@@ -61,8 +61,8 @@
     @isset($activeSettingMenu)
         <style>
             .preloader-container {
-                margin-left: 510px;
-                width: calc(100% - 510px);
+                /*margin-left: 510px;
+                width: calc(100% - 510px);*/
                 z-index: 99999;
                 overflow: hidden;
             }

@@ -37,5 +37,9 @@ class Deal extends Model
     {
         return $this->belongsTo(User::class, 'client_id')->withoutGlobalScopes(['active']);
     }
-   
+
+    public function has_award_time_request()
+    {
+        return $this->belongsTo(AwardTimeIncress::class, 'id', 'deal_id');
+    }
 }

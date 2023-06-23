@@ -8,12 +8,14 @@
       </div>
       <?php
       $project_submission= App\Models\ProjectSubmission::where('project_id',$project->id)->orderBy('id','desc')->first();
-       
-        
+        $project_portfolio =DB::table('project_portfolios')
+                            ->join('project_cms','project_portfolios.cms_category','=','project_cms.id')
+                            ->join('project_website_types','project_portfolios.website_type','=','project_website_types.id')
+                            ->join('project_niches','project_portfolios.niche','=','project_niches.id')
+                            ->select('project_portfolios.*','project_cms.cms_name','project_website_types.website_type','project_niches.category_name')
+                            ->orderBy('project_portfolios.id', 'desc')
+                            ->first();
        ?>
-        @php 
-        $portfolios= App\Models\ProjectPortfolio::where('project_id',$project->id)->first();
-          @endphp
       <form class="" action="{{route('project-submit-accept')}}" method="post">
         @csrf
         <input type="hidden" name="id" value="{{$project_submission->id}}">
@@ -325,9 +327,9 @@
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-                  <p class="fw-normal mb-1">{{$portfolios->cms_name}}</p>
-                  @else 
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">{{$project_portfolio->cms_name}}</p>
+                  @else
                   <p class="fw-normal mb-1">--</p>
                   @endif
 
@@ -349,9 +351,9 @@
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-                  <p class="fw-normal mb-1">{{$portfolios->website_type}}</p>
-                  @else 
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">{{$project_portfolio->website_type}}</p>
+                  @else
                   <p class="fw-normal mb-1">--</p>
                   @endif
 
@@ -373,10 +375,10 @@
           </div>
         </td>
         <td>
-          @if($project_submission->niche != null)
+          @if($project_portfolio != null)
 
-                <p class="fw-normal mb-1">{{$project_submission->category->category_name}}</p>
-                @else 
+                <p class="fw-normal mb-1">{{$project_portfolio->category_name}}</p>
+                @else
                   <p class="fw-normal mb-1">--</p>
                   @endif
         </td>
@@ -397,11 +399,9 @@
               </div>
           </td>
           <td>
-            
-           
-            @if($portfolios != null)
-                  <p class="fw-normal mb-1">Number of pages: {{$portfolios->main_page_number}}</p>
-                 
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">Number of pages: {{$project_portfolio->main_page_number}}</p>
+                  <p class="fw-normal mb-1">Name of pages: {{$project_portfolio->main_page_name}}</p>
                   @else
                   <p class="fw-normal mb-1">--</p>
               @endif
@@ -424,9 +424,9 @@
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-                  <p class="fw-normal mb-1">Number of pages: {{$portfolios->secondary_page_number}}</p>
-                 
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">Number of pages: {{$project_portfolio->secondary_page_number}}</p>
+                  <p class="fw-normal mb-1">Name of pages: {{$project_portfolio->secondary_page_name}}</p>
                   @else
                   <p class="fw-normal mb-1">--</p>
               @endif
@@ -449,8 +449,8 @@
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-                  <p class="fw-normal mb-1">{{$portfolios->backup_email_address}}</p>
+            @if($project_portfolio != null)
+                  <p class="fw-normal mb-1">{{$project_portfolio->backup_email_address}}</p>
                   @else
                   <p class="fw-normal mb-1">--</p>
               @endif
@@ -473,10 +473,10 @@
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-            
-            
-              <p class="fw-normal mb-1">{{$portfolios->day_interval}}</p>
+            @if($project_portfolio != null)
+
+
+              <p class="fw-normal mb-1">{{$project_portfolio->day_interval}}</p>
               @else
               <p class="fw-normal mb-1">--</p>
           @endif
@@ -494,14 +494,14 @@
           </td>
           <td>
               <div class="d-flex align-items-center">
-                  Description
+                Is There Any Major Functions You Want To Mention About This Project?
 
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-              <p class="fw-normal mb-1">{!! $portfolios->description !!}</p>
-              @else 
+            @if($project_portfolio != null)
+              <p class="fw-normal mb-1">{!! $project_portfolio->description !!}</p>
+              @else
               <p class="fw-normal mb-1">--</p>
               @endif
 
@@ -525,10 +525,10 @@
               </div>
           </td>
           <td>
-            @if($portfolios != null)
-              <p class="fw-normal mb-1">{{$portfolios->theme_name}}</p>
-              <p class="fw-normal mb-1">{{$portfolios->theme_url}}</p>
-              @else 
+            @if($project_portfolio != null)
+              <p class="fw-normal mb-1">{{$project_portfolio->theme_name}}</p>
+              <p class="fw-normal mb-1">{{$project_portfolio->theme_url}}</p>
+              @else
               <p class="fw-normal mb-1">--</p>
               @endif
 
@@ -550,15 +550,15 @@
           </div>
         </td>
         <td>
-          @if($portfolios != null)
-          <p class="fw-normal mb-1">@if($portfolios->plugin_information == 1)
+          @if($project_portfolio != null)
+          <p class="fw-normal mb-1">@if($project_portfolio->plugin_information == 1)
             Yes
 
             @else
             No
             @endif
             </p>
-            @else 
+            @else
             <p class="fw-normal mb-1">--</p>
             @endif
 
@@ -566,31 +566,6 @@
 
 
       </tr>
-      <tr>
-        <td>
-            <div class="d-flex align-items-center">
-                22
-
-            </div>
-        </td>
-        <td>
-            <div class="d-flex align-items-center">
-                Plugin Name And Url
-
-            </div>
-        </td>
-        <td>
-          @if($portfolios != null)
-          <p class="fw-normal mb-1">{{implode(',',Json_decode($portfolios->plugin_name))}}</p>
-          <p class="fw-normal mb-1">{{implode(',',Json_decode($portfolios->plugin_url))}}</p>
-            @else 
-            <p class="fw-normal mb-1">--</p>
-            @endif
-
-        </td>
-
-
-    </tr>
       <tr>
           <td>
               <div class="d-flex align-items-center">
@@ -621,7 +596,47 @@
 
 
       </tr>
-     
+      <tr>
+          <td>
+              <div class="d-flex align-items-center">
+                  22
+
+              </div>
+          </td>
+          <td>
+              <div class="d-flex align-items-center">
+                  Plugin Name And Url
+
+              </div>
+          </td>
+          <td>
+            @if($project_portfolio != null)
+                  @if (is_numeric($project_portfolio->plugin_name))
+                      @php
+                          $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
+                      @endphp
+                      <p class="fw-normal mb-1">
+                          {{ $website_plugin->plugin_name }}
+                      </p>
+                      <p class="fw-normal mb-1">
+                          {{ $website_plugin->plugin_url }}
+                      </p>
+                  @else
+                      <p class="fw-normal mb-1">
+                          {{ $project_portfolio->plugin_name }}
+                      </p>
+                      <p class="fw-normal mb-1">
+                          {{ $project_portfolio->plugin_url }}
+                      </p>
+                  @endif
+              @else
+              <p class="fw-normal mb-1">--</p>
+              @endif
+
+          </td>
+
+
+      </tr>
 
       <tr>
         <td>

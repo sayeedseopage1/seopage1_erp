@@ -17,29 +17,29 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
         parPageRow,
         setParPageRow
     } = React.useContext(QualifiedSalesContext);
- 
+
 
     React.useEffect(() => {
         let _columns = defaultColumns;
         let lsColumn = localStorage.getItem(`qualifiedSalesTable_${window?.Laravel?.user?.id}`);
 
-        
+
 
         // //  // sort by lsColumn
 
         // // //  const columns = _columns.filter(d => activeColumns.includes(d.id))
         // // //             .sort((a, b) => activeColumns.indexOf(a.id) - activeColumns.indexOf(b.id))
-                 
-        
+
+
         if(lsColumn){
             lsColumn = JSON.parse(lsColumn);
-            _columns = _columns.sort((a, b) => lsColumn.findIndex(d => d.id === a.id) - lsColumn.findIndex(d => d.id === b.id)); 
+            _columns = _columns.sort((a, b) => lsColumn.findIndex(d => d.id === a.id) - lsColumn.findIndex(d => d.id === b.id));
         }
-       
+
         // console.log({_columns})
 
         setColumns([..._columns]);
-        
+
     }, [])
 
     // // initial state
@@ -66,9 +66,9 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
     }
 
 
-    // sort request 
+    // sort request
     const requestSort = (key) => {
-        
+
         let direction = "asc";
         if (
             sortConfig &&
@@ -76,15 +76,15 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
             sortConfig.direction === "asc"
         ) {
             direction = "desc";
-        } else direction = "asc"; 
+        } else direction = "asc";
 
         setSortConfig({ key, direction });
     };
 
- 
 
-    const getUser = (id) => { 
-        if(usersObject){
+
+    const getUser = (id) => {
+        if(usersObject && usersObject !== {}){
             id = Number(id);
             return usersObject[id];
         } else return {};
@@ -100,9 +100,9 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
             <div className='sp1_qs_table_tr'>
                 {columns?.map(column => {
                     return(
-                        <DragableHeader 
-                            key={column.id} 
-                            column={column} 
+                        <DragableHeader
+                            key={column.id}
+                            column={column}
                             columns={columns}
                             setColumns={setColumns}
                             sortConfig={sortConfig}
@@ -143,13 +143,13 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
                     })}
                 </div>
             ))
-        } 
+        }
         </div>
         </div>
     </div>
      <div className="cnx__table_footer">
         <div className="__show_entries">
-            <span>Show</span> 
+            <span>Show</span>
             <select className='py-2 border' onChange={(e) => setParPageRow(Number(e.target.value))}>
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -178,7 +178,7 @@ const QualifiedSalesTable = ({data = [], users=[], usersObject, isLoading=true})
             setCurrentPageData={(v) => setCurrentPageData(v)}
             numOfPerPageRow={Number(parPageRow)}
         />
-        {/* end pagination */} 
+        {/* end pagination */}
     </div>
     </>
   )

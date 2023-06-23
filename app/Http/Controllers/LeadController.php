@@ -77,7 +77,7 @@ class LeadController extends AccountBaseController
     public function DealStageChange(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'client_username' => 'required|unique:deal_stages|max:255',
+            'client_username' => 'required|max:255',
             'profile_link' => 'required',
             'message_link' => 'required',
             'comments' => 'required',
@@ -366,9 +366,9 @@ class LeadController extends AccountBaseController
             $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
             $user->notify(new DealUpdate($deal, $pusher_options));
         }
-        Toastr::success('Lead Converted Successfully', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
         return response()->json([
-            'status' => 'success'
+            'status' => 'success',
+            'deal_id' => $deal->id,
         ]);
     }
     public function DealStageUpdate(Request $request)
@@ -849,7 +849,7 @@ class LeadController extends AccountBaseController
 if ($request->project_type !='hourly'){
     $request->validate([
         'client_name' => 'required|max:255',
-        'project_id'=>'required|unique:leads,project_id,'.$request->project_id,
+        'project_id' => 'required|unique:leads,project_id,'.$request->project_id.'|numeric',
         'country' => 'required',
         'project_link' => 'required|url',
         'deadline' => 'required|date',

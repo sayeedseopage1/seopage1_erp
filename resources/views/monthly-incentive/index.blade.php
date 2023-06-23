@@ -19,7 +19,7 @@
                                 <th>Achieved Point</th>
                                 <th>Incentive Amount</th>
                                 <th>Point Deduction</th>
-                                <th>Incentive Deduction</th>
+                                {{-- <th>Incentive Deduction</th> --}}
                                 <th>Minimum Shift Goal</th>
                                 <th>Minimum Shift Goal Achieved</th>
                                 <th>Milestone Shift Goal</th>
@@ -49,7 +49,7 @@
                                     <td>{{$value->point_earned}}</td>
                                     <td>{{$value->incentive_earned}} BDT</td>
                                     <td>{{$value->deduction_amount}}</td>
-                                    <td>{{$value->deduction_incentive_amount}} BDT</td>
+                                    {{-- <td>{{$value->deduction_incentive_amount}} BDT</td> --}}
                                     <td>{{$value->minimum_goal}}</td>
                                     <td>{{$value->minimum_goal_achieved}}</td>
                                     <td>{{$value->milestone_goal}}</td>

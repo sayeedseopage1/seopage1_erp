@@ -22,7 +22,7 @@ class QualifiedSalesController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Qualified Sales';
         $this->activeSettingMenu = 'qualified-sales';
-       
+
     }
     /**
      * Display a listing of the resource.
@@ -31,24 +31,26 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function index(Request $request)
     {
-    
-       
-        if($request->mode == 'json')  
+
+
+        if($request->mode == 'json')
         {
             if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
             {
                 $this->data = QualifiedSale::select([
                     'qualified_sales.*',
-                   
+
                     'converted_by.id as closed_by',
                     'converted_by.name as closed_by_name',
-                    
+                    DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id) as total_points'),
                 ])
-                ->leftjoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
+                ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
                 ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
                 ;
 
-            }else 
+
+
+            }else
             {
                 $userId = Auth::id();
         $shiftId = Auth::user()->shift;
@@ -70,17 +72,17 @@ class QualifiedSalesController extends AccountBaseController
                             ->where('shift', '=', $shiftId);
                     });
             })
-            ->where('deals.added_by', $userId)
+            //->where('deals.added_by', $userId)
             ->groupBy('qualified_sales.id', 'converted_by.id', 'converted_by.name', 'cash_points.user_id');
 
             }
-           
+
             if ($request->project_id != 'null') {
                 $this->data = $this->data->where('qualified_sales.project_id', $request->project_id);
             }
             if ($request->client_id != 'null') {
                 $this->data = $this->data->where('qualified_sales.client_id', $request->client_id);
-            
+
             }
             if ($request->start_date != 'null') {
                 $this->data = $this->data->where(DB::raw('DATE(qualified_sales.created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
@@ -101,19 +103,25 @@ class QualifiedSalesController extends AccountBaseController
                 $this->data = $this->data->where('deals.project_name', 'LIKE', '%'.$request->search.'%')
                 ->orWhere('qualified_sales.pm_name', 'LIKE', '%'.$request->search.'%')
                 ->orWhere('qualified_sales.client_name', 'LIKE', '%'.$request->search.'%')
-                
+
                 ;
             }
             if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
                 return response()->json($this->data->get()->toArray());
-            }else 
+            }else
             {
-                return response()->json($this->data->where('deals.added_by',Auth::id())->get()->toArray());
+                return response()->json(
+                    $this->data
+                        ->groupBy('cash_points.user_id')
+                        ->having('cash_points.user_id', Auth::id())
+                        ->get()
+                        ->toArray()
+                );
             }
-           
+
 
         }
-   
+
         // /dd($projects);
 
         return view('qualified-sales.index',$this->data);
@@ -127,13 +135,13 @@ class QualifiedSalesController extends AccountBaseController
         ->groupBy('cash_points.user_id', 'users.name');
         //->get();
         return response()->json($this->userPoints->get());
-       
+
     //    / ->pluck('total_points', 'name');
     //    / dd($userPoints);
 
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -164,7 +172,7 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function show($id)
     {
-        
+
     }
 
     /**

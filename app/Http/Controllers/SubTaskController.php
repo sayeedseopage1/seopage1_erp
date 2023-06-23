@@ -9,9 +9,9 @@ use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\TaskUser;
-use Validator;
 use App\Helper\Files;
 use App\Models\TaskFile;
+use Validator;
 
 class SubTaskController extends AccountBaseController
 {
@@ -172,7 +172,7 @@ class SubTaskController extends AccountBaseController
 
         if ($request->hasFile('file')) {
 
-            foreach ($request->file as $fileData) { 
+            foreach ($request->file as $fileData) {
                 $file = new TaskFile();
                 $file->task_id = $task_s->id;
 
@@ -269,7 +269,7 @@ class SubTaskController extends AccountBaseController
 
         $validator = Validator::make($request->all(), $rules);
 
-         
+
         if ($validator->fails()) {
             return response($validator->errors(), 422);
         }
@@ -328,7 +328,7 @@ class SubTaskController extends AccountBaseController
 
         if ($request->hasFile('file')) {
 
-            foreach ($request->file as $fileData) { 
+            foreach ($request->file as $fileData) {
                 $file = new TaskFile();
                 $file->task_id = $id;
 

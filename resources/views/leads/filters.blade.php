@@ -81,7 +81,7 @@
                 <div class="select-filter mb-4">
                     <div class="select-others">
                         <select class="form-control select-picker" data-container="body" id="sales_executive_id">
-                            @foreach($sales_executives as $row)
+                            @foreach($sales_executives as $row) v
                             <option value="{{$row->name}}">{{ucfirst($row->name)}}</option>
                             @endforeach
                         </select>
@@ -256,10 +256,10 @@
             data['endDate'] = endDate;
             data['searchText'] = searchText;
             data['status'] = $('#leads_status :selected').val();
-          
+
             data['date_filter_on'] = date_filter_on;
             // showTable()
         });*/
-        
+
     </script>
 @endpush

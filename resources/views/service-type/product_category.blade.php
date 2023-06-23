@@ -240,6 +240,7 @@
             'website_name': document.getElementById("website_name").value,
             'business_information': document.getElementById("business_information").value,
             'word_count': document.getElementById("word_count").value,
+            'product_no': document.getElementById("product_no").value,
             'share_file_info': share_file_info,
             'folder_link': folder_link_values,
             'category_url': category_url_values,

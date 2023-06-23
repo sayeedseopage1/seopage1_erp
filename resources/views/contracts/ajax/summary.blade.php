@@ -285,7 +285,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                                 @php
                                     $deal= App\Models\DealStage::where('short_code',$contract->deal->deal_id)->first();
                                 @endphp
-                              <td class="border-left-0"><a href="{{route('deals.show',$deal->id)}}">{{ $contract->deal->project_name }}</a>
+                              <td class="border-left-0"><a href="{{route('deals.show',$contract->deal->id)}}">{{ $contract->deal->project_name }}</a>
                               </td>
                           </tr>
                           @php
@@ -312,6 +312,15 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
 
                           @endif
+                          <tr>
+                            <td class="bg-light-grey border-right-0 f-w-500">
+                              Project Type </td>
+                              <td class="border-left-0">
+                                  <h4 class="badge badge-primary">{{$contract->deal->project_type}}</h4>
+                              </td>
+
+
+                          </tr>
                         {{-- @if ($contract->end_date != null)
                               <tr>
                                   <td class="bg-light-grey border-right-0 f-w-500">@lang('modules.contracts.endDate')

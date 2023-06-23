@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BasicSeo;
 use App\Models\BlogArticle;
+use App\Models\ProductCategoryCollection;
+use App\Models\ProductDescription;
+use App\Models\projectDescription;
 use App\Models\WebContent;
 use Artisan;
 use Carbon\Carbon;
@@ -65,6 +69,7 @@ use Pusher\Pusher;
 use App\Notifications\PusherNotificaiton;
 use Notification;
 use App\Models\TaskUser;
+use App\Models\AuthorizationAction;
 
 class HomeController extends Controller
 {
@@ -215,6 +220,19 @@ class HomeController extends Controller
                 $data->comment = $value;
                 $data->save();
             }
+            //start authorization action
+
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $project->getMorphClass();
+            $authorization_action->model_id = $project->id;
+            $authorization_action->type = 'deliverable_modification_by_client';
+            $authorization_action->deal_id = $project->deal_id;
+            $authorization_action->project_id = $project->id;
+            $authorization_action->link = route('projects.show', $project->id).'?tab=deliverable';
+            $authorization_action->title = 'Client send delivarables modification request';
+            $authorization_action->authorization_for = 62;
+            $authorization_action->save();
+            //end authorization action
         }
 
         $project->authorization_status = 'pending';
@@ -235,7 +253,7 @@ class HomeController extends Controller
             'user_id' => $project->pm_id,
             'role_id' => 4,
             'title' => 'Client Disagree Delivarables',
-            'body' => $link,
+            'body' => $text,
             'redirectUrl' => route('projects.show', $project->id).'?tab=deliverables'
         ];
 
@@ -1310,9 +1328,12 @@ class HomeController extends Controller
     }
     public function storeWebContent(Request $request){
 //        dd($request->all());
-
         $data = $request->all();
+        $folder_links = json_encode($data['folder_link']);
         $reference_websites = json_encode($data['reference_website']);
+        $description1 = json_encode($data['description1']);
+        $description2 = json_encode($data['description2']);
+        $description3 = json_encode($data['description3']);
         $page_names = json_encode($data['page_name']);
         $quantitys = json_encode($data['quantity']);
         $approximate_words = json_encode($data['approximate_word']);
@@ -1322,13 +1343,17 @@ class HomeController extends Controller
         $web_content->website_niche = $data['website_niche'];
         $web_content->website_name = $data['website_name'];
         $web_content->business_information = $data['business_information'];
-        $web_content->drive_link = $data['drive_link'];
-        $web_content->reference_website = $data['reference_website'];
+        $web_content->share_file_info = $data['share_file_info'];
+        $web_content->folder_link = $folder_links;
+        $web_content->reference_website = $reference_websites;
         $web_content->competitor_content = $data['competitor_content'];
-        $web_content->description1 = $data['description1'];
-        $web_content->description2 = $data['description2'];
-        $web_content->description3 = $data['description3'];
+        $web_content->description1 = $description1;
+        $web_content->description2 = $description2;
+        $web_content->description3 = $description3;
         $web_content->product_list = $data['product_list'];
+        $web_content->page_name = $page_names;
+        $web_content->quantity = $quantitys;
+        $web_content->approximate_word = $approximate_words;
         $web_content->gender = $data['gender'];
         $web_content->age1 = $data['age1'];
         $web_content->age2 = $data['age2'];
@@ -1337,12 +1362,10 @@ class HomeController extends Controller
         $web_content->country = $data['country'];
         $web_content->city = $data['city'];
         $web_content->interest = $data['interest'];
-        $web_content->buying_habit = $data['buying_habit'];
-        $web_content->thor_native_language = $data['thor_native_language'];
-        $web_content->reference_website = $reference_websites;
-        $web_content->page_name = $page_names;
-        $web_content->quantity = $quantitys;
-        $web_content->approximate_word = $approximate_words;
+        $web_content->buying_habit1 = $data['buying_habit1'];
+        $web_content->buying_habit2 = $data['buying_habit2'];
+        $web_content->buying_habit3 = $data['buying_habit3'];
+        $web_content->language = $data['language'];
         $web_content->save();
 
         return response()->json(['status'=>200]);
@@ -1351,7 +1374,7 @@ class HomeController extends Controller
         return view('service-type.blog_article');
     }
     public function storeBlogArticle(Request $request){
-
+//dd($request->all());
         $data = $request->all();
 
         $folderLinks = json_encode($data['folder_link']);
@@ -1385,22 +1408,97 @@ class HomeController extends Controller
     }
 
     public function storeProductDescription(Request $request){
-        dd($request->all());
+        $data = $request->all();
+
+        $folder_links = json_encode($data['folder_link']);
+        $blogUrls = json_encode($data['blog_url']);
+        $product_lists = json_encode($data['product_list']);
+
+        $product_description = new ProductDescription();
+        $product_description->website_link = $data['website_link'];
+        $product_description->website_niche = $data['website_niche'];
+        $product_description->website_name = $data['website_name'];
+        $product_description->business_information = $data['business_information'];
+        $product_description->share_file_info = $data['share_file_info'];
+        $product_description->folder_link = $folder_links;
+        $product_description->blog_url = $blogUrls;
+        $product_description->product_no = $data['product_no'];
+        $product_description->product_list = $product_lists;
+        $product_description->word_count = $data['word_count'];
+        $product_description->save();
+
+        return response()->json(['status'=>200]);
+
     }
 
     public function productCategory(){
         return view('service-type.product_category');
     }
     public function storeProductCategory(Request $request){
-        dd($request->all());
+        $data = $request->all();
+
+        $folder_links = json_encode($data['folder_link']);
+        $categoryUrls = json_encode($data['category_url']);
+        $category_lists = json_encode($data['category_list']);
+
+        $product_category_collection = new ProductCategoryCollection();
+        $product_category_collection->website_link = $data['website_link'];
+        $product_category_collection->website_niche = $data['website_niche'];
+        $product_category_collection->website_name = $data['website_name'];
+        $product_category_collection->business_information = $data['business_information'];
+        $product_category_collection->share_file_info = $data['share_file_info'];
+        $product_category_collection->folder_link = $folder_links;
+        $product_category_collection->category_url = $categoryUrls;
+        $product_category_collection->product_no = $data['product_no'];
+        $product_category_collection->category_list = $category_lists;
+        $product_category_collection->word_count = $data['word_count'];
+        $product_category_collection->save();
+
+        return response()->json(['status'=>200]);
     }
     public function productBasicSeo(){
         return view('service-type.basic_seo');
     }
+    public function storeProductBasicSeo(Request $request){
+
 
 
 
     // ck editor image upload
+
+        $basic_seo = new BasicSeo();
+        $basic_seo->owner_name = $request->owner_name;
+        $basic_seo->business_name = $request->business_name;
+        $basic_seo->business_address = $request->business_address;
+        $basic_seo->phone_number = $request->phone_number;
+        $basic_seo->zip_code = $request->zip_code;
+        $basic_seo->google_search_info = $request->google_search_info;
+        $basic_seo->done1 = $request->done1;
+        $basic_seo->email1 = $request->email1;
+        $basic_seo->password1 = $request->password1;
+        $basic_seo->google_analytic_info = $request->google_analytic_info;
+        $basic_seo->done2 = $request->done2;
+        $basic_seo->email2 = $request->email2;
+        $basic_seo->password2 = $request->password2;
+        $basic_seo->google_business_account_info = $request->google_business_account_info;
+        $basic_seo->done3 = $request->done3;
+        $basic_seo->email3 = $request->email3;
+        $basic_seo->password3 = $request->password3;
+        $basic_seo->share_cms_access_info = $request->share_cms_access_info;
+        $basic_seo->url = $request->url;
+        $basic_seo->user_name = $request->user_name;
+        $basic_seo->password4 = $request->password4;
+        $basic_seo->confirm_adding = $request->confirm_adding;
+        $basic_seo->save();
+        return response()->json(['status'=>200]);
+    }
+
+    // public function fix_database()
+    // {
+    //     dd('ok');
+    // }
+
+
     public function upload(Request $request)
     {
         $request->validate([

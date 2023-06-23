@@ -69,7 +69,7 @@ class TaskNoteController extends AccountBaseController
         return Reply::dataOnly([
             'status' => 'success',
             'message' => 'Note created successfully',
-            'note' => [ 
+            'note' => [
                 'note' => $note->note,
                 'id' => $note->id,
                 'title' => $note->title,
