@@ -2143,8 +2143,11 @@ class ContractController extends AccountBaseController
 
         $project = Project::where('deal_id', $request->id)->first();
 
-        
-        $point= new CashPoint();
+        $authorization_bonus_check= Cashpoint::where('project_id',$project->id)->where('user_id',$user_name->id)->where('type','Authorization Bonus')->first();
+        if($authorization_bonus_check == null)
+        {
+            $point= new CashPoint();
+
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;
         $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name .
@@ -2164,6 +2167,10 @@ class ContractController extends AccountBaseController
 
         $point->save();
 
+
+        }
+        
+        
         //update authoziation action
         $authorization_action = AuthorizationAction::where([
             'deal_id' => $deal->id,

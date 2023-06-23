@@ -129,9 +129,9 @@ const IncentiveCurrent = () => {
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
                                         <span>
-                                            *Confirmed incentive so far: 0 
+                                            *Confirmed incentive so far: {data?.incentive_final_amount?.incentive_earned? Number(data?.incentive_final_amount?.incentive_earned).toFixed(2):0} BDT
                                         </span>
-                                    )} 
+                                    )}
                                 </div>
                             </div>
                         </div>

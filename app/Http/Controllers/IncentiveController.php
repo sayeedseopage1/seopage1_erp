@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserIncentive;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\GoalSetting;
@@ -215,6 +216,7 @@ class IncentiveController extends AccountBaseController
 
         $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
+        $data['incentive_final_amount'] = UserIncentive::where('user_id',$request->user_id)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->select('incentive_earned')->first();
         $data['point_achieve_by_your_shift'] = round($cash_point,2);
 
         if ($cash_point > 0) {
