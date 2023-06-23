@@ -1,7 +1,7 @@
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
 
-const DatePickerComponent = ({date, setDate}) => {
+const DatePickerComponent = ({date, setDate, minDate, maxDate, placeholderText}) => {
 
   return ( 
         <DatePicker 
@@ -9,6 +9,9 @@ const DatePickerComponent = ({date, setDate}) => {
             dateFormat='dd-MM-yyyy'
             onChange={(d) => setDate(d)} 
             className='w-100 border-0 py-2'
+            minDate={minDate}
+            maxDate={maxDate}
+            placeholderText={placeholderText}
         />  
   )
 }

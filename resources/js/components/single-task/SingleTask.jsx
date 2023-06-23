@@ -66,22 +66,22 @@ const SingleTask = () => {
                         </Button>
 
 
-                        {/* <Button 
+                        <Button 
                             variant='tertiary'
                             className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
                         >
                             <i className="fa-solid fa-stopwatch"></i>
                             <span className="d-inline ml-1">00:05:44</span>
-                        </Button> */}
+                        </Button>
 
 
-                        {/* <Button 
+                        <Button 
                             variant='tertiary'
                             className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
                         >
                             <i className="fa-solid fa-pause"></i>
                             <span className="d-inline ml-1">Stop Timer</span>
-                        </Button> */}
+                        </Button>
                            
 
                         <Button 
@@ -104,15 +104,14 @@ const SingleTask = () => {
                           
 
                         {/* {{-- approved --}} */}
-                        {/* <button type="button" className="d-flex align-items-center btn btn-sm btn-success mr-2 text-white border-0"
-                        >
+                        <button type="button" className="d-flex align-items-center btn btn-sm btn-success mr-2 text-white border-0">
                             <span className="d-inline mr-1">Approved</span> 
-                        </button> */}
+                        </button> 
 
                         {/* {{-- awaiting for time extension --}} */}
-                        {/* <button type="button" className="d-flex align-items-center btn btn-sm btn-warning mr-2 text-dark border-0" >
+                        <button type="button" className="d-flex align-items-center btn btn-sm btn-warning mr-2 text-dark border-0" >
                             <span className="d-inline mr-1">Awaiting for Time Extension</span> 
-                        </button> */}
+                        </button>
 
                         {/* {{-- 3 dot --}} */}
                         <button type="button" className="d-flex align-items-center btn btn-sm btn-outline-dark mr-2 border-0 ml-auto">
@@ -359,7 +358,7 @@ const SingleTask = () => {
                 <CommentSection />
                 <SubTaskSection  />
                 <NoteSection />
-                <SubmittedWork />
+                {task && task?.id && <SubmittedWork task={task} />}
                 <TimeLogSection />
                 {task && task?.id && <HistorySection />}
                 {task && task?.id && <RevisionSection task={task} />}

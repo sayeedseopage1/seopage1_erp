@@ -2067,29 +2067,37 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'task_submission') {
             $data = TaskSubmission::with('user')->where('task_id', $id)->get();
-            foreach ($data as $item) {
-                if ($item->attach != null) {
-                    $file[] = $item->attach;
+            if ($data->count() > 0) {
+                $file = [];
+                $url = [];
+                $description = '';
+                foreach ($data as $item) {
+                    if ($item->attach != null) {
+                        array_push($file, $item->attach);
+                    }
+                    if ($item->link != null) {
+                        array_push($url, $item->link);
+                    }
+                    if ($item->text != null) {
+                        $description = $item->text;
+                    }
                 }
-                if ($item->link != null) {
-                    $url[] = $item->link;
-                }
-                if ($item->text != null) {
-                    $description = $item->text;
-                }
+
+                $user = $data->first()->user;
+                $response = [
+                    'file' => $file,
+                    'url' => $url,
+                    'description' => $description,
+                    'user' => [
+                        'id' => $user->id,
+                        'name' =>  $user->name,
+                        'image' => $user->image_url,
+                    ]
+                ];
+                return response()->json($response);
+            } else {
+                return response()->json([]);
             }
-            $user = $data->first()->user;
-            $response = [
-                'file' => $file,
-                'url' => $url,
-                'description' => $description,
-                'user' => [
-                    'id' => $user->id,
-                    'name' =>  $user->name,
-                    'image' => $user->image_url,
-                ]
-            ];
-            return response()->json($response);
         } else {
             abort(403);
         }
