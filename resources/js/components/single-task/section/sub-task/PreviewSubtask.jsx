@@ -2,10 +2,12 @@ import * as React from 'react'
 import { useNavigate, useSearchParams} from 'react-router-dom'
 import Modal from '../../components/Modal';
 import Button from '../../components/Button';
+import Genarel from './preview/Genarel';
 
 const PreviewSubtask = () => {
   const [searchParams] = useSearchParams(); 
   const previewType= searchParams.get('preview-type') === 'modal';
+  const taskID = searchParams.get('subtask');
  
   const navigate = useNavigate();
 
@@ -31,23 +33,34 @@ const PreviewSubtask = () => {
            </div> 
 
            <div className='sp1_subtask_offsetcanvas--body'>
-                {/* tab */}
-                <nav>
-                    <div className="nav nav-tabs" id="nav-tab" role="tablist">
-                        <a className="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-general" role="tab" aria-controls="nav-general" aria-selected="true">General</a>
-                        <a className="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-sub-task" role="tab" aria-controls="nav-sub-task" aria-selected="false">Sub Task</a>
-                        <a className="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Submitted Works</a>
-                        <a className="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-time-logs" role="tab" aria-controls="nav-time-logs" aria-selected="false">Time Logs</a>
-                        <a className="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-reviews" role="tab" aria-controls="nav-reviews" aria-selected="false">Task Review</a>
+                {/* tab */} 
+                    <div className="nav flex-column nav-pills sp1-subtask-modal-sidebar" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                        <a className="nav-link active" id="v-pills-general-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">General</a>
+                        <a className="nav-link" id="v-pills-comments-tab" data-toggle="pill" href="#v-pills-comments" role="tab" aria-controls="v-pills-comments" aria-selected="false">Comment</a>
+                        <a className="nav-link" id="v-pills-subtask-tab" data-toggle="pill" href="#v-pills-subtask" role="tab" aria-controls="v-pills-subtask" aria-selected="false">Sub Task</a>
+                        <a className="nav-link" id="v-pills-submitted-work-tab" data-toggle="pill" href="#v-pills-submitted-work" role="tab" aria-controls="v-pills-submitted-work" aria-selected="false">Submitted Works</a> 
+                        <a className="nav-link" id="v-pills-time-log-work-tab" data-toggle="pill" href="#v-pills-time-log-work" role="tab" aria-controls="v-pills-time-log-work" aria-selected="false">Time Logs</a>  
+                        <a className="nav-link" id="v-pills-task-review-work-tab" data-toggle="pill" href="#v-pills-task-review-work" role="tab" aria-controls="v-pills-task-review-work" aria-selected="false">Task Review</a>
                     </div>
-                </nav>
-                <div className="tab-content" id="nav-tabContent">
-                <div className="tab-pane fade show active" id="nav-general" role="tabpanel" aria-labelledby="nav-home-tab">...</div>
-                <div className="tab-pane fade" id="nav-sub-task" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
-                <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-                <div className="tab-pane fade" id="nav-time-logs" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-                <div className="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
-                </div>
+
+                    <div className="tab-content p-3" id="v-pills-tabContent">
+
+                        <div className="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-general-tab">
+                           <Genarel taskID={taskID} /> 
+                        </div>
+
+                        <div className="tab-pane fade" id="v-pills-comments" role="tabpanel" aria-labelledby="v-pills-comments-tab">Comment</div>
+                        <div className="tab-pane fade" id="v-pills-subtask" role="tabpanel" aria-labelledby="v-pills-subtask-tab">
+                            Sub Task
+                        </div>
+                        <div className="tab-pane fade" id="v-pills-submitted-work" role="tabpanel" aria-labelledby="v-pills-submitted-work-tab">Submitted work</div>
+
+                        
+                        <div className="tab-pane fade" id="v-pills-time-log-work" role="tabpanel" aria-labelledby="v-pills-time-log-work-tab">Time Logs</div>
+
+                        
+                        <div className="tab-pane fade" id="v-pills-review-work" role="tabpanel" aria-labelledby="v-pills-review-work-tab">Task Reviews</div>
+                    </div> 
                 {/* end tab */}
            </div>
         </div>

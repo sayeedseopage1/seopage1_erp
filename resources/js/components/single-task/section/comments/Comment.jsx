@@ -25,9 +25,14 @@ const Comment = ({comment}) => {
             </p>
             <p
               className='text-ellipsis d-flex align-items-center mb-0 pb-0'
-              style={{color: '#AEAFB9'}}>
-                {dayjs(comment?.last_updated_at).format('MMM DD, YYYY')} at &nasp;
-                {dayjs(comment?.last_updated_at).format('hh:mm a')}
+              style={{color: '#AEAFB9'}}> 
+                {
+                  comment?.last_updated_at &&
+                  <> 
+                    {dayjs.unix(comment?.last_updated_at).format('MMM DD, YYYY ')} at &nbsp; 
+                    {dayjs.unix(comment?.last_updated_at).format('hh:mm a')}
+                  </>
+                }
             </p>
          </div>
 

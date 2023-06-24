@@ -4,6 +4,9 @@ import Button from '../../components/Button';
 import EmojiPicker, {Emoji, EmojiStyle} from 'emoji-picker-react';
 import Dropdown from '../../components/Dropdown'; 
 import { User } from '../../../utils/user-details';
+import UploadFilesInLine from '../../../file-upload/UploadFilesInLine';
+import FileUploader from '../../../file-upload/FileUploader';
+import dayjs from 'dayjs';
  
 
 
@@ -21,6 +24,7 @@ const InnerComment = ({comment}) => {
         e.preventDefault();
         setReplyMode(true);
     }
+ 
 
 
     // emoji selection control
@@ -46,7 +50,15 @@ const InnerComment = ({comment}) => {
                 </div> 
                 <div>
                     <span className="font-weight-bold d-block mr-2">{user?.getName()} ({user?.getDesignationName()})</span>
-                    <span className='' style={{fontSize: '13px', color: '#888'}}>Sep 30, 2022 at 4:14PM</span>
+                    <span className='' style={{fontSize: '13px', color: '#888'}}>
+                    {
+                        comment?.last_updated_at &&
+                        <> 
+                            {dayjs.unix(comment?.last_updated_at).format('MMM DD, YYYY ')} at &nbsp; 
+                            {dayjs.unix(comment?.last_updated_at).format('hh:mm a')}
+                        </>
+                    }
+                    </span>
                 </div>
             </div>
 
@@ -55,8 +67,25 @@ const InnerComment = ({comment}) => {
                     className='sp1_ck_content' 
                     style={{overflow: 'hidden'}} 
                     dangerouslySetInnerHTML={{__html: comment?.comment}} 
-                />
+                /> 
             </div> 
+
+            <div className='files'>
+                <FileUploader>
+                    {comment?.files_data?.map((file) =>(
+                        <FileUploader.Preview
+                            key={file?.name}
+                            fileName={file?.name} 
+                            downloadAble={true}
+                            deleteAble={false}
+                            downloadUrl={file?.url}
+                            previewUrl={file?.url}
+                            fileType={file?.icon}
+                            ext=''
+                        />
+                    ))}
+                </FileUploader>
+            </div>
 
             <div className="sp1_task_comment_actions">
                 <Dropdown>

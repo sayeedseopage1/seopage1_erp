@@ -61,6 +61,16 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true 
             })
+        }),
+
+        // comments
+        storeComment: build.mutation({
+            query: ({data, task_id}) => ({
+                url: `/account/task/${task_id}/json?mode=comment_store`,
+                method: "POST",
+                body: data,
+                formData:true
+            }) 
         })
     })
 }) ;
@@ -74,5 +84,6 @@ export const {
     useEditSubtaskMutation,
     useCrateNoteMutation,
     useDeleteNoteUploadedFileMutation,
-    useUpdateNoteMutation
+    useUpdateNoteMutation,
+    useStoreCommentMutation
 } = singleTaskPageApiSlice;

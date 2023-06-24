@@ -1992,7 +1992,7 @@ class TaskController extends AccountBaseController
             foreach ($data as $value) {
                 $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
                 $value->total_replies = $replies->count();
-                $value->last_updated_at = $value->created_at;
+                $value->last_updated_at = strtotime($value->created_at);
                 $value->replies = User::whereIn('id', $replies)->get()->map(function ($row) {
                     return [
                         'id' => $row->id,
@@ -2035,9 +2035,31 @@ class TaskController extends AccountBaseController
                 return response()->json([]);
             }
         } elseif ($request->mode == 'task_submission_list') {
-           dd(Auth::user()); 
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
+            return response()->json($data);
+        } elseif ($request->mode == 'comment_store') {
+            $data = new TaskComment();
+            $data->comment = $request->comment;
+            $data->user_id = $this->user->id;
+            $data->task_id = $request->task_id;
+            $data->added_by = $this->user->id;
+            $data->last_updated_by = $this->user->id;
+
+            $data->save();
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public');
+                $file_name = [];
+                foreach ($files as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $file->move($destinationPath, $filename);
+                }
+                $data->files = $file_name;
+                $data->save();
+            }
+            $data = TaskComment::find($data->id);
             return response()->json($data);
         } else {
             abort(404);
