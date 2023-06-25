@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('frontend_password');
             $table->string('login_url');
             $table->string('email');
+
             $table->string('password');
             $table->timestamps();
         });
