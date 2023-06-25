@@ -146,10 +146,8 @@
                             toastr.options.closeMethod = 'fadeOut';
                             toastr.options.closeDuration = 120;
                             toastr.options.closeEasing = 'swing';
-                            toastr.success('Request Submit to Admin', 'Success');
-                            toastr.options.onHidden = function() {
-                                window.location.href = window.location.href;
-                            }
+                            toastr.success('Request Approved', 'Success');
+                            window.location.href = window.location.href;
                         }
                     }
                 })

@@ -1988,11 +1988,11 @@ class TaskController extends AccountBaseController
 
             return response()->json($data);
         } elseif ($request->mode == 'task_comment') {
-            $data = TaskComment::with('user')->where('task_id', $id)->get();
-
+            $data = TaskComment::where('task_id', $id)->get();
             foreach ($data as $value) {
                 $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-
+                $value->total_replies = $replies->count();
+                $value->last_updated_at = strtotime($value->created_at);
                 $value->replies = User::whereIn('id', $replies)->get()->map(function ($row) {
                     return [
                         'id' => $row->id,
@@ -2001,8 +2001,149 @@ class TaskController extends AccountBaseController
                 });
             }
             return response()->json($data);
+        } elseif ($request->mode == 'task_comment_file_delete') {
+            $data = TaskComment::findOrfail($id);
+            if ($data->files != null) {
+                $files = json_decode($data->files);
+                $file = [];
+                foreach ($files as $item) {
+                    if ($item != $request->query('files')) {
+                        array_push($file, $item);
+                    }
+                }
+                $data->files = $file;
+                $data->save();
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Task deleted successfully!!!'
+            ]);
+        } elseif ($request->mode == 'task_submission') {
+            $data = TaskSubmission::with('user')->where('task_id', $id)->get();
+            if ($data->count() > 0) {
+                $file = [];
+                $url = [];
+                $description = [];
+                foreach ($data as $item) {
+                    if ($item->attach != null) {
+                        array_push($file, $item->attach);
+                    }
+                    if ($item->link != null) {
+                        array_push($url, $item->link);
+                    }
+                    if ($item->text != null) {
+                        array_push($description, $item->text);
+                    }
+                }
+
+                $user = $data->first()->user;
+                $response = [
+                    'file' => $file,
+                    'url' => $url,
+                    'description' => $description,
+                    'user' => [
+                        'id' => $user->id,
+                        'name' =>  $user->name,
+                        'image' => $user->image_url,
+                    ]
+                ];
+                return response()->json($response);
+            } else {
+                return response()->json([]);
+            }
+        } elseif ($request->mode == 'task_submission_list') {
+            $task_submission = TaskSubmission::where('task_id', $id)->get();
+            if ($task_submission != null) {
+                $taskSubmissions = json_decode($task_submission, true);
+                $groupedSubmissions = collect($taskSubmissions)->groupBy(function ($submission) {
+                    return $submission['submission_no'] . '_' . $submission['task_id'];
+                })->map(function ($group) {
+                    return $group;
+                })->toArray();
+
+
+                function mergeArrays($arr1, $arr2)
+                {
+                    $merged = [];
+                    foreach ($arr1 as $key => $value) {
+                        if ($value !== null) {
+                            $merged[$key] = $value;
+                        } elseif (isset($arr2[$key])) {
+                            $merged[$key] = $arr2[$key];
+                        }
+                    }
+
+                    foreach ($arr2 as $key => $value) {
+                        if ($value !== null && !isset($merged[$key])) {
+                            $merged[$key] = $value;
+                        }
+                    }
+                    return $merged;
+                }
+
+                $newArray = [];
+                foreach ($groupedSubmissions as $group) {
+                    if (count($group) > 1) {
+                        $newArr = mergeArrays($group[0], $group[1]);
+                        $newArray[] = $newArr;
+                    } else {
+                        $newArray[] = $group[0];
+                    }
+                }
+                return response()->json($newArray);
+            }
+        } elseif ($request->mode == 'task_reply_comment') {
+            $data = TaskReply::where('comment_id', $id)->get();
+            return response()->json($data);
+        } elseif ($request->mode == 'comment_store') {
+            $data = new TaskComment();
+            $data->comment = $request->comment;
+            $data->user_id = $this->user->id;
+            $data->task_id = $request->task_id;
+            $data->added_by = $this->user->id;
+            $data->last_updated_by = $this->user->id;
+
+            $data->save();
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public');
+                $file_name = [];
+                foreach ($files as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $file->move($destinationPath, $filename);
+                }
+                $data->files = $file_name;
+                $data->save();
+            }
+            $data = TaskComment::find($data->id);
+            return response()->json($data);
+        } elseif ($request->mode == 'comment_reply_store') {
+            $data = new TaskReply();
+            $data->comment_id = $request->comment_id;
+            $data->reply = $request->comment;
+            $data->user_id = $this->user->id;
+            $data->task_id = $request->task_id;
+            $data->added_by = $this->user->id;
+            $data->last_updated_by = $this->user->id;
+
+            $data->save();
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public');
+                $file_name = [];
+                foreach ($files as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $file->move($destinationPath, $filename);
+                }
+                $data->files = $file_name;
+                $data->save();
+            }
+            $data = TaskComment::find($data->id);
+            return response()->json($data);
         } else {
-            abort(403);
+            abort(404);
         }
     }
 }
