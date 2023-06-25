@@ -40,9 +40,6 @@ class PortfolioController extends AccountBaseController
         $this->website_themes = ProjectWebsiteTheme::all();
         $this->website_plugins = ProjectWebsitePlugin::all();
 
-<<<<<<< HEAD
-        return view('portfolio.index',$this->data);
-=======
         $this->portfolios = DB::table('project_portfolios')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
@@ -53,15 +50,11 @@ class PortfolioController extends AccountBaseController
         //        dd($this->portfolios);
 
         return view('portfolio.index', $this->data);
->>>>>>> be5715169 (udapte with portfolio page)
     }
 
     public function getSubCategory($website_cat_id)
     {
-<<<<<<< HEAD
-=======
         //        dd($website_cat_id);
->>>>>>> be5715169 (udapte with portfolio page)
         $website_sub_cats = ProjectNiche::find($website_cat_id)->child;
         return response()->json($website_sub_cats);
     }
@@ -69,10 +62,7 @@ class PortfolioController extends AccountBaseController
 
     public function filterCmsCategories(Request $request)
     {
-<<<<<<< HEAD
-=======
         $filteredCategories = ProjectPortfolio::query();
->>>>>>> be5715169 (udapte with portfolio page)
         if (!is_null($request->input('category_id'))) {
             $selectedCategoryId = $request->input('category_id');
             $filteredCategories = $filteredCategories->where('cms_category', $selectedCategoryId);
@@ -107,12 +97,8 @@ class PortfolioController extends AccountBaseController
         return response()->json($filteredCategories);
     }
 
-<<<<<<< HEAD
-    public function filterDataShow($dataId){
-=======
     public function filterDataShow($dataId)
     {
->>>>>>> be5715169 (udapte with portfolio page)
         $portfolio = DB::table('project_portfolios')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
@@ -121,24 +107,12 @@ class PortfolioController extends AccountBaseController
             ->where('project_portfolios.id', $dataId)
             ->first();
 
-<<<<<<< HEAD
-//        dd($portfolio);
-
-            $html = view('portfolio.portfolio_modal', [
-                'portfolio' => $portfolio
-            ])->render();
-            return response($html);
-
-    }
-
-=======
 
         $html = view('portfolio.portfolio_modal', [
             'portfolio' => $portfolio
         ])->render();
         return response($html);
     }
->>>>>>> be5715169 (udapte with portfolio page)
 
     /**
      * Show the form for creating a new resource.
