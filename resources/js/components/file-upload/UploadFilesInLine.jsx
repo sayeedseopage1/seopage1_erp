@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Button from './Button'
 
-const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mode=""}) => {
+const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mode="", uploadInputClass='', fileWrapperClass=''}) => {
     const [previews, setPreviews] = React.useState([]);
 
     
@@ -38,6 +38,8 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
   
 
   const RenderIcon = ({_file, type=''}) => { 
+
+    console.log({_file})
     let filename ='';
     let file = {};
     if(type === 'previous'){
@@ -89,7 +91,7 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
   return (
     <div className='d-flex align-items-center flex-wrap' style={{gap: '10px'}}>
          
-        {mode !== 'preview' &&  <div className="sp1_sub-task-file-upload">
+        {mode !== 'preview' &&  <div className={`sp1_sub-task-file-upload ${uploadInputClass}`}>
             <i className="fa-solid fa-cloud-arrow-up"></i>
             <span>Upload Files</span>
             <input type="file" multiple onChange={handleFileUpload}/>
@@ -98,7 +100,7 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
         {previous?.map((file) => (
           <div 
               key={file.id} 
-              className="sp1_sub-task-file-upload"
+              className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
               data-toggle="tooltip" 
               data-placement="bottom" 
               title={file?.name}
@@ -154,7 +156,7 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
         {previews?.map((file, i) => (
             <div 
                 key={i} 
-                className="sp1_sub-task-file-upload"
+                className={`sp1_sub-task-file-upload ${fileWrapperClass}`}
                 data-toggle="tooltip" 
                 data-placement="bottom" 
                 title={file?.name}

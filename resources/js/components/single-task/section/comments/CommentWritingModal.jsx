@@ -2,14 +2,8 @@ import React from 'react'
 import Modal from '../../components/Modal'
 import Button from '../../components/Button'
 import CKEditorComponent from '../../../ckeditor'
-import FileUpload from '../../../file-upload/FileUpload'
 
 const CommentWritingModal = ({isOpen, close}) => {
-    const [openUploadFileModal, setOpenUploadFileModal] = React.useState(false);
-
-    const toggleUpload = () => setOpenUploadFileModal(!openUploadFileModal);
-    const closeUploadModal = () => setOpenUploadFileModal(false);
-
   return (
     <Modal isOpen={isOpen} className="sp1_st_cnt_modal">
         <div className='sp1_st_comment_preview'>
@@ -44,11 +38,10 @@ const CommentWritingModal = ({isOpen, close}) => {
                             </div> 
                             <div className='py-3'>
                                 <div>Attach Files here (if need) <i className='fa-solid fa-paperclip ml-1 text-primary' /></div>
-                                <div onClick={toggleUpload} className='sp1_st_write_comment_editor_attach'>
+                                <div className='sp1_st_write_comment_editor_attach'>
                                     <i className="fa-solid fa-cloud-arrow-up"></i>
                                     <span>Attach Files</span>
-                                </div>
-                                <FileUpload close={closeUploadModal} isOpen={openUploadFileModal} />
+                                </div> 
                             </div>
                         </div> 
                    </div>

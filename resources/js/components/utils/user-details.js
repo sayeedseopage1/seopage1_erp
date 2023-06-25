@@ -24,7 +24,7 @@ export class User {
       this.reportingTo = data?.reporting_to;
       this.slackUsername = data?.slack_username;
       this.upcomingBirthday = new Date(data?.upcoming_birthday);
-      this.userId = data?.user_id;
+      this.userId = data?.id;
       this.gender = data?.gender;
       this.googleCalendarStatus = data?.google_calendar_status;
       this.image = data?.image;

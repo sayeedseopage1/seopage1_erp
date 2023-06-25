@@ -106,3 +106,35 @@
     flex-wrap: wrap;
     gap: 10px;
 }
+
+
+.sp1_file_upload--input-preview{
+    border: 1px solid rgba(0 0 0 / 10%);
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background .4s ease-in-out;
+}
+
+
+.sp1_file_upload--input-preview:hover{
+    background: rgba(0 0 0 / 5%)
+}
+
+
+.sp1_file_upload--input-preview
+.uploaded-file-ext{
+    font-size: 14px;
+}
+
+.sp1_file_upload--input-preview
+.uploaded-file-ext-sm{
+    padding: 0px 4px; 
+    bottom: 15px !important;
+}
+
+
+
+.sp1_file_upload--input-preview  .uploaded-file-name{
+    font-size: 14px; 
+    margin-top: 0;
+}

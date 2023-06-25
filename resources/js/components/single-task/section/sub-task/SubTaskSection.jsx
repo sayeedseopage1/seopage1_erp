@@ -9,19 +9,21 @@ import { useNavigate } from 'react-router-dom';
 import { storeSubTasks } from '../../../services/features/subTaskSlice';
 import SubtTaskEditForm from './SubTaskEditForm';
 import CustomModal from '../../components/CustomModal';
+import PreviewSubtask from './PreviewSubtask';
 
 const SubTaskSection = () => {
   const {task, subTask} = useSelector(s => s.subTask);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [edit, setEdit] = React.useState(null);
-
-
   const [formMode, setFormMode] = React.useState('add');
   const [isTaskModalOpen, setIsTaskModalOpen] = React.useState(false);
   const [subtaskModalToggleRef, setSubtaskModalToggleRef] = React.useState(null);
-  
+
+
+ 
+
+
   const toggleAddButton = () => setIsTaskModalOpen(!isTaskModalOpen);
   const closeAddModal = () => {
     setIsTaskModalOpen(false)
@@ -84,18 +86,17 @@ const SubTaskSection = () => {
   return (
     <div className='sp1_task_right_card mb-3' style={{zIndex: isTaskModalOpen? '99' : ''}}>  
 
+      <PreviewSubtask />
+
+
+      {/* modal */}
       <CustomModal 
         toggleRef={subtaskModalToggleRef}
         isOpen={isTaskModalOpen}  
         close={closeAddModal}
         formMode={formMode}
       >
-       {
-       !edit ? 
-          <SubTaskForm  close={closeAddModal}/> 
-        : 
-          <SubtTaskEditForm close={closeEditForm} editId={edit}/>
-      } 
+       { !edit ?  <SubTaskForm  close={closeAddModal}/> : <SubtTaskEditForm close={closeEditForm} editId={edit}/>}
       </CustomModal>
 
       {/* left dropdown */}
@@ -115,32 +116,30 @@ const SubTaskSection = () => {
 
        <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
           <div className="f-16">
-              <span>Sub Task</span>
-                {isFetching && <div 
-                    className="spinner-border text-dark ml-2" 
-                    role="status"
-                    style={{
-                        width: '16px',
-                        height: '16px',
-                        border: '0.14em solid rgba(0, 0, 0, .25)',
-                        borderRightColor: 'transparent' 
-                    }}
-                />}
+            <span>Sub Task</span>
+            {isFetching && <div 
+                className="spinner-border text-dark ml-2" 
+                role="status"
+                style={{
+                    width: '16px',
+                    height: '16px',
+                    border: '0.14em solid rgba(0, 0, 0, .25)',
+                    borderRightColor: 'transparent' 
+                }}
+            />}
           </div> 
-              <Button
-                  variant='tertiary'
-                  className="sp1_tark_add_item" 
-                  aria-label="addButton"
-                  onClick={toggleAddButton}
-              > 
-                  {isTaskModalOpen ? (
-                    <> <i className="fa-solid fa-xmark" style= {{fontSize: '12px'}}/> Close </> 
-                    ) :
-                    (
-                      <> <i className="fa-solid fa-plus"  style= {{fontSize: '12px'}} /> Sub Task  </>
-                    )
-                  } 
-              </Button>
+
+          <Button
+              variant='tertiary'
+              className="sp1_tark_add_item" 
+              aria-label="addButton"
+              onClick={toggleAddButton}
+          > 
+              {isTaskModalOpen ? 
+                (<> <i className="fa-solid fa-xmark" style= {{fontSize: '12px'}}/> Close </> ) :
+                ( <> <i className="fa-solid fa-plus"  style= {{fontSize: '12px'}} /> Sub Task  </> )
+              } 
+          </Button>
         </div>
 
         <div className="sp1_task_right_card--body">

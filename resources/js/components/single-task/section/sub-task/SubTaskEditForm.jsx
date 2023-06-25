@@ -312,7 +312,13 @@ const estimateError= (err) =>{
                         <div className="form-group my-3">
                             <label htmlFor="">Start Date <sup className='f-14'>*</sup></label>
                             <div className="form-control height-35 f-14">
-                                <DatePicker date={startDate} setDate={setStateDate} />
+                                <DatePicker 
+                                    placeholderText={`Ex: ${dayjs.dayjs().format('DD-MM-YYYY')}`}
+                                    minDate={dayjs.dayjs(task?.start_date).toDate()} 
+                                    maxDate={dueDate || dayjs.dayjs(task?.due_date).toDate()} 
+                                    date={startDate} 
+                                    setDate={setStateDate} 
+                                />
                             </div>
                             {
                                 required_error?.start_date?.[0] &&
@@ -325,7 +331,13 @@ const estimateError= (err) =>{
                         <div className="form-group my-3">
                             <label htmlFor="">Due Date <sup className='f-14'>*</sup></label>
                             <div className="form-control height-35 f-14">
-                                <DatePicker date={dueDate} setDate={setDueDate} />
+                                <DatePicker 
+                                    placeholderText={`Ex: ${dayjs.dayjs().format('DD-MM-YYYY')}`}
+                                    minDate={startDate || dayjs.dayjs(task?.start_date).toDate()} 
+                                    maxDate={dayjs.dayjs(task?.due_date).toDate()}
+                                    date={dueDate} 
+                                    setDate={setDueDate} 
+                                />
                             </div>
                             {
                                 required_error?.due_date?.[0] &&
