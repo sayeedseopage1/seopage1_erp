@@ -25,13 +25,15 @@ return new class extends Migration
             $table->string('reference_link')->nullable();
             $table->text('instruction')->nullable();
             $table->string('color');
-            $table->integer('color_schema');
+            
             $table->text('color_description');
             $table->integer('plugin_research');
             $table->string('plugin_name')->nullable();
             $table->string('plugin_url')->nullable();
-            $table->string('google_drive_link')->nullable();
+            $table->integer('color_schema')->nullable();
             $table->text('instruction_plugin')->nullable();
+            $table->string('google_drive_link')->nullable();
+
             $table->timestamps();
         });
     }

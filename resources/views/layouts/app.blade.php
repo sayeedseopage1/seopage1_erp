@@ -42,6 +42,9 @@
     <link rel="stylesheet" href="{{asset('moving-countdown/style.css')}}" type="text/css" />
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <!-- sp1 editor css -->
+    <link rel="stylesheet" href="{{asset('css/ck-editor.css')}}">
+    <link rel="stylesheet" href="{{asset('css/seopage1.css')}}">
 
 
     <!-- designation hierarchy && department hierarchy -->
@@ -58,8 +61,8 @@
     @isset($activeSettingMenu)
         <style>
             .preloader-container {
-                margin-left: 510px;
-                width: calc(100% - 510px);
+                /*margin-left: 510px;
+                width: calc(100% - 510px);*/
                 z-index: 99999;
                 overflow: hidden;
             }

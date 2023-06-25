@@ -85,7 +85,7 @@ const EmployeeWiseSessionTable = ({control}) => {
 
     // initial default 
     React.useEffect(() => {
-        setSortConfig({ key: "task_id", direction: "asc" });
+        setSortConfig({ key: "start_time", direction: "dec" });
         const columnOrderFromLocalStore = localStorage.getItem(
             ModalType === 'projectWise' ? "projectWiseTableSessionColumnOrder" : "employeeWiseTableSessionColumnOrder"
         );

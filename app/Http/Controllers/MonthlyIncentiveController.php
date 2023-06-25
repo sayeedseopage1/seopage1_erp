@@ -31,12 +31,12 @@ class MonthlyIncentiveController extends AccountBaseController
     { 
         if (Auth::user()->role_id == 1) {
             $this->user_incentive = UserIncentive::where([
-                ['point_earned' , '>', 0],
+                // ['point_earned' , '>', 0],
                 'status' => '0'
             ])->orderBy('id', 'desc')->get();
         } else {
             $this->user_incentive = UserIncentive::where([
-                ['point_earned' , '>', 0],
+                // ['point_earned' , '>', 0],
                 'status' => '0'
             ])->orderBy('id', 'desc')->where('user_id',Auth::id())->get();
         }

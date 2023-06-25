@@ -9,6 +9,10 @@ use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\TaskUser;
+use App\Helper\Files;
+use App\Models\TaskFile;
+use Validator;
+
 class SubTaskController extends AccountBaseController
 {
 
@@ -39,14 +43,46 @@ class SubTaskController extends AccountBaseController
      * @return array
      * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
      */
-    public function store(StoreSubTask $request)
+    public function store(Request $request)
     {
-        $check_estimation = Task::where('id',$request->task_id)->first();
-        $hours= $request->estimate_hours *60 ;
-        $minutes= $request->estimate_minutes;
-        $total_minutes= $hours+$minutes;
-        if($check_estimation->estimate_time_left_minutes - $total_minutes < 0 )
-        {
+        $setting = global_setting();
+        $task = Task::find(request()->task_id);
+        $startDate = $task->start_date->format($setting->date_format);
+        $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';
+        $rules = [
+            'title' => 'required',
+            'estimate_hours' => 'required',
+            'estimate_minutes' => 'required',
+            'description' => 'required',
+            'user_id' => 'required',
+
+        ];
+
+        $dueDateRule = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
+
+        !is_null($task->due_date) ? $dueDateRule . '|before_or_equal:' . $task->due_date : $dueDateRule;
+
+        if ($task->due_date) {
+
+            $dueDate = $task->due_date->format($setting->date_format);
+            $dueDateRule .= '|before_or_equal:' . $dueDate;
+        }
+
+        $rules['start_date'] = $dueDateRule;
+
+        $rules['due_date'] = !is_null(request()->start_date) ? ($dueDateRule . '|after_or_equal:' . Carbon::createFromFormat($setting->date_format, request()->start_date)->format($setting->date_format)) : $dueDateRule;
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 422);
+        }
+
+        $check_estimation = Task::where('id', $request->task_id)->first();
+        $hours = $request->estimate_hours * 60;
+        $minutes = $request->estimate_minutes;
+        $total_minutes = $hours + $minutes;
+        if ($check_estimation->estimate_time_left_minutes - $total_minutes < 0) {
 
             // return response()->json([
             //     "message" => "The given data was invalid.",
@@ -62,8 +98,7 @@ class SubTaskController extends AccountBaseController
         $task = Task::findOrFail($request->task_id);
         $taskUsers = $task->users->pluck('id')->toArray();
 
-        abort_403(!(
-            $this->addPermission == 'all'
+        abort_403(!($this->addPermission == 'all'
             || ($this->addPermission == 'added' && $task->added_by == user()->id)
             || ($this->addPermission == 'owned' && in_array(user()->id, $taskUsers))
             || ($this->addPermission == 'added' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id))
@@ -83,41 +118,41 @@ class SubTaskController extends AccountBaseController
 
         $subTask->save();
 
-        $task_id= Task::where('id',$request->task_id)->first();
-        $task_s= new Task();
-        $task_s->task_short_code= $task_id->task_short_code .'-'.$subTask->id;
-        $task_s->heading= $subTask->title;
-        $task_s->description= str_replace('<p><br></p>', '', trim($request->description));
+        $task_id = Task::where('id', $request->task_id)->first();
+        $task_s = new Task();
+        $task_s->task_short_code = $task_id->task_short_code . '-' . $subTask->id;
+        $task_s->heading = $subTask->title;
+        $task_s->description = str_replace('<p><br></p>', '', trim($request->description));
         if ($request->start_date != '' && $request->due_date != '') {
             $task_s->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
             $task_s->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
         }
-      $task_s->project_id= $task_id->project_id;
-      $task_s->task_category_id=$request->task_category_id;
+        $task_s->project_id = $task_id->project_id;
+        $task_s->task_category_id = $request->task_category_id;
 
-      $task_s->priority= $request->priority;
-      $task_s->is_private = $request->has('is_private') ? 1 : 0;
-      $task_s->billable = $request->has('billable') && $request->billable ? 1 : 0;
-      $task_s->estimate_hours = $request->estimate_hours;
-      $task_s->estimate_minutes = $request->estimate_minutes;
-      $task_s->repeat = $request->repeat ? 1 : 0;
-      $task_s->milestone_id= $request->milestone_id;
-      $total_hours= $request->estimate_hours *60;
-        $total_minutes= $request->estimate_minutes;
-        $total_in_minutes= $total_hours+ $total_minutes;
-        $task_s->estimate_time_left_minutes= $total_in_minutes;
+        $task_s->priority = $request->priority;
+        $task_s->is_private = $request->has('is_private') ? 1 : 0;
+        $task_s->billable = $request->has('billable') && $request->billable ? 1 : 0;
+        $task_s->estimate_hours = $request->estimate_hours;
+        $task_s->estimate_minutes = $request->estimate_minutes;
+        $task_s->repeat = $request->repeat ? 1 : 0;
+        $task_s->milestone_id = $request->milestone_id;
+        $total_hours = $request->estimate_hours * 60;
+        $total_minutes = $request->estimate_minutes;
+        $total_in_minutes = $total_hours + $total_minutes;
+        $task_s->estimate_time_left_minutes = $total_in_minutes;
 
-      if ($request->has('repeat')) {
-          $task_s->repeat_count = $request->repeat_count;
-          $task_s->repeat_type = $request->repeat_type;
-          $task_s->repeat_cycles = $request->repeat_cycles;
-      }
+        if ($request->has('repeat')) {
+            $task_s->repeat_count = $request->repeat_count;
+            $task_s->repeat_type = $request->repeat_type;
+            $task_s->repeat_cycles = $request->repeat_cycles;
+        }
 
 
         $task_s->board_column_id = 2;
-        $task_s->task_status= "pending";
-        $task_s->dependent_task_id= $request->task_id;
-        $task_s->subtask_id= $subTask->id;
+        $task_s->task_status = "pending";
+        $task_s->dependent_task_id = $request->task_id;
+        $task_s->subtask_id = $subTask->id;
         $task_s->save();
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;
@@ -125,21 +160,44 @@ class SubTaskController extends AccountBaseController
         //
         // $task_user->save();
 
-        $hours_s= $request->estimate_hours *60 ;
-        $minutes_s= $request->estimate_minutes;
-        $total_minutes_s= $hours_s+$minutes_s;
-       
+        $hours_s = $request->estimate_hours * 60;
+        $minutes_s = $request->estimate_minutes;
+        $total_minutes_s = $hours_s + $minutes_s;
 
-        $parent_task= Task::where('id',$subTask->task_id)->first();
-        $parent_task_update= Task::find($parent_task->id);
-        $parent_task_update->estimate_time_left_minutes= $parent_task->estimate_time_left_minutes - $total_minutes_s;
+
+        $parent_task = Task::where('id', $subTask->task_id)->first();
+        $parent_task_update = Task::find($parent_task->id);
+        $parent_task_update->estimate_time_left_minutes = $parent_task->estimate_time_left_minutes - $total_minutes_s;
         $parent_task_update->save();
 
+        if ($request->hasFile('file')) {
 
+            foreach ($request->file as $fileData) {
+                $file = new TaskFile();
+                $file->task_id = $task_s->id;
+
+                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task_s->id);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
+        //dd($parent_task, $subTask);
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
-        return Reply::successWithData(__('messages.subTaskAdded'), [ 'subTaskID' => $subTask->id]);
-
+        return Reply::successWithData(__('messages.subTaskAdded'), [
+            'subTaskID' => $subTask->id,
+            'sub_task' => [
+                'id' => $task_s->id,
+                'title' => \Str::limit($task_s->heading, 30, '...'),
+                'subtask_id' => $subTask->id
+            ]
+        ]);
     }
 
     /**
@@ -166,7 +224,7 @@ class SubTaskController extends AccountBaseController
         $subTask->save();
 
         $this->task = Task::with(['subtasks', 'subtasks.files'])->findOrFail($subTask->task_id);
-        $this->logTaskActivity($this->task->id, user()->id, 'subTaskUpdateActivity', $this->task ->board_column_id, $subTask->id);
+        $this->logTaskActivity($this->task->id, user()->id, 'subTaskUpdateActivity', $this->task->board_column_id, $subTask->id);
 
         $view = view('tasks.sub_tasks.show', $this->data)->render();
 
@@ -180,9 +238,43 @@ class SubTaskController extends AccountBaseController
      * @return array
      * @throws \Froiden\RestAPI\Exceptions\RelatedResourceNotFoundException
      */
-    public function update(StoreSubTask $request, $id)
+    public function update(Request $request, $id)
     {
-        $subTask = SubTask::findOrFail($id);
+        $setting = global_setting();
+        $task = Task::find($id);
+        $startDate = $task->start_date->format($setting->date_format);
+        $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';
+        $rules = [
+            'title' => 'required',
+            'estimate_hours' => 'required',
+            'estimate_minutes' => 'required',
+            'description' => 'required',
+            'user_id' => 'required',
+
+        ];
+
+        $dueDateRule = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
+
+        !is_null($task->due_date) ? $dueDateRule . '|before_or_equal:' . $task->due_date : $dueDateRule;
+
+        if ($task->due_date) {
+
+            $dueDate = $task->due_date->format($setting->date_format);
+            $dueDateRule .= '|before_or_equal:' . $dueDate;
+        }
+
+        $rules['start_date'] = $dueDateRule;
+
+        $rules['due_date'] = !is_null(request()->start_date) ? ($dueDateRule . '|after_or_equal:' . Carbon::createFromFormat($setting->date_format, request()->start_date)->format($setting->date_format)) : $dueDateRule;
+
+        $validator = Validator::make($request->all(), $rules);
+
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 422);
+        }
+
+        $subTask = SubTask::findOrFail($request->subTaskID);
         $subTask->title = $request->title;
         $subTask->description = str_replace('<p><br></p>', '', trim($request->description));
 
@@ -198,13 +290,73 @@ class SubTaskController extends AccountBaseController
 
         $subTask->save();
 
-        $task = $subTask->task;
+        $task_s = Task::find($id);
+        $task_s->task_short_code = $task->task_short_code . '-' . $subTask->id;
+        $task_s->heading = $subTask->title;
+        $task_s->description = str_replace('<p><br></p>', '', trim($request->description));
+        if ($request->start_date != '' && $request->due_date != '') {
+            $task_s->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+            $task_s->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        }
+        $task_s->project_id = $task->project_id;
+        $task_s->task_category_id = $request->task_category_id;
+
+        $task_s->priority = $request->priority;
+        $task_s->is_private = $request->has('is_private') ? 1 : 0;
+        $task_s->billable = $request->has('billable') && $request->billable ? 1 : 0;
+        $task_s->estimate_hours = $request->estimate_hours;
+        $task_s->estimate_minutes = $request->estimate_minutes;
+        $task_s->repeat = $request->repeat ? 1 : 0;
+        $task_s->milestone_id = $request->milestone_id;
+        $total_hours = $request->estimate_hours * 60;
+        $total_minutes = $request->estimate_minutes;
+        $total_in_minutes = $total_hours + $total_minutes;
+        $task_s->estimate_time_left_minutes = $total_in_minutes;
+
+        if ($request->has('repeat')) {
+            $task_s->repeat_count = $request->repeat_count;
+            $task_s->repeat_type = $request->repeat_type;
+            $task_s->repeat_cycles = $request->repeat_cycles;
+        }
+
+
+        $task_s->board_column_id = 2;
+        $task_s->task_status = "pending";
+        $task_s->dependent_task_id = $request->task_id;
+        $task_s->subtask_id = $subTask->id;
+        $task_s->save();
+
+        if ($request->hasFile('file')) {
+
+            foreach ($request->file as $fileData) {
+                $file = new TaskFile();
+                $file->task_id = $id;
+
+                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $id);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
+        //$task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskUpdateActivity', $task->board_column_id, $subTask->id);
 
         $this->task = Task::with(['subtasks', 'subtasks.files'])->findOrFail($subTask->task_id);
-        $view = view('tasks.sub_tasks.show', $this->data)->render();
+        //$view = view('tasks.sub_tasks.show', $this->data)->render();
 
-        return Reply::successWithData(__('messages.subTaskUpdated'), ['view' => $view]);
+        return Reply::successWithData(__('messages.subTaskUpdated'), [
+            'status' => 'success',
+            'message' => 'Data has been updated successfully',
+            'sub_task' => [
+                'id' => $id,
+                'title' => $request->title,
+                'subtask_id' => $subTask->id
+            ]
+        ]);
     }
-
 }

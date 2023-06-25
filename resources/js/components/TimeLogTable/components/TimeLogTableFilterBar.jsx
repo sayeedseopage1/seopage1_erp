@@ -158,7 +158,9 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
             selected={selectedEmployeeId ? users?.find(u => Number(u.id) === selectedEmployeeId) : null}
             isLoading={userIsFetching}
             onSelect={handleEmployeeFilter}
-            selectedAllButton = {false}
+
+            selectedAllButton = {top_management}
+
         />
 
 

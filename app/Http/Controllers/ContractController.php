@@ -55,6 +55,7 @@ use App\Models\LeadsDealsActivityLog;
 use App\Models\DealStageChange;
 use App\Models\QualifiedSale;
 use App\Models\AuthorizationAction;
+use App\Models\AwardTimeIncress;
 
 class ContractController extends AccountBaseController
 {
@@ -121,8 +122,7 @@ class ContractController extends AccountBaseController
         $this->deletePermission = user()->permission('delete_contract');
 
         abort_403(
-            !(
-                $this->deletePermission == 'all' ||
+            !($this->deletePermission == 'all' ||
                 ($this->deletePermission == 'added' && user()->id == $contract->added_by) ||
                 ($this->deletePermission == 'owned' && user()->id == $contract->client_id) ||
                 ($this->deletePermission == 'both' && (user()->id == $contract->client_id || user()->id == $contract->added_by))
@@ -217,16 +217,16 @@ class ContractController extends AccountBaseController
     }
     public function storeDeal(Request $request)
     {
-        $current_time= Carbon::now()->format('d-m-Y H:i:s' );
-        $award_date= strtotime($request->award_time);
-        $aw_dt= date('Y-m-d H:i:s', $award_date );
+        $current_time = Carbon::now()->format('d-m-Y H:i:s');
+        $award_date = strtotime($request->award_time);
+        $aw_dt = date('Y-m-d H:i:s', $award_date);
         //dd($aw_dt);
         $validate = $request->validate([
             'user_name' => 'required',
             'client_name' => 'required',
             'project_name' => 'required',
             'amount' => 'required',
-            'award_time' => 'required|date|before:'.$current_time,
+            'award_time' => 'required|date|before:' . $current_time,
         ]);
         //        if ($validate) {
         $to = Carbon::parse($request->current_time);
@@ -245,23 +245,23 @@ class ContractController extends AccountBaseController
         }
 
 
-        $existing_client= User::where('user_name',$request->user_name)->first();
+        $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new Deal();
         $deal->deal_id = 'DSEOP1' . $suffle;
         $deal->project_name = $request->project_name;
-        $deal->currency_id= 1;
-        $deal->actual_amount=  $request->amount;
-        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $deal->currency_id = 1;
+        $deal->actual_amount =  $request->amount;
+        $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $deal->award_time= $aw_dt;
-        $deal->amount = ($request->amount)/$currency->exchange_rate;
+        $deal->award_time = $aw_dt;
+        $deal->amount = ($request->amount) / $currency->exchange_rate;
         $deal->client_name = $request->client_name;
         $deal->client_username = $request->user_name;
         $deal->added_by = Auth::id();
         //$date= Carbon::now();
-        $deal->original_currency_id= $request->original_currency_id;
+        $deal->original_currency_id = $request->original_currency_id;
         $date = date('Y-m-d H:i:s');
 
         $newDate = Carbon::createFromFormat('Y-m-d H:i:s', $date)
@@ -272,12 +272,10 @@ class ContractController extends AccountBaseController
         $deal->deal_creation_date = $newDate;
 
         $deal->start_date = $newDate;
-        if($existing_client != null)
-        {
+        if ($existing_client != null) {
             $deal->client_badge = 'existing client';
-
-        }else {
-            $deal->client_badge= 'new client';
+        } else {
+            $deal->client_badge = 'new client';
         }
 
         $deal->save();
@@ -290,17 +288,16 @@ class ContractController extends AccountBaseController
                 $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
                 $lead_ag_id->save();
             }
-
         }
         $getUser = User::where('user_name', $request->user_name)->first();
         if (is_null($getUser)) {
             $user = new User();
             $user->name = $request->client_name;
             $user->user_name = $request->user_name;
-            $user->login= 'disable';
+            $user->login = 'disable';
             $user->email_notifications = 0;
-            $country= Country::where('nicename',$request->country)->first();
-            $user->country_id= $country->id;
+            $country = Country::where('nicename', $request->country)->first();
+            $user->country_id = $country->id;
             $user->save();
             $role = new RoleUser();
             $role->role_id = 3;
@@ -327,9 +324,9 @@ class ContractController extends AccountBaseController
         $contract->original_amount = $request->amount;
         $contract->actual_amount = $request->amount;
         //$deal->actual_amount=  $request->amount;
-        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $currency = Currency::where('id', $request->original_currency_id)->first();
 
-        $contract->amount = ($request->amount)/$currency->exchange_rate;
+        $contract->amount = ($request->amount) / $currency->exchange_rate;
         $contract->start_date = $newDate;
         $contract->original_start_date = $newDate;
         $contract->client_id = $user->id;
@@ -352,9 +349,9 @@ class ContractController extends AccountBaseController
         $project->deliverable_authorization = 0;
 
 
-        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount)/$currency->exchange_rate;
+        $project->project_budget = ($request->amount) / $currency->exchange_rate;
 
         $project->completion_percent = 0;
         $project->deal_id = $deal->id;
@@ -380,9 +377,9 @@ class ContractController extends AccountBaseController
             }
         }
 
-        if($existing_client != null) {
+        if ($existing_client != null) {
             // /dd("true");
-            $find_pm_id = Project::where('client_id',$existing_client->id)->orderBy('id','desc')->where('id','!=',$project->id)->where('pm_id','!=',null)->first();
+            $find_pm_id = Project::where('client_id', $existing_client->id)->orderBy('id', 'desc')->where('id', '!=', $project->id)->where('pm_id', '!=', null)->first();
 
             $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
             $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
@@ -393,7 +390,7 @@ class ContractController extends AccountBaseController
                 $deal_pm_id = Deal::find($deal->id);
                 $deal_pm_id->pm_id = $find_pm_id->pm_id;
                 $deal_pm_id->save();
-                $project_pm_id= Project::find($project->id);
+                $project_pm_id = Project::find($project->id);
                 $project_pm_id->pm_id = $find_pm_id->pm_id;
                 $project_pm_id->save();
                 // dd($project_pm_id);
@@ -408,14 +405,13 @@ class ContractController extends AccountBaseController
                 $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
+                $pm_project_update->amount = $pm_project_update->amount + ($deal->amount / 2);
                 $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
                 $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
+                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount / 2);
                 $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                 $pm_project_update->save();
             }
-
         }
 
         return response()->json([
@@ -425,20 +421,20 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-//        dd($request->all());
+        //        dd($request->all());
         \DB::beginTransaction();
-        $current_time= Carbon::now()->format('d-m-Y H:i:s' );
-        $award_date= strtotime($request->award_time);
-        $aw_dt= date('Y-m-d H:i:s', $award_date );
+        $current_time = Carbon::now()->format('d-m-Y H:i:s');
+        $award_date = strtotime($request->award_time);
+        $aw_dt = date('Y-m-d H:i:s', $award_date);
 
         $validated = $request->validate([
-//            'user_name' => 'required',
+            //            'user_name' => 'required',
             'client_name' => 'required',
-//            'project_name' => 'required',
+            //            'project_name' => 'required',
             'amount' => 'required|min:1',
 
             // 'current_time' => 'date|date_format:d-m-Y H:i A',
-            'award_time' => 'required|date|before:'.$current_time,
+            'award_time' => 'required|date|before:' . $current_time,
         ]);
         //  dd($request);
         $to = Carbon::parse($current_time);
@@ -489,37 +485,34 @@ class ContractController extends AccountBaseController
                     $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
                     $lead_ag->save();
                 }
-
             }
-
         }
 
         $message_links = $request->message_link;
         // /dd($message_links);
-        $value= '';
+        $value = '';
 
         if (is_array($message_links) || is_object($message_links)) {
             foreach ($message_links as $link) {
                 //dd($d['day']);
-                $value= $value  . $link .' <br> ';
-
+                $value = $value  . $link . ' <br> ';
             }
         }
-        $existing_client= User::where('user_name',$request->user_name)->first();
+        $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
         $deal = new Deal();
         $deal->deal_id = $request->deal_id;
         $deal->project_name = $request->project_name;
-        $deal->profile_link= $request->profile_link;
-        $deal->message_link= $value;
-        $deal->original_currency_id= $request->original_currency_id;
-        $deal->currency_id= 1;
-        $deal->project_type= $request->project_type;
-        $deal->actual_amount=  $request->amount;
-        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $deal->profile_link = $request->profile_link;
+        $deal->message_link = $value;
+        $deal->original_currency_id = $request->original_currency_id;
+        $deal->currency_id = 1;
+        $deal->project_type = $request->project_type;
+        $deal->actual_amount =  $request->amount;
+        $currency = Currency::where('id', $request->original_currency_id)->first();
         //  dd($currency);
-        $deal->amount = ($request->amount)/$currency->exchange_rate;
+        $deal->amount = ($request->amount) / $currency->exchange_rate;
         $deal->client_name = $request->client_name;
         $deal->client_username = $request->user_name;
         $deal->lead_id = $request->lead_id;
@@ -533,15 +526,13 @@ class ContractController extends AccountBaseController
         //dd($newDate);
 
         $deal->deal_creation_date = $newDate;
-        $deal->award_time= $aw_dt;
+        $deal->award_time = $aw_dt;
 
         $deal->start_date = $newDate;
-        if($existing_client != null)
-        {
+        if ($existing_client != null) {
             $deal->client_badge = 'existing client';
-
-        }else {
-            $deal->client_badge= 'new client';
+        } else {
+            $deal->client_badge = 'new client';
         }
         $deal->save();
         //$lead_con_id = Lead::where('id', $request->lead_id)->first();
@@ -554,7 +545,6 @@ class ContractController extends AccountBaseController
                 $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
                 $lead_ag_id->save();
             }
-
         }
 
 
@@ -564,21 +554,19 @@ class ContractController extends AccountBaseController
             $lead->save();
         }
 
-        $user_name= User::where('user_name',$request->user_name)->first();
+        $user_name = User::where('user_name', $request->user_name)->first();
         if ($user_name == null) {
-            if($lead != null)
-            {
-                $country= Country::where('nicename',$lead->country)->first();
+            if ($lead != null) {
+                $country = Country::where('nicename', $lead->country)->first();
             }
 
             $user = new User();
             $user->name = $request->client_name;
             $user->user_name = $request->user_name;
-            $user->login= 'disable';
+            $user->login = 'disable';
             $user->email_notifications = 0;
-            if($lead != null)
-            {
-                $user->country_id= $country->id;
+            if ($lead != null) {
+                $user->country_id = $country->id;
             }
 
             $user->save();
@@ -592,7 +580,7 @@ class ContractController extends AccountBaseController
             $client->client_username = $request->client_username;
             $client->save();
         } else {
-            $user= $existing_client;
+            $user = $existing_client;
         }
 
 
@@ -608,9 +596,9 @@ class ContractController extends AccountBaseController
         $contract->subject = $request->project_name;
         $contract->original_amount = $request->amount;
         //$deal->actual_amount=  $request->amount;
-        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $currency = Currency::where('id', $request->original_currency_id)->first();
         $contract->actual_amount = $request->amount;
-        $contract->amount = ($request->amount)/$currency->exchange_rate;
+        $contract->amount = ($request->amount) / $currency->exchange_rate;
 
         $contract->start_date = $newDate;
         $contract->original_start_date = $newDate;
@@ -632,9 +620,9 @@ class ContractController extends AccountBaseController
         $project->project_short_code = 'PSEOP1' . $suffle;
         $project->start_date = $newDate;
         $project->deliverable_authorization = 0;
-        $currency= Currency::where('id',$request->original_currency_id)->first();
+        $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
-        $project->project_budget = ($request->amount)/$currency->exchange_rate;
+        $project->project_budget = ($request->amount) / $currency->exchange_rate;
         $project->due = $deal->amount;
 
         $project->completion_percent = 0;
@@ -645,14 +633,12 @@ class ContractController extends AccountBaseController
         $project->save();
 
         // dd($existing_client);
-        if($existing_client != null)
-        {
+        if ($existing_client != null) {
 
             //  dd("true");
 
-            $find_pm_id = Project::where('client_id',$existing_client->id)->orderBy('id','desc')->where('id','!=',$project->id)->where('pm_id','!=',null)->first();
-            if($find_pm_id != null)
-            {
+            $find_pm_id = Project::where('client_id', $existing_client->id)->orderBy('id', 'desc')->where('id', '!=', $project->id)->where('pm_id', '!=', null)->first();
+            if ($find_pm_id != null) {
 
                 $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
 
@@ -665,7 +651,7 @@ class ContractController extends AccountBaseController
                     $deal_pm_id = Deal::find($deal->id);
                     $deal_pm_id->pm_id = $find_pm_id->pm_id;
                     $deal_pm_id->save();
-                    $project_pm_id= Project::find($project->id);
+                    $project_pm_id = Project::find($project->id);
                     $project_pm_id->pm_id = $find_pm_id->pm_id;
                     $project_pm_id->save();
                     // dd($project_pm_id);
@@ -680,16 +666,14 @@ class ContractController extends AccountBaseController
                     $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
                     $pm_project_update = PMAssign::find($pm_project_find->id);
                     $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                    $pm_project_update->amount = $pm_project_update->amount + ($deal->amount /2);
+                    $pm_project_update->amount = $pm_project_update->amount + ($deal->amount / 2);
                     $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
                     $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount/2);
+                    $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount / 2);
                     $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
                     $pm_project_update->save();
                 }
             }
-
-
         }
 
         // if($existing_client != null)
@@ -732,8 +716,8 @@ class ContractController extends AccountBaseController
 
         // activity log
         $user = Auth::user();
-        $text = $user->getRole->name.' '.$user->name.' - Closed Deal ('.$deal->project_name.') for '.$deal->actual_amount.'$ (Client: '.$deal->client_name.')';
-        $link = '<a href="'.route('deals.show', $deal->id).'">'.$text.'</a>';
+        $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+        $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
         $activityLog = new LeadsDealsActivityLog();
         if ($lead != null) {
             $activityLog->lead_id = $lead->id;
@@ -787,11 +771,11 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-//        dd($request->all());
+        //        dd($request->all());
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
-        $deal= Deal::where('id',$project->deal_id)->first();
+        $deal = Deal::where('id', $project->deal_id)->first();
         $milestone_amount = ProjectMilestone::where('project_id', $project->id)->sum('actual_cost');
         $check = ($deal->actual_amount) - ($milestone_amount);
         // /dd($check);
@@ -818,14 +802,14 @@ class ContractController extends AccountBaseController
             $milestone->project_id = $request->project_id;
             $milestone->milestone_type = $request->milestone_type;
 
-            $milestone->actual_cost=  $request->cost;
-            $project= Project::where('id',$request->project_id)->first();
-            $deal= Deal::where('id',$project->deal_id)->first();
+            $milestone->actual_cost =  $request->cost;
+            $project = Project::where('id', $request->project_id)->first();
+            $deal = Deal::where('id', $project->deal_id)->first();
             //dd($deal);
             $milestone->original_currency_id = $deal->original_currency_id;
-            $currency= Currency::where('id',$deal->original_currency_id)->first();
+            $currency = Currency::where('id', $deal->original_currency_id)->first();
             //dd($currency);
-            $milestone->cost = ($request->cost)/$currency->exchange_rate;
+            $milestone->cost = ($request->cost) / $currency->exchange_rate;
             $milestone->summary = $request->summary;
             $milestone->currency_id = 1;
 
@@ -839,29 +823,27 @@ class ContractController extends AccountBaseController
     }
     public function editMilestone($id)
     {
-        $milestone= ProjectMilestone::find($id);
-        if($milestone)
-        {
+        $milestone = ProjectMilestone::find($id);
+        if ($milestone) {
             return response()->json([
                 'status' => 200,
                 'milestone' => $milestone,
             ]);
-        }else {
+        } else {
             return response()->json([
                 'status' => 404,
                 'message' => 'Milestone Not Found',
             ]);
         }
-
     }
     public function updateMilestone(Request $request, $id)
     {
 
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
-        $deal= Deal::where('id',$project_id->deal_id)->first();
+        $deal = Deal::where('id', $project_id->deal_id)->first();
         $milestone_amount = ProjectMilestone::where('project_id', $project_id->id)->sum('actual_cost');
-        $updated_amount= $milestone_amount - $projectmilestone->actual_cost;
+        $updated_amount = $milestone_amount - $projectmilestone->actual_cost;
         $check = ($deal->actual_amount) - ($updated_amount);
         //dd($check,$projectmilestone->actual_cost);
 
@@ -879,19 +861,18 @@ class ContractController extends AccountBaseController
         } else {
             $milestone = ProjectMilestone::find($id);
             //dd($id);
-            if($milestone)
-            {
+            if ($milestone) {
 
                 $milestone->milestone_title = $request->title;
 
-                $milestone->actual_cost=  $request->cost;
-                $project= Project::where('id',$milestone->project_id)->first();
-                $deal= Deal::where('id',$project->deal_id)->first();
+                $milestone->actual_cost =  $request->cost;
+                $project = Project::where('id', $milestone->project_id)->first();
+                $deal = Deal::where('id', $project->deal_id)->first();
                 //dd($deal);
                 $milestone->original_currency_id = $deal->original_currency_id;
-                $currency= Currency::where('id',$deal->original_currency_id)->first();
+                $currency = Currency::where('id', $deal->original_currency_id)->first();
                 //dd($currency);
-                $milestone->cost = ($request->cost)/$currency->exchange_rate;
+                $milestone->cost = ($request->cost) / $currency->exchange_rate;
                 $milestone->summary = $request->summary;
                 $milestone->currency_id = 1;
                 $milestone->milestone_type = $request->milestone_type;
@@ -901,31 +882,28 @@ class ContractController extends AccountBaseController
                     'status' => 200,
                     'message' => 'Milestone Updated Successfully',
                 ]);
-            }else {
+            } else {
                 return response()->json([
                     'status' => 404,
                     'message' => 'Milestone Not Found',
                 ]);
             }
-
-
         }
     }
 
     public function deleteMilestone($id)
     {
-        $milestone= ProjectMilestone::find($id);
+        $milestone = ProjectMilestone::find($id);
         $milestone->delete();
         return response()->json([
             'status' => 200,
             'message' => 'Milestone Deleted Successfully',
         ]);
-
     }
     public function storedealDetails(Request $request)
     {
-        $deal_hourly_checked = Deal::where('id',$request->id)->first();
-        if ($deal_hourly_checked->project_type !='hourly'){
+        $deal_hourly_checked = Deal::where('id', $request->id)->first();
+        if ($deal_hourly_checked->project_type != 'hourly') {
             $validated = $request->validate([
                 'project_name' => 'required',
                 'deadline' => 'required',
@@ -952,7 +930,7 @@ class ContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
             ]);
-        }else{
+        } else {
             $validated = $request->validate([
                 'project_name' => 'required',
                 'estimated_hour_task' => 'required',
@@ -992,20 +970,18 @@ class ContractController extends AccountBaseController
             ]);
         }
         //dd("hello");
-        $project_milestone= Project::where('deal_id',$request->id)->first();
-        $won_deal_id= Deal::where('id',$request->id)->first();
-        if($won_deal_id->project_type != 'hourly')
-        {
+        $project_milestone = Project::where('deal_id', $request->id)->first();
+        $won_deal_id = Deal::where('id', $request->id)->first();
+        if ($won_deal_id->project_type != 'hourly') {
 
 
-            $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
-//      dd($milestone);
-            $won_deal_id= Deal::where('id',$request->id)->first();
-            if($won_deal_id->project_type != 'hourly')
-            {
+            $milestone = ProjectMilestone::where('project_id', $project_milestone->id)->first();
+            //      dd($milestone);
+            $won_deal_id = Deal::where('id', $request->id)->first();
+            if ($won_deal_id->project_type != 'hourly') {
 
 
-                $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
+                $milestone = ProjectMilestone::where('project_id', $project_milestone->id)->first();
                 if ($milestone == null) {
                     return response()->json([
                         "message" => "The given data was invalid.",
@@ -1023,24 +999,23 @@ class ContractController extends AccountBaseController
         try {
             $deal = Deal::find($request->id);
             $deal->project_name = $request->project_name;
-            $deal->currency_id= 1;
-            $deal->actual_amount=  $request->amount;
-            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $deal->currency_id = 1;
+            $deal->actual_amount =  $request->amount;
+            $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $deal->amount = ($request->amount)/$currency->exchange_rate;
+            $deal->amount = ($request->amount) / $currency->exchange_rate;
             $deal->organization = $request->organization;
             $deal->client_email = $request->client_email;
             //  $deal->description = $request->description;
             // $deal->pipeline_stage = $request->pipeline_stage;
             $message_links = $request->message_link;
             // /dd($message_links);
-            $value= '';
+            $value = '';
 
             if (is_array($message_links) || is_object($message_links)) {
                 foreach ($message_links as $link) {
                     //dd($d['day']);
-                    $value= $value  . $link .' <br> ';
-
+                    $value = $value  . $link . ' <br> ';
                 }
             }
             $deal->deadline = $request->deadline;
@@ -1070,31 +1045,30 @@ class ContractController extends AccountBaseController
             $project->project_summary = $request->description;
             $project->deadline = $request->deadline;
 
-            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount)/$currency->exchange_rate;
+            $project->project_budget = ($request->amount) / $currency->exchange_rate;
             $project->due = $deal->amount;
             $project->currency_id = 1;
             $project->save();
-            if($deal->project_type == 'hourly')
-            {
+            if ($deal->project_type == 'hourly') {
                 // dd("true");
-                $milestone= new ProjectMilestone();
-                $milestone->project_id= $project->id;
+                $milestone = new ProjectMilestone();
+                $milestone->project_id = $project->id;
 
                 $milestone->currency_id = 1;
-                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+                $milestone->milestone_title = $project->project_name . '- InitialMilestone';
 
-                $milestone->original_currency_id= $deal->original_currency_id;
-                $milestone->cost= 0;
+                $milestone->original_currency_id = $deal->original_currency_id;
+                $milestone->cost = 0;
 
-                $milestone->actual_cost= 0;
+                $milestone->actual_cost = 0;
 
-                $milestone->invoice_created= 0;
-                $milestone->status= 'incomplete';
-                $milestone->added_by= Auth::id();
-                $milestone->last_updated_by= Auth::id();
-                $milestone->milestone_type= 'Client Created this Milestone';
+                $milestone->invoice_created = 0;
+                $milestone->status = 'incomplete';
+                $milestone->added_by = Auth::id();
+                $milestone->last_updated_by = Auth::id();
+                $milestone->milestone_type = 'Client Created this Milestone';
                 //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
 
                 $milestone->save();
@@ -1112,9 +1086,9 @@ class ContractController extends AccountBaseController
             $contract->subject = $request->project_name;
             $contract->actual_amount = $request->amount;
             //$deal->actual_amount=  $request->amount;
-            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $currency = Currency::where('id', $request->original_currency_id)->first();
 
-            $contract->amount = ($request->amount)/$currency->exchange_rate;
+            $contract->amount = ($request->amount) / $currency->exchange_rate;
             $contract->original_amount = $request->amount;
             $contract->description = $request->description;
             $contract->currency_id = $request->currency_id;
@@ -1137,10 +1111,9 @@ class ContractController extends AccountBaseController
 
             // $pm_count = PMAssign::select('project_count')->min('project_count');
             // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-            if($deal->pm_id == null)
-            {
-                $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
-                $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
+            if ($deal->pm_id == null) {
+                $pm_count = PMAssign::select('monthly_project_count')->where('status', 1)->min('monthly_project_count');
+                $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status', 1)->first();
                 if ($pm_count < 2) {
                     if ($pm_user != null) {
                         $pmassign = new PMProject();
@@ -1172,7 +1145,7 @@ class ContractController extends AccountBaseController
                         $pm_project_update->save();
                     }
                 } else {
-                    $items = PMAssign::where('status',1)->get();
+                    $items = PMAssign::where('status', 1)->get();
                     // $pm_amount = $items->min('amount');
                     // $pm_count_id = $items->min('project_count');
                     //
@@ -1252,35 +1225,35 @@ class ContractController extends AccountBaseController
             }
 
 
-            $deal_pm_id = Deal::where('id',$request->id)->first();
-            $project_id= Project::where('deal_id',$deal_pm_id->id)->first();
+            $deal_pm_id = Deal::where('id', $request->id)->first();
+            $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
 
-            $project_admin_update= Project::find($project_id->id);
-            $project_admin_update->added_by= $project_id->pm_id;
-            $project_admin_update->project_admin= $project_id->pm_id;
+            $project_admin_update = Project::find($project_id->id);
+            $project_admin_update->added_by = $project_id->pm_id;
+            $project_admin_update->project_admin = $project_id->pm_id;
             $project_admin_update->save();
 
             //qualified sales start from here
             $qualified_sale = new QualifiedSale();
-            $qualified_sale->project_name= $deal->project_name;
+            $qualified_sale->project_name = $deal->project_name;
 
-            $qualified_sale->deal_id= $deal->id;
+            $qualified_sale->deal_id = $deal->id;
 
-            $qualified_sale->project_id= $project->id;
-            $qualified_sale->deal_short_code= $deal->deal_id;
+            $qualified_sale->project_id = $project->id;
+            $qualified_sale->deal_short_code = $deal->deal_id;
 
-            $qualified_sale->date= Carbon::now();
+            $qualified_sale->date = Carbon::now();
 
-            $qualified_sale->client_id= $deal->client_id;
+            $qualified_sale->client_id = $deal->client_id;
 
-            $qualified_sale->client_name= $deal->client_name;
+            $qualified_sale->client_name = $deal->client_name;
             $qualified_sale->pm_id = $project_id->pm_id;
 
-            $qualified_sale->pm_name= $project_id->pm_name->name;
+            $qualified_sale->pm_name = $project_id->pm_name->name;
 
             // $actual_currency= Currency::where('id',$deal->currency_id)->first();
 
-            $qualified_sale->amount= $deal->amount;
+            $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
             $qualified_sale->save();
             //    / dd($qualified_sale);
@@ -1291,7 +1264,7 @@ class ContractController extends AccountBaseController
 
             //qualified sales start from here
 
-            $user= User::where('id',$deal_pm_id->pm_id)->first();
+            $user = User::where('id', $deal_pm_id->pm_id)->first();
             $this->triggerPusher('notification-channel', 'notification', [
                 'user_id' => $user->id,
                 'role_id' => 4,
@@ -1302,7 +1275,7 @@ class ContractController extends AccountBaseController
             Mail::to($user->email)->send(new WonDealMail($project_id));
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
-            $users= User::where('role_id',1)->get();
+            $users = User::where('role_id', 1)->get();
             foreach ($users as $usr) {
                 Mail::to($usr->email)->send(new WonDealMail($project_id));
             }
@@ -1332,14 +1305,14 @@ class ContractController extends AccountBaseController
             // //dd($clientdetail);
             // $clientdetail->company_name= $request->organization;
             // $clientdetail->save();
-            $deal= Deal::find($deal->id);
-            $deal->authorization_status= 2;
+            $deal = Deal::find($deal->id);
+            $deal->authorization_status = 2;
             $deal->save();
-            $sender= User::where('id',Auth::id())->first();
+            $sender = User::where('id', Auth::id())->first();
 
 
             //sales lead
-            $users= User::where('role_id',8)->get();
+            $users = User::where('role_id', 8)->get();
 
             foreach ($users as $key => $user) {
                 //start authorization action
@@ -1351,14 +1324,16 @@ class ContractController extends AccountBaseController
                 $authorization_action->authorization_for = $user->id;
                 $authorization_action->save();
                 //end authorization action
-                
-                Notification::send($user, new DealAuthorizationSendNotification($deal,$sender));
+
+
+                Notification::send($user, new DealAuthorizationSendNotification($deal, $sender));
+
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
                     'role_id' => $user->role_id,
-                    'title' => 'Price authorization request from '.$sender->name,
-                    'body' => $sender->name. ' send price authorization request for '.$deal->project_name,
-                    'redirectUrl' => route('deals.show',$deal->id)
+                    'title' => 'Price authorization request from ' . $sender->name,
+                    'body' => $sender->name . ' send price authorization request for ' . $deal->project_name,
+                    'redirectUrl' => route('deals.show', $deal->id)
                 ]);
             }
 
@@ -1371,18 +1346,15 @@ class ContractController extends AccountBaseController
             Toastr::error('Action Failed', 'Error', ["positionClass" => "toast-top-right", 'redirectUrl']);
             return back();
         }
-//                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
-//                    return redirect('/account/contracts');
+        //                    Toastr::success('Deal creation completed successfully!', 'Success', ["positionClass" => "toast-top-right", 'redirectUrl']);
+        //                    return redirect('/account/contracts');
         return response()->json(['message' => 'Deal creation completed successfully']);
-
-
-
     }
     public function updatedealDetails(Request $request)
     {
-//        dd($request->all());
-        $deal_hourly_checked = Deal::where('id',$request->id)->first();
-        if ($deal_hourly_checked->project_type !='hourly'){
+        //        dd($request->all());
+        $deal_hourly_checked = Deal::where('id', $request->id)->first();
+        if ($deal_hourly_checked->project_type != 'hourly') {
             $validated = $request->validate([
                 'project_name' => 'required',
                 'deadline' => 'required',
@@ -1409,7 +1381,7 @@ class ContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
             ]);
-        }else{
+        } else {
             $validated = $request->validate([
                 'project_name' => 'required',
                 'estimated_hour_task' => 'required',
@@ -1448,17 +1420,16 @@ class ContractController extends AccountBaseController
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
             ]);
         }
-//      dd("hello");
-        $project_milestone= Project::where('deal_id',$request->id)->first();
-        $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
-//      dd($milestone);
-        $won_deal_id= Deal::where('id',$request->id)->first();
-        if($won_deal_id->project_type != 'hourly')
-        {
+        //      dd("hello");
+        $project_milestone = Project::where('deal_id', $request->id)->first();
+        $milestone = ProjectMilestone::where('project_id', $project_milestone->id)->first();
+        //      dd($milestone);
+        $won_deal_id = Deal::where('id', $request->id)->first();
+        if ($won_deal_id->project_type != 'hourly') {
 
 
 
-            $milestone= ProjectMilestone::where('project_id',$project_milestone->id)->first();
+            $milestone = ProjectMilestone::where('project_id', $project_milestone->id)->first();
             if ($milestone == null) {
                 return response()->json([
                     "message" => "The given data was invalid.",
@@ -1478,23 +1449,22 @@ class ContractController extends AccountBaseController
             // /dd($request);
             $deal = Deal::find($request->id);
             $deal->project_name = $request->project_name;
-            $deal->currency_id= 1;
-            $deal->actual_amount=  $request->amount;
-            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $deal->currency_id = 1;
+            $deal->actual_amount =  $request->amount;
+            $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $deal->amount = ($request->amount)/$currency->exchange_rate;
+            $deal->amount = ($request->amount) / $currency->exchange_rate;
             $deal->organization = $request->organization;
             $deal->client_email = $request->client_email;
             // /  $deal->description = $request->description;
             $message_links = $request->message_link;
             // /dd($message_links);
-            $value= '';
+            $value = '';
 
             if (is_array($message_links) || is_object($message_links)) {
                 foreach ($message_links as $link) {
                     //dd($d['day']);
-                    $value= $value  . $link .' <br> ';
-
+                    $value = $value  . $link . ' <br> ';
                 }
             }
             $deal->deadline = $request->deadline;
@@ -1518,39 +1488,41 @@ class ContractController extends AccountBaseController
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
             $deal->updated_by = Auth::id();
-//                dd($deal);
+            //                dd($deal);
             $deal->save();
-           // dd($deal);
+
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
             $project->project_summary = $request->description;
             $project->deadline = $request->deadline;
-            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
-            $project->project_budget = ($request->amount)/$currency->exchange_rate;
+            $project->project_budget = ($request->amount) / $currency->exchange_rate;
             $project->due = $deal->amount;
             $project->currency_id = 1;
             $project->save();
+
             if($deal->project_type == 'hourly')
             {
-               //  dd("true");
+
                 $milestone= new ProjectMilestone();
                 $milestone->project_id= $project->id;
 
+
                 $milestone->currency_id = 1;
-                $milestone->milestone_title= $project->project_name . '- InitialMilestone';
+                $milestone->milestone_title = $project->project_name . '- InitialMilestone';
 
-                $milestone->original_currency_id= $deal->original_currency_id;
-                $milestone->cost= 0;
+                $milestone->original_currency_id = $deal->original_currency_id;
+                $milestone->cost = 0;
 
-                $milestone->actual_cost= 0;
+                $milestone->actual_cost = 0;
 
-                $milestone->invoice_created= 0;
-                $milestone->status= 'incomplete';
-                $milestone->added_by= Auth::id();
-                $milestone->last_updated_by= Auth::id();
-                $milestone->milestone_type= 'Client Created this Milestone';
+                $milestone->invoice_created = 0;
+                $milestone->status = 'incomplete';
+                $milestone->added_by = Auth::id();
+                $milestone->last_updated_by = Auth::id();
+                $milestone->milestone_type = 'Client Created this Milestone';
                 //dd($milestone->actual_cost,$milestone->invoice_created,$milestone->status,$milestone->added_by,$milestone->last_updated_by, $milestone->milestone_type);
 
                 $milestone->save();
@@ -1563,20 +1535,20 @@ class ContractController extends AccountBaseController
             $contract->subject = $request->project_name;
             $contract->actual_amount = $request->amount;
             //$deal->actual_amount=  $request->amount;
-            $currency= Currency::where('id',$request->original_currency_id)->first();
+            $currency = Currency::where('id', $request->original_currency_id)->first();
 
-            $contract->amount = ($request->amount)/$currency->exchange_rate;
+            $contract->amount = ($request->amount) / $currency->exchange_rate;
             $contract->original_amount = $request->amount;
             $contract->description = $request->description;
             $contract->currency_id = $request->currency_id;
             $contract->save();
-           // dd($contract);
+
             $client_id = User::where('id', $contract_id->client_id)->first();
             $client = User::find($client_id->id);
             $client->email = $request->client_email;
             $client->name = $request->client_name;
             $client->save();
-           // dd($client);
+
             if ($deal->pm_id == null) {
                 $lead_developer_id = RoleUser::where('role_id', 6)->get();
                 //dd($lead_developer_id);
@@ -1592,8 +1564,8 @@ class ContractController extends AccountBaseController
                 // $pm_count = PMAssign::select('project_count')->min('project_count');
                 // $pm_user = PMAssign::where('project_count', $pm_count)->first();
                 if ($deal->pm_id == null) {
-                    $pm_count = PMAssign::select('monthly_project_count')->where('status',1)->min('monthly_project_count');
-                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status',1)->first();
+                    $pm_count = PMAssign::select('monthly_project_count')->where('status', 1)->min('monthly_project_count');
+                    $pm_user = PMAssign::where('monthly_project_count', $pm_count)->where('status', 1)->first();
                     if ($pm_count < 2) {
                         if ($pm_user != null) {
                             $pmassign = new PMProject();
@@ -1624,7 +1596,7 @@ class ContractController extends AccountBaseController
                             $pm_project_update->save();
                         }
                     } else {
-                        $items = PMAssign::where('status',1)->get();
+                        $items = PMAssign::where('status', 1)->get();
                         // $pm_amount = $items->min('amount');
                         // $pm_count_id = $items->min('project_count');
                         //
@@ -1701,29 +1673,28 @@ class ContractController extends AccountBaseController
                             $pm_project_update->save();
                         }
                     }
-
                 }
 
-                $deal_pm_id = Deal::where('id',$request->id)->first();
-                $project_id= Project::where('deal_id',$deal_pm_id->id)->first();
-                $project_admin_update= Project::find($project_id->id);
-                $project_admin_update->added_by= $project_id->pm_id;
-                $project_admin_update->project_admin= $project_id->pm_id;
+                $deal_pm_id = Deal::where('id', $request->id)->first();
+                $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
+                $project_admin_update = Project::find($project_id->id);
+                $project_admin_update->added_by = $project_id->pm_id;
+                $project_admin_update->project_admin = $project_id->pm_id;
                 $project_admin_update->save();
-            //    / dd($project_admin_update);
+
                 $qualified_sale = new QualifiedSale();
-                $qualified_sale->project_name= $deal->project_name;
+                $qualified_sale->project_name = $deal->project_name;
 
-                $qualified_sale->deal_id= $deal->id;
-                $qualified_sale->project_id= $project->id;
-                $qualified_sale->deal_short_code= $deal->deal_id;
-                $qualified_sale->date= Carbon::now();
-                $qualified_sale->client_id= $deal->client_id;
-                $qualified_sale->client_name= $deal->client_name;
+                $qualified_sale->deal_id = $deal->id;
+                $qualified_sale->project_id = $project->id;
+                $qualified_sale->deal_short_code = $deal->deal_id;
+                $qualified_sale->date = Carbon::now();
+                $qualified_sale->client_id = $deal->client_id;
+                $qualified_sale->client_name = $deal->client_name;
                 $qualified_sale->pm_id = $project_id->pm_id;
-                $qualified_sale->pm_name= $project_id->pm_name->name;
+                $qualified_sale->pm_name = $project_id->pm_name->name;
 
-                $qualified_sale->amount= $deal->amount;
+                $qualified_sale->amount = $deal->amount;
 
                 $qualified_sale->save();
                 // /dd($qualified_sale);
@@ -1731,7 +1702,7 @@ class ContractController extends AccountBaseController
 
 
 
-                $user= User::where('id',$deal_pm_id->pm_id)->first();
+                $user = User::where('id', $deal_pm_id->pm_id)->first();
                 Mail::to($user->email)->send(new WonDealMail($project_id));
                 // $check_new_pm= User::where('id',$deal->pm_id)->first();
                 // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
@@ -1796,11 +1767,6 @@ class ContractController extends AccountBaseController
         }
 
         return response()->json(['message' => 'Deal Updated Successfully']);
-
-
-
-
-
     }
     public function DealUrl($id)
     {
@@ -1862,8 +1828,7 @@ class ContractController extends AccountBaseController
             ->withCustomFields();
 
         abort_403(
-            !(
-                $this->editPermission == 'all' ||
+            !($this->editPermission == 'all' ||
                 ($this->editPermission == 'added' && user()->id == $this->contract->added_by) ||
                 ($this->editPermission == 'owned' && user()->id == $this->contract->client_id) ||
                 ($this->editPermission == 'both' && (user()->id == $this->contract->client_id || user()->id == $this->contract->added_by))
@@ -1979,8 +1944,7 @@ class ContractController extends AccountBaseController
         ])->findOrFail($id);
 
         abort_403(
-            !(
-                $viewPermission == 'all' ||
+            !($viewPermission == 'all' ||
                 ($viewPermission == 'added' && user()->id == $this->contract->added_by) ||
                 ($viewPermission == 'owned' && user()->id == $this->contract->client_id) ||
                 ($viewPermission == 'both' && (user()->id == $this->contract->client_id || user()->id == $this->contract->added_by))
@@ -2025,8 +1989,7 @@ class ContractController extends AccountBaseController
         $this->contract = Contract::with('signature', 'client', 'client.clientDetails', 'files')->findOrFail($id);
 
         abort_403(
-            !(
-                $viewPermission == 'all' ||
+            !($viewPermission == 'all' ||
                 ($viewPermission == 'added' && user()->id == $this->contract->added_by) ||
                 ($viewPermission == 'owned' && user()->id == $this->contract->client_id) ||
                 ($viewPermission == 'both' && (user()->id == $this->contract->client_id || user()->id == $this->contract->added_by))
@@ -2118,14 +2081,14 @@ class ContractController extends AccountBaseController
     }
     public function UpdateDealID(Request $request)
     {
-        $deal= Deal::find($request->deal_id);
-        $deal->status= 'Denied';
+        $deal = Deal::find($request->deal_id);
+        $deal->status = 'Denied';
         $deal->save();
-        $project_id= Project::where('deal_id',$deal->id)->first();
-        $project= Project::find($project_id->id);
+        $project_id = Project::where('deal_id', $deal->id)->first();
+        $project = Project::find($project_id->id);
 
         $project->status = 'canceled';
-        $project->project_status= "Not Accepted";
+        $project->project_status = "Not Accepted";
         $project->save();
         return response()->json(
             [
@@ -2154,41 +2117,58 @@ class ContractController extends AccountBaseController
             'requirment_define' => 'required',
         ]);
 
-        $deal = Deal::find($request->id);
-        $deal->authorization_status = 1;
-        $deal->price_authorization = $request->price_authorization;
-        $deal->requirment_define = $request->requirment_define;
-        $deal->project_deadline_authorization = $request->project_deadline_authorization;
+        if ($request->denyDeal){
+            $deal = Deal::find($request->id);
+            $deal->authorization_status = 2;
+            $deal->price_authorization = $request->price_authorization;
+            $deal->requirment_define = $request->requirment_define;
+            $deal->project_deadline_authorization = $request->project_deadline_authorization;
+        }else{
+            $deal = Deal::find($request->id);
+            $deal->authorization_status = 1;
+            $deal->price_authorization = $request->price_authorization;
+            $deal->requirment_define = $request->requirment_define;
+            $deal->project_deadline_authorization = $request->project_deadline_authorization;
+        }
 
         //kpi settings
-        $kpiSetting = kpiSetting::where('kpi_status',1)->first();
-        $earned_point = ($kpiSetting->accepted_by_pm * $deal->actual_amount/100)*$kpiSetting->authorized_by_leader /100;
+        $kpiSetting = kpiSetting::where('kpi_status', 1)->first();
+        $earned_point = ($kpiSetting->accepted_by_pm * $deal->actual_amount / 100) * $kpiSetting->authorized_by_leader / 100;
 
-        $user_name= User::where('role_id',8)->first();
-        $cash_points_team_lead= CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+        $user_name = User::where('role_id', 8)->first();
+        $cash_points_team_lead = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
         //kpi point
 
         $project = Project::where('deal_id', $request->id)->first();
 
-        $point= new CashPoint();
+        $authorization_bonus_check= Cashpoint::where('project_id',$project->id)->where('user_id',$user_name->id)->where('type','Authorization Bonus')->first();
+        if($authorization_bonus_check == null)
+        {
+            $point= new CashPoint();
+
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;
         $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name .
             '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$project->id).'">'
             .$project->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$project->client_id).'">'.
+
             $project->client_name->name;
 
         $point->gained_as = "Individual";
-        $point->points= $earned_point;
+        $point->points = $earned_point;
 
         if ($cash_points_team_lead != null) {
-            $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point/100;
+            $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point / 100;
         } else {
-            $point->total_points_earn= $earned_point/100;
+            $point->total_points_earn = $earned_point / 100;
         }
 
         $point->save();
 
+
+        }
+        
+        
         //update authoziation action
         $authorization_action = AuthorizationAction::where([
             'deal_id' => $deal->id,
@@ -2204,10 +2184,9 @@ class ContractController extends AccountBaseController
 
         //end authorization action
 
-        $qualified_sale_id= QualifiedSale::where('deal_id',$deal->id)->first();
-        if($qualified_sale_id != null)
-        {
-            $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+        $qualified_sale_id = QualifiedSale::where('deal_id', $deal->id)->first();
+        if ($qualified_sale_id != null) {
+            $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
             $qualified_sale->authorized_by_sales_lead = 1;
             $qualified_sale->sales_lead_need_define = $request->requirment_define;
             $qualified_sale->sales_lead_price_authorization = $request->price_authorization;
@@ -2222,6 +2201,80 @@ class ContractController extends AccountBaseController
                 'success' => true,
                 'message' => 'Data inserted successfully'
             ]);
+        }
+    }
+
+    public function award_time_increase_index()
+    {
+        if ($this->user->role_id == 1) {
+            $this->award_time_request = AwardTimeIncress::where('status', '0')->orderBy('id', 'desc')->get();
+            return view('contracts.award_time_extention', $this->data);
+        } else {
+            abort(403);
+        }
+    }
+
+    public function award_time_incress_store(Request $request)
+    {
+        $data = new AwardTimeIncress();
+        $data->request_from = $this->user->id;
+        $data->deal_id = $request->id;
+        $data->incress_hours = $request->hours;
+        $data->pm_comment = $request->description;
+
+        if ($data->save()) {
+
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $data->getMorphClass();
+            $authorization_action->model_id = $data->id;
+            $authorization_action->type = 'award_time_extension';
+            $authorization_action->deal_id = $data->deal_id;
+            $authorization_action->project_id = 0;
+            $authorization_action->link = route('deals.show', $data->id);
+            $authorization_action->title = 'Won deal award time extension';
+            $authorization_action->authorization_for = 62;
+            $authorization_action->save();
+
+            return response()->json([
+                'status' => 'success'
+            ]);
+        }
+    }
+
+    public function award_time_incress_update(Request $request)
+    {
+        $deal = Deal::find($request->id);
+        if ($deal) {
+            $mode = '0';
+            if ($request->mode == 'approve') {
+                $mode = '1';
+                //$total_secoends = 20 * 60 * 60;
+                $secoend_left = Carbon::now()->diffInSeconds($deal->award_time);
+                //$total_secoend_left = $total_secoends - $secoend_left;
+                $request_secoends = $request->hours * 60 * 60;
+
+                if ($secoend_left >= $request_secoends) {
+                    $deal->award_time = Carbon::parse($deal->award_time)->addSecond($request_secoends);
+                } else {
+                    $deal->award_time = Carbon::parse($deal->award_time)->addSecond($secoend_left);
+                }
+
+                $deal->save();
+            } elseif ($request->mode == 'reject') {
+                $mode = '2';
+            }
+
+            if ($mode != '0') {
+                $award_time_request = AwardTimeIncress::find($request->request_id);
+                $award_time_request->admin_comment = $request->description;
+                $award_time_request->approved_by = $this->user->id;
+                $award_time_request->status = $mode;
+                if ($award_time_request->save()) {
+                    return response()->json([
+                        'status' => 'success'
+                    ]);
+                }
+            }
         }
     }
 }

@@ -69,7 +69,7 @@ class MonthlyKpiIncentive extends Command
             $existing_kpi->start_month = Carbon::now()->addMonth()->startOfMonth()->format('Y-m-d');
             
             kpiSetting::insert($existing_kpi->toArray());
-        } else if (Carbon::today() == Carbon::now()->endOfMonth() ) {
+        } else if (Carbon::today() == Carbon::now()->endOfMonth()) {
             $this_month_kpi = kpiSetting::where([
                 'kpi_status' => '1',
                 'cron_status' => '1',
@@ -201,31 +201,7 @@ class MonthlyKpiIncentive extends Command
         //                 }
         //             //}
         //         }
-        // $team= Seopage1Team::where('id',1)->first();
-        // $users = explode(',', $team->members);
-        // $user_data = [];
-        //             foreach ($users as $key => $value) {
-        //                 if ($value != '') {
-        //                      //$user = User::find($value);
-        //                     array_push($user_data,$value);
-        //                 }
-        //             }
-        // foreach($user_data as $user)
-        // {
-        //     // /dd($user);
-        //     $user_cash_points= CashPoint::where('user_id',$user)->sum('points');
-        //     $point = new CashPoint();
-        //     $point->user_id= $user;
-        //     $user_name = User::where('id',$user)->first();
-        // //    / dd($value);
-        //     $point->activity= $user_name->name. ' deduct '.$user_cash_points.' points';
-        //     $point->gained_as = "Individual";
-        //     $point->points= -$user_cash_points;
-        //     $point->total_points_earn = 0;
-        //     $point->total_points_redeem = $user_cash_points;
-        //     $point->total_points_void = 0;
-        //     $point->save();
-
+       
         // }
                
                 
@@ -279,7 +255,7 @@ class MonthlyKpiIncentive extends Command
                 $user_final_achievable_point_without_minimum_goal = $user_achieved_point - ($user_achieved_point*$contribution_after_deduction/100);
             }else 
             {
-                $user_final_achievable_point_without_minimum_goal = $shift_incentive_achievable_point;
+                $user_final_achievable_point_without_minimum_goal = $user_achieved_point;
 
             }
             //dd($shift_incentive_achievable_point);
@@ -308,28 +284,90 @@ class MonthlyKpiIncentive extends Command
             $total_goals= $total_team_goal+ $minimum_shift_goal+ $milestone_shift_goal;
             $total_goals_achieve= $minimum_shift_achieve_goal+ $milestone_shift_achieve_goal + $total_team_goal_achieve;
             //dd($data);
-            $data['month'] = $current_month;
-            $data['name'] = $shift->name;
-            $data['non_incentive_points'] = $incentive_setting->every_shift_every_point_above;
-            $data['shift_achieved_points']= $shift_points;
-            $data['shift_incentive_achievable_point'] = $shift_incentive_achievable_point;
-            $data['contribution']= $contribution;
-            $data['user_achieved_points']= $user_achieved_point;
-            $data['amount_before_deduction']= $amount_before_deduction;
-            $data['user_deducted_points']= $user_deducted_points;
-            $data['user_point_after_deduction']= $user_final_achievable_point_without_minimum_goal;
-            $data['amount_after_deduction']= $amount_after_deduction;
-            $data['deducted_incentive_amount']= $deducted_incentive_amount;
-            $data['incentive_amount_after_20_percent_held']= $incentive_amount_after_20p_held;
-            $data['incentive_held_amount']= $incentive_held_amount;
-            $data['final_payable_incentive_amount']= $incentive_amount_after_20p_held;
+            // $data['month'] = $current_month;
+            // $data['name'] = $shift->name;
+            // $data['non_incentive_points'] = $incentive_setting->every_shift_every_point_above;
+            // $data['shift_achieved_points']= $shift_points;
+            // $data['shift_incentive_achievable_point'] = $shift_incentive_achievable_point;
+            // $data['contribution']= $contribution;
+            // $data['user_achieved_points']= $user_achieved_point;
+            // $data['amount_before_deduction']= $amount_before_deduction;
+            // $data['user_deducted_points']= $user_deducted_points;
+            // $data['user_point_after_deduction']= $user_final_achievable_point_without_minimum_goal;
+            // $data['amount_after_deduction']= $amount_after_deduction;
+            // $data['deducted_incentive_amount']= $deducted_incentive_amount;
+            // $data['incentive_amount_after_20_percent_held']= $incentive_amount_after_20p_held;
+            // $data['incentive_held_amount']= $incentive_held_amount;
+            // $data['final_payable_incentive_amount']= $incentive_amount_after_20p_held;
+            $minimum_shift_goals= GoalSetting::where('team_id',$shift->shift)->where('goalType','Minimum')->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+            ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
+            ->count();
+            $minimum_shift_goals_achieved= GoalSetting::where('team_id',$shift->shift)->where('goalType','Minimum')->where('goal_status',1)->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+            ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
+            ->count();
+            $milestone_goals= GoalSetting::where('team_id',$shift->shift)->where('goalType','Milestone')->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+            ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
+            ->count();
+            $milestone_goals_achieved= GoalSetting::where('team_id',$shift->shift)->where('goalType','Milestone')->where('goal_status',1)->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+            ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
+            ->count();
+            $total_team_goal= GoalSetting::where('team_id',1)->where('goalType','Minimum')->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+            ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
+            ->count();
+            $total_team_goal_achieved= GoalSetting::where('team_id',1)->where('goalType','Minimum')->where('goal_status',1)->whereDate('startDate', '>=', Carbon::now()->startOfMonth()->format('Y-m-d'))
+            ->whereDate('endDate', '<=', Carbon::now()->endOfMonth()->format('Y-m-d'))
+            ->count();
+            $incentive = new UserIncentive();
+            $incentive->month = $current_month;
+            $incentive->user_id= $shift->id;
+            $incentive->non_incentive_points = $incentive_setting->every_shift_every_point_above;;
+            $incentive->shift_achieved_points= $shift_points;
+            $incentive->shift_incentive_achievable_point= $shift_incentive_achievable_point;
+            $incentive->contribution =$contribution;
+            $incentive->user_achieved_points =$user_achieved_point;
+            $incentive->amount_before_deduction =$amount_before_deduction;
+            $incentive->user_deducted_points = $user_deducted_points;
+            $incentive->user_point_after_deduction =$user_final_achievable_point_without_minimum_goal;
+            $incentive->amount_after_deduction =$amount_after_deduction;
+            $incentive->deducted_incentive_amount= $deducted_incentive_amount;
+            $incentive->incentive_amount_after_20_percent_held= $incentive_amount_after_20p_held;
+            $incentive->incentive_held_amount= $incentive_held_amount;
+            $incentive->final_payable_incentive_amount= $incentive_amount_after_20p_held;
+            $incentive->minimum_shift_goals= $minimum_shift_goals;
+            $incentive->minimum_shift_goals_achieved= $minimum_shift_goals_achieved;
+            $incentive->milestone_goals= $milestone_goals;
+            $incentive->milestone_goals_achieved= $milestone_goals_achieved;
+            $incentive->team_goal= $total_team_goal;
+            $incentive->total_team_goal_achieved= $total_team_goal_achieved;
+            $incentive->total_goals= $minimum_shift_goals+$milestone_goals+$total_team_goal;
+            $incentive->total_goals_achieved= $minimum_shift_goals_achieved+ $milestone_goals_achieved+ $total_team_goal_achieved;
+            $incentive->save();
 
-
-        // /    dd($data);
-
-
-       
-    //    / $total_shift_points= CashPoint::
+    }
+    $team= Seopage1Team::where('id',1)->first();
+    $users = explode(',', $team->members);
+    $user_data = [];
+                foreach ($users as $key => $value) {
+                    if ($value != '') {
+                         //$user = User::find($value);
+                        array_push($user_data,$value);
+                    }
+                }
+    foreach($user_data as $user)
+    {
+        // /dd($user);
+        $user_cash_points= CashPoint::where('user_id',$user)->sum('points');
+        $point = new CashPoint();
+        $point->user_id= $user;
+        $user_name = User::where('id',$user)->first();
+    //    / dd($value);
+        $point->activity= $user_name->name. ' deduct '.$user_cash_points.' points';
+        $point->gained_as = "Individual";
+        $point->points= -$user_cash_points;
+        $point->total_points_earn = 0;
+        $point->total_points_redeem = $user_cash_points;
+        $point->total_points_void = 0;
+        $point->save();
     }
 
             $kpi = kpiSetting::where([

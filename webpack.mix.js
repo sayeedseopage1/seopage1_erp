@@ -12,6 +12,7 @@ const mix = require("laravel-mix");
  */
 mix.js("resources/js/app.jsx", "public/js")
     .react()
+    .js('resources/js/sp1-editor.js', "public/js/sp1-editor.js")
     .scripts(
         [
             "public/js/bootstrap.js",
@@ -35,6 +36,8 @@ mix.js("resources/js/app.jsx", "public/js")
         "public/js/main.js"
     )
     .sass("resources/scss/main.scss", "public/css")
+    .sass("resources/scss/sp1/ck-editor.scss", "public/css/ck-editor.css")
+    .sass("resources/scss/sp1/seopage1.scss", "public/css/seopage1.css")
     .options({ processCssUrls: false })
     .sourceMaps(true, "source-map")
     .webpackConfig((webpack) => {
@@ -48,3 +51,9 @@ mix.js("resources/js/app.jsx", "public/js")
            },
         };
      });
+
+
+     mix.browserSync({
+            proxy: 'http://127.0.0.1:8000',
+      });
+

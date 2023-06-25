@@ -15,15 +15,23 @@
                                 <th>Month</th>
                                 <th>Name</th>
                                 <th>Non Incentive Points</th>
-                                <th>Shift Point</th>
-                                <th>Achieved Point</th>
-                                <th>Incentive Amount</th>
-                                <th>Point Deduction</th>
+                                <th>Shift's Achieved Point</th>
+                                <th>Shift's Incentive Achievable Point</th>
+                                <th>User Contribution</th>
+                                <th>User's Achieved Point</th>
                                 {{-- <th>Incentive Deduction</th> --}}
+                                <th>Amount Before Deduction</th>
+                                <th>User's Deducted Point</th>
+                                <th>User's Point's After Deduction</th>
+                                <th>Amount After Deduction</th>
+                                <th>Deducted Incentive Amount</th>
+                                <th>Incentive Amount After 20% Held</th>
+                                <th>Incentive Held Amount</th>
+                                <th>Final Payable Incentive Amount</th>
                                 <th>Minimum Shift Goal</th>
                                 <th>Minimum Shift Goal Achieved</th>
-                                <th>Milestone Shift Goal</th>
-                                <th>Milestone Shift Goal Achieved</th>
+                                <th>Shift Milestone</th>
+                                <th>Shift Milestone Achieved</th>
                                 <th>Total Team Goal</th>
                                 <th>Team Goal Achieved</th>
                                 <th>Total Goals</th>
@@ -45,40 +53,30 @@
                                         @endphp
                                         {{$non_incentive_point->every_shift_every_point_above}}
                                     </td>
-                                    <td>{{$value->shift_point}}</td>
-                                    <td>{{$value->point_earned}}</td>
-                                    <td>{{$value->incentive_earned}} BDT</td>
-                                    <td>{{$value->deduction_amount}}</td>
-                                    {{-- <td>{{$value->deduction_incentive_amount}} BDT</td> --}}
-                                    <td>{{$value->minimum_goal}}</td>
-                                    <td>{{$value->minimum_goal_achieved}}</td>
-                                    <td>{{$value->milestone_goal}}</td>
-                                    <td>{{$value->milestone_goal_achieved}}</td>
+                                    <td>{{$value->shift_achieved_points}}</td>
+                                    <td>{{$value->shift_incentive_achievable_point}}</td>
+                                    <td>{{$value->contribution}}%</td>
+                                    <td>{{$value->user_achieved_points}}</td>
+                                    <td>{{$value->amount_before_deduction}}</td>
+                                    
+                                    <td>{{$value->user_deducted_points}}</td>
+                                    <td>{{$value->user_point_after_deduction}}</td>
+                                    <td>{{$value->amount_after_deduction}} BDT</td>
+                                    <td>{{$value->deducted_incentive_amount}} BDT</td>
+                                    <td>{{$value->incentive_amount_after_20_percent_held}} BDT</td>
+                                    <td>{{$value->incentive_held_amount}} BDT</td>
+                                    <td>{{$value->final_payable_incentive_amount}} BDT</td>
+                                    <td>{{$value->minimum_shift_goals}}</td>
+                                    <td>{{$value->minimum_shift_goals_achieved}}</td>
+                                    <td>{{$value->milestone_goals}}</td>
+                                    <td>{{$value->milestone_goals_achieved}}</td>
                                     <td>{{$value->team_goal}}</td>
-                                    <td>
-                                        @php
-                                        $user_goal = App\Models\GoalSetting::where([
-                                            'user_id' => $value->user_id
-                                        ])
-                                        ->whereDate('startDate', '>=', $value->month)
-                                        ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-                                        ->get()->count();
+                                    <td>{{$value->total_team_goal_achieved}}</td>
+                                    <td>{{$value->total_goals}}</td>
+                                    <td>{{$value->total_goals_achieved}}</td>
 
-                                        $user_in_team = App\Models\Seopage1Team::where('members', 'LIKE', '%'.$value->user_id.'%')->get()->pluck('id');
-
-                                        $user_in_team_goal = App\Models\GoalSetting::whereIn('team_id', [1])
-                                        //->where('id', '!=', 1)
-                                        ->where('goal_status', 1)
-                                        ->whereDate('startDate', '>=', $value->month)
-                                        ->whereDate('endDate', '<=', \Carbon\Carbon::parse($value->month)->endOfMonth()->format('Y-m-d'))
-                                        ->get()
-                                        ->count();
-                                        @endphp
-
-                                        {{$user_in_team_goal}}
-                                    </td>
-                                    <td>{{$value->team_goal_achieved}}</td>
-                                    <td>{{$value->team_goal_achieved_last}}</td>
+                                    {{-- <td>{{$value->deduction_incentive_amount}} BDT</td> --}}
+                                
                                     <td>
                                         <div class="task_view">
                                             <div class="dropdown">

@@ -10,22 +10,29 @@ class AuthorizationAction extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'model_name', 
-        'model_id', 
-        'type', 
-        'deal_id', 
-        'project_id', 
-        'link', 
-        'title', 
-        'description', 
-        'authorization_by', 
-        'approved_at', 
+        'model_name',
+        'model_id',
+        'type',
+        'deal_id',
+        'project_id',
+        'link',
+        'title',
+        'description',
+        'authorization_by',
+        'approved_at',
         'status'
     ];
 
+    protected $with = ['authorization'];
+
+    public function authorization()
+    {
+        return $this->belongsTo(User::class, 'authorization_by');
+    }
+
     public function project()
     {
-        return $this->belongsTo(Project::class, 'project_id'); 
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function get_model()
@@ -89,6 +96,9 @@ class AuthorizationAction extends Model
             ],
             'task_assigned_on_lead_developer' => [
                 'approved', 'review'
+            ],
+            'award_time_extension' => [
+                'review'
             ]
         ];
 

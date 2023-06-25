@@ -1,10 +1,15 @@
 @extends('layouts.app')
-@push('style')
-<style>
-    .tooltip-arrow, .red-tooltip + .tooltip > .tooltip-inner {
-        background-color: #fff;
-    }
-</style>
+@push('styles')
+    <style>
+        .tooltip-arrow,
+        .red-tooltip+.tooltip>.tooltip-inner {
+            background-color: #fff;
+        }
+
+        .won_deal_btn_primary {
+            padding: 6px 8px;
+        }
+    </style>
 @endpush
 @push('datatable-styles')
     @include('sections.datatable_css')
@@ -18,7 +23,8 @@
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
             <div class="select-status d-flex">
-                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange" placeholder="@lang('placeholders.dateRange')">
+                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
+                    id="datatableRange" placeholder="@lang('placeholders.dateRange')">
             </div>
         </div>
 
@@ -30,27 +36,31 @@
                             <i class="fa fa-search f-13 text-dark-grey"></i>
                         </span>
                     </div>
-                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field" placeholder="@lang('app.startTyping')">
+                    <input type="text" class="form-control f-14 p-1 border-additional-grey" id="search-text-field"
+                        placeholder="@lang('app.startTyping')">
                 </div>
             </form>
         </div>
 
-        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+        <div
+            class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Project Manager')</p>
             <div class="select-status">
-                <select class="form-control select-picker" name="pm_id" id="pm_id" data-live-search="true" data-size="8">
+                <select class="form-control select-picker" name="pm_id" id="pm_id" data-live-search="true"
+                    data-size="8">
                     <option selected value="all">@lang('All PM')</option>
-                    @php 
-                        $project_manager= App\Models\User::where('role_id', '4')->get()
+                    @php
+                        $project_manager = App\Models\User::where('role_id', '4')->get();
                     @endphp
                     @foreach ($project_manager as $value)
-                        <option value="{{$value->id}}">{{ ucfirst($value->name) }}</option>
+                        <option value="{{ $value->id }}">{{ ucfirst($value->name) }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
 
-        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+        <div
+            class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.clientName')</p>
             <div class="select-status">
                 <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
@@ -67,16 +77,18 @@
             </div>
         </div>
 
-        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+        <div
+            class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Closed By')</p>
             <div class="select-status">
-                <select class="form-control select-picker" name="closed_by" id="closed_by" data-live-search="true" data-size="8">
+                <select class="form-control select-picker" name="closed_by" id="closed_by" data-live-search="true"
+                    data-size="8">
                     <option selected value="all">@lang('All')</option>
-                    @php 
-                        $project_manager= App\Models\User::whereIn('role_id', ['1', '7', '8'])->get()
+                    @php
+                        $project_manager = App\Models\User::whereIn('role_id', ['1', '7', '8'])->get();
                     @endphp
                     @foreach ($project_manager as $value)
-                        <option value="{{$value->id}}">{{ ucfirst($value->name) }}</option>
+                        <option value="{{ $value->id }}">{{ ucfirst($value->name) }}</option>
                     @endforeach
                 </select>
             </div>
@@ -94,9 +106,9 @@
 @endsection
 
 @php
-$addContractPermission = user()->permission('add_contract');
-$manageContractTemplatePermission = user()->permission('manage_contract_template');
-
+    $addContractPermission = user()->permission('add_contract');
+    $manageContractTemplatePermission = user()->permission('manage_contract_template');
+    
 @endphp
 
 @section('content')
@@ -107,11 +119,21 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
             <div id="table-actions" class="d-flex align-items-center">
                 @if ($addContractPermission == 'all' || $addContractPermission == 'added')
-                    @if(Auth::user()->role_id == 1)
-                        <button class="btn btn-primary mr-3" id="deal-add">
+                    @if (Auth::user()->role_id == 1)
+                        <button class="btn btn-primary mr-3 won_deal_btn_primary" id="deal-add">
                             <i class="fa-solid fa-plus"></i><span> Create Won Deal</span>
                         </button>
                         @include('contracts.modals.dealaddmodal')
+                        @php
+                            $total_request = App\Models\AwardTimeIncress::where('status', '0')->count();
+                        @endphp
+                        <a class="border-secondary btn btn-warning mr-3" href="{{ route('award_time_check.index') }}">
+                            <i class="fa fa-clock"></i>
+                            Incress Award Time Request
+                            @if ($total_request > 0)
+                                <span class="badge badge-primary">{{ $total_request }}</span>
+                            @endif
+                        </a>
                     @endif
                 @endif
             </div>
@@ -126,12 +148,47 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
         <!-- Task Box End -->
     </div>
     <!-- CONTENT WRAPPER END -->
+
+    <div class="modal fade" id="award_time_incress_modal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Award Time Extention</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="task_id">
+                    <div class="form-group">
+                        <label for="hours">Select Hours</label>
+                        <select name="hours" id="task_hours" class="form-control">
+                            <option value="">Select Hours</option>
+                            <option value="2">2 Hours</option>
+                            <option value="4">4 Hours</option>
+                            <option value="10">10 Hours</option>
+                            <option value="20">20 Hours</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea name="descripton" id="task_description" class="form-control" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="award_time_incress_submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
 @push('scripts')
     @include('sections.datatable_js')
-    
+
     <script>
         $('#Wondeals-table').on('preXhr.dt', function(e, settings, data) {
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
@@ -282,6 +339,43 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             });
         });
 
+        $('body').on('click', '.award_time_incress', function(e) {
+            e.preventDefault();
+            $('#task_id').val($(this).data('id'));
+            $('#award_time_incress_modal').modal('toggle');
+        });
+
+        $('#award_time_incress_submit').click(function() {
+            var task_id = $('#task_id').val();
+            var task_hours = $('#task_hours').val();
+            var task_description = $('#task_description').val();
+
+            $.easyAjax({
+                url: '{{ route('award_time_check.store') }}',
+                //container: '#quick-action-form',
+                type: "POST",
+                disableButton: true,
+                buttonSelector: "#award_time_incress_submit",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: task_id,
+                    hours: task_hours,
+                    description: task_description,
+                },
+                success: function(resp) {
+                    if (resp.status == 'success') {
+                        toastr.options.closeMethod = 'fadeOut';
+                        toastr.options.closeDuration = 120;
+                        toastr.options.closeEasing = 'swing';
+                        toastr.success('Request Submit to Admin', 'Success');
+                        toastr.options.onHidden = function() {
+                            $('#award_time_incress_modal').modal('toggle');
+                        }
+                    }
+                }
+            })
+        });
+
         const applyQuickAction = () => {
             var rowdIds = $("#Wondeal-table input:checkbox:checked").map(function() {
                 return $(this).val();
@@ -306,23 +400,22 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             })
         };
 
-        $( document ).ready(function() {
+        $(document).ready(function() {
             @if (!is_null(request('start')) && !is_null(request('end')))
-            $('#datatableRange').val('{{ request('start') }}' +
-            ' @lang("app.to") ' + '{{ request('end') }}');
-            $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
-            $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
+                $('#datatableRange').val('{{ request('start') }}' +
+                    ' @lang('app.to') ' + '{{ request('end') }}');
+                $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
+                $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
                 showTable();
             @endif
         });
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $('#description2').summernote();
             $('#description3').summernote();
-            
+
             $('#deal-add').click(function() {
                 $('#dealaddmodal').modal('show');
             })
