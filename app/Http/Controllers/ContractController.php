@@ -2160,9 +2160,9 @@ class ContractController extends AccountBaseController
         $point->points = $earned_point;
 
         if ($cash_points_team_lead != null) {
-            $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point / 100;
+            $point->total_points_earn = $cash_points_team_lead->total_points_earn + $earned_point;
         } else {
-            $point->total_points_earn = $earned_point / 100;
+            $point->total_points_earn = $earned_point ;
         }
 
         $point->save();
