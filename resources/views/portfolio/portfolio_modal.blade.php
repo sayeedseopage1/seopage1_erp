@@ -18,7 +18,7 @@
                             <span>{{$portfolio->project_name}}</span>
                         </div>
                         <div class="mb-3">
-                            <span class="f-20">Client Name: {{$portfolio->user_name}}</span><br>
+                            <span class="f-20">Client Name:</span><br>
                             <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
                         </div>
                         <div class="row">
@@ -108,16 +108,18 @@
                             </div>
                             <div class="col-md-6">
                                 <h5>Total number of pages with page numbers:</h5>
-                                <p class="ml-2">Main page name and number: {{$portfolio->main_page_number}} page ({{$portfolio->main_page_name}})</p>
-                                <p class="ml-2">Secondary page name and number: {{$portfolio->secondary_page_number}} page ({{$portfolio->secondary_page_name}})</p>
+                                <p class="ml-2">Main page name and number: {{$portfolio->main_page_number}} page</p>
+                                <p class="ml-2">Secondary page name and number: {{$portfolio->secondary_page_number}} page</p>
                             </div>
                         </div>
                         <div class="mt-3">
+                            @if($portfolio->description)
                             <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
                             @if($portfolio !=null)
                                 <p>{!! $portfolio->description !!}</p>
                             @else
-                                <p>--</p>
+                                <p>No major functionalities to mention for this project</p>
+                            @endif
                             @endif
                         </div>
                     </div>
