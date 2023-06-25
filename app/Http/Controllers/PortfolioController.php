@@ -12,6 +12,7 @@ use App\Models\ProjectWebsiteTheme;
 use App\Models\ProjectWebsiteType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function Google\Auth\Cache\get;
 use function Symfony\Component\HttpClient\Response\select;
 
 class PortfolioController extends AccountBaseController
@@ -38,16 +39,6 @@ class PortfolioController extends AccountBaseController
         $this->website_categories = ProjectNiche::whereNull('parent_category_id')->get();
         $this->website_themes = ProjectWebsiteTheme::all();
         $this->website_plugins = ProjectWebsitePlugin::all();
-
-//        $this->portfolios = DB::table('project_portfolios')
-//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-//            ->join('project_website_themes', 'project_portfolios.id', '=', 'project_website_themes.id')
-//            ->join('users', 'projects.client_id', '=', 'users.id')
-//            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-//            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link','project_website_themes.theme_name')
-//            ->get();
-
-        //dd($this->portfolios);
 
         return view('portfolio.index',$this->data);
     }
@@ -101,12 +92,13 @@ class PortfolioController extends AccountBaseController
     public function filterDataShow($dataId){
         $portfolio = DB::table('project_portfolios')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-            ->join('project_website_themes', 'project_portfolios.id', '=', 'project_website_themes.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
             ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link','project_website_themes.theme_name')
+            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
             ->where('project_portfolios.id', $dataId)
             ->first();
+
+//        dd($portfolio);
 
             $html = view('portfolio.portfolio_modal', [
                 'portfolio' => $portfolio

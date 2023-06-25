@@ -661,7 +661,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <div class="row mb-4" >
                 <!-- BUDGET VS SPENT START -->
                 <div class="col-3">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Estimated Hours</h4>
@@ -678,7 +678,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
                 <div class="col-3">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Hourly Rate</h4>
@@ -695,7 +695,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
                 <div class="col-3">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Hub Staff Tracking </h4>
@@ -708,7 +708,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
                 <div class="col-3">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Expected Tracked Hours on Day 1 </h4>
@@ -729,7 +729,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <div class="row mb-4" >
                 <!-- BUDGET VS SPENT START -->
                 <div class="col-4">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Expected Tracked Hours on Day 2</h4>
@@ -746,7 +746,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
                 <div class="col-4">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Clients Expected Amount of Work Per Hour </h4>
@@ -763,7 +763,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
                 <div class="col-4">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>Clients Expectation About Approx. Hours Needed for the Initial Tasks</h4>
@@ -784,7 +784,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <div class="row mb-4" >
                 <!-- BUDGET VS SPENT START -->
                 <div class="col-12">
-                    <x-cards.data>
+                    <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
                                 <h4>On-going/One-time Project? </h4>
