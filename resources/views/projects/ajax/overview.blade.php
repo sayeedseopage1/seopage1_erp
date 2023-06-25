@@ -246,7 +246,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                     <!-- PROGRESS END DATE END -->
                     <!-- See Task Guideline Start -->
-                    @php
+                    {{-- @php
                     $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->first();
                     @endphp
                     <div class="mt-4">
@@ -254,11 +254,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">See Task Guideline</button>
                         @endif
                     </div>
-                    <!-- See Task Guideline End -->
+                    <!-- See Task Guideline End --> --}}
                 </x-cards.data>
             </div>
             <!--Task Guideline Modal -->
-            <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
+            {{-- <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -450,7 +450,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <!-- PROJECT PROGRESS END -->
             <!-- CLIENT START -->
             <div class="col-md-4 mb-4">
@@ -634,6 +634,29 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- BUDGET VS SPENT END -->
         </div>
         <!-- TASK STATUS AND BUDGET END -->
+       
+
+        <!-- TASK STATUS AND BUDGET START -->
+        {{-- <div class="row mb-4" >
+            <!-- BUDGET VS SPENT START -->
+            <div class="col-md-12">
+                <x-cards.data>
+                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-2' : '' }}">
+                        <div class="col">
+                            <h4 class="f-18 f-w-500 mb-0">@lang('modules.projects.hoursLogged')</h4>
+                            <x-stacked-chart id="task-chart2" :chartData="$hoursBudgetChart" height="250" />
+                        </div>
+                        @if ($projectBudgetPermission == 'all')
+                        <div class="col">
+                            <h4 class="f-18 f-w-500 mb-0">@lang('modules.projects.projectBudget')</h4>
+                            <x-stacked-chart id="task-chart3" :chartData="$amountBudgetChart" height="250" />
+                        </div>
+                        @endif
+                    </div>
+                </x-cards.data>
+            </div>
+            <!-- BUDGET VS SPENT END -->
+        </div> --}}
         @if($project->deal->project_type=="hourly")
             <div class="row mb-4" >
                 <!-- BUDGET VS SPENT START -->
@@ -688,7 +711,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
-                                <h4>Tracked Hours </h4>
+                                <h4>Expected Tracked Hours on Day 1 </h4>
                                 <br>
                                 @if($project->deal->tracked_hours)
                                 <p>{{$project->deal->tracked_hours}}</p>
@@ -709,7 +732,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
-                                <h4>2nd Day Tracked Hours</h4>
+                                <h4>Expected Tracked Hours on Day 2</h4>
                                 <br>
                                 @if($project->deal->second_day_tracked_hours)
                                 <p>{{$project->deal->second_day_tracked_hours}}</p>
@@ -726,7 +749,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
-                                <h4>Expects Amount Per Hour</h4>
+                                <h4>Clients Expected Amount of Work Per Hour </h4>
                                 <br>
                                 @if($project->deal->expect_amount)
                                 <p>{{$project->deal->expect_amount}}</p>
@@ -743,7 +766,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
-                                <h4>Client Certain Amount Of Hour</h4>
+                                <h4>Clients Expectation About Approx. Hours Needed for the Initial Tasks</h4>
                                 <br>
                                 @if($project->deal->certain_amount_hour)
                                 <p>{{$project->deal->certain_amount_hour}}</p>
@@ -764,7 +787,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-cards.data class="h-100">
                         <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                             <div class="col">
-                                <h4>Long Project Continue </h4>
+                                <h4>On-going/One-time Project? </h4>
                                 <br>
                                 @if($project->deal->long_project)
                                 <p>{{$project->deal->long_project}}</p>
@@ -780,28 +803,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <!-- BUDGET VS SPENT END -->
             </div>
         @endif
-
-        <!-- TASK STATUS AND BUDGET START -->
-        {{-- <div class="row mb-4" >
-            <!-- BUDGET VS SPENT START -->
-            <div class="col-md-12">
-                <x-cards.data>
-                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-2' : '' }}">
-                        <div class="col">
-                            <h4 class="f-18 f-w-500 mb-0">@lang('modules.projects.hoursLogged')</h4>
-                            <x-stacked-chart id="task-chart2" :chartData="$hoursBudgetChart" height="250" />
-                        </div>
-                        @if ($projectBudgetPermission == 'all')
-                        <div class="col">
-                            <h4 class="f-18 f-w-500 mb-0">@lang('modules.projects.projectBudget')</h4>
-                            <x-stacked-chart id="task-chart3" :chartData="$amountBudgetChart" height="250" />
-                        </div>
-                        @endif
-                    </div>
-                </x-cards.data>
-            </div>
-            <!-- BUDGET VS SPENT END -->
-        </div> --}}
         <?php
             $deal= App\Models\Deal::where('id',$project->deal_id)->first(); ?>
         <div class="row mb-4" >

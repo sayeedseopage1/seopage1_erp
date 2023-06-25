@@ -1,6 +1,5 @@
 import { apiSlice } from "./apiSlice";            
 
-
 const qualifiedSalesApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getQualifiedSales: build.query({
@@ -14,11 +13,9 @@ const qualifiedSalesApiSlice = apiSlice.injectEndpoints({
 }) ;
 
 
-
 export const { 
     useGetQualifiedSalesQuery,
     useLazyGetQualifiedSalesQuery,
     useGetPointDistributionDetailsQuery,
     useLazyGetPointDistributionDetailsQuery
 } = qualifiedSalesApiSlice;
-

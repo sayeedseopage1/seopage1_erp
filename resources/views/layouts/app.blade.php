@@ -42,6 +42,9 @@
     <link rel="stylesheet" href="{{asset('moving-countdown/style.css')}}" type="text/css" />
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <!-- sp1 editor css -->
+    <link rel="stylesheet" href="{{asset('css/ck-editor.css')}}">
+    <link rel="stylesheet" href="{{asset('css/seopage1.css')}}">
 
 
     <!-- designation hierarchy && department hierarchy -->

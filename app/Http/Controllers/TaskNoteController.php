@@ -64,11 +64,16 @@ class TaskNoteController extends AccountBaseController
         }
 
         $this->notes = TaskNote::where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
+        //$view = view('tasks.notes.show', $this->data)->render();
 
         return Reply::dataOnly([
             'status' => 'success',
-            'name' => $note->note,
-            'id' => $note->id
+            'message' => 'Note created successfully',
+            'note' => [
+                'note' => $note->note,
+                'id' => $note->id,
+                'title' => $note->title,
+            ]
         ]);
     }
 

@@ -22,7 +22,7 @@ class QualifiedSalesController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Qualified Sales';
         $this->activeSettingMenu = 'qualified-sales';
-       
+
     }
     /**
      * Display a listing of the resource.
@@ -31,14 +31,15 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function index(Request $request)
     {
-    
-       
-        if($request->mode == 'json')  
+
+
+        if($request->mode == 'json')
         {
             if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
             {
                 $this->data = QualifiedSale::select([
                     'qualified_sales.*',
+
                     'converted_by.id as closed_by',
                     'converted_by.name as closed_by_name',
                     DB::raw('(SELECT SUM(cash_points.points) FROM cash_points WHERE cash_points.project_id = qualified_sales.project_id) as total_points'),
@@ -46,9 +47,10 @@ class QualifiedSalesController extends AccountBaseController
                 ->leftJoin('deals', 'deals.id', '=', 'qualified_sales.deal_id')
                 ->join('users as converted_by', 'converted_by.id', '=', 'deals.added_by')
                 ;
-            
 
-            }else 
+
+
+            }else
             {
                 $userId = Auth::id();
         $shiftId = Auth::user()->shift;
@@ -74,13 +76,13 @@ class QualifiedSalesController extends AccountBaseController
             ->groupBy('qualified_sales.id', 'converted_by.id', 'converted_by.name', 'cash_points.user_id');
 
             }
-           
+
             if ($request->project_id != 'null') {
                 $this->data = $this->data->where('qualified_sales.project_id', $request->project_id);
             }
             if ($request->client_id != 'null') {
                 $this->data = $this->data->where('qualified_sales.client_id', $request->client_id);
-            
+
             }
             if ($request->start_date != 'null') {
                 $this->data = $this->data->where(DB::raw('DATE(qualified_sales.created_at)'), '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
@@ -101,12 +103,12 @@ class QualifiedSalesController extends AccountBaseController
                 $this->data = $this->data->where('deals.project_name', 'LIKE', '%'.$request->search.'%')
                 ->orWhere('qualified_sales.pm_name', 'LIKE', '%'.$request->search.'%')
                 ->orWhere('qualified_sales.client_name', 'LIKE', '%'.$request->search.'%')
-                
+
                 ;
             }
             if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8) {
                 return response()->json($this->data->get()->toArray());
-            }else 
+            }else
             {
                 return response()->json(
                     $this->data
@@ -116,10 +118,10 @@ class QualifiedSalesController extends AccountBaseController
                         ->toArray()
                 );
             }
-           
+
 
         }
-   
+
         // /dd($projects);
 
         return view('qualified-sales.index',$this->data);
@@ -132,14 +134,14 @@ class QualifiedSalesController extends AccountBaseController
         ->join('users', 'users.id', '=', 'cash_points.user_id')
         ->groupBy('cash_points.user_id', 'users.name');
         //->get();
-        return response()->json($this->userPoints->get()); 
-       
+        return response()->json($this->userPoints->get());
+
     //    / ->pluck('total_points', 'name');
     //    / dd($userPoints);
 
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -170,7 +172,7 @@ class QualifiedSalesController extends AccountBaseController
      */
     public function show($id)
     {
-        
+
     }
 
     /**

@@ -19,6 +19,7 @@ const Pagination = ({
 
     // count total pages
     React.useEffect(() => {
+        setCurrentPage(1);
         const tPages = Math.ceil(totalRows / nPageRows);
         setTotalPages(tPages);
     }, [totalRows, nPageRows]);

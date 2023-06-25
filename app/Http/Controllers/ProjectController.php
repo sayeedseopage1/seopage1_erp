@@ -979,6 +979,32 @@ class ProjectController extends AccountBaseController
 
                 }
                 $point->save();
+                if($find_deal_id->authorization_status == 1)
+                {
+
+                $team_lead= user::where('role_id',8)->first();
+                $earned_point= ($project_budget*$kpi->authorized_by_leader)/100;
+                $cash_points_team_lead= Cashpoint::where('user_id',$team_lead->id)->sum('points');
+                $point= new CashPoint();
+                $point->user_id= $team_lead->id;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name .
+                    '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'
+                    .$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'.
+                    $find_project_id->client_name->name;
+        
+                $point->gained_as = "Individual";
+                $point->points= $earned_point;
+                $point->type = 'Authorization Bonus';
+        
+                if ($cash_points_team_lead != null) {
+                    $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point/100;
+                } else {
+                    $point->total_points_earn= $earned_point/100;
+                }
+        
+                $point->save();
+            }
                 // if ($find_deal_id->authorization_status == 1) {
                 //     $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
 
