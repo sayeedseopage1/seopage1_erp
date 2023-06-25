@@ -2052,7 +2052,7 @@ class TaskController extends AccountBaseController
                 return response()->json([]);
             }
         } elseif ($request->mode == 'task_submission_list') {
-            $task_submission = TaskSubmission::where('task_id', $id)->get();
+            $task_submission = TaskSubmission::with('user')->where('task_id', $id)->get();
             if ($task_submission != null) {
                 $taskSubmissions = json_decode($task_submission, true);
                 $groupedSubmissions = collect($taskSubmissions)->groupBy(function ($submission) {
@@ -2150,6 +2150,16 @@ class TaskController extends AccountBaseController
             }
             $data = TaskComment::find($data->id);
             return response()->json($data);
+        } elseif ($request->mode == 'develoer_first_task_check') {
+            $data = ProjectTimeLog::where([
+                'project_id' => $request->project_id,
+                'task_id' => $id,
+                'usre_id' => $this->user->id
+            ])->first();
+
+            return response()->json([
+                'is_first_task' => ($data) ? false : true,
+            ]);
         } else {
             abort(404);
         }
