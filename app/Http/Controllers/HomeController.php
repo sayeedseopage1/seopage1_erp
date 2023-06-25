@@ -217,7 +217,7 @@ class HomeController extends Controller
                 $data = new ProjectDeliverablesClientDisagree();
                 $data->project_id = $project->id;
                 $data->delivarable_id = $key;
-                $data->comment = $value; 
+                $data->comment = $value;
                 $data->save();
             }
             //start authorization action
@@ -1461,6 +1461,11 @@ class HomeController extends Controller
     }
     public function storeProductBasicSeo(Request $request){
 
+
+
+
+    // ck editor image upload
+
         $basic_seo = new BasicSeo();
         $basic_seo->owner_name = $request->owner_name;
         $basic_seo->business_name = $request->business_name;
@@ -1492,6 +1497,7 @@ class HomeController extends Controller
     // {
     //     dd('ok');
     // }
+
 
     public function upload(Request $request)
     {

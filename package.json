@@ -10,6 +10,7 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@ckeditor/ckeditor5-alignment": "^38.0.1",
         "axios": "^0.21.1",
         "browser-sync": "^2.29.3",
         "browser-sync-webpack-plugin": "^2.3.0",
@@ -22,6 +23,10 @@
         "webpack": "^5.23.0"
     },
     "dependencies": {
+        "@ckeditor/ckeditor5-build-classic": "^38.0.1",
+        "@ckeditor/ckeditor5-build-decoupled-document": "^38.0.1",
+        "@ckeditor/ckeditor5-react": "^6.0.0",
+        "@headlessui/react": "^1.7.15",
         "@popperjs/core": "^2.11.7",
         "@react-pdf/renderer": "^3.1.9",
         "@reduxjs/toolkit": "^1.9.3",
@@ -35,6 +40,7 @@
         "crypto-browserify": "^3.12.0",
         "dayjs": "^1.11.7",
         "dropify": "^0.2.2",
+        "emoji-picker-react": "^4.4.9",
         "file-saver": "^2.0.5",
         "flag-icon-css": "^4.1.7",
         "framer-motion": "^10.10.0",
@@ -48,6 +54,7 @@
         "quill-emoji": "^0.1.8",
         "react": "^18.2.0",
         "react-chartjs-2": "^5.2.0",
+        "react-content-loader": "^6.2.1",
         "react-custom-scrollbars-2": "^4.5.0",
         "react-data-export": "^0.6.0",
         "react-datepicker": "^4.11.0",
@@ -68,6 +75,7 @@
         "signature_pad": "^3.0.0-beta.4",
         "styled-components": "^5.3.9",
         "sweetalert2": "^10.12.0",
+        "swr": "^2.1.5",
         "xlsx": "^0.18.5"
     }
 }

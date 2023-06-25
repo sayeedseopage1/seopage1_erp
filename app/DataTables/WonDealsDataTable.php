@@ -143,6 +143,7 @@ class WonDealsDataTable extends BaseDataTable
                 </div>
             </div>';
 
+
                 return $action;
             })
             ->addIndexColumn()

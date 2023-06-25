@@ -10,11 +10,11 @@
         @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
             <a href="{{ route('tasks.index') }}"><button class="btn btn-primary mb-3">Go back</button></a>
         @else
-            <a href="{{ route('projects.show', $task->project_id) }}?tab=tasks"><button class="btn btn-primary mb-3">Go
-                    back</button></a>
+            <a href="{{ route('projects.show', $task->project_id) }}?tab=tasks"><button class="btn btn-primary mb-3">Go back</button></a>
         @endif
         <h3 class="heading-h1 mb-3 ml-2 align-self-center">{{ ucfirst($task->heading) }}</h3>
     </div>
+    
     <div class="row">
         <div class="col-sm-9 review-card">
             <div class="card bg-white border-0 b-shadow-4">
@@ -24,11 +24,16 @@
                             @php
                                 $task_member = App\Models\TaskUser::where('task_id', $task->id)->first();
                             @endphp
-                            {{-- @if (Auth::user()->role_id == 5 && $task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
+                            {{--@if(Auth::user()->role_id == 5 && $task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
                                 <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision">Revision</button>
                                 @include('tasks.modals.develoepr_revision')
-                            @endif --}}
-                            @if ($changeStatusPermission == 'all' || ($changeStatusPermission == 'added' && $task->added_by == user()->id) || ($changeStatusPermission == 'owned' && in_array(user()->id, $taskUsers)) || ($changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id)) || ($task->project && $task->project->project_admin == user()->id))
+                            @endif--}}
+                            @if (
+                                $changeStatusPermission == 'all' ||
+                                    ($changeStatusPermission == 'added' && $task->added_by == user()->id) ||
+                                    ($changeStatusPermission == 'owned' && in_array(user()->id, $taskUsers)) ||
+                                    ($changeStatusPermission == 'both' && (in_array(user()->id, $taskUsers) || $task->added_by == user()->id)) ||
+                                    ($task->project && $task->project->project_admin == user()->id))
                                 <?php
                                 $extension_request = App\Models\TaskTimeExtension::where('task_id', $task->id)
                                     ->where('user_id', '!=', Auth::id())
@@ -41,8 +46,7 @@
                                     @lang('modules.tasks.markComplete')
                                 </x-forms.button-primary> -->
 
-                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension
-                                            Request</button>
+                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#extensionrequest">Extension Request</button>
 
 
                                         @include('tasks.modals.extensionrequest')
@@ -59,13 +63,17 @@
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                         @if ($task->board_column_id != 7)
+
     @lang('modules.tasks.markComplete')
 @endif
+
                                     </x-forms.button-primary> -->
 
                                     @if ($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
-                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskapprove">Approve</button>
-                                        <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white" data-toggle="modal" data-target="#taskBtn">Need Revision</button>
+                                        <button class="btn bg-success mr-2 mb-2 mb-lg-0 mb-md-0 text-white"
+                                            data-toggle="modal" data-target="#taskapprove">Approve</button>
+                                        <button class="btn bg-danger mr-3 mb-2 mb-lg-0 mb-md-0 text-white"
+                                            data-toggle="modal" data-target="#taskBtn">Need Revision</button>
 
                                         @include('tasks.modals.taskBtn')
                                         @include('tasks.modals.taskapprove')
@@ -75,7 +83,8 @@
 
                             @if (Auth::user()->role_id == 4)
                                 @if ($task->board_column_id == 8)
-                                    <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0" id="submit_task_for_client_approval">Submit Task for Client Approval</button>
+                                    <button class="btn btn-success mr-2 mb-2 mb-lg-0 mb-md-0"
+                                        id="submit_task_for_client_approval">Submit Task for Client Approval</button>
                                 @endif
                             @endif
                             @if (Auth::user()->role_id == 4)
@@ -87,9 +96,7 @@
                             @endif
 
                             @php
-                                $val = App\Models\ProjectTimeLog::where('task_id', $task->id)
-                                    ->latest()
-                                    ->first();
+                                $val = App\Models\ProjectTimeLog::where('task_id', $task->id)->latest()->first();
                                 $task_active_id = App\Models\Task::where('id', $task->id)->first();
                             @endphp
                             @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision' || $task->task_status == 'incomplete')
@@ -100,23 +107,32 @@
                                                 @lang('modules.timeLogs.startTimer')
                                             </x-forms.button-secondary>
                                         @elseif (!is_null($task->userActiveTimer))
-                                            <span class="border p-2 rounded mr-2 bg-light"><i class="fa fa-clock mr-1"></i><span id="active-task-timer">{{ $task->userActiveTimer->timer }}</span></span>
+                                            <span class="border p-2 rounded mr-2 bg-light"><i
+                                                    class="fa fa-clock mr-1"></i><span
+                                                    id="active-task-timer">{{ $task->userActiveTimer->timer }}</span></span>
 
                                             @if (is_null($task->userActiveTimer->activeBreak))
                                                 {{-- <x-forms.button-secondary icon="pause-circle" data-time-id="{{ $task->userActiveTimer->id }}" id="pause-timer-btn" class="mr-2">@lang('modules.timeLogs.pauseTimer')</x-forms.button-secondary> --}}
 
-                                                <x-forms.button-secondary data-time-id="{{ $task->userActiveTimer->id }}" id="stop-task-timer" icon="stop-circle">
+                                                <x-forms.button-secondary
+                                                    data-time-id="{{ $task->userActiveTimer->id }}" id="stop-task-timer"
+                                                    icon="stop-circle">
                                                     @lang('modules.timeLogs.stopTimer')
                                                 </x-forms.button-secondary>
                                             @else
-                                                <x-forms.button-secondary id="resume-timer-btn" icon="play-circle" data-time-id="{{ $task->userActiveTimer->activeBreak->id }}">
+                                                <x-forms.button-secondary id="resume-timer-btn" icon="play-circle"
+                                                    data-time-id="{{ $task->userActiveTimer->activeBreak->id }}">
                                                     @lang('modules.timeLogs.resumeTimer')</x-forms.button-secondary>
                                             @endif
 
                                         @endif
                                     @endif
                                 @endif
-                                @if (Auth::user()->role_id == 5 || Auth::user()->role_id == 6 || Auth::user()->role_id == 4 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+                                @if (Auth::user()->role_id == 5 ||
+                                        Auth::user()->role_id == 6 ||
+                                        Auth::user()->role_id == 4 ||
+                                        Auth::user()->role_id == 9 ||
+                                        Auth::user()->role_id == 10)
 
                                     @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision' || $task->board_column_id == 3)
                                         @php
@@ -129,12 +145,13 @@
                                             @php
                                                 $has_incompleted_task = false;
                                                 $subtasks = \App\Models\Subtask::where('task_id', $task->id)->get();
-                                                
+
                                                 $subtask_incompleted_count = 0;
                                                 foreach ($subtasks as $sub) {
+                                                   
                                                     $subtask_check = App\Models\Task::where('subtask_id', $sub->id)->first();
-                                                
-                                                    if ($subtask_check->board_column_id == 1 || $subtask_check->board_column_id == 2 || $subtask_check->board_column_id == 3 || $subtask_check->board_column_id == 6) {
+
+                                                    if($subtask_check->board_column_id == 1 || $subtask_check->board_column_id == 2 || $subtask_check->board_column_id == 3 || $subtask_check->board_column_id == 6) {
                                                         $has_incompleted_task = true;
                                                     }
                                                 }
@@ -142,7 +159,7 @@
                                                 //dd($task, $subtasks, $incompleted_subtask, $has_incompleted_task);
                                             @endphp
                                             {{-- && $subtasks->count() != $subtask_incompleted_count --}}
-                                            @if (Auth::user()->role_id == 6 && $has_incompleted_task == true && $subtasks->count() != 0)
+                                            @if (Auth::user()->role_id == 6 && $has_incompleted_task == true && $subtasks->count() != 0) 
                                                 <button class="btn-secondary rounded f-14 p-2 my-3 disabled"><i class="fa-solid fa-check"></i> Mark As Complete</button>
                                                 <!-- <button class="btn-secondary rounded f-14 p-2 my-3" data-toggle="modal" data-target="#markcomplete"><i class="fa-solid fa-check"></i> Mark As Complete</button> -->
                                             @else
@@ -164,17 +181,18 @@
 
                                     @if ($task->task_status == 'in progress' || $task->task_status == 'pending' || $task->task_status == 'revision')
                                         @if ($extension == null && $task_member->user_id == Auth::user()->id)
-                                            <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#timextension"><i class="fa-solid fa-plus"></i> Request
+                                            <button class="btn-secondary rounded f-14 p-2" data-toggle="modal"
+                                                data-target="#timextension"><i class="fa-solid fa-plus"></i> Request
                                                 Time Extension</button>
                                         @endif
                                     @endif
 
-                                    @if ($task->board_column_id == 1 && $task_member->user_id == Auth::user()->id)
+                                    @if (($task->board_column_id == 1 && $task_member->user_id == Auth::user()->id) )
                                         <button class="btn-secondary rounded f-14 p-2" data-toggle="modal" data-target="#revision"> Revision</button>
 
                                         @if (Auth::user()->role_id == 5)
                                             @include('tasks.modals.develoepr_revision')
-                                        @elseif(Auth::user()->role_id == 6 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+                                        @elseif(Auth::user()->role_id == 6)
                                             @include('tasks.modals.revision')
                                         @endif
                                     @endif
@@ -217,18 +235,25 @@
 
                         <div class="col-lg-4 col-2 text-right">
                             <div class="dropdown">
-                                <button class="btn btn-lg f-14 px-2 py-1 text-dark-grey text-capitalize rounded" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-lg f-14 px-2 py-1 text-dark-grey text-capitalize rounded"
+                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fa fa-ellipsis-h"></i>
                                 </button>
 
-                                <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">
+                                <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0"
+                                    aria-labelledby="dropdownMenuLink" tabindex="0">
 
                                     @if ($sendReminderPermission == 'all' && $task->boardColumn->slug != 'completed')
-                                        <a class="dropdown-item" id="reminderButton" href="javascript:;">@lang('modules.tasks.reminder')</a>
+                                        <a class="dropdown-item" id="reminderButton"
+                                            href="javascript:;">@lang('modules.tasks.reminder')</a>
                                     @endif
 
-                                    @if ($editTaskPermission == 'all' || ($editTaskPermission == 'added' && $task->added_by == user()->id) || ($task->project && $task->project->project_admin == user()->id))
-                                        <a class="dropdown-item" href="{{ route('tasks.edit', $task->id) }}">@lang('app.edit')
+                                    @if (
+                                        $editTaskPermission == 'all' ||
+                                            ($editTaskPermission == 'added' && $task->added_by == user()->id) ||
+                                            ($task->project && $task->project->project_admin == user()->id))
+                                        <a class="dropdown-item"
+                                            href="{{ route('tasks.edit', $task->id) }}">@lang('app.edit')
                                             @lang('app.task')</a>
 
                                         <hr class="my-1">
@@ -237,15 +262,21 @@
                                     @php $pin = $task->pinned() @endphp
 
                                     @if ($pin)
-                                        <a class="dropdown-item" href="javascript:;" id="pinnedItem" data-pinned="pinned">@lang('app.unpin')
+                                        <a class="dropdown-item" href="javascript:;" id="pinnedItem"
+                                            data-pinned="pinned">@lang('app.unpin')
                                             @lang('app.task')</a>
                                     @else
-                                        <a class="dropdown-item" href="javascript:;" id="pinnedItem" data-pinned="unpinned">@lang('app.pin')
+                                        <a class="dropdown-item" href="javascript:;" id="pinnedItem"
+                                            data-pinned="unpinned">@lang('app.pin')
                                             @lang('app.task')</a>
                                     @endif
 
-                                    @if (($taskSettings->copy_task_link == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
-                                        <a class="dropdown-item btn-copy" href="javascript:;" data-clipboard-text="{{ route('front.task_detail', $task->hash) }}">@lang('modules.tasks.copyTaskLink')</a>
+                                    @if (
+                                        ($taskSettings->copy_task_link == 'yes' && in_array('client', user_roles())) ||
+                                            in_array('admin', user_roles()) ||
+                                            in_array('employee', user_roles()))
+                                        <a class="dropdown-item btn-copy" href="javascript:;"
+                                            data-clipboard-text="{{ route('front.task_detail', $task->hash) }}">@lang('modules.tasks.copyTaskLink')</a>
                                     @endif
                                 </div>
                             </div>
@@ -260,20 +291,27 @@
                     
                     ?>
                     @if ($task_name != null)
-                        @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                        @if (
+                            ($taskSettings->description == 'yes' && in_array('client', user_roles())) ||
+                                in_array('admin', user_roles()) ||
+                                in_array('employee', user_roles()))
                             <div class="col-12 px-0 pb-3 d-lg-flex d-md-flex d-block">
                                 <p class="mb-0 text-lightest f-14 w-30 text-capitalize">
                                     Parent Task
                                 </p>
                                 <div class="mb-0 text-dark-grey">
-                                    <a class="text-dark-grey" style="font-weight:bold;" href="/account/tasks/{{ $task_name->id }}">{{ $task_name->heading }}</a>
+                                    <a class="text-dark-grey" style="font-weight:bold;"
+                                        href="/account/tasks/{{ $task_name->id }}">{{ $task_name->heading }}</a>
                                 </div>
 
 
                             </div>
                         @endif
                     @endif
-                    @if (($taskSettings->project == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->project == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                             <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">@lang('app.project')
                             </p>
@@ -317,7 +355,10 @@
 
 
 
-                    @if (($taskSettings->assigned_to == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->assigned_to == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                             <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                 @lang('modules.tasks.assignTo')</p>
@@ -326,7 +367,9 @@
                                     @foreach ($task->users as $item)
                                         <div class="taskEmployeeImg rounded-circle mr-1">
                                             <a href="{{ route('employees.show', $item->id) }}">
-                                                <img data-toggle="tooltip" data-original-title="{{ mb_ucwords($item->name) }}" src="{{ $item->image_url }}">
+                                                <img data-toggle="tooltip"
+                                                    data-original-title="{{ mb_ucwords($item->name) }}"
+                                                    src="{{ $item->image_url }}">
                                             </a>
                                         </div>
                                     @endforeach
@@ -340,30 +383,33 @@
                             @endif
                         </div>
                     @endif
-                    @if (($taskSettings->assigned_by == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->assigned_by == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         @if ($task->created_by)
                             <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                                 <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                                     @lang('modules.tasks.assignBy')</p>
-
+                             
                                 <x-employee :user="$task->createBy" />
-
+                               
                             </div>
                         @endif
                     @endif
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('Project Manager')</p>
-
+                     
                         <x-employee :user="$task->project->pm" />
-
+                       
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
                             @lang('Client')</p>
-
+                     
                         <x-client :user="$task->project->client" />
-
+                       
                     </div>
                     <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
                         <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">
@@ -379,7 +425,10 @@
                             @lang('app.' . $task->priority)
                         </p>
                     </div>
-                    @if (($taskSettings->task_category == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->task_category == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         <x-cards.data-row :label="__('modules.tasks.taskCategory')" :value="$task->category->category_name ?? '--'" html="true" />
                     @endif
 
@@ -439,68 +488,15 @@
 
                     <x-cards.data-row :label="__('General Guidelines')" :value="!empty($task->project->project_summary) ? $task->project->project_summary : '--'" html="true" />
 
-                    @php
-                        $working_environment = \App\Models\WorkingEnvironment::where('project_id', $task->project->id)
-                            ->orderBy('id', 'desc')
-                            ->first();
-                    @endphp
-                    {{-- <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Working/Staging Site’s
-                            URL</p>
-                        @if ($working_environment != null)
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                {{ $working_environment->site_url }}
-                            </p>
-                        @else
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                --
-                            </p>
-                        @endif
-                    </div>
-                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Working/Staging Site’s
-                            Login URL</p>
-                        @if ($working_environment != null)
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                {{ $working_environment->login_url }}
-                            </p>
-                        @else
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                --
-                            </p>
-                        @endif
-                    </div>
-                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Username/Email</p>
-                        @if ($working_environment != null)
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                {{ $working_environment->email }}
-                            </p>
-                        @else
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                --
-                            </p>
-                        @endif
-                    </div>
-                    <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
-                        <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">Frontend Password</p>
-                        @if ($working_environment != null)
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                {{ $working_environment->password }}
-                            </p>
-                        @else
-                            <p class="mb-0 text-dark-grey f-14 w-70">
-                                --
-                            </p>
-                        @endif
-                    </div> --}}
-
                     <div class="card">
                         <div class="body">
 
 
 
-                            @if (($taskSettings->description == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            @if (
+                                ($taskSettings->description == 'yes' && in_array('client', user_roles())) ||
+                                    in_array('admin', user_roles()) ||
+                                    in_array('employee', user_roles()))
                                 <x-cards.data-row :label="__(' Description')" :value="!empty($task->description) ? $task->description : '--'" html="true" />
                             @endif
 
@@ -511,7 +507,10 @@
 
 
                     {{-- Custom fields data --}}
-                    @if (($taskSettings->custom_fields == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->custom_fields == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         @if (isset($fields))
                             @foreach ($fields as $field)
                                 @if ($field->type == 'text' || $field->type == 'password' || $field->type == 'number')
@@ -519,13 +518,25 @@
                                 @elseif($field->type == 'textarea')
                                     <x-cards.data-row :label="$field->label" html="true" :value="$task->custom_fields_data['field_' . $field->id] ?? '--'" />
                                 @elseif($field->type == 'radio')
-                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id]) ? $task->custom_fields_data['field_' . $field->id] : '--'" />
+                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id])
+                                        ? $task->custom_fields_data['field_' . $field->id]
+                                        : '--'" />
                                 @elseif($field->type == 'checkbox')
-                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id]) ? $task->custom_fields_data['field_' . $field->id] : '--'" />
+                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id])
+                                        ? $task->custom_fields_data['field_' . $field->id]
+                                        : '--'" />
                                 @elseif($field->type == 'select')
-                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id]) && $task->custom_fields_data['field_' . $field->id] != '' ? $field->values[$task->custom_fields_data['field_' . $field->id]] : '--'" />
+                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id]) &&
+                                    $task->custom_fields_data['field_' . $field->id] != ''
+                                        ? $field->values[$task->custom_fields_data['field_' . $field->id]]
+                                        : '--'" />
                                 @elseif($field->type == 'date')
-                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id]) && $task->custom_fields_data['field_' . $field->id] != '' ? \Carbon\Carbon::parse($task->custom_fields_data['field_' . $field->id])->format(global_setting()->date_format) : '--'" />
+                                    <x-cards.data-row :label="$field->label" :value="!is_null($task->custom_fields_data['field_' . $field->id]) &&
+                                    $task->custom_fields_data['field_' . $field->id] != ''
+                                        ? \Carbon\Carbon::parse(
+                                            $task->custom_fields_data['field_' . $field->id],
+                                        )->format(global_setting()->date_format)
+                                        : '--'" />
                                 @endif
                             @endforeach
                         @endif
@@ -535,14 +546,24 @@
 
             </div>
 
-            @if ((($taskSettings->files == 'yes' || $taskSettings->time_logs == 'yes' || $taskSettings->notes == 'yes' || $taskSettings->history == 'yes') && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+            @if (
+                (($taskSettings->files == 'yes' ||
+                    $taskSettings->time_logs == 'yes' ||
+                    $taskSettings->notes == 'yes' ||
+                    $taskSettings->history == 'yes') &&
+                    in_array('client', user_roles())) ||
+                    in_array('admin', user_roles()) ||
+                    in_array('employee', user_roles()))
                 <!-- TASK TABS START -->
                 <div class="bg-additional-grey rounded my-3">
 
                     <div class="s-b-inner s-b-notifications bg-white b-shadow-4 rounded">
 
                         <x-tab-section class="task-tabs">
-                            @if (($taskSettings->sub_task == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            @if (
+                                ($taskSettings->sub_task == 'yes' && in_array('client', user_roles())) ||
+                                    in_array('admin', user_roles()) ||
+                                    in_array('employee', user_roles()))
                                 <x-tab-item class="ajax-tab" :active="request('view') === 'sub_task' || !request('view')" :link="route('tasks.show', $task->id) . '?view=sub_task'">
                                     @lang('modules.tasks.subTask')</x-tab-item>
                             @endif
@@ -562,7 +583,10 @@
                                 @endif
                             @endif --}}
 
-                            @if (($taskSettings->time_logs == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            @if (
+                                ($taskSettings->time_logs == 'yes' && in_array('client', user_roles())) ||
+                                    in_array('admin', user_roles()) ||
+                                    in_array('employee', user_roles()))
                                 <x-tab-item class="ajax-tab" :active="request('view') === 'time_logs'" :link="route('tasks.show', $task->id) . '?view=time_logs'">
                                     @lang('app.menu.timeLogs')
                                     @if ($task->active_timer_all_count > 0)
@@ -571,18 +595,27 @@
                                 </x-tab-item>
                             @endif
 
-                            @if (($taskSettings->notes == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            @if (
+                                ($taskSettings->notes == 'yes' && in_array('client', user_roles())) ||
+                                    in_array('admin', user_roles()) ||
+                                    in_array('employee', user_roles()))
                                 @if ($viewTaskNotePermission != 'none')
                                     <x-tab-item class="ajax-tab" :active="request('view') === 'notes'" :link="route('tasks.show', $task->id) . '?view=notes'">
                                         @lang('app.notes')</x-tab-item>
                                 @endif
                             @endif
 
-                            @if (($taskSettings->history == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            @if (
+                                ($taskSettings->history == 'yes' && in_array('client', user_roles())) ||
+                                    in_array('admin', user_roles()) ||
+                                    in_array('employee', user_roles()))
                                 <x-tab-item class="ajax-tab" :active="request('view') === 'history'" :link="route('tasks.show', $task->id) . '?view=history'">@lang('modules.tasks.history')
                                 </x-tab-item>
                             @endif
-                            @if (($taskSettings->history == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                            @if (
+                                ($taskSettings->history == 'yes' && in_array('client', user_roles())) ||
+                                    in_array('admin', user_roles()) ||
+                                    in_array('employee', user_roles()))
                                 <x-tab-item class="ajax-tab" :active="request('view') === 'deliverables'" :link="route('tasks.show', $task->id) . '?view=deliverables'">@lang('Submitted Work')
                                 </x-tab-item>
                             @endif
@@ -607,18 +640,24 @@
                 ->first();
             
             ?>
-
+            
         </div>
         <div class="col-sm-3 review-card">
             <x-cards.data>
-                @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                @if (
+                    ($taskSettings->status == 'yes' && in_array('client', user_roles())) ||
+                        in_array('admin', user_roles()) ||
+                        in_array('employee', user_roles()))
                     <p class="f-w-500">
                         <i class="fa fa-circle mr-1 text-yellow" style="color: {{ $task->boardColumn->label_color }}"></i>
                         {{ $task->boardColumn->column_name }}
                     </p>
                 @endif
 
-                @if (($taskSettings->make_private == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                @if (
+                    ($taskSettings->make_private == 'yes' && in_array('client', user_roles())) ||
+                        in_array('admin', user_roles()) ||
+                        in_array('employee', user_roles()))
                     @if ($task->is_private || $pin)
                         <div class="col-12 px-0 pb-3 d-flex">
                             @if ($task->is_private)
@@ -634,7 +673,10 @@
                     @endif
                 @endif
 
-                @if (($taskSettings->start_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                @if (
+                    ($taskSettings->start_date == 'yes' && in_array('client', user_roles())) ||
+                        in_array('admin', user_roles()) ||
+                        in_array('employee', user_roles()))
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                         <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('app.startDate') }}</p>
                         <p class="mb-0 text-dark-grey w-50 f-14">
@@ -647,7 +689,10 @@
                     </div>
                 @endif
 
-                @if (($taskSettings->due_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                @if (
+                    ($taskSettings->due_date == 'yes' && in_array('client', user_roles())) ||
+                        in_array('admin', user_roles()) ||
+                        in_array('employee', user_roles()))
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                         <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('app.dueDate') }}
                         </p>
@@ -662,7 +707,10 @@
                     </div>
                 @endif
                 @if ($task->original_due_date != null)
-                    @if (($taskSettings->due_date == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->due_date == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                             <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Original Due Date') }}
                             </p>
@@ -677,8 +725,8 @@
                         </div>
                     @endif
                 @endif
-                @if ($task->status == 'completed')
-
+                @if($task->status == 'completed')
+              
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                         <p class="mb-0 text-lightest w-50 f-14 text-capitalize">{{ __('Actual Completion Date') }}
                         </p>
@@ -691,10 +739,13 @@
 
                         </p>
                     </div>
-
+              
                 @endif
 
-                @if (($taskSettings->time_estimate == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                @if (
+                    ($taskSettings->time_estimate == 'yes' && in_array('client', user_roles())) ||
+                        in_array('admin', user_roles()) ||
+                        in_array('employee', user_roles()))
                     @if ($task->estimate_hours > 0 || $task->estimate_minutes > 0)
                         <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                             <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
@@ -715,7 +766,10 @@
                     }
                 @endphp
 
-                @if (($taskSettings->hours_logged == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                @if (
+                    ($taskSettings->hours_logged == 'yes' && in_array('client', user_roles())) ||
+                        in_array('admin', user_roles()) ||
+                        in_array('employee', user_roles()))
                     <div class="col-12 px-0 pb-3 d-lg-flex d-block">
                         <p class="mb-0 text-lightest w-50 f-14 text-capitalize">
                             {{ __('Parent task hours logged') }}
@@ -765,8 +819,12 @@
             </x-cards.data>
             @if ($task_review != null)
                 <br>
+
                 <x-cards.data>
-                    @if (($taskSettings->status == 'yes' && in_array('client', user_roles())) || in_array('admin', user_roles()) || in_array('employee', user_roles()))
+                    @if (
+                        ($taskSettings->status == 'yes' && in_array('client', user_roles())) ||
+                            in_array('admin', user_roles()) ||
+                            in_array('employee', user_roles()))
                         <p style="font-size:15px;" class="f-w-500 badge badge-primary">Task Review</p>
                     @endif
 
@@ -908,7 +966,8 @@
                         </p>
                         <p class="mb-0 w-50 f-14" style="color:orange;">
                             @for ($i = 1; $i <= $avgRating; $i++)
-                                <span style="color: orange;" class="fa fa-star{{ $i <= $avgRating ? '' : '-empty' }}"></span>
+                                <span style="color: orange;"
+                                    class="fa fa-star{{ $i <= $avgRating ? '' : '-empty' }}"></span>
                             @endfor
 
 
@@ -1671,8 +1730,8 @@
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'comments2': comments2,
-                'task_id': {{ $task->id }},
-                'user_id': {{ $task->last_updated_by }},
+                'task_id': {{$task->id}},
+                'user_id': {{$task->last_updated_by}},
                 'revision_status': status,
             }
             // console.log(data);
@@ -1683,7 +1742,7 @@
             });
             $.ajax({
                 type: "POST",
-                url: "{{ route('task-status-revision') }}",
+                url: "{{route('task-status-revision')}}",
                 data: data,
                 dataType: "json",
                 success: function (response) {
@@ -1692,7 +1751,7 @@
                         $('#submitBtnRevision').attr("disabled", false);
                         $('#submitBtnRevision').html("Submit");
                         //window.location.reload();
-                        window.location.href = '{{ route('tasks.show', $task->id) }}'
+                        window.location.href = '{{route("tasks.show", $task->id)}}'
                         toastr.success('Task Revision Successfully');
                     }
 
@@ -1705,7 +1764,7 @@
                     $('#submitBtnRevision').html("Submit");
                 }
             });
-        //});
+        //}); 
     }*/
 </script>
 

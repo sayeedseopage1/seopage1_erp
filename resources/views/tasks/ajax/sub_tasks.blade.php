@@ -30,9 +30,20 @@
                 @if($diff_in_minutes < 2880 && $signature == null)
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
-                                    class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                                @lang('modules.tasks.subTask')</a>
+                            @php
+                                $sub_tasks = \App\Models\SubTask::where('task_id',$task->id)->get();
+                                $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
+                            @endphp
+                            @if(count($sub_tasks) <1 && count($working_environments) < 1)
+                                    <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
+                                        <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                    </a>
+                            @else
+                                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                                    @lang('modules.tasks.subTask')
+                                </a>
+                            @endif
                         </div>
                     </div>
 
@@ -41,17 +52,39 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="f-15 f-w-500" href="javascript:;" id="task-disable2"><i
-                                    class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                                @lang('modules.tasks.subTask')</a>
+                            @php
+                                $sub_tasks = \App\Models\SubTask::where('task_id',$task->project->id)->get();
+                                $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
+                            @endphp
+                            @if(count($sub_tasks) <1 && count($working_environments) < 1)
+                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                </a>
+                            @else
+                                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                                    @lang('modules.tasks.subTask')
+                                </a>
+                            @endif
                         </div>
                     </div>
                 @else
                     <div class="row">
                         <div class="col-md-12">
-                            <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task"><i
-                                    class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                                @lang('modules.tasks.subTask')</a>
+                            @php
+                                $sub_tasks = \App\Models\SubTask::where('task_id',$task->project->id)->get();
+                                $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
+                            @endphp
+                            @if(count($sub_tasks) <1 && count($working_environments) < 1)
+                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                </a>
+                            @else
+                                <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
+                                    @lang('modules.tasks.subTask')
+                                </a>
+                            @endif
                         </div>
                     </div>
 
@@ -110,7 +143,7 @@
                                 <option value="">--</option>
                                 @foreach($projects as $project)
                                     <option value="{{$project->id}}">{{$project->project_name}}</option>
-                                @endforeach 
+                                @endforeach
                             </x-forms.select>
                         @endif
                     </div>
@@ -683,7 +716,7 @@
                         }
                     },
                     error: function(error) {
-                        
+
                         if (error.responseJSON.errors.description) {
                             $('#description_error').addClass('d-block');
                             $('#description_error').text('This field are required');
@@ -703,7 +736,7 @@
                             $('#sub_task_due_date_error').addClass('d-block');
                             $('#sub_task_due_date_error').text(error.responseJSON.errors.due_date);
                         }
-                    } 
+                    }
                 });
             });
 

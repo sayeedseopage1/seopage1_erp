@@ -64,19 +64,20 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
-                            <select class="form-control milestone_type height-35 f-14" name="service_type">
-                                <option value="Development">Development</option>
-                                <option value="Webcontent">Webcontent</option>
-                                <option value="Blogs/articles">Blogs/articles</option>
-                                <option value="Product descriptions">Product descriptions</option>
-                                <option value="Product category/collection pages">Product category/collection pages</option>
-                                <option value="Basic SEO">Basic SEO</option>
-                            </select>
-                        </div>
-                    </div> --}}
+{{--                     <div class="col-md-4">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>--}}
+{{--                            <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">--}}
+{{--                                <option value="Development">Development</option>--}}
+{{--                                <option value="Webcontent">Webcontent</option>--}}
+{{--                                <option value="Blogs/articles">Blogs/articles</option>--}}
+{{--                                <option value="Product descriptions">Product descriptions</option>--}}
+{{--                                <option value="Product category/collection pages">Product category/collection pages</option>--}}
+{{--                                <option value="Basic SEO">Basic SEO</option>--}}
+{{--                            </select>--}}
+{{--                        </div> --}}
+{{--                         <input type="text" id="generatedLinkContainer" class="form-control height-35 f-14 py-3">--}}
+{{--                    </div>--}}
 
 
                     <div class="col-md-12">
@@ -112,10 +113,17 @@
             </div>
 
         </div>
+
     </div>
 </div>
-<script type="text/javascript">
+{{--<script type="text/javascript">--}}
+{{--    function generateURL() {--}}
+{{--        var select = document.querySelector('#service_type');--}}
+{{--        var selectedValue = select.value;--}}
 
+{{--        var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-'));--}}
 
-
-</script>
+{{--        var generatedLinkContainer = document.getElementById('generatedLinkContainer');--}}
+{{--        generatedLinkContainer.value = url;--}}
+{{--    }--}}
+{{--</script>--}}

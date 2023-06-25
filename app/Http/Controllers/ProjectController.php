@@ -771,13 +771,13 @@ class ProjectController extends AccountBaseController
         }
 
         if (request()->ajax()) {
-            $html = view('projects.ajax.disputeview', $this->data)->render();
+            $html = view('projects.modals.final_dispute_view', $this->data)->render();
             return Reply::dataOnly(['status' => 'success', 'html' => $html, 'title' => $this->pageTitle]);
         }
 
 
         abort_403(user()->permission('edit_projects') == 'added' && $this->project->added_by != user()->id);
-        $this->view = 'projects.ajax.disputeview';
+        $this->view = 'projects.modals.final_dispute_view';
 
         return view('projects.create', $this->data);
     }
@@ -800,6 +800,7 @@ class ProjectController extends AccountBaseController
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
         if ($dealStage != null) {
             if ($find_project_id->status == 'not started') {
+
                 $kpi = kpiSetting::where('kpi_status', '1')->first();
 
 
@@ -841,8 +842,10 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_qualified->total_points_earn + ($project_budget * $kpi->qualify) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->qualify) / 100;
+
                 }
                 $point->save();
+
 
 
 
@@ -862,8 +865,10 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_requirements_defined->total_points_earn + ($project_budget * $kpi->requirements_defined) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->requirements_defined) / 100;
+
                 }
                 $point->save();
+
 
 
 
@@ -883,8 +888,10 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_proposal_made->total_points_earn + ($project_budget * $kpi->proposal_made) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->proposal_made) / 100;
+
                 }
                 $point->save();
+
 
 
 
@@ -903,6 +910,7 @@ class ProjectController extends AccountBaseController
                     $point->total_points_earn = $cash_points_negotiation_started->total_points_earn + ($project_budget * $kpi->negotiation_started) / 100;
                 } else {
                     $point->total_points_earn =  ($project_budget * $kpi->negotiation_started) / 100;
+
                 }
                 $point->save();
 
@@ -968,8 +976,35 @@ class ProjectController extends AccountBaseController
                 } else {
                     $point->total_points_earn =
                         ($project_budget * $kpi->contact_form) / 100;
+
                 }
                 $point->save();
+                if($find_deal_id->authorization_status == 1)
+                {
+
+                $team_lead= user::where('role_id',8)->first();
+                $earned_point= ($project_budget*$kpi->authorized_by_leader)/100;
+                $cash_points_team_lead= Cashpoint::where('user_id',$team_lead->id)->sum('points');
+                $point= new CashPoint();
+                $point->user_id= $team_lead->id;
+                $point->project_id= $find_project_id->id;
+                $point->activity= '<a style="color:blue" href="'.route('employees.show',$team_lead->id).'">'.$team_lead->name .
+                    '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'
+                    .$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'.
+                    $find_project_id->client_name->name;
+        
+                $point->gained_as = "Individual";
+                $point->points= $earned_point;
+                $point->type = 'Authorization Bonus';
+        
+                if ($cash_points_team_lead != null) {
+                    $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point/100;
+                } else {
+                    $point->total_points_earn= $earned_point/100;
+                }
+        
+                $point->save();
+            }
                 // if ($find_deal_id->authorization_status == 1) {
                 //     $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
 
@@ -998,6 +1033,7 @@ class ProjectController extends AccountBaseController
 
                 if ($find_deal_id->amount > $kpi->generate_single_deal) {
 
+
                     $bonus_point = $kpi->bonus_point;
                     if ($find_deal_id->lead_id != null) {
                         $lead = Lead::where('id', $find_deal_id->lead_id)->first();
@@ -1017,11 +1053,13 @@ class ProjectController extends AccountBaseController
                             $point->total_points_earn = $cash_points->total_points_earn + $bonus_point * 24 / 100;
                         } else {
                             $point->total_points_earn =  $bonus_point * 24 / 100;
+
                         }
                         $point->save();
                         // dd($point);
 
                     }
+
                     $deal_qualified = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 1)->first();
 
 
@@ -1041,8 +1079,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_qualified->total_points_earn + $bonus_point * 4 / 100;
                     } else {
                         $point->total_points_earn =  $bonus_point * 4 / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1064,8 +1104,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_requirements_defined->total_points_earn + $bonus_point * 17 / 100;
                     } else {
                         $point->total_points_earn = $bonus_point * 17 / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1087,8 +1129,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_proposal_made->total_points_earn + $bonus_point * 12 / 100;
                     } else {
                         $point->total_points_earn =  $bonus_point * 12 / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1109,8 +1153,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_negotiation_started->total_points_earn + $bonus_point * 12 / 100;
                     } else {
                         $point->total_points_earn =  $bonus_point * 12 / 100;
+
                     }
                     $point->save();
+
 
 
                     $deal_milestone_breakdown = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 5)->first();
@@ -1135,9 +1181,11 @@ class ProjectController extends AccountBaseController
                                 $bonus_point * 14 / 100;
                         }
                         $point->save();
+
                     }
                     $deal_id = Deal::where('id', $find_deal_id->id)->first();
                     //dd($deal_id);
+
                     $user_name = User::where('id', $deal_id->added_by)->first();
 
                     $cash_points_close_deal = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();
@@ -1194,10 +1242,12 @@ class ProjectController extends AccountBaseController
 
                     // Create a new cash point entry with the sum of points
 
+
                 }
                 $currentMonth = Carbon::now()->month;
                 //     // / dd($currentMonth);
                 $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
+
 
 
                 if ($monthly_deal > $kpi->after && $monthly_deal >= $monthly_deal + $kpi->additional_sales_amount) {
@@ -1221,11 +1271,13 @@ class ProjectController extends AccountBaseController
                             $point->total_points_earn = $cash_points->total_points_earn + ($project_budget_additional * $kpi->the_bidder) / 100;
                         } else {
                             $point->total_points_earn =  ($project_budget_additional * $kpi->the_bidder) / 100;
+
                         }
                         $point->save();
                         // dd($point);
 
                     }
+
                     $deal_qualified = DealStageChange::where('deal_id', $find_deal_id->deal_id)->where('deal_stage_id', 1)->first();
 
 
@@ -1244,8 +1296,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_qualified->total_points_earn + ($project_budget_additional * $kpi->qualify) / 100;
                     } else {
                         $point->total_points_earn =  ($project_budget_additional * $kpi->qualify) / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1266,8 +1320,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_requirements_defined->total_points_earn + ($project_budget_additional * $kpi->requirements_defined) / 100;
                     } else {
                         $point->total_points_earn =  ($project_budget_additional * $kpi->requirements_defined) / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1288,8 +1344,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_proposal_made->total_points_earn + ($project_budget_additional * $kpi->proposal_made) / 100;
                     } else {
                         $point->total_points_earn =  ($project_budget_additional * $kpi->proposal_made) / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1309,8 +1367,10 @@ class ProjectController extends AccountBaseController
                         $point->total_points_earn = $cash_points_negotiation_started->total_points_earn + ($project_budget_additional * $kpi->negotiation_started) / 100;
                     } else {
                         $point->total_points_earn =  ($project_budget_additional * $kpi->negotiation_started) / 100;
+
                     }
                     $point->save();
+
 
 
 
@@ -1439,6 +1499,7 @@ class ProjectController extends AccountBaseController
                     $update_kpi->bonus_status = 1;
                     $update_kpi->save();
                 }
+
 
 
 
@@ -1788,6 +1849,7 @@ class ProjectController extends AccountBaseController
 
                 //5% kpi setting end
             }
+
         }
         // dd($find_project_id);
 
@@ -3250,9 +3312,11 @@ class ProjectController extends AccountBaseController
         $project = ProjectDeliverable::find($deliverable_id->id);
         $project->authorization = 1;
         $project->save();
+
         $project_id = Project::where('id', $deliverable_id->project_id)->first();
 
         $user = User::where('id', $project_id->pm_id)->first();
+
 
         $this->triggerPusher('notification-channel', 'notification', [
             'user_id' => $user->id,
@@ -3464,10 +3528,23 @@ class ProjectController extends AccountBaseController
         $milestone->status = 'pending';
 
         $milestone->save();
+
+        $website_themes = new ProjectWebsiteTheme();
+        $website_themes->theme_name = $request->theme_name;
+        $website_themes->theme_url = $request->theme_url;
+        $website_themes->save();
+
+        foreach($request->plugin_name as $key => $plugin_name) {
+            $website_plugins = new ProjectWebsitePlugin();
+            $website_plugins->plugin_name = $plugin_name;
+            $website_plugins->plugin_url = $request->plugin_url[$key] ;
+            $website_plugins->save();
+        }
+
         $data = $request->all();
 
-        $plugin_names = json_encode($data['plugin_name']);
-        $plugin_urls = json_encode($data['plugin_url']);
+//        $plugin_names = json_encode($data['plugin_name']);
+//        $plugin_urls = json_encode($data['plugin_url']);
 
         $project_portfolio = new ProjectPortfolio();
         $project_portfolio->project_id = $project->project_id;
@@ -3475,8 +3552,8 @@ class ProjectController extends AccountBaseController
         $project_portfolio->website_type = $data['website_type'];
         $project_portfolio->niche = $data['niche'];
         $project_portfolio->sub_niche = $data['sub_niche'];
-        $project_portfolio->theme_name = $data['theme_name'];
-        $project_portfolio->theme_url = $data['theme_url'];
+        $project_portfolio->theme_name = $website_themes->id;
+        $project_portfolio->theme_url = $website_themes->id;
         $project_portfolio->plugin_information = $data['website_plugin_box_information'];
         $project_portfolio->main_page_number = $data['main_page_number'];
         $project_portfolio->secondary_page_number = $data['secondary_page_number'];
@@ -3485,12 +3562,14 @@ class ProjectController extends AccountBaseController
         $project_portfolio->description = $data['description'];
         $project_portfolio->portfolio_link = $data['actual_link'];
         $project_portfolio->added_by = $data['added_by'];
-        $project_portfolio->plugin_name = $plugin_names;
-        $project_portfolio->plugin_url = $plugin_urls;
+        $project_portfolio->plugin_name = $website_plugins->id;
+        $project_portfolio->plugin_url = $website_plugins->id;
         $project_portfolio->save();
         $milestone_update = ProjectMilestone::where('id', $milestone->milestone_id)->first();
         $milestone_update->project_completion_status = 2;
         $milestone_update->save();
+
+
         //$user= User::where('id',$project->pm_id)->first();
 
         // authorization action section
@@ -3729,6 +3808,7 @@ class ProjectController extends AccountBaseController
         Toastr::success('Project Accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return back();
     }
+
 
 
     public function ProjectDeny(Request $request)
@@ -4078,19 +4158,42 @@ class ProjectController extends AccountBaseController
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
-        $project = Project::find($request->project_id);
-        $project->authorization_status = 'approved';
-        $project->deliverable_authorization = 1;
-        $project->save();
+
+//        dd($request->all());
+        if ($request->denyAuthorization) {
+            $project = Project::find($request->project_id);
+            $project->authorization_status = 'canceled';
+            $project->project_status = 'canceled';
+            $project->deliverable_authorization = 2;
+            $project->save();
+        }else{
+            $project=Project::find($request->project_id);
+            $project->authorization_status = 'approved';
+            $project->deliverable_authorization= 1;
+            $project->save();
+        }
+
 
         $qualified_sale_id = QualifiedSale::where('project_id', $project->id)->first();
 
-        if ($qualified_sale_id != null) {
-            $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
-            $qualified_sale->authorized_by_admin = 1;
-            $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
-            $qualified_sale->admin_id = Auth::id();
-            $qualified_sale->save();
+
+        if($qualified_sale_id != null)
+        {
+            if ($request->denyAuthorization) {
+                $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
+                $qualified_sale->authorized_by_admin = 2;
+                $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+                $qualified_sale->admin_id = Auth::id();
+                $qualified_sale->save();
+            }else{
+                $qualified_sale= QualifiedSale::find($qualified_sale_id->id);
+                $qualified_sale->authorized_by_admin = 1;
+                $qualified_sale->admin_authorization_comment = $request->admin_authorization_comment;
+                $qualified_sale->admin_id = Auth::id();
+                $qualified_sale->save();
+            }
+
+
         }
 
 

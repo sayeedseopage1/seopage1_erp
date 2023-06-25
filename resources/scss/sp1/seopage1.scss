@@ -1,0 +1,62 @@
+@import "single-task-page";
+
+
+// .skeleton-loading {
+//     display: inline-block;
+//     width: fit-content;
+//     height: 1.5em;
+//     color: transparent !important;
+//     background: linear-gradient(-90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+//     background-size: 400% 100%;
+//     border-radius: 3px;
+//     -moz-user-select: none;
+//     -webkit-user-select: none;
+//     -ms-user-select: none;
+//     user-select: none;
+//     animation: skeleton-loading-animation 1.5s ease-in-out infinite;
+//   }
+  
+//   @keyframes skeleton-loading-animation {
+//     0% {
+//       background-position: 100% 50%;
+//     }
+//     100% {
+//       background-position: -100% 50%;
+//     }
+//   }
+ 
+@keyframes glice {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
+
+  @keyframes pulse {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.6;
+    }
+  }
+  
+  .skeleton-loading {
+    width: fit-content; 
+    padding: 3px ;
+    color: transparent !important;
+    background-color: #f0f0f0;
+    background-image: linear-gradient(45deg, #f0f0f0, #e0e0e0, #f0f0f0);
+    background-size: 200px 100%;
+    animation: glice 2s infinite linear, pulse 2s infinite;
+  }
+ 
+  
+  .hover-underline:hover{
+    text-decoration: underline;
+  }

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+  @extends('layouts.app')
 @push('styles')
     <style>
         .categoryLink{
@@ -64,7 +64,7 @@
             <div class="col-md-12">
                 <div class="card mt-3">
                     <div class="card-body">
-
+                        {{-- {{ dd($website_themes) }} --}}
                         <div class="row">
                             <div class="col-12 col-sm-4 col-md-3 col-xl-2 p-2 d-flex flex-column">
                                 <label style="font-size: 13px; font-weight: bold; color:#999eac; white-space:nowrap;" for="">Select CMS Category</label>
@@ -143,139 +143,15 @@
                         <div class="displayFilterData">
                             <p class="mt-2 f-18" style="color:#5e6168; font-weight: 500">Website Category: <span id="displaySelectedCategory">Seopage1</span></p>
                             <div id="categoryLinkWrapper" class="d-flex flex-wrap m-0 p-0">
-                                <div class="categoryLink linkBtn" >
+                                <div class="categoryLink" >
                                     <img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">
-                                    <span class="linkBtn">www.seopage1.com</span>
+                                    <span>www.seopage1.com</span>
                                 </div>
                             </div>
                         </div>
 
                         <!--Modal Start-->
-                        <div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="linkModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="linkModalLabel">View Category</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        @foreach($portfolios as $index => $portfolio)
-                                            @php
-                                                $project = \App\Models\Project::find($portfolio->project_id);
-                                            @endphp
-                                            <section style="background-color: #f4f4f4;" class="py-3 linkShow rounded" id="linkShow{{$index}}">
-                                                <div class="container-fluid">
-                                                    <div class="mb-3">
-                                                        <h5 class="f-20">Project Title:</h5>
-                                                        <span>{{$portfolio->project_name}}</span>
-                                                    </div>
-
-
-                                                    <div class="mb-3">
-                                                        <span class="f-20">Client Name: {{$portfolio->user_name}}</span><br>
-                                                        <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3 mb-md-0">
-                                                            <h5>Website Link:</h5>
-                                                            <span>{{$portfolio->actual_link}}</span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5>Agree price:</h5>
-                                                            <span>${{$portfolio->project_budget}}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-3">
-                                                        {{--                                            <div class="col-md-6 mb-3 mb-md-0">--}}
-                                                        {{--                                                <h5>Final price with bonus and additional requirements:</h5>--}}
-                                                        {{--                                                <span>$ 4654 USD</span>--}}
-                                                        {{--                                            </div>--}}
-                                                        <div class="col-md-6 d-flex">
-                                                            <h5>Theme Name:</h5>
-                                                            <p class="ml-2">{{$portfolio->theme_name}}</p>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="row mt-3">
-                                                        <div class="col-md-6 mb-3 mb-md-0">
-                                                            <h5>Total estimated hours:</h5>
-                                                            @php
-                                                                $hours = floor($project->hours_allocated); // Extract the whole number of hours
-                                                                $minutes = ($project->hours_allocated - $hours) * 60; // Calculate the minutes
-                                                                // Create a Carbon instance to format the hours and minutes
-                                                                $time = \Carbon\Carbon::createFromTime($hours, $minutes);
-                                                                $formattedDuration = $time->format('H \H\o\u\r\s i \M\i\n');
-                                                            @endphp
-                                                            <span>{{$formattedDuration}}</span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5>Total Logged hours:</h5>
-                                                            @php
-                                                                $project_time_logs_hours= \App\Models\ProjectTimeLog::where('project_id', $project->id)->sum('total_hours');
-                                                                $project_time_logs_minutes= \App\Models\ProjectTimeLog::where('project_id', $project->id)->sum('total_minutes');
-                                                                $project_time_logs=  ($project_time_logs_minutes / 60);
-                                                                $project_time_minutes = $project_time_logs_minutes % 60;
-                                                                $currentTime = \Carbon\Carbon::now();
-                                                                $totalMinutes = \DB::table('project_time_logs')
-                                                                ->where('project_id',$project->id)
-                                                                ->whereNull('end_time')
-                                                                ->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF('$currentTime', start_time)))/60 as total_minutes"))
-                                                                ->value('total_minutes');
-                                                                $active_time_hours = intval(round($totalMinutes,1) / 60);
-                                                                $active_time_minutes = intval(round($totalMinutes,1) % 60);
-                                                                $update_hours = $project_time_minutes + $active_time_minutes / 60 ;
-                                                                $update_minutes = $project_time_minutes + $active_time_minutes / 60 ;
-                                                                if($project_time_minutes + $active_time_minutes >= 60)
-                                                                {
-                                                                    $add_hours = intval(round(($project_time_minutes + $active_time_minutes) / 60, 1)) ;
-                                                                    $add_minutes = ($project_time_minutes + $active_time_minutes) % 60;
-                                                                }else {
-                                                                    $add_hours = 0;
-                                                                    $add_minutes = $project_time_minutes + $active_time_minutes;
-                                                                }
-                                                                $total_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours.'.'.$add_minutes;
-                                                                $logged_hours = intval(round($project_time_logs, 1)) + $active_time_hours + $add_hours . ' hrs '. $add_minutes . ' mins';
-                                                            @endphp
-                                                            <p class="ml-2">{{$logged_hours}}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-3">
-                                                        <div class="col-md-6 mb-3 mb-md-0">
-                                                            <h5>Average hourly price based on the final logged hours:</h5>
-                                                            @if($total_hours != 0)
-                                                                <span>${{round($project->project_budget / $total_hours, 2)}}</span>
-                                                            @else
-                                                                <span>$0</span>
-
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5>Total number of pages with page numbers:</h5>
-                                                            <p class="ml-2">Main page name and number: {{$portfolio->main_page_number}} page ({{$portfolio->main_page_name}})</p>
-                                                            <p class="ml-2">Secondary page name and number: {{$portfolio->secondary_page_number}} page ({{$portfolio->secondary_page_name}})</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-3">
-                                                        <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
-                                                        @if($portfolio->description)
-                                                        <span>{!! $portfolio->description !!}</span>
-                                                        @else
-                                                        <span>--</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </section>
-
-                                        @endforeach
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="portfolioModal"></div>
                     </div>
                 </div>
             </div>
@@ -314,43 +190,43 @@
                     var rowHtml = '<div class="row"></div>';
                     $('.displayFilterData').append(rowHtml);
 
-                   $.each(response, function(index, category) {
-                       var linkHtml = '<div class="col-md-4">' +
-                           '<div id="categoryLinkWrapper" class="m-0 p-0">' +
-                           '<div class="categoryLink linkBtn d-flex align-items-center">' +
-                           '<img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">';
+                    $.each(response, function(index, category) {
+                        var linkHtml = '<div class="col-md-4">' +
+                            '<div id="categoryLinkWrapper" class="m-0 p-0">' +
+                            '<div class="categoryLink d-flex align-items-center">' +
+                            '<img src="/user-uploads/favicon/14d159b3d5548dfbc48b977da1ede616.png" alt="" class="rounded-circle m-1" width="26" height="26" style="border: 2px solid #dddddd;">';
 
-                       if (category.portfolio_link) {
-                           linkHtml += '<a href="#" class="mr-auto linkBtn" data-toggle="modal" data-target="#linkModal">' + category.portfolio_link + '</a>';
-                       } else {
-                           linkHtml += '<span class="mr-auto">--Link are not available--</span>';
-                       }
-
-                       linkHtml += '<button type="submit" class="btn btn-outline-primary copyBtn"><i class="fa fa-clone"></i></button>' +
-                           '</div>' +
-                           '</div>' +
-                           '</div>';
+                            linkHtml += '<a href="#" class="mr-auto linkBtn"  data-id="' + category.id + '">' + category.portfolio_link + '</a>'
+                            linkHtml += '<button type="submit" class="btn btn-outline-primary copyBtn"><i class="fa fa-clone"></i></button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
 
                         $('.displayFilterData .row').append(linkHtml);
-                       CopyTextLink();
+                        CopyTextLink();
                     });
 
-                    var linkBtns = document.querySelectorAll(".linkBtn");
-                    linkBtns.forEach(function(linkBtn, index) {
-                        linkBtn.addEventListener("click", function(event) {
-                            event.preventDefault();
 
-                            var linkShows = document.querySelectorAll(".linkShow");
-                            linkShows.forEach(function(linkShow) {
-                                linkShow.style.display = "none";
+                    $('.linkBtn').each(function(){
+                        $(this).on('click', function(e) {
+                            e.preventDefault();
+                            var dataId = $(this).data('id');
+                            $.ajax({
+                                url: '/filter-data/' + dataId,
+                                type: "GET",
+                                dataType: "html",
+                                success: function (data) {
+                                    console.log(data);
+                                    $('.portfolioModal').html(data);
+                                    $('#linkModal').modal('show');
+                                },
+                                error: function(xhr, status, error) {
+                                    // Handle the error response here
+                                    console.error(error);
+                                }
                             });
-
-                            var linkShow = document.getElementById("linkShow" + index);
-                            if (linkShow) {
-                                linkShow.style.display = "block";
-                            }
                         });
-                    });
+                    })
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);

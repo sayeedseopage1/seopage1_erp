@@ -880,6 +880,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('invoices', InvoiceController::class);
 
+    Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
+    Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
+    Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
+
 
     //report-central
     Route::get('report-central/performance-predefined-cycle', [ReportCentralController::class, 'performancePredefinedCycle'])->name('performance_predefined_cycle');
@@ -914,9 +918,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('monthly-incentive/get-json/index', [MonthlyIncentiveController::class, 'get_index_json']);
     //qualified sales Settings
 
+
     Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
 
     Route::resource('qualified-sales', QualifiedSalesController::class);
+
 
     // Estimates
     Route::get('estimates/delete-image', [EstimateController::class, 'deleteEstimateItemImage'])->name('estimates.delete_image');
@@ -1171,18 +1177,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
 
-    Route::post('/insights/sections/add', [InsightsController::class, 'storeSection'])->name('insights/sections/add');
 
-    Route::resource('authorization-action', AuthorizationAction::class);
-
-    Route::get('index-non-cash-points', [NonCashPointSettingsController::class, 'index'])->name('non_cash_point.index');
-    Route::post('store-non-cash-points', [NonCashPointSettingsController::class, 'store'])->name('non_cash_point.store');
-
+    Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
     Route::get('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-
-    Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
-    Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
-    Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
 });
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
@@ -1286,6 +1283,7 @@ Route::post('/projects/project-completion/filter-subcategories', [ProjectControl
 Route::resource('portfolio', PortfolioController::class);
 Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
 Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
+Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
 
 //add project niche
@@ -1386,4 +1384,5 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 
 //Route::get('fix-database', [HomeController::class, 'fix_database'])->name('fix_database');
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
+Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
