@@ -24,13 +24,13 @@
 		background: #009879;
 		color: #fff;
 		padding: 6px 12px;
-		white-space: nowrap;
+		/* white-space: nowrap; */
 	}
 
 	.sp1_styled-table tbody td{
 		color: #555;
 		padding: 12px 12px; 
-		white-space: nowrap;
+		/* white-space: nowrap; */
 	}
 
 	.sp1_styled_tabel_container{

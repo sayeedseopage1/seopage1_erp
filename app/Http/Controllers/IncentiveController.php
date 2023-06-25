@@ -217,7 +217,7 @@ class IncentiveController extends AccountBaseController
 
         $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
-        $data['incentive_final_amount'] = UserIncentive::where('user_id',$request->user_id)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->select('incentive_earned')->first();
+        $data['incentive_final_amount'] = UserIncentive::where('user_id',$request->user_id)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->select('final_payable_incentive_amount')->first();
        
         $user_shift= User::where('id',$request->user_id)->first();
         $shift_user= User::where('shift',$user_shift->shift)->where('id','!=',$request->user_id)->first();
