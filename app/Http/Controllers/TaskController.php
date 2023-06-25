@@ -2090,7 +2090,15 @@ class TaskController extends AccountBaseController
                         $newArray[] = $group[0];
                     }
                 }
-                return response()->json($newArray);
+
+                $new_array_with_link = [];
+
+                foreach ($newArray as $value) {
+                    $value['link'] = [$value['link']];
+                    array_push($new_array_with_link, $value);
+                }
+
+                return response()->json($new_array_with_link);
             }
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
