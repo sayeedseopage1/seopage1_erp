@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Button from './Button'
 
-const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mode="", uploadInputClass='', fileWrapperClass=''}) => {
+const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mode=""}) => {
     const [previews, setPreviews] = React.useState([]);
 
     
@@ -38,8 +38,6 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
   
 
   const RenderIcon = ({_file, type=''}) => { 
-
-    console.log({_file})
     let filename ='';
     let file = {};
     if(type === 'previous'){
@@ -57,7 +55,6 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
     return(
       <div className='uploaded-file-preview'>
           <div className='__icon'>
-              
               <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="52"

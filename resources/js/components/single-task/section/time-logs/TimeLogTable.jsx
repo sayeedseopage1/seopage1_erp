@@ -70,6 +70,7 @@ const TableRow = ({log}) => {
         <tr className='__tbody_tr'>
             <td className='__tbody_td _tbody_td_employee'>
                 <img src={user?.getAvatar()} alt={user?.getName()} />
+                <span className='px-2'>{user?.getName()}</span>
             </td>
             
             <td className='__tbody_td _tbody_td_start_time'>

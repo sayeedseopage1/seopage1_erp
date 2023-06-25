@@ -5,7 +5,7 @@ const initialState = {
     subTask: [],
     notes: [],
     timeLogs: [],
-    histories: []
+    histories: [], 
 }
 
 const subTaskSlice = createSlice({
