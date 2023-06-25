@@ -1491,8 +1491,6 @@ class ContractController extends AccountBaseController
             //                dd($deal);
             $deal->save();
 
-           // dd($deal);
-
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
