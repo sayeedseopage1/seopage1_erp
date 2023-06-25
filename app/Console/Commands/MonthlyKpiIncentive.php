@@ -201,31 +201,7 @@ class MonthlyKpiIncentive extends Command
         //                 }
         //             //}
         //         }
-        // $team= Seopage1Team::where('id',1)->first();
-        // $users = explode(',', $team->members);
-        // $user_data = [];
-        //             foreach ($users as $key => $value) {
-        //                 if ($value != '') {
-        //                      //$user = User::find($value);
-        //                     array_push($user_data,$value);
-        //                 }
-        //             }
-        // foreach($user_data as $user)
-        // {
-        //     // /dd($user);
-        //     $user_cash_points= CashPoint::where('user_id',$user)->sum('points');
-        //     $point = new CashPoint();
-        //     $point->user_id= $user;
-        //     $user_name = User::where('id',$user)->first();
-        // //    / dd($value);
-        //     $point->activity= $user_name->name. ' deduct '.$user_cash_points.' points';
-        //     $point->gained_as = "Individual";
-        //     $point->points= -$user_cash_points;
-        //     $point->total_points_earn = 0;
-        //     $point->total_points_redeem = $user_cash_points;
-        //     $point->total_points_void = 0;
-        //     $point->save();
-
+       
         // }
                
                 
@@ -324,12 +300,53 @@ class MonthlyKpiIncentive extends Command
             $data['incentive_held_amount']= $incentive_held_amount;
             $data['final_payable_incentive_amount']= $incentive_amount_after_20p_held;
 
+            $incentive = new UserIncentive();
+            $incentive->month = $current_month;
+            $incentive->name= $shift->name;
+            $incentive->non_incentive_points = $incentive_setting->every_shift_every_point_above;;
+            $incentive->shift_achieved_points= $shift_points;
+            $incentive->shift_incentive_achievable_point= $shift_incentive_achievable_point;
+            $incentive->contribution =$contribution;
+            $incentive->user_achieved_points =$user_achieved_point;
+            $incentive->amount_before_deduction =$amount_before_deduction;
+            $incentive->user_deducted_points = $user_deducted_points;
+            $incentive->user_point_after_deduction =$user_final_achievable_point_without_minimum_goal;
+          //  $incentive->
+
+
+            
+
 
         // /    dd($data);
 
 
        
     //    / $total_shift_points= CashPoint::
+    }
+    $team= Seopage1Team::where('id',1)->first();
+    $users = explode(',', $team->members);
+    $user_data = [];
+                foreach ($users as $key => $value) {
+                    if ($value != '') {
+                         //$user = User::find($value);
+                        array_push($user_data,$value);
+                    }
+                }
+    foreach($user_data as $user)
+    {
+        // /dd($user);
+        $user_cash_points= CashPoint::where('user_id',$user)->sum('points');
+        $point = new CashPoint();
+        $point->user_id= $user;
+        $user_name = User::where('id',$user)->first();
+    //    / dd($value);
+        $point->activity= $user_name->name. ' deduct '.$user_cash_points.' points';
+        $point->gained_as = "Individual";
+        $point->points= -$user_cash_points;
+        $point->total_points_earn = 0;
+        $point->total_points_redeem = $user_cash_points;
+        $point->total_points_void = 0;
+        $point->save();
     }
 
             $kpi = kpiSetting::where([

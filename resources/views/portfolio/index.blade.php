@@ -152,78 +152,6 @@
 
                         <!--Modal Start-->
                         <div class="portfolioModal"></div>
-{{--                        <div class="modal fade" id="linkModal" tabindex="-1" aria-labelledby="linkModalLabel" aria-hidden="true">--}}
-{{--                            <div class="modal-dialog modal-xl">--}}
-{{--                                <div class="modal-content">--}}
-{{--                                    <div class="modal-header">--}}
-{{--                                        <h5 class="modal-title" id="linkModalLabel">View Category</h5>--}}
-{{--                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
-{{--                                            <span aria-hidden="true">&times;</span>--}}
-{{--                                        </button>--}}
-{{--                                    </div>--}}
-{{--                                    <div class="modal-body">--}}
-{{--                                        @foreach($portfolios as $index => $portfolio)--}}
-{{--                                            @php--}}
-{{--                                                $project = \App\Models\Project::find($portfolio->project_id);--}}
-{{--                                            @endphp--}}
-{{--                                            <section style="background-color: #f4f4f4;" class="py-3 linkShow rounded" id="linkShowId{{$index}}">--}}
-{{--                                                <div class="container-fluid">--}}
-{{--                                                    <div class="mb-3">--}}
-{{--                                                        <h5 class="f-20">Project Title:</h5>--}}
-{{--                                                        <span>{{$portfolio->project_name}}</span>--}}
-{{--                                                    </div>--}}
-
-
-                                                    <div class="mb-3">
-                                                        <span class="f-20">Client Name: {{$portfolio->user_name}}</span><br>
-                                                        <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-md-6 mb-3 mb-md-0">
-                                                            <h5>Website Link:</h5>
-                                                            <span>{{$portfolio->actual_link}}</span>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5>Agree price:</h5>
-                                                            <span>${{$portfolio->project_budget}}</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mt-3">
-                                                        {{--                                            <div class="col-md-6 mb-3 mb-md-0">--}}
-                                                        {{--                                                <h5>Final price with bonus and additional requirements:</h5>--}}
-                                                        {{--                                                <span>$ 4654 USD</span>--}}
-                                                        {{--                                            </div>--}}
-                                                        <div class="col-md-6 d-flex">
-                                                            <h5>Theme Name:</h5>
-                                                            <p class="ml-2">{{$portfolio->theme_name}}</p>
-                                                        </div>
-
-                                                            @endif
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <h5>Total number of pages with page numbers:</h5>
-                                                            <p class="ml-2">Main page name and number: {{$portfolio->main_page_number}} page ({{$portfolio->main_page_name}})</p>
-                                                            <p class="ml-2">Secondary page name and number: {{$portfolio->secondary_page_number}} page ({{$portfolio->secondary_page_name}})</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-3">
-                                                        <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
-                                                        @if($portfolio->description)
-                                                        <span>{!! $portfolio->description !!}</span>
-                                                        @else
-                                                        <span>--</span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </section>
-{{--                                        @endforeach--}}
-{{--                                    </div>--}}
-{{--                                    <div class="modal-footer">--}}
-{{--                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                     </div>
                 </div>
             </div>
@@ -278,16 +206,18 @@
                         CopyTextLink();
                     });
 
-                    $(document).ready(function() {
-                        $(document).on('click', '.linkBtn', function(e) {
+
+                    $('.linkBtn').each(function(){
+                        $(this).on('click', function(e) {
                             e.preventDefault();
                             var dataId = $(this).data('id');
                             $.ajax({
-                                url: '/filter-data-show/' + dataId,
+                                url: '/filter-data/' + dataId,
                                 type: "GET",
                                 dataType: "html",
                                 success: function (data) {
-                                    $('.portfolioModal').append(data);
+                                    console.log(data);
+                                    $('.portfolioModal').html(data);
                                     $('#linkModal').modal('show');
                                 },
                                 error: function(xhr, status, error) {
@@ -296,25 +226,7 @@
                                 }
                             });
                         });
-                    });
-
-                    // var linkBtns = document.querySelectorAll(".linkBtn");
-                    // linkBtns.forEach(function(linkBtn, index) {
-                    //     linkBtn.addEventListener("click", function(event) {
-                    //         event.preventDefault();
-                    //
-                    //         var linkShows = document.querySelectorAll(".linkShow");
-                    //         linkShows.forEach(function(linkShow) {
-                    //             linkShow.style.display = "none";
-                    //         });
-                    //
-                    //         var linkShowId = document.getElementById("linkShowId" + index);
-                    //         console.log(linkShowId);
-                    //         if (linkShowId) {
-                    //             linkShowId.style.display = "block";
-                    //         }
-                    //     });
-                    // });
+                    })
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);

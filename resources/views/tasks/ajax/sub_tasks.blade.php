@@ -31,23 +31,17 @@
                     <div class="row">
                         <div class="col-md-12">
                             @php
-                                $sub_tasks = \App\Models\SubTask::where('task_id',$task->project->id)->get();
+                                $sub_tasks = \App\Models\SubTask::where('task_id',$task->id)->get();
                                 $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
-                                <a class="f-15 f-w-500 disabled" href="javascript:;" onclick="event.preventDefault(); return null" style="cursor: not-allowed;">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                                    @lang('modules.tasks.subTask')
-                                </a>
+                                    <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
+                                        <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                    </a>
                             @else
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
                                     <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
                                     @lang('modules.tasks.subTask')
-                                </a>
-                            @endif
-                            @if(count($working_environments) <1)
-                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
                                 </a>
                             @endif
                         </div>
@@ -63,19 +57,13 @@
                                 $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
-                                <a class="f-15 f-w-500 disabled" href="javascript:;" onclick="event.preventDefault(); return null" style="cursor: not-allowed;">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                                    @lang('modules.tasks.subTask')
+                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
                                 </a>
                             @else
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
                                     <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
                                     @lang('modules.tasks.subTask')
-                                </a>
-                            @endif
-                            @if(count($working_environments) <1)
-                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
                                 </a>
                             @endif
                         </div>
@@ -88,19 +76,13 @@
                                 $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
-                                <a class="f-15 f-w-500 disabled" href="javascript:;" onclick="event.preventDefault(); return null" style="cursor: not-allowed;">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
-                                    @lang('modules.tasks.subTask')
+                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
                                 </a>
                             @else
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
                                     <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
                                     @lang('modules.tasks.subTask')
-                                </a>
-                            @endif
-                            @if(count($working_environments) <1)
-                                <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
                                 </a>
                             @endif
                         </div>

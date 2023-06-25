@@ -880,6 +880,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('invoices', InvoiceController::class);
 
+    Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
+    Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
+    Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
+
 
     //report-central
     Route::get('report-central/performance-predefined-cycle', [ReportCentralController::class, 'performancePredefinedCycle'])->name('performance_predefined_cycle');
@@ -1279,7 +1283,7 @@ Route::post('/projects/project-completion/filter-subcategories', [ProjectControl
 Route::resource('portfolio', PortfolioController::class);
 Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
 Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
-Route::get('/filter-data-show/{dataId}', [PortfolioController::class, 'filterDataShow'])->name('filter-data-show');
+Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
 
 //add project niche

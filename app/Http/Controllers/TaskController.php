@@ -62,9 +62,11 @@ use App\Models\TaskComment;
 use App\Models\AuthorizationAction;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
+
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
-use Toaster;
+
+use App\Models\AuthorizationAction;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -153,7 +155,14 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->link != null) {
-            foreach ($request->link as $lin) {
+
+
+
+
+            $links = explode(',', $request->link);
+            foreach ($links as $lin) {
+
+
                 $task_submit = new TaskSubmission();
                 $task_submit->task_id = $request->id;
                 $task_submit->user_id = $request->user_id;
@@ -846,6 +855,7 @@ class TaskController extends AccountBaseController
 
         if (is_array($request->user_id)) {
             $assigned_to = User::find($request->user_id[0]);
+
             if ($assigned_to->role_id == 6) {
                 //authorization action start
 
@@ -2003,11 +2013,15 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'task_comment_file_delete') {
             $data = TaskComment::findOrfail($id);
-            if ($data->files != null) {
+
+
+            if ($data->files != null){
                 $files = json_decode($data->files);
                 $file = [];
-                foreach ($files as $item) {
-                    if ($item != $request->query('files')) {
+                foreach ($files as $item){
+                    if ($item != $request->query('files')){
+
+
                         array_push($file, $item);
                     }
                 }
@@ -2034,6 +2048,7 @@ class TaskController extends AccountBaseController
                     if ($item->text != null) {
                         array_push($description, $item->text);
                     }
+
                 }
 
                 $user = $data->first()->user;
@@ -2052,6 +2067,7 @@ class TaskController extends AccountBaseController
                 return response()->json([]);
             }
         } elseif ($request->mode == 'task_submission_list') {
+
             $task_submission = TaskSubmission::with('user')->where('task_id', $id)->get();
             if ($task_submission != null) {
                 $taskSubmissions = json_decode($task_submission, true);
@@ -2081,6 +2097,7 @@ class TaskController extends AccountBaseController
                     return $merged;
                 }
 
+
                 $newArray = [];
                 foreach ($groupedSubmissions as $group) {
                     if (count($group) > 1) {
@@ -2089,6 +2106,7 @@ class TaskController extends AccountBaseController
                     } else {
                         $newArray[] = $group[0];
                     }
+
                 }
 
                 $new_array_with_link = [];
@@ -2100,6 +2118,7 @@ class TaskController extends AccountBaseController
 
                 return response()->json($new_array_with_link);
             }
+
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
@@ -2124,6 +2143,7 @@ class TaskController extends AccountBaseController
                 $data->files = $file_name;
                 $data->save();
             }
+
             $data = TaskComment::find($data->id);
             return response()->json($data);
         } elseif ($request->mode == 'comment_reply_store') {
@@ -2150,6 +2170,7 @@ class TaskController extends AccountBaseController
             }
             $data = TaskComment::find($data->id);
             return response()->json($data);
+
         } elseif ($request->mode == 'develoer_first_task_check') {
             $data = ProjectTimeLog::where([
                 'project_id' => $request->project_id,
@@ -2160,6 +2181,7 @@ class TaskController extends AccountBaseController
             return response()->json([
                 'is_first_task' => ($data) ? false : true,
             ]);
+
         } else {
             abort(404);
         }

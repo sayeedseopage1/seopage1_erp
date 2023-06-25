@@ -2143,8 +2143,11 @@ class ContractController extends AccountBaseController
 
         $project = Project::where('deal_id', $request->id)->first();
 
-        
-        $point= new CashPoint();
+        $authorization_bonus_check= Cashpoint::where('project_id',$project->id)->where('user_id',$user_name->id)->where('type','Authorization Bonus')->first();
+        if($authorization_bonus_check == null)
+        {
+            $point= new CashPoint();
+
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;
         $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name .
@@ -2164,6 +2167,10 @@ class ContractController extends AccountBaseController
 
         $point->save();
 
+
+        }
+        
+        
         //update authoziation action
         $authorization_action = AuthorizationAction::where([
             'deal_id' => $deal->id,
@@ -2240,9 +2247,9 @@ class ContractController extends AccountBaseController
     {
         $deal = Deal::find($request->id);
         if ($deal) {
-            $mode = 0;
-            if ($request->mode == 'approved') {
-                $mode = 1;
+            $mode = '0';
+            if ($request->mode == 'approve') {
+                $mode = '1';
                 //$total_secoends = 20 * 60 * 60;
                 $secoend_left = Carbon::now()->diffInSeconds($deal->award_time);
                 //$total_secoend_left = $total_secoends - $secoend_left;
@@ -2256,17 +2263,15 @@ class ContractController extends AccountBaseController
 
                 $deal->save();
             } elseif ($request->mode == 'reject') {
-                $mode = 2;
+                $mode = '2';
             }
 
-            if ($mode != 0) {
+            if ($mode != '0') {
                 $award_time_request = AwardTimeIncress::find($request->request_id);
                 $award_time_request->admin_comment = $request->description;
                 $award_time_request->approved_by = $this->user->id;
                 $award_time_request->status = $mode;
-                dd('ko');
-                //if ($award_time_request->save()) {
-                if (1 == 1) {
+                if ($award_time_request->save()) {
                     return response()->json([
                         'status' => 'success'
                     ]);
