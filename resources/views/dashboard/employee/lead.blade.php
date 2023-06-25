@@ -277,7 +277,7 @@
 													<a href="{{route('employees.show', $pm->id)}}" title="{{$pm->name}}" class="openRightModal">{{Str::limit($pm->name,15)}}</a>
 													
 												</td>
-												<td>{{$project->deadline->format('Y-m-d')}}</td>
+												<td>{{$project->deadline}}</td>
 												<td>
 													@php
 													$task_status= App\Models\TaskBoardColumn::where('id',$row->board_column_id)->first();
@@ -365,7 +365,7 @@
 													<a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{Str::limit($user->name,10)}}</a>
 													
 												</td>
-												<td>{{$project->deadline->format('Y-m-d')}}</td>
+												<td>{{$project->deadline}}</td>
 												<td>
 													@php
 													$task_status= App\Models\TaskBoardColumn::where('id',$item->board_column_id)->first();
