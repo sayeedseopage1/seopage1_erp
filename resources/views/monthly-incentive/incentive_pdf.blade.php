@@ -340,13 +340,13 @@
                 </td>
                     <td>Monthly Incentive</td>
                   
-                    <td>{{round( $data['incentive_earned']/100,2) }}</td>
+                    <td>{{round( $data['user_point_after_deduction'],2) }}</td>
                     {{-- <td>{{ $data['point_earned'] }}</td> --}}
-                    <td>{{ round(($data['incentive_earned']/100)-($data['incentive_earned']/100*20/100),2) }}</td>
+                    <td>{{ round(($data['incentive_amount_after_20_percent_held'])/100,2) }}</td>
                   
                     {{-- <td>{{ $data['deduction_amount'] }}</td> --}}
-                    <td>{{round(($data['incentive_earned']/100) -(($data['incentive_earned']/100)-($data['incentive_earned']/100*20/100)),2) }}</td>
-                    <td>{{ round((($data['incentive_earned']/100)-($data['incentive_earned']/100*20/100))*100,2) }} BDT</td>
+                    <td>{{round(($data['user_point_after_deduction']) -(($data['incentive_amount_after_20_percent_held'])/100),2) }}</td>
+                    <td>{{ round(($data['incentive_amount_after_20_percent_held']),2) }} BDT</td>
                 </tr>
                 <!-- and so on... -->
             </tbody>

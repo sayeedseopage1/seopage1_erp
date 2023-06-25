@@ -65,6 +65,7 @@ use App\Models\TaskNoteFile;
 
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
+
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
 
@@ -1749,8 +1750,13 @@ class TaskController extends AccountBaseController
         $working_environment->email = $request->email;
         $working_environment->password = $request->password;
         $working_environment->save();
+        $task_id= Task::where('project_id',$working_environment->project_id)->first();
+        return response()->json([
+            'status'=>200,
+            'redirect' => url('/account/tasks/'.$task_id->id),
+        ]);
 
-        return response()->json(['status' => 200]);
+        
     }
 
     public function task_json(Request $request, $id)

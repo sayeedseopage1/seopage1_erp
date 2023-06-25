@@ -24,13 +24,13 @@
 		background: #009879;
 		color: #fff;
 		padding: 6px 12px;
-		white-space: nowrap;
+		/* white-space: nowrap; */
 	}
 
 	.sp1_styled-table tbody td{
 		color: #555;
 		padding: 12px 12px; 
-		white-space: nowrap;
+		/* white-space: nowrap; */
 	}
 
 	.sp1_styled_tabel_container{
@@ -111,26 +111,49 @@
                     <table class="sp1_styled-table">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                
                                 <th>Month</th>
+                                
                                 <th>Non Incentive Points</th>
-                                <th>Achieved Point</th>
-                                <th>Incentive Amount</th>
-                                <th>Point Deduction</th>
-                                <th>Incentive Deduction</th>
+                              
+                              
+                                <th>User's Achieved Point</th>
+                                {{-- <th>Incentive Deduction</th> --}}
+                                <th>Amount Before Deduction</th>
+                                <th>User's Deducted Point</th>
+                                <th>User's Point's After Deduction</th>
+                                <th>Amount After Deduction</th>
+                                <th>Deducted Incentive Amount</th>
+                                <th>Incentive Amount After 20% Held</th>
+                                <th>Incentive Held Amount</th>
+                                <th>Final Payable Incentive Amount</th>
                                 {{-- <th>Total Goal</th>
                                 <th>Achieved Goal</th> --}}
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{ $user_incentive->id }}</td>
-                                <td>{{ \Carbon\Carbon::parse($user_incentive->start_month)->subMonth(1)->format('M (Y)') }}</td>
-                                <td>{{ $non_incentive_point->every_shift_every_point_above }}</td>
-                                <td>{{ $user_incentive->point_earned }}</td>
-                                <td>{{ $user_incentive->incentive_earned }}</td>
-                                <td>{{ $user_incentive->deduction_amount }}</td>
-                                <td>{{ $user_incentive->deduction_incentive_amount }}</td>
+                               
+                                <td>{{\Carbon\Carbon::parse($user_incentive->month)->format('M (Y)')}}</td>
+                                   
+                                    <td>
+                                        @php
+                                            $non_incentive_point = App\Models\IncentiveSetting::where('start_month', $user_incentive->month)->first();
+                                        @endphp
+                                        {{$non_incentive_point->every_shift_every_point_above}}
+                                    </td>
+                                   
+                                  
+                                    <td>{{$user_incentive->user_achieved_points}}</td>
+                                    <td>{{$user_incentive->amount_before_deduction}}</td>
+                                    
+                                    <td>{{$user_incentive->user_deducted_points}}</td>
+                                    <td>{{$user_incentive->user_point_after_deduction}}</td>
+                                    <td>{{$user_incentive->amount_after_deduction}} BDT</td>
+                                    <td>{{$user_incentive->deducted_incentive_amount}} BDT</td>
+                                    <td>{{$user_incentive->incentive_amount_after_20_percent_held}} BDT</td>
+                                    <td>{{$user_incentive->incentive_held_amount}} BDT</td>
+                                    <td>{{$user_incentive->final_payable_incentive_amount}} BDT</td>
 
 
                                 {{-- <td>Total Goal</td>
