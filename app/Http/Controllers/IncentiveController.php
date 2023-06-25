@@ -36,7 +36,6 @@ class IncentiveController extends AccountBaseController
 
     public function index_json(Request $request)
     {
-        // /dd($request);
 
         if (isset($request->start_date)) {
             $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
@@ -46,7 +45,7 @@ class IncentiveController extends AccountBaseController
             $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
         }
 
-        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7 ) {
+        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7) {
             $userID = Auth::id();
         } else {
             $userID = $request->user_id;
@@ -54,13 +53,13 @@ class IncentiveController extends AccountBaseController
 
         $user_shift = Seopage1Team::where([
             ['id', '!=', 1],
-            ['members', 'LIKE', '%'.$userID.'%']
+            ['members', 'LIKE', '%' . $userID . '%']
         ])->get()->pluck('id');
 
         $user_shift_goal = GoalSetting::whereIn('team_id', $user_shift)
-        ->where('goalType', 'Minimum',)
-        ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
-        ->get()->count();
+            ->where('goalType', 'Minimum',)
+            ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+            ->get()->count();
 
         $user_goals = GoalSetting::where([
             'assigneeType' => 'User',
@@ -69,8 +68,8 @@ class IncentiveController extends AccountBaseController
             'frequency' => $request->period,
             //['created_at', '>=', Carbon::now()->startOfMonth()]
         ])
-        ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
-        ->count();
+            ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+            ->count();
 
         $user_goals = $user_shift_goal + $user_goals;
         /*$team_goal = GoalSetting::where([
@@ -97,17 +96,17 @@ class IncentiveController extends AccountBaseController
             'frequency' => $request->period,
             'user_id' => $userID,
         ])
-        ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
-        ->count();
+            ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+            ->count();
 
         $team_achieve_goal = GoalSetting::where([
             'assigneeType' => 'Team',
             'goalType' => 'Minimum',
             'goal_status' => '1',
-            ['team_id' , '!=', 1]
+            ['team_id', '!=', 1]
         ])
-        ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
-        ->get();
+            ->whereBetween('startDate', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+            ->get();
 
         foreach ($team_achieve_goal as $value) {
             $members = $value->goal->members;
@@ -150,14 +149,14 @@ class IncentiveController extends AccountBaseController
         $team_goals = GoalSetting::whereIn('team_id', array_values($teams))->get();*/
 
         $team_goals = GoalSetting::where('team_id', 1)
-        ->whereDate('startDate', '>=', $start_date)
-        ->whereDate('endDate', '<=', $end_date)
-        ->get();
+            ->whereDate('startDate', '>=', $start_date)
+            ->whereDate('endDate', '<=', $end_date)
+            ->get();
 
         $team_goals_achieve = GoalSetting::where('goal_status', 1)
-        ->whereDate('startDate', '>=', $start_date)
-        ->whereDate('endDate', '<=', $end_date)
-        ->where('team_id', 1)->get();
+            ->whereDate('startDate', '>=', $start_date)
+            ->whereDate('endDate', '<=', $end_date)
+            ->where('team_id', 1)->get();
 
         $data['minimum_team_goal'] = $team_goals->count();
         $data['mimimum_team_achieve_goal'] = $team_goals_achieve->count();
@@ -172,7 +171,7 @@ class IncentiveController extends AccountBaseController
 
         $user_list_for_point_achieve = Seopage1Team::where([
             ['id', '!=', 1],
-            ['members', 'LIKE', '%'.$request->user_id.'%']
+            ['members', 'LIKE', '%' . $request->user_id . '%']
         ])->get();
 
 
@@ -188,9 +187,9 @@ class IncentiveController extends AccountBaseController
         $user_array = array_unique($user_array);
 
         $cash_point = CashPoint::whereIn('user_id', $user_array)
-        ->where('points', '>', 0)
-        ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
-        ->sum('points');
+            ->where('points', '>', 0)
+            ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+            ->sum('points');
 
         $ten_days_incomplete_goal = GoalSetting::where([
             'assigneeType' => 'User',
@@ -199,8 +198,8 @@ class IncentiveController extends AccountBaseController
             'goal_status' => 0,
             'frequency' => $request->period,
         ])
-        ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
-        ->get();
+            ->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+            ->get();
 
 
         // $data['deduct_point_for_incomplete_goal'] = 0;
@@ -217,15 +216,15 @@ class IncentiveController extends AccountBaseController
 
         $cash_point_total = CashPoint::whereIn('user_id', $user_array)->whereBetween('created_at', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
         $cash_point_total_of_this_user = CashPoint::where('user_id', $request->user_id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
-        $data['incentive_final_amount'] = UserIncentive::where('user_id',$request->user_id)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->select('incentive_earned')->first();
-       
-        $user_shift= User::where('id',$request->user_id)->first();
-        $shift_user= User::where('shift',$user_shift->shift)->where('id','!=',$request->user_id)->first();
-        $shift_user_points= Cashpoint::where('user_id',$shift_user->id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
-        $data['point_achieve_by_your_shift'] = round(($cash_point_total_of_this_user+$shift_user_points),2);
+        $data['incentive_final_amount'] = UserIncentive::where('user_id', $request->user_id)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->select('incentive_earned')->first();
+
+        $user_shift = User::where('id', $request->user_id)->first();
+        $shift_user = User::where('shift', $user_shift->shift)->where('id', '!=', $request->user_id)->first();
+        $shift_user_points = Cashpoint::where('user_id', $shift_user->id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
+        $data['point_achieve_by_your_shift'] = round(($cash_point_total_of_this_user + $shift_user_points), 2);
 
         if ($cash_point > 0) {
-            $total_percentage_share_incentive = (100 * ($cash_point - $cash_point_total_of_this_user)) / $cash_point ;
+            $total_percentage_share_incentive = (100 * ($cash_point - $cash_point_total_of_this_user)) / $cash_point;
             //dd($total_percentage_share_incentive);
 
             $total_percentage_share_incentive_of_this_user = 100 - $total_percentage_share_incentive;
@@ -236,8 +235,8 @@ class IncentiveController extends AccountBaseController
             $data['toal_share_incentive'] = 0;
         }
 
-        $data['point_value']= $incentive_setting->point_of_value;
-        $data['percentage_of_share']= $total_percentage_share_incentive_of_this_user ?? 0;
+        $data['point_value'] = $incentive_setting->point_of_value;
+        $data['percentage_of_share'] = $total_percentage_share_incentive_of_this_user ?? 0;
 
         return response()->json($data);
     }
@@ -307,7 +306,4 @@ class IncentiveController extends AccountBaseController
     {
         //
     }
-
-
-
 }
