@@ -14,7 +14,6 @@ use App\Models\PmTaskGuideline;
 use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
-use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\Role;
 use App\Models\SubTask;
@@ -22,7 +21,6 @@ use App\Models\SubTaskFile;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\TaskCategory;
-use App\Models\TaskHistory;
 use App\Models\TaskLabel;
 use App\Models\TaskLabelList;
 use App\Models\TaskReply;
@@ -64,10 +62,8 @@ use App\Models\TaskComment;
 use App\Models\AuthorizationAction;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
-
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
-
 use Toaster;
 
 use function Symfony\Component\Cache\Traits\role;
@@ -111,10 +107,14 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'link' => 'required|string',
+        $validator = Validator::make($request->input(), [
+            'link' => 'required|array',
+            'link.*' => 'required|url|min:1',
             'text' => 'required',
-            'file' => 'required',
+        ], [
+            'link.url' => 'Invalid url!',
+            'link.*.required' => 'This field is required',
+            'text.required' => 'Please describe what you\'ve done !',
         ]);
 
         $link = [];
@@ -153,10 +153,7 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->link != null) {
-
-            $links = explode(',', $request->link);
-            foreach ($links as $lin) {
-
+            foreach ($request->link as $lin) {
                 $task_submit = new TaskSubmission();
                 $task_submit->task_id = $request->id;
                 $task_submit->user_id = $request->user_id;
@@ -1683,40 +1680,15 @@ class TaskController extends AccountBaseController
 
     public function storeTaskGuideline(Request $request)
     {
-        $validator = Validator::make($request->input(), [
+        $request->validate([
             'theme_details' => 'required',
             'design' => 'required',
-            'color_schema' => 'required',
-            'color' => 'required|array',
-            'color.*' => 'required|string|min:2',
-            'color_description' => 'required|array',
             'plugin_research' => 'required',
         ], [
-            'theme_details.required' => 'This field is required',
-            'design.required' => 'This field is required',
-            'color_schema.required' => 'This field is required',
-            'color.*.required' => 'This field is required',
-            'color_description.required' => 'This field is required',
-            'plugin_research.required' => 'This field is required',
+            'theme_details.required' => 'This field is required!',
+            'design.required' => 'This field is required!',
+            'plugin_research.required' => 'This field is required!',
         ]);
-
-        $color = [];
-        foreach ($validator->errors()->toArray() as $key => $value) {
-            if (strpos($key, 'color.') !== false) {
-                $exp= explode('.', $key);
-                $color[$exp[1]] = $value[0];
-            }
-        }
-
-        $errors = $validator->errors()->toArray();
-        $errors = array_merge($errors, ['color' => $color]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $errors
-            ], 422);
-        }
-
         $data = $request->all();
         $reference_links = json_encode($data['reference_link']);
         $colors = json_encode($data['color']);
@@ -1732,7 +1704,6 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->drive_url = $data['drive_url'];
         $pm_task_guideline->reference_link = $reference_links;
         $pm_task_guideline->instruction = $data['instruction'];
-        $pm_task_guideline->color_schema = $data['color_schema'];
         $pm_task_guideline->color = $colors;
         $pm_task_guideline->color_description = $color_descriptions;
         $pm_task_guideline->plugin_research = $data['plugin_research'];
@@ -1754,13 +1725,11 @@ class TaskController extends AccountBaseController
     {
         $request->validate([
             'site_url' => 'required',
-            'frontend_password' => 'required',
             'login_url' => 'required',
             'email' => 'required',
             'password' => 'required',
         ], [
             'site_url.required' => 'This field is required!',
-            'frontend_password.required' => 'This field is required!',
             'login_url.required' => 'This field is required!',
             'email.required' => 'This field is required!',
             'password.required' => 'This field is required!',
@@ -1768,26 +1737,15 @@ class TaskController extends AccountBaseController
 
         $working_environment = new WorkingEnvironment();
         $working_environment->project_id = $request->project_id;
-        $working_environment->frontend_password = $request->frontend_password;
         $working_environment->site_url = $request->site_url;
         $working_environment->login_url = $request->login_url;
         $working_environment->email = $request->email;
         $working_environment->password = $request->password;
         $working_environment->save();
 
-
-
-        $task_id= Task::where('project_id',$working_environment->project_id)->first();
-
-        return response()->json([
-            'status'=>200,
-            'redirect' => url('/account/tasks/'.$task_id->id),
-        ]);
-
-
+        return response()->json(['status' => 200]);
     }
 
-    public function task_json(Request $request, $id)
     public function task_json(Request $request, $id)
     {
         if ($request->mode == 'basic') {
@@ -2030,11 +1988,11 @@ class TaskController extends AccountBaseController
 
             return response()->json($data);
         } elseif ($request->mode == 'task_comment') {
-            $data = TaskComment::with('user')->where('task_id', $id)->get();
-
+            $data = TaskComment::where('task_id', $id)->get();
             foreach ($data as $value) {
                 $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
-
+                $value->total_replies = $replies->count();
+                $value->last_updated_at = strtotime($value->created_at);
                 $value->replies = User::whereIn('id', $replies)->get()->map(function ($row) {
                     return [
                         'id' => $row->id,
@@ -2043,33 +2001,109 @@ class TaskController extends AccountBaseController
                 });
             }
             return response()->json($data);
+        } elseif ($request->mode == 'task_comment_file_delete') {
+            $data = TaskComment::findOrfail($id);
+            if ($data->files != null){
+                $files = json_decode($data->files);
+                $file = [];
+                foreach ($files as $item){
+                    if ($item != $request->query('files')){
+                        array_push($file, $item);
+                    }
+                }
+                $data->files = $file;
+                $data->save();
+            }
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Task deleted successfully!!!'
+            ]);
         } elseif ($request->mode == 'task_submission') {
             $data = TaskSubmission::with('user')->where('task_id', $id)->get();
-            foreach ($data as $item) {
-                if ($item->attach != null) {
-                    $file[] = $item->attach;
+            if ($data->count() > 0) {
+                $file = [];
+                $url = [];
+                $description = [];
+                foreach ($data as $item) {
+                    if ($item->attach != null) {
+                        array_push($file, $item->attach);
+                    }
+                    if ($item->link != null) {
+                        array_push($url, $item->link);
+                    }
+                    if ($item->text != null) {
+                        array_push($description, $item->text);
+                    }
                 }
-                if ($item->link != null) {
-                    $url[] = $item->link;
-                }
-                if ($item->text != null) {
-                    $description = $item->text;
-                }
+
+                $user = $data->first()->user;
+                $response = [
+                    'file' => $file,
+                    'url' => $url,
+                    'description' => $description,
+                    'user' => [
+                        'id' => $user->id,
+                        'name' =>  $user->name,
+                        'image' => $user->image_url,
+                    ]
+                ];
+                return response()->json($response);
+            } else {
+                return response()->json([]);
             }
-            $user = $data->first()->user;
-            $response = [
-                'file' => $file,
-                'url' => $url,
-                'description' => $description,
-                'user' => [
-                    'id' => $user->id,
-                    'name' =>  $user->name,
-                    'image' => $user->image_url,
-                ]
-            ];
-            return response()->json($response);
+        } elseif ($request->mode == 'task_submission_list') {
+        } elseif ($request->mode == 'task_reply_comment') {
+            $data = TaskReply::where('comment_id', $id)->get();
+            return response()->json($data);
+        } elseif ($request->mode == 'comment_store') {
+            $data = new TaskComment();
+            $data->comment = $request->comment;
+            $data->user_id = $this->user->id;
+            $data->task_id = $request->task_id;
+            $data->added_by = $this->user->id;
+            $data->last_updated_by = $this->user->id;
+
+            $data->save();
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public');
+                $file_name = [];
+                foreach ($files as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $file->move($destinationPath, $filename);
+                }
+                $data->files = $file_name;
+                $data->save();
+            }
+            $data = TaskComment::find($data->id);
+            return response()->json($data);
+        } elseif ($request->mode == 'comment_reply_store') {
+            $data = new TaskReply();
+            $data->comment_id = $request->comment_id;
+            $data->reply = $request->comment;
+            $data->user_id = $this->user->id;
+            $data->task_id = $request->task_id;
+            $data->added_by = $this->user->id;
+            $data->last_updated_by = $this->user->id;
+
+            $data->save();
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public');
+                $file_name = [];
+                foreach ($files as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $file->move($destinationPath, $filename);
+                }
+                $data->files = $file_name;
+                $data->save();
+            }
+            $data = TaskComment::find($data->id);
+            return response()->json($data);
         } else {
-            abort(403);
+            abort(404);
         }
     }
 }
