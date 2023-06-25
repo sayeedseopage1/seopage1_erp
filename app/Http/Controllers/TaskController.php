@@ -2028,11 +2028,13 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'task_comment_file_delete') {
             $data = TaskComment::findOrfail($id);
+
             if ($data->files != null){
                 $files = json_decode($data->files);
                 $file = [];
                 foreach ($files as $item){
                     if ($item != $request->query('files')){
+
                         array_push($file, $item);
                     }
                 }
@@ -2077,6 +2079,56 @@ class TaskController extends AccountBaseController
                 return response()->json([]);
             }
         } elseif ($request->mode == 'task_submission_list') {
+
+            $task_submission = TaskSubmission::with('user')->where('task_id', $id)->get();
+            if ($task_submission != null) {
+                $taskSubmissions = json_decode($task_submission, true);
+                $groupedSubmissions = collect($taskSubmissions)->groupBy(function ($submission) {
+                    return $submission['submission_no'] . '_' . $submission['task_id'];
+                })->map(function ($group) {
+                    return $group;
+                })->toArray();
+
+
+                function mergeArrays($arr1, $arr2)
+                {
+                    $merged = [];
+                    foreach ($arr1 as $key => $value) {
+                        if ($value !== null) {
+                            $merged[$key] = $value;
+                        } elseif (isset($arr2[$key])) {
+                            $merged[$key] = $arr2[$key];
+                        }
+                    }
+
+                    foreach ($arr2 as $key => $value) {
+                        if ($value !== null && !isset($merged[$key])) {
+                            $merged[$key] = $value;
+                        }
+                    }
+                    return $merged;
+                }
+
+                $newArray = [];
+                foreach ($groupedSubmissions as $group) {
+                    if (count($group) > 1) {
+                        $newArr = mergeArrays($group[0], $group[1]);
+                        $newArray[] = $newArr;
+                    } else {
+                        $newArray[] = $group[0];
+                    }
+                }
+
+                $new_array_with_link = [];
+
+                foreach ($newArray as $value) {
+                    $value['link'] = [$value['link']];
+                    array_push($new_array_with_link, $value);
+                }
+
+                return response()->json($new_array_with_link);
+            }
+
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
@@ -2127,6 +2179,18 @@ class TaskController extends AccountBaseController
             }
             $data = TaskComment::find($data->id);
             return response()->json($data);
+
+        } elseif ($request->mode == 'develoer_first_task_check') {
+            $data = ProjectTimeLog::where([
+                'project_id' => $request->project_id,
+                'task_id' => $id,
+                'usre_id' => $this->user->id
+            ])->first();
+
+            return response()->json([
+                'is_first_task' => ($data) ? false : true,
+            ]);
+
         } else {
             abort(404);
         }

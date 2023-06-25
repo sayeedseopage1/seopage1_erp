@@ -2247,9 +2247,9 @@ class ContractController extends AccountBaseController
     {
         $deal = Deal::find($request->id);
         if ($deal) {
-            $mode = 0;
-            if ($request->mode == 'approved') {
-                $mode = 1;
+            $mode = '0';
+            if ($request->mode == 'approve') {
+                $mode = '1';
                 //$total_secoends = 20 * 60 * 60;
                 $secoend_left = Carbon::now()->diffInSeconds($deal->award_time);
                 //$total_secoend_left = $total_secoends - $secoend_left;
@@ -2263,17 +2263,15 @@ class ContractController extends AccountBaseController
 
                 $deal->save();
             } elseif ($request->mode == 'reject') {
-                $mode = 2;
+                $mode = '2';
             }
 
-            if ($mode != 0) {
+            if ($mode != '0') {
                 $award_time_request = AwardTimeIncress::find($request->request_id);
                 $award_time_request->admin_comment = $request->description;
                 $award_time_request->approved_by = $this->user->id;
                 $award_time_request->status = $mode;
-                dd('ko');
-                //if ($award_time_request->save()) {
-                if (1 == 1) {
+                if ($award_time_request->save()) {
                     return response()->json([
                         'status' => 'success'
                     ]);

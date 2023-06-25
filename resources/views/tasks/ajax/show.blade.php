@@ -63,8 +63,10 @@
                                     <!-- <x-forms.button-primary icon="check" data-status="completed"
                                         class="change-task-status mr-2 mb-2 mb-lg-0 mb-md-0">
                                         @if ($task->board_column_id != 7)
-                                        @lang('modules.tasks.markComplete')
-                                        @endif
+
+    @lang('modules.tasks.markComplete')
+@endif
+
                                     </x-forms.button-primary> -->
 
                                     @if ($task->added_by == Auth::user()->id || Auth::user()->role_id == 1)
