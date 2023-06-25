@@ -2,6 +2,7 @@ import * as React from 'react'
 import WorkItem from './WorkItem';
 import useSWR from 'swr';
 import SubmitionView from './SubmitionView';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 
 const fetcher = (url) => axios.get(url).then(res => res.data); 
@@ -10,13 +11,20 @@ const fetcher = (url) => axios.get(url).then(res => res.data);
 const SubmittedWork = ({task}) => { 
   const [modalRefButton, setModalRefButton] = React.useState(null); 
   const [isOpen, setIsOpen] = React.useState(false);
-  
-  const { data, error, isLoading } = useSWR(`/account/task/${task?.id}/json?mode=task_submission`, fetcher, {refreshInterval: 1000 * 3600});
-  
+  const navigate = useNavigate(); 
+  const { data, error, isLoading } = useSWR(`/account/task/${task?.id}/json?mode=task_submission_list`, fetcher, {refreshInterval: 1000 * 3600});
+  const [searchParams] = useSearchParams();
+  const preview = searchParams.get('submitted-work');
     // control modal
-  const toggle = () => setIsOpen(!isOpen);
-  const close = () => setIsOpen(false);
-
+  const toggle = (e) => {
+    e.preventDefault();
+    setIsOpen(!isOpen)
+  };
+  const close = () => {
+    setIsOpen(false);
+    navigate(`/account/tasks/${task?.id}`);
+  }
+ 
   return (
     <div className='sp1_task_right_card mb-3'>
         <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
@@ -37,18 +45,20 @@ const SubmittedWork = ({task}) => {
 
 
         {/* side drop toggle button */}
-          <button 
-            aria-label='openCommentModalButton'  
-            ref={setModalRefButton}
-            className='sp1_task_right_dl_toggle'
-            onClick={toggle}
-            style={{zIndex: isOpen ? '110' : ''}}
-          >
-            <i 
-              className={`fa-solid fa-circle-chevron-${ isOpen ? 'right' : 'left'}`} 
-              style={{color: "#276fec"}} 
-            />
-        </button>
+          {preview && !isLoading && (
+            <button 
+                aria-label='openCommentModalButton'  
+                ref={setModalRefButton}
+                className='sp1_task_right_dl_toggle'
+                onClick={close}
+                style={{zIndex:  preview ? '110' : ''}}
+              >
+                <i 
+                  className={`fa-solid fa-circle-chevron-${ (preview) ? 'right' : 'left'}`} 
+                  style={{color: "#276fec"}} 
+                />
+            </button>
+          )}
 
         {/* <SubmitionView
             isOpen={isOpen}
@@ -60,17 +70,17 @@ const SubmittedWork = ({task}) => {
 
         {/* side drop toggle button end */} 
         <div className="sp1_task_right_card--body"> 
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
-          <WorkItem />
+        {
+          data?.map((item => (
+            <WorkItem 
+              key={item.id} 
+              data={item} 
+              toggle={toggle} 
+              close={close}
+              modalRef={modalRefButton} 
+            />
+          )))
+        }
         </div>
 
     </div>
