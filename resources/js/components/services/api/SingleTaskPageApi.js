@@ -71,9 +71,36 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData:true
             }) 
-        })
+        }),
+
+        //start time
+        startTimerApi: build.mutation({
+            query: (data) => ({
+                url: `/account/timelogs/start-timer`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                },
+            })
+        }),
+
+        //start time
+        stopTimerApi: build.mutation({
+            query: (data) => ({
+                url: `/account/timelogs/stop-timer?id=${data?.timeId}`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                },
+            })
+        }),
+
     })
 }) ;
+
+
 
 
 export const { 
@@ -85,5 +112,7 @@ export const {
     useCrateNoteMutation,
     useDeleteNoteUploadedFileMutation,
     useUpdateNoteMutation,
-    useStoreCommentMutation
+    useStoreCommentMutation,
+    useStartTimerApiMutation,
+    useStopTimerApiMutation
 } = singleTaskPageApiSlice;

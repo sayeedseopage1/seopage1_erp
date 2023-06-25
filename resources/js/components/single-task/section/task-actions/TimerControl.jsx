@@ -1,99 +1,210 @@
-import React , {useState, useEffect}from 'react'
+import React , {useState, useEffect}from 'react';
 import Button from '../../components/Button';
+import StartTimerConfirmationModal from './StartTimerConfirmationModal';
+import { 
+    useGetTaskDetailsQuery, 
+    useStartTimerApiMutation, 
+    useStopTimerApiMutation 
+} from '../../../services/api/SingleTaskPageApi';
+import { CompareDate } from '../../../utils/dateController';
+import _ from 'lodash';
 
-const TimerControl = () => {
-    const [timerStart, setTimerStart] = useState(false);
+const TimerControl = ({task}) => {
+  const [timerStart, setTimerStart] = useState(false);
+  const [timerId, setTimerId] = useState(null);
   const [seconds, setSeconds] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [days, setDays] = useState(0);
+  const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false);
 
+  const dayjs = new CompareDate();
+
+  // check timer is already running
+  useEffect(() => {
+    if(task?.running_timer?.status === 'running'){
+        let serverTime = task.running_timer.time;
+        let localTime = dayjs.dayjs().unix();
+        let timer = localTime - serverTime;
+        setTimerStart(true);
+        setSeconds(timer);
+        setTimerId(task?.running_timer?.id); 
+    }
+  }, [task]);
+ 
+ 
+//   timer control
   useEffect(() => {
     let interval = null;
     if (timerStart) {
-      interval = setInterval(() => {
-        setSeconds((seconds) => seconds + 1);
-        if (seconds === 60) {
-          setMinutes((minutes) => minutes + 1);
-          setSeconds(0);
-        }
-        if (minutes === 60) {
-          setHours((hours) => hours + 1);
-          setMinutes(0);
-        }
-        if (hours === 24) {
-          setDays((days) => days + 1);
-          setHours(0);
-        }
+    //   interval for timer
+      interval = setInterval(() => { 
+        setSeconds(s => s + 1);
       }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
+    } else clearInterval(interval); // clear interval 
+    return () => clearInterval(interval); // clear interval
   }, [timerStart]);
 
+
+  // time formating
   const timer = () => {
-    let sec = seconds < 10 ? `0${seconds}` : seconds;
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor((seconds % (3600)) % 60); 
+
+    // format
+    let sec = s < 10 ? `0${s}` : s;
     let min = minutes < 10 ? `0${minutes}` : minutes;
-    let hr = hours < 10 ? `0${hours}` : hours;
-    let dy = days < 10 ? `0${days}` : days;
+    let hr = hours < 10 ? `0${hours}` : hours; 
     return `${hr}:${min}:${sec}`;
   };
 
+    // tostar
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true, 
+    })
 
-  // start timer
-  const startTimer = e => {
-    e.preventDefault();
-    setTimerStart(true);
-  }
+    /******** Start timer control *********/ 
+
+    // timer start first timer : checking api
+    const {
+        data:startTimerFirstCheck, 
+        isFetching: startTimerFirstCheckIsFetching 
+    } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.project_id}`);
+
+    // start timer api slice 
+    const [ startTimerApi, {
+        isLoading: timerStartStatusIsLoading
+    }] = useStartTimerApiMutation();
+
+    // stop timer api slice
+    const [stopTimerApi, {isLoading: timerStopStatusIsLoading}] = useStopTimerApiMutation();
+
+    const startTimerControl = () => {
+        setIsOpenConfirmationModal(false);
+        startTimerApi({
+            task_id: task?.id,
+            project_id: task?.project_id,
+            memo: task?.heading,
+            user_id: window?.Laravel?.user?.id 
+        })
+        .unwrap()
+        .then(res => {
+          if(res?.status === 'success'){
+            setTimerStart(true); 
+            setTimerId(res?.id);
+            Toast.fire({
+                icon: res?.status,
+                title: _.startCase(res?.message)
+            }) 
+         }else{   
+              Toast.fire({
+                icon: res?.status,
+                title: _.startCase(res?.message)
+              }) 
+          }
+        })
+        .catch(err => {
+            console.log(err)
+        });
+    }
+   
+    // start timer function
+    const startTimer = e => {
+        e.preventDefault();
+        if(startTimerFirstCheck){
+            if(startTimerFirstCheck.is_first_task){
+                setIsOpenConfirmationModal(true);
+            }else startTimerControl();
+        }
+    }
+  
+
+  /*********** End of Start Timer control ***************/ 
 
   // stop timer
-    const stopTimer = (e) => {
-        e.preventDefault();
-        setTimerStart(false);
-        setDays(0);
-        setSeconds(0);
-        setMinutes(0);
-        setHours(0);
+    const stopTimer = () => {
+        stopTimerApi({ timeId: timerId }).unwrap().then(res => {
+            if(res?.status === 'success'){
+                Toast.fire({
+                    icon: res?.status,
+                    title: _.startCase(res?.message),
+                }) 
+                setTimerStart(false); 
+                setSeconds(0);
+                timerId(null);
+             }else{  
+                Toast.fire({
+                    icon: res?.status,
+                    title: _.startCase(res?.message),
+                }) 
+              }
+        })
     } 
+
+
+    // control loading states...
+    useEffect(() => {
+        if(startTimerFirstCheckIsFetching || timerStartStatusIsLoading){ 
+            document.getElementsByTagName('body')[0].style.cursor = 'progress';
+        } else {
+            document.getElementsByTagName('body')[0].style.cursor = 'default';
+        }
+    }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
 
   return (
     <>
         {
             !timerStart ? (
-                <Button 
-                    variant='tertiary'
-                    onClick={startTimer}
-                    className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
-                >
-                    <i className="fa-solid fa-circle-play"></i>
-                    Start Timer
-                </Button>
+                <>
+                    {
+                        !timerStartStatusIsLoading ? 
+                        <Button 
+                            variant='tertiary'
+                            onClick={startTimer}
+                            className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
+                        >
+                            <i className="fa-solid fa-circle-play" />
+                            Start Timer
+                        </Button> :
+                        <Button className='cursor-processing mr-2'>
+                            <div className="spinner-border text-white" role="status" style={{ width: '18px',height: '18px'}}></div>
+                            Starting...
+                        </Button>
+                    } 
+                    <StartTimerConfirmationModal 
+                        isOpen={isOpenConfirmationModal} 
+                        onConfirm={startTimerControl}
+                    />
+                </>
             ): (
                 <>
                     <Button 
                         variant='tertiary'
                         className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
                     >
-                        <i className="fa-solid fa-stopwatch"></i>
+                        <i className="fa-solid fa-stopwatch" />
                         <span className="d-inline ml-1">{timer()}</span>
                     </Button>
-
-
-                    <Button 
-                        variant='tertiary'
-                        onClick={stopTimer}
-                        className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
-                    >
-                        <i className="fa-solid fa-pause"></i>
-                        <span className="d-inline ml-1">Stop Timer</span>
-                    </Button>
+                    {
+                        !timerStopStatusIsLoading ? 
+                        <Button 
+                            variant='tertiary'
+                            onClick={stopTimer}
+                            className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
+                        >
+                            <i className="fa-solid fa-pause" />
+                            <span className="d-inline ml-1">Stop Timer</span>
+                        </Button> :
+                        <Button className='cursor-processing mr-2'>
+                            <div className="spinner-border text-white" role="status" style={{ width: '18px',height: '18px'}}></div>
+                            Stopping...
+                        </Button>
+                    } 
                 </>
             )
         }
-
-
-        
     </>
   )
 }

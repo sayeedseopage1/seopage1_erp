@@ -373,7 +373,6 @@ class TimelogController extends AccountBaseController
             ->whereNull('end_time')
             ->join('users', 'users.id', '=', 'project_time_logs.user_id')
             ->where('user_id', $this->user->id)->first();
-
         if (is_null($activeTimer)) {
             $taskId = $request->task_id;
 
@@ -415,7 +414,11 @@ class TimelogController extends AccountBaseController
 
             $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
 
-            return Reply::success(__('messages.timerStartedSuccessfully'));
+            return response()->json([
+                'status' => 'success',
+                'message' => 'task timer started',
+                'id' => $timeLog->id
+            ]);
         }
 
         return Reply::error(__('messages.timerAlreadyRunning'));

@@ -18,9 +18,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { storeTask } from '../services/features/subTaskSlice'
 import TaskAction from './section/task-actions/TaskAction'
+import Loading from './components/Loading'
 
- 
- 
 const SingleTask = () => {
   const { task } = useSelector(s => s.subTask);
   const dispatch = useDispatch();
@@ -46,7 +45,8 @@ const SingleTask = () => {
   const logged_user = window?.Laravel?.user;
 
   return (
-    <React.Fragment>
+    <div className='postion-relative'>
+        <Loading isLoading={isFetching}/>
         <div className={`f-16 mb-3 ${loadingClass}`}>
             <span> <strong>Subtask: </strong> </span>
             <span>{_.startCase(task?.subtask_title)}</span>
@@ -56,7 +56,7 @@ const SingleTask = () => {
         <div className='row'>
             <div className="col-8">
                 <div className="bg-white rounded-lg p-3">
-                   <TaskAction /> 
+                   <TaskAction task={task}/> 
 
                     {/* task information */}
                     <div>
@@ -304,7 +304,7 @@ const SingleTask = () => {
               </div>
             </div>
         </div>
-    </React.Fragment>
+    </div>
   )
 }
 

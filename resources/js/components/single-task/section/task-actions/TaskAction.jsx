@@ -2,11 +2,10 @@ import React from 'react'
 import Button from '../../components/Button'
 import TimerControl from './TimerControl'
 
-const TaskAction = () => {
+const TaskAction = ({task}) => {
   return ( 
         <div className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group">
-            <TimerControl />
-                
+            <TimerControl task={task}/> 
 
             <Button 
                 variant='tertiary'

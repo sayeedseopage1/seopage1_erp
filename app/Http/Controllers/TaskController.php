@@ -1821,6 +1821,22 @@ class TaskController extends AccountBaseController
                     $task->sub_task_time_log = $timeL;
                 }
             }
+            $task->running_timer = null;
+            $running_timer = ProjectTimeLog::where([
+                'task_id' => $id,
+                'user_id' => $this->user->id,
+                'end_time' => null
+            ])->orderBy('id', 'desc')->first();
+
+            if ($running_timer) {
+                $time_log_data = [
+                    'id' => $running_timer->id,
+                    'status' => 'running',
+                    'time' => strtotime($running_timer->start_time)
+                ];
+
+                $task->running_timer = $time_log_data;
+            }
             return response()->json($task);
         } elseif ($request->mode == 'sub_task') {
             $sub_tasks = SubTask::select(['id', 'title'])->where('task_id', $id)->get();
@@ -2020,8 +2036,6 @@ class TaskController extends AccountBaseController
                 $file = [];
                 foreach ($files as $item){
                     if ($item != $request->query('files')){
-
-
                         array_push($file, $item);
                     }
                 }
@@ -2170,12 +2184,11 @@ class TaskController extends AccountBaseController
             }
             $data = TaskComment::find($data->id);
             return response()->json($data);
-
-        } elseif ($request->mode == 'develoer_first_task_check') {
+        } elseif ($request->mode == 'developer_first_task_check') {
             $data = ProjectTimeLog::where([
                 'project_id' => $request->project_id,
                 'task_id' => $id,
-                'usre_id' => $this->user->id
+                'user_id' => $this->user->id
             ])->first();
 
             return response()->json([
