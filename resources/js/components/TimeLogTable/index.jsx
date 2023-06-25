@@ -73,8 +73,8 @@ const EmployeeWiseTableProvider = ({ children }) => {
 // table context/state provider end
 
 // tabs
-// const tabs = ["Employee Wise", "Project Wise", "Task Wise"];
-const tabs = [ "Project Wise", "Task Wise"];
+const tabs = ["Employee Wise", "Project Wise", "Task Wise"];
+// const tabs = [ "Project Wise", "Task Wise"];
 // tabs end
 
 // project wise table columns
@@ -158,20 +158,20 @@ const TimeLogTable = () => {
     }, [])
 
     
-    // const activeTableNamespace =
-    //     activeTab === "Employee Wise"
-    //         ? "employee"
-    //         : activeTab === "Project Wise"
-    //         ? "project"
-    //         : activeTab === "Task Wise"
-    //         ? "task"
-    //         : "";
-
-    const activeTableNamespace = activeTab === "Project Wise"
+    const activeTableNamespace =
+        activeTab === "Employee Wise"
+            ? "employee"
+            : activeTab === "Project Wise"
             ? "project"
             : activeTab === "Task Wise"
             ? "task"
             : "";
+
+    // const activeTableNamespace = activeTab === "Project Wise"
+    //         ? "project"
+    //         : activeTab === "Task Wise"
+    //         ? "task"
+    //         : "";
 
     if(loading) return null;
     return (

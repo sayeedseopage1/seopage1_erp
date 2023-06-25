@@ -66,7 +66,6 @@ use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
 
-
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
 
@@ -1825,6 +1824,22 @@ class TaskController extends AccountBaseController
                     $task->sub_task_time_log = $timeL;
                 }
             }
+            $task->running_timer = null;
+            $running_timer = ProjectTimeLog::where([
+                'task_id' => $id,
+                'user_id' => $this->user->id,
+                'end_time' => null
+            ])->orderBy('id', 'desc')->first();
+
+            if ($running_timer) {
+                $time_log_data = [
+                    'id' => $running_timer->id,
+                    'status' => 'running',
+                    'time' => strtotime($running_timer->start_time)
+                ];
+
+                $task->running_timer = $time_log_data;
+            }
             return response()->json($task);
         } elseif ($request->mode == 'sub_task') {
             $sub_tasks = SubTask::select(['id', 'title'])->where('task_id', $id)->get();
@@ -2019,11 +2034,11 @@ class TaskController extends AccountBaseController
             $data = TaskComment::findOrfail($id);
 
 
-            if ($data->files != null){
+            if ($data->files != null) {
                 $files = json_decode($data->files);
                 $file = [];
-                foreach ($files as $item){
-                    if ($item != $request->query('files')){
+                foreach ($files as $item) {
+                    if ($item != $request->query('files')) {
 
 
                         array_push($file, $item);
@@ -2052,7 +2067,6 @@ class TaskController extends AccountBaseController
                     if ($item->text != null) {
                         array_push($description, $item->text);
                     }
-
                 }
 
                 $user = $data->first()->user;
@@ -2110,7 +2124,6 @@ class TaskController extends AccountBaseController
                     } else {
                         $newArray[] = $group[0];
                     }
-
                 }
 
                 $new_array_with_link = [];
@@ -2122,7 +2135,6 @@ class TaskController extends AccountBaseController
 
                 return response()->json($new_array_with_link);
             }
-
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
@@ -2174,18 +2186,16 @@ class TaskController extends AccountBaseController
             }
             $data = TaskComment::find($data->id);
             return response()->json($data);
-
-        } elseif ($request->mode == 'develoer_first_task_check') {
+        } elseif ($request->mode == 'developer_first_task_check') {
             $data = ProjectTimeLog::where([
                 'project_id' => $request->project_id,
                 'task_id' => $id,
-                'usre_id' => $this->user->id
+                'user_id' => $this->user->id
             ])->first();
 
             return response()->json([
                 'is_first_task' => ($data) ? false : true,
             ]);
-
         } else {
             abort(404);
         }
