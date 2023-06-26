@@ -34,7 +34,7 @@ class AccountBaseController extends Controller
         }
 
         $this->middleware(function ($request, $next) {
-
+            //dd(!user()->admin_approval && request()->ajax());
             abort_403(!user()->admin_approval && request()->ajax());
 
             if (!user()->admin_approval && Route::currentRouteName() != 'account_unverified') {
@@ -109,11 +109,9 @@ class AccountBaseController extends Controller
                 }
 
                 $this->checkListCompleted = $checkListCompleted;
-            }
-            else if (in_array('client', user_roles())) {
+            } else if (in_array('client', user_roles())) {
                 $this->appTheme = client_theme();
-            }
-            else {
+            } else {
                 $this->appTheme = employee_theme();
             }
 
@@ -166,9 +164,9 @@ class AccountBaseController extends Controller
     {
         if ($this->pusherSettings->status) {
             $user = User::find($data['user_id']);
-            
+
             Notification::send($user, new PusherNotificaiton($data));
-            
+
             $pusher = new Pusher($this->pusherSettings->pusher_app_key, $this->pusherSettings->pusher_app_secret, $this->pusherSettings->pusher_app_id, array('cluster' => $this->pusherSettings->pusher_cluster, 'useTLS' => $this->pusherSettings->force_tls));
             $pusher->trigger($channel, $event, $data);
         }
@@ -197,5 +195,4 @@ class AccountBaseController extends Controller
 
         return $data;
     }
-
 }

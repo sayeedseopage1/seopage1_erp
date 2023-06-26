@@ -136,8 +136,8 @@ class TimelogReportController extends AccountBaseController
 
                 ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
                 ->whereIn('project_time_logs.user_id', $id_array)
-                ->where('projects.status', $status)
                 ->groupBy('project_time_logs.user_id', 'employee.id');
+
             if (is_null($project_id)) {
                 $data = $data->groupBy('project_time_logs.project_id');
             } else {
@@ -180,6 +180,10 @@ class TimelogReportController extends AccountBaseController
             if (!is_null($clientId)) {
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id', $clientId);
+            }
+
+            if (!is_null($status)) {
+                $data = $data->where('projects.status', $status);
             }
             /*$total_rows = $data->get()->count();
 
