@@ -1319,37 +1319,39 @@ class ContractController extends AccountBaseController
                 $authorization_action = new AuthorizationAction();
                 $authorization_action->model_name = $deal->getMorphClass();
                 $authorization_action->model_id = $deal->id;
-                $authorization_action->type = 'project_manager_accept_project';
-                $authorization_action->deal_id = $deal->id;
-                $authorization_action->project_id = $project->id;
-                $authorization_action->link = route('authorization_request', $deal->id);
-                $authorization_action->title = 'Project manager accept Project';
+                $authorization_action->type = 'saleslead_price_authorization';
+                $authorization_action->deal_id = $project_id->id;
+                $authorization_action->project_id = $project_id->id;
+                $authorization_action->link = route('authorization_request', $project_id->deal_id);
+                $authorization_action->title = 'Sales Lead Price Authorization';
                 $authorization_action->authorization_for = $user->id;
                 $authorization_action->save();
+               // dd($authorization_action);
                 //end authorization action
 
 
-                Notification::send($user, new DealAuthorizationSendNotification($deal, $sender));
+                Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
 
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
                     'role_id' => $user->role_id,
-                    'title' => 'Price authorization request from ' . $sender->name,
-                    'body' => $sender->name . ' send price authorization request for ' . $deal->project_name,
-                    'redirectUrl' => route('deals.show', $deal->id)
+                    'title' => 'Price authorization request from ' . Auth::user()->name,
+                    'body' => Auth::user()->name . ' send price authorization request for ' . $deal->project_name,
+                    'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
+           // dd("true");
 
             //start authorization action
             $authorization_action = new AuthorizationAction();
             $authorization_action->model_name = $deal->getMorphClass();
             $authorization_action->model_id = $deal->id;
             $authorization_action->type = 'project_manager_accept_project';
-            $authorization_action->deal_id = $deal->id;
-            $authorization_action->project_id = $project->id;
+            $authorization_action->deal_id = $project_id->deal_id;
+            $authorization_action->project_id = $project_id->id;
             $authorization_action->link = route('authorization_request', $deal->id);
             $authorization_action->title = 'Project manager accept Project';
-            $authorization_action->authorization_for = $project->pm->id;
+            $authorization_action->authorization_for = $project_id->pm_id;
             $authorization_action->save();
             //end authorization action
 
@@ -1717,6 +1719,48 @@ class ContractController extends AccountBaseController
 
                 $user = User::where('id', $deal_pm_id->pm_id)->first();
                 Mail::to($user->email)->send(new WonDealMail($project_id));
+                $users = User::where('role_id', 8)->get();
+
+                foreach ($users as $key => $user) {
+                    //start authorization action
+                    $authorization_action = new AuthorizationAction();
+                    $authorization_action->model_name = $deal->getMorphClass();
+                    $authorization_action->model_id = $deal->id;
+                    $authorization_action->type = 'saleslead_price_authorization';
+                    $authorization_action->deal_id = $project_id->id;
+                    $authorization_action->project_id = $project_id->id;
+                    $authorization_action->link = route('authorization_request', $project_id->deal_id);
+                    $authorization_action->title = 'Sales Lead Price Authorization';
+                    $authorization_action->authorization_for = $user->id;
+                    $authorization_action->save();
+                   // dd($authorization_action);
+                    //end authorization action
+    
+    
+                    Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+    
+                    $this->triggerPusher('notification-channel', 'notification', [
+                        'user_id' => $user->id,
+                        'role_id' => $user->role_id,
+                        'title' => 'Price authorization request from ' . Auth::user()->name,
+                        'body' => Auth::user()->name . ' send price authorization request for ' . $deal->project_name,
+                        'redirectUrl' => route('deals.show', $project_id->deal_id)
+                    ]);
+                }
+               // dd("true");
+    
+                //start authorization action
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->model_name = $deal->getMorphClass();
+                $authorization_action->model_id = $deal->id;
+                $authorization_action->type = 'project_manager_accept_project';
+                $authorization_action->deal_id = $project_id->deal_id;
+                $authorization_action->project_id = $project_id->id;
+                $authorization_action->link = route('projects.edit', $project_id->id);
+                $authorization_action->title = 'Project manager accept Project';
+                $authorization_action->authorization_for = $project_id->pm_id;
+                $authorization_action->save();
+                //dd($authorization_action);
                 // $check_new_pm= User::where('id',$deal->pm_id)->first();
                 // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
                 // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());

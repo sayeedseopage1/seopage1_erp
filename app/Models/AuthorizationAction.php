@@ -102,9 +102,15 @@ class AuthorizationAction extends Model
             ],
             'project_manager_accept_project' => [
 
-                'review', 'approved', 'reject'
+                'review'
+
+            ],
+            'saleslead_price_authorization' => [
+
+                'review'
 
             ]
+          
         ];
 
         return $options[$this->type];
