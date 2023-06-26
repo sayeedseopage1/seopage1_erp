@@ -32,6 +32,10 @@
                                     <option value="Collection">Collection</option>
                                     <option value="Website design change ">Website design change </option>
                                     <option value="Speed optimization">Speed optimization</option>
+                                    <option value="Fixing Issues/Bugs">Fixing Issues/Bugs</option>
+                                    <option value="Fixing Responsiveness/Making something responsive">Fixing Responsiveness/Making something responsive</option>
+                                    <option value="Minor revisions and finalizing a website" >Minor revisions and finalizing a website</option>
+                                    <option value="Website initial setup (Theme and plugin installation)">Website initial setup (Theme and plugin installation)</option>
                                     <option value="Others">Others</option>
                                 </select>
                             </div>
