@@ -99,6 +99,9 @@ class AuthorizationAction extends Model
             ],
             'award_time_extension' => [
                 'review'
+            ],
+            'project_manager_accept_project' => [
+                'review'
             ]
         ];
 

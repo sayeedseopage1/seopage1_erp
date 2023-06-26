@@ -76,11 +76,11 @@ class PendingActionController extends AccountBaseController
         ])->whereIn('id', $uniqueUsers)->get();
 
         if ($this->user->role_id != 1) {
-            dd($this->user->id);
             $this->authorization_action = $this->authorization_action->where('authorization_for', $this->user->id);
         }
 
         $this->authorization_action = $this->authorization_action->orderBy('id', 'desc')->paginate($per_page);
+        //dd($this->authorization_action->get());
         return view('pending-action.index', $this->data);
     }
 

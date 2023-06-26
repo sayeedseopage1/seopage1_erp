@@ -1319,6 +1319,7 @@ class ContractController extends AccountBaseController
                 $authorization_action = new AuthorizationAction();
                 $authorization_action->model_name = $deal->getMorphClass();
                 $authorization_action->model_id = $deal->id;
+                $authorization_action->type = 'project_manager_accept_project';
                 $authorization_action->deal_id = $deal->id;
                 $authorization_action->project_id = $project->id;
                 $authorization_action->link = route('authorization_request', $deal->id);
