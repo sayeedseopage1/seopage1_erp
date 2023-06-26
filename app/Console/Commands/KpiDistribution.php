@@ -509,12 +509,13 @@ class KpiDistribution extends Command
     
                             // Set other fields as needed
                             $point->save();
-                            CashPoint::where('user_id', $total_points->user_id)->where('type','Single Deal Bonus')->delete();
-                            $updated_total_points=  CashPoint::where('user_id', $total_points->user_id)->orderBy('id','desc')->first();
-                            $total_points=  CashPoint::where('user_id', $total_points->user_id)->sum('points');
-                            $point_update= CashPoint::find($$updated_total_points->id);
-                            $point_update->total_points_earn = $total_points;
-                            $point_update->save();
+                            CashPoint::where('user_id', $total_points->user_id)->where('type', 'Single Deal Bonus')->delete();
+                        $updated_total_points=  CashPoint::where('user_id', $total_points->user_id)->orderBy('id','desc')->first();
+                        $total_points=  CashPoint::where('user_id', $total_points->user_id)->sum('points');
+                       // dd($total_points,$point);
+                        $point_update= CashPoint::find($updated_total_points->id);
+                        $point_update->total_points_earn = $point->total_points_earn- $point->points;
+                        $point_update->save();
                             }
                     
             
