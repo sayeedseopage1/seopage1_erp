@@ -1340,7 +1340,18 @@ class ContractController extends AccountBaseController
                 ]);
             }
 
-
+            //start authorization action
+            $authorization_action = new AuthorizationAction();
+            $authorization_action->model_name = $deal->getMorphClass();
+            $authorization_action->model_id = $deal->id;
+            $authorization_action->type = 'project_manager_accept_project';
+            $authorization_action->deal_id = $deal->id;
+            $authorization_action->project_id = $project->id;
+            $authorization_action->link = route('authorization_request', $deal->id);
+            $authorization_action->title = 'Project manager accept Project';
+            $authorization_action->authorization_for = $project->pm->id;
+            $authorization_action->save();
+            //end authorization action
 
             DB::commit();
             // all good

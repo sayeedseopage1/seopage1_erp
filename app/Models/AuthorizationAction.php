@@ -101,7 +101,9 @@ class AuthorizationAction extends Model
                 'review'
             ],
             'project_manager_accept_project' => [
-                'review'
+
+                'review', 'approved', 'reject'
+
             ]
         ];
 
