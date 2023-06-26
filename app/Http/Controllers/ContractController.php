@@ -1320,13 +1320,17 @@ class ContractController extends AccountBaseController
                 $authorization_action->model_name = $deal->getMorphClass();
                 $authorization_action->model_id = $deal->id;
                 $authorization_action->type = 'saleslead_price_authorization';
+
                 $authorization_action->deal_id = $project_id->deal_id;
+
                 $authorization_action->project_id = $project_id->id;
                 $authorization_action->link = route('authorization_request', $project_id->deal_id);
                 $authorization_action->title = 'Sales Lead Price Authorization';
                 $authorization_action->authorization_for = $user->id;
                 $authorization_action->save();
+
                 // dd($authorization_action);
+
                 //end authorization action
 
 
@@ -1340,7 +1344,7 @@ class ContractController extends AccountBaseController
                     'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
-            // dd("true");
+
 
             //start authorization action
             $authorization_action = new AuthorizationAction();
@@ -1729,17 +1733,22 @@ class ContractController extends AccountBaseController
                     $authorization_action->model_name = $deal->getMorphClass();
                     $authorization_action->model_id = $deal->id;
                     $authorization_action->type = 'saleslead_price_authorization';
+
                     $authorization_action->deal_id = $project_id->deal_id;
+
+
                     $authorization_action->project_id = $project_id->id;
                     $authorization_action->link = route('authorization_request', $project_id->deal_id);
                     $authorization_action->title = 'Sales Lead Price Authorization';
                     $authorization_action->authorization_for = $user->id;
                     $authorization_action->save();
+
                     // dd($authorization_action);
                     //end authorization action
 
 
                     Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+
 
                     $this->triggerPusher('notification-channel', 'notification', [
                         'user_id' => $user->id,
@@ -1749,7 +1758,6 @@ class ContractController extends AccountBaseController
                         'redirectUrl' => route('deals.show', $project_id->deal_id)
                     ]);
                 }
-                // dd("true");
 
                 //start authorization action
                 $authorization_action = new AuthorizationAction();
