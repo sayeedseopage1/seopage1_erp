@@ -113,12 +113,14 @@ class AuthorizationAction extends Model
             ],
             'project_manager_accept_project' => [
 
+
                 'review'
 
             ],
             'saleslead_price_authorization' => [
 
                 'review'
+
 
             ]
         ];
