@@ -85,44 +85,36 @@
                         <h6>{{ $value->title }}</h6>
 
                         <p class="sp1_pa_text">
-                            "<a href="{{ $value->link }}">{{ Str::title(Str::snake(class_basename($value->model_name), ' ')) }}</a> for project <a href="{{ route('projects.show', $value->project_id) }}">{{ $value->project->project_name }}</a> (PM: <a href="{{ route('employees.show', $value->project->pm_id) }}">{{ $value->project->pm->name }}</a>) from Client: <a href="{{ route('clients.show', $value->project->client_id) }}">{{ $value->project->client->name }}</a> needs to be authorized"
+                            @php
+                                $description = '"<a href="'.$value->link.'">'.Str::title(Str::snake(class_basename($value->model_name), ' ')) .'</a> for project <a href="'.route('projects.show', $value->project_id).'">'.$value->project->project_name.'</a> (PM: <a href="'.route('employees.show', $value->project->pm_id).'">'.$value->project->pm->name.'</a>) from Client: <a href="'.route('clients.show', $value->project->client_id).'">'.$value->project->client->name.'</a> needs to be authorized"';
+                            @endphp
+                            {!! $description !!}
                         </p>
-                        @if (request()->query('tab') == 'active')
+                        @if (request()->query('tab') != 'past')
                             <div class="d-flex align-items-center flex-wrap">
                                 @if (in_array('review', $value->status_options))
-                                @if ($value->type == 'award_time_extension')
-                                <a href="{{ route('award_time_check.index') }}"
-                                   class="sp1_pa_nav_link mb-2 mr-2"
-                                   target="_blank">Approve</a>
-                                @else
-                                <button data-id="{{ $value->id }}"
-                                        data-mode="review"
-                                        class="sp1_pa_nav_link mb-2 mr-2">
-                                    <a href="{{ $value->link }}"
-                                       target="_blank">Review</a>
-                                </button>
+                                    @if ($value->type == 'award_time_extension')
+                                        <a href="{{ route('award_time_check.index') }}" class="sp1_pa_nav_link mb-2 mr-2" target="_blank">Approve</a>
+                                    @else
+                                        <button data-id="{{ $value->id }}" data-mode="review" class="sp1_pa_nav_link mb-2 mr-2">
+                                            <a href="{{ $value->link }}" target="_blank">Review</a>
+                                        </button>
+                                    @endif
                                 @endif
-                                @endif
+
                                 @if (in_array('approved', $value->status_options))
-                                @if ($value->type == 'deliverable_modification_by_top_managment' || $value->type == 'deliverable_modification_by_client')
-                                <a href="{{ $value->link }}"
-                                   class="sp1_pa_nav_link mb-2 mr-2"
-                                   target="_blank">Approve</a>
-                                @else
-                                <button data-id="{{ $value->id }}"
-                                        data-mode="approved"
-                                        class="sp1_pa_nav_link mb-2 mr-2 pending_action">Approve</button>
+                                    @if ($value->type == 'deliverable_modification_by_top_managment' || $value->type == 'deliverable_modification_by_client')
+                                        <a href="{{ $value->link }}" class="sp1_pa_nav_link mb-2 mr-2" target="_blank">Approve</a>
+                                    @else
+                                        <button data-id="{{ $value->id }}" data-description="{{ $description }}" data-title="{{ $value->title }}" data-mode="approved" class="sp1_pa_nav_link mb-2 mr-2 pending_action">Approve</button>
+                                    @endif
                                 @endif
-                                @endif
+
                                 @if (in_array('reject', $value->status_options))
-                                <button data-id="{{ $value->id }}"
-                                        data-mode="deny"
-                                        class="sp1_pa_nav_link mb-2 mr-2 pending_action">Deny</button>
+                                    <button data-id="{{ $value->id }}" data-description="{{ $description }}" data-title="{{ $value->title }}" data-mode="deny" class="sp1_pa_nav_link mb-2 mr-2 pending_action">Deny</button>
                                 @endif
                                 @if (in_array('request_modification', $value->status_options))
-                                <button data-id="{{ $value->id }}"
-                                        data-mode="request_modification"
-                                        class="sp1_pa_nav_link mb-2 mr-2 pending_action">Request Modifications</button>
+                                    <button data-id="{{ $value->id }}" data-description="{{ $description }}" data-title="{{ $value->title }}" data-mode="request_modification" class="sp1_pa_nav_link mb-2 mr-2 pending_action">Request Modifications</button>
                                 @endif
                             </div>
                         @endif
@@ -188,27 +180,57 @@
             </ul>
         </nav> --}}
     </section>
-    </section>
+</section>
+<div class="modal fade" id="pending_action_comment_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pending_aciton_title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="pending_action_id" name="id" value="">
+                    <input type="hidden" class="action_mode" name="mode" value="">
+                    <div class="card">
+                        <div class="card-body" id="peinding_action_description"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Message:</label>
+                        <textarea class="form-control" id="message-text"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="action_mode"></button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
 <script>
     $(document).ready(function() {
         var debounceTimer;
 
-        $('.pending_action').click(function(e) {
+        $('#action_mode').click(function(e) {
             e.preventDefault();
-            var id = $(this).data('id');
-            var mode = $(this).data('mode');
+            var id = $('#pending_action_id').val();
+            var mode = $('.action_mode').val();
 
             var url = '{{ route('pending-action.update', ':id') }}';
             url = url.replace(':id', id);
 
-            $.ajax({
+            $.easyAjax({
+                disableButton: true,
+                buttonSelector: "#action_mode",
                 url: url,
                 type: 'PUT',
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: id,
+                    description: $('#message-text').val(),
                     method: 'put',
                     mode: mode,
                 },
@@ -219,6 +241,16 @@
                 }
             })
         });
+
+        $('.pending_action').click(function(e) {
+            e.preventDefault();
+            $('#pending_action_id').val($(this).data('id'));
+            $('#pending_aciton_title').text($(this).data('title'));
+            $('#peinding_action_description').html($(this).data('description'));
+            $('#action_mode').text($(this).data('mode'));
+            $('.action_mode').val($(this).data('mode'));
+            $('#pending_action_comment_modal').modal('show');
+        })
 
         $(function() {
             var format = 'YYYY-MM-DD';
@@ -262,68 +294,7 @@
                 parentEl: '.dashboard-header',
             }, cb_pending_action);
         });
-
-        /*$('#search-input').on('input', function() {
-            clearTimeout(debounceTimer); 
-
-            debounceTimer = setTimeout(function() {
-                var searchTerm = $.trim($('#search-input').val());
-
-                var currentUrl = window.location.href;
-                var params = {
-                    search: searchTerm,
-                };
-
-                var serializedParams = $.param(params);
-                var newUrl = currentUrl + (currentUrl.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-
-                // Redirect to the new URL
-                window.location.href = newUrl;
-            }, 500);
-        });*/
-
-        /*$('#search-input').on('input', function() {
-            clearTimeout(debounceTimer);
-
-            debounceTimer = setTimeout(function() {
-                var searchTerm = $.trim($('#search-input').val());
-
-                var currentUrl = window.location.href;
-                var urlWithoutParams = currentUrl.split('?')[0]; // Get the URL without query parameters
-                var params = {
-                    search: searchTerm,
-                };
-
-                var serializedParams = $.param(params);
-                var newUrl = urlWithoutParams + (currentUrl.indexOf('?') === -1 ? '?' : '&') + serializedParams;
-
-                // Redirect to the new URL
-                window.location.href = newUrl;
-            }, 500);
-        });*/
-
-        // $('#search-input').on('input', function() {
-        //     clearTimeout(debounceTimer);
-
-        //     debounceTimer = setTimeout(function() {
-        //         var searchTerm = $.trim($('#search-input').val());
-
-        //         var currentUrl = window.location.href;
-        //         var urlWithoutParams = currentUrl.split('?')[0]; // Get the URL without query parameters
-        //         var params = {};
-
-        //         if (searchTerm) {
-        //             params.search = searchTerm;
-        //         }
-
-        //         var serializedParams = $.param(params);
-        //         var newUrl = urlWithoutParams + (serializedParams ? '?' + serializedParams : '');
-
-        //         // Redirect to the new URL
-        //         window.location.href = newUrl;
-        //     }, 500);
-        // });
-
+        
         $('#search-input').on('input', function() {
             clearTimeout(debounceTimer);
 

@@ -45,6 +45,7 @@ class PendingActionController extends AccountBaseController
         } else {
             $this->authorization_action = $this->authorization_action->where('status', '0');
         }
+
         if (isset($request->start_time) || isset($request->end_date)) {
             if ($request->start_date == $request->end_date) {
                 $this->authorization_action = $this->authorization_action->wheredate('created_at', '=', carbon::parse($request->start_date)->format('y-m-d'));
@@ -73,6 +74,11 @@ class PendingActionController extends AccountBaseController
         $this->users = User::select([
             'id', 'name', 'image'
         ])->whereIn('id', $uniqueUsers)->get();
+
+        if ($this->user->role_id != 1) {
+            dd($this->user->id);
+            $this->authorization_action = $this->authorization_action->where('authorization_for', $this->user->id);
+        }
 
         $this->authorization_action = $this->authorization_action->orderBy('id', 'desc')->paginate($per_page);
         return view('pending-action.index', $this->data);
@@ -152,7 +158,7 @@ class PendingActionController extends AccountBaseController
             $task->due_date = $task_data->due_date;
             $task->save();
 
-            $authorization_action->description = 'Authorization by admin';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now();
             $authorization_action->status = '1';
@@ -211,7 +217,7 @@ class PendingActionController extends AccountBaseController
 
                 Notification::send($user, new ProjectDeliverableFinalAuthorizationNotificationAccept($project_id));
 
-                $authorization_action->description = $this->user->name . ' approved this authorization';
+                $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -239,7 +245,7 @@ class PendingActionController extends AccountBaseController
                 ]);
                 Notification::send($user, new DeliverableOthersAuthorizationAcceptNotification($project_id));
 
-                $authorization_action->description = $this->user->name . ' approved "OTHER TYPE" delivarable authorization';
+                $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -251,13 +257,13 @@ class PendingActionController extends AccountBaseController
             if ($request->mode == 'approved') {
                 $p_request = new Request();
                 $p_request->project_id = $authorization_action->project_id;
-                $p_request->admin_comment = $this->user->name . ' Accept this project challenge Request';
+                $p_request->admin_comment = $request->description;
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
                 $project_controller->ProjectAccept($p_request);
 
-                $authorization_action->description = $p_request->admin_comment;
+                $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -267,13 +273,13 @@ class PendingActionController extends AccountBaseController
             } elseif ($request->mode == 'deny') {
                 $p_request = new Request();
                 $p_request->project_id = $authorization_action->project_id;
-                $p_request->admin_comment = $this->user->name . ' Deny this project challenge Request';
+                $p_request->admin_comment = $request->description;
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
                 $project_controller->ProjectAccept($p_request);
 
-                $authorization_action->description = $p_request->admin_comment;
+                $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -281,18 +287,17 @@ class PendingActionController extends AccountBaseController
 
                 $error = false;
             }
-            //dd('ok');
         } elseif ($type == 'project_qc') {
             if ($request->mode == 'approved') {
                 $p_request = new Request();
                 $p_request->id = $authorization_action->model_id;
-                $p_request->admin_comment_qc = $this->user->name . ' Accept this QC submission Request';
+                $p_request->admin_comment_qc = $request->description;
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
                 $project_controller->ProjectQcSubmissionAccept($p_request);
 
-                $authorization_action->description = $p_request->admin_comment;
+                $authorization_action->description = $p_request->admin_comment_qc;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -309,7 +314,7 @@ class PendingActionController extends AccountBaseController
                 $project_controller = new ProjectController();
                 $project_controller->ProjectQcSubmissionAccept($p_request);
 
-                $authorization_action->description = $p_request->admin_comment;
+                $authorization_action->description = $p_request->admin_comment_qc;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -321,7 +326,7 @@ class PendingActionController extends AccountBaseController
             if ($request->mode == 'approved') {
                 $p_request = new Request();
                 $p_request->id = $authorization_action->model_id;
-                $p_request->admin_comment = $this->user->name . ' Accept this Project Completion Request';
+                $p_request->admin_comment = $request->description;
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
@@ -338,7 +343,7 @@ class PendingActionController extends AccountBaseController
                 $p_request = new Request();
                 $p_request->id = $authorization_action->model_id;
                 $p_request->deny = true;
-                $p_request->admin_comment = $this->user->name . ' Deny this Project Completion Request';
+                $p_request->admin_comment = $request->description;
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
@@ -362,7 +367,7 @@ class PendingActionController extends AccountBaseController
                 $project_controller = new ProjectController();
                 $project_controller->DeliverableAuthorizationAccept($p_request);
 
-                $authorization_action->description = 'Admin accept this project deliverable time extention';
+                $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -379,7 +384,7 @@ class PendingActionController extends AccountBaseController
                 $project_controller = new ProjectMilestoneController();
                 $project_controller->CancelMilestoneApprove($p_request);
 
-                $authorization_action->description = 'Admin approved this request';
+                $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
@@ -388,7 +393,7 @@ class PendingActionController extends AccountBaseController
                 $error = false;
             }
         } elseif ($type == 'task_approved_by_lead_develoer') {
-            $authorization_action->description = 'Admin approved this request';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now();
             $authorization_action->status = '1';
@@ -399,7 +404,7 @@ class PendingActionController extends AccountBaseController
                 'url' => $authorization_action->link
             ]);
         } elseif ($type == 'task_revision_by_lead_developer') {
-            $authorization_action->description = 'Admin approved this request';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now();
             $authorization_action->status = '1';
@@ -410,7 +415,7 @@ class PendingActionController extends AccountBaseController
                 'url' => $authorization_action->link
             ]);
         } elseif ($type == 'complete_milestone') {
-            $authorization_action->description = 'Admin approved this milestone complete request';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
             $authorization_action->status = '1';
@@ -421,7 +426,7 @@ class PendingActionController extends AccountBaseController
                 'url' => $authorization_action->link
             ]);
         } elseif ($type == 'invoice_created') {
-            $authorization_action->description = 'Admin approved this invoice created request';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
             $authorization_action->status = '1';
@@ -432,7 +437,7 @@ class PendingActionController extends AccountBaseController
                 'url' => $authorization_action->link
             ]);
         } elseif ($type == 'payment_created') {
-            $authorization_action->description = 'Admin approved this add payment request';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
             $authorization_action->status = '1';
@@ -443,7 +448,7 @@ class PendingActionController extends AccountBaseController
                 'url' => $authorization_action->link
             ]);
         } elseif ($type == 'task_assigned_on_lead_developer') {
-            $authorization_action->description = 'Lead developer accept this task';
+            $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
             $authorization_action->status = '1';
