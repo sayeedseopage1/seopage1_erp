@@ -3,7 +3,7 @@ import { User } from '../../../utils/user-details'
 import SubmitionView from './SubmitionView';
 import { Link, useSearchParams } from 'react-router-dom';
 
-const WorkItem = ({data, toggle, modalRef, close}) => { 
+const WorkItem = ({data, toggle, modalRef, close, isLoading}) => { 
   const [searchParams] = useSearchParams();
   const previewId = searchParams.get('submitted-work') || 0;
 
@@ -12,7 +12,7 @@ const WorkItem = ({data, toggle, modalRef, close}) => {
   return (
     <div className="d-flex align-items-center justify-content-between sp1_tark_right_item">
         <div> 
-            <a className='hover-underline text-primary' href={`/account/tasks/132?preview-type=modal&subtask=${data?.task_id}`}> Task#{data?.id} </a>
+            <a className='hover-underline text-primary' href={`/account/tasks/132?preview-type=modal&subtask=${data?.task_id}`}> Task#{data?.task_id} </a>
             ({data?.submission_no}) submitted by <a className='hover-underline text-primary' href={user?.getUserLink()}>{user?.getName()}</a> </div>
 
         <div>  Feb 14, 2023  </div>
@@ -30,6 +30,7 @@ const WorkItem = ({data, toggle, modalRef, close}) => {
             toggle={modalRef}
             data={data}
             close={close}
+            isLoading={isLoading}
         />
        } 
     </div> 

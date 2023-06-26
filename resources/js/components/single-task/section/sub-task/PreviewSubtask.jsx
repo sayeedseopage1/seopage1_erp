@@ -41,6 +41,7 @@ const PreviewSubtask = () => {
                         <a className="nav-link" id="v-pills-submitted-work-tab" data-toggle="pill" href="#v-pills-submitted-work" role="tab" aria-controls="v-pills-submitted-work" aria-selected="false">Submitted Works</a> 
                         <a className="nav-link" id="v-pills-time-log-work-tab" data-toggle="pill" href="#v-pills-time-log-work" role="tab" aria-controls="v-pills-time-log-work" aria-selected="false">Time Logs</a>  
                         <a className="nav-link" id="v-pills-task-review-work-tab" data-toggle="pill" href="#v-pills-task-review-work" role="tab" aria-controls="v-pills-task-review-work" aria-selected="false">Task Review</a>
+                        
                     </div>
 
                     <div className="tab-content p-3" id="v-pills-tabContent">

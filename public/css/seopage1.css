@@ -467,12 +467,17 @@
 
 .sp1-subtask-form.--modal-panel {
   width: 50vw;
-  height: 80vh;
+  height: 100%;
+  min-height: 300px;
+  max-height: 80vh;
   overflow-y: hidden;
   background: #FAFAFC;
   border-radius: 16px;
   padding: 16px;
   border: 1px solid var(--header_color);
+}
+.sp1-subtask-form.--modal-panel.--modal-submitted {
+  width: 30vw;
 }
 .sp1-subtask-form.--modal-panel-header {
   display: flex;
@@ -766,6 +771,102 @@
   margin-bottom: 5px;
 }
 
+.sp1_mark-as--modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sp1_mark-as--modal-panel {
+  width: 100%;
+  max-width: 40vw;
+  background: #fff;
+  padding: 8px 16px;
+  border-radius: 12px;
+}
+.sp1_mark-as--modal-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+}
+.sp1_mark-as--modal-body {
+  height: -moz-fit-content;
+  height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 16px 0;
+}
+.sp1_mark-as--modal-body form > .form-group > label {
+  font-size: 14px;
+  color: #777;
+  font-weight: bold;
+}
+.sp1_mark-as--modal-body form > .form-group > input.form-control {
+  padding: 10px 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}
+
+.sp1_conf--button-group {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+  margin-top: 10px;
+}
+.sp1_conf--button-group > button {
+  padding: 3px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 14px;
+  color: #fff;
+  transition: background 0.2s ease-in-out;
+}
+.sp1_conf--button-group > button:first-child {
+  font-size: 1rem;
+  background-color: var(--header_color);
+}
+.sp1_conf--button-group > button:first-child:hover {
+  color: #fff;
+  background: #444958;
+}
+.sp1_conf--button-group > button:nth-child(2) {
+  background-color: #444958;
+}
+.sp1_conf--button-group > button:nth-child(2):hover {
+  color: #fff;
+  background: #1e6cff;
+}
+
+.sp1_single_task--modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp1_single_task--modal-panel {
+  width: -moz-fit-content;
+  width: fit-content;
+  max-width: 50vw;
+  height: -moz-fit-content;
+  height: fit-content;
+  max-height: 80vh;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.sp1_single_task--modal-body {
+  height: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.sp1_stop-button-confirmation-option h6 {
+  font-weight: bold;
+}
 @keyframes glice {
   0% {
     background-position: -200px 0;

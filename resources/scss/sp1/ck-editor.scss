@@ -197,6 +197,7 @@
 .ck-content p + .image-style-align-right,
 .ck-content p + .image-style-side {
     margin-top: 0;
+    margin-bottom: 10px;
 }
 /* @ckeditor/ckeditor5-image/theme/imagestyle.css */
 .ck-content .image-inline.image-style-align-left,
@@ -470,8 +471,13 @@
         margin-left: 40px !important;
         list-style: unset !important;
     }
+
+    ul,ol{
+        margin-bottom: 10px;
+    }
+
     li{list-style: unset !important;}
-    p{margin-bottom: 3px !important;}
+    p{margin-bottom: 10px !important;}
     h1{font-size: 2rem !important;}
     a{
         color: var(--header_color);

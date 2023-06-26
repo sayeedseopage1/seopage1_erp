@@ -6,7 +6,7 @@ import "./components/Incentives/main";
 import "./components/QualifiedSales/main";
 // import "./components/PendingAction/main";
 
-//import "./components/single-task/index"
+import "./components/single-task/index"
 
 
 

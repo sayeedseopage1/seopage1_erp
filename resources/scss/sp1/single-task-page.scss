@@ -521,12 +521,18 @@
 
     &.--modal-panel{
         width: 50vw;
-        height: 80vh;
+        height: 100%;
+        min-height: 300px;
+        max-height: 80vh;
         overflow-y: hidden;
         background: #FAFAFC ;
         border-radius: 16px;
         padding: 16px; 
         border: 1px solid var(--header_color);
+        
+        &.--modal-submitted{
+            width: 30vw;
+        }
 
         &-header{
             display: flex;
@@ -543,7 +549,7 @@
             max-height: 70vh;
             overflow-x: hidden;
             overflow-y: auto;
-        }
+        } 
     } 
 }
 
@@ -867,3 +873,123 @@
     }
 
 } 
+
+
+
+// mark as complete button control
+.sp1_mark-as{
+    &--modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-panel{
+            width: 100%;
+            max-width: 40vw;
+            background: #fff;
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        &-heading{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgb(0 0 0 / 10%);
+            padding-bottom: 10px;
+        }
+
+        &-body{ 
+            height: fit-content;
+            max-height: 80vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px 0;
+
+            & form > .form-group > label{
+                font-size: 14px;
+                color: #777;
+                font-weight: bold;
+            }
+
+            & form > .form-group > input.form-control{
+                padding: 10px 12px;
+                border: 1px solid rgb(0 0 0 / 10%);
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+
+
+// single task stop button controller
+
+.sp1_conf--button-group{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 10px;
+
+    & > button{ 
+        padding: 3px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 14px;
+        color: #fff;
+        transition: background 0.2s ease-in-out;
+
+        &:first-child{
+            font-size: 1rem; 
+            background-color: var(--header_color);
+            &:hover{
+                color: #fff;
+                background: #444958;
+            }
+        } 
+        &:nth-child(2){
+            background-color: #444958;
+            &:hover{
+                color: #fff;
+                background: #1e6cff;
+            }
+        }  
+    }
+}
+
+
+
+// single task page
+.sp1_single_task--modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sp1_single_task--modal-panel{
+    width: fit-content;
+    max-width: 50vw;
+    height: fit-content;
+    max-height: 80vh;
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.sp1_single_task--modal-body{
+    height: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+
+.sp1_stop-button-confirmation-option{
+    h6{
+        font-weight: bold;
+    }
+
+    & > .confirmation--options{ 
+        & > .--option-item{}
+    }
+}

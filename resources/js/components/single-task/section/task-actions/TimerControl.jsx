@@ -8,6 +8,7 @@ import {
 } from '../../../services/api/SingleTaskPageApi';
 import { CompareDate } from '../../../utils/dateController';
 import _ from 'lodash';
+import StopTimerControl from './StopTimerControl';
 
 const TimerControl = ({task}) => {
   const [timerStart, setTimerStart] = useState(false);
@@ -187,21 +188,8 @@ const TimerControl = ({task}) => {
                         <i className="fa-solid fa-stopwatch" />
                         <span className="d-inline ml-1">{timer()}</span>
                     </Button>
-                    {
-                        !timerStopStatusIsLoading ? 
-                        <Button 
-                            variant='tertiary'
-                            onClick={stopTimer}
-                            className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
-                        >
-                            <i className="fa-solid fa-pause" />
-                            <span className="d-inline ml-1">Stop Timer</span>
-                        </Button> :
-                        <Button className='cursor-processing mr-2'>
-                            <div className="spinner-border text-white" role="status" style={{ width: '18px',height: '18px'}}></div>
-                            Stopping...
-                        </Button>
-                    } 
+
+                    <StopTimerControl stopTimer={stopTimer} /> 
                 </>
             )
         }

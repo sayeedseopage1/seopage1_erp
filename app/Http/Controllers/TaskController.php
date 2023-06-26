@@ -66,8 +66,6 @@ use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
 
-use App\Models\AuthorizationAction;
-
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
 
@@ -2159,6 +2157,7 @@ class TaskController extends AccountBaseController
             }
 
             $data = TaskComment::find($data->id);
+            $data->last_updated_at = $data->updated_at;
             return response()->json($data);
         } elseif ($request->mode == 'comment_reply_store') {
             $data = new TaskReply();

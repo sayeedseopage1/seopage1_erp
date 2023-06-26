@@ -1,19 +1,13 @@
 import React from 'react'
 import Button from '../../components/Button'
 import TimerControl from './TimerControl'
+import MarkAsComplete from './MarkAsComplete'
 
 const TaskAction = ({task}) => {
   return ( 
         <div className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group">
-            <TimerControl task={task}/> 
-
-            <Button 
-                variant='tertiary'
-                className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
-            >
-                <i className="fa-solid fa-check"></i>
-                <span className="d-inline ml-1">Mark As Complete</span>
-            </Button>
+            <TimerControl task={task}/>  
+            <MarkAsComplete /> 
 
 
             <Button 

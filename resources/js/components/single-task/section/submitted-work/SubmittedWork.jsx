@@ -3,6 +3,7 @@ import WorkItem from './WorkItem';
 import useSWR from 'swr';
 import SubmitionView from './SubmitionView';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import SubmittedModalView from './SubmittedModalView';
 
 
 const fetcher = (url) => axios.get(url).then(res => res.data); 
@@ -18,7 +19,11 @@ const SubmittedWork = ({task}) => {
     // control modal
   const toggle = (e) => {
     e.preventDefault();
-    setIsOpen(!isOpen)
+    if(preview){
+      navigate(`/account/tasks/${task?.id}`);
+    }else{
+      setIsOpen(!isOpen);
+    }
   };
   const close = () => {
     setIsOpen(false);
@@ -45,27 +50,27 @@ const SubmittedWork = ({task}) => {
 
 
         {/* side drop toggle button */}
-          {preview && !isLoading && (
-            <button 
-                aria-label='openCommentModalButton'  
-                ref={setModalRefButton}
-                className='sp1_task_right_dl_toggle'
-                onClick={close}
-                style={{zIndex:  preview ? '110' : ''}}
-              >
-                <i 
-                  className={`fa-solid fa-circle-chevron-${ (preview) ? 'right' : 'left'}`} 
-                  style={{color: "#276fec"}} 
-                />
-            </button>
-          )}
+          
+          <button 
+              aria-label='openCommentModalButton'  
+              ref={setModalRefButton}
+              className='sp1_task_right_dl_toggle'
+              onClick={toggle}
+              style={{zIndex:  (preview || isOpen) ? '110' : ''}}
+            >
+              <i 
+                className={`fa-solid fa-circle-chevron-${ (preview || isOpen) ? 'right' : 'left'}`} 
+                style={{color: "#276fec"}} 
+              />
+          </button>
 
-        {/* <SubmitionView
+        <SubmittedModalView
             isOpen={isOpen}
             toggle={modalRefButton}
             data={data}
             close={close}
-        /> */}
+            isLoading={isLoading}
+        />
 
 
         {/* side drop toggle button end */} 
@@ -77,6 +82,7 @@ const SubmittedWork = ({task}) => {
               data={item} 
               toggle={toggle} 
               close={close}
+              isLoading={isLoading}
               modalRef={modalRefButton} 
             />
           )))

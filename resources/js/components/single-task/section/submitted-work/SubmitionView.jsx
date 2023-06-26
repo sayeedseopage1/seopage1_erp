@@ -5,7 +5,7 @@ import { User } from '../../../utils/user-details';
 import dayjs from 'dayjs'; 
 import FileUploader from '../../../file-upload/FileUploader';
 
-const SubmitionView = ({isOpen, close, toggle, data}) => {
+const SubmitionView = ({isOpen, close, toggle, data, isLoading}) => {
     const user = data && data.user ? new User(data?.user) : null;
     
   return (
@@ -13,11 +13,11 @@ const SubmitionView = ({isOpen, close, toggle, data}) => {
         isOpen={isOpen}
         toggleRef={toggle} 
     >
-        <div className='sp1-subtask-form --modal-panel'>
+        <div className='sp1-subtask-form --modal-panel --modal-submitted'>
             <div className='sp1-subtask-form --modal-panel-header'> 
                 <div className='d-flex align-items-center'>
                     <h6>Submitted Task </h6>
-                    {true && <div 
+                    {isLoading && <div 
                         className="spinner-border text-dark ml-2" 
                         role="status"
                         style={{
@@ -37,10 +37,10 @@ const SubmitionView = ({isOpen, close, toggle, data}) => {
                 </Button> 
             </div>
 
-            <div className="sp1-subtask-form --modal-panel-body">
+            <div className="sp1-subtask-form --modal-panel-body --modal-submitted-body">
                 <div className='mt-3 d-flex flex-column' style={{gap: '10px'}}>
                     <div>
-                        <span className='fs-14 font-weight-bold mb-2' style={{color: '#767581'}}>Submitted By</span>
+                        <span className='fs-14 font-weight-bold d-block mb-3' style={{color: '#767581'}}>Submitted By</span>
                         <div className='d-flex align-items-center'>
                            <div>
                                 <img
@@ -84,13 +84,21 @@ const SubmitionView = ({isOpen, close, toggle, data}) => {
 
                   <div className='mt-2 mt-3'>
                     <span className='d-block fs-12 font-weight-bold mb-2' style={{color: '#767581'}}>Description</span>
-                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: data?.text}} />
+                    {
+                        data?.text ? (
+                            <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: data?.text}} />
+                        ): (
+                            <span className='' style={{color: 'rgb(180, 188, 196)'}}>
+                                No description is available
+                            </span>
+                        )
+                    } 
                   </div>
 
-                  {
-                    data?.attach && (
-                        <div className='mt-3'>
-                            <span className='d-block fs-12 font-weight-bold mb-2' style={{color: '#767581'}}>Attached Files</span>
+                <div className='mt-3'>
+                    <span className='d-block fs-12 font-weight-bold mb-2' style={{color: '#767581'}}>Attached Files</span>
+                    {
+                        data?.attach ? (
                             <FileUploader>
                                 {data?.attach?.map((file) =>(
                                     <FileUploader.Preview
@@ -105,9 +113,11 @@ const SubmitionView = ({isOpen, close, toggle, data}) => {
                                     />
                                 ))}
                             </FileUploader>
-                        </div>
-                    )
-                  }
+                        ): <span className='' style={{color: 'rgb(180, 188, 196)'}}>
+                        No Attachment is available
+                    </span>
+                    }
+                </div>
 
                 </div>      
             </div>
