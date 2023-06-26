@@ -80,6 +80,7 @@ class PendingActionController extends AccountBaseController
         }
 
         $this->authorization_action = $this->authorization_action->orderBy('id', 'desc')->paginate($per_page);
+        //dd($this->authorization_action->get());
         return view('pending-action.index', $this->data);
     }
 
