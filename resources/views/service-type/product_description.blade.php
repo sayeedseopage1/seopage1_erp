@@ -65,7 +65,7 @@
 
                 <form class="row g-3" action="" method="post" id="storeProductDescription">
                 @csrf
-
+                    <input type="hidden" name="deal_id" id="deal_id" value="{{$id}}">
                 <!-- Website Link & Niche Starts Here -->
                     <div class="row mt-3">
                         <div class="col-md-3">
@@ -247,6 +247,7 @@
             'folder_link': folder_link_values,
             'blog_url': blog_url_values,
             'product_list': product_list_values,
+            'deal_id': {{$id}},
         }
         // console.log(data);
         $.ajaxSetup({

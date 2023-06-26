@@ -36,7 +36,7 @@
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
                                     <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
-                                        <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                        <i class="icons icon-plus font-weight-bold mr-1"></i> Add Sub Tasks
                                     </a>
                             @else
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
@@ -58,7 +58,7 @@
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
                                 <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Add Sub Tasks
                                 </a>
                             @else
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
@@ -77,7 +77,7 @@
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
                                 <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
-                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Working Environment
+                                    <i class="icons icon-plus font-weight-bold mr-1"></i> Add Sub Tasks
                                 </a>
                             @else
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">

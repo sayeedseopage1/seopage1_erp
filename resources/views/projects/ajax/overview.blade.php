@@ -19,6 +19,17 @@ $project->members->pluck('user_id')->toArray(); @endphp
 </style>
 <div class="d-lg-flex">
     <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
+        @php
+            $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
+        @endphp
+        @if($q_c)
+            <div style="margin-bottom: -40px;">
+                <button type="button" class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
+                    Client Review
+                </button>
+                @include('projects.modals.client_review')
+            </div>
+        @endif
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
@@ -96,15 +107,15 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
                 @if($project->status == 'canceled' && $project->dispute_status == 1)
 
-                <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
-                    <div class="">
-                        <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">
-                        @lang('See Dispute')
-                        </a>
+{{--                <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">--}}
+{{--                    <div class="">--}}
+{{--                        <a class="btn btn-primary bg-white border height-35 f-15 px-2 py-2 text-dark-grey text-capitalize rounded openRightModal" href="{{ route('projects.dispute.form', $project->id) }}"  aria-haspopup="true" aria-expanded="false">--}}
+{{--                        @lang('See Dispute')--}}
+{{--                        </a>--}}
 
 
-                    </div>
-                </div>
+{{--                    </div>--}}
+{{--                </div>--}}
                 @endif
               @if($project->status == 'in progress' || $project->status == 'not started' || $project->status == 'on hold')
 
@@ -139,8 +150,9 @@ $project->members->pluck('user_id')->toArray(); @endphp
 
             @endif
             @endif
-
             @else
+
+
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
 
             <div class="ml-lg-3 ml-md-0 ml-0 mr-3 mr-lg-0 mr-md-3">
@@ -167,7 +179,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
             @endif
             @endif
             @endif
-
 
             @php
 
@@ -213,6 +224,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             @endif
 
         </div>
+
         <!-- PROJECT PROGRESS AND CLIENT START -->
         <div class="row">
             <!-- PROJECT PROGRESS START -->
@@ -521,6 +533,142 @@ $project->members->pluck('user_id')->toArray(); @endphp
         </div>
         <!-- PROJECT PROGRESS AND CLIENT END -->
 
+        <!--CLIENT REVIEW-->
+        @php
+            $client_review = \App\Models\ClientReview::where('project_id',$project->id)->orderBy('id','desc')->first();
+        @endphp
+        @if($client_review)
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <x-cards.data>
+                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row' : '' }}">
+                            <div class="col-12">
+                                <h5>Client Rating</h5>
+                                <div class="d-block">
+                                    @if($client_review->client_rating)
+                                        @if($client_review->client_rating ==5)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating > 4 && $client_review->client_rating <5)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating ==4)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating > 3 && $client_review->client_rating <4)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating ==3)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating > 2 && $client_review->client_rating <3)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating ==2)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating > 1 && $client_review->client_rating <2)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating ==1)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                        @if($client_review->client_rating > 0 && $client_review->client_rating <1)
+                                            <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                            <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                                <i class="fa-regular fa-star"></i>
+                                            </h6>
+                                        @endif
+                                    @else
+                                        <h3 style="font-size: 2.25rem;">{{number_format($client_review->client_rating,1)}} <sub style="font-size: 0.875rem;">/5</sub></h3>
+                                        <h6 class="d-flex align-items-center" style="gap:3px; color: #ff8200; font-size: 16px; ">
+                                            <i class="fa-regular fa-star"></i>
+                                            <i class="fa-regular fa-star"></i>
+                                            <i class="fa-regular fa-star"></i>
+                                            <i class="fa-regular fa-star"></i>
+                                            <i class="fa-regular fa-star"></i>
+                                        </h6>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="col-12 pt-4">
+                                <h5>Client Comment</h5>
+                                <div class="col-6 px-0">{!! $client_review->client_comment !!}</div>
+                            </div>
+
+                        </div>
+                    </x-cards.data>
+                </div>
+            </div>
+        @endif
+        <!--END CLIENT REVIEW-->
         <!-- TASK STATUS AND BUDGET START -->
         <div class="row mb-4"  >
             <!-- TASK STATUS START -->
@@ -529,13 +677,15 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-pie-chart id="task-chart" :labels="$taskChart['labels']" :values="$taskChart['values']" :colors="$taskChart['colors']" height="220" width="250" />
                 </x-cards.data>
                 <br>
-                <x-cards.data padding="false">
+
+                <?php
+                $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->first();
+                $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
+                $project_completion = \App\Models\ProjectSubmission::where('project_id',$project->id)->first();
+                ?>
+                @if ($q_c !=null && $project_completion !=null)
+                <x-cards.data>
                     <div class="py-3">
-                        <?php
-                        $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->first();
-                        $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
-                        $project_completion = \App\Models\ProjectSubmission::where('project_id',$project->id)->first();
-                        ?>
                         <div class="container">
                             <div class="row mb-4">
                                 <div class="col-6">
@@ -551,17 +701,26 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                     @endif
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    @if ($dispute != null)
-                                        <button style="width: 100%" type="button" class="btn-secondary rounded text-center" data-toggle="modal" data-target="#final_dispute_view">See Dispute</button>
-                                        @include('projects.modals.final_dispute_view')
-                                    @endif
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </x-cards.data>
+                @endif
+                @if ($dispute !=null)
+                    <x-cards.data>
+                        <div class="py-3">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-12">
+                                        @if ($dispute != null)
+                                            <button style="width: 100%" type="button" class="btn-secondary rounded text-center" data-toggle="modal" data-target="#final_dispute_view">See Dispute</button>
+                                            @include('projects.modals.final_dispute_view')
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </x-cards.data>
+                @endif
             </div>
             <!-- TASK STATUS END -->
             <!-- BUDGET VS SPENT START -->
@@ -633,6 +792,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+
         <!-- TASK STATUS AND BUDGET END -->
        
 

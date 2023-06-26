@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('blog_articles', function (Blueprint $table) {
             $table->id();
+            $table->integer('deal_id');
             $table->string('website_link');
             $table->string('website_niche');
             $table->string('website_name');

@@ -185,6 +185,7 @@ use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
 use App\Http\Controllers\NonCashPointSettingsController;
+use App\Http\Controllers\ClientReviewController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1192,15 +1193,15 @@ Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
 //Service type section
-Route::get('/deals/service-type/web-content', [HomeController::class, 'webContent']);
+Route::get('/deals/service-type/web-content/{id}', [HomeController::class, 'webContent']);
 Route::post('/deals/store/web-content', [HomeController::class, 'storeWebContent'])->name('store_web_content');
-Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogArticle']);
+Route::get('/deals/service-type/blogs-articles/{id}', [HomeController::class, 'blogArticle']);
 Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
-Route::get('/deals/service-type/product-description', [HomeController::class, 'productDescription']);
+Route::get('/deals/service-type/product-description/{id}', [HomeController::class, 'productDescription']);
 Route::post('/deals/store/product-description', [HomeController::class, 'storeProductDescription'])->name('store_product_description');
-Route::get('/deals/service-type/product-category', [HomeController::class, 'productCategory']);
+Route::get('/deals/service-type/product-category/{id}', [HomeController::class, 'productCategory']);
 Route::post('/deals/store/product-category', [HomeController::class, 'storeProductCategory'])->name('store_product_category');
-Route::get('/deals/service-type/basic-seo', [HomeController::class, 'productBasicSeo']);
+Route::get('/deals/service-type/basic-seo/{id}', [HomeController::class, 'productBasicSeo']);
 Route::post('/deals/store/basic-seo', [HomeController::class, 'storeProductBasicSeo'])->name('store_product_basic_seo');
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
@@ -1276,6 +1277,9 @@ Route::post('/acoounts/project-completion/store', [ProjectController::class, 'Pr
 Route::get('/projects/project-completion/get-sub-niche/{niche_id}', [ProjectController::class, 'getSubNiches']);
 //Route::post('/projects/project-completion/search-niche', [ProjectController::class, 'searchNiche'])->name('search_niche');
 Route::post('/projects/project-completion/filter-subcategories', [ProjectController::class, 'filterSubcategories'])->name('filter_subcategories');
+
+//Client Review Section
+Route::resource('client-review', ClientReviewController::class);
 
 
 

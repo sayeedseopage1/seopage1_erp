@@ -536,14 +536,14 @@
                                                                 <td class="pl-20 text-capitalize">
                                                                     @if($milestone->invoice)
                                                                         @if($milestone->invoice->status == 'paid')
-                                                                            <span class="badge badge-success">Paid</span> 
+                                                                            <span class="badge badge-success">Paid</span>
                                                                         @else
                                                                             <span class="badge badge-danger">Unpaid</span>
                                                                         @endif
                                                                     @else
                                                                         <span class="badge badge-warning">N/A</span>
                                                                     @endif
-                                                                    
+
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -633,9 +633,9 @@
                                                                     @php
                                                                         $totalHours = $task->estimate_hours;
                                                                         $totalMinutes = $task->estimate_minutes;
-                                                                        
+
                                                                         $tasks = $task->subtasks;
-                                                                        
+
                                                                         foreach($tasks as $value) {
                                                                             $countTask = \App\Models\Task::where('subtask_id', $value->id)->first();
                                                                             $totalHours = $totalHours + $countTask->estimate_hours;
@@ -658,9 +658,9 @@
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">
                                                                     @php
-                                                                        $row = $task;   
+                                                                        $row = $task;
                                                                         $timeLog = '--';
-                                                
+
                                                                         if($row->timeLogged) {
                                                                             $totalMinutes = $row->timeLogged->sum('total_minutes');
 
@@ -670,7 +670,7 @@
                                                                                     $totalMinutes = $totalMinutes + $workingTime;
                                                                                 }
                                                                             }
-                                                                            
+
                                                                             $breakMinutes = $row->breakMinutes();
                                                                             $totalMinutes = $totalMinutes - $breakMinutes;
 
@@ -689,7 +689,7 @@
                                                                         foreach ($subtasks as $subtask) {
                                                                             $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
                                                                             $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
-                                                                            
+
                                                                             foreach($task->timeLogged as $value) {
                                                                                 if (is_null($value->end_time)) {
                                                                                     $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
@@ -1273,7 +1273,7 @@
                                                     <th class="pl-20 text-capitalize">Milestones (Payment)</th>
                                                     <th class="pl-20 text-capitalize">Start Date</th>
                                                     <th class="pl-20 text-capitalize">Deadline</th>
-                                                   
+
                                                     <th class="pl-20 text-capitalize">Progress</th>
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
@@ -1318,7 +1318,7 @@
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
                                                         <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
-                                                        
+
                                                         <td>
                                                             @php
                                                                 $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
@@ -1424,14 +1424,14 @@
                                                                 <td class="pl-20 text-capitalize">
                                                                     @if($milestone->invoice)
                                                                         @if($milestone->invoice->status == 'paid')
-                                                                            <span class="badge badge-success">Paid</span> 
+                                                                            <span class="badge badge-success">Paid</span>
                                                                         @else
                                                                             <span class="badge badge-danger">Unpaid</span>
                                                                         @endif
                                                                     @else
                                                                         <span class="badge badge-warning">N/A</span>
                                                                     @endif
-                                                                    
+
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -1470,7 +1470,7 @@
                                                 </thead>
                                                 <tbody>
                                                     @forelse($month_task_status as $task)
-                                                    
+
                                                             <tr>
                                                                 <td>{{$loop->index+1}}</td>
                                                                 <td class="pl-20 text-capitalize ">
@@ -1521,9 +1521,9 @@
                                                                     @php
                                                                         $totalHours = $task->estimate_hours;
                                                                         $totalMinutes = $task->estimate_minutes;
-                                                                        
+
                                                                         $tasks = $task->subtasks;
-                                                                        
+
                                                                         foreach($tasks as $value) {
                                                                             $countTask = \App\Models\Task::where('subtask_id', $value->id)->first();
                                                                             $totalHours = $totalHours + $countTask->estimate_hours;
@@ -1546,9 +1546,9 @@
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">
                                                                     @php
-                                                                        $row = $task;   
+                                                                        $row = $task;
                                                                         $timeLog = '--';
-                                                
+
                                                                         if($row->timeLogged) {
                                                                             $totalMinutes = $row->timeLogged->sum('total_minutes');
 
@@ -1558,7 +1558,7 @@
                                                                                     $totalMinutes = $totalMinutes + $workingTime;
                                                                                 }
                                                                             }
-                                                                            
+
                                                                             $breakMinutes = $row->breakMinutes();
                                                                             $totalMinutes = $totalMinutes - $breakMinutes;
 
@@ -1577,7 +1577,7 @@
                                                                         foreach ($subtasks as $subtask) {
                                                                             $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
                                                                             $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
-                                                                            
+
                                                                             foreach($task->timeLogged as $value) {
                                                                                 if (is_null($value->end_time)) {
                                                                                     $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
@@ -1602,7 +1602,7 @@
                                                                     <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
                                                                 </td>
                                                             </tr>
-                                                        
+
                                                     @empty
                                                         <tr>
                                                             <td colspan="12" class="shadow-none">
@@ -2157,7 +2157,7 @@
                                                     <th class="pl-20 text-capitalize">Milestones (Payment)</th>
                                                     <th class="pl-20 text-capitalize">Start Date</th>
                                                     <th class="pl-20 text-capitalize">Deadline</th>
-                                                  
+
                                                     <th class="pl-20 text-capitalize">Progress</th>
                                                     <th class="pl-20 text-capitalize">Status</th>
                                                 </thead>
@@ -2202,7 +2202,7 @@
                                                         </td>
                                                         <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
                                                         <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
-                                                        
+
                                                         <td>
                                                             @php
                                                                 $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
@@ -2308,14 +2308,14 @@
                                                                 <td class="pl-20 text-capitalize">
                                                                     @if($milestone->invoice)
                                                                         @if($milestone->invoice->status == 'paid')
-                                                                            <span class="badge badge-success">Paid</span> 
+                                                                            <span class="badge badge-success">Paid</span>
                                                                         @else
                                                                             <span class="badge badge-danger">Unpaid</span>
                                                                         @endif
                                                                     @else
                                                                         <span class="badge badge-warning">N/A</span>
                                                                     @endif
-                                                                    
+
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -2354,7 +2354,7 @@
                                                 </thead>
                                                 <tbody>
                                                     @forelse($general_task_status as $task)
-                                                       
+
                                                             <tr>
                                                                 <td>{{$loop->index+1}}</td>
                                                                 <td class="pl-20 text-capitalize ">
@@ -2405,9 +2405,9 @@
                                                                     @php
                                                                         $totalHours = $task->estimate_hours;
                                                                         $totalMinutes = $task->estimate_minutes;
-                                                                        
+
                                                                         $tasks = $task->subtasks;
-                                                                        
+
                                                                         foreach($tasks as $value) {
                                                                             $countTask = \App\Models\Task::where('subtask_id', $value->id)->first();
                                                                             $totalHours = $totalHours + $countTask->estimate_hours;
@@ -2430,9 +2430,9 @@
                                                                 </td>
                                                                 <td class="pl-20 text-capitalize">
                                                                     @php
-                                                                        $row = $task;   
+                                                                        $row = $task;
                                                                         $timeLog = '--';
-                                                
+
                                                                         if($row->timeLogged) {
                                                                             $totalMinutes = $row->timeLogged->sum('total_minutes');
 
@@ -2442,7 +2442,7 @@
                                                                                     $totalMinutes = $totalMinutes + $workingTime;
                                                                                 }
                                                                             }
-                                                                            
+
                                                                             $breakMinutes = $row->breakMinutes();
                                                                             $totalMinutes = $totalMinutes - $breakMinutes;
 
@@ -2461,7 +2461,7 @@
                                                                         foreach ($subtasks as $subtask) {
                                                                             $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
                                                                             $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
-                                                                            
+
                                                                             foreach($task->timeLogged as $value) {
                                                                                 if (is_null($value->end_time)) {
                                                                                     $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
@@ -2486,7 +2486,7 @@
                                                                     <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
                                                                 </td>
                                                             </tr>
-                                                       
+
                                                     @empty
                                                         <tr>
                                                             <td colspan="12" class="shadow-none">
@@ -2503,9 +2503,9 @@
                         </div>
                     </div>
                 </div>
-            </div>   
+            </div>
         </div>
-     
+
     </div>
 @endsection
 @push('scripts')
@@ -2952,7 +2952,7 @@
         $(document).ready(function() {
             var todayDate = moment();
             var monthDate = moment();
-            
+
             $('.todayDate').text(todayDate.format('dddd LL'));
 
             var todayOnlyDate = moment(todayDate).format('DD');
@@ -2992,7 +2992,7 @@
                     $(this).prev().prev().text(todayDate.format('dddd LL'));
                     date = todayDate
                 }
-                
+
                 getData(mode, $(this), date);
             });
 

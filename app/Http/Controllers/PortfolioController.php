@@ -40,11 +40,21 @@ class PortfolioController extends AccountBaseController
         $this->website_themes = ProjectWebsiteTheme::all();
         $this->website_plugins = ProjectWebsitePlugin::all();
 
-        return view('portfolio.index',$this->data);
+        $this->portfolios = DB::table('project_portfolios')
+            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+            ->join('users', 'projects.client_id', '=', 'users.id')
+            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
+            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
+            ->get();
+
+        //        dd($this->portfolios);
+
+        return view('portfolio.index', $this->data);
     }
 
     public function getSubCategory($website_cat_id)
     {
+        //        dd($website_cat_id);
         $website_sub_cats = ProjectNiche::find($website_cat_id)->child;
         return response()->json($website_sub_cats);
     }
@@ -52,44 +62,43 @@ class PortfolioController extends AccountBaseController
 
     public function filterCmsCategories(Request $request)
     {
+        $filteredCategories = ProjectPortfolio::query();
         if (!is_null($request->input('category_id'))) {
             $selectedCategoryId = $request->input('category_id');
-            $filteredCategories = ProjectPortfolio::where('cms_category', $selectedCategoryId);
+            $filteredCategories = $filteredCategories->where('cms_category', $selectedCategoryId);
         }
 
         if (!is_null($request->input('website_type'))) {
             $selectedCategoryId = $request->input('website_type');
-            $filteredCategories = ProjectPortfolio::where('website_type', $selectedCategoryId);
+            $filteredCategories = $filteredCategories->where('website_type', $selectedCategoryId);
         }
 
         if (!is_null($request->input('website_category'))) {
             $selectedCategoryId = $request->input('website_category');
-            $filteredCategories = ProjectPortfolio::where('niche', $selectedCategoryId);
+            $filteredCategories = $filteredCategories->where('niche', $selectedCategoryId);
         }
 
-        if (!is_null($request->input('sub_niche'))) {
-            $selectedCategoryId = $request->input('sub_niche');
-            $filteredCategories = ProjectPortfolio::where('sub_niche', $selectedCategoryId);
+        if (!is_null($request->input('website_sub_cat'))) {
+            $selectedCategoryId = $request->input('website_sub_cat');
+            $filteredCategories = $filteredCategories->where('sub_niche', $selectedCategoryId);
         }
 
         if (!is_null($request->input('theme_name'))) {
             $selectedCategoryId = $request->input('theme_name');
-            $filteredCategories = ProjectPortfolio::where('theme_name', $selectedCategoryId);
+            $filteredCategories = $filteredCategories->where('theme_name', $selectedCategoryId);
         }
 
         if (!is_null($request->input('website_plugin'))) {
             $selectedCategoryId = $request->input('website_plugin');
-            $filteredCategories = ProjectPortfolio::where('plugin_name', 'LIKE', '%'.$selectedCategoryId.'%');
+            $filteredCategories = $filteredCategories->where('plugin_name', $selectedCategoryId);
         }
 
-        $filteredCategories = $filteredCategories->where('portfolio_link','!=',null)->get();
-
-
-//        dd($filteredCategories);
+        $filteredCategories = $filteredCategories->where('portfolio_link', '!=', null)->get();
         return response()->json($filteredCategories);
     }
 
-    public function filterDataShow($dataId){
+    public function filterDataShow($dataId)
+    {
         $portfolio = DB::table('project_portfolios')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
@@ -98,15 +107,12 @@ class PortfolioController extends AccountBaseController
             ->where('project_portfolios.id', $dataId)
             ->first();
 
-//        dd($portfolio);
 
-            $html = view('portfolio.portfolio_modal', [
-                'portfolio' => $portfolio
-            ])->render();
-            return response($html);
-
+        $html = view('portfolio.portfolio_modal', [
+            'portfolio' => $portfolio
+        ])->render();
+        return response($html);
     }
-
 
     /**
      * Show the form for creating a new resource.

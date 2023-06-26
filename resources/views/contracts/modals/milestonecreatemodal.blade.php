@@ -1,4 +1,3 @@
-
 <div class="modal fade" id="milestoneaddmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -64,22 +63,28 @@
                         </div>
                     </div>
 
-{{--                     <div class="col-md-4">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>--}}
-{{--                            <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">--}}
-{{--                                <option value="Development">Development</option>--}}
-{{--                                <option value="Webcontent">Webcontent</option>--}}
-{{--                                <option value="Blogs/articles">Blogs/articles</option>--}}
-{{--                                <option value="Product descriptions">Product descriptions</option>--}}
-{{--                                <option value="Product category/collection pages">Product category/collection pages</option>--}}
-{{--                                <option value="Basic SEO">Basic SEO</option>--}}
-{{--                            </select>--}}
-{{--                        </div> --}}
-{{--                         <input type="text" id="generatedLinkContainer" class="form-control height-35 f-14 py-3">--}}
-{{--                    </div>--}}
-
-
+                     <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
+                            <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
+                                <option value="">Development</option>
+                                <option value="web-content">Webcontent</option>
+                                <option value="blogs-articles">Blogs/articles</option>
+                                <option value="product-description">Product descriptions</option>
+                                <option value="product-category">Product category/collection pages</option>
+                                <option value="basic-seo">Basic SEO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8 mt-2" id="inputUrl" style="display: none;">
+                        <div class="input-group">
+                            <input type="text" class="form-control height-35 f-14" id="generatedLinkContainer" aria-label="Recipient's username" aria-describedby="copyButton">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="copyButton" data-id="{{$deal->id}}"><i class="fa fa-clone"></i></button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Milestone Summary
@@ -116,14 +121,40 @@
 
     </div>
 </div>
-{{--<script type="text/javascript">--}}
-{{--    function generateURL() {--}}
-{{--        var select = document.querySelector('#service_type');--}}
-{{--        var selectedValue = select.value;--}}
+<script type="text/javascript">
+    function generateURL() {
+        var select = document.querySelector('#service_type');
+        var selectedValue = select.value;
 
-{{--        var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-'));--}}
+        var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-'))+ '/' + <?php echo $deal->id; ?>;
 
-{{--        var generatedLinkContainer = document.getElementById('generatedLinkContainer');--}}
-{{--        generatedLinkContainer.value = url;--}}
-{{--    }--}}
-{{--</script>--}}
+        var generatedLinkContainer = document.getElementById('generatedLinkContainer');
+        generatedLinkContainer.value = url;
+    }
+
+    const selectElement = document.getElementById("service_type");
+    const inputUrl = document.getElementById("inputUrl");
+
+    selectElement.addEventListener("change", function() {
+        if (selectElement.value === "web-content" ||
+            selectElement.value === "blogs-articles" ||
+            selectElement.value === "product-description" ||
+            selectElement.value === "product-category" ||
+            selectElement.value === "basic-seo") {
+            inputUrl.style.display = "block";
+        } else {
+            inputUrl.style.display = "none";
+        }
+    });
+    document.getElementById("copyButton").addEventListener("click", function() {
+        var generatedLink = document.getElementById("generatedLinkContainer").value;
+
+        navigator.clipboard.writeText(generatedLink)
+            .then(function() {
+                alert("Copied: " + generatedLink);
+            })
+            .catch(function(error) {
+                alert("Unable to copy: " + error);
+            });
+    });
+</script>

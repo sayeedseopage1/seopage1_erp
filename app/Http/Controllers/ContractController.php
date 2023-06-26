@@ -771,7 +771,7 @@ class ContractController extends AccountBaseController
     }
     public function storeMilestone(Request $request)
     {
-        //        dd($request->all());
+//                dd($request->all());
         $total_value = $request->input('another_value') * 2;
 
         $project = Project::where('id', $request->project_id)->first();
@@ -801,6 +801,7 @@ class ContractController extends AccountBaseController
             $milestone->milestone_title = $request->title;
             $milestone->project_id = $request->project_id;
             $milestone->milestone_type = $request->milestone_type;
+            $milestone->service_type = $request->service_type;
 
             $milestone->actual_cost =  $request->cost;
             $project = Project::where('id', $request->project_id)->first();
@@ -838,6 +839,7 @@ class ContractController extends AccountBaseController
     }
     public function updateMilestone(Request $request, $id)
     {
+//        dd($request->all());
 
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
@@ -876,6 +878,7 @@ class ContractController extends AccountBaseController
                 $milestone->summary = $request->summary;
                 $milestone->currency_id = 1;
                 $milestone->milestone_type = $request->milestone_type;
+                $milestone->service_type = $request->service_type;
 
                 $milestone->update();
                 return response()->json([
@@ -2143,11 +2146,12 @@ class ContractController extends AccountBaseController
 
         $project = Project::where('deal_id', $request->id)->first();
 
+
         $authorization_bonus_check= Cashpoint::where('project_id',$project->id)->where('user_id',$user_name->id)->where('type','Authorization Bonus')->first();
         if($authorization_bonus_check == null)
         {
             $point= new CashPoint();
-
+            
         $point->user_id= $user_name->id;
         $point->project_id= $project->id;
         $point->activity= '<a style="color:blue" href="'.route('employees.show',$user_name->id).'">'.$user_name->name .
@@ -2169,8 +2173,8 @@ class ContractController extends AccountBaseController
 
 
         }
-        
-        
+
+
         //update authoziation action
         $authorization_action = AuthorizationAction::where([
             'deal_id' => $deal->id,

@@ -68,6 +68,7 @@
                     @csrf
 
                     <!-- Website Link & Niche Starts Here -->
+                    <input type="hidden" name="deal_id" id="deal_id" value="{{$id}}">
                     <div class="row mt-3">
                         <div class="col-md-3">
                             <h6>Website Link & Niche:</h6>
@@ -435,6 +436,7 @@
             'buying_habit2': document.getElementById("buying_habit2").value,
             'buying_habit3': document.getElementById("buying_habit3").value,
             'language': document.getElementById("language").value,
+            'deal_id': {{$id}},
         }
         $.ajaxSetup({
             headers: {

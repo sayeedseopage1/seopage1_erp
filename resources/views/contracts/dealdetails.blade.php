@@ -722,6 +722,7 @@
                         $('#cost').val(response.milestone.actual_cost);
                         CKEDITOR.instances['summary2'].setData(response.milestone.summary);
                         $('#milestone_type').val(response.milestone.milestone_type);
+                        $('#service_type2').val(response.milestone.service_type);
                         $('#milestone_id').val(milestone_id);
                     }
                 }
@@ -736,6 +737,7 @@
                 'cost' : $('#cost').val(),
                 'milestone_type': $('#milestone_type').val(),
                 'original_currency_id': $('#original_currency_id').val(),
+                'service_type': $('#service_type2').val(),
                 'summary' : summary,
             }
             $.ajaxSetup({
@@ -821,11 +823,11 @@
                 'title': $('.title').val(),
                 'cost': $('.cost').val(),
                 'milestone_type': $('.milestone_type').val(),
-
                 'summary': summary,
                 //'project_id': document.querySelector('.project_id').value,
                 'project_id': document.getElementById("project_id").value,
                 'original_currency_id': document.getElementById("original_currency_id").value,
+                'service_type': document.getElementById("service_type").value,
             }
             //console.log(data);
             $.ajaxSetup({
@@ -852,7 +854,10 @@
                         $('#success_message').text(response.message);
                         $('#milestoneaddmodal').modal('hide');
                         $('#milestoneaddmodal').find('input').val("");
-                        document.querySelector('#summary1').value= '';
+                        $('.milestone_type').val('');
+                        CKEDITOR.instances.summary1.setData('');
+                        $('#service_type').val('');
+                        $('#inputUrl').hide();
                         fetchmilestone();
 
                     }

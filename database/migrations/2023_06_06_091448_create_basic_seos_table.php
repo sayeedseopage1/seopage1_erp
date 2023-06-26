@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('basic_seos', function (Blueprint $table) {
             $table->id();
+            $table->integer('deal_id');
             $table->string('owner_name');
             $table->string('business_name');
             $table->string('business_address');

@@ -1323,11 +1323,10 @@ class HomeController extends Controller
         // }
         // dd($groupedData);
     }
-    public function webContent(){
-        return view('service-type.web_content');
+    public function webContent($id){
+        return view('service-type.web_content',compact('id'));
     }
     public function storeWebContent(Request $request){
-//        dd($request->all());
         $data = $request->all();
         $folder_links = json_encode($data['folder_link']);
         $reference_websites = json_encode($data['reference_website']);
@@ -1339,6 +1338,7 @@ class HomeController extends Controller
         $approximate_words = json_encode($data['approximate_word']);
 
         $web_content = new WebContent();
+        $web_content->deal_id = $data['deal_id'];
         $web_content->website_link = $data['website_link'];
         $web_content->website_niche = $data['website_niche'];
         $web_content->website_name = $data['website_name'];
@@ -1370,8 +1370,8 @@ class HomeController extends Controller
 
         return response()->json(['status'=>200]);
     }
-    public function blogArticle(){
-        return view('service-type.blog_article');
+    public function blogArticle($id){
+        return view('service-type.blog_article',compact('id'));
     }
     public function storeBlogArticle(Request $request){
 //dd($request->all());
@@ -1383,6 +1383,7 @@ class HomeController extends Controller
         $keywordLinks = json_encode($data['keyword_link']);
 
         $blog_article= new BlogArticle();
+        $blog_article->deal_id = $data['deal_id'];
         $blog_article->website_link = $data['website_link'];
         $blog_article->website_niche = $data['website_niche'];
         $blog_article->website_name = $data['website_name'];
@@ -1403,8 +1404,8 @@ class HomeController extends Controller
     }
 
 
-    public function productDescription(){
-        return view('service-type.product_description');
+    public function productDescription($id){
+        return view('service-type.product_description',compact('id'));
     }
 
     public function storeProductDescription(Request $request){
@@ -1415,6 +1416,7 @@ class HomeController extends Controller
         $product_lists = json_encode($data['product_list']);
 
         $product_description = new ProductDescription();
+        $product_description->deal_id = $data['deal_id'];
         $product_description->website_link = $data['website_link'];
         $product_description->website_niche = $data['website_niche'];
         $product_description->website_name = $data['website_name'];
@@ -1431,8 +1433,8 @@ class HomeController extends Controller
 
     }
 
-    public function productCategory(){
-        return view('service-type.product_category');
+    public function productCategory($id){
+        return view('service-type.product_category',compact('id'));
     }
     public function storeProductCategory(Request $request){
         $data = $request->all();
@@ -1442,6 +1444,7 @@ class HomeController extends Controller
         $category_lists = json_encode($data['category_list']);
 
         $product_category_collection = new ProductCategoryCollection();
+        $product_category_collection->deal_id = $data['deal_id'];
         $product_category_collection->website_link = $data['website_link'];
         $product_category_collection->website_niche = $data['website_niche'];
         $product_category_collection->website_name = $data['website_name'];
@@ -1456,8 +1459,8 @@ class HomeController extends Controller
 
         return response()->json(['status'=>200]);
     }
-    public function productBasicSeo(){
-        return view('service-type.basic_seo');
+    public function productBasicSeo($id){
+        return view('service-type.basic_seo',compact('id'));
     }
     public function storeProductBasicSeo(Request $request){
 
@@ -1467,6 +1470,7 @@ class HomeController extends Controller
     // ck editor image upload
 
         $basic_seo = new BasicSeo();
+        $basic_seo->deal_id = $request->deal_id;
         $basic_seo->owner_name = $request->owner_name;
         $basic_seo->business_name = $request->business_name;
         $basic_seo->business_address = $request->business_address;

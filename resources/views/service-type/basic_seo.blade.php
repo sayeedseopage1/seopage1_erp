@@ -65,6 +65,7 @@
 
                 <form class="row g-3" action="" method="post" id="storeBasicSEO">
                     @csrf
+                    <input type="hidden" name="deal_id" id="deal_id" value="{{$id}}">
                     <!-- Site Owner's Name -->
                     <div class="row mt-3">
                         <div class="col-md-3">
@@ -387,6 +388,7 @@
             'user_name': document.getElementById("user_name").value,
             'password4': document.getElementById("password4").value,
             'confirmAdding': confirmAdding,
+            'deal_id': {{$id}},
         }
         // console.log(data);
         $.ajaxSetup({
