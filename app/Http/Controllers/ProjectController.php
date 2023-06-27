@@ -1978,7 +1978,13 @@ class ProjectController extends AccountBaseController
         $project->currency_id = 1;
 
         //$project->hours_allocated = 0;
+        if ($request->project_challenge == 'No Challenge') {
         $project->status = 'in progress';
+        }else 
+        {
+            $project->status = 'under review';
+
+        }
         $project->project_status = 'Accepted';
         //$project->added_by= Auth::id();
         $project->last_updated_by = Auth::id();
