@@ -278,7 +278,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                             <td class="border-left-0"><a href="{{route('leads.show',$contract->deal->lead_id)}}">{{ $contract->deal->project_name }}</a>
                             </td>
                         </tr>
-                        @endif   
+                        @endif
                           <tr>
                               <td class="bg-light-grey border-right-0 f-w-500">
                                 Deal Name</td>
@@ -294,7 +294,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                               Project Name</td>
-                             
+
                             <td class="border-left-0"><a href="{{route('projects.show',$project->id)}}">{{ $project->project_name }}</a>
                             </td>
                         </tr>
@@ -660,6 +660,135 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
           <!-- BUDGET VS SPENT END -->
       </div>
       @endif
+    @if($contract->deal->project_type=="hourly")
+    <div class="row mb-4" >
+        <!-- BUDGET VS SPENT START -->
+        <div class="col-4">
+            <x-cards.data class="h-100">
+                <div class="row">
+                    <div class="col">
+                        <h4>Estimated Hours</h4>
+                        <br>
+                        @if($contract->deal->estimated_hour_task)
+                            <p>{{$contract->deal->estimated_hour_task}}</p>
+                        @else
+                            <p>--</p>
+                        @endif
+
+                    </div>
+
+                </div>
+            </x-cards.data>
+        </div>
+        <div class="col-4">
+            <x-cards.data class="h-100">
+                <div class="row">
+                    <div class="col">
+                        <h4>Hourly Rate</h4>
+                        <br>
+                        @if($contract->deal->hourly_rate)
+                            <p>{{$contract->deal->hourly_rate}}</p>
+                        @else
+                            <p>--</p>
+                        @endif
+
+                    </div>
+
+                </div>
+            </x-cards.data>
+        </div>
+        <div class="col-4">
+            <x-cards.data class="h-100">
+                <div class="row">
+                    <div class="col">
+                        <h4>Hub Staff Tracking </h4>
+                        <br>
+                        <p>{{$contract->deal->hubstaff_tracking ==1 ? 'Yes' : 'No'}}</p>
+
+                    </div>
+
+                </div>
+            </x-cards.data>
+        </div>
+        <!-- BUDGET VS SPENT END -->
+    </div>
+
+    <div class="row mb-4" >
+    <!-- BUDGET VS SPENT START -->
+        <div class="col-6">
+            <x-cards.data class="h-100">
+                <div class="row">
+                    <div class="col">
+                        <h4>Expected Tracked Hours on Day 2</h4>
+                        <br>
+                        @if($contract->deal->second_day_tracked_hours)
+                            <p>{{$contract->deal->second_day_tracked_hours}}</p>
+                        @else
+                            <p>--</p>
+                        @endif
+
+                    </div>
+
+                </div>
+            </x-cards.data>
+        </div>
+        <div class="col-6">
+            <x-cards.data class="h-100">
+                <div class="row">
+                    <div class="col">
+                        <h4>Clients Expected Amount of Work Per Hour </h4>
+                        <br>
+                        @if($contract->deal->expect_amount)
+                            <p>{{$contract->deal->expect_amount}}</p>
+                        @else
+                            <p>--</p>
+                        @endif
+
+                    </div>
+
+                </div>
+            </x-cards.data>
+        </div>
+    <!-- BUDGET VS SPENT END -->
+    </div>
+
+    <div class="row mb-4" >
+        <!-- BUDGET VS SPENT START -->
+        <div class="col-6">
+            <x-cards.data class="h-100">
+                <div class="col">
+                    <h4>Expected Tracked Hours on Day 1 </h4>
+                    <br>
+                    @if($contract->deal->tracked_hours)
+                        <p>{{$contract->deal->tracked_hours}}</p>
+                    @else
+                        <p>--</p>
+                    @endif
+
+                </div>
+            </x-cards.data>
+        </div>
+        <div class="col-6">
+            <x-cards.data class="h-100">
+                <div class="row">
+                    <div class="col">
+                        <h4>Clients Expectation About Approx. Hours Needed for the Initial Tasks</h4>
+                        <br>
+                        @if($contract->deal->certain_amount_hour)
+                            <p>{{$contract->deal->certain_amount_hour}}</p>
+                        @else
+                            <p>--</p>
+                        @endif
+
+                    </div>
+
+                </div>
+            </x-cards.data>
+        </div>
+        <!-- BUDGET VS SPENT END -->
+    </div>
+    @endif
+
       <div class="row mb-4" >
           <!-- BUDGET VS SPENT START -->
           <div class="col-md-12">
