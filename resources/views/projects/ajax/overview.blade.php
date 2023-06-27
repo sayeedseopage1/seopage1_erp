@@ -534,7 +534,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
         <!-- PROJECT PROGRESS AND CLIENT END -->
 
         <!--CLIENT REVIEW-->
-        @php
+        {{-- @php
             $client_review = \App\Models\ClientReview::where('project_id',$project->id)->orderBy('id','desc')->first();
         @endphp
         @if($client_review)
@@ -667,7 +667,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
             </div>
-        @endif
+        @endif --}}
         <!--END CLIENT REVIEW-->
         <!-- TASK STATUS AND BUDGET START -->
         <div class="row mb-4"  >
