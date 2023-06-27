@@ -559,6 +559,11 @@
                                         <script>
                                             CKEDITOR.replace('price_authorization');
                                         </script>
+                                        @error('price_authorization')
+                                        <div class="d-block invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -570,6 +575,11 @@
                                         <script>
                                             CKEDITOR.replace('requirment_define');
                                         </script>
+                                        @error('price_authorization')
+                                        <div class="d-block invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -582,6 +592,11 @@
                                         <script>
                                             CKEDITOR.replace('project_deadline_authorization');
                                         </script>
+                                        @error('project_deadline_authorization')
+                                        <div class="d-block invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>

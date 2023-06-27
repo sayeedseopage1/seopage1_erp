@@ -59,7 +59,7 @@ class AuthorizationAction extends Model
                 'approved', 'reject', 'review'
             ],
             'project_qc' => [
-                'approved', 'reject', 'review'
+                'approved', 'reject', 'review', 'modification'
             ],
             'project_completion' => [
                 'approved', 'reject', 'review'
@@ -107,6 +107,10 @@ class AuthorizationAction extends Model
             ],
             'saleslead_price_authorization' => [
 
+                'review'
+
+            ],
+            'saleslead_price_authorization' => [
                 'review'
 
             ]

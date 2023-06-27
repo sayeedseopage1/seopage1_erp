@@ -1320,13 +1320,15 @@ class ContractController extends AccountBaseController
                 $authorization_action->model_name = $deal->getMorphClass();
                 $authorization_action->model_id = $deal->id;
                 $authorization_action->type = 'saleslead_price_authorization';
-                $authorization_action->deal_id = $project_id->id;
+
+                $authorization_action->deal_id = $project_id->deal_id;
+
                 $authorization_action->project_id = $project_id->id;
                 $authorization_action->link = route('authorization_request', $project_id->deal_id);
                 $authorization_action->title = 'Sales Lead Price Authorization';
                 $authorization_action->authorization_for = $user->id;
                 $authorization_action->save();
-               // dd($authorization_action);
+
                 //end authorization action
 
 
@@ -1340,7 +1342,7 @@ class ContractController extends AccountBaseController
                     'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
-           // dd("true");
+
 
             //start authorization action
             $authorization_action = new AuthorizationAction();
@@ -1727,18 +1729,22 @@ class ContractController extends AccountBaseController
                     $authorization_action->model_name = $deal->getMorphClass();
                     $authorization_action->model_id = $deal->id;
                     $authorization_action->type = 'saleslead_price_authorization';
-                    $authorization_action->deal_id = $project_id->id;
+
+                    $authorization_action->deal_id = $project_id->deal_id;
+
                     $authorization_action->project_id = $project_id->id;
                     $authorization_action->link = route('authorization_request', $project_id->deal_id);
                     $authorization_action->title = 'Sales Lead Price Authorization';
                     $authorization_action->authorization_for = $user->id;
                     $authorization_action->save();
-                   // dd($authorization_action);
+
+                    // dd($authorization_action);
                     //end authorization action
-    
-    
+
+
                     Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
-    
+
+
                     $this->triggerPusher('notification-channel', 'notification', [
                         'user_id' => $user->id,
                         'role_id' => $user->role_id,
@@ -1747,8 +1753,7 @@ class ContractController extends AccountBaseController
                         'redirectUrl' => route('deals.show', $project_id->deal_id)
                     ]);
                 }
-               // dd("true");
-    
+
                 //start authorization action
                 $authorization_action = new AuthorizationAction();
                 $authorization_action->model_name = $deal->getMorphClass();
@@ -2172,6 +2177,7 @@ class ContractController extends AccountBaseController
         $request->validate([
             'price_authorization' => 'required',
             'requirment_define' => 'required',
+            'project_deadline_authorization' => 'required'
         ]);
 
         if ($request->denyDeal) {
@@ -2224,14 +2230,23 @@ class ContractController extends AccountBaseController
 
 
         //update authoziation action
+        if ($this->user->role_id == 4) {
+            $type = 'project_manager_accept_project';
+        } else {
+            $type = 'saleslead_price_authorization';
+        }
+
         $authorization_action = AuthorizationAction::where([
             'deal_id' => $deal->id,
             'project_id' => $project->id,
+            'type' => $type,
+            'authorization_for' => $this->user->id,
             'status' => '0'
         ])->first();
 
         if ($authorization_action) {
             $authorization_action->authorization_by = Auth::id();
+            $authorization_action->approved_at = Carbon::now();
             $authorization_action->status = '1';
             $authorization_action->save();
         }
