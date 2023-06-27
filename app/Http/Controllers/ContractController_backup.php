@@ -1042,7 +1042,7 @@ class ContractController extends AccountBaseController
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
-            
+            $project->project_summary = $request->description;
             $project->deadline = $request->deadline;
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
@@ -1272,18 +1272,13 @@ class ContractController extends AccountBaseController
                 'body' => 'You have new project. Please check',
                 'redirectUrl' => route('contracts.show', $deal_pm_id->id)
             ]);
-            if ($deal->project_type == 'fixed') {
-                Mail::to($user->email)->send(new WonDealMail($project_id));
-            }
-           
+            Mail::to($user->email)->send(new WonDealMail($project_id));
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
-            if ($deal->project_type == 'fixed') {
             $users = User::where('role_id', 1)->get();
             foreach ($users as $usr) {
                 Mail::to($usr->email)->send(new WonDealMail($project_id));
             }
-        }
             // $check_new_pm= User::where('id',$deal->pm_id)->first();
             // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
             // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
@@ -1325,13 +1320,15 @@ class ContractController extends AccountBaseController
                 $authorization_action->model_name = $deal->getMorphClass();
                 $authorization_action->model_id = $deal->id;
                 $authorization_action->type = 'saleslead_price_authorization';
+
                 $authorization_action->deal_id = $project_id->deal_id;
+
                 $authorization_action->project_id = $project_id->id;
                 $authorization_action->link = route('authorization_request', $project_id->deal_id);
                 $authorization_action->title = 'Sales Lead Price Authorization';
                 $authorization_action->authorization_for = $user->id;
                 $authorization_action->save();
-
+                dd($authorization_action);
 
                 //end authorization action
 
@@ -1346,7 +1343,7 @@ class ContractController extends AccountBaseController
                     'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
-            // dd("true");
+
 
             //start authorization action
             $authorization_action = new AuthorizationAction();
@@ -1355,7 +1352,7 @@ class ContractController extends AccountBaseController
             $authorization_action->type = 'project_manager_accept_project';
             $authorization_action->deal_id = $project_id->deal_id;
             $authorization_action->project_id = $project_id->id;
-            $authorization_action->link = route('projects.edit', $project_id->id);
+            $authorization_action->link = route('authorization_request', $deal->id);
             $authorization_action->title = 'Project manager accept Project';
             $authorization_action->authorization_for = $project_id->pm_id;
             $authorization_action->save();
@@ -1513,12 +1510,10 @@ class ContractController extends AccountBaseController
             //                dd($deal);
             $deal->save();
 
-           // dd($deal);
-
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
-            
+            $project->project_summary = $request->description;
             $project->deadline = $request->deadline;
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
@@ -1724,10 +1719,9 @@ class ContractController extends AccountBaseController
 
 
 
-                if ($deal->project_type == 'fixed') {
+
                 $user = User::where('id', $deal_pm_id->pm_id)->first();
                 Mail::to($user->email)->send(new WonDealMail($project_id));
-                }
                 $users = User::where('role_id', 8)->get();
 
                 foreach ($users as $key => $user) {
@@ -1736,6 +1730,7 @@ class ContractController extends AccountBaseController
                     $authorization_action->model_name = $deal->getMorphClass();
                     $authorization_action->model_id = $deal->id;
                     $authorization_action->type = 'saleslead_price_authorization';
+
                     $authorization_action->deal_id = $project_id->deal_id;
 
                     $authorization_action->project_id = $project_id->id;
@@ -1743,11 +1738,13 @@ class ContractController extends AccountBaseController
                     $authorization_action->title = 'Sales Lead Price Authorization';
                     $authorization_action->authorization_for = $user->id;
                     $authorization_action->save();
+
                     // dd($authorization_action);
                     //end authorization action
 
 
                     Notification::send($user, new DealAuthorizationSendNotification($deal, Auth::user()));
+
 
                     $this->triggerPusher('notification-channel', 'notification', [
                         'user_id' => $user->id,
@@ -1757,7 +1754,6 @@ class ContractController extends AccountBaseController
                         'redirectUrl' => route('deals.show', $project_id->deal_id)
                     ]);
                 }
-                // dd("true");
 
                 //start authorization action
                 $authorization_action = new AuthorizationAction();
