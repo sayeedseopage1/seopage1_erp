@@ -3829,6 +3829,7 @@ class ProjectController extends AccountBaseController
                 'authorization_for' => $this->user->id,
                 'status' => '0'
             ])->first();
+
             if ($authorization_action) {
                 $authorization_action->description = $request->admin_comment;
                 $authorization_action->authorization_by = $this->user->id;

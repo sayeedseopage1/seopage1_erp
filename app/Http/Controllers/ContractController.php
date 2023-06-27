@@ -2233,7 +2233,6 @@ class ContractController extends AccountBaseController
             $point->save();
         }
 
-
         //update authoziation action
         if ($this->user->role_id == 4) {
             $type = 'project_manager_accept_project';
@@ -2257,7 +2256,7 @@ class ContractController extends AccountBaseController
         }
 
         //end authorization action
-
+        $point= CashPoint::where('project_id',$project->id)->sum('points');
         $qualified_sale_id = QualifiedSale::where('deal_id', $deal->id)->first();
         if ($qualified_sale_id != null) {
             $qualified_sale = QualifiedSale::find($qualified_sale_id->id);
@@ -2265,7 +2264,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->sales_lead_need_define = $request->requirment_define;
             $qualified_sale->sales_lead_price_authorization = $request->price_authorization;
             $qualified_sale->sales_lead_deadline_comment = $request->project_deadline_authorization;
-            $qualified_sale->total_points = $point->points + $qualified_sale->total_points;
+            $qualified_sale->total_points = $point;
             $qualified_sale->sales_lead_id = Auth::id();
             $qualified_sale->save();
         }

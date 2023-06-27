@@ -229,6 +229,7 @@
                 buttonSelector: "#action_mode",
                 url: url,
                 type: 'PUT',
+                //disableButtonText: 'Processing...',
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: id,
@@ -236,10 +237,15 @@
                     method: 'put',
                     mode: mode,
                 },
+                beforeSend: function() {
+                    // Change the button text to 'Processing...' when the request is sent
+                    $('#action_mode').text('Processing...');
+                    $('#action_mode').attr('disabled', 'disabled');
+                },
                 success: function(resp) {
                     if(resp.type == 'redirect') {
                         window.open(resp.url, '_blank');
-                    } elseif(resp.status == 'success') {
+                    } else if(resp.status == 'success' || resp.success == true) {
                         window.location.reload();
                     }
                 }
