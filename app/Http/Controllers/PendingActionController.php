@@ -277,12 +277,12 @@ class PendingActionController extends AccountBaseController
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
-                $project_controller->ProjectAccept($p_request);
+                $project_controller->ProjectDeny($p_request);
 
                 $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
                 $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
+                $authorization_action->status = '2';
                 $authorization_action->save();
 
                 $error = false;

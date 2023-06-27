@@ -83,7 +83,9 @@
                 <div class="row">
                     <div class="col-12 col-lg-9">
                         <h6>{{ $value->title }}</h6>
-
+                        @if(is_null($value->project))
+                        {{dd($value)}}
+                        @endif
                         <p class="sp1_pa_text">
                             @php
                                 $description = '"<a href="'.$value->link.'">'.Str::title(Str::snake(class_basename($value->model_name), ' ')) .'</a> for project <a href="'.route('projects.show', $value->project_id).'">'.$value->project->project_name.'</a> (PM: <a href="'.route('employees.show', $value->project->pm_id).'">'.$value->project->pm->name.'</a>) from Client: <a href="'.route('clients.show', $value->project->client_id).'">'.$value->project->client->name.'</a> needs to be authorized"';
@@ -237,6 +239,8 @@
                 success: function(resp) {
                     if(resp.type == 'redirect') {
                         window.open(resp.url, '_blank');
+                    } elseif(resp.status == 'success') {
+                        window.location.reload();
                     }
                 }
             })

@@ -124,6 +124,10 @@ class AuthorizationAction extends Model
 
 
 
+            ],
+            'saleslead_price_authorization' => [
+                'review'
+
             ]
         ];
 
