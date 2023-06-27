@@ -982,9 +982,10 @@ class ProjectController extends AccountBaseController
                 if($find_deal_id->authorization_status == 1)
                 {
 
-                $team_lead= user::where('role_id',8)->first();
+                $team_lead= User::where('role_id',8)->first();
                 $earned_point= ($project_budget*$kpi->authorized_by_leader)/100;
                 $cash_points_team_lead= Cashpoint::where('user_id',$team_lead->id)->sum('points');
+               // dd($cash_points_team_lead);
                 $point= new CashPoint();
                 $point->user_id= $team_lead->id;
                 $point->project_id= $find_project_id->id;
@@ -998,13 +999,14 @@ class ProjectController extends AccountBaseController
                 $point->type = 'Authorization Bonus';
         
                 if ($cash_points_team_lead != null) {
-                    $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point/100;
+                    $point->total_points_earn=$cash_points_team_lead+ $earned_point/100;
                 } else {
                     $point->total_points_earn= $earned_point/100;
                 }
         
                 $point->save();
             }
+          //  dd($point);
                 // if ($find_deal_id->authorization_status == 1) {
                 //     $earned_point = ($kpi->authorized_by_leader * $project_budget) / 100;
 
@@ -1858,7 +1860,7 @@ class ProjectController extends AccountBaseController
             }
 
         }
-        // dd($find_project_id);
+         //dd($find_project_id);
 
 
 
@@ -1880,16 +1882,19 @@ class ProjectController extends AccountBaseController
                 $qualified_sale->total_points = $total_points;
                 $qualified_sale->save();
             }
-            $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
-            if ($request->project_challenge != 'No Challenge') {
+            // $project->project_challenge = ($request->project_challenge !== '<p><br></p>') ? $request->project_challenge : null;
+            // if ($request->project_challenge != 'No Challenge') {
 
-                $project->status = 'under review';
-                $admin = User::where('role_id', 1)->get();
-                foreach ($admin  as $user) {
+            //     $project->status = 'under review';
+            //     $admin = User::where('role_id', 1)->get();
+            //     foreach ($admin  as $user) {
 
-                    Notification::send($user, new ProjectReviewNotification($project));
-                }
-            }
+            //         Notification::send($user, new ProjectReviewNotification($project));
+            //     }
+            // }
+            $users = User::where('role_id', 1)->get();
+
+           
         }
 
 
@@ -1979,31 +1984,30 @@ class ProjectController extends AccountBaseController
 
         $project->comments = $request->comments;
         $project->save();
+        if ($request->project_challenge != 'No Challenge') {
+            $project_update = Project::find($request->project_id);
+             $project->status = 'under review';
+            $project_update->save();
+ 
+             $authorization_action = new AuthorizationAction();
+             $authorization_action->model_name = $project->getMorphClass();
+             $authorization_action->model_id = $project->id;
+             $authorization_action->type = 'project_challenge';
+             $authorization_action->deal_id = $project_update->deal_id;
+             $authorization_action->project_id = $project_update->id;
+             $authorization_action->link = route('projects.show', $project_update->id);
+             $authorization_action->title = 'Project Challenge Authorization';
+             $authorization_action->authorization_for = 62;
+             $authorization_action->save();
+ 
+             foreach ($users as $user) {
+                 Notification::send($user, new ProjectReviewNotification($project));
+             }
+         }
 
 
         // $this->logProjectActivity($project->id, 'Project accepted by ');
-        $users = User::where('role_id', 1)->get();
-
-        if ($request->project_challenge != 'No Challenge') {
-            $project_update = Project::find($project->id);
-            // $project_update->status = 'under review';
-            $project_update->save();
-
-            $authorization_action = new AuthorizationAction();
-            $authorization_action->model_name = $project_update->getMorphClass();
-            $authorization_action->model_id = $project_update->id;
-            $authorization_action->type = 'project_challenge';
-            $authorization_action->deal_id = $project_update->deal_id;
-            $authorization_action->project_id = $project_update->id;
-            $authorization_action->link = route('projects.show', $project_update->id);
-            $authorization_action->title = 'Project Challenge Authorization';
-            $authorization_action->authorization_for = 62;
-            $authorization_action->save();
-
-            foreach ($users as $user) {
-                Notification::send($user, new ProjectReviewNotification($project));
-            }
-        }
+       
 
         if ($project->project_status != 'Accepted') {
             foreach ($users as $user) {
