@@ -329,7 +329,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
     Route::get('/points/{any?}', [PointsController::class, 'index'])->where('any', '.*')->name('points.index');
     Route::post('/incentives-json/get', [IncentiveController::class, 'index_json'])->name('incentives.json');
+    Route::get('/incentives/disbursed-amounts/disbursed-get', [IncentiveController::class, 'DisbursedAmount'])->name('disbursed-amount');
+    Route::get('/incentives/held-amounts/held-get', [IncentiveController::class, 'HeldAmount'])->name('held-amount');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
+    
+   
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */

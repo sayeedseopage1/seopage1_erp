@@ -195,21 +195,7 @@
                                 </div>
                                 <!--Plugin Research End-->
                              </div>
-<<<<<<< HEAD
-                            <div class="row mb-5" style="display: none;" id="plugin_research_info">
-                                <div class="col-md-4">
-                                    <label for="">Plugin Name</label>
-                                    <input type="text" name="plugin_name" id="plugin_name" class="form-control height-35 f-14" placeholder="Type Plugin Name">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="">Plugin URL</label>
-                                    <input type="url" name="plugin_url" id="plugin_url" class="form-control height-35 f-14" placeholder="Type Plugin Url">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="">Share Google Drive Link</label>
-                                    <input type="url" name="google_drive_link" id="google_drive_link" class="form-control height-35 f-14" placeholder="Type Google link">
-                                </div>
-=======
+
                             <div style="display: none;" id="plugin_research_info">
                                 <div class="row mb-3">
                                     <div class="col-md-4">
@@ -231,7 +217,7 @@
                                         <textarea name="instruction_plugin" id="instruction_plugin" cols="30" rows="5" class="form-control"></textarea>
                                     </div>
                                 </div>
->>>>>>> cf9e604ed97b6c00e6ed9ab73035938251987bc3
+
                             </div>
                             <div class="row mb-5">
                                     <div class="col-md-12">

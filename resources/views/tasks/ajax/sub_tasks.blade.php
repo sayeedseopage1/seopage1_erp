@@ -35,12 +35,12 @@
                                 $working_environments = \App\Models\WorkingEnvironment::where('project_id',$task->project->id)->get();
                             @endphp
                             @if(count($sub_tasks) <1 && count($working_environments) < 1)
-                                {{dd('1')}}
+                                
                                     <a href="{{route('working-environment',['project_id'=>$task->project->id])}}" class="f-15 f-w-500 p-2 mr-3">
                                         <i class="icons icon-plus font-weight-bold mr-1"></i> Add Sub Tasks
                                     </a>
                             @else
-                                {{dd('2')}}
+                               
                                 <a class="f-15 f-w-500" href="javascript:;" id="add-sub-task">
                                     <i class="icons icon-plus font-weight-bold mr-1"></i>@lang('app.add')
                                     @lang('modules.tasks.subTask')

@@ -11,7 +11,18 @@ const incentiveApiSlice = apiSlice.injectEndpoints({
                     _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
                 },
             })
-       }) 
+       }),
+
+
+       getDisbursedAmount: build.query({
+        query: (query) => `/account/incentives/disbursed-amounts/disbursed-get${query}`
+       }),
+
+       getHeldAmount: build.query({
+        query: (query) => `/account/incentives/held-amounts/held-get${query}`
+       }),
+
+       
 
     })
 
@@ -20,6 +31,10 @@ const incentiveApiSlice = apiSlice.injectEndpoints({
 
 
 export const { 
-    useIncentiveCurrentDataMutation
+    useIncentiveCurrentDataMutation,
+    useGetDisbursedAmountQuery,
+    useLazyGetDisbursedAmountQuery,
+    useGetHeldAmountQuery,
+    useLazyGetHeldAmountQuery
  } = incentiveApiSlice;
 

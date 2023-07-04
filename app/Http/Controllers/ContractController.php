@@ -1355,7 +1355,7 @@ class ContractController extends AccountBaseController
             $authorization_action->deal_id = $project_id->deal_id;
             $authorization_action->project_id = $project_id->id;
             $authorization_action->link = route('projects.edit', $project_id->id);
-            $authorization_action->title = 'Project manager accept Project';
+            $authorization_action->title = 'Required action to accept project';
             $authorization_action->authorization_for = $project_id->pm_id;
             $authorization_action->save();
             //end authorization action

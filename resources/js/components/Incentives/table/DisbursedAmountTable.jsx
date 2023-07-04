@@ -4,6 +4,7 @@ import Pagination from './Pagination';
 // import TableFilterButton from './TableFilterButton';
 import { useDrag, useDragLayer, useDrop} from 'react-dnd';
 import { Icon } from '../../Insights/utils/Icon';
+import { useEffect } from 'react';
 
 
 const DataTableContext = React.createContext();
@@ -33,7 +34,7 @@ const useTableState = () => {
 
 
 // data table 
-const DataTable = ({data, defaultColumns, isLoading}) => {
+const DataTable = ({data, defaultColumns, isLoading, pagination=true}) => {
     const [currentPage, setCurrentPage] = React.useState(1)
     const [currentPageData, setCurrentPageData] = React.useState([]);
     const [numberOfRowPerPage, setNumberOfRowPerPage] = React.useState(10);
@@ -56,6 +57,12 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
     React.useEffect(() => {
         currentPage !== 1 ? setCurrentPage(1) : null
     }, [data])
+
+    useEffect(() => {
+        if(!pagination){
+            setCurrentPageData(data)
+        }
+    }, [pagination, data])
 
 
     // config sort
@@ -166,7 +173,9 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                     {/* end table body  */}
                 </div>
             </div>
-        {/* table footer  */}
+
+            {/* table footer  */}
+            {pagination && 
         
             <div className="cnx__table_footer">
                 <div className="__show_entries">
@@ -201,17 +210,17 @@ const DataTable = ({data, defaultColumns, isLoading}) => {
                 />
                 {/* end pagination */}
             </div>
-        
+            }
             {/* end table footer  */}
         </div>
     )
 }
 
 
-const DataTableComponent = ({data, defaultColumns, isLoading}) => {
+const DataTableComponent = ({data, defaultColumns, isLoading, pagination}) => {
     return(
         <ContextProvider>
-           <DataTable data={data} defaultColumns={defaultColumns} isLoading={isLoading} />
+           <DataTable data={data} defaultColumns={defaultColumns} isLoading={isLoading} pagination={pagination} />
         </ContextProvider>
     )
 }

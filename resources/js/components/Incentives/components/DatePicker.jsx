@@ -2,18 +2,29 @@ import React, { useEffect, useState } from 'react'
 import Dropdown from '../../Insights/ui/Dropdown';
 import dayjs from 'dayjs';
 
-const DatePicker = ({startDate, endDate, setStartDate, setEndDate}) => {
+const DatePicker = ({startDate, endDate, setStartDate, setEndDate, subtract}) => {
     const [year,setYear] = useState(dayjs().format('YYYY'));
     const [start, setStart] = useState(dayjs().format('MMM DD, YYYY'));
     const [end, setEnd] = useState(dayjs().format('MMM DD, YYYY'));
 
-    useEffect(()=> {
-        const s = dayjs().startOf('month').format('MMM DD, YYYY');
-        const e = dayjs().endOf('month').format('MMM DD, YYYY');
+    useEffect(()=> { 
+        let s;
+        let e;
+
+        if(subtract){
+            s = dayjs().subtract(subtract, 'month').startOf('month').format('MMM DD, YYYY');
+            e = dayjs().subtract(subtract, 'month').endOf('month').format('MMM DD, YYYY');
+            setEndDate(dayjs().subtract(subtract, 'month').endOf('month').format('YYYY-MM-DD'));
+            setStartDate(dayjs().subtract(subtract, 'month').startOf('month').format('YYYY-MM-DD'));
+        }else{
+            s = dayjs().startOf('month').format('MMM DD, YYYY');
+            e = dayjs().endOf('month').format('MMM DD, YYYY');
+            setEndDate(dayjs().endOf('month').format('YYYY-MM-DD'));
+            setStartDate(dayjs().startOf('month').format('YYYY-MM-DD'));
+        }
+
         setStart(s);
-        setEnd(e);
-        setEndDate(dayjs().endOf('month').format('YYYY-MM-DD'));
-        setStartDate(dayjs().startOf('month').format('YYYY-MM-DD'));
+        setEnd(e);  
     }, [])
 
     const handleDatePick = (start, end) => {

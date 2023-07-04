@@ -746,8 +746,11 @@
                         $('#success_message').addClass('alert alert-success');
                         $('#success_message').text(response.message);
                         $('#milestoneaddmodal').modal('hide');
+                      
                         $('#milestoneaddmodal').find('input').val("");
-                        document.querySelector('#summary2').value= '';
+                        $('.milestone_type').val('');
+                      
+                        CKEDITOR.instances.summary1.setData('');
                         fetchmilestone();
 
                     }

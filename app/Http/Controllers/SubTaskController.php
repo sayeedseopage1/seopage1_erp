@@ -6,12 +6,14 @@ use App\Helper\Reply;
 use App\Http\Requests\SubTask\StoreSubTask;
 use App\Models\SubTask;
 use App\Models\Task;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\TaskUser;
 use App\Helper\Files;
 use App\Models\TaskFile;
 use Validator;
+use App\Models\AuthorizationAction;
 
 class SubTaskController extends AccountBaseController
 {
@@ -154,6 +156,16 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
         $task_s->save();
+        $authorization_action = new AuthorizationAction();
+        $authorization_action->model_name = $task_s->getMorphClass();
+        $authorization_action->model_id = $task_s->id;
+        $authorization_action->type = 'task_assign_by_lead_developer';
+        $authorization_action->deal_id = $task_s->project->deal_id;
+        $authorization_action->project_id = $task_s->project->id;
+        $authorization_action->link = route('tasks.show', $task_s->id);
+        $authorization_action->title = Auth::user()->name . ' assign new task to developer';
+        $authorization_action->authorization_for = $request->user_id ;
+        $authorization_action->save();
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;
         // $task_user->user_id= $request->user_id ? $request->user_id : null;

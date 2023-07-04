@@ -308,4 +308,78 @@ class IncentiveController extends AccountBaseController
     {
         //
     }
+    public function DisbursedAmount(Request $request)
+    {
+       
+        if (isset($request->start_date)) {
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+        }
+
+        if (isset($request->end_date)) {
+            $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        }
+
+        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7) {
+            $userID = Auth::id();
+        } else {
+            $userID = $request->employee_id;
+        }
+
+        $incentive_amount= UserIncentive::where('user_id',$userID)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->first();
+        if ($incentive_amount != null) {
+            $data['total_disbursed_amount_during_this_period']= $incentive_amount->final_payable_incentive_amount;
+            $data['month']= $incentive_amount->month;
+            $data['earned_points']= $incentive_amount->user_point_after_deduction;
+            $data['total_points']= $incentive_amount->shift_achieved_points;
+            $data['disbursed_Amount']= $incentive_amount->final_payable_incentive_amount;
+            $data['held_amount']= $incentive_amount->incentive_held_amount;
+
+
+        }else {
+            $data = [];
+        }
+       
+    //    / dd($data);
+        return response()->json($data);
+
+
+
+    }
+
+
+    public function HeldAmount(Request $request)
+    {
+       
+        if (isset($request->start_date)) {
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+        }
+
+        if (isset($request->end_date)) {
+            $end_date = Carbon::parse($request->end_date)->format('Y-m-d');
+        }
+
+        if (Auth::user()->role_id == 8 || Auth::user()->role_id == 7) {
+            $userID = Auth::id();
+        } else {
+            $userID = $request->employee_id;
+        }
+
+        $incentive_amount= UserIncentive::where('user_id',$userID)->whereBetween('month', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->first();
+        if ($incentive_amount != null) {
+            $data['total_held_amount_during_this_period']= $incentive_amount->incentive_held_amount;
+            $data['month']= $incentive_amount->month;
+            $data['earned_points']= $incentive_amount->user_point_after_deduction;
+            $data['total_points']= $incentive_amount->shift_achieved_points;
+            $data['disbursed_Amount']= $incentive_amount->final_payable_incentive_amount;
+            $data['held_amount']= $incentive_amount->incentive_held_amount;
+
+
+        }else {
+            $data = [];
+        }
+       
+    //    / dd($data);
+        return response()->json($data); 
+
+    }
 }
