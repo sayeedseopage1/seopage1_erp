@@ -122,7 +122,7 @@ const taskWiseTableConfig = {
 // log table
 const TimeLogTable = () => {
     const [loading, setLoading] = React.useState(true);
-    const [activeTab, setActiveTab] = React.useState("Project Wise");
+    const [activeTab, setActiveTab] = React.useState("Employee Wise");
     const [employeeSessionModal, setEmployeeSessionModal] = React.useState({
         isOpen: false,
         employeeID: 0,
@@ -192,14 +192,14 @@ const TimeLogTable = () => {
                 <Tab>Export</Tab>
             </Tabs>
             {
-            // activeTab === "Employee Wise" ? (
-            //     <EmployeeWiseTable
-            //         open={openEmployeeSession}
-            //         close={closeEmployeeSession}
-            //         columns={employeeWiseTableConfig.columns}
-            //         subColumns={employeeWiseTableConfig.subColumns}
-            //     />
-            // ) : 
+            activeTab === "Employee Wise" ? (
+                <EmployeeWiseTable
+                    open={openEmployeeSession}
+                    close={closeEmployeeSession}
+                    columns={employeeWiseTableConfig.columns}
+                    subColumns={employeeWiseTableConfig.subColumns}
+                />
+            ) : 
             activeTab === "Project Wise" ? (
                 <ProjectWiseTable
                     open={openEmployeeSession}
