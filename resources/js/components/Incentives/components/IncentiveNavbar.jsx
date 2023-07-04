@@ -18,7 +18,7 @@ const IncentiveNavbar = () => {
         {
             id: 'incentive_navbar_item_3',
             name: 'Held amounts',
-            url: '/hold-amounts'
+            url: '/held-amounts'
         },
         // {
         //     id: 'incentive_navbar_item_4',

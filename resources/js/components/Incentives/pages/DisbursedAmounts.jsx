@@ -1,13 +1,25 @@
 import * as React from 'react'
 import IncentiveNavbar from '../components/IncentiveNavbar'
 import DataTable from '../table/DisbursedAmountTable';
+import FilterBar from '../components/FilterBar';
+import { useLazyGetDisbursedAmountQuery } from '../../services/api/IncentiveApiSlice';
+import _ from 'lodash';
+import dayjs from 'dayjs';
+
 
 
 const DisbursedAmounts = () => {
     const [period, setPeriod]  = React.useState("Monthly");
     const [dataShowFor, setDataShowFor] = React.useState("Shift");
- 
-
+    const [data, setData] = React.useState([]);
+    const [firstLoading, setFirstLoading] = React.useState(true);
+    const [tableDataIsFetching, setTableDataIsFetching] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(true);
+    
+    const [
+        getDisbursedAmount,
+        {isFetching}
+    ] = useLazyGetDisbursedAmountQuery();
 
     const handleDataShowFor = (e, type) => {
         e.preventDefault(); 
@@ -15,13 +27,42 @@ const DisbursedAmounts = () => {
     }
 
 
+    const handleDataRequest = (filter) => {
+       const query = {
+        employee_id: filter?.employee_id,
+        start_date: filter?._startDate,
+        end_date: filter?._endDate
+       }
+
+       let queryString = new URLSearchParams(query);
+
+       // fetch data
+       getDisbursedAmount(`?${queryString.toString()}`).unwrap().then(res => {
+        if(!_.isArray(res)){
+            let r = {...res}
+            r.id = 1; 
+            setData([r]);
+        }else{
+            setData([]);
+        }
+       }).catch(err => {
+        console.log(err)
+       }).finally(() => {
+        setIsLoading(false);
+       })
+
+    }
+ 
+
     return (
+       <>
+        <FilterBar handleDataRequest={handleDataRequest} /> 
         <div className='sp1_point_page_container'>
             <IncentiveNavbar />
 
             <main className="sp1_point_page_main">
                 
-                <section className="sp1__incentive_item_container">
+                {/* <section className="sp1__incentive_item_container">
                 <div className='d-flex align-items-center'>
                     <div className="d-flex align-items-center px-2 py-2 rounded" style={{background: 'rgba(29, 130, 245, 0.1)' }}> 
                         <div 
@@ -50,22 +91,23 @@ const DisbursedAmounts = () => {
                             onClick={(e) => handleDataShowFor(e, "Team")}>Team</div> 
                     </div>
                 </div> 
-                </section>
+                </section> */}
                 
                 <section className='border-top'>
                     <div className='d-flex align-items-center justify-content-center font-weight-bold py-3'>
-                        <h4> Total disbursed amount during this period: 50000 Tk</h4>
+                        <h4> Total disbursed amount during this period: {data[0]?.total_disbursed_amount_during_this_period} BDT</h4>
                     </div>
                 <DataTable
-                        data={[]}
-                        isLoading={false}
+                        data={data}
+                        isLoading={isFetching || isLoading}
+                        pagination={false}
                         defaultColumns={[
                             {
                                 header: 'Month',
                                 accessor: 'month',
                                 id: 'month',
                                 cell: (row) => {
-                                    return <span>Month</span>
+                                    return <span>{dayjs(row?.month).format('MMM DD, YYYY')}</span>
                                 } 
                             },
                             {
@@ -73,7 +115,7 @@ const DisbursedAmounts = () => {
                                 accessor: "earned_points",
                                 id: "earned_points",
                                 cell: (row) => {
-                                    return <span>Earned Points</span>
+                                    return <span>{row?.earned_points}</span>
                                 }
                             },
                             {
@@ -81,7 +123,7 @@ const DisbursedAmounts = () => {
                                 accessor: "total_points",
                                 id: "total_points",
                                 cell: (row) => {
-                                    return <span>89239</span>
+                                    return <span>{row?.total_points}</span>
                                 }
                             },
                             {
@@ -89,7 +131,7 @@ const DisbursedAmounts = () => {
                                 accessor: "disbursed_amount",
                                 id: "disbursed_amount",
                                 cell: (row) => {
-                                    return <span>12313 BDT</span>
+                                    return <span>BDT {row?.disbursed_Amount}</span>
                                 }
                             },
                             {
@@ -97,14 +139,15 @@ const DisbursedAmounts = () => {
                                 accessor: "held_amount",
                                 id: "held_amount",
                                 cell: (row) => {
-                                    return <span>12313 BDT</span>
+                                    return <span>BDT {row?.held_amount}</span>
                                 }
                             }
                         ]}
                     />
                 </section>
             </main>
-        </div>
+        </div>  
+       </> 
     )
 }
 

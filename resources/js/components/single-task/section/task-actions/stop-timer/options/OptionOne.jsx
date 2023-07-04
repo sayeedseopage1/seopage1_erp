@@ -11,7 +11,9 @@ const OptionOne = () => {
 
 
     const handleOnChange = e => { 
+        console.log(e.target.checked)
         e.preventDefault();
+        setChecked(e.target.checked)
     }
 
     const handleOnClick = e => {
@@ -25,8 +27,6 @@ const OptionOne = () => {
             <div className='d-flex align-items-center' style={{gap: '10px'}}>
                 <input 
                     type='radio' 
-                    checked={checked} 
-                    onClick={handleOnClick}
                     name='confiramtion_time_stop' 
                     style={{cursor: 'pointer'}} 
                     onChange={handleOnChange}
@@ -62,7 +62,7 @@ const OptionOne = () => {
     
                                 <div className='mt-3'>
                                     <h6>Write your comments here.</h6> 
-                                    <div className='ck-editor-holder'>
+                                    <div className='ck-editor-holder' style={{width: '350px'}}>
                                         <CKEditorComponent />
                                     </div> 
                                 </div>

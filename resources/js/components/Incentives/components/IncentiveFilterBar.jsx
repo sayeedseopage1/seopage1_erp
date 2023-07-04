@@ -61,7 +61,7 @@ export default function CashPointsFilter ({
                 setFilterState(data)
             )
         }
-    }, [data, isFetching])
+    }, [isFetching])
 
     // table data
     const [
@@ -196,13 +196,6 @@ export default function CashPointsFilter ({
     return (
         <div className='sp1__pp_filter_bar'>
             <FilterItem>
-                {/* <JqueryDateRangePicker
-                    startDate={startDate}
-                    endDate={endDate}
-                    setStartDate={setStartDate}
-                    setEndDate={setEndDate}
-                    defaultSelectedType={defaultSelectedDate}
-                /> */}
                 <DatePicker
                     startDate={startDate}
                     endDate={endDate}

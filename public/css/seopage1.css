@@ -861,6 +861,7 @@
 .sp1_single_task--modal-body {
   height: 100%;
   max-height: 80vh;
+  overflow: hidden;
   overflow-y: auto;
 }
 
