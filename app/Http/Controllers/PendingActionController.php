@@ -261,7 +261,7 @@ class PendingActionController extends AccountBaseController
                 $p_request->authorization_form = 'authorization_action';
 
                 $project_controller = new ProjectController();
-                dd($project_controller->ProjectAccept($p_request));
+                $project_controller->ProjectAccept($p_request);
 
                 $authorization_action->description = $request->description;
                 $authorization_action->authorization_by = $this->user->id;
