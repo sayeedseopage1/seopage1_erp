@@ -606,6 +606,7 @@
     background-color: #f0f0f0;
 }
 
+
 .cnx_ins__sidebar_header_dd_item {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -2177,3 +2178,51 @@
     width: 14px;
     height: 14px;
 }
+
+
+
+/* goal filter */
+.cnx_ins__sidebar_dashboards_dd_btn i.fa-user-group{
+    font-size: 13px;
+    color: #393844;
+}
+
+.cnx_ins__sidebar_dashboards_dd_btn span.__goal-date-filter{
+    font-size: 13px;
+    color: #393844;
+}
+
+
+.cnx_ins__sidebar_dashboards_dd_btn.active i.fa-user-group,
+.cnx_ins__sidebar_dashboards_dd_btn.active span.__goal-date-filter{
+    color: var(--header_color);
+}
+
+
+.cnx_ins--goal-filter-dd-menu{
+    font-size: 13x;
+    width: 250px;
+}
+.cnx_ins--goal-filter-dd-menu--options{ 
+    max-height: 350px;
+    overflow-y: auto;
+}
+.goal-filter--dd-list{
+    padding: 4px 6px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.goal-filter--dd-list:hover{
+    background-color: rgba(97, 119, 214, 0.1) !important;
+    color: #000;
+    border-radius: 4px;
+}
+
+.goal-filter--dd-list.selected{
+    background-color: var(--header_color) !important;
+    color: #fff;
+    border-radius: 4px;
+}
+
+/* end goal filter */

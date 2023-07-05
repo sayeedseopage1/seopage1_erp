@@ -6,6 +6,7 @@ use App\Helper\Reply;
 use App\Http\Requests\SubTask\StoreSubTask;
 use App\Models\SubTask;
 use App\Models\Task;
+use App\Models\User;
 use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -162,10 +163,24 @@ class SubTaskController extends AccountBaseController
         $authorization_action->type = 'task_assign_by_lead_developer';
         $authorization_action->deal_id = $task_s->project->deal_id;
         $authorization_action->project_id = $task_s->project->id;
+        $authorization_action->task_id = $task_s->id;
         $authorization_action->link = route('tasks.show', $task_s->id);
         $authorization_action->title = Auth::user()->name . ' assign new task to developer';
         $authorization_action->authorization_for = $request->user_id ;
         $authorization_action->save();
+
+        $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
+        //dd($parent_task_authorization);
+        if($parent_task_authorization->status == 0)
+        {
+            $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
+            $task_authorization= AuthorizationAction::find($parent_task_authorization->id);
+            $task_authorization->authorization_by=  $lead_developer->id;
+            $task_authorization->status = '1';
+            $task_authorization->save();
+
+        }
+      
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;
         // $task_user->user_id= $request->user_id ? $request->user_id : null;

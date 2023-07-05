@@ -84,7 +84,7 @@
                     <div class="col-12 col-lg-9">
                         <h6>{{ $value->title }}</h6>
                         @if(is_null($value->project))
-                        {{dd($value)}}
+                        
                         @endif
                         <p class="sp1_pa_text">
                             @php
@@ -195,7 +195,7 @@
                     <input type="hidden" id="pending_action_id" name="id" value="">
                     <input type="hidden" class="action_mode" name="mode" value="">
                     <div class="card">
-                        <div class="card-body" id="peinding_action_description"></div>
+                        <div class="card-body" id="pending_action_description"></div>
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Message:</label>
@@ -205,7 +205,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="action_mode"></button>
+                <button type="button" class="btn btn-primary" id="action_mode">Submit</button>
             </div>
         </div>
     </div>
@@ -244,6 +244,7 @@
                 },
                 success: function(resp) {
                     if(resp.type == 'redirect') {
+                        $('#pending_action_description').html('');
                         window.open(resp.url, '_blank');
                     } else if(resp.status == 'success' || resp.success == true) {
                         window.location.reload();
@@ -256,7 +257,7 @@
             e.preventDefault();
             $('#pending_action_id').val($(this).data('id'));
             $('#pending_aciton_title').text($(this).data('title'));
-            $('#peinding_action_description').html($(this).data('description'));
+            $('#pending_action_description').html($(this).data('description'));
             $('#action_mode').text($(this).data('mode'));
             $('.action_mode').val($(this).data('mode'));
             $('#pending_action_comment_modal').modal('show');

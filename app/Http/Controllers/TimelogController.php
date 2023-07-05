@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\AuthorizationAction;
 class TimelogController extends AccountBaseController
 {
 
@@ -116,13 +116,13 @@ class TimelogController extends AccountBaseController
 
     public function store(StoreTimeLog $request)
     {
-        //  dd($request);
+      
         $startDateTime = Carbon::createFromFormat($this->global->date_format, $request->start_date, $this->global->timezone)->format('Y-m-d') . ' ' . Carbon::createFromFormat($this->global->time_format, $request->start_time)->format('H:i:s');
         $startDateTime = Carbon::parse($startDateTime, $this->global->timezone)->setTimezone('UTC');
 
         $endDateTime = Carbon::createFromFormat($this->global->date_format, $request->end_date, $this->global->timezone)->format('Y-m-d') . ' ' . Carbon::createFromFormat($this->global->time_format, $request->end_time)->format('H:i:s');
         $endDateTime = Carbon::parse($endDateTime, $this->global->timezone)->setTimezone('UTC');
-
+       
         $timeLog = new ProjectTimeLog();
 
         if ($request->has('project_id')) {
@@ -350,11 +350,20 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(StartTimer $request)
     {
-
+    //    / DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
+        $authorization_action = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_assign_by_lead_developer')->first();
+           
+            if ($authorization_action != null && $authorization_action->status == 0) {
+                $authorization= AuthorizationAction::find($authorization_action->id);
+                $authorization->status = '1';
+                $authorization->authorization_by= $authorization_action->authorization_for;
+                $authorization->save();
+        //   dd($authorization);
+            }
         $timeLog = new ProjectTimeLog();
 
         $activeTimer = ProjectTimeLog::with('user')
@@ -392,24 +401,23 @@ class TimelogController extends AccountBaseController
             $timeLog->hourly_rate = 0;
             $timeLog->memo = $request->memo;
             $timeLog->save();
+        //   /  dd($timeLog);
+            
 
-            if ($request->project_id != '') {
-                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
-            } else {
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
-            }
-
-            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
-
-            return Reply::success([
-                'status' => 'success',
-                'message' => 'task timer started',
-                'id' => $timeLog->id
-            ]);
+        if ($request->project_id != '') {
+            //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+            $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+        }
+        else {
+            $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
         }
 
-        return Reply::error(__('messages.timerAlreadyRunning'));
+        $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+
+        return Reply::success(__('messages.timerStartedSuccessfully'));
+    }
+
+    return Reply::error(__('messages.timerAlreadyRunning'));
     }
 
     public function stopTimer(Request $request)

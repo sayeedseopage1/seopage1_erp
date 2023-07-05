@@ -1,7 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import axios from 'axios';
 import * as React from 'react';
-import { useGetGoalsQuery, useUpdateGoalMutation, usePrefetch, useAddGoalMutation, useLazyGetGoalsQuery } from "../services/api/goalsApiSlice";
+import { useUpdateGoalMutation, useAddGoalMutation, useLazyGetGoalsQuery } from "../services/api/goalsApiSlice";
 import { getPeriod } from "../utils/getPeriod";
 import dayjs from 'dayjs';
 import _ from "lodash";
@@ -11,9 +9,7 @@ export const useGoals = () => {
     const [goals, setGoals] = React.useState({
         goals: [],
         recurring: []
-    });
-    const dispatch = useDispatch();
-
+    }); 
 
     const [
         addGoal,
@@ -50,59 +46,39 @@ export const useGoals = () => {
 
 
     const handleGoalsState = (goalsData) => {
-        if(goalsData && goalsIsSuccess){
+ 
+        if(goalsData && !goalsIsFetching){
             const newGoals = [];
             const newRecurring = [];
-
-            
-            goalsData?.goals?.map(goal => {
-                if(_.isArray(goal)){
-                    newGoals.push(...goal);
-                }else{
-                    newGoals.push(goal)
-                }
-            
+ 
+            goalsData?.goals?.map(goal => {   
+                _.isArray(goal) ? newGoals.push(...goal) : newGoals.push(goal)
             })
 
             goalsData?.recurring?.map(r => {
-                if(_.isArray(r)){
-                    newRecurring.push(...r);
-                }else{
-                    newRecurring.push(r)
-                }
-            })
-
+                 _.isArray(r) ? newRecurring.push(...r) : newRecurring.push(r) 
+            }) 
             setGoals({
                 goals: newGoals,
                 recurring: newRecurring
             })
         }
     }
-    
-    const _goalsData = React.useMemo(() => 
-        handleGoalsState(goalsData)
-    , [goalsData])
 
 
-    React.useEffect(() => { 
-        (async() => {
-            try{ 
-                const goalsData = await getGoalsData(window?.Laravel?.user?.id).unwrap(); 
-                handleGoalsState(goalsData);
-            }catch(err){
-                console.log(err)
-            }
-        })();  
-    }, [])
-
-  
-
-    React.useEffect(() => {
-        handleGoalsState(goalsData)
-    }, [_goalsData])
-
-
-
+    // fetch goals data
+    const fetchGoals = (filter) => {
+        let userId = window?.Laravel?.user?.id;
+        let query = new URLSearchParams(filter).toString();
+        getGoalsData(`${userId}?${query}`)
+        .unwrap()
+        .then(res => {
+            if(res){  handleGoalsState(res); }
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
 
  
@@ -590,6 +566,7 @@ export const useGoals = () => {
 
     return {
         goals,
+        fetchGoals,
         goalsIsLoading,
         goalsIsSuccess,
         goalsIsFetching,

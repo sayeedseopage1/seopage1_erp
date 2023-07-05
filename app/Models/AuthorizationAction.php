@@ -68,7 +68,7 @@ class AuthorizationAction extends Model
                 'approved', 'review'
             ],
             'milestone_cancel' => [
-                'approved', 'review', 'review'
+                'approved', 'review'
             ],
             'deliverable_modification_by_top_managment' => [
                 'approved', 'review'
@@ -99,10 +99,10 @@ class AuthorizationAction extends Model
                 'approved', 'review'
             ],
             'task_assigned_on_lead_developer' => [
-                'approved', 'review'
+                 'review'
             ],
             'task_assign_by_lead_developer' => [
-                'approved','review'
+                'review'
             ],
            
             'award_time_extension' => [
