@@ -226,7 +226,64 @@ class InsightsController extends AccountBaseController
     }
 }
 
-    public function getGoal($id)
+    // public function getGoal($id)
+    // {
+    //     $user= User::where('id',$id)->first();
+
+    //     if(Auth::user()->id == $user->id)
+    //     {
+    //         $goal= GoalSetting::where('user_id',$user->id)->get();
+    //         //dd($goal);
+                    
+
+    //         $goal_recurring= GoalRecurring::all();
+    //     //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+
+    //     }
+
+
+    //     if($user->role_id == 1 || $user->role_id == 8)
+    //     {
+
+
+    //         $goal = GoalSetting::all();
+    //         $goal_recurring= GoalRecurring::all();
+           
+    //         // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+    //     } 
+    //     elseif($user->role_id != 1 || $user->role_id != 8) {
+    //         $count = Seopage1Team::
+    //         whereRaw("FIND_IN_SET(?, members)", [$user->id])
+    //         ->get();
+           
+           
+    //         //$teams= Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->get();
+    //        // dd($user->id);
+
+    //         if ($count != null)  {
+
+    //             foreach($count as $team)
+    //             {
+                    
+    //                 $goal[]= GoalSetting::where('team_id',$team->id)->get();
+                        
+
+    //             $goal_recurring[]= GoalRecurring::all();
+              
+
+    //             }
+               
+                
+    //         } 
+    // //    /dd($goal);
+           
+    //     }
+    //     return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+        
+        
+    //     }
+   
+    public function getGoal(Request $request,$id)
     {
         $user= User::where('id',$id)->first();
 
@@ -234,7 +291,7 @@ class InsightsController extends AccountBaseController
         {
             $goal= GoalSetting::where('user_id',$user->id)->get();
             //dd($goal);
-                    
+
 
             $goal_recurring= GoalRecurring::all();
         //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
@@ -245,18 +302,30 @@ class InsightsController extends AccountBaseController
         if($user->role_id == 1 || $user->role_id == 8)
         {
 
+            if($request->start_date != null && $request->end_date != null)
+            {
+                if($request->shift_id != 'null')
+                {
+                    $goal = GoalSetting::whereDate('startDate','>=',$request->start_date)->whereDate('endDate','<=',$request->end_date)->where('team_id',$request->shift_id)->get();
 
-            $goal = GoalSetting::all();
+                }else
+                {
+                    $goal = GoalSetting::whereDate('startDate','>=',$request->start_date)->whereDate('endDate','<=',$request->end_date)->get();
+                }
+
+
+            }
+           // $goal = GoalSetting::all();
             $goal_recurring= GoalRecurring::all();
-           
+
             // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        } 
+        }
         elseif($user->role_id != 1 || $user->role_id != 8) {
             $count = Seopage1Team::
             whereRaw("FIND_IN_SET(?, members)", [$user->id])
             ->get();
-           
-           
+
+
             //$teams= Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->get();
            // dd($user->id);
 
@@ -264,25 +333,24 @@ class InsightsController extends AccountBaseController
 
                 foreach($count as $team)
                 {
-                    
+
                     $goal[]= GoalSetting::where('team_id',$team->id)->get();
-                        
+
 
                 $goal_recurring[]= GoalRecurring::all();
-              
+
 
                 }
-               
-                
-            } 
+
+
+            }
     //    /dd($goal);
-           
+
         }
         return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        
-        
+
+
         }
-    
 
 
     /**

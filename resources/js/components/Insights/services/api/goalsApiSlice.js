@@ -5,8 +5,13 @@ import { apiSlice } from "./apiSlice";
 const goalApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         
+        // getGoals: build.query({
+        //     query: (user_id) => `/account/insights/goals/get/${user_id}`,
+        //     providesTags: (result) => [{ type: 'Goal', id: 'LIST' }],
+        // }),
+
         getGoals: build.query({
-            query: (user_id) => `/account/insights/goals/get/${user_id}`,
+            query: (query) => `/account/insights/goals/get/${query}`,
             providesTags: (result) => [{ type: 'Goal', id: 'LIST' }],
         }),
 

@@ -18,7 +18,8 @@ import { useDashboards } from '../hooks/useDashboards';
 import { useGoals } from '../hooks/useGoals';
 import dayjs from 'dayjs';
 import { CompareDate } from '../utils/dateController';
-import SidebarItems from './SidebarItems';
+import SidebarItems from './SidebarItems'; 
+import { useTeams } from '../hooks/useTeams';
 
 
 
@@ -26,6 +27,7 @@ import SidebarItems from './SidebarItems';
 const InsightSidebar = () => {
     const [search, setSearch] = React.useState('');
     const {sections, getSectionsByType}  = useSections();
+    const { teams } = useTeams();
     const {dashboards} = useDashboards();
     const [filteredGoals, setFilteredGoals] = React.useState({active: [], past: []});
     const {reports} = useSelector((state) => state.reports);
@@ -35,14 +37,17 @@ const InsightSidebar = () => {
     });
     const dispatch = useDispatch();
     const compareDate = new CompareDate();
-    const {goals:__goals, goalsIsFetching} = useGoals();
+    const {goals:__goals, fetchGoals, goalsIsFetching} = useGoals();
+
+    // filter items 
+    const [selectedTeam, setSelectedTeam] = React.useState(null);
+    const [selectedMonth, setSelectedMonth] = React.useState(null);
+    const [selectedYear, setSelectedYear] = React.useState(2023);
     
 
 
     React.useEffect(() => {
-        // check if goals and __goals are not equal
-        
-
+        // check if goals and __goals are not equal  
         setGoals({...__goals})
     }, [__goals,  goalsIsFetching])
 
@@ -53,7 +58,8 @@ const InsightSidebar = () => {
             past: []
         };
 
-
+         
+ 
         if(goals?.goals && goals?.goals?.length > 0){
             let _goals = goals?.goals?.map((goal) => {
                 let title = goal?.title;
@@ -90,6 +96,65 @@ const InsightSidebar = () => {
     }
 
 
+    // get date
+    const getMonth = (index, year) => ({
+        name: dayjs().year(year).month(index).format('MMMM'),
+        short_name: dayjs().year(year).month(index).format('MMM'),
+        start: dayjs().year(year).month(index).startOf('month').format('YYYY-MM-DD'),
+        end: dayjs().year(year).month(index).endOf('month').format('YYYY-MM-DD'),
+        duration: function(){ return `${this.start.format('MMM DD, YYYY')} - ${this.end.format('MMM DD, YYYY')}`},  
+    }) 
+
+    React.useEffect(() => {
+        let month = {
+            name: dayjs().format('MMMM'),
+            short_name: dayjs().format('MMM'),
+            start: dayjs().subtract(1, 'month').startOf('month').format('YYYY-MM-DD'),
+            end: dayjs().endOf('month').format('YYYY-MM-DD'),
+            duration: function(){ 
+                return `${this.start.format('MMM DD, YYYY')} - ${this.end.format('MMM DD, YYYY')}`
+            },  
+        }
+
+        let filter = {
+            start_date: month.start,
+            end_date: month.end,
+            shift_id: selectedTeam?.id || null
+        } 
+         
+        setSelectedMonth(month);
+        fetchGoals(filter);
+    }, [])
+
+
+    // handle goal month filter 
+    const handleGoalMonthFilter = (month) => {
+        setSelectedMonth(month);
+
+        let filter = {
+            start_date: month.start,
+            end_date: month.end,
+            shift_id: selectedTeam?.id || null
+        } 
+  
+        fetchGoals(filter);
+    }
+
+    // handle goal month filter 
+    const handleGoalShiftFilter = (team) => { 
+        setSelectedTeam(team);
+        const month = selectedMonth;
+
+        let filter = {
+            start_date: month?.start,
+            end_date: month?.end,
+            shift_id: team?.id || null
+        } 
+ 
+        fetchGoals(filter);
+    }
+ 
+ 
     return(
         <aside className='cnx_ins__sidebar'> 
 
@@ -269,26 +334,109 @@ const InsightSidebar = () => {
                                     </div>}
                                 </Accordion.Item.Header>
 
-                                <Dropdown className='cnx_ins__sidebar_dashboards_dd'>
-                                        <Dropdown.Toggle icon={false}>
-                                            <Button aria-label="GoalAddButton" className='cnx_ins__sidebar_dashboards_dd_btn'>
-                                                <i className="fa-solid fa-ellipsis-h" />
-                                            </Button>
-                                        </Dropdown.Toggle>
+                                {/* goal filter options */}
+                                
+                                {/* date filter */}
+                                <Dropdown className='cnx_ins--goal-filter-dd mr-2'>
+                                    <Dropdown.Toggle icon={false} className="cnx_ins--goal-filter-dd-toggle">
+                                        <Button 
+                                            aria-label="GoalAddButton"  
+                                            className='cnx_ins__sidebar_dashboards_dd_btn' 
+                                        >
+                                            <span className='__goal-date-filter'>
+                                                {selectedMonth?.short_name}
+                                            </span>
+                                        </Button> 
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="cnx_ins--goal-filter-dd-menu">
+                                        <div className='d-flex align-items-center justify-content-between'>
+                                            <Button 
+                                                aria-label="GoalAddButton"  
+                                                className='cnx_ins__sidebar_dashboards_dd_btn px-2' 
+                                                onClick={() => setSelectedYear(prevState => prevState - 1)}
+                                            >
+                                                <span className='__goal-date-filter'> 
+                                                    <i className='fa-solid fa-chevron-left' />  
+                                                </span>
+                                            </Button> 
 
-                                        <Dropdown.Menu className="cnx_ins__sidebar_header_dd">
-                                            <Dropdown.Item onClick={() => dispatch(openGoalModal())} className="cnx_ins__sidebar_header_dd_item">
-                                                <Icon type="Goal" />
-                                                <span>Goals</span>
-                                            </Dropdown.Item>
-                                        
-                                            <div className='cnx_divider'/>
-                                            {/* <Dropdown.Item className="cnx_ins__sidebar_header_dd_item disabled">
-                                                <i className="fa-solid fa-trash-can cnx_font_sm" />
-                                                <span>Bulk delete goal</span>
-                                            </Dropdown.Item> */}
-                                        </Dropdown.Menu>
+
+                                            <div className='w-100 text-center'> {selectedYear} </div>
+                                            
+                                            <Button 
+                                                aria-label="GoalAddButton"  
+                                                className='cnx_ins__sidebar_dashboards_dd_btn px-2' 
+                                                onClick={() => setSelectedYear(prevState => prevState + 1)}
+                                            >
+                                                <span className='__goal-date-filter'> 
+                                                    <i className='fa-solid fa-chevron-right' />  
+                                                </span>
+                                            </Button> 
+                                        </div>
+                                        <div className='cnx_ins--goal-filter-dd-menu--options'>
+                                        {
+                                            [...Array(12)].map((_, i) => (
+                                                    <Dropdown.Item
+                                                        key={getMonth(i, selectedYear).name}  
+                                                        onClick={() => handleGoalMonthFilter(getMonth(i, selectedYear))}
+                                                        className={selectedMonth?.name === getMonth(i, selectedYear).name ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
+                                                    >  
+                                                        {getMonth(i, selectedYear).name}  
+                                                    </Dropdown.Item>
+                                                )) 
+                                        }
+                                        </div>
+                                    </Dropdown.Menu>
                                 </Dropdown>
+                                {/* end date filter */}
+
+                                {/* team filter */}
+                                <Dropdown className='cnx_ins--goal-filter-dd mr-2'>
+                                    <Dropdown.Toggle icon={false} className="cnx_ins--goal-filter-dd-toggle">
+                                        <Button 
+                                            aria-label="GoalAddButton" 
+                                            data-toggle='tooltip'
+                                            data-placeholder='top'
+                                            title={selectedTeam?.team_name}
+                                            className={selectedTeam ? 'cnx_ins__sidebar_dashboards_dd_btn active' : 'cnx_ins__sidebar_dashboards_dd_btn'}
+                                        >
+                                            <i className='fa-solid fa-user-group' />
+                                        </Button> 
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu className="cnx_ins--goal-filter-dd-menu">
+                                        {teams && (
+                                            <Dropdown.Item   
+                                                onClick={() => handleGoalShiftFilter(null)}
+                                                className={selectedTeam === null ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
+                                            >  
+                                                All Teams
+                                            </Dropdown.Item>
+                                        )}
+                                        {
+                                            teams? 
+                                                teams.map(team => (
+                                                    <Dropdown.Item
+                                                        key={team.id}  
+                                                        onClick={() => handleGoalShiftFilter(team)}
+                                                        className={selectedTeam?.id === team.id ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
+                                                    >  
+                                                        {team.team_name}  
+                                                    </Dropdown.Item>
+                                                ))
+                                            : <span>Loading...</span>
+                                        }
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                                {/* end team filter */}
+                                {/* end goal filter options */}
+                                 
+                                <Button 
+                                    aria-label="GoalAddButton" 
+                                    className='cnx_ins__sidebar_dashboards_dd_btn'
+                                    onClick={() => dispatch(openGoalModal())}
+                                >
+                                    <i className="fa-solid fa-plus" />
+                                </Button>
                             </div>
                             <Accordion.Item.Body>
 
