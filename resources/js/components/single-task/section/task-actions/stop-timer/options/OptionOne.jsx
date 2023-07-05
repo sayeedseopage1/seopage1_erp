@@ -61,10 +61,10 @@ const OptionOne = () => {
                                 </div>
     
                                 <div className='mt-3'>
-                                    <h6>Write your comments here.</h6> 
-                                    <div className='ck-editor-holder' style={{width: '350px'}}>
+                                    <h6>Write your comments here.</h6>  
+                                    <div className='ck-editor-holder stop-timer-options'>
                                         <CKEditorComponent />
-                                    </div> 
+                                    </div>  
                                 </div>
 
                                 <div className='mt-3 d-flex align-items-center'>

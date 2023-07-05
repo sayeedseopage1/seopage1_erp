@@ -861,13 +861,16 @@
 .sp1_single_task--modal-body {
   height: 100%;
   max-height: 80vh;
-  overflow: hidden;
-  overflow-y: auto;
+  position: relative;
 }
 
 .sp1_stop-button-confirmation-option h6 {
   font-weight: bold;
 }
+.ck-editor-holder.stop-timer-options .ck-editor__editable {
+  max-height: 300px;
+}
+
 @keyframes glice {
   0% {
     background-position: -200px 0;

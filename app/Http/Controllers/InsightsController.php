@@ -38,41 +38,41 @@ class InsightsController extends AccountBaseController
     {
         return view('insights.insights', $this->data);
     }
-     
+
     // public function getusers(Request $request)
     // {
-        
+
     //     $users = User::where('role_id',7)->orWhere('role_id',8)->get();
-       
-        
+
+
     //      return response()->json($users);
     // }
 
     public function getusers(Request $request)
-        {
-            
-            $users = User::where('role_id',7)->orWhere('role_id',8)->get();
-        
-            if ($request->isMethod('post')) {
-                if ($request->type == 'all') {
-                    $users = User::all();
-                } else {
-                    $users = User::find($request->id);
-                }  
+    {
+
+        $users = User::where('role_id', 7)->orWhere('role_id', 8)->get();
+
+        if ($request->isMethod('post')) {
+            if ($request->type == 'all') {
+                $users = User::all();
+            } else {
+                $users = User::find($request->id);
             }
-            
-            return response()->json($users);
         }
-    
+
+        return response()->json($users);
+    }
+
 
 
     public function getteam(Request $request)
     {
-        
+
         $users = Seopage1Team::all();
-       
-        
-         return response()->json($users);
+
+
+        return response()->json($users);
     }
 
     /**
@@ -93,8 +93,8 @@ class InsightsController extends AccountBaseController
      */
     public function store(Request $request)
     {
-       // dd($request->assigneeFor);
-       
+        // dd($request->assigneeFor);
+
     }
 
 
@@ -107,29 +107,29 @@ class InsightsController extends AccountBaseController
 
     public function storeGoal(Request $request)
     {
-        $goal= new GoalSetting();
+        $goal = new GoalSetting();
         $goal->entry = $request->entry;
         $goal->entryType = $request->entryType;
         $goal->assigneeType = $request->assigneeType;
-        if($request->assigneeType == 'User') {
+        if ($request->assigneeType == 'User') {
             $goal->user_id = $request->assigneeFor['id'];
-            $goal->name= $request->assigneeFor['name'];      
+            $goal->name = $request->assigneeFor['name'];
         } else if ($request->assigneeType == 'Team') {
             $goal->team_id = $request->assigneeFor['id'];
-            $goal->team_name= $request->assigneeFor['name'];   
+            $goal->team_name = $request->assigneeFor['name'];
         }
 
-        foreach($request->pipeline as $pipeline) {
-            $goal->pipeline= $pipeline;
+        foreach ($request->pipeline as $pipeline) {
+            $goal->pipeline = $pipeline;
         }
         $goal->frequency = $request->frequency;
         $goal->startDate = $request->startDate;
         $goal->endDate = $request->endDate;
         $goal->trackingType = $request->trackingType;
-        $goal->trackingValue= $request->trackingValue;
+        $goal->trackingValue = $request->trackingValue;
         $goal->applyRecurring = $request->applyRecurring;
         $goal->achievablePoints = (int) $request->achievablePoints;
-        if( $request->entryType == 'Progressed') {
+        if ($request->entryType == 'Progressed') {
             $goal->qualified = $request->qualified;
         } else {
             $goal->qualified = null;
@@ -139,51 +139,52 @@ class InsightsController extends AccountBaseController
         $goal->goalType = $request->goalType;
         $goal->title = $request->title;
         // $goal->general_checkbox = $request->general_checkbox;
-        $goal->added_by= Auth::id();
+        $goal->added_by = Auth::id();
         $goal->save();
-        if($request->recurring != null) {
-            foreach($request->recurring as $key=>$rec) {
+        if ($request->recurring != null) {
+            foreach ($request->recurring as $key => $rec) {
                 // dd($key,$rec);
-                $recurring= new GoalRecurring();
+                $recurring = new GoalRecurring();
                 $recurring->goal_id = $goal->id;
                 $recurring->value = $rec['value'];
                 // dd($recurring->value);
-                $recurring->title=  $rec['title'];
-                $recurring->start=  $rec['start'];
-                $recurring->end=  $rec['end'];
+                $recurring->title =  $rec['title'];
+                $recurring->start =  $rec['start'];
+                $recurring->end =  $rec['end'];
                 $recurring->save();
             }
-            $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
+            $recurring_data = GoalRecurring::where('goal_id', $goal->id)->get();
             //dd($goal, $$recurring);
-            return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
+            return response()->json(["goal" => $goal, "recurring" => $recurring_data]);
         }
 
-        
+
         return response()->json(["goal" => $goal]);
     }
-    public function editGoal(Request $request, $id) {
-        $goal= GoalSetting::find($id);
+    public function editGoal(Request $request, $id)
+    {
+        $goal = GoalSetting::find($id);
         $goal->entry = $request->entry;
         $goal->entryType = $request->entryType;
         $goal->assigneeType = $request->assigneeType;
-        if($request->assigneeType == 'User') {
+        if ($request->assigneeType == 'User') {
             $goal->user_id = $request->assigneeFor['id'];
-            $goal->name= $request->assigneeFor['name'];      
-        } else if($request->assigneeType == 'Team') {
+            $goal->name = $request->assigneeFor['name'];
+        } else if ($request->assigneeType == 'Team') {
             $goal->team_id = $request->assigneeFor['id'];
-            $goal->team_name= $request->assigneeFor['name'];   
+            $goal->team_name = $request->assigneeFor['name'];
         }
 
-        foreach($request->pipeline as $pipeline) {
-            $goal->pipeline= $pipeline;  
+        foreach ($request->pipeline as $pipeline) {
+            $goal->pipeline = $pipeline;
         }
         $goal->frequency = $request->frequency;
         $goal->startDate = $request->startDate;
         $goal->endDate = $request->endDate;
         $goal->trackingType = $request->trackingType;
-        $goal->trackingValue= $request->trackingValue;
+        $goal->trackingValue = $request->trackingValue;
         $goal->applyRecurring = $request->applyRecurring;
-        
+
         $goal->achievablePoints = $request->achievablePoints;
         if ($request->entryType == 'Progressed') {
             $goal->qualified = $request->qualified;
@@ -194,163 +195,88 @@ class InsightsController extends AccountBaseController
         $goal->dealType = $request->dealType;
         $goal->goalType = $request->goalType;
         // $goal->general_checkbox = $request->general_checkbox;
-        $goal->added_by= Auth::id();
+        $goal->added_by = Auth::id();
         $goal->save();
 
-        $find_goal_recurrings = GoalRecurring::where('goal_id',$id)->get();
-        if($find_goal_recurrings != null) {
+        $find_goal_recurrings = GoalRecurring::where('goal_id', $id)->get();
+        if ($find_goal_recurrings != null) {
             foreach ($find_goal_recurrings as $value) {
-                $recurring= GoalRecurring::find($value->id);
+                $recurring = GoalRecurring::find($value->id);
                 $recurring->delete();
             }
         }
-       
-        if($request->recurring != null) {
-            foreach($request->recurring as $key=>$rec) {
+
+        if ($request->recurring != null) {
+            foreach ($request->recurring as $key => $rec) {
                 // dd($key,$rec);
-                $recurring= new GoalRecurring();
+                $recurring = new GoalRecurring();
                 $recurring->goal_id = $goal->id;
                 $recurring->value = $rec['value'];
                 // dd($recurring->value);
-                $recurring->title=  $rec['title'];
-                $recurring->start=  $rec['start'];
-                $recurring->end=  $rec['end'];
+                $recurring->title =  $rec['title'];
+                $recurring->start =  $rec['start'];
+                $recurring->end =  $rec['end'];
                 $recurring->save();
             }
-        $recurring_data= GoalRecurring::where('goal_id',$goal->id)->get();
+            $recurring_data = GoalRecurring::where('goal_id', $goal->id)->get();
 
-        return response()->json(["goal" => $goal, "recurring"=> $recurring_data]);
-    } else {
-        return response()->json(["goal" => $goal]);
-
+            return response()->json(["goal" => $goal, "recurring" => $recurring_data]);
+        } else {
+            return response()->json(["goal" => $goal]);
+        }
     }
-}
 
-    // public function getGoal($id)
-    // {
-    //     $user= User::where('id',$id)->first();
-
-    //     if(Auth::user()->id == $user->id)
-    //     {
-    //         $goal= GoalSetting::where('user_id',$user->id)->get();
-    //         //dd($goal);
-                    
-
-    //         $goal_recurring= GoalRecurring::all();
-    //     //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-
-    //     }
-
-
-    //     if($user->role_id == 1 || $user->role_id == 8)
-    //     {
-
-
-    //         $goal = GoalSetting::all();
-    //         $goal_recurring= GoalRecurring::all();
-           
-    //         // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-    //     } 
-    //     elseif($user->role_id != 1 || $user->role_id != 8) {
-    //         $count = Seopage1Team::
-    //         whereRaw("FIND_IN_SET(?, members)", [$user->id])
-    //         ->get();
-           
-           
-    //         //$teams= Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->get();
-    //        // dd($user->id);
-
-    //         if ($count != null)  {
-
-    //             foreach($count as $team)
-    //             {
-                    
-    //                 $goal[]= GoalSetting::where('team_id',$team->id)->get();
-                        
-
-    //             $goal_recurring[]= GoalRecurring::all();
-              
-
-    //             }
-               
-                
-    //         } 
-    // //    /dd($goal);
-           
-    //     }
-    //     return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        
-        
-    //     }
-   
-    public function getGoal(Request $request,$id)
+    public function getGoal(Request $request, $id)
     {
-        $user= User::where('id',$id)->first();
+        $user = User::where('id', $id)->first();
 
-        if(Auth::user()->id == $user->id)
-        {
-            $goal= GoalSetting::where('user_id',$user->id)->get();
+        if (Auth::user()->id == $user->id) {
+            $goal = GoalSetting::where('user_id', $user->id)->get();
             //dd($goal);
 
 
-            $goal_recurring= GoalRecurring::all();
-        //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
+            $goal_recurring = GoalRecurring::all();
+            //   return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
 
         }
 
 
-        if($user->role_id == 1 || $user->role_id == 8)
-        {
+        if ($user->role_id == 1 || $user->role_id == 8) {
 
-            if($request->start_date != null && $request->end_date != null)
-            {
-                if($request->shift_id != 'null')
-                {
-                    $goal = GoalSetting::whereDate('startDate','>=',$request->start_date)->whereDate('endDate','<=',$request->end_date)->where('team_id',$request->shift_id)->get();
-
-                }else
-                {
-                    $goal = GoalSetting::whereDate('startDate','>=',$request->start_date)->whereDate('endDate','<=',$request->end_date)->get();
+            if ($request->start_date != null && $request->end_date != null) {
+                if ($request->shift_id != 'null') {
+                    $goal = GoalSetting::whereDate('startDate', '>=', $request->start_date)->whereDate('endDate', '<=', $request->end_date)->where('team_id', $request->shift_id)->get();
+                } else {
+                    $goal = GoalSetting::whereDate('startDate', '>=', $request->start_date)->whereDate('endDate', '<=', $request->end_date)->get();
                 }
-
-
             }
-           // $goal = GoalSetting::all();
-            $goal_recurring= GoalRecurring::all();
+            // $goal = GoalSetting::all();
+            $goal_recurring = GoalRecurring::all();
 
             // return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-        }
-        elseif($user->role_id != 1 || $user->role_id != 8) {
-            $count = Seopage1Team::
-            whereRaw("FIND_IN_SET(?, members)", [$user->id])
-            ->get();
+        } elseif ($user->role_id != 1 || $user->role_id != 8) {
+            $count = Seopage1Team::whereRaw("FIND_IN_SET(?, members)", [$user->id])
+                ->get();
 
 
             //$teams= Seopage1Team::whereRaw("FIND_IN_SET($user->id, members) > 0")->get();
-           // dd($user->id);
+            // dd($user->id);
 
-            if ($count != null)  {
+            if ($count != null) {
 
-                foreach($count as $team)
-                {
+                foreach ($count as $team) {
 
-                    $goal[]= GoalSetting::where('team_id',$team->id)->get();
-
-
-                $goal_recurring[]= GoalRecurring::all();
+                    $goal[] = GoalSetting::where('team_id', $team->id)->get();
 
 
+                    $goal_recurring[] = GoalRecurring::all();
                 }
-
-
             }
-    //    /dd($goal);
+            //    /dd($goal);
 
         }
         return response()->json(["goals" => $goal, "recurring" => $goal_recurring]);
-
-
-        }
+    }
 
 
     /**
@@ -362,35 +288,35 @@ class InsightsController extends AccountBaseController
      */
     public function storeDashboard(Request $request)
     {
-        $dashboard= new Dashboard();
-        $dashboard->dashboard_name= $request->name;
-        $dashboard->root= $request->root;
-        $dashboard->section_id= $request->section['id'];
-        $dashboard->added_by= Auth::id();
-        $dashboard->save(); 
+        $dashboard = new Dashboard();
+        $dashboard->dashboard_name = $request->name;
+        $dashboard->root = $request->root;
+        $dashboard->section_id = $request->section['id'];
+        $dashboard->added_by = Auth::id();
+        $dashboard->save();
 
-        $dashboard= Dashboard::select([
+        $dashboard = Dashboard::select([
             'dashboards.id as dashboard_id',
             'dashboards.*',
             'sections.*'
         ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
-        ->where('dashboards.id', $dashboard->id)
-        ->get();
-        
+            ->where('dashboards.id', $dashboard->id)
+            ->get();
+
         return response()->json($dashboard);
 
-       // return $request;
-       // dd($request->assigneeFor);
-        
+        // return $request;
+        // dd($request->assigneeFor);
+
     }
     public function getDashboard()
     {
-        $dashboard= Dashboard::select([
+        $dashboard = Dashboard::select([
             'dashboards.id as dashboard_id',
             'dashboards.*',
             'sections.*'
         ])->join('sections', 'sections.id', '=', 'dashboards.section_id')
-        ->get();
+            ->get();
 
         return response()->json($dashboard);
     }
@@ -405,12 +331,12 @@ class InsightsController extends AccountBaseController
      */
     public function storeSection(Request $request)
     {
-        
-        $section= new Section();
-        $section->type= $request->type;
-        $section->section_name= $request->section;
-        $section->root= $request->root;
-        $section->added_by= Auth::id();
+
+        $section = new Section();
+        $section->type = $request->type;
+        $section->section_name = $request->section;
+        $section->root = $request->root;
+        $section->added_by = Auth::id();
         $section->save();
 
         // return $request;
@@ -418,7 +344,7 @@ class InsightsController extends AccountBaseController
     }
     public function getSection()
     {
-        $section= Section::all();
+        $section = Section::all();
         return response()->json($section);
     }
 
@@ -470,7 +396,7 @@ class InsightsController extends AccountBaseController
     }
     public function DealConversion()
     {
-        $deals= DealStage::with('client')->get();
+        $deals = DealStage::with('client')->get();
 
         $lead = Lead::all();
         return response()->json(["deals" => $deals, "leads" => $lead]);
@@ -507,29 +433,28 @@ class InsightsController extends AccountBaseController
     }
 
 
-    
+
 
     public function getGoalDetails(GoalSetting $data)
     {
-        if($data->team_id != null)
-        {
+        if ($data->team_id != null) {
             $team = Seopage1Team::find($data->team_id);
 
             $users = explode(',', $team->members);
             $user_data = [];
             foreach ($users as $key => $value) {
                 if ($value != '') {
-                     //$user = User::find($value);
-                    array_push($user_data,$value);
+                    //$user = User::find($value);
+                    array_push($user_data, $value);
                 }
             }
         } else {
-            $user_data[]= $data->user_id;
+            $user_data[] = $data->user_id;
         }
-        
+
         // Always use an array of user IDs, even if $data->user_id is set
         $data2 = $data->user_id ? [$data->user_id] : $user_data;
-    
+
         if ($data->entryType == 'Added') {
 
 
@@ -549,14 +474,14 @@ class InsightsController extends AccountBaseController
                     'leads.added_by as lead_converted_by',
                     'leads.id as lead_id',
                 ])
-                ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
-                ->whereIn('leads.added_by', $data2)
-                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-        
+                    ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                    ->whereIn('leads.added_by', $data2)
+                    ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+
                 if (!is_null($data->endDate)) {
                     $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
                 }
-        
+
                 $dealStage = $dealStage->get();
             } elseif ($data->dealType == 'New Client') {
                 $dealStage = DealStage::select([
@@ -573,20 +498,17 @@ class InsightsController extends AccountBaseController
                     'leads.added_by as lead_converted_by',
                     'leads.id as lead_id',
                 ])
-                ->leftjoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
-                ->whereIn('leads.added_by', $data2)
-                ->whereDate('deal_stages.created_at', '>=', $data->startDate)
-                ->where('deal_stages.client_badge','=','new client');
-        
+                    ->leftjoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                    ->whereIn('leads.added_by', $data2)
+                    ->whereDate('deal_stages.created_at', '>=', $data->startDate)
+                    ->where('deal_stages.client_badge', '=', 'new client');
+
                 if (!is_null($data->endDate)) {
                     $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
                 }
-        
+
                 $dealStage = $dealStage->get();
-
             }
-            
-
         } elseif ($data->entryType == 'Progressed') {
             if ($data->qualified == 'Qualified') {
                 $deal_status = 1;
@@ -604,55 +526,53 @@ class InsightsController extends AccountBaseController
 
             if ($data->dealType == 'All Clients' || $data->dealType == 'Existing Clients') {
                 $dealStage = DealStage::leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
-                ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
-                ->whereIn('leads.added_by', $data2)
-                ->where([
-                    'deal_stages.deal_stage' => $deal_status,
-                    'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
-                ])
-                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-                
+                    ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
+                    ->whereIn('leads.added_by', $data2)
+                    ->where([
+                        'deal_stages.deal_stage' => $deal_status,
+                        'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
+                    ])
+                    ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+
                 if (!is_null($data->endDate)) {
                     $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
                 }
-                
+
                 $dealStage = $dealStage->get();
             } elseif ($data->dealType == 'New Client') {
                 $dealStage = DealStage::join('leads', 'leads.id', '=', 'deal_stages.lead_id')
-                ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
-                ->whereIn('leads.added_by', $data2)
-                ->where([
-                    'deal_stages.deal_stage' => $deal_status,
-                    'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
-                ])
-                
-                ->where('deal_stages.client_badge','=','new client')
-                ->whereDate('deal_stages.created_at', '>=', $data->startDate);
-                
+                    ->join('deal_stage_changes', 'deal_stage_changes.deal_id', 'deal_stages.short_code')
+                    ->whereIn('leads.added_by', $data2)
+                    ->where([
+                        'deal_stages.deal_stage' => $deal_status,
+                        'deal_stage_changes.deal_stage_id' => 'deal_stages.deal_stage',
+                    ])
+
+                    ->where('deal_stages.client_badge', '=', 'new client')
+                    ->whereDate('deal_stages.created_at', '>=', $data->startDate);
+
                 if (!is_null($data->endDate)) {
                     $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $data->endDate);
                 }
-                
+
                 $dealStage = $dealStage->get();
             }
-            
         } elseif ($data->entryType == 'Won') {
-            if($data->team_id != null)
-            {
+            if ($data->team_id != null) {
                 $team = Seopage1Team::find($data->team_id);
 
                 $users = explode(',', $team->members);
                 $user_data = [];
                 foreach ($users as $key => $value) {
                     if ($value != '') {
-                         //$user = User::find($value);
-                        array_push($user_data,$value);
+                        //$user = User::find($value);
+                        array_push($user_data, $value);
                     }
                 }
             } else {
-                $user_data[]= $data->user_id;
+                $user_data[] = $data->user_id;
             }
-            
+
 
             $data2 = $data->user_id ? [$data->user_id] : $user_data;
 
@@ -666,19 +586,19 @@ class InsightsController extends AccountBaseController
                     DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
 
-                ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+                    ->leftJoin('leads', 'leads.id', 'deals.lead_id')
 
-                ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                ->whereDate('deals.created_at', '>=', $data->startDate);
+                    ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                    ->whereDate('deals.created_at', '>=', $data->startDate);
 
                 if (!is_null($data->endDate)) {
                     $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
                 }
-                $deals_data = $deals_data->where('deals.status', '!=','Denied')
+                $deals_data = $deals_data->where('deals.status', '!=', 'Denied')
 
-                //->whereIn('deals.added_by', $data2)
-                ->orderBy('deals.id', 'desc')
-                ->get();
+                    //->whereIn('deals.added_by', $data2)
+                    ->orderBy('deals.id', 'desc')
+                    ->get();
 
                 foreach ($deals_data as $key => $value) {
                     $check_client = Deal::whereDate('created_at', '>=', $data->startDate);
@@ -698,15 +618,12 @@ class InsightsController extends AccountBaseController
                                 'project_id' => $project->id,
                             ])->whereBetween(DB::raw('DATE(paid_on)'), [$data->startDate, $data->endDate])->get();
 
-                            if (count($payments) > 0 ) {
-                                if($data->trackingType == 'value')
-                                {
+                            if (count($payments) > 0) {
+                                if ($data->trackingType == 'value') {
                                     $value->amount = $payments->sum('amount');
-
-                                }else {
+                                } else {
                                     $value->amount = 1;
                                 }
-                               
                             } else {
                                 $value->amount = 0;
                             }
@@ -721,7 +638,7 @@ class InsightsController extends AccountBaseController
                     } else {
                         $member[] = $data->user_id;
                     }
-                    
+
                     $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                     $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                     $value->team_total_amount = 0;
@@ -775,23 +692,23 @@ class InsightsController extends AccountBaseController
                     'deals.*',
                     'pm.id as pm_id',
                     'pm.name as pm_name',
-                    
+
 
                     DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                 ])
-                ->leftJoin('leads', 'leads.id', 'deals.lead_id')
-                ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                ->whereDate('deals.created_at', '>=', $data->startDate)
-                ->where('deals.client_badge','=','new client');
+                    ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+                    ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                    ->whereDate('deals.created_at', '>=', $data->startDate)
+                    ->where('deals.client_badge', '=', 'new client');
 
                 if (!is_null($data->endDate)) {
                     $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
                 }
-                $deals_data = $deals_data->where('deals.status', '!=','Denied')
-               // ->whereIn('deals.added_by', $data2)
-                //->groupBy('client_id')
-                ->orderBy('deals.id', 'desc')
-                ->get();
+                $deals_data = $deals_data->where('deals.status', '!=', 'Denied')
+                    // ->whereIn('deals.added_by', $data2)
+                    //->groupBy('client_id')
+                    ->orderBy('deals.id', 'desc')
+                    ->get();
 
                 foreach ($deals_data as $key => $value) {
                     if ($data->trackingType == 'count') {
@@ -805,15 +722,12 @@ class InsightsController extends AccountBaseController
                                 'project_id' => $project->id,
                             ])->whereBetween(DB::raw('DATE(paid_on)'), [$data->startDate, $data->endDate])->get();
 
-                            if (count($payments) > 0 ) {
-                                if($data->trackingType == 'value')
-                                {
+                            if (count($payments) > 0) {
+                                if ($data->trackingType == 'value') {
                                     $value->amount = $payments->sum('amount');
-
-                                }else {
+                                } else {
                                     $value->amount = 1;
                                 }
-                               
                             } else {
                                 $value->amount = 0;
                             }
@@ -828,7 +742,7 @@ class InsightsController extends AccountBaseController
                     } else {
                         $member[] = $data->user_id;
                     }
-                    
+
                     $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
                     $value->bidder_amount = round((24 * $value->amount) / 100, 2);
                     $value->team_total_amount = 0;
@@ -923,4 +837,3 @@ class InsightsController extends AccountBaseController
         }
     }
 }
-

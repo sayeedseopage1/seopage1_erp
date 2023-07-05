@@ -524,11 +524,18 @@ const Goal = () => {
                                     {goal?.entry} {goal?.entryType}
                                 </div>
                             </Tooltip>
-
-                            <Tooltip text="Pipeline">
+                            
+                            {/* <Tooltip text="Pipeline">
                                 <div className='cnx__ins_details_item'>
                                     <i className="fa-solid fa-chart-simple" />
                                     Pipeline{goal?.entryType === 'Progressed' ? ', ' + goal?.qualified : ''}
+                                </div>
+                            </Tooltip> */}
+
+                            <Tooltip text="Achievable Points">
+                                <div className='cnx__ins_details_item'>
+                                    <i className="fa-solid fa-circle-dollar-to-slot" />
+                                    Achievable Points ( {goal?.achievablePoints} )
                                 </div>
                             </Tooltip>
 

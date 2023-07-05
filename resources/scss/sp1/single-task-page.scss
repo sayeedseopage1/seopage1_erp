@@ -979,9 +979,8 @@
 
 .sp1_single_task--modal-body{
     height: 100%;
-    max-height: 80vh;
-    overflow: hidden;
-    overflow-y: auto;
+    max-height: 80vh;  
+    position: relative;
 }
 
 
@@ -992,5 +991,12 @@
 
     & > .confirmation--options{ 
         & > .--option-item{}
+    }
+}
+
+
+.ck-editor-holder.stop-timer-options{
+    & .ck-editor__editable{
+        max-height: 300px;
     }
 }

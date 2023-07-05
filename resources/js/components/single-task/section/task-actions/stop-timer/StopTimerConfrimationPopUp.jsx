@@ -1,6 +1,4 @@
 import React from 'react'
-import Button from '../../../components/Button'
-import CKEditorComponent from '../../../../ckeditor'
 import OptionOne from './options/OptionOne'
 import OptionTwo from './options/OptionTwo'
 import OptionThree from './options/OptionThree'

@@ -391,42 +391,44 @@ const InsightSidebar = () => {
                                 {/* end date filter */}
 
                                 {/* team filter */}
-                                <Dropdown className='cnx_ins--goal-filter-dd mr-2'>
-                                    <Dropdown.Toggle icon={false} className="cnx_ins--goal-filter-dd-toggle">
-                                        <Button 
-                                            aria-label="GoalAddButton" 
-                                            data-toggle='tooltip'
-                                            data-placeholder='top'
-                                            title={selectedTeam?.team_name}
-                                            className={selectedTeam ? 'cnx_ins__sidebar_dashboards_dd_btn active' : 'cnx_ins__sidebar_dashboards_dd_btn'}
-                                        >
-                                            <i className='fa-solid fa-user-group' />
-                                        </Button> 
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu className="cnx_ins--goal-filter-dd-menu">
-                                        {teams && (
-                                            <Dropdown.Item   
-                                                onClick={() => handleGoalShiftFilter(null)}
-                                                className={selectedTeam === null ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
-                                            >  
-                                                All Teams
-                                            </Dropdown.Item>
-                                        )}
-                                        {
-                                            teams? 
-                                                teams.map(team => (
-                                                    <Dropdown.Item
-                                                        key={team.id}  
-                                                        onClick={() => handleGoalShiftFilter(team)}
-                                                        className={selectedTeam?.id === team.id ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
-                                                    >  
-                                                        {team.team_name}  
-                                                    </Dropdown.Item>
-                                                ))
-                                            : <span>Loading...</span>
-                                        }
-                                    </Dropdown.Menu>
-                                </Dropdown>
+                                {[1, 8].includes(Number(window?.Laravel?.user?.role_id)) && 
+                                    <Dropdown className='cnx_ins--goal-filter-dd mr-2'>
+                                        <Dropdown.Toggle icon={false} className="cnx_ins--goal-filter-dd-toggle">
+                                            <Button 
+                                                aria-label="GoalAddButton" 
+                                                data-toggle='tooltip'
+                                                data-placeholder='top'
+                                                title={selectedTeam?.team_name}
+                                                className={selectedTeam ? 'cnx_ins__sidebar_dashboards_dd_btn active' : 'cnx_ins__sidebar_dashboards_dd_btn'}
+                                            >
+                                                <i className='fa-solid fa-user-group' />
+                                            </Button> 
+                                        </Dropdown.Toggle>
+                                        <Dropdown.Menu className="cnx_ins--goal-filter-dd-menu">
+                                            {teams && (
+                                                <Dropdown.Item   
+                                                    onClick={() => handleGoalShiftFilter(null)}
+                                                    className={selectedTeam === null ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
+                                                >  
+                                                    All Teams
+                                                </Dropdown.Item>
+                                            )}
+                                            {
+                                                teams? 
+                                                    teams.map(team => (
+                                                        <Dropdown.Item
+                                                            key={team.id}  
+                                                            onClick={() => handleGoalShiftFilter(team)}
+                                                            className={selectedTeam?.id === team.id ? 'goal-filter--dd-list selected' : 'goal-filter--dd-list'}
+                                                        >  
+                                                            {team.team_name}  
+                                                        </Dropdown.Item>
+                                                    ))
+                                                : <span>Loading...</span>
+                                            }
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                }
                                 {/* end team filter */}
                                 {/* end goal filter options */}
                                  
