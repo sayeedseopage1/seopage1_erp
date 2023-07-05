@@ -78,7 +78,8 @@ class PendingActionController extends AccountBaseController
         if ($this->user->role_id != 1) {
             //dd("True");
             $this->authorization_action = $this->authorization_action->where('authorization_for', $this->user->id)->orderBy('id', 'desc')->paginate($per_page);
-        }else 
+        }
+        else 
         {
             $this->authorization_action = $this->authorization_action->where('type','!=','task_assigned_on_lead_developer' )->orderBy('id', 'desc')->paginate($per_page);
         }
@@ -363,6 +364,7 @@ class PendingActionController extends AccountBaseController
             }
             //dd('ok');
         } elseif ($type == 'project_deliverable_time_extention') {
+           
             if ($request->mode == 'approved') {
                 $p_request = new Request();
                 $p_request->project_id = $authorization_action->model_id;
@@ -376,6 +378,14 @@ class PendingActionController extends AccountBaseController
                 $authorization_action->approved_at = Carbon::now();
                 $authorization_action->status = '1';
                 $authorization_action->save();
+
+                //$project_id= Project::where('id',$authorization_action->model_id)->first();
+                $project_id= PMProject::where('project_id',$authorization_action->project_id)->first();
+            //    / dd($authorization_action->model_id);
+                $pm_project=PMProject::find($project_id->id);
+                $pm_project->deliverable_status = 1;
+                $pm_project->save();
+               // dd($pm_project);
 
                 $error = false;
             }
@@ -473,7 +483,19 @@ class PendingActionController extends AccountBaseController
                 'type' => 'redirect',
                 'url' => $authorization_action->link
             ]);
-        }elseif ($type == ' task_submission_by_developer') {
+        }elseif ($type == 'deliverable_modification_by_client') {
+            
+            
+            $authorization_action->description = $request->description;
+            $authorization_action->authorization_by = $this->user->id;
+            $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
+            $authorization_action->status = '1';
+            $authorization_action->save();
+            $error = false;
+            
+
+           
+        }elseif ($type == 'task_submission_by_developer') {
             $authorization_action->description = $request->description;
             $authorization_action->authorization_by = $this->user->id;
             $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');

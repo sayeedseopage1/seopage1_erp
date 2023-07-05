@@ -3054,7 +3054,7 @@ class ProjectController extends AccountBaseController
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
-        $filename = str_slug($project_name->project_name) . '-agreement-' . $project_name->id;
+        $filename = str_slug($this->project->project_name) . '-agreement-' . $this->project->id;
 
         return [
             'pdf' => $pdf,
@@ -3063,7 +3063,7 @@ class ProjectController extends AccountBaseController
     }
     public function sign(SignRequest $request, $id)
     {
-        //dd($request,$id);
+     //  dd($request,$id);
         $this->project = Project::with('signature')->findOrFail($id);
 
         if ($this->project && $this->project->signature) {
@@ -3095,6 +3095,8 @@ class ProjectController extends AccountBaseController
 
         $sign->signature = $imageName;
         $sign->save();
+        
+      
 
         event(new ProjectSignedEvent($this->project, $sign));
 

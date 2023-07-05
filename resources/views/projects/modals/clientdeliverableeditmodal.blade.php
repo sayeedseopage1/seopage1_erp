@@ -22,6 +22,7 @@
                                 <select class="form-control height-35 f-14" name="deliverable_type">
                                     <option selected value="{{$deliverable->deliverable_type}}">{{$deliverable->deliverable_type}}</option>
                                     <option value="Graphics Design">Graphics Design</option>
+                                    <option value="Website initial setup (Theme and plugin installation)">Website initial setup (Theme and plugin installation)</option>
                                     <option value="UI/UX Design">UI/UX Design</option>
                                     <option value="Main Page Development">Main Page Development</option>
                                     <option value="Secondary Page Development">Secondary Page Development</option>
@@ -35,7 +36,7 @@
                                     <option value="Fixing Issues/Bugs">Fixing Issues/Bugs</option>
                                     <option value="Fixing Responsiveness/Making something responsive">Fixing Responsiveness/Making something responsive</option>
                                     <option value="Minor revisions and finalizing a website" >Minor revisions and finalizing a website</option>
-                                    <option value="Website initial setup (Theme and plugin installation)">Website initial setup (Theme and plugin installation)</option>
+                                   
                                     <option value="Others">Others</option>
                                 </select>
                             </div>

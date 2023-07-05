@@ -108,7 +108,9 @@ class AuthorizationAction extends Model
             ],
             'task_assign_by_lead_developer' => [
 
+
                 'review'
+
 
             ],
            

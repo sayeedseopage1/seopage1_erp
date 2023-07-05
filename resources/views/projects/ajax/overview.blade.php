@@ -22,14 +22,14 @@ $project->members->pluck('user_id')->toArray(); @endphp
         @php
             $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
         @endphp
-        @if($q_c)
+        {{-- @if($q_c)
             <div style="margin-bottom: -40px;">
                 <button type="button" class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
                     Client Review
                 </button>
                 @include('projects.modals.client_review')
             </div>
-        @endif
+        @endif --}}
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)

@@ -23,6 +23,7 @@
             </label>
           <select class="form-control height-35 f-14" name="deliverable_type" id="deliverable_type">
             <option value="Graphics Design" title="All the graphic design tasks will be included here for example logo design, banner design, image design, image editing, image resize, infographic creation etc. etc.">Graphics Design</option>
+            <option value="Website initial setup (Theme and plugin installation)" title="Any Website initial setup (Theme and plugin installation) works should be added under this item.">Website initial setup (Theme and plugin installation)</option>
             <option value="UI/UX Design" title="All the website designs & mockups should go under UX design. For example, these should all go under UI/UX design (Right now, listed under ): https://prnt.sc/ii2PJhYaTs9J">UI/UX Design</option>
             <option value="Main Page Development" title="All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples, of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc. ">Main Page Development</option>
             <option value="Website design change" title="Any website redesign work or section redesign work should be added under this item.">Website design change </option>
@@ -36,7 +37,7 @@
             <option value="Fixing Issues/Bugs" title="Any Fixing Issues/Bugs works should be added under this item.">Fixing Issues/Bugs</option>
             <option value="Fixing Responsiveness/Making something responsive" title="Any Fixing Responsiveness/Making something responsive works should be added under this item.">Fixing Responsiveness/Making something responsive</option>
             <option value="Minor revisions and finalizing a website" title="Any Minor revisions and finalizing a website works should be added under this item.">Minor revisions and finalizing a website</option>
-            <option value="Website initial setup (Theme and plugin installation)" title="Any Website initial setup (Theme and plugin installation) works should be added under this item.">Website initial setup (Theme and plugin installation)</option>
+           
             <option value="Others" title="Anything that is not specifically mentioned above should go to others. For example, any complex functionality, speed optimization, bug fixing or anything else not mentioned specifically above. If you select others, the top management will have to check and authorize those deliverables before you can proceed further.">Others</option>
           </select>
                   <label id="deliverableError" class="text-danger" for=""></label>

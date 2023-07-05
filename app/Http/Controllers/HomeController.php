@@ -223,16 +223,16 @@ class HomeController extends Controller
             }
             //start authorization action
 
-            $authorization_action = new AuthorizationAction();
-            $authorization_action->model_name = $project->getMorphClass();
-            $authorization_action->model_id = $project->id;
-            $authorization_action->type = 'deliverable_modification_by_client';
-            $authorization_action->deal_id = $project->deal_id;
-            $authorization_action->project_id = $project->id;
-            $authorization_action->link = route('projects.show', $project->id).'?tab=deliverable';
-            $authorization_action->title = 'Client send delivarables modification request';
-            $authorization_action->authorization_for = 62;
-            $authorization_action->save();
+            // $authorization_action = new AuthorizationAction();
+            // $authorization_action->model_name = $project->getMorphClass();
+            // $authorization_action->model_id = $project->id;
+            // $authorization_action->type = 'deliverable_modification_by_client';
+            // $authorization_action->deal_id = $project->deal_id;
+            // $authorization_action->project_id = $project->id;
+            // $authorization_action->link = route('projects.show', $project->id).'?tab=deliverables';
+            // $authorization_action->title = 'Client send delivarables modification request';
+            // $authorization_action->authorization_for = $project->pm_id;
+            // $authorization_action->save();
             //end authorization action
         }
 

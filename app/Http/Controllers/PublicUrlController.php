@@ -28,6 +28,7 @@ use App\Events\ProjectSignedEvent;
 use Notification;
 use App\Notifications\ClientDeliverableSignNotification;
 use App\Models\User;
+use App\Models\AuthorizationAction;
 
 
 class PublicUrlController extends Controller
@@ -120,6 +121,16 @@ class PublicUrlController extends Controller
 
         $sign->signature = $imageName;
         $sign->save();
+
+        $authorization_action= AuthorizationAction::where('project_id',$this->project->id)->where('type','deliverable_modification_by_client')->first();
+        if($authorization_action != null)
+        {
+            $action=  AuthorizationAction::find($authorization_action->id);
+            $action->status= 1;
+            $action->authorization_by= $this->project->pm_id;
+            $action->save();
+
+        }
 
         event(new ProjectSignedEvent($this->project, $sign));
         $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->get();
