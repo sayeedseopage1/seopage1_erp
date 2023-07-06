@@ -5,7 +5,8 @@ const initialState = {
     subTask: [],
     notes: [],
     timeLogs: [],
-    histories: [], 
+    histories: [],
+    taskStatus: null, 
 }
 
 const subTaskSlice = createSlice({
@@ -13,6 +14,7 @@ const subTaskSlice = createSlice({
     initialState,
     reducers:{
         storeTask: (state, action) => {
+            state.taskStatus = action.payload?.board_column || null;
             state.task = action.payload;
         },
         storeSubTasks: (state, action) => {
@@ -33,9 +35,13 @@ const subTaskSlice = createSlice({
         },
         storeHistories: (state, action) => {
             state.histories = [...action.payload].sort((a,b) => b.id - a.id);
+        },
+
+        setTaskStatus: (state, action) =>{
+            state.taskStatus = action.payload;
         }
     }
 })
 
-export const {storeTask, storeSingleSubTask, storeSubTasks, storeNotes, storeTimeLogs, storeHistories} = subTaskSlice.actions;
+export const {storeTask, setTaskStatus, storeSingleSubTask, storeSubTasks, storeNotes, storeTimeLogs, storeHistories} = subTaskSlice.actions;
 export default subTaskSlice.reducer;

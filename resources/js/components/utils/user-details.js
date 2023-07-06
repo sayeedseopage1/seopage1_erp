@@ -54,7 +54,7 @@ export class User {
     getName(){return this.name};
 
     // user id
-    getId(){return this.userId};
+    getId(){return Number(this.userId)};
 
     // user link
     getUserLink() {

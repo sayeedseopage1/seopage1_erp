@@ -1,27 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import CKEditorComponent from '../../../../../ckeditor'  
 import Button from '../../../../components/Button';
 
-const OptionOne = ({id, onChecked, checked}) => {   
-    const [duratonStart, setDurationStart] = useState('08:00 AM');
-    const [durationEnd, setDurationEnd] = useState('05:00 PM');
-
-    const [comment, setComment] = useState('');
-
-
-    // initials jquery time picker
+const LateExplainationOption = ({id, onChecked, checked}) => { 
     useEffect(() => {
-        window.$('#timepicker1')
-        .timepicker('setTime', duratonStart)
-        .on('changeTime.timepicker', function(e){
-            setDurationStart(e.target.value)
-        });
-
-        window.$('#timepicker2')
-        .timepicker('setTime', durationEnd)
-        .on('changeTime.timepicker', function(e){
-            setDurationEnd(e.target.value)
-        });
+        window.$('#timepicker1').timepicker();
+        window.$('#timepicker2').timepicker();
     },[checked])
 
 
@@ -30,30 +14,6 @@ const OptionOne = ({id, onChecked, checked}) => {
             onChecked(id);
         }else onChecked(null)
     } 
-
-    // handle comment 
-    const handleEditorChange = (e, editor) => {
-        const data = editor.getData();
-        setComment(data);
-    } 
-
-
-    // handle submission
-
-    const handleSubmittion = (e) => {
-        e.preventDefault();
-
-        const data = {
-            reason_for_less_tracked_hours_a_day_task: "I Did Not Have Enough Work To Do",
-            duration_form: duratonStart,
-            duration_to: durationEnd
-        }
-
-        console.log({data})
-
-
-    }
-
 
   return (
     <>
@@ -66,11 +26,13 @@ const OptionOne = ({id, onChecked, checked}) => {
                     checked={checked}
                     onChange={handleOnChange} 
                 />
-                I Did Not Have Enough Work To Do
+               I Came Late
             </div>
                 {
                     checked && (
-                            <div className='pl-3 my-3 bg-white'>  
+                            <div className='pl-3 my-3 bg-white'> 
+                                <div className='mb-2 font-weight-bold'> Select the delay time here </div>
+                                 
                                 <div className="row">
                                     <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                         <label htmlFor="" className='d-block'> From: </label>
@@ -96,23 +58,14 @@ const OptionOne = ({id, onChecked, checked}) => {
                                 </div>
     
                                 <div className='mt-3'>
-                                    <h6>Write your comments here.</h6>  
+                                    <div className='mb-2 font-weight-bold'>Explain the reason of being late today</div>  
                                     <div className='ck-editor-holder stop-timer-options'>
-                                        <CKEditorComponent onChange={handleEditorChange} />
+                                        <CKEditorComponent />
                                     </div>  
                                 </div>
 
                                 <div className='mt-3 d-flex align-items-center'>
-                                    <Button 
-                                        variant='tertiary'
-                                        onClick={() => onChecked(null)}
-                                        className='ml-auto mr-2'
-                                    > Back </Button>
-                                    
-                                    <Button 
-                                        onClick={handleSubmittion}
-                                        className=''
-                                    > Submit </Button>
+                                    <Button className='ml-auto'> Submit </Button>
                                 </div>
                             </div>
                     )
@@ -122,4 +75,4 @@ const OptionOne = ({id, onChecked, checked}) => {
   )
 }
 
-export default OptionOne
+export default LateExplainationOption 

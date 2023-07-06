@@ -21,7 +21,7 @@ import TaskAction from './section/task-actions/TaskAction'
 import Loading from './components/Loading'
 
 const SingleTask = () => {
-  const { task } = useSelector(s => s.subTask);
+  const { task, taskStatus } = useSelector(s => s.subTask);
   const dispatch = useDispatch();
   const params = useParams(); 
   const {
@@ -56,7 +56,7 @@ const SingleTask = () => {
         <div className='row'>
             <div className="col-8">
                 <div className="bg-white rounded-lg p-3">
-                   <TaskAction task={task}/> 
+                   <TaskAction task={task} status={taskStatus}/> 
 
                     {/* task information */}
                     <div>
@@ -242,12 +242,12 @@ const SingleTask = () => {
                                 width: '10px',
                                 height: '10px',
                                 borderRadius: '100%',
-                                background: task?.board_column?.label_color,
+                                background: taskStatus?.label_color,
                                 marginRight: '6px',
                                 boxShadow: '0 0 10px rgba(0,0,0,.1)'
                             }} 
                         ></span>
-                        {task?.board_column?.column_name}
+                        {taskStatus?.column_name}
                     </div> 
 
                     <div className="d-flex align-items-center mb-2">

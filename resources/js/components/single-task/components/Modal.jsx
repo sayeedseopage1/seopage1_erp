@@ -7,6 +7,7 @@ const Modal = ({ children, isOpen, className }) => {
     // generate random id for dropdown menu
     const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
     let DOM = document.getElementById(id);
+ 
   
     React.useEffect(() => {
         setIsBrowser(true);
@@ -17,6 +18,15 @@ const Modal = ({ children, isOpen, className }) => {
             document.body.removeChild(el);
         }
     }, []);
+
+
+    React.useEffect(() => {
+        if(isOpen){
+            document.body.classList.add('cnx_body-overflow-hidden')
+        }else{
+            document.body.classList.remove('cnx_body-overflow-hidden')
+        }
+    }, [isOpen]) 
 
     if(!DOM) return;
  

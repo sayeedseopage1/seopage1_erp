@@ -29,9 +29,9 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
         //     query: () => `/account/menu/filter-options/department`
         // }), 
 
-        // getAllProjectsOptions:build.query({
-        //     query: (query) => `/account/get-projects/${query}`
-        // }),
+        getAllProjectsOptions:build.query({
+            query: (query) => `/account/get-projects/${query}`
+        }),
 
         // mutation
         getEmployeeOptions: build.mutation({
@@ -60,7 +60,7 @@ const filterBarOptionsApiSlice = apiSlice.injectEndpoints({
 export const { 
     // // query
     useGetAllFilterOptionQuery,
-    // useGetAllProjectsOptionsQuery,
+    useGetAllProjectsOptionsQuery,
     // useGetDepartmentOptionsQuery,
     // useGetShiftOptionsQuery,
     // useGetEmployeeOptionsQuery,

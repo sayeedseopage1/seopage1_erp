@@ -13,21 +13,18 @@ const StopTimerControl = ({stopTimer}) => {
 
     // control stop timer button click
     const handleStopButtonOnClick = (e) => {
-        e.preventDefault();
-
+        e.preventDefault(); 
         const currentTime = dayjs.dayjs(); // current time
         const targetTime = dayjs.dayjs().hour(16).minute(30); // 4:30 
         const isOverTime = dayjs.dayjs(currentTime).isSameOrAfter(targetTime); // over 4:30 PM
 
-        if(isOverTime){
+        // stopTimer()
+        // if(isOverTime){
             // if over 4:30 pm check if developer meet their daily target time
-
-
             setOpenStopButtonConfirmationButton(true);
-
-        }else{
-            stopTimer();
-        }    
+        // }else{
+        //     stopTimer();
+        // }    
     }
 
 
@@ -49,9 +46,15 @@ const StopTimerControl = ({stopTimer}) => {
             }  
 
 
+            <div>
             <Modal isOpen={openStopButtonConfirmationButton} className="sp1_single_task--modal">
-                <StopTimerConfrimationPopUp />
+               <div className='sp1_single_task--modal-panerl-wrapper'>
+                    <div>
+                        <StopTimerConfrimationPopUp />
+                    </div>
+               </div> 
             </Modal>
+            </div>
         </React.Fragment>
     )
 }

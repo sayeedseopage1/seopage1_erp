@@ -12,6 +12,7 @@ use App\Models\Project;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
+use App\Models\TaskboardColumn;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -362,11 +363,13 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(StartTimer $request)
     {
-      
+     // DB::beginTransaction();
       $task_status= Task::find($request->task_id);
       $task_status->task_status="in progress";
       $task_status->board_column_id= 3;
       $task_status->save();
+      $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+     // dd($task_status);
       $timeLog = new ProjectTimeLog();
 
         $activeTimer = ProjectTimeLog::with('user')
@@ -417,7 +420,8 @@ class TimelogController extends AccountBaseController
             return response()->json([
                 'status' => 'success',
                 'message' => 'task timer started',
-                'id' => $timeLog->id
+                'id' => $timeLog->id,
+                'task_status'=> $task_board_column
             ]);
         }
 

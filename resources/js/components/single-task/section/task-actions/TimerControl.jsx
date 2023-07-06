@@ -3,18 +3,23 @@ import Button from '../../components/Button';
 import StartTimerConfirmationModal from './StartTimerConfirmationModal';
 import { 
     useGetTaskDetailsQuery, 
+    useLazyGetTaskDetailsQuery, 
     useStartTimerApiMutation, 
     useStopTimerApiMutation 
 } from '../../../services/api/SingleTaskPageApi';
 import { CompareDate } from '../../../utils/dateController';
 import _ from 'lodash';
 import StopTimerControl from './StopTimerControl';
+import { useDispatch } from 'react-redux';
+import { setTaskStatus } from '../../../services/features/subTaskSlice';
 
 const TimerControl = ({task}) => {
   const [timerStart, setTimerStart] = useState(false);
   const [timerId, setTimerId] = useState(null);
   const [seconds, setSeconds] = useState(0);
   const [isOpenConfirmationModal, setIsOpenConfirmationModal] = useState(false);
+
+  const dispatch = useDispatch();
 
   const dayjs = new CompareDate();
 
@@ -68,11 +73,11 @@ const TimerControl = ({task}) => {
 
     /******** Start timer control *********/ 
 
-    // timer start first timer : checking api
-    const {
-        data:startTimerFirstCheck, 
-        isFetching: startTimerFirstCheckIsFetching 
-    } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.project_id}`);
+    // timer start first timer : checking api 
+    const [
+        startTimerFirstCheck,
+        {isFetching: startTimerFirstCheckIsFetching }
+    ] = useLazyGetTaskDetailsQuery();
 
     // start timer api slice 
     const [ startTimerApi, {
@@ -82,6 +87,7 @@ const TimerControl = ({task}) => {
     // stop timer api slice
     const [stopTimerApi, {isLoading: timerStopStatusIsLoading}] = useStopTimerApiMutation();
 
+    // timer start control
     const startTimerControl = () => {
         setIsOpenConfirmationModal(false);
         startTimerApi({
@@ -95,6 +101,7 @@ const TimerControl = ({task}) => {
           if(res?.status === 'success'){
             setTimerStart(true); 
             setTimerId(res?.id);
+            dispatch(setTaskStatus(res?.task_status));
             Toast.fire({
                 icon: res?.status,
                 title: _.startCase(res?.message)
@@ -114,11 +121,14 @@ const TimerControl = ({task}) => {
     // start timer function
     const startTimer = e => {
         e.preventDefault();
-        if(startTimerFirstCheck){
-            if(startTimerFirstCheck.is_first_task){
+        startTimerFirstCheck(`/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.project_id}`)
+        .unwrap()
+        .then(res => {
+            if(res.is_first_task){
                 setIsOpenConfirmationModal(true);
             }else startTimerControl();
-        }
+        })
+        .catch(err => console.log(err))
     }
   
 
@@ -160,7 +170,7 @@ const TimerControl = ({task}) => {
             !timerStart ? (
                 <>
                     {
-                        !timerStartStatusIsLoading ? 
+                        (!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching) ? 
                         <Button 
                             variant='tertiary'
                             onClick={startTimer}

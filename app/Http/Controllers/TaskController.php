@@ -2189,6 +2189,7 @@ class TaskController extends AccountBaseController
                 'task_id' => $id,
                 'user_id' => $this->user->id
             ])->first();
+            //  dd($data);
 
             return response()->json([
                 'is_first_task' => ($data) ? false : true,
