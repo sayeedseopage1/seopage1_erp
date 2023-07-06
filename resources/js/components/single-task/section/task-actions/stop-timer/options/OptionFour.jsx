@@ -162,17 +162,22 @@ const OptionFour = ({id, onChecked, checked}) =>  {
                                       onChange={setProject} 
                                   >
                                       <Listbox.Button className="position-relative w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center justify-content-between">
-                                          <span>{responsiblePerson?.project_name || '--'}</span>
+                                          <span>{project?.project_name || '--'}</span>
                                           <HiOutlineSelector />
                                       </Listbox.Button>
 
-                                      <Listbox.Options className="position-absolute bg-white p-2 shadow w-100" style={{zIndex: '1', maxHeight: '350px', overflowY: 'auto'}}>
+                                      <Listbox.Options 
+                                        className="position-absolute bg-white p-2 shadow w-100" 
+                                        style={{zIndex: '1', maxHeight: '350px', overflowY: 'auto'}}
+                                      >
                                           <SearchBox value={projectQuery} onChange={setProjectQuery} />
                                           {projects?.filter(p => _.lowerCase(p.projectj_name).includes(_.lowerCase(projectQuery)))?.map((project)=>(
                                               <Listbox.Option
                                                   key={project.id}
                                                   value={project}
-                                                  className={({selected, active}) => selected ? 'task-selection-list-option selected': active ? 'task-selection-list-option active': 'task-selection-list-option'}
+                                                  tabIndex={-1}
+                                                  className={
+                                                    ({selected, active}) => selected ? 'task-selection-list-option selected': active ? 'task-selection-list-option active': 'task-selection-list-option'}
                                               >
                                                   {project.project_name}
                                               </Listbox.Option> 
