@@ -74,20 +74,23 @@ class AuthorizationAction extends Model
                 'approved', 'review'
             ],
             'deliverable_modification_by_client' => [
-                'approved', 'review'
+                 'review'
             ],
             'task_submission_by_lead_developer' => [
-                'approved', 'review'
+                 'review'
             ],
             'task_submission_by_developer' => [
-                'approved', 'review'
+                 'review'
             ],
           
             'task_approved_by_lead_develoer' => [
-                'approved', 'review'
+                 'review'
             ],
             'task_revision_by_lead_developer' => [
-                'approved', 'review'
+                'review'
+            ],
+            'task_revision_by_project_manager' => [
+                'review'
             ],
             'complete_milestone' => [
                 'approved', 'review'

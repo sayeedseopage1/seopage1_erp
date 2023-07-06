@@ -107,15 +107,12 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-        $validator = Validator::make($request->input(), [
-            'link' => 'required|array',
-            'link.*' => 'required|url|min:1',
-            'text' => 'required',
-        ], [
-            'link.url' => 'Invalid url!',
-            'link.*.required' => 'This field is required',
-            'text.required' => 'Please describe what you\'ve done !',
-        ]);
+       // dd($request);
+       $validator = Validator::make($request->all(), [
+        'link' => 'required|string',
+        'text' => 'required',
+       
+    ]);
         //dd($request);
 
         $link = [];
@@ -228,10 +225,12 @@ class TaskController extends AccountBaseController
         $authorization_action->model_id = $task->id;
         $authorization_action->type = $type;
         $authorization_action->deal_id = $task->project->deal_id;
+        $authorization_action->task_id = $task->id;
         $authorization_action->project_id = $task->project->id;
-        $authorization_action->link = route('projects.show', $task->project->id) . '?tab=tasks';
-        $authorization_action->title = Auth::user()->name . ' submitted task for approved';
-        $authorization_action->authorization_for = $authorization_for;
+        $authorization_action->task_id = $task->id;
+        $authorization_action->link = route('tasks.show', $task->id);
+        $authorization_action->title = Auth::user()->name . ' submitted task for approval';
+        $authorization_action->authorization_for = $task->added_by;
         $authorization_action->save();
 
         $task_id = Task::where('id', $task->id)->first();
@@ -258,6 +257,7 @@ class TaskController extends AccountBaseController
     }
     public function TaskApprove(Request $request)
     {
+       // dd($request);
         $request->validate([
             'rating' => 'required',
             'rating2' => 'required',
@@ -269,13 +269,45 @@ class TaskController extends AccountBaseController
             'rating3.required' => 'This field is required!',
             'comments.required' => 'This field is required!',
         ]);
+       //  DB::beginTransaction();
 
         $task_status = Task::find($request->task_id);
         $task_status->status = "   completed";
         $task_status->task_status = "approved";
         $task_status->board_column_id = 8;
         $task_status->save();
+        if (Auth::user()->role_id == 6) {
+            $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
+            //dd($lead_dev_authorization);
+            if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
+            {
+                $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+                $lead_dev_authorization_update->status= '1';
+                $lead_dev_authorization_update->authorization_by = Auth::id();
+                $lead_dev_authorization_update->save();
+    
+            }
+        }
+       
+        if(Auth::user()->role_id == 4)
+        {
+            $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
+            //dd($lead_dev_authorization);
+            if($pm_authorization == null && $pm_authorization->status == 0)
+            {
+                $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+                $lead_dev_authorization_update->status= '1';
+                $lead_dev_authorization_update->authorization_by = Auth::id();
+                $lead_dev_authorization_update->save();
+    
+            }
 
+        }
+        
+       
+        
+    
+    //    / dd( $lead_dev_authorization_update);
 
         $task = new TaskApprove();
         $task->user_id = $request->user_id;
@@ -286,17 +318,18 @@ class TaskController extends AccountBaseController
         $task->comments = $request->comments;
         $task->save();
 
+
         //authorizatoin action start here
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $task_status->getMorphClass();
-        $authorization_action->model_id = $task_status->id;
-        $authorization_action->type = 'task_approved_by_lead_develoer';
-        $authorization_action->deal_id = $task_status->project->deal_id;
-        $authorization_action->project_id = $task_status->project_id;
-        $authorization_action->link = route('tasks.show', $request->task_id);
-        $authorization_action->title = Auth::user()->name . ' approved this task';
-        $authorization_action->authorization_for = 1;
-        $authorization_action->save();
+        // $authorization_action = new AuthorizationAction();
+        // $authorization_action->model_name = $task_status->getMorphClass();
+        // $authorization_action->model_id = $task_status->id;
+        // $authorization_action->type = 'task_approved_by_lead_develoer';
+        // $authorization_action->deal_id = $task_status->project->deal_id;
+        // $authorization_action->project_id = $task_status->project_id;
+        // $authorization_action->link = route('tasks.show', $request->task_id);
+        // $authorization_action->title = Auth::user()->name . ' approved this task';
+        // $authorization_action->authorization_for = 1;
+        // $authorization_action->save();
         //end authorization action here
 
         $text = Auth::user()->name . ' mark task completed';
@@ -321,7 +354,8 @@ class TaskController extends AccountBaseController
     }
     public function TaskRevision(Request $request)
     {
-        //DB::beginTransaction();
+       // dd($request);
+       // DB::beginTransaction();
         $request->validate([
             'comments2' => 'required',
         ], [
@@ -332,6 +366,34 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "revision";
         $task_status->board_column_id = 1;
         $task_status->save();
+       
+       // dd($lead_dev_authorization);
+       if (Auth::user()->role_id == 6) {
+        $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
+        if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
+        {
+            $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+            $lead_dev_authorization_update->status= '1';
+            $lead_dev_authorization_update->authorization_by = Auth::id();
+            $lead_dev_authorization_update->save();
+        //   /  dd($lead_dev_authorization_update);
+        }
+       }
+      if (Auth::user()->role_id == 4) {
+     $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
+    //dd($lead_dev_authorization);
+    if($pm_authorization == null && $pm_authorization->status == 0)
+    {
+        $pm_authorization_update= AuthorizationAction::find($pm_authorization->id);
+        $pm_authorization_update->status= '1';
+        $pm_authorization->authorization_by = Auth::id();
+        $pm_authorization->save();
+
+    }
+      }
+    
+     // dd("true");
+
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
@@ -356,22 +418,25 @@ class TaskController extends AccountBaseController
             $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
         }
         $task_revision->save();
-        if ($this->user->role_id == 6) {
+        if (Auth::user()->role_id == 6) {
             $type = 'task_revision_by_lead_developer';
         } else {
             $type = 'task_revision_by_project_manager';
         }
         //dd($type);
         //authorizatoin action start here
+        
+        $task_user= TaskUser::where('task_id',$task_status->id)->first();
         $authorization_action = new AuthorizationAction();
         $authorization_action->model_name = $task_status->getMorphClass();
         $authorization_action->model_id = $task_status->id;
-        $authorization_action->type = 'task_revision_by_lead_developer';
+        $authorization_action->type = $type;
         $authorization_action->deal_id = $task_status->project->deal_id;
         $authorization_action->project_id = $task_status->project->id;
+        $authorization_action->task_id = $task_status->id;
         $authorization_action->link = route('tasks.show', $request->task_id);
-        $authorization_action->title = Auth::user()->name . ' send task revision request to developer';
-        $authorization_action->authorization_for = $task_status->project->pm_id;
+        $authorization_action->title = Auth::user()->name . ' send task revision request';
+        $authorization_action->authorization_for = $task_user->user_id;
         $authorization_action->save();
         //end authorization action here
 
@@ -1540,6 +1605,7 @@ class TaskController extends AccountBaseController
     //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     {
+        //dd($request);
         $request->validate([
             'text3' => 'required',
         ], [
@@ -1549,6 +1615,7 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
+        //$authorization_action= AuthorizationAction::where('task_id',$task_status->id)->where('type','task_revision_by_lead_developer')
 
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
         $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
@@ -1660,10 +1727,21 @@ class TaskController extends AccountBaseController
 
     public function accept_or_revision_by_developer(Request $request)
     {
+        // DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
+        $authorization_action= AuthorizationAction::where('type','task_revision_by_lead_developer')->where('task_id',$task_status->id)->where('authorization_for',Auth::id())->first();
+       // dd($authorization_action);
+        if($authorization_action != null)
+        {
+        $action= AuthorizationAction::find($authorization_action->id);
+        $action->status = '1';
+        $action->authorization_by = Auth::id();
+        $action->save();
+        }
+       // dd($action);
 
         $tasks_accept = TaskRevision::find($request->revision_id);
         if ($request->mode == 'deny') {
@@ -1763,6 +1841,7 @@ class TaskController extends AccountBaseController
 
     public function task_json(Request $request, $id)
     {
+      //  dd($request);
         if ($request->mode == 'basic') {
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
