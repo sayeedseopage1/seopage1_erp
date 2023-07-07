@@ -9,7 +9,9 @@ use App\Models\Currency;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLogBreak;
+use App\Models\Task;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use Auth;
 use Notification;
@@ -56,6 +58,7 @@ class ProjectMilestoneController extends AccountBaseController
     }
     public function CompleteMilestone(Request $request)
     {
+    //    / dd($request);
         $milestone_id= ProjectMilestone::where('id',$request->id)->first();
         $milestone= ProjectMilestone::find($request->id);
         $milestone->status= "complete";
@@ -108,6 +111,7 @@ class ProjectMilestoneController extends AccountBaseController
     public function createAutoMilestone(Request $request)
     {
        // dd($request->all());
+    //   / DB::beginTransaction();
         $project=Project::where('id',$request->project_id)->first();
         $deal=Deal::where('id',$project->deal_id)->first();
         $milestone_count= ProjectMilestone::where('project_id',$request->project_id)->count();
@@ -136,6 +140,13 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone_update->status= "complete";
         $milestone_update->last_updated_by= Auth::id();
         $milestone_update->save();
+        $tasks = Task::where('milestone_id',$milestone_update->id)->where('board_column_id','!=',4)->get();
+        foreach ($tasks as $key => $task) {
+            $update_task = Task::find($task->id);
+            $update_task->milestone_id = $milestone->id;
+            $update_task->save();
+        }
+      //  dd("true");
         $project_id= Project::where('id',$milestone_update->project_id)->first();
         $milestone_updated_count= ProjectMilestone::where('project_id',$milestone_update->project_id)->count();
 

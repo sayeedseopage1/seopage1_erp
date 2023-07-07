@@ -158,6 +158,7 @@ class InvoiceController extends AccountBaseController
 
     public function store(StoreInvoice $request)
     {
+       // dd($request);
       $milestone_check = ProjectMilestone::where('id',$request->milestone_id)->first();
       if($milestone_check->invoice_created == 1)
       {
