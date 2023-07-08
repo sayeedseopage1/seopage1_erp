@@ -2029,11 +2029,11 @@ class TaskController extends AccountBaseController
             $data = TaskComment::findOrfail($id);
 
 
-            if ($data->files != null){
+            if ($data->files != null) {
                 $files = json_decode($data->files);
                 $file = [];
-                foreach ($files as $item){
-                    if ($item != $request->query('files')){
+                foreach ($files as $item) {
+                    if ($item != $request->query('files')) {
                         array_push($file, $item);
                     }
                 }
@@ -2060,7 +2060,6 @@ class TaskController extends AccountBaseController
                     if ($item->text != null) {
                         array_push($description, $item->text);
                     }
-
                 }
 
                 $user = $data->first()->user;
@@ -2118,7 +2117,6 @@ class TaskController extends AccountBaseController
                     } else {
                         $newArray[] = $group[0];
                     }
-
                 }
 
                 $new_array_with_link = [];
@@ -2130,7 +2128,6 @@ class TaskController extends AccountBaseController
 
                 return response()->json($new_array_with_link);
             }
-
         } elseif ($request->mode == 'task_reply_comment') {
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
@@ -2194,9 +2191,22 @@ class TaskController extends AccountBaseController
             return response()->json([
                 'is_first_task' => ($data) ? false : true,
             ]);
-
         } else {
             abort(404);
         }
+    }
+    public function DeveloperTask($id)
+    {
+        // /$id = 225;
+        $data = Task::select([
+
+            'tasks.*',
+            'tasks.id as task_id',
+            'tasks.heading as task_name',
+
+        ])->join('projects', 'projects.id', '=', 'tasks.project_id',)
+
+            ->join('task_users as task_assign_on', 'task_assign_on.task_id', '=', 'tasks.id')->where('task_assign_on.user_id', $id)->where('projects.status', '=', 'in progress')->get();
+        return response()->json($data);
     }
 }

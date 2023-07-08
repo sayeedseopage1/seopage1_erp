@@ -36,19 +36,19 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Condensed" type="text/css" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="{{asset('moving-countdown/style.css')}}" type="text/css" />
+    <link rel="stylesheet" href="{{ asset('moving-countdown/style.css') }}" type="text/css" />
 
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <!-- sp1 editor css -->
-    <link rel="stylesheet" href="{{asset('css/ck-editor.css')}}">
-    <link rel="stylesheet" href="{{asset('css/seopage1.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/ck-editor.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/seopage1.css') }}">
 
 
     <!-- designation hierarchy && department hierarchy -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
 
@@ -62,7 +62,7 @@
         <style>
             .preloader-container {
                 /*margin-left: 510px;
-                width: calc(100% - 510px);*/
+                        width: calc(100% - 510px);*/
                 z-index: 99999;
                 overflow: hidden;
             }
@@ -77,48 +77,52 @@
                 margin-right: 4px;
             }
 
-        .loader, .loader:after {
-            border-radius: 50%;
-            width: 10em;
-            height: 10em;
-        }
+            .loader,
+            .loader:after {
+                border-radius: 50%;
+                width: 10em;
+                height: 10em;
+            }
 
-        .loader {
-            margin: 60px auto;
-            font-size: 10px;
-            position: relative;
-            text-indent: -9999em;
-            border-top: 1.1em solid rgba(255, 255, 255, 0.2);
-            border-right: 1.1em solid rgba(255, 255, 255, 0.2);
-            border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
-            border-left: 1.1em solid #ffffff;
-            -webkit-transform: translateZ(0);
-            -ms-transform: translateZ(0);
-            transform: translateZ(0);
-            -webkit-animation: load8 1.1s infinite linear;
-            animation: load8 1.1s infinite linear;
-        }
-        @-webkit-keyframes load8 {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
+            .loader {
+                margin: 60px auto;
+                font-size: 10px;
+                position: relative;
+                text-indent: -9999em;
+                border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+                border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+                border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+                border-left: 1.1em solid #ffffff;
+                -webkit-transform: translateZ(0);
+                -ms-transform: translateZ(0);
+                transform: translateZ(0);
+                -webkit-animation: load8 1.1s infinite linear;
+                animation: load8 1.1s infinite linear;
             }
-            100% {
-                -webkit-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
-        }
-        @keyframes load8 {
-            0% {
-                -webkit-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
-        }
 
+            @-webkit-keyframes load8 {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes load8 {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
         </style>
     @endisset
 
@@ -137,9 +141,8 @@
         .fc a[data-navlink] {
             color: #99a5b5;
         }
-
     </style>
-    
+
 
     {{-- Custom theme styles --}}
     @if (!user()->dark_theme)
@@ -303,77 +306,90 @@
             <x-app-title class="d-block d-lg-none" :pageTitle="__($pageTitle)"></x-app-title>
 
             @yield('content')
-            @if(Auth::user()->role_id == 4 && !Request::is('account/contracts/*') &&!Request::is('account/deals/*'))
+            @if (Auth::user()->role_id == 4 && !Request::is('account/contracts/*') && !Request::is('account/deals/*'))
                 @php
-                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->where('pm_id', Auth::id())->get();
+                    $deal_id = App\Models\Deal::where('status', 'pending')
+                        ->orderBy('id', 'asc')
+                        ->where('pm_id', Auth::id())
+                        ->get();
                 @endphp
-                @if(count($deal_id) > 0)
-                    <div class="timer-card @if(\Session::get('timer_box_status') == 'off') minimized @endif">
-                    	<div class="header mt-3 rounded">
-				            <h5 class="float-start">Project Acceptance ({{$deal_id->count()}})</h5>
-				            <button class="minimize-button" onclick="minimizeCard()">
-				                <i id="handelButton" class="fa-solid fa-minimize"></i>
-				            </button>
-        				</div>
-                    	@foreach($deal_id as $value)
+                @if (count($deal_id) > 0)
+                    <div class="timer-card @if (\Session::get('timer_box_status') == 'off') minimized @endif">
+                        <div class="header mt-3 rounded">
+                            <h5 class="float-start">Project Acceptance ({{ $deal_id->count() }})</h5>
+                            <button class="minimize-button" onclick="minimizeCard()">
+                                <i id="handelButton" class="fa-solid fa-minimize"></i>
+                            </button>
+                        </div>
+                        @foreach ($deal_id as $value)
                             @php
                                 if ($deal_id != null) {
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
-
+                                
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
-
-                                    if(\Carbon\Carbon::now()->lt($to)){
+                                
+                                    if (\Carbon\Carbon::now()->lt($to)) {
                                         $diff_in_minutes = $from->diffInMinutes($to);
                                     } else {
                                         $diff_in_minutes = 0;
                                     }
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1200)
-                            <div class="content">
-					            <div class="bg-timer-box my-3 rounded p-2 text-light">
-					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
-					                <span class="timer-count font-weight-bold" id="timer_{{$value->id}}">00:00:00</span>
-					                <p>{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
-					                <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none" href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
-					            </div>
-					        </div>
+                            @if ($value != null && $diff_in_minutes < 1200)
+                                <div class="content">
+                                    <div class="bg-timer-box my-3 rounded p-2 text-light">
+                                        <p class="mb-0">New Deal Won: {{ $value->client_name }}</p>
+                                        <span class="timer-count font-weight-bold"
+                                            id="timer_{{ $value->id }}">00:00:00</span>
+                                        <p>{{ \Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A') }}
+                                        </p>
+                                        <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none"
+                                            href="/account/contracts/{{ $value->id }}" target="_blank"
+                                            class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                                    </div>
+                                </div>
                             @endif
                         @endforeach
                     </div>
                 @endif
             @endif
-            @if(Auth::user()->role_id == 1 && !Request::is('account/contracts/*') &&!Request::is('account/deals/*'))
+            @if (Auth::user()->role_id == 1 && !Request::is('account/contracts/*') && !Request::is('account/deals/*'))
                 @php
-                    $deal_id= App\Models\Deal::where('status','pending')->orderBy('id','asc')->get();
+                    $deal_id = App\Models\Deal::where('status', 'pending')
+                        ->orderBy('id', 'asc')
+                        ->get();
                 @endphp
-                @if(count($deal_id) > 0)
-                    <div class="timer-card @if(\Session::get('timer_box_status') == 'off') minimized @endif">
-                    	<div class="header mt-3 rounded">
-				            <h5 class="text-left mb-0">Won deals ({{$deal_id->count()}})</h5>
-				            <button class="minimize-button" onclick="minimizeCard()">
-				                <i id="handelButton" class="fa-solid fa-minimize"></i>
-				            </button>
-        				</div>
-                    	@foreach($deal_id as $value)
+                @if (count($deal_id) > 0)
+                    <div class="timer-card @if (\Session::get('timer_box_status') == 'off') minimized @endif">
+                        <div class="header mt-3 rounded">
+                            <h5 class="text-left mb-0">Won deals ({{ $deal_id->count() }})</h5>
+                            <button class="minimize-button" onclick="minimizeCard()">
+                                <i id="handelButton" class="fa-solid fa-minimize"></i>
+                            </button>
+                        </div>
+                        @foreach ($deal_id as $value)
                             @php
                                 if ($deal_id != null) {
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
-
+                                
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
-
+                                
                                     $diff_in_minutes = $from->diffInMinutes($to);
                                 }
                             @endphp
-                            @if($value != null && $diff_in_minutes < 1300)
-                            <div class="content">
-					            <div class="bg-timer-box my-3 rounded p-2 text-light">
-					                <p class="mb-0">New Deal Won: {{$value->client_name}}</p>
-					                <span class="timer-count font-weight-bold" id="timer_{{$value->id}}">00:00:00</span>
-					                <p>{{\Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A')}}</p>
-					                <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none" href="/account/contracts/{{$value->id}}" target="_blank" class="Accept">View <i class="fa-regular fa-eye"></i></a>
-					            </div>
-					        </div>
+                            @if ($value != null && $diff_in_minutes < 1300)
+                                <div class="content">
+                                    <div class="bg-timer-box my-3 rounded p-2 text-light">
+                                        <p class="mb-0">New Deal Won: {{ $value->client_name }}</p>
+                                        <span class="timer-count font-weight-bold"
+                                            id="timer_{{ $value->id }}">00:00:00</span>
+                                        <p>{{ \Carbon\Carbon::parse($value->award_time)->addHours(20)->format('Y-m-d (l), g:i A') }}
+                                        </p>
+                                        <a class="btn btn-success text-light rounded px-1 py-0 text-underline-none"
+                                            href="/account/contracts/{{ $value->id }}" target="_blank"
+                                            class="Accept">View <i class="fa-regular fa-eye"></i></a>
+                                    </div>
+                                </div>
                             @endif
                         @endforeach
                     </div>
@@ -487,8 +503,10 @@
         const daterangeConfig = {
             "@lang('app.today')": [moment(), moment()],
             "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
-            "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(20, 'days'), moment().startOf('month').add(19, 'days')],
-            "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(20, 'days'), moment().startOf('month').subtract(1, 'month').add(19, 'days')],
+            "@lang('app.thisMonth')": [moment().startOf('month').subtract(1, 'month').add(20, 'days'), moment().startOf(
+                'month').add(19, 'days')],
+            "@lang('app.lastMonth')": [moment().startOf('month').subtract(2, 'month').add(20, 'days'), moment().startOf(
+                'month').subtract(1, 'month').add(19, 'days')],
             "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
             "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
             "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]
@@ -500,12 +518,12 @@
             "separator": " @lang('app.to') ",
             "applyLabel": "@lang('app.apply')",
             "cancelLabel": "@lang('app.cancel')",
-            "daysOfWeek": ['@lang("app.weeks.Sun")', '@lang("app.weeks.Mon")',
-                '@lang("app.weeks.Tue")',
-                '@lang("app.weeks.Wed")', '@lang("app.weeks.Thu")', '@lang("app.weeks.Fri")',
-                '@lang("app.weeks.Sat")'
+            "daysOfWeek": ['@lang('app.weeks.Sun')', '@lang('app.weeks.Mon')',
+                '@lang('app.weeks.Tue')',
+                '@lang('app.weeks.Wed')', '@lang('app.weeks.Thu')', '@lang('app.weeks.Fri')',
+                '@lang('app.weeks.Sat')'
             ],
-            "monthNames": ['@lang("app.months.January")', '@lang("app.months.February")',
+            "monthNames": ['@lang('app.months.January')', '@lang('app.months.February')',
                 "@lang('app.months.March')", "@lang('app.months.April')",
                 "@lang('app.months.May')",
                 "@lang('app.months.June')", "@lang('app.months.July')",
@@ -569,7 +587,7 @@
 
         $('body').on('click', '.img-lightbox', function() {
             var imageUrl = $(this).data('image-url');
-            const url = "{{ route('invoices.show_image').'?image_url=' }}"+encodeURIComponent(imageUrl);
+            const url = "{{ route('invoices.show_image') . '?image_url=' }}" + encodeURIComponent(imageUrl);
             $(MODAL_LG + ' ' + MODAL_HEADING).html('...');
             $.ajaxModal(MODAL_LG, url);
         });
@@ -594,8 +612,6 @@
             $('> .icon', this).toggleClass('fa-eye-slash fa-eye');
             $(this).siblings('span').toggleClass('blur-code ');
         });
-
-
     </script>
 
     <script>
@@ -780,46 +796,48 @@
         });
     </script>
 
-	<script type="text/javascript" src="{{asset('moving-countdown/script.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('moving-countdown/script.js') }}"></script>
     <script type="text/javascript">
-
-        @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 && !Request::is('account/contracts/*'))
-            @if(isset($deal_id) && $deal_id != null)
-                @foreach($deal_id as $value)
+        @if (Auth::user()->role_id == 1 || (Auth::user()->role_id == 4 && !Request::is('account/contracts/*')))
+            @if (isset($deal_id) && $deal_id != null)
+                @foreach ($deal_id as $value)
                     @php
-                        $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$value->award_time)->format('Y-m-d H:i:s');
-                        $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)->addMinutes(1200)->format('Y-m-d H:i:s');
+                        $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time)->format('Y-m-d H:i:s');
+                        $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $currentDateTime)
+                            ->addMinutes(1200)
+                            ->format('Y-m-d H:i:s');
                         $minutes = \Carbon\Carbon::parse($newDateTime)->diffInMinutes(\Carbon\Carbon::now());
                         $seconds = \Carbon\Carbon::parse($newDateTime)->diffInSeconds(\Carbon\Carbon::now());
                     @endphp
-                    @if($minutes < 1200)
-                    // let timeInMinutes_{{$value->id}} = {{$minutes}}; // set the time in minutes dynamically
-                    // const deadline_{{$value->id}} = timeInMinutes_{{$value->id}} * 60; // convert minutes to seconds
-                    const deadline_{{$value->id}} = {{$seconds}}; // convert minutes to seconds
-                    let timerInterval_{{$value->id}};
-                    let timeRemaining_{{$value->id}} = deadline_{{$value->id}};
-                    let timerElement_{{$value->id}} = document.getElementById('timer_{{$value->id}}');
+                    @if ($minutes < 1200)
+                        // let timeInMinutes_{{ $value->id }} = {{ $minutes }}; // set the time in minutes dynamically
+                        // const deadline_{{ $value->id }} = timeInMinutes_{{ $value->id }} * 60; // convert minutes to seconds
+                        const deadline_{{ $value->id }} = {{ $seconds }}; // convert minutes to seconds
+                        let timerInterval_{{ $value->id }};
+                        let timeRemaining_{{ $value->id }} = deadline_{{ $value->id }};
+                        let timerElement_{{ $value->id }} = document.getElementById('timer_{{ $value->id }}');
 
-                    // Initialize the timer
-                    updateTimer_{{$value->id}}();
+                        // Initialize the timer
+                        updateTimer_{{ $value->id }}();
 
-                    // Start the countdown timer
-                    timerInterval_{{$value->id}} = setInterval(function() {
-                        timeRemaining_{{$value->id}}--;
-                        updateTimer_{{$value->id}}();
+                        // Start the countdown timer
+                        timerInterval_{{ $value->id }} = setInterval(function() {
+                            timeRemaining_{{ $value->id }}--;
+                            updateTimer_{{ $value->id }}();
 
-                        // If time has run out, stop the timer
-                        if (timeRemaining_{{$value->id}} <= 0) {
-                            clearInterval(timerInterval_{{$value->id}});
+                            // If time has run out, stop the timer
+                            if (timeRemaining_{{ $value->id }} <= 0) {
+                                clearInterval(timerInterval_{{ $value->id }});
+                            }
+                        }, 1000);
+
+                        function updateTimer_{{ $value->id }}() {
+                            let hours = Math.floor(timeRemaining_{{ $value->id }} / 3600);
+                            let minutes = Math.floor((timeRemaining_{{ $value->id }} % 3600) / 60);
+                            let seconds = timeRemaining_{{ $value->id }} % 60;
+                            timerElement_{{ $value->id }}.innerText =
+                                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                         }
-                    }, 1000);
-
-                    function updateTimer_{{$value->id}}() {
-                        let hours = Math.floor(timeRemaining_{{$value->id}} / 3600);
-                        let minutes = Math.floor((timeRemaining_{{$value->id}} % 3600) / 60);
-                        let seconds = timeRemaining_{{$value->id}} % 60;
-                        timerElement_{{$value->id}}.innerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                    }
                     @endif
                 @endforeach
             @endif
@@ -829,8 +847,16 @@
     <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
 
-    <script src="{{URL::asset('easy-notification/easyNotify.js')}}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ URL::asset('easy-notification/easyNotify.js') }}"></script>
+
+    {{-- react script --}}
+
+    <script src="{{ mix('js/manifest.js') }}"></script>
+    <script src="{{ mix('js/vendor.js') }}"></script>
+    <script src="{{ mix('js/react/app.js') }}"></script>
+
+    {{-- react script --}}
+
     <script type="text/javascript">
         $(document).ready(function() {
             var channel = pusher.subscribe('lead-updated-channel');
@@ -842,7 +868,7 @@
                         title: data.title,
                         options: {
                             body: data.body,
-                            icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
+                            icon: '{{ URL::asset('user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png') }}',
                             lang: 'en-US',
                             onClick: function() {
                                 window.location.href = data.redirectUrl;
@@ -862,7 +888,7 @@
                         title: data.title,
                         options: {
                             body: data.body,
-                            icon: '{{URL::asset("user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png")}}',
+                            icon: '{{ URL::asset('user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png') }}',
                             lang: 'en-US',
                             onClick: function() {
                                 window.location.href = data.redirectUrl;
@@ -878,12 +904,20 @@
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         @php
-            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(12)->addDays(20);
+            $startDate = \Carbon\Carbon::now()
+                ->startOfMonth()
+                ->subMonths(12)
+                ->addDays(20);
             $today = \Carbon\Carbon::now()->format('d');
             if ($today > 20) {
-                $endDate = \Carbon\Carbon::now()->startOfMonth()->addMonth(1)->addDays(19);
+                $endDate = \Carbon\Carbon::now()
+                    ->startOfMonth()
+                    ->addMonth(1)
+                    ->addDays(19);
             } else {
-                $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(19);
+                $endDate = \Carbon\Carbon::now()
+                    ->startOfMonth()
+                    ->addDays(19);
             }
         @endphp
         $(function() {
@@ -895,8 +929,9 @@
             var end = moment(endDate, format);
 
             function cb(start, end) {
-                $('#datatableRange_al').val(moment(start).subtract(1, 'year').format('{{ global_setting()->moment_date_format }}') +
-                    ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+                $('#datatableRange_al').val(moment(start).subtract(1, 'year').format(
+                        '{{ global_setting()->moment_date_format }}') +
+                    ' @lang('app.to') ' + end.format('{{ global_setting()->moment_date_format }}'));
                 $('#reset-filters').removeClass('d-none');
             }
 
