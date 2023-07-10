@@ -957,8 +957,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
-/* harmony import */ var _headlessui_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @headlessui/react */ "./node_modules/@headlessui/react/dist/components/listbox/listbox.js");
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -978,10 +976,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+var DeveloperTaskSelectionMenu = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.lazy)(function () {
+  return Promise.all(/*! import() */[__webpack_require__.e("/js/vendor"), __webpack_require__.e("resources_js_components_single-task_section_task-actions_stop-timer_options_DevloperTaskSelec-9c8548")]).then(__webpack_require__.bind(__webpack_require__, /*! ./DevloperTaskSelectionMenu */ "./resources/js/components/single-task/section/task-actions/stop-timer/options/DevloperTaskSelectionMenu.jsx"));
+});
+
 // duration time
-
-
-
 var DurationTime = function DurationTime(_ref) {
   var handleSelectTimeDuration = _ref.handleSelectTimeDuration,
     index = _ref.index,
@@ -1055,6 +1056,8 @@ var OptionFive = function OptionFive(_ref2) {
     _useState8 = _slicedToArray(_useState7, 2),
     durations = _useState8[0],
     setDurations = _useState8[1];
+
+  // handle input change
   var handleOnChange = function handleOnChange(e) {
     e.target.checked ? onChecked(id) : onChecked(null);
   };
@@ -1068,6 +1071,15 @@ var OptionFive = function OptionFive(_ref2) {
       } else arr.push(d);
     });
     setDurations(arr);
+  };
+
+  // handle submittion
+  var handleSubmittion = function handleSubmittion() {
+    var data = {
+      forgot_to_track_task_id: task === null || task === void 0 ? void 0 : task.id,
+      durations: JSON.stringify(durations)
+    };
+    console.log(data);
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -1097,31 +1109,15 @@ var OptionFive = function OptionFive(_ref2) {
             children: "Select the task you forgot to track hours"
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "position-relative",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_3__.Listbox, {
-              value: task,
-              onChange: setTask,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_3__.Listbox.Button, {
-                className: "position-relative w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center justify-content-between",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
-                  children: task || "--"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_4__.HiOutlineSelector, {})]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_3__.Listbox.Options, {
-                className: "position-absolute bg-white p-2 shadow w-100",
-                style: {
-                  zIndex: "1"
-                },
-                children: _toConsumableArray(Array(10)).map(function (_, i) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_3__.Listbox.Option, {
-                    value: "option-".concat(i),
-                    className: function className(_ref3) {
-                      var selected = _ref3.selected,
-                        active = _ref3.active;
-                      return selected ? "task-selection-list-option selected" : active ? "task-selection-list-option active" : "task-selection-list-option";
-                    },
-                    children: ["option ", i]
-                  }, i);
-                })
-              })]
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
+              fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+                className: "w-100 bg-white py-2 pl-2 pr-1 mb-3 border d-flex align-items-center justify-content-between",
+                children: "Loading..."
+              }),
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(DeveloperTaskSelectionMenu, {
+                task: task,
+                setTask: setTask
+              })
             })
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -1169,12 +1165,20 @@ var OptionFive = function OptionFive(_ref2) {
               className: "fa-solid fa-circle-plus"
             }), "Add New Time"]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "mt-3 d-flex align-items-center",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-            className: "ml-auto",
-            children: " Submit "
-          })
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            variant: "tertiary",
+            onClick: function onClick() {
+              return onChecked(null);
+            },
+            className: "ml-auto mr-2",
+            children: "Back"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            onClick: handleSubmittion,
+            className: "",
+            children: "Submit"
+          })]
         })]
       })]
     })
@@ -1217,10 +1221,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var ProjectSelectionList = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_1__.lazy)(function () {
-  return __webpack_require__.e(/*! import() */ "resources_js_components_single-task_section_task-actions_stop-timer_options_ProjectSelectionL-5ed198").then(__webpack_require__.bind(__webpack_require__, /*! ./ProjectSelectionList */ "./resources/js/components/single-task/section/task-actions/stop-timer/options/ProjectSelectionList.jsx"));
+  return Promise.all(/*! import() */[__webpack_require__.e("/js/vendor"), __webpack_require__.e("resources_js_components_single-task_section_task-actions_stop-timer_options_ProjectSelectionL-5ed198")]).then(__webpack_require__.bind(__webpack_require__, /*! ./ProjectSelectionList */ "./resources/js/components/single-task/section/task-actions/stop-timer/options/ProjectSelectionList.jsx"));
 });
 var UserSelectionList = /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_1__.lazy)(function () {
-  return __webpack_require__.e(/*! import() */ "resources_js_components_single-task_section_task-actions_stop-timer_options_UserSelectionList_jsx").then(__webpack_require__.bind(__webpack_require__, /*! ./UserSelectionList */ "./resources/js/components/single-task/section/task-actions/stop-timer/options/UserSelectionList.jsx"));
+  return Promise.all(/*! import() */[__webpack_require__.e("/js/vendor"), __webpack_require__.e("resources_js_components_single-task_section_task-actions_stop-timer_options_UserSelectionList_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./UserSelectionList */ "./resources/js/components/single-task/section/task-actions/stop-timer/options/UserSelectionList.jsx"));
 });
 var OptionFour = function OptionFour(_ref) {
   var _window, _window$Laravel;

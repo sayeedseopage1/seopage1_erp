@@ -9,7 +9,7 @@ const CustomModal = ({toggleRef = null,  isOpen, close, children}) => {
     const { styles, attributes } = usePopper(toggleRef, modalRef,{
         placement: 'left-start',
         modifiers: [ 
-            {name: 'offset', options: {offset: [-100, -10]}}
+            {name: 'offset', options: {offset: [-100, -10]}},
         ]
     })
 

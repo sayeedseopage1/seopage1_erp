@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import Button from "../../../../components/Button";
 import { Listbox } from "@headlessui/react";
 import { HiOutlineSelector } from "react-icons/hi";
+
+const DeveloperTaskSelectionMenu = lazy(() => import('./DevloperTaskSelectionMenu'));
 
 // duration time
 const DurationTime = ({
@@ -75,6 +77,9 @@ const OptionFive = ({ id, onChecked, checked }) => {
         { start: "00:00 AM", end: "00:00 AM" },
     ]);
 
+
+
+    // handle input change
     const handleOnChange = (e) => {
         e.target.checked ? onChecked(id) : onChecked(null);
     };
@@ -89,6 +94,19 @@ const OptionFive = ({ id, onChecked, checked }) => {
         });
         setDurations(arr);
     };
+
+    
+
+    // handle submittion
+    const handleSubmittion = () => {
+        const data = {
+            forgot_to_track_task_id: task?.id,
+            durations: JSON.stringify(durations)
+        }
+
+        console.log(data)
+    }
+ 
 
     return (
         <>
@@ -116,36 +134,16 @@ const OptionFive = ({ id, onChecked, checked }) => {
                                 Select the task you forgot to track hours
                             </div>
                             <div className="position-relative">
-                                <Listbox value={task} onChange={setTask}>
-                                    <Listbox.Button className="position-relative w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center justify-content-between">
-                                        <span>{task || "--"}</span>
-                                        <HiOutlineSelector />
-                                    </Listbox.Button>
-
-                                    <Listbox.Options
-                                        className="position-absolute bg-white p-2 shadow w-100"
-                                        style={{ zIndex: "1" }}
-                                    >
-                                        {[...Array(10)].map((_, i) => (
-                                            <Listbox.Option
-                                                key={i}
-                                                value={`option-${i}`}
-                                                className={({
-                                                    selected,
-                                                    active,
-                                                }) =>
-                                                    selected
-                                                        ? "task-selection-list-option selected"
-                                                        : active
-                                                        ? "task-selection-list-option active"
-                                                        : "task-selection-list-option"
-                                                }
-                                            >
-                                                option {i}
-                                            </Listbox.Option>
-                                        ))}
-                                    </Listbox.Options>
-                                </Listbox>
+                                <Suspense fallback={
+                                     <div className="w-100 bg-white py-2 pl-2 pr-1 mb-3 border d-flex align-items-center justify-content-between">
+                                        Loading...
+                                    </div>
+                                }>
+                                    <DeveloperTaskSelectionMenu
+                                        task={task} 
+                                        setTask={setTask}
+                                    />
+                                </Suspense>
                             </div>
                         </div>
 
@@ -197,7 +195,17 @@ const OptionFive = ({ id, onChecked, checked }) => {
                         </div>
 
                         <div className="mt-3 d-flex align-items-center">
-                            <Button className="ml-auto"> Submit </Button>
+                            <Button
+                                variant="tertiary"
+                                onClick={() => onChecked(null)}
+                                className="ml-auto mr-2"
+                            >
+                                Back
+                            </Button>
+
+                            <Button onClick={handleSubmittion} className="">
+                                Submit
+                            </Button>
                         </div>
                     </div>
                 )}

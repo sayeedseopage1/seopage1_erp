@@ -119,7 +119,7 @@
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if ({"resources_js_components_single-task_section_task-actions_stop-timer_StopTimerConfrimationPopUp_jsx":1,"resources_js_components_single-task_section_task-actions_stop-timer_options_ProjectSelectionL-5ed198":1,"resources_js_components_single-task_section_task-actions_stop-timer_options_UserSelectionList_jsx":1}[chunkId]) return "js/react/" + chunkId + ".js";
+/******/ 			if ({"resources_js_components_single-task_section_task-actions_stop-timer_StopTimerConfrimationPopUp_jsx":1,"resources_js_components_single-task_section_task-actions_stop-timer_options_ProjectSelectionL-5ed198":1,"resources_js_components_single-task_section_task-actions_stop-timer_options_UserSelectionList_jsx":1,"resources_js_components_single-task_section_task-actions_stop-timer_options_DevloperTaskSelec-9c8548":1}[chunkId]) return "js/react/" + chunkId + ".js";
 /******/ 			// return url for filenames based on template
 /******/ 			return "" + chunkId + ".js";
 /******/ 		};

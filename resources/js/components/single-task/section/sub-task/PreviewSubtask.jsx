@@ -45,9 +45,10 @@ const PreviewSubtask = () => {
                     </div>
 
                     <div className="tab-content p-3" id="v-pills-tabContent">
-
-                        <div className="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-general-tab">
-                           <Genarel taskID={taskID} /> 
+                        <div className="tab-pane fade show active sp1_st_tab_panel" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-general-tab">
+                           <div className='mr-3'>
+                            <Genarel taskID={taskID} />
+                           </div> 
                         </div>
 
                         <div className="tab-pane fade" id="v-pills-comments" role="tabpanel" aria-labelledby="v-pills-comments-tab">Comment</div>

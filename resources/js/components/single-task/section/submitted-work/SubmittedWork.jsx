@@ -2,7 +2,7 @@ import * as React from 'react'
 import WorkItem from './WorkItem';
 import useSWR from 'swr';
 import SubmitionView from './SubmitionView';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import SubmittedModalView from './SubmittedModalView';
 
 
@@ -13,21 +13,26 @@ const SubmittedWork = ({task}) => {
   const [modalRefButton, setModalRefButton] = React.useState(null); 
   const [isOpen, setIsOpen] = React.useState(false);
   const navigate = useNavigate(); 
+  const location = useLocation();
   const { data, error, isLoading } = useSWR(`/account/task/${task?.id}/json?mode=task_submission_list`, fetcher, {refreshInterval: 1000 * 3600});
   const [searchParams] = useSearchParams();
   const preview = searchParams.get('submitted-work');
+  const modal = searchParams.get('view-modal')
     // control modal
   const toggle = (e) => {
     e.preventDefault();
-    if(preview){
-      navigate(`/account/tasks/${task?.id}`);
+    if(preview || modal){
+      if(location.state && location.state.from){
+        navigate(location.state.from);
+      }else{navigate(`/account/tasks/${task?.id}`);} 
     }else{
-      setIsOpen(!isOpen);
+      navigate(`/account/tasks/${task?.id}?view-modal=submitted-work`) 
     }
   };
-  const close = () => {
-    setIsOpen(false);
-    navigate(`/account/tasks/${task?.id}`);
+  const close = () => { 
+    if(location.state && location.state.from){
+      navigate(location.state.from);
+    }else{navigate(`/account/tasks/${task?.id}`);} 
   }
  
   return (
@@ -56,16 +61,16 @@ const SubmittedWork = ({task}) => {
               ref={setModalRefButton}
               className='sp1_task_right_dl_toggle'
               onClick={toggle}
-              style={{zIndex:  (preview || isOpen) ? '110' : ''}}
+              style={{zIndex:  (preview || modal === 'submitted-work') ? '110' : ''}}
             >
               <i 
-                className={`fa-solid fa-circle-chevron-${ (preview || isOpen) ? 'right' : 'left'}`} 
+                className={`fa-solid fa-circle-chevron-${ (preview || modal === 'submitted-work') ? 'right' : 'left'}`} 
                 style={{color: "#276fec"}} 
               />
           </button>
 
         <SubmittedModalView
-            isOpen={isOpen}
+            isOpen={modal === 'submitted-work'}
             toggle={modalRefButton}
             data={data}
             close={close}

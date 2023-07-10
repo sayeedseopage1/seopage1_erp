@@ -3,7 +3,7 @@ import { useState, useRef } from 'react';
 import Modal from './Modal';
 import { useClickAway } from 'react-use';
 
-const Guideline = ({text}) => {
+const Guideline = ({text, editorContainerClass}) => {
   const [expend, setExpend] = useState(false);
   let isLong = text?.length > 400;
   const showText = isLong ? text.slice(0, 400) + '...' : text;
@@ -20,7 +20,7 @@ const Guideline = ({text}) => {
 
   return (
     <div className='sp1_task_card--sub-card'>
-       <div dangerouslySetInnerHTML={{__html: showText}}></div> 
+       <div className={editorContainerClass} dangerouslySetInnerHTML={{__html: showText}}></div> 
        {isLong ? <a href="#" onClick={handleExpend} className=''> Read full guideline </a> : ''}
 
        <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
@@ -31,7 +31,7 @@ const Guideline = ({text}) => {
                     </button>
                 </div>
                 <div className='__content'> 
-                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: text}} />
+                    <div className={`sp1_ck_content ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
                 </div>
 
                 <div className=' __footer'>

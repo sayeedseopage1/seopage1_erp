@@ -1,5 +1,6 @@
 import * as React from "react";
 import "./file-upload.css";
+import Button from "./Button";
 
 const FileUploaderContext = React.createContext();
 
@@ -44,7 +45,7 @@ const RenderIcon = ({ filename, size }) => {
 
 // file input
 const FileInput = ({ className = "" }) => {
-    const { setFiles, previews, setPreviews } = React.useContext();
+    const { setFiles, previews, setPreviews } = React.useContext(FileUploaderContext);
 
     const handleFileUpload = (e) => {
         const uploadedFiles = e.target.files;
@@ -85,15 +86,17 @@ const FileInput = ({ className = "" }) => {
                 className="sp1_file_upload--input"
             />
             <i className="fa-solid fa-cloud-arrow-up"></i>
-            <span>Upload Files</span>
+            <span className="mt-2">Upload Files</span>
         </div>
     );
 };
 
 // previews
 const FilePreview = ({
+    id,
     deleteAble = true,
-    downloadAble = ture,
+    onRemove,
+    downloadAble = true,
     downloadUrl = "#",
     fileType = "",
     fileName = "",
@@ -104,9 +107,19 @@ const FilePreview = ({
     ...props
 }) => {
     return (
-        <a href={downloadUrl} download={true}>
-            <div className="sp1_file_upload--input-preview" {...props}>
-                {fileType === "images" ? (
+        <a href={downloadUrl} download={downloadAble}>
+            <div className="sp1_file_upload--input-preview" {...props}>  
+                {/* delete button */}
+                {deleteAble  && (
+                    <Button  
+                    onClick={(e) => onRemove(e, id)} 
+                    className='__remove--btn'
+                > 
+                    <i className="fa-regular fa-trash-can"></i> 
+                </Button> 
+                )}
+                {/* end delete button */}
+                {(fileType === "images" || fileType.startsWith('image/')) ? (
                     <img
                         src={previewUrl}
                         alt={fileName}
@@ -121,25 +134,43 @@ const FilePreview = ({
                 ) : (
                     <RenderIcon filename={fileName} size={size} />
                 )}
+                
             </div>
         </a>
     );
 };
 
+// uploaded file previews
+const SelectedFilePreveiw = ({children}) => {
+    const { previews, files, setFiles, setPreviews } = React.useContext(FileUploaderContext);
+
+    const onDelete = (e, index) => {
+        // e.stopPropagation();
+        const updatePreview = [...previews];
+        const updatedFiles = [...files];  
+        updatedFiles.splice(index, 1);  
+        updatePreview.splice(index, 1); 
+        setFiles(updatedFiles);   
+        setPreviews(updatePreview)
+    }
+    
+    return children({previews, onDelete})
+}
+
 // file uploader
 const FileUploader = ({ files, setFiles, children, className = "" }) => {
-    const [previews, setPreveiws] = React.useState("");
+    const [previews, setPreviews] = React.useState(""); 
     return (
         <FileUploaderContext.Provider
             value={{
                 files,
                 setFiles,
                 previews,
-                setPreveiws,
+                setPreviews,
             }}
         >
             <div
-                className={`d-flex align-items-center ${className}`}
+                className={`d-flex flex-wrap align-items-center ${className}`}
                 style={{ gap: "10px" }}
             >
                 {children}
@@ -150,5 +181,6 @@ const FileUploader = ({ files, setFiles, children, className = "" }) => {
 
 FileUploader.Input = FileInput;
 FileUploader.Preview = FilePreview;
+FileUploader.SelectedFiles = SelectedFilePreveiw
 
 export default FileUploader;

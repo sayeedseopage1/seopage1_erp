@@ -1,3 +1,12 @@
+.dot-color {
+  display: block;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .sp1_task_btn_group {
   border-color: #E7EFFC;
 }
@@ -496,6 +505,26 @@
   overflow-y: auto;
 }
 
+.sp1_st-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sp1_st-list-item-head {
+  width: 120px;
+  color: #383b42;
+}
+
+.sp1_st-list-item-value {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+}
+.sp1_st-list-item-value > .dot-color {
+  margin-top: 6px;
+}
+
 .sp1-selection-display {
   text-align: left;
   display: flex;
@@ -701,7 +730,7 @@
 }
 
 .sp1_subtask_offsetcanvas {
-  width: 80vw;
+  width: 1080px;
   height: 80vh;
   background: #fff;
   border-radius: 10px;
@@ -743,6 +772,31 @@
   background-color: var(--header_color) !important;
 }
 
+.sp1_st_tab_panel {
+  height: calc(80vh - 80px);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal-guideline-editor-text > h1 {
+  font-size: 32px !important;
+}
+.modal-guideline-editor-text > h2 {
+  font-size: 28px !important;
+}
+.modal-guideline-editor-text > h3 {
+  font-size: 24px !important;
+}
+.modal-guideline-editor-text > h4 {
+  font-size: 20px !important;
+}
+.modal-guideline-editor-text > h5 {
+  font-size: 18px !important;
+}
+.modal-guideline-editor-text > h6 {
+  font-size: 16px !important;
+}
+
 .subtask-timer-confirmation--modal {
   display: flex;
   align-items: center;
@@ -778,7 +832,8 @@
 }
 .sp1_mark-as--modal-panel {
   width: 100%;
-  max-width: 40vw;
+  max-width: 650px;
+  margin-inline: auto;
   background: #fff;
   padding: 8px 16px;
   border-radius: 12px;
@@ -793,9 +848,6 @@
 .sp1_mark-as--modal-body {
   height: -moz-fit-content;
   height: fit-content;
-  max-height: 80vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   padding: 16px 0;
 }
 .sp1_mark-as--modal-body form > .form-group > label {
@@ -856,7 +908,7 @@
   height: 100vh;
   overflow-y: auto;
   padding: 20px;
-  background: rgba(39, 111, 236, 0.2);
+  background: rgba(24, 27, 32, 0.089);
 }
 
 .sp1_single_task--modal-panel {
@@ -891,6 +943,28 @@
 .task-selection-list-option.active {
   background-color: rgba(24, 96, 240, 0.3);
   color: #000;
+}
+
+.mark-as-compeleted-link {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.mark-as-compeleted-link button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  display: none;
+  background-color: transparent;
+  color: rgb(88, 77, 77);
+  padding: 4px;
+  transform: translateY(-50%);
+}
+
+.mark-as-compeleted-link:hover button {
+  color: #f51b1b;
+  display: block;
 }
 
 @keyframes glice {
@@ -929,6 +1003,16 @@
 
 .cnx_body-overflow-hidden {
   overflow: hidden;
+}
+
+/* dropdown */
+.sp1-dropdown-menu {
+  min-width: 100%;
+  width: -moz-fit-content;
+  width: fit-content;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 /*# sourceMappingURL=seopage1.css.map*/

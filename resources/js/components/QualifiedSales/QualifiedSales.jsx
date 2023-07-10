@@ -1,11 +1,8 @@
 import React from "react";
-import QualifiedSalesTable from "./table/QualifiedSalesTable";
-import {
-    useGetQualifiedSalesQuery,
-    useLazyGetQualifiedSalesQuery,
-} from "../services/api/qualifiedSalesApiSlice";
 import { useUsers } from "../hooks/useUsers";
+import { useLazyGetQualifiedSalesQuery } from "../services/api/qualifiedSalesApiSlice";
 import QualifiedSalesFilterbar from "./components/QualifiedSalesFilterbar";
+import QualifiedSalesTable from "./table/QualifiedSalesTable";
 
 const QualifiedSales = () => {
     const { users, usersObject, usersIsFetching } = useUsers();

@@ -108,7 +108,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
-        //
+        /**
+            * * Get developer's tasks
+            * @param id This is User ID
+        */ 
+
+        getDeveloperTasks: build.query({
+            query: (id) =>  `/account/tasks/get-developer-tasks/${id}` 
+        })
     }),
 });
 
@@ -124,4 +131,5 @@ export const {
     useStoreCommentMutation,
     useStartTimerApiMutation,
     useStopTimerApiMutation,
+    useGetDeveloperTasksQuery
 } = singleTaskPageApiSlice;
