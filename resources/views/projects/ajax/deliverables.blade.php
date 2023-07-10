@@ -87,7 +87,7 @@
                             <td class="bg-light-grey border-right-0 f-w-500">
                              Hourly Rate</td>
                             <td class="border-left-0">
-                                @if($project->hours_allocated != 0 || $project->hours_allocated !=  null )
+                                @if($project->hours_allocated >  0 )
                               {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
                               @else 
                               --

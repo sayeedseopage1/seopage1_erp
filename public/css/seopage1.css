@@ -772,4 +772,18 @@
   text-decoration: underline;
 }
 
+.cnx_body-overflow-hidden {
+  overflow: hidden;
+}
+
+/* dropdown */
+.sp1-dropdown-menu {
+  min-width: 100%;
+  width: -moz-fit-content;
+  width: fit-content;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
 /*# sourceMappingURL=seopage1.css.map*/

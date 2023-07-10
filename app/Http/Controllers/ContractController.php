@@ -2318,17 +2318,24 @@ class ContractController extends AccountBaseController
             if ($request->mode == 'approve') {
                 $mode = '1';
                 //$total_secoends = 20 * 60 * 60;
-                $secoend_left = Carbon::now()->diffInSeconds($deal->award_time);
+                $second_left = Carbon::now()->diffInSeconds($deal->award_time);
                 //$total_secoend_left = $total_secoends - $secoend_left;
-                $request_secoends = $request->hours * 60 * 60;
+                $request_seconds = $request->hours * 60 * 60;
 
-                if ($secoend_left >= $request_secoends) {
-                    $deal->award_time = Carbon::parse($deal->award_time)->addSecond($request_secoends);
+                if ($second_left >= $request_seconds) {
+                    $deal->award_time = Carbon::parse($deal->award_time)->addSeconds($request_seconds);
                 } else {
-                    $deal->award_time = Carbon::parse($deal->award_time)->addSecond($secoend_left);
+                    $deal->award_time = Carbon::now()->addSeconds($second_left);
                 }
+                $deal->status= 'pending';
 
                 $deal->save();
+                $project_id = Project::where('deal_id',$deal->id)->first();
+                $project= Project::find($project_id->id);
+                $project->project_status = 'pending';
+                $project->status = 'not started';
+                $project->save();
+
             } elseif ($request->mode == 'reject') {
                 $mode = '2';
             }

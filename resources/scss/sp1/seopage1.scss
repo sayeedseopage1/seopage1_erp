@@ -60,3 +60,18 @@
   .hover-underline:hover{
     text-decoration: underline;
   }
+
+  .cnx_body-overflow-hidden{
+    overflow: hidden;
+  }
+
+
+  /* dropdown */
+
+  .sp1-dropdown-menu{
+    min-width: 100%;
+    width: fit-content;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+  }

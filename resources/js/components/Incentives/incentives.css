@@ -6,6 +6,7 @@
     flex-direction: column;
     gap: 16px;
     padding: 16px 0;
+    overflow: hidden;
 }
 
 
@@ -78,4 +79,11 @@
 .sp1__dis_amount_tbl_tr{
     background-color: rgba(243, 249, 255, 1);
     border-color: #fff !important;
+}
+
+
+.sp1-order-list{
+    margin: 0;
+    padding: 16px;
+    list-style: decimal;
 }

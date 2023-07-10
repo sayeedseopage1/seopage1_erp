@@ -5,6 +5,7 @@ import IncentiveNavbar from '../components/IncentiveNavbar';
 import { useParams } from 'react-router-dom';
 import IncentiveCurrentFilterBar from '../components/IncentiveCurrentFilterbar';
 import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
+import Dropdown from '../components/Dropdown';
 
 
 
@@ -67,20 +68,62 @@ const IncentiveCurrent = () => {
                     <section className="sp1__incentive_item_container">
                         <div className="sp1__incentive_row">
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
-                                <div className="sp1__incentive_item ">
-                                    {
-                                        !isLoading? (
-                                            <span> 
-                                                Minimum goals for your shift: {data?.minimum_user_goals_shift} 
-                                            </span>
-                                        ): null
-                                    }
-                                </div>
+                                
+                            {
+                                !isLoading? (
+                                    <div className="sp1__incentive_item d-flex align-items-center" style={{gap: "8px"}}>
+                                        <div> 
+                                            Minimum goals for your shift:   
+                                        </div>
+                                        <Dropdown hoverAble={true}>
+                                            <Dropdown.Toggle icon={false}> <span className='p-2'>{data?.minimum_user_goals_shift}</span> </Dropdown.Toggle>
+                                            {
+                                                data?.minimum_goals_of_your_shift?.length > 0 && (
+                                                    <Dropdown.Menu className="p-3">
+                                                        <ol className='sp1-order-list'>
+                                                            {
+                                                                data?.minimum_goals_of_your_shift?.map(d => (
+                                                                    <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
+                                                                        {d.title} - <a href={`/account/insights/goals/${d.id}`}> View</a>
+                                                                    </li>
+                                                                ))
+                                                            } 
+                                                        </ol> 
+                                                    </Dropdown.Menu>
+                                                )
+                                            }
+                                            
+                                        </Dropdown>
+                                    </div>
+                                ): null
+                            } 
                             </div>
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
-                                        <span>Minimum Goals achieved by your shift: {data?.minimum_user_achieve_goals_shift}</span>
+                                        <div className="sp1__incentive_item d-flex align-items-center" style={{gap: "8px"}}>
+                                            <div> 
+                                                Minimum Goals achieved by your shift:   
+                                            </div>
+                                            <Dropdown hoverAble={true}>
+                                                <Dropdown.Toggle icon={false}> <span>{data?.minimum_user_achieve_goals_shift}</span> </Dropdown.Toggle>
+                                                {data?.minimum_goals_of_your_shift_achieve?.length > 0 && (
+                                                    <Dropdown.Menu className="px-3 py-1">
+                                                    <ol className='sp1-order-list'>
+                                                        {
+                                                            data?.minimum_goals_of_your_shift_achieve
+                                                            ?.map(d => (
+                                                                <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
+                                                                    {d.title} {d.goal_status ? <span className='badge badge-success'> Achieved </span>: <span className='badge badge-danger'> Not Achieved </span>} - <a href={`/account/insights/goals/${d.id}`}>  View</a>
+                                                                </li>
+                                                            ))
+                                                        }
+                                                            
+                                                        </ol> 
+                                                    </Dropdown.Menu>
+                                                )}
+                                            </Dropdown>
+                                        </div> 
                                     )} 
                                 </div>
                             </div>
@@ -90,14 +133,63 @@ const IncentiveCurrent = () => {
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
                                 <div className='sp1__incentive_item'>
                                     {!isLoading && (
-                                        <span> Minimum Team goal:  {data?.minimum_team_goal} </span>
+                                        <div className="sp1__incentive_item d-flex align-items-center" style={{gap: "8px"}}>
+                                            <div> 
+                                                Minimum Team goal: 
+                                            </div>
+                                            <Dropdown hoverAble={true}>
+                                                <Dropdown.Toggle icon={false}>
+                                                    <span> {data?.minimum_team_goal}</span> 
+                                                </Dropdown.Toggle>
+                                                {
+                                                     data?.minimum_team_goal_get?.length > 0 && (
+                                                        <Dropdown.Menu className="px-3 py-1">
+                                                            <ol className='sp1-order-list'>
+                                                                {
+                                                                    data?.minimum_team_goal_get
+                                                                    ?.map(d => (
+                                                                        <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
+                                                                            {d.title} - <a href={`/account/insights/goals/${d.id}`}> View</a>
+                                                                        </li>
+                                                                    ))
+                                                                }  
+                                                            </ol> 
+                                                        </Dropdown.Menu> 
+                                                     )
+                                                }
+                                            </Dropdown>
+                                        </div>  
                                     )}  
                                 </div>
                             </div>
                             <div className={`${!isLoading ? 'sp1__incentive_row_item' : 'sp1__incentive_row_item animate-pulse'}`}>
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
-                                        <span> Minimum Team goal achieved:   {data?.mimimum_team_achieve_goal} </span>
+                                        <div className="sp1__incentive_item d-flex align-items-center" style={{gap: "8px"}}>
+                                            <div> 
+                                            Minimum Team goal achieved: 
+                                            </div>
+                                            <Dropdown hoverAble={true}>
+                                                <Dropdown.Toggle icon={false}>
+                                                    <span> {data?.mimimum_team_achieve_goal}</span> 
+                                                </Dropdown.Toggle>
+                                                {data?.minimum_team_goal_get_achieved?.length > 0 && (
+                                                <Dropdown.Menu className="px-3 py-1">
+                                                    <ol className='sp1-order-list'>
+                                                    {
+                                                        data?.minimum_team_goal_get_achieved
+                                                        ?.map(d => (
+                                                            <li key={d.id} className='font-weight-normal' style={{listStyle: 'unset'}}>
+                                                                {d.title} {d.goal_status ? <span className='badge badge-success'> Achieved </span>: <span className='badge badge-danger'> Not Achieved </span>} - <a href={`/account/insights/goals/${d.id}`}> View</a>
+                                                            </li>
+                                                        ))
+                                                    }
+                                                        
+                                                    </ol> 
+                                                </Dropdown.Menu> 
+                                                )}
+                                            </Dropdown>
+                                        </div>   
                                     )} 
                                 </div>
                             </div>

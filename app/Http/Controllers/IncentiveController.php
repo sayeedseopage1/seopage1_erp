@@ -224,7 +224,14 @@ class IncentiveController extends AccountBaseController
         $shift_user_points= Cashpoint::where('user_id',$shift_user->id)->where('points', '>', 0)->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])->sum('points');
         $data['point_achieve_by_your_shift'] = round(($cash_point_total_of_this_user+$shift_user_points),2);
 
-
+        $data['minimum_goals_of_your_shift']= GoalSetting::where('team_id',$shift_user->shift)->where('goalType','Minimum')->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+        ->get();
+        $data['minimum_goals_of_your_shift_achieve']= GoalSetting::where('team_id',$shift_user->shift)->where('goalType','Minimum')->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+        ->get();
+        $data['minimum_team_goal_get']= GoalSetting::where('team_id',1)->where('goalType','Minimum')->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+        ->get();
+        $data['minimum_team_goal_get_achieved']=  GoalSetting::where('team_id',1)->where('goalType','Minimum')->whereBetween('created_at', [Carbon::parse($request->start_date)->startOfMonth(), Carbon::parse($request->start_date)->endOfMonth()])
+        ->get();
         if ($cash_point > 0) {
             $total_percentage_share_incentive = (100 * ($cash_point - $cash_point_total_of_this_user)) / $cash_point;
             //dd($total_percentage_share_incentive);
