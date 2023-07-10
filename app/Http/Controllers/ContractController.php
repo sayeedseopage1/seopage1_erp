@@ -2197,7 +2197,7 @@ class ContractController extends AccountBaseController
 
         //kpi settings
         $kpiSetting = kpiSetting::where('kpi_status', 1)->first();
-        $earned_point = ($kpiSetting->accepted_by_pm * $deal->actual_amount / 100) * $kpiSetting->authorized_by_leader / 100;
+        $earned_point = ($kpiSetting->accepted_by_pm * $deal->amount / 100) * $kpiSetting->authorized_by_leader / 100;
 
         $user_name = User::where('role_id', 8)->first();
         $cash_points_team_lead = CashPoint::where('user_id', $user_name->id)->orderBy('id', 'desc')->first();

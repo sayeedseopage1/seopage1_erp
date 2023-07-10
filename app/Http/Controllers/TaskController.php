@@ -1605,7 +1605,7 @@ class TaskController extends AccountBaseController
     //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     {
-        //dd($request);
+//        dd($request->all());
         $request->validate([
             'text3' => 'required',
         ], [
@@ -1615,32 +1615,42 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
-        //$authorization_action= AuthorizationAction::where('task_id',$task_status->id)->where('type','task_revision_by_lead_developer')
 
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
-        $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
-        foreach ($selected_subtasks as $key => $selected_subtask) {
+        if ($request->subTask != null){
+            $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
+            foreach ($selected_subtasks as $key => $selected_subtask) {
 
-            $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
-            $sub_task_status = Task::find($find_task_id->id);
-            $sub_task_status->task_status = "incomplete";
-            $sub_task_status->board_column_id = 1;
-            $sub_task_status->save();
+                $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
+                $sub_task_status = Task::find($find_task_id->id);
+                $sub_task_status->task_status = "incomplete";
+                $sub_task_status->board_column_id = 1;
+                $sub_task_status->save();
 
-            $tasks_accept = new TaskRevision();
-            $tasks_accept->accept_and_continue = $request->text3;
-            $tasks_accept->subtask_id = $request->subTask[$key];
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = $request->comment[$key];
-            $tasks_accept->save();
+                $tasks_accept = new TaskRevision();
+                $tasks_accept->accept_and_continue = $request->text3;
+                $tasks_accept->subtask_id = $request->subTask[$key];
+                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->comment = $request->comment[$key];
+                $tasks_accept->save();
+            }
         }
 
-        $tasks_accept = TaskRevision::find($request->revision_id);
-        $tasks_accept->deny_and_continue = $request->text2;
-        $tasks_accept->subtask_id = implode(",", $request->subTask);
-        $tasks_accept->revision_reason = $request->revision_acknowledgement;
-        $tasks_accept->comment = implode(",", $request->comment);
-        $tasks_accept->save();
+        if ($request->subTask== null) {
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text2;
+//        $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+//        $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->save();
+        }else{
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->save();
+        }
 
         foreach ($subtasks as $subtask) {
 
@@ -1673,30 +1683,40 @@ class TaskController extends AccountBaseController
         $task_status->save();
 
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
-        $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
-        foreach ($selected_subtasks as $key => $selected_subtask) {
+        if ($request->subTask != null) {
+            $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
+            foreach ($selected_subtasks as $key => $selected_subtask) {
 
-            $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
-            $sub_task_status = Task::find($find_task_id->id);
-            $sub_task_status->task_status = "incomplete";
-            $sub_task_status->board_column_id = 1;
-            $sub_task_status->save();
-            //dd($request->subTask[$key]);
-            $tasks_accept = new TaskRevision();
-            $tasks_accept->deny_and_continue = $request->text3;
-            $tasks_accept->subtask_id = $request->subTask[$key];
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = $request->comment[$key];
-            $tasks_accept->save();
+                $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
+                $sub_task_status = Task::find($find_task_id->id);
+                $sub_task_status->task_status = "incomplete";
+                $sub_task_status->board_column_id = 1;
+                $sub_task_status->save();
+                //dd($request->subTask[$key]);
+                $tasks_accept = new TaskRevision();
+                $tasks_accept->deny_and_continue = $request->text3;
+                $tasks_accept->subtask_id = $request->subTask[$key];
+                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->comment = $request->comment[$key];
+                $tasks_accept->save();
+            }
         }
 
-        $tasks_accept = TaskRevision::find($request->revision_id);
-        $tasks_accept->deny_and_continue = $request->text2;
-        $tasks_accept->subtask_id = implode(",", $request->subTask);
-        $tasks_accept->revision_reason = $request->revision_acknowledgement;
-        $tasks_accept->comment = implode(",", $request->comment);
-        $tasks_accept->save();
-
+        if ($request->subTask== null) {
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text2;
+//            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+//            $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->save();
+        }else{
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->save();
+        }
         foreach ($subtasks as $subtask) {
 
             $find_task_id = Task::where('subtask_id', $subtask->id)->first();

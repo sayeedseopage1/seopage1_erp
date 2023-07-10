@@ -54,6 +54,7 @@
                         @php
                             $subtasks = \App\Models\SubTask::where('task_id',$task->id)->get();
                         @endphp
+                        @if($subtasks->isNotEmpty())
                         <div class="mb-3">
                             <label for="" class="form-label">Select Sub Tasks</label>
                             <select class="selectpicker form-control" multiple aria-label="Default select example" data-live-search="true" id="subTask_deny">
@@ -72,6 +73,7 @@
                                 });
                             </script>
                         </div>
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -82,98 +84,146 @@
         </div>
     </div>
 </form>
+    @if($subtasks->isNotEmpty())
+        <script>
+        //    SELECT OPTION CODE
+        const dropdown_deny = document.getElementById("subTask_deny");
+        const _deny = document.getElementById("commentContainer_deny");
+        dropdown_deny.addEventListener("change", function() {
+            _deny.innerHTML = "";
 
-<script>
-    //    SELECT OPTION CODE
-    const dropdown_deny = document.getElementById("subTask_deny");
-    const _deny = document.getElementById("commentContainer_deny");
-    dropdown_deny.addEventListener("change", function() {
-        _deny.innerHTML = "";
+            const selectedOptions = Array.from(dropdown_deny.selectedOptions);
+            for (const option of selectedOptions) {
+                const textAreaContainer = document.createElement("div");
+                textAreaContainer.classList.add("mb-2");
 
-        const selectedOptions = Array.from(dropdown_deny.selectedOptions);
-        for (const option of selectedOptions) {
-            const textAreaContainer = document.createElement("div");
-            textAreaContainer.classList.add("mb-2");
+                const label = document.createElement("label");
+                label.textContent = option.text;
+                textAreaContainer.appendChild(label);
 
-            const label = document.createElement("label");
-            label.textContent = option.text;
-            textAreaContainer.appendChild(label);
+                const textArea = document.createElement("textarea");
+                var id = Math.random().toString(36).substr(2,9);
+                textArea.id = id;
+                textArea.classList.add("myClass_deny");
+                CKEDITOR.replace(textArea, {
+                    height: 80
+                });
+                textAreaContainer.appendChild(textArea);
 
-            const textArea = document.createElement("textarea");
-            var id = Math.random().toString(36).substr(2,9);
-            textArea.id = id;
-            textArea.classList.add("myClass_deny");
-            CKEDITOR.replace(textArea, {
-                height: 80
+                _deny.appendChild(textAreaContainer);
+            }
+
+            if (selectedOptions.length > 0) {
+                _deny.style.display = "block";
+            } else {
+                _deny.style.display = "none";
+            }
+        });
+
+        $('#denyBtn').click(function(e){
+            e.preventDefault();
+            $(this).prop("disabled", true);
+            $('#denyBtn').html("Processing...");
+            var text2 = CKEDITOR.instances.text2.getData();
+            var subTask = Array.from(document.getElementById("subTask_deny").selectedOptions).map(option => option.value);
+            const elements = document.getElementsByClassName("myClass_deny");
+            const textAreaData = [];
+            for (let i = 0; i < elements.length; i++) {
+                const id = elements[i].id;
+                var editorData = CKEDITOR.instances[id].getData();
+                textAreaData.push(editorData);
+            }
+
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'text2': text2,
+                'subTask': subTask,
+                'revision_acknowledgement': document.getElementById("revision_acknowledgement_deny").value,
+                'comment': textAreaData,
+                'task_id': {{$task->id}},
+                'revision_id': '{{$taskRevisionComment->id}}'
+            }
+            // console.log(data);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
-            textAreaContainer.appendChild(textArea);
+            $.ajax({
+                type: "POST",
+                url: "{{route('tasks.deny_continue')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    // console.log(response.status);
+                    if(response.status==200){
+                        $('#denyAndContinue').trigger("reset");
+                        $('#denyBtn').prop("disabled", false);
+                        $('#denyBtn').html("Deny & Continue");
+                        window.location.reload();
+                        toastr.success('Task Accept And Continue Successfully');
+                    }
 
-            _deny.appendChild(textAreaContainer);
-        }
-
-        if (selectedOptions.length > 0) {
-            _deny.style.display = "block";
-        } else {
-            _deny.style.display = "none";
-        }
-    });
-
-    $('#denyBtn').click(function(e){
-        e.preventDefault();
-        $(this).prop("disabled", true);
-        $('#denyBtn').html("Processing...");
-        var text2 = CKEDITOR.instances.text2.getData();
-        var subTask = Array.from(document.getElementById("subTask_deny").selectedOptions).map(option => option.value);
-        const elements = document.getElementsByClassName("myClass_deny");
-        const textAreaData = [];
-        for (let i = 0; i < elements.length; i++) {
-            const id = elements[i].id;
-            var editorData = CKEDITOR.instances[id].getData();
-            textAreaData.push(editorData);
-        }
-
-        var data= {
-            '_token': "{{ csrf_token() }}",
-            'text2': text2,
-            'subTask': subTask,
-            'revision_acknowledgement': document.getElementById("revision_acknowledgement_deny").value,
-            'comment': textAreaData,
-            'task_id': {{$task->id}},
-            'revision_id': '{{$taskRevisionComment->id}}'
-        }
-        // console.log(data);
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: "POST",
-            url: "{{route('tasks.deny_continue')}}",
-            data: data,
-            dataType: "json",
-            success: function (response) {
-                // console.log(response.status);
-                if(response.status==200){
-                    $('#denyAndContinue').trigger("reset");
-                    $('#denyBtn').prop("disabled", false);
+                },
+                error: function(error) {
+                    if(error.responseJSON.errors.text2){
+                        $('#text2_error').text(error.responseJSON.errors.text2);
+                    }else{
+                        $('#text2_error').text('');
+                    }
+                    $('#denyBtn').attr("disabled", false);
                     $('#denyBtn').html("Deny & Continue");
-                    window.location.reload();
-                    toastr.success('Task Accept And Continue Successfully');
                 }
-
-            },
-            error: function(error) {
-                if(error.responseJSON.errors.text2){
-                    $('#text2_error').text(error.responseJSON.errors.text2);
-                }else{
-                    $('#text2_error').text('');
-                }
-                $('#denyBtn').attr("disabled", false);
-                $('#denyBtn').html("Deny & Continue");
-            }
+            });
         });
-    });
-</script>
+    </script>
+    @else
+        <script>
+            $('#denyBtn').click(function(e){
+                e.preventDefault();
+                $(this).prop("disabled", true);
+                $('#denyBtn').html("Processing...");
+                var text2 = CKEDITOR.instances.text2.getData();
+                var data= {
+                    '_token': "{{ csrf_token() }}",
+                    'text2': text2,
+                    'revision_acknowledgement': document.getElementById("revision_acknowledgement_deny").value,
+                    'task_id': {{$task->id}},
+                    'revision_id': '{{$taskRevisionComment->id}}'
+                }
+                // console.log(data);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "POST",
+                    url: "{{route('tasks.deny_continue')}}",
+                    data: data,
+                    dataType: "json",
+                    success: function (response) {
+                        // console.log(response.status);
+                        if(response.status==200){
+                            $('#denyAndContinue').trigger("reset");
+                            $('#denyBtn').prop("disabled", false);
+                            $('#denyBtn').html("Deny & Continue");
+                            window.location.reload();
+                            toastr.success('Task Accept And Continue Successfully');
+                        }
 
+                    },
+                    error: function(error) {
+                        if(error.responseJSON.errors.text2){
+                            $('#text2_error').text(error.responseJSON.errors.text2);
+                        }else{
+                            $('#text2_error').text('');
+                        }
+                        $('#denyBtn').attr("disabled", false);
+                        $('#denyBtn').html("Deny & Continue");
+                    }
+                });
+            });
+        </script>
+    @endif
 
