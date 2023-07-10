@@ -38,16 +38,16 @@ class PortfolioController extends AccountBaseController
         $this->website_types = ProjectWebsiteType::all();
         $this->website_categories = ProjectNiche::whereNull('parent_category_id')->get();
         $this->website_themes = ProjectWebsiteTheme::all();
-        $this->website_plugins = ProjectWebsitePlugin::all();
+        $this->website_plugins = ProjectWebsitePlugin::whereNotNull('plugin_name')->get();
 
-        $this->portfolios = DB::table('project_portfolios')
-            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
-            ->join('users', 'projects.client_id', '=', 'users.id')
-            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
-            ->get();
+//        $this->portfolios = DB::table('project_portfolios')
+//            ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+//            ->join('users', 'projects.client_id', '=', 'users.id')
+//            ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
+//            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
+//            ->get();
 
-        //        dd($this->portfolios);
+//                dd($this->website_subcategories);
 
         return view('portfolio.index', $this->data);
     }
@@ -100,12 +100,18 @@ class PortfolioController extends AccountBaseController
     public function filterDataShow($dataId)
     {
         $portfolio = DB::table('project_portfolios')
+            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link', 'niche.category_name','sub_niche.id')
             ->join('projects', 'project_portfolios.project_id', '=', 'projects.id')
+            ->join('project_niches as niche', 'project_portfolios.niche', '=', 'niche.id')
+            ->leftJoin('project_niches as sub_niche', 'project_portfolios.sub_niche', '=', 'sub_niche.id')
             ->join('users', 'projects.client_id', '=', 'users.id')
             ->join('project_submissions', 'project_portfolios.project_id', '=', 'project_submissions.project_id')
-            ->select('project_portfolios.*', 'users.user_name', 'projects.project_name', 'projects.project_budget', 'project_submissions.actual_link')
+           
             ->where('project_portfolios.id', $dataId)
             ->first();
+       // dd($portfolio);
+
+//        dd($portfolio);
 
 
         $html = view('portfolio.portfolio_modal', [

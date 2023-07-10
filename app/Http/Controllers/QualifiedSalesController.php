@@ -130,6 +130,7 @@ class QualifiedSalesController extends AccountBaseController
     {
         $qualified_sale= QualifiedSale::where('id',$id)->first();
         $this->userPoints = CashPoint::select('cash_points.user_id', 'users.name', DB::raw('SUM(cash_points.points) as total_points'))
+        ->where('points','>',0)
         ->where('project_id', $qualified_sale->project_id)
         ->join('users', 'users.id', '=', 'cash_points.user_id')
         ->groupBy('cash_points.user_id', 'users.name');

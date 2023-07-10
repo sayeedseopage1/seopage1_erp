@@ -8,8 +8,11 @@
                 </button>
             </div>
             <div class="modal-body">
+                {{-- {{dd($portfolio)}} --}}
                 @php
                     $project = \App\Models\Project::find($portfolio->project_id);
+                    $sub_niche= App\Models\ProjectNiche::where('id',$portfolio->sub_niche)->first();
+                //  /   dd($portfolio->category_name,$sub_niche);
                 @endphp
                 <section style="background-color: #f4f4f4;" class="py-3 linkShow rounded" id="linkShowId">
                     <div class="container-fluid">
@@ -17,10 +20,33 @@
                             <h5 class="f-20">Project Title:</h5>
                             <span>{{$portfolio->project_name}}</span>
                         </div>
-                        <div class="mb-3">
-                            <span class="f-20">Client Name:</span><br>
-                            <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <span class="f-20">Client Name:</span><br>
+                                    <img src="img/avatar.png" alt="" class="rounded-circle m-1" width="30" height="30"><span class="ml-2">{{$portfolio->user_name}}</span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mb-3">
+                                    <span class="f-20">Website Category:</span><br>
+                                    <span>{{$portfolio->category_name}}</span>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="mb-3">
+                                    <span class="f-20">Website Subcategory:</span><br>
+                                    @if($portfolio->sub_niche != null)
+                                   <span>{{$sub_niche->category_name}}</span>
+                                   @else 
+                                   <span>--</span>
+
+                                   @endif
+                                </div>
+                            </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6 mb-3 mb-md-0">
                                 <h5>Website Link:</h5>
@@ -114,12 +140,12 @@
                         </div>
                         <div class="mt-3">
                             @if($portfolio->description)
-                            <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
-                            @if($portfolio !=null)
-                                <p>{!! $portfolio->description !!}</p>
-                            @else
-                                <p>No major functionalities to mention for this project</p>
-                            @endif
+                                <h5>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot)</h5>
+                                @if($portfolio !=null)
+                                    <p>{!! $portfolio->description !!}</p>
+                                @else
+                                    <p>No major functionalities to mention for this project</p>
+                                @endif
                             @endif
                         </div>
                     </div>
