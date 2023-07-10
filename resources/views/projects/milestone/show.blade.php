@@ -20,7 +20,7 @@
     <x-cards.data>
 
       @if($milestone->status == 'incomplete')
-      @if(Auth::user()->role_id == 4 || Auth::user()->role_id ==1)
+      {{-- @if(Auth::user()->role_id == 4 || Auth::user()->role_id ==1)
       <form class="" action="{{route('milestone-complete')}}" method="post">
         @csrf
           <input type="hidden" name="id" value="{{$milestone->id}}">
@@ -31,7 +31,7 @@
         <button type="submit" class="btn-primary rounded f-14 p-2 mr-2 mb-2 mb-lg-0 mb-md-0 complete_milestone">Mark As Complete</button>
         @endif
         @endif
-          </form>
+          </form> --}}
         <hr>
         @else
           @if($milestone->invoice_created == 0)
@@ -44,7 +44,7 @@
            @if($invoice_generated == ($milestone_count -1)  && $milestone->qc_status == 0)
            <a href="/projects/q&c/{{$milestone->project_id}}"   class="btn-success rounded f-14 p-2 flex-right">Complete Q&C</a>
            @else
-             <a href="#"   class="btn-primary rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $milestone->id }}">Generate Invoice</a>
+             {{-- <a href="#"   class="btn-primary rounded f-14 p-2 flex-right create-invoice"  data-row-id="{{ $milestone->id }}">Generate Invoice</a> --}}
 
             @endif
           @else
@@ -82,7 +82,12 @@
             @php
             $status = "<i class='fa fa-circle mr-2 text-red'></i>".__('app.incomplete');
             @endphp
+        @elseif($milestone->status == 'canceled')
+        @php
+        $status = "<i class='fa fa-circle mr-2 text-red'></i>".__('Canceled');
+        @endphp
         @else
+        
             @php
             $status = "<i class='fa fa-circle mr-2 text-dark-green'></i>".__('app.complete');
             @endphp

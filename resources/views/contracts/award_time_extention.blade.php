@@ -72,11 +72,11 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="form-group">
+                                                    <div class="form-group height-35 f-14">
                                                         <label for="hours">
                                                             Select Hours (Request for {{ $value->incress_hours }} Hrs)
                                                         </label>
-                                                        <select name="hours" id="task_hours{{ $value->id }}" class="form-control">
+                                                        <select name="hours" id="task_hours{{ $value->id }}" class="form-control height-35 f-14">
                                                             <option value="">Select Hours</option>
                                                             @for ($i = 1; $i <= 20; $i++)
                                                                 <option value="{{ $i }}" @selected($i == $value->incress_hours)>
@@ -85,13 +85,13 @@
                                                             @endfor
                                                         </select>
                                                     </div>
-                                                    <div class="card">
+                                                    <div class="card mt-5">
                                                         <div class="card-body">
                                                             <p>Porject Manager Comment</p>
                                                             <p>{{ $value->pm_comment }}</p>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <div class="form-group mt-3">
                                                         <label for="description">Description:</label>
                                                         <textarea name="descripton" id="task_description{{ $value->id }}" class="form-control" cols="30" rows="10"></textarea>
                                                     </div>

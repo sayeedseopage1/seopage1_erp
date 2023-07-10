@@ -1298,6 +1298,7 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
+
 .sp1-item-center {
   display: flex;
   align-items: center;
@@ -1307,5 +1308,6 @@
 .hover-bold:hover {
   font-weight: bold;
 }
+
 
 /*# sourceMappingURL=seopage1.css.map*/

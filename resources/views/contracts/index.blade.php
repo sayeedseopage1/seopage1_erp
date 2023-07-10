@@ -163,7 +163,7 @@
                     <input type="hidden" name="id" id="task_id">
                     <div class="form-group">
                         <label for="hours">Select Hours</label>
-                        <select name="hours" id="task_hours" class="form-control">
+                        <select name="hours" id="task_hours" class="form-control height-35 f-14">
                             <option value="">Select Hours</option>
                             <option value="2">2 Hours</option>
                             <option value="4">4 Hours</option>
@@ -364,12 +364,13 @@
                 },
                 success: function(resp) {
                     if (resp.status == 'success') {
+                        $('#award_time_incress_modal').modal('hide');
                         toastr.options.closeMethod = 'fadeOut';
                         toastr.options.closeDuration = 120;
                         toastr.options.closeEasing = 'swing';
                         toastr.success('Request Submit to Admin', 'Success');
                         toastr.options.onHidden = function() {
-                            $('#award_time_incress_modal').modal('toggle');
+                           
                         }
                     }
                 }

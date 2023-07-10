@@ -131,12 +131,12 @@ class WonDealsDataTable extends BaseDataTable
 
                     if ($award_time_request) {
                         if ($award_time_request->status == '1') {
-                            $action .= '<a class="dropdown-item bg-success text-light" data-id="' . $row->id . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time Accept') . '</a>';
+                            $action .= '<a class="dropdown-item bg-success text-light" data-id="' . $row->id . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time Accepted') . '</a>';
                         } elseif ($award_time_request->status == '2') {
                             $action .= '<a class="dropdown-item bg-danger text-light" data-id="' . $row->id . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time Rejected') . '</a>';
                         }
                     } else {
-                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Award time update') . '</a>';
+                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                     }
                 }
                 $action .= '
