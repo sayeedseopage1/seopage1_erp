@@ -761,7 +761,7 @@ class KpiDistribution extends Command
     }
     
     
-    $currentMonth = Carbon::now()->month;
+    $currentMonth = Carbon::now()->subMonth()->month;
     // dd($currentMonth);
   $monthly_deal = Deal::whereMonth('created_at', $currentMonth)->sum('amount');
     //$monthly_deal = 20000;

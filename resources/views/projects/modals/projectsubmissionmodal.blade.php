@@ -499,7 +499,7 @@
               </div>
           </td>
           <td>
-            @if($project_portfolio != null)
+            @if($project_portfolio->description != null)
               <p class="fw-normal mb-1">{!! $project_portfolio->description !!}</p>
               @else
               <p class="fw-normal mb-1">--</p>
@@ -566,36 +566,7 @@
 
 
       </tr>
-      <tr>
-          <td>
-              <div class="d-flex align-items-center">
-                  23
-
-              </div>
-          </td>
-          <td>
-              <div class="d-flex align-items-center">
-                  Shared the Dummy/test site with client
-
-              </div>
-          </td>
-          <td>
-              <p class="fw-normal mb-1">@if($project_submission->dummy_information == 1)
-                      Yes
-                      <br>
-                      <br>
-                      <strong>Dummy/Test Site link: </strong><a href="{{$project_submission->dummy_link}}" target="_blank">{{$project_submission->dummy_link}}</a>
-                      <br>
-
-                  @else
-                      No
-                  @endif
-              </p>
-
-          </td>
-
-
-      </tr>
+      
       <tr>
           <td>
               <div class="d-flex align-items-center">
@@ -615,6 +586,7 @@
                       @php
                           $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
                       @endphp
+                     
                       <p class="fw-normal mb-1">
                           {{ $website_plugin->plugin_name }}
                       </p>
@@ -622,12 +594,13 @@
                           {{ $website_plugin->plugin_url }}
                       </p>
                   @else
-                      <p class="fw-normal mb-1">
+                   <p>--</p>
+                      {{-- <p class="fw-normal mb-1">
                           {{ $project_portfolio->plugin_name }}
                       </p>
                       <p class="fw-normal mb-1">
                           {{ $project_portfolio->plugin_url }}
-                      </p>
+                      </p> --}}
                   @endif
               @else
               <p class="fw-normal mb-1">--</p>
@@ -637,6 +610,36 @@
 
 
       </tr>
+      <tr>
+        <td>
+            <div class="d-flex align-items-center">
+                23
+
+            </div>
+        </td>
+        <td>
+            <div class="d-flex align-items-center">
+                Shared the Dummy/test site with client
+
+            </div>
+        </td>
+        <td>
+            <p class="fw-normal mb-1">@if($project_submission->dummy_information == 1)
+                    Yes
+                    <br>
+                    <br>
+                    <strong>Dummy/Test Site link: </strong><a href="{{$project_submission->dummy_link}}" target="_blank">{{$project_submission->dummy_link}}</a>
+                    <br>
+
+                @else
+                    No
+                @endif
+            </p>
+
+        </td>
+
+
+    </tr>
 
       <tr>
         <td>

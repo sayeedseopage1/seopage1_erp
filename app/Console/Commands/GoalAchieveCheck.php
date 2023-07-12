@@ -48,9 +48,9 @@ class GoalAchieveCheck extends Command
     }
     public function handle()
     {
-        $currentMonth = Carbon::now()->startOfMonth();
+        $currentMonth = Carbon::now()->subMonth()->startOfMonth();
        
-        // /dd($currentMonth);
+       // dd($currentMonth);
         
         $deal_projects = Project::where('created_at', '>=', $currentMonth)
         ->where('project_status','!=','Not Accepted')->get();
@@ -213,15 +213,28 @@ class GoalAchieveCheck extends Command
                             $goal_id->save();
                             if ($goal->achievablePoints > 0) {
         
-                                $distribute_amount = $goal->achievablePoints / count($user_id);
+                                
                                 
                                 foreach ($user_id as $value2) {
-        
-                                    $user_name = User::find($value2);
+               
+                                    $user_name = User::where('id',$value2)->first();
+                                    $user_cashpoints= CashPoint::where('user_id',$user_name->id)->whereDate('created_at',$currentMonth)->sum('points');
+                                    $shift_user = User::where('id','!=',$user_name->id)->where('shift',$user_name->shift)->first();
+                                    $shift_user_points= CashPoint::where('user_id',$shift_user->id)->whereDate('created_at',$currentMonth)->sum('points');
+
+                                    $total_points= $user_cashpoints + $shift_user_points; 
+                                   
+                                    if ($total_points != 0) {
+                                        $user_contribution = ($user_cashpoints*100)/$total_points;
+                                    }else 
+                                    {
+                                        $user_contribution = 0; 
+                                    }
+                                    $distribute_amount = $goal->achievablePoints*($user_contribution/100);
                                     $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
         
                                     $point= new CashPoint();
-                                    $point->user_id= $value2;
+                                    $point->user_id= $user_name->id;
                                     $point->project_id= $deal_project->id;
                                     $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
                                     $point->bonus_type= "Bonus";
@@ -233,6 +246,7 @@ class GoalAchieveCheck extends Command
                                     } else {
                                         $point->total_points_earn=  $distribute_amount;
                                     }
+                                    $point->created_at = '2023-06-30';
         
                                     $point->save();
                                 }
@@ -377,11 +391,24 @@ class GoalAchieveCheck extends Command
                                     
                                     foreach ($user_id as $value2) {
         
-                                        $user_name = User::find($value2);
+                                        $user_name = User::where('id',$value2)->first();
+                                        $user_cashpoints= CashPoint::where('user_id',$user_name->id)->whereDate('created_at',$currentMonth)->sum('points');
+                                        $shift_user = User::where('id','!=',$user_name->id)->where('shift',$user_name->shift)->first();
+                                        $shift_user_points= CashPoint::where('user_id',$shift_user->id)->whereDate('created_at',$currentMonth)->sum('points');
+
+                                        $total_points= $user_cashpoints + $shift_user_points; 
+                                       
+                                        if ($total_points != 0) {
+                                            $user_contribution = ($user_cashpoints*100)/$total_points;
+                                        }else 
+                                        {
+                                            $user_contribution = 0; 
+                                        }
+                                        $distribute_amount = $goal->achievablePoints*($user_contribution/100);
                                         $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
         
                                         $point= new CashPoint();
-                                        $point->user_id= $value2;
+                                        $point->user_id= $user_name->id;
                                         $point->project_id= $deal_project->id;
                                         $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
                                         $point->gained_as = "Individual";
@@ -392,6 +419,7 @@ class GoalAchieveCheck extends Command
                                         } else {
                                             $point->total_points_earn=  $distribute_amount;
                                         }
+                                        $point->created_at = '2023-06-30';
         
                                         $point->save();
                                     }
@@ -495,12 +523,27 @@ class GoalAchieveCheck extends Command
                         $distribute_amount = $goal->achievablePoints / count($user_data); 
                         
                         foreach ($user_data as $value) {
-    
-                            $user_name = User::find($value);
+                            
+                            $user_name = User::where('id',$value)->first();
+                            $user_bid_counts= Lead::where('added_by',$user_name->id)->where('deal_status',1)->whereDate('updated_at',$currentMonth)->count();
+                            $shift_user = User::where('id','!=',$user_name->id)->where('shift',$user_name->shift)->first();
+                            $shift_bid_counts= Lead::where('added_by',$user_name->id)->where('deal_status',1)->whereDate('updated_at',$currentMonth)->count();
+
+                            $total_bids= $user_bid_counts + $shift_bid_counts; 
+                           
+
+                            if ($total_bids = 0) {
+                                $user_contribution = ($user_bid_counts*100)/$total_bids;
+                            }else 
+                            {
+                                $user_contribution = 0; 
+                            }
+                            //$user_contribution = ($user_cashpoints*100)/$total_points;
+                            $distribute_amount = $goal->achievablePoints*($user_contribution/100);
                             $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
     
                             $point= new CashPoint();
-                            $point->user_id= $value;
+                            $point->user_id= $user_name->id;
                            // $point->project_id= $find_project_id->id;
                             $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
                             $point->gained_as = "Individual";
@@ -511,6 +554,7 @@ class GoalAchieveCheck extends Command
                             } else {
                                 $point->total_points_earn=  $distribute_amount;
                             }
+                            $point->created_at = '2023-06-30';
     
                             $point->save();
                         }
@@ -569,7 +613,21 @@ class GoalAchieveCheck extends Command
                         
                         foreach ($user_data as $value) {
     
-                            $user_name = User::find($value);
+                            $user_name = User::where('id',$value)->first();
+                            $user_bid_counts= Lead::where('added_by',$user_name->id)->where('deal_status',1)->whereDate('updated_at',$currentMonth)->count();
+                            $shift_user = User::where('id','!=',$user_name->id)->where('shift',$user_name->shift)->first();
+                            $shift_bid_counts= Lead::where('added_by',$user_name->id)->where('deal_status',1)->whereDate('updated_at',$currentMonth)->count();
+
+                            $total_bids= $user_bid_counts + $shift_bid_counts; 
+                           
+
+                            if ($total_bids = 0) {
+                                $user_contribution = ($user_bid_counts*100)/$total_bids;
+                            }else 
+                            {
+                                $user_contribution = 0; 
+                            }
+                            $distribute_amount = $goal->achievablePoints*($user_contribution/100);
                             $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
     
                             $point= new CashPoint();
@@ -584,6 +642,7 @@ class GoalAchieveCheck extends Command
                             } else {
                                 $point->total_points_earn=  $distribute_amount;
                             }
+                            $point->created_at = '2023-06-30';
     
                             $point->save();
                         }
