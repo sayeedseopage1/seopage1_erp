@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DeveloperStopTask extends Model
+class DeveloperStopTimer extends Model
 {
     use HasFactory;
 }

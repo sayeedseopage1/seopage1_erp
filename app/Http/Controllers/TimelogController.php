@@ -8,11 +8,13 @@ use App\Helper\Reply;
 use App\Http\Requests\TimeLogs\StartTimer;
 use App\Http\Requests\TimeLogs\StoreTimeLog;
 use App\Http\Requests\TimeLogs\UpdateTimeLog;
+use App\Models\DeveloperStopTimer;
 use App\Models\Project;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
 use App\Models\User;
+use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -351,6 +353,22 @@ class TimelogController extends AccountBaseController
     public function startTimer(StartTimer $request)
     {
     //    / DB::beginTransaction();
+    $userID = Auth::id(); // Replace with the actual user ID
+
+    $yesterdayDate = Carbon::yesterday()->toDateString();
+    
+    $totalMinutes = DB::table('project_time_logs')
+        ->where('user_id', $userID)
+        ->whereDate('created_at', $yesterdayDate)
+        ->sum('total_minutes');
+    $acknowlendement = DeveloperStopTimer::where('user_id',Auth::id())->where('created_at',$yesterdayDate)->first();
+    if($totalMinutes < 435 && $acknowlendement == null) 
+    {
+        return response()->json([
+            'error' => 'Developer did not submit the acknowledgement form'
+        ], 400);
+
+    };
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
