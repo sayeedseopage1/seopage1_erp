@@ -47,8 +47,8 @@ class HourlyKpiDistribution extends Command
     }
     public function handle()
     {
-         $date= '2023-06-01';
-         $currentMonth = Carbon::now()->subMonth()->startOfMonth();
+         $date= '2023-07-01';
+         $currentMonth = Carbon::now()->startOfMonth();
     //    / $date = '2023-05-01';
         //dd($currentMonth);
        // $completed_projects = Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->where('status','finished')->get();

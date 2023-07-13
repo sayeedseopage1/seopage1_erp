@@ -14,8 +14,10 @@
                 ->join('project_cms', 'project_portfolios.cms_category', '=', 'project_cms.id')
                 ->join('project_website_types', 'project_portfolios.website_type', '=', 'project_website_types.id')
                 ->join('project_niches', 'project_portfolios.niche', '=', 'project_niches.id')
+                ->join('projects','project_portfolios.project_id','=','projects.id')
                 ->select('project_portfolios.*', 'project_cms.cms_name', 'project_website_types.website_type', 'project_niches.category_name')
-                ->orderBy('project_portfolios.id', 'desc')
+                ->where('project_portfolios.project_id',$project->id)
+                 ->orderBy('project_portfolios.id', 'desc')
                 ->first();
             ?>
             <form class="" action="{{ route('project-submit-accept') }}" method="post">
@@ -642,6 +644,49 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
+                                                22
+                              
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                Plugin Name And Url
+                              
+                                            </div>
+                                        </td>
+                                        <td>
+                                          @if($project_portfolio != null)
+                                                @if (is_numeric($project_portfolio->plugin_name))
+                                                    @php
+                                                        $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
+                                                    @endphp
+                                                   
+                                                    <p class="fw-normal mb-1">
+                                                        {{ $website_plugin->plugin_name }}
+                                                    </p>
+                                                    <p class="fw-normal mb-1">
+                                                        {{ $website_plugin->plugin_url }}
+                                                    </p>
+                                                @else
+                                                 <p>--</p>
+                                                    {{-- <p class="fw-normal mb-1">
+                                                        {{ $project_portfolio->plugin_name }}
+                                                    </p>
+                                                    <p class="fw-normal mb-1">
+                                                        {{ $project_portfolio->plugin_url }}
+                                                    </p> --}}
+                                                @endif
+                                            @else
+                                            <p class="fw-normal mb-1">--</p>
+                                            @endif
+                              
+                                        </td>
+                              
+                              
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
                                                 23
 
                                             </div>
@@ -675,47 +720,7 @@
 
 
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                22
-
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                Plugin Name And Url
-
-                                            </div>
-                                        </td>
-                                        <td>
-                                            @if ($project_portfolio != null)
-                                                @if (is_numeric($project_portfolio->plugin_name))
-                                                    @php
-                                                    $website_plugin = App\Models\ProjectWebsitePlugin::find($project_portfolio->plugin_name);
-                                                    @endphp
-                                                    <p class="fw-normal mb-1">
-                                                        {{ $website_plugin->plugin_name }}
-                                                    </p>
-                                                    <p class="fw-normal mb-1">
-                                                        {{ $website_plugin->plugin_url }}
-                                                    </p>
-                                                @else
-                                                    <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->plugin_name }}
-                                                    </p>
-                                                    <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->plugin_url }}
-                                                    </p>
-                                                @endif
-                                            @else
-                                                <p class="fw-normal mb-1">--</p>
-                                            @endif
-
-                                        </td>
-
-
-                                    </tr>
+                                    
 
                                     <tr>
                                         <td>

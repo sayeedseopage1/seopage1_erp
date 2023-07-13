@@ -48,7 +48,7 @@ class GoalAchieveCheck extends Command
     }
     public function handle()
     {
-        $currentMonth = Carbon::now()->subMonth()->startOfMonth();
+        $currentMonth = Carbon::now()->startOfMonth();
        
        // dd($currentMonth);
         
