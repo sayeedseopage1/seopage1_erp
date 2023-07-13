@@ -48,7 +48,7 @@ class KpiDistribution extends Command
     public function handle()
     {
        // DB::beginTransaction();
-        $date = '2023-06-01';
+        $date = '2023-07-01';
         //dd($currentMonth);
         $projects = Project::whereDate('start_date','>=',$date)->where('project_status','Accepted')->get();
     //    / dd($projects);
