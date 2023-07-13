@@ -232,6 +232,14 @@ class PaymentController extends AccountBaseController
 
         $payment->status = 'complete';
         $payment->save();
+        $project_id_find = Project::where('id',$payment->project_id)->first();
+        $deal_id_find = Deal::where('id',$project_id_find)->first();
+        if($deal_id_find != null && $deal_id_find->project_type == 'hourly')
+        {
+            $deal_update = Deal::find($deal_id_find);
+            $deal_update->payment_date = $payment->paid_on;
+            $deal_update->save();
+        }
 
         //authorization action start
 
