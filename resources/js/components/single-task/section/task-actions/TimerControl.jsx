@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from "../../components/Button";
 import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
 import {
-    useGetTaskDetailsQuery,
     useLazyGetTaskDetailsQuery,
+    useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
     useStopTimerApiMutation,
 } from "../../../services/api/SingleTaskPageApi";
@@ -11,7 +11,10 @@ import { CompareDate } from "../../../utils/dateController";
 import _ from "lodash";
 import StopTimerControl from "./StopTimerControl";
 import { useDispatch } from "react-redux";
-import { setTaskStatus } from "../../../services/features/subTaskSlice";
+import { setLessTrackModal, setTaskStatus } from "../../../services/features/subTaskSlice";
+import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
+import { User } from "../../../utils/user-details";
+
 
 const TimerControl = ({ task }) => {
     const [timerStart, setTimerStart] = useState(false);
@@ -20,9 +23,11 @@ const TimerControl = ({ task }) => {
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
         useState(false);
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch(); 
+    const dayjs = new CompareDate(); 
+    const loggedUser = new User(window?.Laravel?.user);
 
-    const dayjs = new CompareDate();
+    const openLessTrackTimerModal = () => dispatch(setLessTrackModal(true)) // open less hours track explaination modal 
 
     // check timer is already running
     useEffect(() => {
@@ -85,6 +90,8 @@ const TimerControl = ({ task }) => {
     // stop timer api slice
     const [stopTimerApi, { isLoading: timerStopStatusIsLoading }] =
         useStopTimerApiMutation();
+    
+    
 
     // timer start control
     const startTimerControl = () => {
@@ -156,6 +163,28 @@ const TimerControl = ({ task }) => {
             });
     };
 
+    const [getUserTrackTime, {
+        isFetching: trackTimerFetcing
+    }] = useLazyGetUserTrackTimeQuery();
+
+    // handle stop timer 
+    const handleStopTimer = () => {
+        /**
+         *  TODO: Fetch Developer track hours for a day
+         *  TODO: if track time less then 7 hours and 15 minutes show trackTimerModal to explain reason
+         *  TODO: else stop timer 
+         */
+
+        // fetch data
+        getUserTrackTime(loggedUser?.getId())
+        .unwrap()
+        .then(res => {
+            console.log({res})
+            res < 435 ? openLessTrackTimerModal() : stopTimer()
+        })
+        .catch(err => console.log(err))
+    }
+
     // control loading states...
     useEffect(() => {
         if (startTimerFirstCheckIsFetching || timerStartStatusIsLoading) {
@@ -166,9 +195,9 @@ const TimerControl = ({ task }) => {
     }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
 
     return (
-        <>
+        <React.Fragment>
             {!timerStart ? (
-                <>
+                <React.Fragment>
                     {!timerStartStatusIsLoading &&
                     !startTimerFirstCheckIsFetching ? (
                         <Button
@@ -193,9 +222,9 @@ const TimerControl = ({ task }) => {
                         isOpen={isOpenConfirmationModal}
                         onConfirm={startTimerControl}
                     />
-                </>
+                </React.Fragment>
             ) : (
-                <>
+                <React.Fragment>
                     <Button
                         variant="tertiary"
                         className="d-flex align-items-center btn-outline-dark mr-2 text-dark"
@@ -204,13 +233,52 @@ const TimerControl = ({ task }) => {
                         <span className="d-inline ml-1">{timer()}</span>
                     </Button>
 
-                    <StopTimerControl
+                    {/* <StopTimerControl
                         stopTimer={stopTimer}
                         timerStopStatusIsLoading={timerStopStatusIsLoading}
-                    />
-                </>
+                    /> */}
+
+                    {
+                        trackTimerFetcing ? 
+                        (
+                            <Button className="cursor-processing mr-2">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{ width: "18px", height: "18px" }}
+                                />
+                                Processing...
+                            </Button>
+                        ):
+
+                        !timerStopStatusIsLoading ? (
+                            <Button
+                                variant="tertiary"
+                                onClick={handleStopTimer}
+                                className="d-flex align-items-center btn-outline-dark mr-2 text-dark"
+                            >
+                                <i className="fa-solid fa-pause" />
+                                <span className="d-inline ml-1">Stop Timer</span>
+                            </Button>
+                        ) : (
+                            <Button className="cursor-processing mr-2">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{ width: "18px", height: "18px" }}
+                                />
+                                Stopping...
+                            </Button>
+                        )
+                    } 
+                </React.Fragment>
             )}
-        </>
+
+
+            {/* LessTrackTimerModal */}
+            <LessTrackTimerModal stopTimer={stopTimer} />
+
+        </React.Fragment>
     );
 };
 

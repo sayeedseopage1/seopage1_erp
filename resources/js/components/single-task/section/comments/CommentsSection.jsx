@@ -57,6 +57,7 @@ const CommentSection = ({task, isLoading}) => {
               isOpen={modalIsOpen}
               toggleRef={modalToggleRef} 
               comments={comments}
+              task={task}
               onCommentPost={onCommentPost}
             />
 

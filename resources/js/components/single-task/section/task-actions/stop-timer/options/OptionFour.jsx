@@ -6,7 +6,7 @@ import Button from "../../../../components/Button";
 const ProjectSelectionList = lazy(() => import("./ProjectSelectionList"));
 const UserSelectionList = lazy(() => import("./UserSelectionList"));
 
-const OptionFour = ({ id, onChecked, checked }) => {
+const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     // form data
     const [person, setPerson] = useState(null);
     const [project, setProject] = useState(null);
@@ -73,7 +73,7 @@ const OptionFour = ({ id, onChecked, checked }) => {
             duration_form: duratonStart,
             duration_to: durationEnd,
             comment,
-            reaponsible_person:
+            responsible_person:
                 loggedUser?.getId() === Number(person?.id)
                     ? "Due To MySelf"
                     : "Due To Another Person",
@@ -81,7 +81,8 @@ const OptionFour = ({ id, onChecked, checked }) => {
             related_to_any_project: project ? "yes" : "no",
             project_id: project ? project.id : project,
         };
-        console.log({ data });
+        
+        onSubmit(data);
     };
 
     return (
@@ -269,9 +270,23 @@ const OptionFour = ({ id, onChecked, checked }) => {
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmittion} className="">
-                                Submit
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{
+                                        width: "18px",
+                                        height: "18px",
+                                    }}
+                                ></div>
+                                Processing...
                             </Button>
+                            }
                         </div>
                     </div>
                 )}

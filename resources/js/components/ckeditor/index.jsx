@@ -29,7 +29,8 @@ export default function CKEditorComponent ({data="", onChange, placeholder="Type
                 onChange={ ( event, editor ) => onChange ? onChange(event, editor): null }
                 editor={ DecoupledEditor }
                 data={data}
-                config={{
+                config={{ 
+                    extraPlugins: [ImageUploadAdapterPlugin],
                     placeholder,
                     toolbar: [ 
                         'undo','redo', 
@@ -76,8 +77,6 @@ export default function CKEditorComponent ({data="", onChange, placeholder="Type
                             { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' },
                         ]
                     },
-
-                    extraPlugins: [ImageUploadAdapterPlugin]
                 }}
             />
         </>

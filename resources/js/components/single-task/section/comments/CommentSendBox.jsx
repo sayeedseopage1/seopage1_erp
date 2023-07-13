@@ -5,8 +5,7 @@ import UploadFilesInLine from '../../../file-upload/UploadFilesInLine';
 import { useSelector } from 'react-redux';
 import { useStoreCommentMutation } from '../../../services/api/SingleTaskPageApi';
 
-const CommentSendBox = ({onCommentPost}) => {
-  const { task } = useSelector(s => s.subTask);
+const CommentSendBox = ({onCommentPost, task}) => {
   const [editMode, setEditMode] = React.useState(false);
   const [comment, setComment] = React.useState('');
   const [files, setFiles] = React.useState([]);

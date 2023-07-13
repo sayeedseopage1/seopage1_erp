@@ -7,6 +7,8 @@ const LeavingEarlyExplainationOption = ({
     onChecked,
     checked,
     parentReason,
+    onSubmit,
+    isSubmitting
 }) => {
     const [comment, setComment] = useState("");
     const [duratonStart, setDurationStart] = useState("08:00 AM");
@@ -52,6 +54,8 @@ const LeavingEarlyExplainationOption = ({
             duration_to: durationEnd,
             comment,
         };
+
+        onSubmit(data)
         console.log({ data });
     };
 
@@ -129,9 +133,23 @@ const LeavingEarlyExplainationOption = ({
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmittion} className="">
-                                Submit
-                            </Button>
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                    <div
+                                        className="spinner-border text-white"
+                                        role="status"
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                        }}
+                                    ></div>
+                                    Processing...
+                                </Button>
+                            }
                         </div>
                     </div>
                 )}

@@ -9,7 +9,7 @@ import ViewComment from './ViewComment';
 const fetcher = (url) => axios.get(url).then(res => res.data); 
 
 const RevisionSection = ({task}) => { 
-    const [toggleRef, setToggleRef] = React.useState(null);
+  const [toggleRef, setToggleRef] = React.useState(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const toggle = (e) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
 
-const LateExplainationOption = ({ id, onChecked, checked, parentReason }) => {
+const LateExplainationOption = ({ id, onChecked, checked, parentReason, onSubmit, isSubmitting }) => {
     const [comment, setComment] = useState("");
     const [duratonStart, setDurationStart] = useState("08:00 AM");
     const [durationEnd, setDurationEnd] = useState("05:00 PM");
@@ -48,6 +48,7 @@ const LateExplainationOption = ({ id, onChecked, checked, parentReason }) => {
             comment,
         };
         console.log({ data });
+        onSubmit(data);
     };
 
     return (
@@ -123,9 +124,23 @@ const LateExplainationOption = ({ id, onChecked, checked, parentReason }) => {
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmittion} className="">
-                                Submit
-                            </Button>
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                    <div
+                                        className="spinner-border text-white"
+                                        role="status"
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                        }}
+                                    ></div>
+                                    Processing...
+                                </Button>
+                            }
                         </div>
                     </div>
                 )}

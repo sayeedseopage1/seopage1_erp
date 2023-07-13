@@ -65,6 +65,7 @@ use App\Models\TaskNoteFile;
 
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
+use App\Models\DeveloperStopTimer;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -2208,5 +2209,65 @@ class TaskController extends AccountBaseController
 
             ->join('task_users as task_assign_on', 'task_assign_on.task_id', '=', 'tasks.id')->where('task_assign_on.user_id', $id)->where('projects.status', '=', 'in progress')->get();
         return response()->json($data);
+    }
+    public function DeveloperStopTask(Request $request)
+    {
+        $currentDateTime = Carbon::now();
+        $desiredTime = Carbon::createFromTime(9, 29, 0); // 4:29 PM
+        
+        // if ($currentDateTime <= $desiredTime) {
+        //     // Current time is not greater than 4:29 PM
+        //     // Add your logic here
+        //     return response()->json([
+        //         'error' => 'Something went wrong'
+        //     ], 400);
+        // } else {
+            // Current time is greater than 4:29 PM
+            // Add your logic here
+            $stop_time = new DeveloperStopTimer();
+            $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+            $stop_time->durations = $request->durations;
+            $stop_time->comment= $request->comment;
+            $stop_time->leave_period= $request->leave_period;
+            $stop_time->child_reason = $request->child_reason;
+            $stop_time->responsible_person= $request->responsible_person;
+            $stop_time->related_to_any_project= $request->related_to_any_project;
+            $stop_time->responsible_person_id = $request->responsible_person_id;
+            $stop_time->project_id= $request->project_id;
+            $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+            $stop_time->task_id = $request->task_id;
+            $stop_time->user_id = $request->user_id;
+            $stop_time->save(); 
+            return response()->json($stop_time);
+        // }
+    }
+    public function DeveloperTrackedTime($id)
+    {
+        $userID = Auth::id(); // Replace with the actual user ID
+
+        //$currentDate = Carbon::now()->toDateString();
+        $currentDate = Carbon::now()->toDateString();
+
+        $totalMinutes = DB::table('project_time_logs')
+            ->where('user_id', $userID)
+            ->whereDate('created_at', $currentDate)
+            ->sum('total_minutes');
+            $user_current_time_tracking= ProjectTimelog::where('user_id',$id)->orderBy('id','desc')->where('end_time',null)->first();
+            if($user_current_time_tracking != null)
+            {
+                $startTime = Carbon::parse($user_current_time_tracking->start_time);
+                $currentTime = Carbon::now();
+                
+                $minutesDifference = $currentTime->diffInMinutes($startTime);
+            $total_times = $totalMinutes+ $minutesDifference;
+
+            }else 
+            {
+                $total_times = $totalMinutes;
+            }
+           
+            return response()->json($total_times);
+          
+        
     }
 }

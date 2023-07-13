@@ -128,9 +128,10 @@ const MarkAsComplete = () => {
                                 <button
                                     className="mt-2 d-flex align-items-center bg-transparent"
                                     style={{ gap: "10px" }}
-                                    onClick={() =>
+                                    onClick={(e) =>{
+                                         e.preventDefault()
                                         setLinks((prev) => [...prev, ""])
-                                    }
+                                    }}
                                 >
                                     <i className="fa-solid fa-circle-plus" />
                                     Add Another Link

@@ -1115,7 +1115,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         'employee_id' => '[0-9]+',
     ]);
 
-    // Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
+    Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
     Route::resource('time-log-report', TimelogReportController::class);
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
@@ -1182,6 +1182,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
     Route::post('/insights/sections/add', [InsightsController::class, 'storeSection'])->name('insights/sections/add');
+    Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
+    Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
 });
 //custom route for seopage1

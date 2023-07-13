@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
 
-const OptionTwo = ({ id, onChecked, checked }) => {
+const OptionTwo = ({ id, onChecked, checked, onSubmit, isSubmitting}) => {
     const [transitionHours, setTransitionHours] = useState(0);
     const [transitionMinutes, setTransitionMinutes] = useState(0);
     const [comment, setComment] = useState("");
@@ -20,7 +20,7 @@ const OptionTwo = ({ id, onChecked, checked }) => {
     };
 
     // handle submission
-    const handleSubmittion = (e) => {
+    const handleSubmission = (e) => {
         e.preventDefault();
 
         const data = {
@@ -32,6 +32,8 @@ const OptionTwo = ({ id, onChecked, checked }) => {
         };
 
         console.log({ data });
+
+        onSubmit(data);
     };
 
     return (
@@ -113,14 +115,26 @@ const OptionTwo = ({ id, onChecked, checked }) => {
                                 onClick={() => onChecked(null)}
                                 className="ml-auto mr-2"
                             >
-                                {" "}
-                                Back{" "}
+                                Back 
                             </Button>
-
-                            <Button onClick={handleSubmittion} className="">
-                                {" "}
-                                Submit{" "}
+ 
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmission} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{
+                                        width: "18px",
+                                        height: "18px",
+                                    }}
+                                ></div>
+                                Processing...
                             </Button>
+                            }
                         </div>
                     </div>
                 )}

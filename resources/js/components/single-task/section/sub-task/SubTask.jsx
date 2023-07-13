@@ -9,9 +9,9 @@ const SubTask = ({subTask, task, toggleEditForm}) => {
         </div>
 
         <div className="d-flex align-items-center">
-            <a target='__blank' href={`/account/tasks/${subTask?.id}`} className="mr-2 py-2 sp1_task_righ_action_btn">
+            <Link to={`?preview-type=modal&subtask=${subTask?.id}`} className="mr-2 py-2 sp1_task_righ_action_btn">
               <i className="fa-regular fa-eye"></i>
-            </a>
+            </Link>
             <Link to='#' onClick={(e) => toggleEditForm(e, subTask?.id)} className="mr-2 py-2 sp1_task_righ_action_btn">
               <i className="fa-regular fa-pen-to-square"></i>
             </Link>

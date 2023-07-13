@@ -1,17 +1,12 @@
-import React from "react";
-import { useGetTaskDetailsQuery } from "../../../../services/api/SingleTaskPageApi";
-import { User } from "../../../../utils/user-details";
-import dayjs from "dayjs";
-import { SingleTask } from "../../../../utils/single-task";
+import React from "react"; 
+import { User } from "../../../../utils/user-details"; 
 import Accordion from "../../../components/Accordion";
 import Guideline from "../../../components/Guideline";
 import RevisionText from "../../../components/RevisionText";
 
-const Genarel = ({ taskID }) => {
-    const { data, isFetching } = useGetTaskDetailsQuery(
-        `/${taskID}/json?mode=basic`
-    );
-    const task = new SingleTask(data);
+const Genarel = ({task}) => {
+    
+    
     const loggedUser = new User(window?.Laravel?.user);
 
     return (
@@ -70,7 +65,7 @@ const Genarel = ({ taskID }) => {
                                 <span
                                     className={`d-block f-14 font-weight-bold`}
                                 >
-                                    {task?.assigneeTo?.getName()}
+                                    <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a> 
                                     {Number(task?.assigneeTo?.getId()) ===
                                         Number(loggedUser?.getId()) && (
                                         <sup
@@ -109,15 +104,19 @@ const Genarel = ({ taskID }) => {
                                 <span
                                     className={`d-block f-14 font-weight-bold`}
                                 >
-                                    {task?.assigneeBy?.getName()}
+                                    <a 
+                                        href={task?.assigneeBy?.getUserLink()}
+                                        className="text-dark hover-underline"
+                                    >
+                                        {task?.assigneeBy?.getName()}
+                                    </a>
                                     {Number(task?.assigneeBy?.getId()) ===
                                         Number(loggedUser?.getId()) && (
                                         <sup
                                             className="rounded-pill bg-dark text-white px-1"
                                             style={{ fontSize: "10px" }}
                                         >
-                                            {" "}
-                                            It's You{" "}
+                                            It's You
                                         </sup>
                                     )}
                                 </span>

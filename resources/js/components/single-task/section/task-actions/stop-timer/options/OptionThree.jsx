@@ -5,7 +5,7 @@ import LeavingEarlyExplainationOption from "./LeavingEarlyExplainationOption";
 import Button from "../../../../components/Button";
 import DidNotWorkForAFewHours from "./DidNotWorkForAFewHours";
 
-const OptionThree = ({ id, onChecked, checked }) => {
+const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     const [selectedOption, setSelectedOption] = useState(null);
     const _checked = useMemo(() => checked, [checked]);
 
@@ -47,6 +47,8 @@ const OptionThree = ({ id, onChecked, checked }) => {
                         <LeaveExplainationOption
                             id="half-leave-option"
                             onChecked={setSelectedOption}
+                            onSubmit={onSubmit}
+                            isSubmitting={isSubmitting}
                             checked={selectedOption === "half-leave-option"}
                             parentReason="I Had Less Hours To Work Today"
                         />
@@ -54,6 +56,8 @@ const OptionThree = ({ id, onChecked, checked }) => {
                         <LateExplainationOption
                             id="late-option"
                             onChecked={setSelectedOption}
+                            onSubmit={onSubmit}
+                            isSubmitting={isSubmitting}
                             checked={selectedOption === "late-option"}
                             parentReason="I Had Less Hours To Work Today"
                         />
@@ -61,6 +65,8 @@ const OptionThree = ({ id, onChecked, checked }) => {
                         <LeavingEarlyExplainationOption
                             id="leaving-early-option"
                             onChecked={setSelectedOption}
+                            onSubmit={onSubmit}
+                            isSubmitting={isSubmitting}
                             checked={selectedOption === "leaving-early-option"}
                             parentReason="I Had Less Hours To Work Today"
                         />
@@ -68,6 +74,8 @@ const OptionThree = ({ id, onChecked, checked }) => {
                         <DidNotWorkForAFewHours
                             id="did-not-work-few-hours"
                             onChecked={setSelectedOption}
+                            onSubmit={onSubmit}
+                            isSubmitting={isSubmitting}
                             checked={
                                 selectedOption === "did-not-work-few-hours"
                             }

@@ -94,7 +94,18 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
 
         // subtask status
 
-        // start time
+        /**
+         * * user track time 
+         *  @parma userId
+         */
+       
+        getUserTrackTime: build.query({
+            query: (userId) => `/account/developer/tracked-time-today/${userId}`
+        }),
+
+        /**
+         * * Stop daily tracking time api
+         */
         stopTimerApi: build.mutation({
             query: (data) => ({
                 url: `/account/timelogs/stop-timer?id=${data?.timeId}`,
@@ -107,6 +118,26 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
         }),
+
+        /**
+         *  * When a develper tracked less then 7 hours a day
+         *  * Developer need to explain the reasons of less tracking
+         *  * this explaination form submittion hook 
+         */
+        storeStopTrackTimer: build.mutation({
+            query: (data) => ({
+                url: `/account/developer/stop-tasks-timer`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),
+
+
 
         /**
             * * Get developer's tasks
@@ -131,5 +162,8 @@ export const {
     useStoreCommentMutation,
     useStartTimerApiMutation,
     useStopTimerApiMutation,
-    useGetDeveloperTasksQuery
+    useGetDeveloperTasksQuery,
+    useStoreStopTrackTimerMutation,
+    useGetUserTrackTimeQuery,
+    useLazyGetUserTrackTimeQuery
 } = singleTaskPageApiSlice;

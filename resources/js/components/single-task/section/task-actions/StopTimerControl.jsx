@@ -73,6 +73,7 @@ const StopTimerControl = ({ stopTimer, timerStopStatusIsLoading }) => {
                                 handleTemporarilyStopTimer={
                                     handleTemporarilyStopTimer
                                 }
+                                close = {() => setOpenStopButtonConfirmationButton(false)}
                             />
                         </Suspense>
                     </div>

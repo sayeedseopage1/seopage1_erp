@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, lazy, Suspense } from "react";
 import Button from "../../../../components/Button";
 import { Listbox } from "@headlessui/react";
 import { HiOutlineSelector } from "react-icons/hi";
+import Loader from "../../../../components/Loader";
 
 const DeveloperTaskSelectionMenu = lazy(() => import('./DevloperTaskSelectionMenu'));
 
@@ -71,10 +72,10 @@ const DurationTime = ({
     );
 };
 
-const OptionFive = ({ id, onChecked, checked }) => {
+const OptionFive = ({ id, onChecked, checked, onSubmit, isSubmitting}) => {
     const [task, setTask] = useState(null);
     const [durations, setDurations] = useState([
-        { start: "00:00 AM", end: "00:00 AM" },
+        { start: "12:00 AM", end: "12:00 AM" },
     ]);
 
 
@@ -104,7 +105,7 @@ const OptionFive = ({ id, onChecked, checked }) => {
             durations: JSON.stringify(durations)
         }
 
-        console.log(data)
+        onSubmit(data)
     }
  
 
@@ -203,9 +204,23 @@ const OptionFive = ({ id, onChecked, checked }) => {
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmittion} className="">
-                                Submit
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{
+                                        width: "18px",
+                                        height: "18px",
+                                    }}
+                                ></div>
+                                Processing...
                             </Button>
+                            }
                         </div>
                     </div>
                 )}

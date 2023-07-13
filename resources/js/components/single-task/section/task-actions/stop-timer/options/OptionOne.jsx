@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useMemo } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
+import { User } from "../../../../../utils/user-details";
+import { useSelector } from "react-redux";
+import { indexOf } from "lodash";
 
 // duration time
-const DurationTime = ({
-    handleSelectTimeDuration,
+const DurationTime = ({ 
+    durations,
+    setDurations, 
     index,
     startTime,
     endTime,
@@ -33,6 +37,17 @@ const DurationTime = ({
     const _start = useMemo(() => start, [start]);
     const _end = useMemo(() => end, [end]);
 
+    // time duration
+    const handleSelectTimeDuration = (value, i) => {
+        const arr = [];
+        durations.map((d, index) => {
+            if (index === i) {
+                arr.push({ ...value });
+            } else arr.push(d);
+        });
+        setDurations(arr);
+    };
+
     useEffect(() => {
         handleSelectTimeDuration(
             {
@@ -43,9 +58,21 @@ const DurationTime = ({
         );
     }, [_start, _end]);
 
+
+    function onRemove(e) {
+         e.preventDefault();
+         const dur = [];
+
+         durations.map((d, i) => {
+            if(i !== index) dur.push(d)
+         })
+
+         setDurations(dur);
+      }
+
     return (
-        <div className="row mt-2">
-            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+        <div className="position-relative row mt-2">
+            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                 <input
                     id={`timepicker1${index}`}
                     className="form-control w-100 py-2"
@@ -55,7 +82,7 @@ const DurationTime = ({
                 />
             </div>
 
-            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                 <input
                     id={`timepicker5${index}`}
                     className="form-control w-100 py-2"
@@ -64,12 +91,21 @@ const DurationTime = ({
                     type="text"
                 />
             </div>
+
+            <div className="col-2">
+                <button
+                    className="sp1_remove-time-duration px-2"
+                    onClick={onRemove}
+                >
+                    <i className="fa-solid fa-trash-can" />
+                </button>
+            </div>
         </div>
     );
 };
 
 // option one
-const OptionOne = ({ id, onChecked, checked }) => {
+const OptionOne = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     const [durations, setDurations] = useState([
         { start: "00:00 AM", end: "00:00 AM" },
     ]);
@@ -89,29 +125,18 @@ const OptionOne = ({ id, onChecked, checked }) => {
     const handleEditorChange = (e, editor) => {
         const data = editor.getData();
         setComment(data);
-    };
-
-    // time duration
-    const handleSelectTimeDuration = (value, i) => {
-        const arr = [];
-        durations.map((d, index) => {
-            if (index === i) {
-                arr.push({ ...value });
-            } else arr.push(d);
-        });
-        setDurations(arr);
-    };
+    }; 
 
     // handle submit
-    const handleSubmission = (e) => {
+    const handleSubmittion = (e) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task:
                 "I Did Not Have Enough Work To Do",
             durations: JSON.stringify(durations),
             comment,
-        };
-        console.log({ data });
+        }; 
+        onSubmit(data);
     };
 
     return (
@@ -150,9 +175,8 @@ const OptionOne = ({ id, onChecked, checked }) => {
                                 index={i}
                                 startTime={d.start}
                                 endTime={d.end}
-                                handleSelectTimeDuration={
-                                    handleSelectTimeDuration
-                                }
+                                durations={durations}
+                                setDurations={setDurations} 
                             />
                         ))}
 
@@ -190,10 +214,23 @@ const OptionOne = ({ id, onChecked, checked }) => {
                             >
                                 Back
                             </Button>
-
-                            <Button onClick={handleSubmission} className="">
-                                Submit
-                            </Button>
+                            {!isSubmitting ? (
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                            ) : (
+                                <Button className="cursor-processing">
+                                    <div
+                                        className="spinner-border text-white"
+                                        role="status"
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                        }}
+                                    ></div>
+                                    Processing...
+                                </Button>
+                            )}
                         </div>
                     </div>
                 )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
 
-const LeaveExplainationOption = ({ id, onChecked, checked, parentReason }) => {
+const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmit, isSubmitting }) => {
     const [leavePeriod, setLeavePeriod] = useState("");
     const [comment, setComment] = useState("");
     const [duratonStart, setDurationStart] = useState("08:00 AM");
@@ -50,6 +50,8 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason }) => {
             leave_period: leavePeriod,
         };
         console.log({ data });
+
+        onSubmit(data);
     };
 
     return (
@@ -156,10 +158,23 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason }) => {
                             >
                                 Back
                             </Button>
-
-                            <Button onClick={handleSubmittion} className="">
-                                Submit
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                <div
+                                    className="spinner-border text-white"
+                                    role="status"
+                                    style={{
+                                        width: "18px",
+                                        height: "18px",
+                                    }}
+                                ></div>
+                                Processing...
                             </Button>
+                            }
                         </div>
                     </div>
                 )}

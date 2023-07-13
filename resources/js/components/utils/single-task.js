@@ -22,10 +22,88 @@ export class Category{
     }
 }
 
+// sub task
+export class SubmittedWork {
+    constructor(task){
+        this.id = task?.id;
+        this.parentTaskId = task?.task_id;
+        this.submittionType = task?.submission_type;
+        this.attach = task?.attach;
+        this.submittedLinkes = task?.link;
+        this.explaination = task?.text;
+        this.submittionNo = task?.submission_no;
+        this.submittedAt = task.created_at;
+        this.user = new User(task?.user); 
+    }
+
+    getSubmittionDate(format = 'MMM DD, YYYY'){
+        return dayjs(this.submittedAt).format(format);
+    }
+}
+
+// comment
+export class Comment {
+    constructor(data) {
+      this.id = data?.id;
+      this.comment = data?.comment;
+      this.userId = data?.user_id;
+      this.taskId = data?.task_id;
+      this.addedBy = data?.added_by;
+      this.lastUpdatedBy = data?.last_updated_by;
+      this.totalReplies = data?.total_replies;
+      this.lastUpdatedAt = data?.last_updated_at;
+      this.replies = data?.replies;
+      this.filesData = data?.files_data;
+      this.user = new User(data?.user);
+    }
+
+    getLastUpdatedAt(format = 'MMM DD, YYYY'){
+        return dayjs(this.lastUpdatedAt).format(format)
+    }
+}
+
+// time log
+export class TimeLog{
+    constructor(data){
+        this.id = data?.id;
+        this.projectId = data?.project_id;
+        this.taskId = data?.task_id;
+        this.startTime = data?.start_time;
+        this.endTime = data?.end_time;
+        this.duration = data?.duration;
+        this.hoursLogged = data?.hours_logged;
+        this.timer = data?.timer;
+        this.totalHours = data?.total_hours;
+        this.totalMinutes = data?.total_minutes;
+        this.breaks = data?.breaks;
+        this.totalBreakMinutes = data?.total_break_minutes;
+        this.earnings = data?.earnings;
+        this.hourlyRate = data?.hourly_rate;
+        this.invoiceId = data?.invoice_id;
+        this.memo = data?.memo;
+        this.userId = data?.user_id;
+        this.addedBy = data?.added_by;
+        this.editedByUser = data?.edited_by_user;
+        this.approved = data?.approved;
+        this.approvedBy = data?.approved_by;
+        this.lastUpdatedBy = data?.last_updated_by;
+        this.user = new User(data?.user);
+    }
+ 
+    getStartTime(format='MMM DD, YYYY'){
+        return dayjs(this.startTime).format(format) 
+    }
+
+    getEndTime(format='MMM DD, YYYY'){
+        return dayjs(this.endTime).format(format) 
+    } 
+}
+
 
 // single task 
 export class SingleTask {
     constructor(task){
+        this.id = task?.id;
         this.title = _.startCase(task?.subtask_title);
         this.parentTaskTitle = _.startCase(task?.heading);
         this.projectName = _.startCase(task?.project_name);
@@ -45,6 +123,7 @@ export class SingleTask {
         this.category = new Category(task?.category);
         this.guidelines = task?.project_summary;
         this.description = task?.description;
+        this.subtask = task?.subtask;
     }
 
     getStartDate(format){

@@ -63,9 +63,6 @@ export default TimeLogTable
 
 const TableRow = ({log}) => {
     const user = log?.user ? new User(log.user) : null;
-
-     
-
     return(
         <tr className='__tbody_tr'>
             <td className='__tbody_td _tbody_td_employee'>

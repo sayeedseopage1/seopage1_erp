@@ -682,6 +682,29 @@
   text-overflow: ellipsis !important;
 }
 
+/* subtask modal */
+.sp1_task_modal-view_item {
+  width: 100%;
+  display: flex;
+  padding: 6px 10px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+.sp1_task_modal-view_item:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.sp1-sumittion_task_modal-view {
+  width: 100% !important;
+  max-width: 500px;
+  height: -moz-fit-content !important;
+  height: fit-content !important;
+  max-height: 80vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .sp1_subtask_log-tbl {
   width: 100%;
   border-collapse: collapse;
@@ -731,7 +754,6 @@
 
 .sp1_subtask_offsetcanvas {
   width: 1080px;
-  height: 80vh;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -748,18 +770,19 @@
 .sp1_subtask_offsetcanvas--body {
   padding: 0;
   background: #fdfdfd;
-  width: 100%;
-  height: 100%;
+  height: 80vh;
   display: -moz-grid;
   display: grid;
   grid-template-columns: 200px 1fr;
-  gap: 10px;
+  position: relative;
 }
 .sp1_subtask_offsetcanvas--body .sp1-subtask-modal-sidebar {
   background: #fff;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   padding: 10px;
   gap: 3px;
+  width: 200px;
+  z-index: 1;
 }
 .sp1_subtask_offsetcanvas--body .sp1-subtask-modal-sidebar .nav-link {
   color: #444958 !important;
@@ -770,6 +793,28 @@
 .sp1_subtask_offsetcanvas--body .sp1-subtask-modal-sidebar .nav-link.active {
   color: #fff !important;
   background-color: var(--header_color) !important;
+}
+.sp1_subtask_offsetcanvas--body .sp1-subtask-modal-tab-content {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.sp1_modal_timelog_view {
+  display: grid;
+  grid-template-rows: 30px 1fr;
+  padding-bottom: 16px;
+  gap: 10px;
+}
+.sp1_modal_timelog_view h6 {
+  font-weight: bold;
+}
+
+.sp1_modal_timelog_view-tbl-contanier {
+  overflow-y: auto;
+  height: calc(80vh - 160px);
 }
 
 .sp1_st_tab_panel {
@@ -935,6 +980,8 @@
   padding: 8px 10px;
   margin-bottom: 2px;
   border-radius: 3px;
+  display: grid;
+  grid-template-columns: 1fr 24px;
 }
 .task-selection-list-option.selected {
   background-color: rgb(24, 96, 240);
@@ -965,6 +1012,59 @@
 .mark-as-compeleted-link:hover button {
   color: #f51b1b;
   display: block;
+}
+
+.sp1_remove-time-duration {
+  background: rgb(250, 226, 226);
+  color: #f00;
+  height: 100%;
+  width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.4 ease-in-out;
+}
+.sp1_remove-time-duration:hover {
+  background: #f00;
+  color: #fff;
+}
+
+/* revision button */
+.sp1-st-revision-btn {
+  background: rgb(240, 17, 17) !important;
+  color: #fff !important;
+  border-color: rgb(240, 17, 17) !important;
+  cursor: pointer !important;
+}
+.sp1-st-revision-btn:hover {
+  background: rgb(224, 4, 4) !important;
+  color: #fff !important;
+  border-color: rgb(224, 4, 4) !important;
+}
+.sp1-st-revision-btn.--view-revision {
+  background: rgb(250, 234, 234) !important;
+  color: red !important;
+  border-color: rgb(247, 214, 214) !important;
+}
+.sp1-st-revision-btn.--view-revision:hover {
+  background: rgb(240, 17, 17) !important;
+  color: #fff !important;
+  border-color: red !important;
+}
+
+/* end revision button */
+/* revision commet view */
+.st_revision_comment {
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  border-radius: 6px;
+}
+
+/* end revision comment */
+/* approve */
+.sp1_st--approve-card {
+  padding: 10px;
 }
 
 @keyframes glice {

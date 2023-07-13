@@ -67,7 +67,7 @@ const DurationTime = ({
     );
 };
 
-const OptionOne = ({ id, onChecked, checked }) => {
+const DidNotWorkForAFewHours = ({ id, onChecked, checked, parentReason, onSubmit, isSubmitting }) => {
     const [durations, setDurations] = useState([
         { start: "00:00 AM", end: "00:00 AM" },
     ]);
@@ -101,15 +101,15 @@ const OptionOne = ({ id, onChecked, checked }) => {
     };
 
     // handle submit
-    const handleSubmission = (e) => {
+    const handleSubmittion = (e) => {
         e.preventDefault();
         const data = {
-            reason_for_less_tracked_hours_a_day_task:
-                "I Did Not Have Enough Work To Do",
+            reason_for_less_tracked_hours_a_day_task: parentReason,
             durations: JSON.stringify(durations),
+            child_reason: "I Didn't Work For a Few Hours In Between",
             comment,
         };
-        console.log({ data });
+       onSubmit(data)
     };
 
     return (
@@ -125,7 +125,7 @@ const OptionOne = ({ id, onChecked, checked }) => {
                         checked={checked}
                         onChange={handleOnChange}
                     />
-                    I Did Not Have Enough Work To Do
+                    I Didn't Work For a Few Hours In Between
                 </div>
                 {checked && (
                     <div className="pl-3 my-3 bg-white">
@@ -190,9 +190,25 @@ const OptionOne = ({ id, onChecked, checked }) => {
                                 Back
                             </Button>
 
-                            <Button onClick={handleSubmission} className="">
-                                Submit
-                            </Button>
+                            
+
+                            {
+                                !isSubmitting ? 
+                                <Button onClick={handleSubmittion} className="">
+                                    Submit
+                                </Button>
+                                : <Button className="cursor-processing">
+                                    <div
+                                        className="spinner-border text-white"
+                                        role="status"
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                        }}
+                                    ></div>
+                                    Processing...
+                                </Button>
+                            }
                         </div>
                     </div>
                 )}
@@ -201,4 +217,4 @@ const OptionOne = ({ id, onChecked, checked }) => {
     );
 };
 
-export default OptionOne;
+export default DidNotWorkForAFewHours;
