@@ -597,13 +597,10 @@ public function getGoal(Request $request, $id)
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
 
                 ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
-                ->whereDate('deals.created_at', '>=', $data->startDate)
-                ->orWhereDate('deals.payment_date','>=', $data->startDate);
+                ->whereDate('deals.created_at', '>=', $data->startDate);
 
                 if (!is_null($data->endDate)) {
-                    $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate)
-                    ->orWhereDate('deals.payment_date', '<=', $data->endDate)
-                    ;
+                    $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
                 }
                 $deals_data = $deals_data->where('deals.status', '!=','Denied')
 
@@ -861,12 +858,10 @@ public function getGoal(Request $request, $id)
                 ->leftJoin('leads', 'leads.id', 'deals.lead_id')
                 ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                 ->whereDate('deals.created_at', '>=', $data->startDate)
-                ->orWhereDate('deals.payment_date','>=', $data->startDate)
                 ->where('deals.client_badge','=','new client');
 
                 if (!is_null($data->endDate)) {
-                    $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate)
-                    ->orWhereDate('deals.payment_date','>=', $data->startDate);
+                    $deals_data = $deals_data->whereDate('deals.created_at', '<=', $data->endDate);
                 }
                 $deals_data = $deals_data->where('deals.status', '!=','Denied')
                // ->whereIn('deals.added_by', $data2)
