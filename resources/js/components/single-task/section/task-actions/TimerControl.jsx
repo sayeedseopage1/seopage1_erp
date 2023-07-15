@@ -161,8 +161,7 @@ const TimerControl = ({ task }) => {
                     });
                 }
             });
-    };
-
+    }; 
     const [getUserTrackTime, {
         isFetching: trackTimerFetcing
     }] = useLazyGetUserTrackTimeQuery();
@@ -203,7 +202,7 @@ const TimerControl = ({ task }) => {
                         <Button
                             variant="tertiary"
                             onClick={startTimer}
-                            className="d-flex align-items-center btn-outline-dark mr-2 text-dark"
+                            className="d-flex align-items-center btn-outline-dark text-dark"
                         >
                             <i className="fa-solid fa-circle-play" />
                             Start Timer
@@ -227,7 +226,7 @@ const TimerControl = ({ task }) => {
                 <React.Fragment>
                     <Button
                         variant="tertiary"
-                        className="d-flex align-items-center btn-outline-dark mr-2 text-dark"
+                        className="d-flex align-items-center btn-outline-dark text-dark"
                     >
                         <i className="fa-solid fa-stopwatch" />
                         <span className="d-inline ml-1">{timer()}</span>
@@ -241,7 +240,7 @@ const TimerControl = ({ task }) => {
                     {
                         trackTimerFetcing ? 
                         (
-                            <Button className="cursor-processing mr-2">
+                            <Button className="cursor-processing">
                                 <div
                                     className="spinner-border text-white"
                                     role="status"
@@ -255,13 +254,13 @@ const TimerControl = ({ task }) => {
                             <Button
                                 variant="tertiary"
                                 onClick={handleStopTimer}
-                                className="d-flex align-items-center btn-outline-dark mr-2 text-dark"
+                                className="d-flex align-items-center btn-outline-dark text-dark"
                             >
                                 <i className="fa-solid fa-pause" />
                                 <span className="d-inline ml-1">Stop Timer</span>
                             </Button>
                         ) : (
-                            <Button className="cursor-processing mr-2">
+                            <Button className="cursor-processing">
                                 <div
                                     className="spinner-border text-white"
                                     role="status"

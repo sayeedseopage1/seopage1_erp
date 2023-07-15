@@ -27,7 +27,7 @@ import { useEditGoalTitle, useEditGoalTitleMutation, useGetGoalByIdQuery } from 
 import { useGetDealsByGoalIdQuery } from '../services/api/dealSliceApi';
 import { CompareDate } from '../utils/dateController';
 import { useReactToPrint } from 'react-to-print';
-import { replace } from 'lodash';
+import _, { replace } from 'lodash';
 import ExportDealTableDataExcel from '../export/excel/ExportDealTableDataExcel';
 import ExportDealAddedTableDataExcel from '../export/excel/ExportDealAddedTableDataExcel';
  
@@ -157,8 +157,13 @@ const Goal = () => {
 
 
     // distribute deals by period
-    const distributeDealsByPeriod = (deals, startDate, endDate, accessor) => {
+    const distributeDealsByPeriod = (deals, startDate, endDate, accessor, checkHourly = false) => {
         return deals?.filter(deal => {
+            if(checkHourly && _.lowerCase(deal?.project_type) === 'hourly'){
+                return day.isSameOrAfter(day.dayjs(deal?.paid_on).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) &&
+                day.isSameOrBefore(day.dayjs(deal?.paid_on).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'))
+            }
+
             return day.isSameOrAfter(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) &&
                 day.isSameOrBefore(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'))
         })
@@ -320,7 +325,8 @@ const Goal = () => {
                     let startDate = period.start;
                     let endDate = period.end;
                     let accessor = goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
-                    let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
+                    let checkHourly = goal.entryType === 'Won' && _.lowerCase(goal.trackingType) === 'value'; 
+                    let _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor, checkHourly);
                     let _summarizedData = {};
 
                     if(goal.entryType === 'Added'){

@@ -1,114 +1,16 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
-import { User } from "../../../../../utils/user-details";
-import { useSelector } from "react-redux";
-import { indexOf } from "lodash";
-
-// duration time
-const DurationTime = ({ 
-    durations,
-    setDurations, 
-    index,
-    startTime,
-    endTime,
-}) => {
-    const [start, setStart] = useState(startTime);
-    const [end, setEnd] = useState(endTime);
-
-    useEffect(() => {
-        window
-            .$(`#timepicker1${index}`)
-            .timepicker("setTime", startTime)
-            .on("changeTime.timepicker", function (e) {
-                e.preventDefault();
-                setStart(e.target.value);
-            });
-
-        window
-            .$(`#timepicker5${index}`)
-            .timepicker("setTime", endTime)
-            .on("changeTime.timepicker", function (e) {
-                e.preventDefault();
-                setEnd(e.target.value);
-            });
-    }, []);
-
-    const _start = useMemo(() => start, [start]);
-    const _end = useMemo(() => end, [end]);
-
-    // time duration
-    const handleSelectTimeDuration = (value, i) => {
-        const arr = [];
-        durations.map((d, index) => {
-            if (index === i) {
-                arr.push({ ...value });
-            } else arr.push(d);
-        });
-        setDurations(arr);
-    };
-
-    useEffect(() => {
-        handleSelectTimeDuration(
-            {
-                start: _start,
-                end: _end,
-            },
-            index
-        );
-    }, [_start, _end]);
-
-
-    function onRemove(e) {
-         e.preventDefault();
-         const dur = [];
-
-         durations.map((d, i) => {
-            if(i !== index) dur.push(d)
-         })
-
-         setDurations(dur);
-      }
-
-    return (
-        <div className="position-relative row mt-2">
-            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                <input
-                    id={`timepicker1${index}`}
-                    className="form-control w-100 py-2"
-                    data-minute-step="1"
-                    data-modal-backdrop="false"
-                    type="text"
-                />
-            </div>
-
-            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                <input
-                    id={`timepicker5${index}`}
-                    className="form-control w-100 py-2"
-                    data-minute-step="1"
-                    data-modal-backdrop="false"
-                    type="text"
-                />
-            </div>
-
-            <div className="col-2">
-                <button
-                    className="sp1_remove-time-duration px-2"
-                    onClick={onRemove}
-                >
-                    <i className="fa-solid fa-trash-can" />
-                </button>
-            </div>
-        </div>
-    );
-};
+import DurationTime from "../../../../components/DurationTimer";
+ 
 
 // option one
 const OptionOne = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     const [durations, setDurations] = useState([
-        { start: "00:00 AM", end: "00:00 AM" },
+        { start: "00:00 AM", end: "00:00 AM", id: 'de2sew' },
     ]);
+
+    const uniqueId = Math.random().toString(6).slice(2)
 
     const [comment, setComment] = useState("");
 
@@ -121,6 +23,12 @@ const OptionOne = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
         }
     };
 
+    function onRemove(e, id) {
+        e.preventDefault();
+        let filtered = durations.filter((d) => d.id !== id);
+        setDurations([...filtered])      
+    }
+    
     // handle editor change
     const handleEditorChange = (e, editor) => {
         const data = editor.getData();
@@ -157,22 +65,23 @@ const OptionOne = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                 {checked && (
                     <div className="pl-3 my-3 bg-white">
                         <div className="row">
-                            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                 <label htmlFor="" className="d-block">
                                     From:
                                 </label>
                             </div>
 
-                            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                 <label htmlFor="" className="d-block">
                                     To
                                 </label>
                             </div>
                         </div>
-                        {durations?.map((d, i) => (
+                        {durations?.map((d) => (
                             <DurationTime
-                                key={i}
-                                index={i}
+                                key={d.id}
+                                id={d.id}
+                                onRemove={onRemove}
                                 startTime={d.start}
                                 endTime={d.end}
                                 durations={durations}
@@ -187,6 +96,7 @@ const OptionOne = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                 setDurations((prev) => [
                                     ...prev,
                                     {
+                                        id: uniqueId,
                                         start: "00:00 AM",
                                         end: "00:00 AM",
                                     },

@@ -13,7 +13,7 @@ const RevisionViewControl = ({task}) => {
         <Button
             variant='tertiary'
             onClick={() => setRevisionModal(true)}
-            className='d-flex align-items-center mr-2 sp1-st-revision-btn --view-revision'
+            className='d-flex align-items-center sp1-st-revision-btn --view-revision'
         >
             <i className="fa-solid fa-plus-minus" />
             <span className="d-inline ml-1">Revision</span>

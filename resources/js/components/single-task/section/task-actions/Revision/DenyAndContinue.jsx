@@ -34,30 +34,30 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
                     </small>}
 
                     <div className="mt-3 d-flex align-items-center">
-                            <Button onClick={onBack} variant="tertiary" className="ml-auto mr-2">
-                                Back
-                            </Button>
+                        <Button onClick={onBack} variant="tertiary" className="ml-auto mr-2">
+                            Back
+                        </Button>
 
-                            {!isSubmitting ? (
-                                <React.Fragment>
-                                    <Button onClick={handleOnSubmit}>Next</Button>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    <Button className="cursor-processing">
-                                        <div
-                                            className="spinner-border text-white"
-                                            role="status"
-                                            style={{
-                                                width: "18px",
-                                                height: "18px",
-                                            }}
-                                        />{" "}
-                                        Processing...
-                                    </Button>
-                                </React.Fragment>
-                            )}
-                        </div>
+                        {!isSubmitting ? (
+                            <React.Fragment>
+                                <Button onClick={handleOnSubmit}>Next</Button>
+                            </React.Fragment>
+                        ) : (
+                            <React.Fragment>
+                                <Button className="cursor-processing">
+                                    <div
+                                        className="spinner-border text-white"
+                                        role="status"
+                                        style={{
+                                            width: "18px",
+                                            height: "18px",
+                                        }}
+                                    />{" "}
+                                    Processing...
+                                </Button>
+                            </React.Fragment>
+                        )}
+                    </div>
                 </div>
             </form>
         </React.Fragment>

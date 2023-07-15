@@ -11562,7 +11562,11 @@ var Goal = function Goal() {
 
   // distribute deals by period
   var distributeDealsByPeriod = function distributeDealsByPeriod(deals, startDate, endDate, accessor) {
+    var checkHourly = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
     return deals === null || deals === void 0 ? void 0 : deals.filter(function (deal) {
+      if (checkHourly && lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(deal === null || deal === void 0 ? void 0 : deal.project_type) === 'hourly') {
+        return day.isSameOrAfter(day.dayjs(deal === null || deal === void 0 ? void 0 : deal.paid_on).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) && day.isSameOrBefore(day.dayjs(deal === null || deal === void 0 ? void 0 : deal.paid_on).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'));
+      }
       return day.isSameOrAfter(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(startDate).format('YYYY-MM-DD')) && day.isSameOrBefore(day.dayjs(deal[accessor]).format('YYYY-MM-DD'), day.dayjs(endDate).format('YYYY-MM-DD'));
     });
   };
@@ -11598,10 +11602,10 @@ var Goal = function Goal() {
 
       // count total deal added value
       _deals.map(function (deal) {
-        if (_.lowerCase(deal.won_lost) === 'yes') {
+        if (lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(deal.won_lost) === 'yes') {
           dealWon++;
         }
-        if (_.lowerCase(deal.won_lost) === 'no') {
+        if (lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(deal.won_lost) === 'no') {
           dealLost++;
         }
       });
@@ -11615,9 +11619,9 @@ var Goal = function Goal() {
       target = fixedDecimalPlace(target);
       goal = fixedDecimalPlace(goal);
       var _goalData = goalData.goal;
-      result = _.lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
+      result = lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(_goalData.trackingType) === 'value' ? dealAdded : totalDeal;
       result = fixedDecimalPlace(result);
-      if (_.lowerCase(_goalData.trackingType) === 'value') {
+      if (lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(_goalData.trackingType) === 'value') {
         if (goal < dealAdded) {
           yAxis = dealAdded;
         } else {
@@ -11632,7 +11636,7 @@ var Goal = function Goal() {
       }
 
       /// difference
-      if (_.lowerCase(_goalData.trackingType) === 'value') {
+      if (lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(_goalData.trackingType) === 'value') {
         difference = dealAdded - Number(period.value);
       } else {
         difference = totalDeal - Number(period.value);
@@ -11673,7 +11677,7 @@ var Goal = function Goal() {
       difference: difference,
       goal: goal,
       result: result,
-      targetType: _.lowerCase(goalData === null || goalData === void 0 ? void 0 : goalData.goal.trackingType),
+      targetType: lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(goalData === null || goalData === void 0 ? void 0 : goalData.goal.trackingType),
       goalData: goalData,
       yAxis: yAxis
     });
@@ -11704,7 +11708,8 @@ var Goal = function Goal() {
           var startDate = period.start;
           var endDate = period.end;
           var accessor = _goal.entryType === 'Added' ? 'deal_created_at' : 'created_at';
-          var _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor);
+          var checkHourly = _goal.entryType === 'Won' && lodash__WEBPACK_IMPORTED_MODULE_26___default().lowerCase(_goal.trackingType) === 'value';
+          var _deals = distributeDealsByPeriod(deals, startDate, endDate, accessor, checkHourly);
           var _summarizedData = {};
           if (_goal.entryType === 'Added') {
             _summarizedData = addedGoalSummary(_deals, goalData, period, index);
@@ -11755,7 +11760,7 @@ var Goal = function Goal() {
   if (!goal) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
     children: "Goal not found"
   });
-  var _title = "".concat(_.upperFirst(goal === null || goal === void 0 ? void 0 : goal.entry), " ").concat(goal === null || goal === void 0 ? void 0 : goal.entryType, " ").concat((goal === null || goal === void 0 ? void 0 : goal.name) || (goal === null || goal === void 0 ? void 0 : goal.team_name));
+  var _title = "".concat(lodash__WEBPACK_IMPORTED_MODULE_26___default().upperFirst(goal === null || goal === void 0 ? void 0 : goal.entry), " ").concat(goal === null || goal === void 0 ? void 0 : goal.entryType, " ").concat((goal === null || goal === void 0 ? void 0 : goal.name) || (goal === null || goal === void 0 ? void 0 : goal.team_name));
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
     className: "cnx__ins_dashboard",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
@@ -24824,7 +24829,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-var _excluded = ["children", "disabled", "className", "variant", "size", "onClick"];
+var _excluded = ["children", "type", "disabled", "className", "variant", "size", "onClick"];
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -24834,6 +24839,8 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 var Button = function Button(_ref) {
   var children = _ref.children,
+    _ref$type = _ref.type,
+    type = _ref$type === void 0 ? "button" : _ref$type,
     _ref$disabled = _ref.disabled,
     disabled = _ref$disabled === void 0 ? false : _ref$disabled,
     _ref$className = _ref.className,
@@ -24849,6 +24856,7 @@ var Button = function Button(_ref) {
     onClick && onClick(e);
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("button", _objectSpread(_objectSpread({
+    type: "button",
     className: classes,
     disabled: disabled,
     onClick: handleOnClick
@@ -24961,6 +24969,71 @@ var Shadow = function Shadow() {
     }
   }), document.querySelector('#sp1SingleTaskPageModal'));
 };
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/components/DatePicker.jsx":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/single-task/components/DatePicker.jsx ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+var DatePicker = function DatePicker(_ref) {
+  var data = _ref.data,
+    setDate = _ref.setDate,
+    _ref$className = _ref.className,
+    className = _ref$className === void 0 ? "" : _ref$className;
+  var handleTimePicker = function handleTimePicker() {
+    if (window.$) {
+      var $ = window.$;
+      var moment = window.moment;
+      $(function () {
+        var start = moment().startOf("month");
+        var end = moment().endOf("month");
+        setDate(start.format());
+        function cb(start, end) {
+          setDate(start.format("YYYY-MM-DD"));
+          $("#datePicker div.sp1__jquery_date_text").html(start.format("MMMM D, YYYY"));
+        }
+        $("#datePicker").daterangepicker({
+          singleDatePicker: true
+        }, cb);
+        cb(start, end);
+      });
+    }
+  };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    handleTimePicker();
+  }, []);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    id: "datePicker",
+    className: "sp1__jquery_date_picker ".concat(className),
+    style: {
+      position: "relative"
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "sp1__jquery_date_btn",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("i", {
+        className: "fa-solid fa-calendar-days"
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "sp1__jquery_date_text"
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DatePicker);
 
 /***/ }),
 
@@ -32301,7 +32374,7 @@ var MarkAsComplete = function MarkAsComplete() {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
       variant: "tertiary",
       onClick: toggle,
-      className: "d-flex align-items-center btn-outline-dark mr-2 text-dark",
+      className: "d-flex align-items-center btn-outline-dark text-dark",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
         className: "fa-solid fa-check"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
@@ -33138,7 +33211,7 @@ var RevisionControl = function RevisionControl(_ref) {
       onClick: function onClick() {
         return setRevisionModal(true);
       },
-      className: "d-flex align-items-center mr-2 sp1-st-revision-btn sp1-st-revision-btn",
+      className: "d-flex align-items-center sp1-st-revision-btn sp1-st-revision-btn",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
         className: "fa-solid fa-plus-minus"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
@@ -33517,7 +33590,7 @@ var RevisionViewControl = function RevisionViewControl(_ref) {
       onClick: function onClick() {
         return setRevisionModal(true);
       },
-      className: "d-flex align-items-center mr-2 sp1-st-revision-btn --view-revision",
+      className: "d-flex align-items-center sp1-st-revision-btn --view-revision",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
         className: "fa-solid fa-plus-minus"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
@@ -33862,7 +33935,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Revision_RevisionControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Revision/RevisionControl */ "./resources/js/components/single-task/section/task-actions/Revision/RevisionControl.jsx");
 /* harmony import */ var _Revision_RevisionViewControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Revision/RevisionViewControl */ "./resources/js/components/single-task/section/task-actions/Revision/RevisionViewControl.jsx");
 /* harmony import */ var _approve_task_ApproveTask__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./approve-task/ApproveTask */ "./resources/js/components/single-task/section/task-actions/approve-task/ApproveTask.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _time_extension_TimeExtension__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./time-extension/TimeExtension */ "./resources/js/components/single-task/section/task-actions/time-extension/TimeExtension.jsx");
+/* harmony import */ var _client_approval_ClientApproval__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./client-approval/ClientApproval */ "./resources/js/components/single-task/section/task-actions/client-approval/ClientApproval.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
 
 
 
@@ -33878,23 +33955,22 @@ var TaskAction = function TaskAction(_ref) {
   var task = _ref.task,
     status = _ref.status;
   var loggedUser = (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_TimerControl__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    style: {
+      gap: '10px'
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_TimerControl__WEBPACK_IMPORTED_MODULE_2__["default"], {
       task: task
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_MarkAsComplete__WEBPACK_IMPORTED_MODULE_3__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_approve_task_ApproveTask__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_MarkAsComplete__WEBPACK_IMPORTED_MODULE_3__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_approve_task_ApproveTask__WEBPACK_IMPORTED_MODULE_7__["default"], {
       task: task
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Revision_RevisionControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Revision_RevisionControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
       task: task
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Revision_RevisionViewControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_Revision_RevisionViewControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
       task: task
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
-      type: "button",
-      className: "d-flex align-items-center btn btn-sm btn-outline-dark mr-2 border-0 ml-auto",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
-        className: "bi bi-three-dots"
-      })
-    })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_time_extension_TimeExtension__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      task: task
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_client_approval_ClientApproval__WEBPACK_IMPORTED_MODULE_9__["default"], {})]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TaskAction);
@@ -34144,7 +34220,7 @@ var TimerControl = function TimerControl(_ref) {
       children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
         variant: "tertiary",
         onClick: startTimer,
-        className: "d-flex align-items-center btn-outline-dark mr-2 text-dark",
+        className: "d-flex align-items-center btn-outline-dark text-dark",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
           className: "fa-solid fa-circle-play"
         }), "Start Timer"]
@@ -34165,7 +34241,7 @@ var TimerControl = function TimerControl(_ref) {
     }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
         variant: "tertiary",
-        className: "d-flex align-items-center btn-outline-dark mr-2 text-dark",
+        className: "d-flex align-items-center btn-outline-dark text-dark",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
           className: "fa-solid fa-stopwatch"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
@@ -34173,7 +34249,7 @@ var TimerControl = function TimerControl(_ref) {
           children: timer()
         })]
       }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        className: "cursor-processing mr-2",
+        className: "cursor-processing",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "spinner-border text-white",
           role: "status",
@@ -34185,7 +34261,7 @@ var TimerControl = function TimerControl(_ref) {
       }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
         variant: "tertiary",
         onClick: handleStopTimer,
-        className: "d-flex align-items-center btn-outline-dark mr-2 text-dark",
+        className: "d-flex align-items-center btn-outline-dark text-dark",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
           className: "fa-solid fa-pause"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
@@ -34193,7 +34269,7 @@ var TimerControl = function TimerControl(_ref) {
           children: "Stop Timer"
         })]
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        className: "cursor-processing mr-2",
+        className: "cursor-processing",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
           className: "spinner-border text-white",
           role: "status",
@@ -34227,6 +34303,409 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/Modal */ "./resources/js/components/single-task/components/Modal.jsx");
+/* harmony import */ var _smastrom_react_rating__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @smastrom/react-rating */ "./node_modules/@smastrom/react-rating/dist/index.mjs");
+/* harmony import */ var _smastrom_react_rating_style_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @smastrom/react-rating/style.css */ "./node_modules/@smastrom/react-rating/style.css");
+/* harmony import */ var _ckeditor_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../ckeditor/index */ "./resources/js/components/ckeditor/index.jsx");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+var ApproveTask = function ApproveTask() {
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    showApproveForm = _useState2[0],
+    setShowApproveForm = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState4 = _slicedToArray(_useState3, 2),
+    completedWithInDeadline = _useState4[0],
+    setCompletedWithInDeadline = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState6 = _slicedToArray(_useState5, 2),
+    submittedStar = _useState6[0],
+    setSubmittedStar = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState8 = _slicedToArray(_useState7, 2),
+    fullfilledStar = _useState8[0],
+    setFullfilledStar = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState10 = _slicedToArray(_useState9, 2),
+    comment = _useState10[0],
+    setComment = _useState10[1];
+  var close = function close(e) {
+    e.preventDefault();
+    setShowApproveForm(false);
+  };
+
+  // editor data 
+  var onWriteOnEditor = function onWriteOnEditor(e, editor) {
+    var data = editor.getData();
+    setComment(data);
+  };
+
+  // submit 
+  var handleOnSubmit = function handleOnSubmit(e) {
+    e.preventDefault();
+    var data = {
+      completedWithInDeadline: completedWithInDeadline,
+      submittedStar: submittedStar,
+      fullfilledStar: fullfilledStar,
+      comment: comment
+    };
+    console.log(data);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      variant: "success",
+      onClick: function onClick() {
+        return setShowApproveForm(true);
+      },
+      className: "d-flex align-items-center border-success",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+        className: "fa-solid fa-handshake-angle"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        className: "d-inline ml-1",
+        children: "Approve"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      isOpen: showApproveForm,
+      className: "sp1_single_task--modal w-100",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "sp1_single_task--modal-panerl-wrapper w-100",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+          className: "sp1_single_task--modal-panel w-100",
+          style: {
+            maxWidth: '600px',
+            minWidth: '320px'
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "border-bottom pb-2 pl-3 pr-2 mb-3 d-flex align-items-center justify-content-between",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              className: "font-weight-bold f-16",
+              children: " Approve Task "
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              onClick: close,
+              className: "",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+                className: "fa-solid fa-xmark"
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            className: "px-3",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "mb-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                className: "sp1_st--approve-card",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                  className: "sp1_st--approve-card-header",
+                  "data-toggle": "collapse",
+                  href: "#oldSubmittedSuccess",
+                  role: "button",
+                  "aria-expanded": "false",
+                  "aria-controls": "oldSubmittedSuccess",
+                  children: ["Old Submitted Works", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_7__.HiOutlineSelector, {})
+                  })]
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                className: "collapse multi-collapse shadow-none",
+                id: "oldSubmittedSuccess",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                  className: "card card-body",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(SubmittedWorkCard, {
+                    data: {}
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(SubmittedWorkCard, {
+                    data: {}
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(SubmittedWorkCard, {
+                    data: {}
+                  })]
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(SubmittedWorkCard, {
+              data: {}
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            className: "mt-4 px-3",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("form", {
+              action: "",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
+                  htmlFor: "",
+                  className: "font-weight-bold",
+                  children: ["Is This Task Completed Within Deadline?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("sup", {
+                    className: "f-16",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  className: "",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_3__.Rating, {
+                    style: {
+                      maxWidth: 120
+                    },
+                    value: completedWithInDeadline,
+                    onChange: setCompletedWithInDeadline,
+                    radius: "small"
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
+                  htmlFor: "",
+                  className: "font-weight-bold",
+                  children: ["How Beautifully The Task Is Submitted?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("sup", {
+                    className: "f-16",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  className: "",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_3__.Rating, {
+                    style: {
+                      maxWidth: 120
+                    },
+                    value: submittedStar,
+                    onChange: setSubmittedStar,
+                    radius: "small"
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
+                  htmlFor: "",
+                  className: "font-weight-bold",
+                  children: ["How Perfectly The Task Requirements Are Fullfilled?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("sup", {
+                    className: "f-16",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  className: "",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_smastrom_react_rating__WEBPACK_IMPORTED_MODULE_3__.Rating, {
+                    style: {
+                      maxWidth: 120
+                    },
+                    value: fullfilledStar,
+                    onChange: setFullfilledStar,
+                    radius: "small"
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("label", {
+                  htmlFor: "",
+                  className: "font-weight-bold",
+                  children: ["Any Recommendations For Developer?", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("sup", {
+                    className: "f-16",
+                    children: "*"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                  className: "ck-editor-holder",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ckeditor_index__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                    onChange: onWriteOnEditor
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+                className: "mt-3 d-flex align-items-center",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  onClick: close,
+                  variant: "tertiary",
+                  className: "ml-auto mr-2",
+                  children: "Close"
+                }),  true ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                    onClick: handleOnSubmit,
+                    children: "Approve"
+                  })
+                }) : /*#__PURE__*/0]
+              })]
+            })
+          })]
+        })
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ApproveTask);
+
+// Submitted work
+
+var SubmittedWorkCard = function SubmittedWorkCard(_ref) {
+  var data = _ref.data,
+    _ref$className = _ref.className,
+    className = _ref$className === void 0 ? "" : _ref$className,
+    style = _ref.style;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+    className: "sp1_st--approve-card mb-3 ".concat(className),
+    style: style,
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "sp1_st--approve-card-header",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        children: "Latest Submittion"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        children: "2023-07-13"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "sp1_st--approve-card-body",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "mb-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "font-weight-bold f-12",
+          style: {
+            color: '#81868E'
+          },
+          children: " Links"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("ol", {
+          style: {
+            listStyle: 'unset'
+          },
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+            style: {
+              listStyle: 'numaric'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+              href: "#",
+              children: "https://gosolution.com/"
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+            style: {
+              listStyle: 'numaric'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+              href: "#",
+              children: "https://gosolution.com/"
+            })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
+            style: {
+              listStyle: 'numaric'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("a", {
+              href: "#",
+              children: "https://gosolution.com/"
+            })
+          })]
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "mb-2",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "font-weight-bold f-12",
+          style: {
+            color: '#81868E'
+          },
+          children: "Description"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "sp1_ck_content border p-1",
+          children: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae corporis blanditiis consequatur quo ullam laboriosam quidem, expedita quod a ut labore tempore! Eligendi repudiandae cumque alias et nostrum aliquid aliquam."
+        })]
+      })]
+    })]
+  });
+};
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/section/task-actions/client-approval/ClientAcceptedTask.jsx":
+/*!*********************************************************************************************************!*\
+  !*** ./resources/js/components/single-task/section/task-actions/client-approval/ClientAcceptedTask.jsx ***!
+  \*********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+var ClientAcceptedTask = function ClientAcceptedTask(_ref) {
+  var task = _ref.task;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      variant: "success",
+      className: "d-flex align-items-center mr-2 border-success",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+        className: "fa-solid fa-check"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: "d-inline ml-1",
+        children: "Client Has Accepted This Task"
+      })]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClientAcceptedTask);
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/section/task-actions/client-approval/ClientApproval.jsx":
+/*!*****************************************************************************************************!*\
+  !*** ./resources/js/components/single-task/section/task-actions/client-approval/ClientApproval.jsx ***!
+  \*****************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _SubmitForClientApproval__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SubmitForClientApproval */ "./resources/js/components/single-task/section/task-actions/client-approval/SubmitForClientApproval.jsx");
+/* harmony import */ var _ClientAcceptedTask__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./ClientAcceptedTask */ "./resources/js/components/single-task/section/task-actions/client-approval/ClientAcceptedTask.jsx");
+/* harmony import */ var _utils_single_task__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/single-task */ "./resources/js/components/utils/single-task.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+
+
+var ClientApproval = function ClientApproval(_ref) {
+  var task = _ref.task;
+  var _task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(task);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_SubmitForClientApproval__WEBPACK_IMPORTED_MODULE_1__.SubmitForClientApproval, {
+      task: _task
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ClientAcceptedTask__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      task: _task
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ClientApproval);
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/section/task-actions/client-approval/SubmitForClientApproval.jsx":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/single-task/section/task-actions/client-approval/SubmitForClientApproval.jsx ***!
+  \**************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SubmitForClientApproval": () => (/* binding */ SubmitForClientApproval)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/Modal */ "./resources/js/components/single-task/components/Modal.jsx");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -34239,63 +34718,103 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var ApproveTask = function ApproveTask() {
+
+var SubmitForClientApproval = function SubmitForClientApproval(_ref) {
+  var task = _ref.task;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
-    showApproveForm = _useState2[0],
-    setShowApproveForm = _useState2[1];
+    isOpen = _useState2[0],
+    setIsOpen = _useState2[1];
+  var closeModal = function closeModal() {
+    return setIsOpen(false);
+  };
+  var openModal = function openModal() {
+    return setIsOpen(true);
+  };
+  var ref = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  (0,react_use__WEBPACK_IMPORTED_MODULE_4__["default"])(ref, closeModal);
+  var handleOnSubmit = function handleOnSubmit() {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: 'Submitted Task For Client Approval Successfully',
+      showConfirmButton: false,
+      timer: 2500
+    });
+    closeModal();
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       variant: "success",
-      onClick: function onClick() {
-        return setShowApproveForm(true);
-      },
+      onClick: openModal,
       className: "d-flex align-items-center mr-2 border-success",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
-        className: "fa-regular fa-handshake"
+        className: "fa-solid fa-handshake-angle"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
         className: "d-inline ml-1",
-        children: "Approve"
+        children: "Submit For Client Approval"
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      isOpen: showApproveForm,
+      isOpen: isOpen,
       className: "sp1_single_task--modal",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
         className: "sp1_single_task--modal-panerl-wrapper",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-          className: "sp1_single_task--modal-panel",
+          ref: ref,
+          className: "sp1_single_task--modal-panel position-absolute p-2 mb-3",
           style: {
-            maxWidth: "550px"
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '250px'
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-            className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-              className: "font-weight-bold f-14",
-              children: " Approve Task "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-              onClick: close,
-              className: "",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+            className: "d-flex align-items-center border-bottom pb-1",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              variant: "tertiary",
+              onClick: closeModal,
+              className: "ml-auto border-0",
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
                 className: "fa-solid fa-xmark"
               })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-            className: "sp1_st--approve-card",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-              className: "sp1_st--approve-card-header",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-                children: "Latest Submission"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-                children: "2023-07-13"
-              })]
             })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            className: "d-flex flex-column align-items-center p-2",
+            style: {
+              gap: '10px'
+            },
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
+              src: "/img/warning.gif",
+              alt: "",
+              style: {
+                width: '50px',
+                height: '50px'
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+              className: "d-flex flex-column aling-items-center",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("h5", {
+                className: "d-block mb-3",
+                children: "Are You Sure?"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+                className: "d-flex align-items-center justify-content-center",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  onClick: handleOnSubmit,
+                  className: "mr-2 py-0",
+                  children: "Yes"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  variant: "tertiary",
+                  onClick: closeModal,
+                  className: "py-0",
+                  children: "No"
+                })]
+              })]
+            })]
           })]
         })
       })
     })]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ApproveTask);
 
 /***/ }),
 
@@ -34349,7 +34868,10 @@ var LessTrackTimerModal = function LessTrackTimerModal(_ref) {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
       className: "sp1_single_task--modal-panerl-wrapper",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.Suspense, {
-        fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], {}),
+        fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          className: "sp1_single_task--modal-panel",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], {})
+        }),
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(StopTimerConfrimationPopUp, {
           handleTemporarilyStopTimer: stopTimerTemprorily,
           close: close
@@ -34359,6 +34881,491 @@ var LessTrackTimerModal = function LessTrackTimerModal(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LessTrackTimerModal);
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/section/task-actions/time-extension/RequestTimeExtension.jsx":
+/*!**********************************************************************************************************!*\
+  !*** ./resources/js/components/single-task/section/task-actions/time-extension/RequestTimeExtension.jsx ***!
+  \**********************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
+/* harmony import */ var _components_DatePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/DatePicker */ "./resources/js/components/single-task/components/DatePicker.jsx");
+/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/components/ckeditor/index.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+var RequestTimeExtension = function RequestTimeExtension(_ref) {
+  var task = _ref.task,
+    _ref$isSubmitting = _ref.isSubmitting,
+    isSubmitting = _ref$isSubmitting === void 0 ? false : _ref$isSubmitting,
+    onSubmit = _ref.onSubmit,
+    close = _ref.close;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+    _useState2 = _slicedToArray(_useState, 2),
+    date = _useState2[0],
+    setDate = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState4 = _slicedToArray(_useState3, 2),
+    comment = _useState4[0],
+    setComment = _useState4[1];
+  var hanldeEditorChange = function hanldeEditorChange(e, editor) {
+    var data = editor.getData();
+    setComment(data);
+  };
+  var handleSubmittion = function handleSubmittion(e) {
+    e.preventDefault();
+    var data = {
+      task_id: task === null || task === void 0 ? void 0 : task.id,
+      date: date,
+      comment: comment
+    };
+    onSubmit(e, data);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: "sp1_single_task--modal-panel",
+      style: {
+        maxWidth: "550px"
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "font-weight-bold f-14",
+          children: ["Task # ", task === null || task === void 0 ? void 0 : task.id, ": Request for Time Extension"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          onClick: close,
+          className: "",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+            className: "fa-solid fa-xmark"
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
+        className: "px-3",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "form-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            htmlFor: "DateExtention",
+            className: "font-weight-bold",
+            children: "Extension Date"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_DatePicker__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              date: date,
+              setDate: setDate,
+              className: "w-100 border"
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "form-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+            htmlFor: "Explaination",
+            className: "font-weight-bold",
+            children: ["Explanation", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+              children: "*"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "ck-editor-holder",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              onChange: hanldeEditorChange
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "mt-3 d-flex align-items-center",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            variant: "tertiary",
+            className: "ml-auto mr-2",
+            onClick: close,
+            children: "Close"
+          }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              onClick: handleSubmittion,
+              children: "Send Request"
+            })
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              className: "cursor-processing",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "spinner-border text-white",
+                role: "status",
+                style: {
+                  width: "18px",
+                  height: "18px"
+                }
+              }), " ", "Processing..."]
+            })
+          })]
+        })]
+      })]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RequestTimeExtension);
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/section/task-actions/time-extension/ReviewTimeExtensionRequest.jsx":
+/*!****************************************************************************************************************!*\
+  !*** ./resources/js/components/single-task/section/task-actions/time-extension/ReviewTimeExtensionRequest.jsx ***!
+  \****************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
+/* harmony import */ var _components_DatePicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/DatePicker */ "./resources/js/components/single-task/components/DatePicker.jsx");
+/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/components/ckeditor/index.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+var ReviewTimeExtensionRequest = function ReviewTimeExtensionRequest(_ref) {
+  var task = _ref.task,
+    _ref$isSubmitting = _ref.isSubmitting,
+    isSubmitting = _ref$isSubmitting === void 0 ? false : _ref$isSubmitting,
+    onSubmit = _ref.onSubmit,
+    close = _ref.close;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+    _useState2 = _slicedToArray(_useState, 2),
+    date = _useState2[0],
+    setDate = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState4 = _slicedToArray(_useState3, 2),
+    hours = _useState4[0],
+    setHours = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState6 = _slicedToArray(_useState5, 2),
+    minutes = _useState6[0],
+    setMinutes = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState8 = _slicedToArray(_useState7, 2),
+    comment = _useState8[0],
+    setComment = _useState8[1];
+  var hanldeEditorChange = function hanldeEditorChange(e, editor) {
+    var data = editor.getData();
+    setComment(data);
+  };
+  var handleSubmittion = function handleSubmittion(e) {
+    e.preventDefault();
+    var data = {
+      task_id: task === null || task === void 0 ? void 0 : task.id,
+      date: date,
+      comment: comment,
+      hours: hours,
+      minutes: minutes
+    };
+    onSubmit(e, data);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      className: "sp1_single_task--modal-panel",
+      style: {
+        maxWidth: "550px"
+      },
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "font-weight-bold f-14",
+          children: ["Task # ", task === null || task === void 0 ? void 0 : task.id, ": Request for Time Extension"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          onClick: close,
+          className: "",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+            className: "fa-solid fa-xmark"
+          })
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
+        className: "px-3",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "form-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+            htmlFor: "DateExtention",
+            className: "font-weight-bold",
+            children: "Original Due Date & Time"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "row mx-0",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "col-6 px-1",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "sp1__jquery_date_picker position-relative w-100 border",
+                style: {
+                  background: '#f5f5f5',
+                  cursor: 'not-allowed'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_btn",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                    className: "fa-solid fa-calendar-days"
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_text",
+                  children: "July 13, 2023"
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "col-3 px-1",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "sp1__jquery_date_picker position-relative w-100 border",
+                style: {
+                  background: '#f5f5f5',
+                  cursor: 'not-allowed'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_btn",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                    className: "fa-solid fa-clock"
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_text",
+                  children: "04 hours"
+                })]
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              className: "col-3 px-1",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "sp1__jquery_date_picker position-relative w-100 border",
+                style: {
+                  background: '#f5f5f5',
+                  cursor: 'not-allowed'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_btn",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                    className: "fa-solid fa-clock"
+                  })
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_text",
+                  children: "03 Mins"
+                })]
+              })
+            })]
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "form-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+            htmlFor: "DateExtention",
+            className: "font-weight-bold",
+            children: ["Extension Date & Time", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+              children: "*"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              className: "row mx-0",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "col-6 px-1",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                  children: "Date"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_DatePicker__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                  date: date,
+                  setDate: setDate,
+                  className: "w-100 border"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "col-3 px-1",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                  children: "Hours"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_picker position-relative w-100 border p-0",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                    className: "sp1__jquery_date_text",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      type: "number",
+                      value: hours,
+                      onChange: function onChange(e) {
+                        return setHours(e.target.value);
+                      },
+                      className: "w-100 bg-transparent border-0 h-100 py-2 px-3"
+                    })
+                  })
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "col-3 px-1",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
+                  children: "Minutes"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  className: "sp1__jquery_date_picker position-relative w-100 border p-0",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                    className: "sp1__jquery_date_text",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+                      type: "number",
+                      value: minutes,
+                      onChange: function onChange(e) {
+                        return setMinutes(e.target.value);
+                      },
+                      className: "w-100 bg-transparent border-0 h-100 py-2 px-3"
+                    })
+                  })
+                })]
+              })]
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "form-group",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+            htmlFor: "Explaination",
+            className: "font-weight-bold",
+            children: ["Explanation", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+              children: "*"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "ck-editor-holder",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              onChange: hanldeEditorChange
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "mt-3 d-flex align-items-center",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            variant: "tertiary",
+            className: "ml-auto mr-2",
+            onClick: close,
+            children: "Close"
+          }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              onClick: handleSubmittion,
+              children: "Send Request"
+            })
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+              className: "cursor-processing",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                className: "spinner-border text-white",
+                role: "status",
+                style: {
+                  width: "18px",
+                  height: "18px"
+                }
+              }), " ", "Processing..."]
+            })
+          })]
+        })]
+      })]
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ReviewTimeExtensionRequest);
+
+/***/ }),
+
+/***/ "./resources/js/components/single-task/section/task-actions/time-extension/TimeExtension.jsx":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/single-task/section/task-actions/time-extension/TimeExtension.jsx ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/components/single-task/components/Button.jsx");
+/* harmony import */ var _RequestTimeExtension__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RequestTimeExtension */ "./resources/js/components/single-task/section/task-actions/time-extension/RequestTimeExtension.jsx");
+/* harmony import */ var _utils_single_task__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../utils/single-task */ "./resources/js/components/utils/single-task.js");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../components/Modal */ "./resources/js/components/single-task/components/Modal.jsx");
+/* harmony import */ var _ReviewTimeExtensionRequest__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ReviewTimeExtensionRequest */ "./resources/js/components/single-task/section/task-actions/time-extension/ReviewTimeExtensionRequest.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+var TimeExtension = function TimeExtension(_ref) {
+  var task = _ref.task;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    timeExtensionModal = _useState2[0],
+    setTimeExtensionModal = _useState2[1];
+  var singleTask = new _utils_single_task__WEBPACK_IMPORTED_MODULE_3__.SingleTask(task);
+
+  // on submit a form
+  var handleSubmittion = function handleSubmittion(e, data) {
+    e.preventDefault();
+    console.log(data);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      variant: "tertiary",
+      onClick: function onClick() {
+        return setTimeExtensionModal(true);
+      },
+      className: "d-flex align-items-center btn-outline-dark mr-2 text-dark",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+        className: "fa-regular fa-clock"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        className: "d-inline ml-1",
+        children: "Request Time Extension"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      variant: "success",
+      onClick: function onClick() {
+        return setTimeExtensionModal(true);
+      },
+      className: "d-flex align-items-center mr-2 border-success",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+        className: "fa-regular fa-clock"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        className: "d-inline ml-1",
+        children: "Time Extension Request"
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      isOpen: timeExtensionModal,
+      className: "sp1_single_task--modal",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "sp1_single_task--modal-panerl-wrapper",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ReviewTimeExtensionRequest__WEBPACK_IMPORTED_MODULE_5__["default"], {
+          task: singleTask,
+          close: function close() {
+            return setTimeExtensionModal(false);
+          },
+          onSubmit: handleSubmittion
+        })
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimeExtension);
 
 /***/ }),
 

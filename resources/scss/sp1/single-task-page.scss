@@ -1176,5 +1176,19 @@
 
 /* approve */
 .sp1_st--approve-card{
-    padding: 10px;
+    border: 1px solid rgb(0 0 0 / 10%); 
+
+    &-header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 5px 10px;
+        background-color: rgb(238, 238, 240);
+    }
+
+    &-body{
+        padding: 6px 10px;
+    }
 }

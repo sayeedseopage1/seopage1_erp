@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 
 const Button = ({
     children, 
+    type="button",
     disabled=false, 
     className = '', 
     variant='primary',
@@ -17,7 +18,7 @@ const Button = ({
 
 
     return (
-        <button className={classes} disabled={disabled} onClick={handleOnClick} {...props}>
+        <button type='button' className={classes} disabled={disabled} onClick={handleOnClick} {...props}>
             {children}
         </button>
     )

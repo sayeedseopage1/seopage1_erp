@@ -1,78 +1,15 @@
 import React, { useEffect, useState, useMemo } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
-
-const DurationTime = ({
-    handleSelectTimeDuration,
-    index,
-    startTime,
-    endTime,
-}) => {
-    const [start, setStart] = useState(startTime);
-    const [end, setEnd] = useState(endTime);
-
-    useEffect(() => {
-        window
-            .$(`#timepicker1${index}`)
-            .timepicker("setTime", startTime)
-            .on("changeTime.timepicker", function (e) {
-                e.preventDefault();
-                setStart(e.target.value);
-            });
-
-        window
-            .$(`#timepicker5${index}`)
-            .timepicker("setTime", endTime)
-            .on("changeTime.timepicker", function (e) {
-                e.preventDefault();
-                setEnd(e.target.value);
-            });
-    }, []);
-
-    const _start = useMemo(() => start, [start]);
-    const _end = useMemo(() => end, [end]);
-
-    useEffect(() => {
-        handleSelectTimeDuration(
-            {
-                start: _start,
-                end: _end,
-            },
-            index
-        );
-    }, [_start, _end]);
-
-    return (
-        <div className="row mt-2">
-            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                <input
-                    id={`timepicker1${index}`}
-                    className="form-control w-100 py-2"
-                    data-minute-step="1"
-                    data-modal-backdrop="false"
-                    type="text"
-                />
-            </div>
-
-            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                <input
-                    id={`timepicker5${index}`}
-                    className="form-control w-100 py-2"
-                    data-minute-step="1"
-                    data-modal-backdrop="false"
-                    type="text"
-                />
-            </div>
-        </div>
-    );
-};
+import DurationTime from "../../../../components/DurationTimer";
 
 const DidNotWorkForAFewHours = ({ id, onChecked, checked, parentReason, onSubmit, isSubmitting }) => {
     const [durations, setDurations] = useState([
-        { start: "00:00 AM", end: "00:00 AM" },
+        { start: "00:00 AM", end: "00:00 AM", id: 'de2sew' },
     ]);
 
     const [comment, setComment] = useState("");
+    const uniqueId = Math.random().toString(6).slice(2)
 
     // handle change
     const handleOnChange = (e) => {
@@ -89,16 +26,11 @@ const DidNotWorkForAFewHours = ({ id, onChecked, checked, parentReason, onSubmit
         setComment(data);
     };
 
-    // time duration
-    const handleSelectTimeDuration = (value, i) => {
-        const arr = [];
-        durations.map((d, index) => {
-            if (index === i) {
-                arr.push({ ...value });
-            } else arr.push(d);
-        });
-        setDurations(arr);
-    };
+    function onRemove(e, id) {
+        e.preventDefault();
+        let filtered = durations.filter((d) => d.id !== id);
+        setDurations([...filtered])      
+    }
 
     // handle submit
     const handleSubmittion = (e) => {
@@ -131,37 +63,38 @@ const DidNotWorkForAFewHours = ({ id, onChecked, checked, parentReason, onSubmit
                     <div className="pl-3 my-3 bg-white">
                         <h6>Select an approximate time here</h6>
                         <div className="row">
-                            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                 <label htmlFor="" className="d-block">
                                     From:
                                 </label>
                             </div>
 
-                            <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                            <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
                                 <label htmlFor="" className="d-block">
                                     To
                                 </label>
                             </div>
                         </div>
-                        {durations?.map((d, i) => (
+                        {durations?.map((d) => (
                             <DurationTime
-                                key={i}
-                                index={i}
+                                key={d.id}
+                                id={d.id}
+                                onRemove={onRemove}
                                 startTime={d.start}
                                 endTime={d.end}
-                                handleSelectTimeDuration={
-                                    handleSelectTimeDuration
-                                }
+                                durations={durations}
+                                setDurations={setDurations} 
                             />
                         ))}
 
-                        <button
+<button
                             className="mt-2 d-flex align-items-center bg-transparent"
                             style={{ gap: "10px" }}
                             onClick={() => {
                                 setDurations((prev) => [
                                     ...prev,
                                     {
+                                        id: uniqueId,
                                         start: "00:00 AM",
                                         end: "00:00 AM",
                                     },

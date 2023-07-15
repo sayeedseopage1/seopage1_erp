@@ -18,12 +18,14 @@ const LessTrackTimerModal = ({stopTimer}) => {
     const stopTimerTemprorily = () => {
         stopTimer();
         close();
-    }
+    } 
 
     return (
         <Modal isOpen={lessTrackModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
-                <React.Suspense fallback={<Loader />}>
+                <React.Suspense fallback={<div className="sp1_single_task--modal-panel">
+                    <Loader />
+                </div>}>
                     <StopTimerConfrimationPopUp
                         handleTemporarilyStopTimer={stopTimerTemprorily}
                         close={close}

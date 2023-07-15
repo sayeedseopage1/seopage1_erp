@@ -8,13 +8,11 @@ import Button from "../../../components/Button";
 import { useGetUserTrackTimeQuery, useStoreStopTrackTimerMutation } from "../../../../services/api/SingleTaskPageApi";
 import { User } from "../../../../utils/user-details";
 import { useSelector } from "react-redux";
-import { useClickAway } from 'react-use'
 
 const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     const { task } = useSelector(s => s.subTask)
     const [optionId, setOptionId] = React.useState(null);
-    const [closingToday, setClosingToday] = React.useState(false);
-    const ref = React.useRef(null);
+    const [closingToday, setClosingToday] = React.useState(false); 
     const [trackHours, setTrackHours] = React.useState('');
     const [trackMinutes, setTrackMinutes] = React.useState('');
     
@@ -47,17 +45,20 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
         .catch(err => console.log(err))
     }
 
-    useClickAway(ref, close);
-
     return (
         <div
             className="sp1_single_task--modal-panel"
-            style={{ transition: ".4s" }}
-            ref={ref}
+            style={{ transition: ".4s" }}   
         >
+            <div className="border-bottom pb-2 px-3 d-flex align-items-center justify-content-between">
+                <div className="font-weight-bold f-16">Stop Timer</div>
+                <Button variant="tertiary" onClick={close} className="">
+                    <i className="fa-solid fa-xmark" />
+                </Button>
+            </div>
             {/* 1st stap */}
             {!closingToday && (
-                <div className="py-2 px-4">
+                <div className="py-2 px-4" > 
                     <h3 className="mb-3 text-center">
                         Are you closing for the day?
                     </h3>

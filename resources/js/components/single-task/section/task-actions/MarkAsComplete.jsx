@@ -63,7 +63,7 @@ const MarkAsComplete = () => {
             <Button
                 variant="tertiary"
                 onClick={toggle}
-                className="d-flex align-items-center btn-outline-dark mr-2 text-dark"
+                className="d-flex align-items-center btn-outline-dark text-dark"
             >
                 <i className="fa-solid fa-check" />
                 <span className="d-inline ml-1">Mark As Complete</span>
