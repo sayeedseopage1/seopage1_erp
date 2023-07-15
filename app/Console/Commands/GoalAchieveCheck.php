@@ -20,6 +20,7 @@ use App\Models\DealStageChange;
 use App\Models\kpiSetting;
 use App\Models\CashPoint;
 use DB;
+use Illuminate\Support\Collection;
 
 class GoalAchieveCheck extends Command
 {
@@ -49,18 +50,22 @@ class GoalAchieveCheck extends Command
     public function handle()
     {
         $currentMonth = Carbon::now()->startOfMonth();
-       
+    //    /dd($currentMonth);
        // dd($currentMonth);
         
-        $deal_projects = Project::where('created_at', '>=', $currentMonth)
-        ->where('project_status','!=','Not Accepted')->get();
+        $deals = Deal::where('created_at', '>=', $currentMonth)
+        ->where('status','Accepted')->get();
+       // dd($deals);
 
-        foreach ($deal_projects as $deal_project) {
-           $goals = GoalSetting::where([
-                'goal_status' =>  0, 
-            ])->get();
+        foreach ($deals as $deal_id) {
+            $goals = GoalSetting::where([
+                'goal_status' => 0,
+            ])
+            ->whereYear('created_at', $currentMonth->year)
+            ->whereMonth('created_at', $currentMonth->month)
+            ->get();
 
-           $deal_id= Deal::where('id',$deal_project['deal_id'])->first();            
+          // $deal_id= Deal::where('id',$deal_project['deal_id'])->first();            
             foreach($goals as $goal) {
                 $start = Carbon::parse($goal->startDate);
                 $end = Carbon::parse($goal->endDate);
@@ -68,6 +73,7 @@ class GoalAchieveCheck extends Command
                 
                 if ($dateToCheck->between($start, $end)) {
                     if ($goal->entryType == 'Won') {
+                     //   dd("nasnkdasnd");
                         $team = Seopage1Team::find($goal->team_id);
                         $user_id = explode(',', rtrim($team->members, ','));
                     }
@@ -76,108 +82,215 @@ class GoalAchieveCheck extends Command
                     if ($goal->dealType == 'All Clients' || $goal->dealType == 'Existing Client') {
                         $deals_data = Deal::select([
                             'deals.*',
-                           
+                            'pm.id as pm_id',
+                            'pm.name as pm_name',
+        
                             DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                         ])
+        
                         ->leftJoin('leads', 'leads.id', 'deals.lead_id')
-                       
+        
+                        ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                         ->whereDate('deals.created_at', '>=', $goal->startDate);
         
                         if (!is_null($goal->endDate)) {
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                         }
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
-                       // ->whereIn('deals.added_by', $user_id)
+        
+                        //->whereIn('deals.added_by', $data2)
                         ->orderBy('deals.id', 'desc')
                         ->get();
+                        
+                        $hourly_deals = Deal::select([
+                            'deals.*',
+                            'pm.id as pm_id',
+                            'pm.name as pm_name',
+                            'projects.id as project_id',
+                            'payments.id as payment_id',
+                            'payments.paid_on',
+                            
+        
+                            DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
+                        ])
+                        ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+                        ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                        ->join('projects','projects.deal_id','deals.id')
+                        ->leftJoin('payments','payments.project_id','projects.id')
+                        ->whereDate('payments.paid_on', '>=', $goal->startDate)
+                        //->where('deals.client_badge','=','new client')
+                        //->whereNotIn('deals.id', $deals_data->pluck('deals.id'))
+                        ->where('deals.project_type','=','hourly')
+                        ;
+        
+                        if (!is_null($goal->endDate)) {
+                            $hourly_deals = $hourly_deals->whereDate('payments.paid_on', '<=', $goal->endDate);
+                        }
+                        $hourly_deals = $hourly_deals->where('deals.status', '!=','Denied')
+                       // ->whereIn('deals.added_by', $data2)
+                        //->groupBy('client_id')
+                        ->orderBy('deals.id', 'desc')
+                        
+                        
+                        ->get();
+                        $mergedData = Collection::make($deals_data)->concat($hourly_deals);
+        
+                        $filteredData = collect($mergedData)->unique('id')->values();
+        
+                        $mergedArray = $filteredData->all();
 
                         $team_total_amount = 0;
-                        foreach ($deals_data as $key => $value) {
-                            $check_client = Deal::whereDate('created_at', '>=', $goal->startDate);
-                            if (!is_null($goal->endDate)) {
-                                $check_client = $check_client->whereDate('created_at', '<=', $goal->endDate);
-                            }
-                            $check_client = $check_client->select('client_id')->groupBy('client_id')->get();
-        
-                            if ($goal->trackingType == 'count') {
-                                $value->amount = 1;
-                                $value->tracking_type = 'count';
-                            }
-                            if ($value->project_type == 'hourly') {
-                                $project = Project::where('deal_id', $value->id)->first();
-                                if (!is_null($project)) {
-                                    $payments = Payment::where([
-                                        'project_id' => $project->id,
-                                    ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
-        
-                                    if (count($payments) > 0 ) {
-                                        if($goal->trackingType == 'value')
-                                        {
-                                            $value->amount = $payments->sum('amount');
-        
-                                        }else {
-                                            $value->amount = 1;
-                                        }
-                                       
-                                    } else {
-                                        $value->amount = 0;
-                                    }
-                                } else {
-                                    $value->amount = 0;
-                                }
-                            }
-                            $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
-                            $value->bidder_amount = round((24 * $value->amount) / 100, 2);
-                            $value->team_total_amount = 0;
+                        if ($goal->trackingType == 'count') {
+                            foreach ($deals_data as $key => $value)
+                            {
+                               $check_client = Deal::whereDate('created_at', '>=', $goal->startDate);
+                               if (!is_null($goal->endDate)) {
+                                   $check_client = $check_client->whereDate('created_at', '<=', $goal->endDate);
+                               }
+                               $check_client = $check_client->select('client_id')->groupBy('client_id')->get();
+            
                            
-                           // dd($value->deal_stage);
-        
-                            foreach ($value->deal_stage as $key => $deal_stage) {
-                                $amount = 0;
-                                if ($deal_stage->deal_stage_id ==  1) {
-                                    $value->qualified_by = $deal_stage->updated_by;
-                                    $amount = round((4 * $value->amount) / 100, 2);
-                                    $value->qualified_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 2) {
-                                    $value->required_defined = $deal_stage->updated_by;
-                                    $amount = round((17 * $value->amount) / 100, 2);
-                                    $value->required_defined_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 3) {
-                                    $value->proposal_made = $deal_stage->updated_by;
-                                    $amount = round((12 * $value->amount) / 100, 2);
-                                    $value->proposal_made_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 4) {
-                                    $value->negotiation_started = $deal_stage->updated_by;
-                                    $amount = round((12 * $value->amount) / 100, 2);
-                                    $value->negotiation_started_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 5) {
-                                    $value->milestone_breakdown = $deal_stage->updated_by;
-                                    $amount = round((14 * $value->amount) / 100, 2);
-                                    $value->milestone_breakdown_amount = $amount;
-                                }
-        
-                                if (in_array($deal_stage->updated_by, $user_id)) {
-                                    $team_total_amount = $team_total_amount + $amount;
-                                    $value->team_total_amount = $team_total_amount;
-                                }
-                            }
-        
-                            $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
-                            $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $user_id)->get();
-                            //  dd($team_summation);
-        
-                            if (in_array($value->added_by, $user_id)) {
-                                //$team_total_amount = $team_total_amount + $amount;
-                                $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
-                            }
-        
-                            if (in_array($value->bidder, $user_id)) {
-                                //$team_total_amount = $team_total_amount + $amount;
-                                $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
-                            }
-        
-                            $array[] = $value;
-                        }
+                            $value->amount = 1;
+                           
+            
+                               if (!is_null($goal->goal)) {
+                                   $member = rtrim($goal->goal->members, ',');
+                                   $member = explode(',', $member);
+                               } else {
+                                   $member[] = $goal->user_id;
+                               }
+                               
+                               $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
+                               $value->bidder_amount = round((24 * $value->amount) / 100, 2);
+                               $value->team_total_amount = 0;
+                               $team_total_amount = 0;
+            
+                               foreach ($value->deal_stage as $key => $deal_stage) {
+                                   $amount = 0;
+                                   if ($deal_stage->deal_stage_id ==  1) {
+                                       $value->qualified_by = $deal_stage->updated_by;
+                                       $amount = round((4 * $value->amount) / 100, 2);
+                                       $value->qualified_amount = $amount;
+                                   } elseif ($deal_stage->deal_stage_id == 2) {
+                                       $value->required_defined = $deal_stage->updated_by;
+                                       $amount = round((17 * $value->amount) / 100, 2);
+                                       $value->required_defined_amount = $amount;
+                                   } elseif ($deal_stage->deal_stage_id == 3) {
+                                       $value->proposal_made = $deal_stage->updated_by;
+                                       $amount = round((12 * $value->amount) / 100, 2);
+                                       $value->proposal_made_amount = $amount;
+                                   } elseif ($deal_stage->deal_stage_id == 4) {
+                                       $value->negotiation_started = $deal_stage->updated_by;
+                                       $amount = round((12 * $value->amount) / 100, 2);
+                                       $value->negotiation_started_amount = $amount;
+                                   } elseif ($deal_stage->deal_stage_id == 5) {
+                                       $value->milestone_breakdown = $deal_stage->updated_by;
+                                       $amount = round((14 * $value->amount) / 100, 2);
+                                       $value->milestone_breakdown_amount = $amount;
+                                   }
+            
+                                   if (in_array($deal_stage->updated_by, $member)) {
+                                       $team_total_amount = $team_total_amount + $amount;
+                                       $value->team_total_amount = $team_total_amount;
+                                   }
+                               }
+            
+                               $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
+                               $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
+            
+                               if (in_array($value->added_by, $member)) {
+                                   $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
+                               }
+            
+                               if (in_array($value->bidder, $member)) {
+                                   $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
+                               }
+            
+                               $array[] = $value;
+                           }
+                         }else 
+                         {
+                            foreach ($mergedArray as $key => $value)
+            
+                                {
+                                   $check_client = Deal::whereDate('created_at', '>=', $goal->startDate);
+                                   if (!is_null($goal->endDate)) {
+                                       $check_client = $check_client->whereDate('created_at', '<=', $goal->endDate);
+                                   }
+                                   $check_client = $check_client->select('client_id')->groupBy('client_id')->get();
+               
+                              
+                                   if ($value->project_type == 'hourly') {
+                                       $project = Project::where('deal_id', $value->id)->first();
+                                       if (!is_null($project)) {
+                                           $payments = Payment::where([
+                                               'project_id' => $project->id,
+                                           ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->sum('amount');
+               
+                                            $value->amount = $payments;
+                                              
+                                           } 
+                                   }else 
+                                   {
+                                    $value->amount = $value->amount;
+                                   }
+               
+                                   if (!is_null($goal->goal)) {
+                                       $member = rtrim($goal->goal->members, ',');
+                                       $member = explode(',', $member);
+                                   } else {
+                                       $member[] = $goal->user_id;
+                                   }
+                                   
+                                   $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
+                                   $value->bidder_amount = round((24 * $value->amount) / 100, 2);
+                                   $value->team_total_amount = 0;
+                                   $team_total_amount = 0;
+               
+                                   foreach ($value->deal_stage as $key => $deal_stage) {
+                                       $amount = 0;
+                                       if ($deal_stage->deal_stage_id ==  1) {
+                                           $value->qualified_by = $deal_stage->updated_by;
+                                           $amount = round((4 * $value->amount) / 100, 2);
+                                           $value->qualified_amount = $amount;
+                                       } elseif ($deal_stage->deal_stage_id == 2) {
+                                           $value->required_defined = $deal_stage->updated_by;
+                                           $amount = round((17 * $value->amount) / 100, 2);
+                                           $value->required_defined_amount = $amount;
+                                       } elseif ($deal_stage->deal_stage_id == 3) {
+                                           $value->proposal_made = $deal_stage->updated_by;
+                                           $amount = round((12 * $value->amount) / 100, 2);
+                                           $value->proposal_made_amount = $amount;
+                                       } elseif ($deal_stage->deal_stage_id == 4) {
+                                           $value->negotiation_started = $deal_stage->updated_by;
+                                           $amount = round((12 * $value->amount) / 100, 2);
+                                           $value->negotiation_started_amount = $amount;
+                                       } elseif ($deal_stage->deal_stage_id == 5) {
+                                           $value->milestone_breakdown = $deal_stage->updated_by;
+                                           $amount = round((14 * $value->amount) / 100, 2);
+                                           $value->milestone_breakdown_amount = $amount;
+                                       }
+               
+                                       if (in_array($deal_stage->updated_by, $member)) {
+                                           $team_total_amount = $team_total_amount + $amount;
+                                           $value->team_total_amount = $team_total_amount;
+                                       }
+                                   }
+               
+                                   $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
+                                   $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
+               
+                                   if (in_array($value->added_by, $member)) {
+                                       $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
+                                   }
+               
+                                   if (in_array($value->bidder, $member)) {
+                                       $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
+                                   }
+               
+                                   $array[] = $value;
+                               }
+                         }
                         if($goal->team_id == 1) {
                             if (is_null($goal->endDate)) {
                                 $end_date = Carbon::parse($goal->startDate);
@@ -235,7 +348,7 @@ class GoalAchieveCheck extends Command
         
                                     $point= new CashPoint();
                                     $point->user_id= $user_name->id;
-                                    $point->project_id= $deal_project->id;
+                                    // $point->project_id= $deal->id;
                                     $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
                                     $point->bonus_type= "Bonus";
                                     $point->gained_as = "Individual";
@@ -252,105 +365,211 @@ class GoalAchieveCheck extends Command
                                 }
                             }
                         }
-                    } elseif ($goal->dealType == 'New Client') {
+                    } 
+                    
+                    elseif ($goal->dealType == 'New Client') {
                         $deals_data = Deal::select([
                             'deals.*',
-                           
+                            'pm.id as pm_id',
+                            'pm.name as pm_name',
+                            
+        
                             DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
                         ])
-                        ->leftjoin('leads', 'leads.id', 'deals.lead_id')
-                       
+                        ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+                        ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
                         ->whereDate('deals.created_at', '>=', $goal->startDate)
                         ->where('deals.client_badge','=','new client');
         
                         if (!is_null($goal->endDate)) {
                             $deals_data = $deals_data->whereDate('deals.created_at', '<=', $goal->endDate);
                         }
-
                         $deals_data = $deals_data->where('deals.status', '!=','Denied')
+                       // ->whereIn('deals.added_by', $data2)
+                        //->groupBy('client_id')
                         ->orderBy('deals.id', 'desc')
+                        
                         ->get();
+        
+                        $hourly_deals = Deal::select([
+                            'deals.*',
+                            'pm.id as pm_id',
+                            'pm.name as pm_name',
+                            'projects.id as project_id',
+                            'payments.id as payment_id',
+                            'payments.paid_on',
+                            
+        
+                            DB::raw('COALESCE(leads.added_by, deals.added_by) as bidder')
+                        ])
+                        ->leftJoin('leads', 'leads.id', 'deals.lead_id')
+                        ->join('users as pm', 'pm.id', '=', 'deals.pm_id')
+                        ->join('projects','projects.deal_id','deals.id')
+                        ->leftJoin('payments','payments.project_id','projects.id')
+                        ->whereDate('payments.paid_on', '>=', $goal->startDate)
+                       // ->whereNotIn('deals.id', $deals_data->pluck('deals.id'))
+                     
+                        ->where('deals.client_badge','=','new client')
+                        ->where('deals.project_type','=','hourly')
+                        ;
+        
+                        if (!is_null($goal->endDate)) {
+                            $hourly_deals = $hourly_deals->whereDate('payments.paid_on', '<=', $goal->endDate);
+                        }
+                        $hourly_deals = $hourly_deals->where('deals.status', '!=','Denied')
+                       // ->whereIn('deals.added_by', $data2)
+                        //->groupBy('client_id')
+                        ->orderBy('deals.id', 'desc')
+                        
+                        ->get();
+                        $mergedData = Collection::make($deals_data)->concat($hourly_deals);
+        
+                        $filteredData = collect($mergedData)->unique('id')->values();
+        
+                        $mergedArray = $filteredData->all();
                         $team_total_amount = 0;
         
-                        foreach ($deals_data as $key => $value) {
-                            if ($goal->trackingType == 'count') {
+                        if ($goal->trackingType == 'count') {
+                            foreach ($deals_data as $key => $value) {
+                               
                                 $value->amount = 1;
-                                $value->tracking_type = 'count';
-                            }
-
-                            if ($value->project_type == 'hourly') {
-                                $project = Project::where('deal_id', $value->id)->first();
-                                if (!is_null($project)) {
-                                    $payments = Payment::where([
-                                        'project_id' => $project->id,
-                                    ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->get();
-        
-                                    if (count($payments) > 0 ) {
-                                        if($goal->trackingType == 'value')
-                                        {
-                                            $value->amount = $payments->sum('amount');
-        
-                                        }else {
-                                            $value->amount = 1;
-                                        }
-                                       
-                                    } else {
-                                        $value->amount = 0;
-                                    }
+                               
+                                if (!is_null($goal->goal)) {
+                                    $member = rtrim($goal->goal->members, ',');
+                                    $member = explode(',', $member);
                                 } else {
-                                    $value->amount = 0;
+                                    $member[] = $goal->user_id;
                                 }
-                            }
-                           
-        
-                            $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
-                            $value->bidder_amount = round((24 * $value->amount) / 100, 2);
-                            $value->team_total_amount = 0;
-                           
-        
-                            foreach ($value->deal_stage as $key => $deal_stage) {
-                                $amount = 0;
-                                if ($deal_stage->deal_stage_id ==  1) {
-                                    $value->qualified_by = $deal_stage->updated_by;
-                                    $amount = round((4 * $value->amount) / 100, 2);
-                                    $value->qualified_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 2) {
-                                    $value->required_defined = $deal_stage->updated_by;
-                                    $amount = round((17 * $value->amount) / 100, 2);
-                                    $value->required_defined_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 3) {
-                                    $value->proposal_made = $deal_stage->updated_by;
-                                    $amount = round((12 * $value->amount) / 100, 2);
-                                    $value->proposal_made_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 4) {
-                                    $value->negotiation_started = $deal_stage->updated_by;
-                                    $amount = round((12 * $value->amount) / 100, 2);
-                                    $value->negotiation_started_amount = $amount;
-                                } elseif ($deal_stage->deal_stage_id == 5) {
-                                    $value->milestone_breakdown = $deal_stage->updated_by;
-                                    $amount = round((14 * $value->amount) / 100, 2);
-                                    $value->milestone_breakdown_amount = $amount;
+                                
+                                $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
+                                $value->bidder_amount = round((24 * $value->amount) / 100, 2);
+                                $value->team_total_amount = 0;
+                                $team_total_amount = 0;
+            
+                                foreach ($value->deal_stage as $key => $deal_stage) {
+                                    $amount = 0;
+                                    if ($deal_stage->deal_stage_id ==  1) {
+                                        $value->qualified_by = $deal_stage->updated_by;
+                                        $amount = round((4 * $value->amount) / 100, 2);
+                                        $value->qualified_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 2) {
+                                        $value->required_defined = $deal_stage->updated_by;
+                                        $amount = round((17 * $value->amount) / 100, 2);
+                                        $value->required_defined_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 3) {
+                                        $value->proposal_made = $deal_stage->updated_by;
+                                        $amount = round((12 * $value->amount) / 100, 2);
+                                        $value->proposal_made_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 4) {
+                                        $value->negotiation_started = $deal_stage->updated_by;
+                                        $amount = round((12 * $value->amount) / 100, 2);
+                                        $value->negotiation_started_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 5) {
+                                        $value->milestone_breakdown = $deal_stage->updated_by;
+                                        $amount = round((14 * $value->amount) / 100, 2);
+                                        $value->milestone_breakdown_amount = $amount;
+                                    }
+            
+                                    if (in_array($deal_stage->updated_by, $member)) {
+                                        $team_total_amount = $team_total_amount + $amount;
+                                        $value->team_total_amount = $team_total_amount;
+                                    }
                                 }
-        
-                                if (in_array($deal_stage->updated_by, $user_id)) {
-                                    $team_total_amount = $team_total_amount + $amount;
-                                    $value->team_total_amount = $team_total_amount;
+            
+                                $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
+                                $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
+            
+                                if (in_array($value->added_by, $member)) {
+                                    //$team_total_amount = $team_total_amount + $amount;
+                                    $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
                                 }
+            
+                                if (in_array($value->bidder, $member)) {
+                                    //$team_total_amount = $team_total_amount + $amount;
+                                    $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
+                                }
+            
+                                $array[] = $value;
                             }
-        
-                            $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
-                            $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $user_id)->get();
-        
-                            if (in_array($value->added_by, $user_id)) {
-                                $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
+                          }else 
+                          {
+                        // / dd($mergedArray);
+                            foreach ($mergedArray as $key => $value) {
+                                
+                                if ($value->project_type == 'hourly') {
+                                    $project = Project::where('deal_id', $value->id)->first();
+                                    
+                                    if (!is_null($project)) {
+                                        $payments = Payment::where([
+                                            'project_id' => $project->id,
+                                        ])->whereBetween(DB::raw('DATE(paid_on)'), [$goal->startDate, $goal->endDate])->sum('amount');
+            
+                                         $value->amount = $payments;
+                                           
+                                        } 
+                                }else 
+                                {
+                                 $value->amount = $value->amount;
+                                }
+            
+                                if (!is_null($goal->goal)) {
+                                    $member = rtrim($goal->goal->members, ',');
+                                    $member = explode(',', $member);
+                                } else {
+                                    $member[] = $goal->user_id;
+                                }
+                                
+                                $value->deal_stage = DealStageChange::where('deal_id', $value->deal_id)->groupBy('deal_stage_id')->get();
+                                $value->bidder_amount = round((24 * $value->amount) / 100, 2);
+                                $value->team_total_amount = 0;
+                                $team_total_amount = 0;
+            
+                                foreach ($value->deal_stage as $key => $deal_stage) {
+                                    $amount = 0;
+                                    if ($deal_stage->deal_stage_id ==  1) {
+                                        $value->qualified_by = $deal_stage->updated_by;
+                                        $amount = round((4 * $value->amount) / 100, 2);
+                                        $value->qualified_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 2) {
+                                        $value->required_defined = $deal_stage->updated_by;
+                                        $amount = round((17 * $value->amount) / 100, 2);
+                                        $value->required_defined_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 3) {
+                                        $value->proposal_made = $deal_stage->updated_by;
+                                        $amount = round((12 * $value->amount) / 100, 2);
+                                        $value->proposal_made_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 4) {
+                                        $value->negotiation_started = $deal_stage->updated_by;
+                                        $amount = round((12 * $value->amount) / 100, 2);
+                                        $value->negotiation_started_amount = $amount;
+                                    } elseif ($deal_stage->deal_stage_id == 5) {
+                                        $value->milestone_breakdown = $deal_stage->updated_by;
+                                        $amount = round((14 * $value->amount) / 100, 2);
+                                        $value->milestone_breakdown_amount = $amount;
+                                    }
+            
+                                    if (in_array($deal_stage->updated_by, $member)) {
+                                        $team_total_amount = $team_total_amount + $amount;
+                                        $value->team_total_amount = $team_total_amount;
+                                    }
+                                }
+            
+                                $value->won_deal_amount = round((17 * $value->amount) / 100, 2);
+                                $team_summation = DealStageChange::where('deal_id', $value->deal_id)->whereIn('updated_by', $member)->get();
+            
+                                if (in_array($value->added_by, $member)) {
+                                    //$team_total_amount = $team_total_amount + $amount;
+                                    $value->team_total_amount = round($value->team_total_amount + $value->won_deal_amount, 2);
+                                }
+            
+                                if (in_array($value->bidder, $member)) {
+                                    //$team_total_amount = $team_total_amount + $amount;
+                                    $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
+                                }
+            
+                                $array[] = $value;
                             }
-        
-                            if (in_array($value->bidder, $user_id)) {
-                                $value->team_total_amount = round($value->team_total_amount + $value->bidder_amount, 2);
-                            }
-        
-                           $array[] = $value;
-                        }
+                          }
                         if($goal->team_id == 1) {
                             if (is_null($goal->endDate)) {
                                 $end_date = Carbon::parse($goal->startDate);
@@ -409,7 +628,7 @@ class GoalAchieveCheck extends Command
         
                                         $point= new CashPoint();
                                         $point->user_id= $user_name->id;
-                                        $point->project_id= $deal_project->id;
+                                       
                                         $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
                                         $point->gained_as = "Individual";
                                         $point->points= $distribute_amount;
@@ -432,15 +651,18 @@ class GoalAchieveCheck extends Command
 
            
            
-    
+               
            
             foreach ($goals as $goal) {
-                $start = Carbon::parse($goal->startDate);
-                $end = Carbon::parse($goal->endDate);
-                $dateToCheck = Carbon::parse($deal_id->created_at);
-    
-                if ($dateToCheck->between($start, $end)) {
-    
+                $start = $goal->startDate;
+                $end = $goal->endDate;
+                $dateToCheck = ($deal_id->created_at)->format('Y-m-d');
+                // dd($dateToCheck,$start,$end);
+               
+                //if ($dateToCheck->between($goal->startDate, $goal->endDate)) {
+                if ($dateToCheck >= $goal->startDate && $dateToCheck <= $goal->endDate) {
+                   
+             //   dd("udnasidnjoias");
                 if($goal->team_id != null)
                 {
                     $team = Seopage1Team::find($goal->team_id);
@@ -453,15 +675,18 @@ class GoalAchieveCheck extends Command
                             array_push($user_data,$value);
                         }
                     }
+                  //  dd($user_data);
                 } else {
                     $user_data[]= $goal->user_id;
                 }
+               // dd($user_data);
                 $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
+                
             }
             
             
-            // Always use an array of user IDs, even if $goal->user_id is set
-            // /dd($user_data);
+        //     // Always use an array of user IDs, even if $goal->user_id is set
+        //     // /dd($user_data);
            
            
            
