@@ -213,14 +213,19 @@ class ProjectMilestoneController extends AccountBaseController
 
             $deal_id= Deal::where('id',$project->deal_id)->first();
             $deal= Deal::find($deal_id->id);
-            $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
-            $deal->amount= $deal->amount+ $milestone->cost;
+            // $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
+            // $deal->amount= $deal->amount+ $milestone->cost;
+            $deal->upsell_actual_amount= $deal->upsell_actual_amount+ $milestone->actual_cost;
+            $deal->upsell_amount= $deal->upsell_amount+ $milestone->cost;
             $deal->save();
             $contract_id= Contract::where('deal_id',$deal->id)->first();
             $contract= Contract::find($contract_id->id);
-            $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
-            $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
-            $contract->amount= $contract->amount+ $milestone->cost;
+            // $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
+            // $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+            // $contract->amount= $contract->amount+ $milestone->cost;
+            $contract->upsell_actual_amount= $contract->upsell_actual_amount+ $milestone->actual_cost;
+            //$contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+            $contract->upsell_amount= $contract->upsell_amount+ $milestone->cost;
             $contract->save();
             $log_user = Auth::user();
             $activity = new ProjectActivity();
@@ -331,14 +336,19 @@ class ProjectMilestoneController extends AccountBaseController
 
             $deal_id= Deal::where('id',$project->deal_id)->first();
             $deal= Deal::find($deal_id->id);
-            $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
-            $deal->amount= $deal->amount+ $milestone->cost;
+            // $deal->actual_amount= $deal->actual_amount+ $milestone->actual_cost;
+            // $deal->amount= $deal->amount+ $milestone->cost;
+            $deal->upsell_actual_amount= $deal->upsell_actual_amount+ $milestone->actual_cost;
+            $deal->upsell_amount= $deal->upsell_amount+ $milestone->cost;
             $deal->save();
             $contract_id= Contract::where('deal_id',$deal->id)->first();
             $contract= Contract::find($contract_id->id);
-            $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
-            $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
-            $contract->amount= $contract->amount+ $milestone->cost;
+            // $contract->actual_amount= $contract->actual_amount+ $milestone->actual_cost;
+            // $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+            // $contract->amount= $contract->amount+ $milestone->cost;
+            $contract->upsell_actual_amount= $contract->upsell_actual_amount+ $milestone->actual_cost;
+           // $contract->original_amount= $contract->original_amount+ $milestone->actual_cost;
+            $contract->upsell_amount= $contract->upsell_amount+ $milestone->cost;
             $contract->save();
             $log_user = Auth::user();
             $activity = new ProjectActivity();
@@ -367,6 +377,45 @@ class ProjectMilestoneController extends AccountBaseController
     public function destroy($id)
     {
         $milestone = ProjectMilestone::findOrFail($id);
+        $milestone_id= ProjectMilestone::where('id',$milestone->id)->first();
+       
+        $project= Project::where('id',$milestone->project_id)->first();
+        $update_project= Project::find($project->id);
+        $update_project->project_budget= $project->project_budget-$milestone->cost;
+        $update_project->due= $project->due- $milestone->cost;
+        
+        $update_project->save();
+        $pm_id= PMAssign::where('pm_id',$project->pm_id)->first();
+        $pm_assign= PMAssign::find($pm_id->id);
+        $pm_assign->amount= $pm_assign->amount- $milestone->cost;
+        $pm_assign->actual_amount= $pm_assign->actual_amount- $milestone->cost;
+        $pm_assign->monthly_project_amount= $pm_assign->monthly_project_amount- $milestone->cost;
+        $pm_assign->monthly_actual_project_amount= $pm_assign->monthly_actual_project_amount- $milestone->cost;
+        $pm_assign->save();
+
+        $deal_id= Deal::where('id',$project->deal_id)->first();
+        $deal= Deal::find($deal_id->id);
+        // $deal->actual_amount= $deal->actual_amount- $milestone->actual_cost;
+        // $deal->amount= $deal->amount- $milestone->cost;
+        $deal->upsell_actual_amount= $deal->upsell_actual_amount- $milestone->actual_cost;
+        $deal->upsell_amount= $deal->upsell_amount- $milestone->cost;
+        $deal->save();
+        $contract_id= Contract::where('deal_id',$deal->id)->first();
+        $contract= Contract::find($contract_id->id);
+        // $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
+        // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+        // $contract->amount= $contract->amount- $milestone->cost;
+        $contract->upsell_actual_amount= $contract->upsell_actual_amount- $milestone->actual_cost;
+       // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+        $contract->upsell_amount= $contract->upsell_amount- $milestone->cost;
+        $contract->save();
+        // $user= User::where('id',$project->pm_id)->first();
+        
+
+        //update authoziation action
+       
+        //end authorization action
+
         ProjectMilestone::destroy($id);
         $this->logProjectActivity($milestone->project_id, 'messages.milestoneDeleted');
         return Reply::success(__('messages.deleteSuccess'));
@@ -488,14 +537,19 @@ class ProjectMilestoneController extends AccountBaseController
 
         $deal_id= Deal::where('id',$project->deal_id)->first();
         $deal= Deal::find($deal_id->id);
-        $deal->actual_amount= $deal->actual_amount- $milestone->actual_cost;
-        $deal->amount= $deal->amount- $milestone->cost;
+        // $deal->actual_amount= $deal->actual_amount- $milestone->actual_cost;
+        // $deal->amount= $deal->amount- $milestone->cost;
+        $deal->upsell_actual_amount= $deal->upsell_actual_amount- $milestone->actual_cost;
+        $deal->upsell_amount= $deal->upsell_amount- $milestone->cost;
         $deal->save();
         $contract_id= Contract::where('deal_id',$deal->id)->first();
         $contract= Contract::find($contract_id->id);
-        $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
-        $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
-        $contract->amount= $contract->amount- $milestone->cost;
+        // $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
+        // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+        // $contract->amount= $contract->amount- $milestone->cost;
+        $contract->upsell_actual_amount= $contract->upsell_actual_amount- $milestone->actual_cost;
+       // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+        $contract->upsell_amount= $contract->upsell_amount- $milestone->cost;
         $contract->save();
         $user= User::where('id',$project->pm_id)->first();
         $log_user = Auth::user();
