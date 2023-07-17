@@ -1092,6 +1092,10 @@
     width: 100%;
   }
 }
+.text-hover-underline:hover {
+  text-decoration: underline;
+}
+
 @keyframes glice {
   0% {
     background-position: -200px 0;
