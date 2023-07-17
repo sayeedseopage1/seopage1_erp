@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel Application - Server Requirements</title>
+    <title>SEOPage1 ERP - Server Requirements</title>
     <style>
         body {
             padding-top: 18px;
@@ -99,7 +99,7 @@
         }
 
         }
-        
+
         @keyframes arrow-spin {
             50% {
                 transform: rotateY(360deg);
@@ -188,7 +188,7 @@ if ($url_f_open != "1" && $url_f_open != 'On') {
         <a href="/">
             <img width="180px" src="/user-uploads/app-logo/c86157272a41bea229e0dcbe2ff9715b.png"></a>
     </div>
-    <h1><a href="/">Application</a> - Server Requirements</h1>
+    <h1><a href="/">SEOPage1 ERP</a> - Server Requirements</h1>
 
     <div class="scene" id="scene">
         <svg
@@ -292,7 +292,7 @@ if ($url_f_open != "1" && $url_f_open != 'On') {
             <td><?php echo $requirement10; ?></td>
         </tr>
         <tr>
-            <td>10. allow_url_fopen</td>
+            <td>10. Allow Url FOpen</td>
             <td><?php echo $requirement11; ?></td>
         </tr>
         </tbody>
