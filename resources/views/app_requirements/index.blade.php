@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SEOPage1 ERP - Server Requirements</title>
+    <title>SEOPage1 ERP - Server Requirements | Erp.Seopage1.Net</title>
     <style>
         body {
             padding-top: 18px;
