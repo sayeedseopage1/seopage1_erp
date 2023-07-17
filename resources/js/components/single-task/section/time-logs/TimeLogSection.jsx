@@ -1,9 +1,11 @@
-import React from 'react'
-import TimeLogItem from './TimeLogItem'
+import React, {lazy, Suspense} from 'react'
+const TimeLogItem = lazy(() => import('./TimeLogItem'));
 import TimeLogTable from './TimeLogTable';
 import { useDispatch, useSelector } from 'react-redux'; 
 import { useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 import { storeTimeLogs } from '../../../services/features/subTaskSlice';
+import { Placeholder } from '../../../global/Placeholder';
+import TimeLogItemLoader from './TimeLogItemLoader';
 
 
 const fetcher = (url) => axios.get(url).then(res => res.data); 
@@ -89,7 +91,11 @@ const TimeLogSection = () => {
         <div className="sp1_task_right_card--body">
           {
             timeLogs?.map(log => (
-              <TimeLogItem key={log.id} log={log}/>
+              <React.Fragment key={log.id}>
+                <Suspense fallback={<TimeLogItemLoader />}>
+                  <TimeLogItem log={log}/>
+                </Suspense>
+              </React.Fragment>
             ))
           } 
         </div>

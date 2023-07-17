@@ -1084,6 +1084,10 @@
     border-radius: 3px;
     display: grid;
     grid-template-columns: 1fr 24px;
+    border-bottom: 1px dashed rgb(0 0 0 / 10%);
+    &:last-child{
+        border: none;
+    }
 
     &.selected{
         background-color: rgb(24, 96, 240);
@@ -1190,5 +1194,16 @@
 
     &-body{
         padding: 6px 10px;
+    }
+}
+
+
+.task-report-form--modal-panel{
+    width: 550px;
+}
+
+@media only screen and (max-width:632px){
+    .task-report-form--modal-panel{
+        width: 100%;
     }
 }

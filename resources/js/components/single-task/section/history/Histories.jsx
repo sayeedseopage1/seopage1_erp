@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {lazy} from 'react'
 import CustomModal from '../../components/CustomModal'
 import Button from '../../components/Button';
-import InnerHistoryItem from './InnerHistoryItem';
+const InnerHistoryItem = lazy(() => import('./InnerHistoryItem'));
+import InnerHistoryItemLoader from './InnerHistoryItemLoader';
 
 const Histories = ({isOpen, close, toggle, data = []}) => {
   return (
@@ -24,7 +25,11 @@ const Histories = ({isOpen, close, toggle, data = []}) => {
             <div className="sp1-subtask-form --modal-panel-body">
                 <div className='mt-3'>
                     {data ? data.map(d => (
-                        <InnerHistoryItem key={d.id} history={d} />
+                        <React.Fragment key={d.id}>
+                            <React.Suspense fallback={<InnerHistoryItemLoader />}>
+                                <InnerHistoryItem history={d} />
+                            </React.Suspense>
+                        </React.Fragment>
                     )):null}
                 </div>      
             </div>

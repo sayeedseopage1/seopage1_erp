@@ -8,6 +8,7 @@ import RevisionViewControl from './Revision/RevisionViewControl'
 import ApproveTask from './approve-task/ApproveTask'
 import TimeExtension from './time-extension/TimeExtension'
 import ClientApproval from './client-approval/ClientApproval'
+import ReportControl from './report/Report'
 
 
 
@@ -26,7 +27,8 @@ const TaskAction = ({task, status}) => {
             <RevisionControl task={task} />
             <RevisionViewControl task={task} />
             <TimeExtension task={task} />
-            <ClientApproval />
+            <ClientApproval task={task} />
+            <ReportControl task={task} />
 
             
             

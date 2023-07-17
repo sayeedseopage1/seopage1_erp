@@ -7,6 +7,7 @@ import ReviewTimeExtensionRequest from './ReviewTimeExtensionRequest'
 
 const TimeExtension = ({task}) => {
   const [timeExtensionModal, setTimeExtensionModal] = useState(false);
+  const [showFor, setShowFor] = useState('REQUEST_TIME_EXTENSION');
   const singleTask = new SingleTask(task);
 
 
@@ -16,12 +17,17 @@ const TimeExtension = ({task}) => {
     console.log(data)
   }
 
+  const open = (type) =>{
+    setTimeExtensionModal(true);
+    setShowFor(type)
+  }
+
   return (
     <React.Fragment>
         <Button 
             variant='tertiary'
-            onClick={() => setTimeExtensionModal(true)}
-            className='d-flex align-items-center btn-outline-dark mr-2 text-dark'
+            onClick={() => open('REQUEST_TIME_EXTENSION')}
+            className='d-flex align-items-center btn-outline-dark text-dark'
         >
             <i className="fa-regular fa-clock"></i>
             <span className="d-inline ml-1">Request Time Extension</span>
@@ -29,8 +35,8 @@ const TimeExtension = ({task}) => {
 
         <Button 
             variant='success'
-            onClick={() => setTimeExtensionModal(true)}
-            className='d-flex align-items-center mr-2 border-success'
+            onClick={() => open('REVIEW_TIME_EXTENSION')}
+            className='d-flex align-items-center border-success'
         >
             <i className="fa-regular fa-clock"></i>
             <span className="d-inline ml-1">Time Extension Request</span>
@@ -38,17 +44,23 @@ const TimeExtension = ({task}) => {
 
         <Modal isOpen={timeExtensionModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
-                {/* <RequestTimeExtension 
-                    task={singleTask}
-                    close={() => setTimeExtensionModal(false)}
-                    onSubmit={handleSubmittion}
-                />  */}
+                {showFor === 'REQUEST_TIME_EXTENSION' && 
+                    <RequestTimeExtension 
+                        task={singleTask}
+                        close={() => setTimeExtensionModal(false)}
+                        onSubmit={handleSubmittion}
+                    />
+                }
 
-                <ReviewTimeExtensionRequest 
-                    task={singleTask}
-                    close={() => setTimeExtensionModal(false)}
-                    onSubmit={handleSubmittion}
-                />
+                {showFor==='REVIEW_TIME_EXTENSION' && 
+                    <ReviewTimeExtensionRequest 
+                        task={singleTask}
+                        close={() => setTimeExtensionModal(false)}
+                        onSubmit={handleSubmittion}
+                    />
+                }
+                 
+
             </div>
         </Modal> 
     </React.Fragment>

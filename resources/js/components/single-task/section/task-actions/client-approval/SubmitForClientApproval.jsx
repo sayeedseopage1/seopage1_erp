@@ -30,7 +30,7 @@ export const SubmitForClientApproval = ({task}) => {
         <Button 
             variant='success'
             onClick={openModal}
-            className='d-flex align-items-center mr-2 border-success'
+            className='d-flex align-items-center border-success'
         >
             <i className="fa-solid fa-handshake-angle"></i>
             <span className="d-inline ml-1">Submit For Client Approval</span>

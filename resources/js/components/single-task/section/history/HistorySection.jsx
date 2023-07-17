@@ -1,5 +1,6 @@
-import React from 'react'
-import HistoryItem from './HistoryItem'
+import React, {lazy, Suspense} from 'react'
+const HistoryItem = lazy(() => import('./HistoryItem'));
+import { Placeholder } from '../../../global/Placeholder';
 import { useDispatch, useSelector } from 'react-redux';
 import { storeHistories } from '../../../services/features/subTaskSlice';
 import { useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
@@ -95,7 +96,11 @@ const HistorySection = () => {
 
         <div className="sp1_task_right_card--body">
           {!isFetching ? histories ? histories.map( history => (
-             <HistoryItem key={history.id} history={history} />
+            <React.Fragment key={history.id}>
+              <Suspense fallback={<div className='sp1_tark_right_item py-2 '> <Placeholder /> </div>}>
+                <HistoryItem history={history} />
+              </Suspense>
+            </React.Fragment>
           )):<div
             className='d-flex align-items-center justify-content-center'
             style={{

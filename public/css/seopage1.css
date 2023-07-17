@@ -982,6 +982,10 @@
   border-radius: 3px;
   display: grid;
   grid-template-columns: 1fr 24px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+.task-selection-list-option:last-child {
+  border: none;
 }
 .task-selection-list-option.selected {
   background-color: rgb(24, 96, 240);
@@ -1079,6 +1083,15 @@
   padding: 6px 10px;
 }
 
+.task-report-form--modal-panel {
+  width: 550px;
+}
+
+@media only screen and (max-width: 632px) {
+  .task-report-form--modal-panel {
+    width: 100%;
+  }
+}
 @keyframes glice {
   0% {
     background-position: -200px 0;
@@ -1125,6 +1138,12 @@
   background: #fff;
   border-radius: 6px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sp1-item-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=seopage1.css.map*/

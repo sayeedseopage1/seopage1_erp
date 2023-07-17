@@ -124,6 +124,11 @@ export class SingleTask {
         this.guidelines = task?.project_summary;
         this.description = task?.description;
         this.subtask = task?.subtask;
+        this.hasSubtask = task?.subtask_id ? true : false;
+    }
+
+    getSubtaskTitle(){
+        return this.hasSubtask ? this.title : this.parentTaskTitle;
     }
 
     getStartDate(format){

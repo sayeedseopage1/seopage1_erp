@@ -429,7 +429,6 @@ class GoalAchieveCheck extends Command
                     $user_data[]= $goal->user_id;
                 }
                 $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
-                dd($goal2);
             }
             
             

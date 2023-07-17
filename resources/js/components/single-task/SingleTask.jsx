@@ -19,9 +19,11 @@ import { useEffect } from "react";
 import { storeTask } from "../services/features/subTaskSlice";
 import TaskAction from "./section/task-actions/TaskAction";
 import Loading from "./components/Loading";
+import { SingleTask } from "../utils/single-task";
+import { User } from "../utils/user-details";
 
-const SingleTask = () => {
-    const { task, taskStatus } = useSelector((s) => s.subTask);
+const SingleTaskPage = () => {
+    const { task:Task, taskStatus } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const params = useParams();
     const { data, isFetching } = useGetTaskDetailsQuery(
@@ -36,19 +38,17 @@ const SingleTask = () => {
 
     const loading = isFetching;
     const loadingClass = isFetching ? "skeleton-loading" : "";
+    const loggedUser = new User(window?.Laravel?.user);
 
-    const assigned_to = task?.users && task?.users[0];
-    const assigned_by = task?.create_by;
-    const logged_user = window?.Laravel?.user;
+    const task = new SingleTask(Task);
+   
 
     return (
         <div className="postion-relative">
             <Loading isLoading={isFetching} />
             <div className={`f-16 mb-3 ${loadingClass}`}>
-                <span>
-                    <strong>Subtask: </strong>
-                </span>
-                <span>{_.startCase(task?.subtask_title)}</span>
+                <span> <strong>Subtask: </strong> </span>
+                <span>{task?.getSubtaskTitle()}</span>
             </div>
 
             <div className="row">
@@ -58,269 +58,146 @@ const SingleTask = () => {
 
                         {/* task information */}
                         <div>
-                            <div className="d-flex flex-column py-3">
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
-                                        Parent Task:{" "}
+                            <div className="d-flex flex-column py-3" style={{gap: '10px'}}>
+                                {task.hasSubtask && (
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head"> Parent Task: </div>
+                                        <div className="sp1_st-list-item-value"> {task?.parentTaskTitle} </div>
                                     </div>
-                                    <div className="">
-                                        <div className={`${loadingClass}`}>
-                                            {_.startCase(task?.heading) ||
-                                                (!loading
-                                                    ? "--"
-                                                    : "Lorem Ipsum is simply dummy text of the printing and. typesetting industry.")}
-                                        </div>
+                                )}
+                                
+
+                                <div className="sp1_st-list-item">
+                                    <div className="sp1_st-list-item-head">Project : </div>
+                                    <div className="sp1_st-list-item-value">
+                                        <span className="dot-color bg-danger mr-2" />
+                                        {task?.projectName}
                                     </div>
                                 </div>
 
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
-                                        Project :{" "}
-                                    </div>
-                                    <div
-                                        className={`d-flex align-items-center ${loadingClass}`}
-                                    >
-                                        {!loading && (
-                                            <span
-                                                style={{
-                                                    display: "block",
-                                                    width: "6px",
-                                                    height: "6px",
-                                                    borderRadius: "50%",
-                                                    background: "red",
-                                                    marginRight: "6px",
-                                                }}
-                                            ></span>
-                                        )}
-                                        {_.startCase(task?.project_name) ||
-                                            (!loading
-                                                ? "--"
-                                                : "Lorem Ipsum is simply dummy text of the printing and.")}
-                                    </div>
-                                </div>
-
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
+                                <div className="sp1_st-list-item">
+                                    <div className="sp1_st-list-item-head">
                                         Milestone :{" "}
                                     </div>
-                                    <div
-                                        className={`d-flex align-items-center ${loadingClass}`}
-                                    >
-                                        {!loading && (
-                                            <span
-                                                style={{
-                                                    display: "block",
-                                                    width: "6px",
-                                                    height: "6px",
-                                                    borderRadius: "50%",
-                                                    background:
-                                                        "var(--header_color)",
-                                                    marginRight: "6px",
-                                                }}
-                                            ></span>
-                                        )}
-                                        {_.startCase(task?.milestone_title) ||
-                                            (!loading
-                                                ? "--"
-                                                : "Lorem Ipsum is simply dummy text of the printing.")}
+                                    <div className="sp1_st-list-item-value">
+                                        <span className="dot-color bg-primary mr-2" />
+                                        {task?.milestoneTitle}
                                     </div>
                                 </div>
 
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
+                                {/* asignee to */}
+                                <div className="sp1_st-list-item">
+                                    <div className="sp1_st-list-item-head">
                                         Assigned To :{" "}
                                     </div>
-                                    <div className="d-flex align-items-center">
-                                        <div
-                                            className={`${loadingClass} ${
-                                                loading ? "rounded-circle" : ""
-                                            }`}
-                                            style={{
-                                                width: "32px",
-                                                height: "32px",
-                                            }}
-                                        >
-                                            {!loading && assigned_to ? (
-                                                <img
-                                                    src={assigned_to?.image_url}
-                                                    alt={assigned_to?.name}
-                                                    width="32px"
-                                                    height="32px"
-                                                    className="rounded-circle"
-                                                />
-                                            ) : (
-                                                ""
-                                            )}
+                                    <div className="sp1_st-list-item-value">
+                                        <div style={{ width: "32px", height: "32px" }}>
+                                            <img
+                                                src={task?.assigneeTo?.getAvatar()}
+                                                alt={task?.assigneeTo?.getName()}
+                                                width="32px"
+                                                height="32px"
+                                                className="rounded-circle"
+                                            />
                                         </div>
                                         <div className="ml-2">
                                             <span
-                                                className={`d-block f-14 font-weight-bold ${loadingClass}`}
+                                                className={`d-block f-14 font-weight-bold`}
                                             >
-                                                {assigned_to?.name ||
-                                                    (!loading
-                                                        ? "--"
-                                                        : "Lorem Ipsum is simply dummy")}
-                                                {Number(assigned_to?.id) ===
-                                                    Number(logged_user?.id) && (
+                                                <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a> 
+                                                {Number(task?.assigneeTo?.getId()) ===
+                                                    Number(loggedUser?.getId()) && (
                                                     <sup
                                                         className="rounded-pill bg-dark text-white px-1"
-                                                        style={{
-                                                            fontSize: "10px",
-                                                        }}
+                                                        style={{ fontSize: "10px" }}
+                                                    >
+                                                        {" "}
+                                                        It's You{" "}
+                                                    </sup>
+                                                )}
+                                            </span>
+
+                                            <span style={{ fontSize: "12px" }}>
+                                                {task?.assigneeTo?.getDesignationName()}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* assignee by */}
+                                <div className="sp1_st-list-item">
+                                    <div className="sp1_st-list-item-head">
+                                        Assigned by:{" "}
+                                    </div>
+                                    <div className="sp1_st-list-item-value">
+                                        <div style={{ width: "32px", height: "32px" }}>
+                                            <img
+                                                src={task?.assigneeBy?.getAvatar()}
+                                                alt={task?.assigneeBy?.getName()}
+                                                width="32px"
+                                                height="32px"
+                                                className="rounded-circle"
+                                            />
+                                        </div>
+                                        <div className="ml-2">
+                                            <span
+                                                className={`d-block f-14 font-weight-bold`}
+                                            >
+                                                <a 
+                                                    href={task?.assigneeBy?.getUserLink()}
+                                                    className="text-dark hover-underline"
+                                                >
+                                                    {task?.assigneeBy?.getName()}
+                                                </a>
+                                                {Number(task?.assigneeBy?.getId()) ===
+                                                    Number(loggedUser?.getId()) && (
+                                                    <sup
+                                                        className="rounded-pill bg-dark text-white px-1"
+                                                        style={{ fontSize: "10px" }}
                                                     >
                                                         It's You
                                                     </sup>
                                                 )}
                                             </span>
 
-                                            <span
-                                                className={`${loadingClass}`}
-                                                style={{
-                                                    fontSize: "12px",
-                                                    color: !loading
-                                                        ? "rgba(111,114,122,1)"
-                                                        : "",
-                                                }}
-                                            >
-                                                {
-                                                    assigned_to?.employee_detail
-                                                        ?.designation?.name
-                                                }
+                                            <span style={{ fontSize: "12px" }}>
+                                                {task?.assigneeBy?.getDesignationName()}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
-                                        Assigned by :{" "}
-                                    </div>
-                                    <div className="d-flex align-items-center">
-                                        <div
-                                            className={`${loadingClass} ${
-                                                loading ? "rounded-circle" : ""
-                                            }`}
-                                            style={{
-                                                width: "32px",
-                                                height: "32px",
-                                            }}
-                                        >
-                                            {!loading && (
-                                                <img
-                                                    src={assigned_by?.image_url}
-                                                    alt={assigned_by?.name}
-                                                    width="32px"
-                                                    height="32px"
-                                                    className="rounded-circle"
-                                                />
-                                            )}
-                                        </div>
-                                        <div className="ml-2">
-                                            <span
-                                                className={`d-block f-14 font-weight-bold ${loadingClass}`}
-                                            >
-                                                {assigned_by?.name ||
-                                                    (!loading
-                                                        ? "--"
-                                                        : "Lorem Ipsum is simply dummy")}
-                                                {Number(assigned_by?.id) ===
-                                                    Number(logged_user?.id) && (
-                                                    <sup
-                                                        className="rounded-pill bg-dark text-white px-1"
-                                                        style={{
-                                                            fontSize: "10px",
-                                                        }}
-                                                    >
-                                                        It's You
-                                                    </sup>
-                                                )}
-                                            </span>
-                                            <span
-                                                className={`${loadingClass}`}
-                                                style={{
-                                                    fontSize: "12px",
-                                                    color: !loading
-                                                        ? "rgba(111,114,122,1)"
-                                                        : "",
-                                                }}
-                                            >
-                                                {
-                                                    assigned_by?.employee_detail
-                                                        ?.designation?.name
-                                                }
-                                            </span>
-                                        </div>
+                                {/* PRIORITY */}
+
+                                <div className="sp1_st-list-item">
+                                    <div className="sp1_st-list-item-head">Priority : </div>
+                                    <div className="sp1_st-list-item-value">
+                                        <span
+                                            className="dot-color mr-2"
+                                            style={{ background: "rgba(252, 189, 1, 1)" }}
+                                        />
+                                        {task?.priority}
                                     </div>
                                 </div>
 
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
-                                        Priority :{" "}
-                                    </div>
-                                    <div
-                                        className={`d-flex align-items-center ${loadingClass}`}
-                                    >
-                                        {!loading && (
-                                            <span
-                                                style={{
-                                                    display: "block",
-                                                    width: "6px",
-                                                    height: "6px",
-                                                    borderRadius: "50%",
-                                                    background:
-                                                        "rgba(252, 189, 1, 1)",
-                                                    marginRight: "6px",
-                                                }}
-                                            ></span>
-                                        )}
-                                        {_.startCase(task?.priority) ||
-                                            (!loading ? "--" : "Lorem Ipsum i")}
+                                {/* category */}
+                                <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">
+                                            Task Category :{" "}
+                                        </div>
+                                        <div className="sp1_st-list-item-value">
+                                            {task?.category?.name}
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className="d-flex align-items-center mb-2">
-                                    <div
-                                        className={`mr-2 ${loadingClass}`}
-                                        style={{ width: "150px" }}
-                                    >
-                                        Task Category :{" "}
-                                    </div>
-                                    <div
-                                        className={`d-flex align-items-center ${loadingClass}`}
-                                    >
-                                        {!loading
-                                            ? task?.task_category
-                                                  ?.category_name || "--"
-                                            : "Lorem Ipsum is"}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
-                        <div>
+                        <div className="mt-3">
                             <Accordion
                                 expendable={false}
                                 title="General Guidelines"
                             >
-                                <Guideline text={task?.project_summary} />
+                                <Guideline text={task?.guidelines} />
                             </Accordion>
 
                             <Accordion
@@ -402,13 +279,15 @@ const SingleTask = () => {
                             </div>
 
                             <div className="d-flex align-items-center mb-2">
-                                <div className="">Start Date:  </div>
+                                <div className="">Start Date: </div>
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
                                     {!loading
                                         ? task?.start_date
-                                            ? dayjs(task?.start_date).format( "MMM DD, YYYY")
+                                            ? dayjs(task?.start_date).format(
+                                                  "MMM DD, YYYY"
+                                              )
                                             : "--"
                                         : "0 hour 0 min"}
                                 </div>
@@ -421,8 +300,10 @@ const SingleTask = () => {
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
                                     {!loading
-                                        ? task?.due_date ? 
-                                            dayjs(task?.due_date).format("MMM DD, YYYY")
+                                        ? task?.due_date
+                                            ? dayjs(task?.due_date).format(
+                                                  "MMM DD, YYYY"
+                                              )
                                             : "--"
                                         : "0 hour 0 min"}
                                 </div>
@@ -447,7 +328,7 @@ const SingleTask = () => {
 
                             <div className="d-flex align-items-center mb-2">
                                 <div className="">
-                                    Parent Task Hours Logged: 
+                                    Parent Task Hours Logged:
                                 </div>
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
@@ -500,4 +381,4 @@ const SingleTask = () => {
     );
 };
 
-export default SingleTask;
+export default SingleTaskPage;

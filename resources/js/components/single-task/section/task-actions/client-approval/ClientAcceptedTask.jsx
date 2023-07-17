@@ -6,7 +6,7 @@ const ClientAcceptedTask = ({task}) => {
     <React.Fragment>
         <Button 
             variant='success'
-            className='d-flex align-items-center mr-2 border-success'
+            className='d-flex align-items-center border-success'
         >
             <i className="fa-solid fa-check"></i>
             <span className="d-inline ml-1">Client Has Accepted This Task</span>
