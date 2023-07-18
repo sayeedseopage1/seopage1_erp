@@ -78,6 +78,11 @@ class AccountBaseController extends Controller
 
             $this->activeTimerCount = $this->activeTimerCount->count();
 
+        $this->selfActiveTimer = ProjectTimeLog::with('activeBreak')
+            ->where('user_id', user()->id)
+            ->whereNull('end_time')
+            ->first();
+
 
             $this->worksuitePlugins = worksuite_plugins();
 
