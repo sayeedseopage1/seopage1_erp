@@ -186,8 +186,15 @@ class ProjectsDataTable extends BaseDataTable
             $currency = Currency::where('id', $deal->original_currency_id)->first();
 
             //dd($deal);
+            if ($deal->upsell_amount == 0) {
+                $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol ;
+            }else 
+            {
+                $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol . ('<span class="badge badge-success">Upsold Amount ('.$deal->upsell_actual_amount.$currency->currency_symbol.')</span>');
+            }
+           
 
-            return $deal->actual_amount+ $deal->upsell_actual_amount  . $currency->currency_symbol;
+            return $project_value;
         });
 
         $customFieldsId = $customFields->pluck('id');
@@ -480,7 +487,7 @@ class ProjectsDataTable extends BaseDataTable
 
             return '(' . $completed . ' / ' . $data->count() . ')';
         });
-        $datatables->rawColumns(['project_name', 'pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check', 'short_code', 'project_manager', 'deliverable_sign', 'deadline', 'hours_allocated']);
+        $datatables->rawColumns(['project_name', 'pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check', 'short_code', 'project_manager', 'deliverable_sign', 'deadline', 'hours_allocated','project_value']);
         $datatables->removeColumn('project_summary');
         $datatables->removeColumn('notes');
         $datatables->removeColumn('category_id');
