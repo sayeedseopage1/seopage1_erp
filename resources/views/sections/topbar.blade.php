@@ -38,8 +38,8 @@
             <span id="active-timer" class="mr-2">{{ $selfActiveTimer->timer }}</span>
 
             @if (is_null($selfActiveTimer->activeBreak))
-                <a href="javascript:;" class="pause-active-timer mr-1 border-right" data-toggle="tooltip" data-original-title="{{ __('modules.timeLogs.pauseTimer') }}" data-time-id="{{ $selfActiveTimer->id }}">
-                    <i class="fa fa-pause-circle text-primary"></i>
+                <a href="{{route('tasks.show',$selfActiveTimer->task_id)}}" class="mr-1 border-right">
+                    <i class="fa-regular fa-eye text-primary"></i>
                 </a>
                 <a href="javascript:;" class="stop-active-timer" data-toggle="tooltip" data-original-title="{{ __('modules.timeLogs.stopTimer') }}" data-time-id="{{ $selfActiveTimer->id }}">
                     <i class="fa fa-stop-circle text-danger"></i>
