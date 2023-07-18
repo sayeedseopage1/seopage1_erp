@@ -362,13 +362,13 @@ class TimelogController extends AccountBaseController
         ->whereDate('created_at', $yesterdayDate)
         ->sum('total_minutes');
     $acknowlendement = DeveloperStopTimer::where('user_id',Auth::id())->where('created_at',$yesterdayDate)->first();
-    if($totalMinutes < 435 && $acknowlendement == null) 
-    {
-        return response()->json([
-            'error' => 'Developer did not submit the acknowledgement form'
-        ], 400);
+    // if($totalMinutes < 435 && $acknowlendement == null) 
+    // {
+    //     return response()->json([
+    //         'error' => 'Developer did not submit the acknowledgement form'
+    //     ], 400);
 
-    };
+    // };
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
