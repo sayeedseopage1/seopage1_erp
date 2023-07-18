@@ -747,6 +747,32 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         </div>
                         @endif
                     @endif
+                    @if ($projectBudgetPermission == 'all')
+                    @if($project->deal->upsell_amount != 0)
+                    @if($project->currency_id != $project->deal->currency_id)
+                    <div class="col-12 col-sm-6 mt-3">
+                        <x-cards.widget
+                            :title="__('Upsold Amount ('. $project->currency->currency_code .')')"
+                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->upsell_amount, $project->currency->currency_symbol) : '0')"
+                            icon="coins"
+                        />
+                    </div>
+                    @endif
+                    @endif
+                @endif
+                    @if ($projectBudgetPermission == 'all')
+                    @if($project->deal->upsell_amount != 0)
+                    @if($project->currency_id != $project->deal->original_currency_id)
+                    <div class="col-12 col-sm-6 mt-3">
+                        <x-cards.widget
+                            :title="__('Upsold Amount ('. $project->deal->original_currency->currency_code .')')"
+                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->upsell_actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
+                            icon="coins"
+                        />
+                    </div>
+                    @endif
+                    @endif
+                @endif
                     <div class="col-12 mt-3">
                         <x-cards.widget :title="__('Project Type')" :value="$project->deal->project_type" icon="clock" badge="true"/>
                     </div>
