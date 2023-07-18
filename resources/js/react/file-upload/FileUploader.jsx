@@ -112,11 +112,11 @@ const FilePreview = ({
                 {/* delete button */}
                 {deleteAble  && (
                     <Button  
-                    onClick={(e) => onRemove(e, id)} 
-                    className='__remove--btn'
-                > 
-                    <i className="fa-regular fa-trash-can"></i> 
-                </Button> 
+                        onClick={(e) => onRemove(e, id)} 
+                        className='__remove--btn'
+                    > 
+                        <i className="fa-regular fa-trash-can"></i> 
+                    </Button>
                 )}
                 {/* end delete button */}
                 {(fileType === "images" || fileType.startsWith('image/')) ? (

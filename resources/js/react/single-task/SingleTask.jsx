@@ -283,13 +283,7 @@ const SingleTaskPage = () => {
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
-                                    {!loading
-                                        ? task?.start_date
-                                            ? dayjs(task?.start_date).format(
-                                                  "MMM DD, YYYY"
-                                              )
-                                            : "--"
-                                        : "0 hour 0 min"}
+                                    {task?.getStartDate("MMM DD, YYYY")}
                                 </div>
                             </div>
 
@@ -299,13 +293,7 @@ const SingleTaskPage = () => {
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
-                                    {!loading
-                                        ? task?.due_date
-                                            ? dayjs(task?.due_date).format(
-                                                  "MMM DD, YYYY"
-                                              )
-                                            : "--"
-                                        : "0 hour 0 min"}
+                                    {task?.getDueDate("MMM DD, YYYY")}
                                 </div>
                             </div>
                             {/* End Due Date */}
@@ -316,12 +304,7 @@ const SingleTaskPage = () => {
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
-                                    {!loading
-                                        ? task?.estimate_hours ||
-                                          task?.estimate_minutes
-                                            ? `${task?.estimate_hours} hrs ${task?.estimate_minutes} mins`
-                                            : "--"
-                                        : `0 hour 0 min`}
+                                    {task?.getEstimateTime()}
                                 </div>
                             </div>
                             {/* End Time Estimate */}
@@ -333,11 +316,7 @@ const SingleTaskPage = () => {
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
                                 >
-                                    {!loading
-                                        ? task?.parent_task_time_log
-                                            ? `${task?.parent_task_time_log}`
-                                            : "--"
-                                        : `0 hrs 0 mins`}
+                                    {task?.parentTaskTimeLog || "--"}
                                 </div>
                             </div>
 
@@ -346,22 +325,14 @@ const SingleTaskPage = () => {
                                 <div
                                     className={`d-flex align-items-center font-weight-bold ml-2 pl-2 ${loadingClass}`}
                                 >
-                                    {!loading
-                                        ? task?.sub_task_time_log
-                                            ? `${task?.sub_task_time_log}`
-                                            : "--"
-                                        : `0 hrs 0 mins`}
+                                    {task?.subTaskTimeLog || "--"}
                                 </div>
                             </div>
 
                             <div className="d-flex align-items-center mb-2">
                                 <div className="">Total Hours Logged: </div>
                                 <div className="d-flex align-items-center font-weight-bold pl-2">
-                                    {!loading
-                                        ? task?.timeLog
-                                            ? `${task?.timeLog}`
-                                            : "--"
-                                        : `0 hrs 0 mins`}
+                                    {task?.totalTimeLog || "--"}
                                 </div>
                             </div>
                         </div>

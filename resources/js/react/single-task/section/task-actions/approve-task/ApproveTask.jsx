@@ -5,19 +5,42 @@ import { Rating } from '@smastrom/react-rating'
 import '@smastrom/react-rating/style.css'
 import CKEditorComponent from '../../../../ckeditor/index'
 import {HiOutlineSelector} from 'react-icons/hi'
+import { useApproveSubmittedTaskMutation, useGetSubmittedTaskQuery } from '../../../../services/api/SingleTaskPageApi';
+import SubmitButton from '../../../components/SubmitButton';
+import { useDispatch } from 'react-redux';
+import { setTaskStatus } from '../../../../services/features/subTaskSlice';
+import { useEffect } from 'react';
+import dayjs from 'dayjs';
+import FileUploader from '../../../../file-upload/FileUploader';
 
-const ApproveTask = () => {
+const ApproveTask = ({task, status, auth}) => {
+  const dispatch = useDispatch();
   const [showApproveForm, setShowApproveForm] = useState(false);
   const [completedWithInDeadline, setCompletedWithInDeadline] = useState(0);
   const [submittedStar, setSubmittedStar] = useState(0);
   const [fullfilledStar, setFullfilledStar] = useState(0);
   const [comment, setComment] = useState('');
 
+  const [oldSubmittion, setOldSubmittion] = useState([]);
+  const [latestSubmittion, setLatestSubmittion] = useState({});
+
+  const [approveSubmittedTask, {isLoading}] = useApproveSubmittedTaskMutation();
+  const { data: getSubmittedTask, isFetching  } = useGetSubmittedTaskQuery(task?.id);
+ 
+ useEffect(() => {
+    if(getSubmittedTask){
+        const data = _.sortBy(getSubmittedTask, ['submission_no']);
+        const latest = _.last(data);
+        const old = _.initial(data);
+        setOldSubmittion([...old]);
+        setLatestSubmittion(latest);
+    }
+ }, [isFetching]);
+
   const close = (e) => {
     e.preventDefault();
     setShowApproveForm(false)
   }
-
 
   // editor data 
   const onWriteOnEditor = (e, editor) => {
@@ -29,13 +52,34 @@ const ApproveTask = () => {
   const handleOnSubmit = (e) =>{
     e.preventDefault();
     const data = {
-        completedWithInDeadline,
-        submittedStar,
-        fullfilledStar,
-        comment
+        rating: completedWithInDeadline,
+        rating2: submittedStar,
+        rating3: fullfilledStar,
+        comment,
+        task_id: task?.id,
+        user_id: auth?.getId()
     }
 
-    console.log(data)
+
+    approveSubmittedTask(data)
+    .unwrap()
+    .then(res => {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+        })
+        
+        Toast.fire({
+            icon: 'success',
+            title: 'Task Approved Successfully'
+        })
+        dispatch(setTaskStatus(res?.task_status));
+    })
+    .catch(err => console.log(err))
+
   }
 
   return (
@@ -66,7 +110,7 @@ const ApproveTask = () => {
                          <div className='mb-3'>
                             <div className="sp1_st--approve-card"> 
                                 <div className="sp1_st--approve-card-header" data-toggle="collapse" href="#oldSubmittedSuccess" role="button"   aria-expanded="false" aria-controls="oldSubmittedSuccess">
-                                    Old Submitted Works
+                                    Old Submitted Works ({_.size(oldSubmittion)})
                                     <button>
                                         <HiOutlineSelector />
                                     </button>
@@ -75,14 +119,23 @@ const ApproveTask = () => {
 
                             <div className="collapse multi-collapse shadow-none" id="oldSubmittedSuccess">
                                 <div className="card card-body">
-                                    <SubmittedWorkCard data={{}}/>
-                                    <SubmittedWorkCard data={{}}/>
-                                    <SubmittedWorkCard data={{}}/>
+                                    {
+                                        _.size(oldSubmittion) > 0 ?
+                                        _.map(oldSubmittion, (task)=>(
+                                            <SubmittedWorkCard key={`${task.id}_${task?.submission_no}`} data={task}/>
+                                        )):
+                                        <span>
+                                            No Old Submittion!
+                                        </span>
+                                    }
                                 </div>
                             </div>
                          </div>
                         {/* content */}
-                        <SubmittedWorkCard data={{}} />
+                        {
+                            // getSubmittedTask?.submission_no === getSubmittedTask.
+                        }
+                        <SubmittedWorkCard data={latestSubmittion} latest={true} />
                     </div>
 
                     <div className="mt-4 px-3">
@@ -140,7 +193,7 @@ const ApproveTask = () => {
                                    Close 
                                 </Button>
 
-                                {true ? (
+                                {/* {!isLoading ? (
                                     <React.Fragment>
                                         <Button onClick={handleOnSubmit}>Approve</Button>
                                     </React.Fragment>
@@ -158,7 +211,8 @@ const ApproveTask = () => {
                                             Processing...
                                         </Button>
                                     </React.Fragment>
-                                )}
+                                )} */}
+                                <SubmitButton onClick={handleOnSubmit} title="Approve" isLoading={isLoading} />
                             </div>
                         </form>
                     </div>
@@ -175,50 +229,56 @@ export default ApproveTask
 
 // Submitted work
 
-const SubmittedWorkCard = ({data, className="", style}) => {
+const SubmittedWorkCard = ({data, latest=false, className="", style}) => {
+
+    const links = _.split(data?.links, ',');
+    const attaches = _.split(data?.attaches, ',');
+   
     return(
         <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}> 
             <div className="sp1_st--approve-card-header">
-                <span>Latest Submittion</span>
-                <span>2023-07-13</span>
+                <span>{latest ? 'Latest': "Old"} Submittion {!latest && `(${data?.submission_no})`}</span>
+                <span>
+                    {dayjs(data?.submission_date).format('MMM DD, YYYY')}
+                </span>
             </div>
 
             <div className='sp1_st--approve-card-body'>
                 <div className='mb-2'>
                     <div className='font-weight-bold f-12' style={{color: '#81868E'}}> Links</div>
                     <ol style={{listStyle: 'unset'}}>
-                        <li style={{listStyle: 'numaric'}}><a href="#">https://gosolution.com/</a></li>
-                        <li style={{listStyle: 'numaric'}}><a href="#">https://gosolution.com/</a></li>
-                        <li style={{listStyle: 'numaric'}}><a href="#">https://gosolution.com/</a></li>
+                        {_.map(links, (link, index) =>(
+                            <li key={`${link}_${index}`} style={{listStyle: 'numaric'}}>
+                                <a href={link}>{link}</a>
+                            </li>
+                        ))}
                     </ol>
                 </div>
 
                 <div className='mb-2'>
                     <div className="font-weight-bold f-12" style={{color: '#81868E'}}>Description</div>
-                    <div className='sp1_ck_content border p-1'>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae corporis blanditiis consequatur quo ullam laboriosam quidem, expedita quod a ut labore tempore! Eligendi repudiandae cumque alias et nostrum aliquid aliquam.
-                    </div>
+                    <div className='sp1_ck_content p-2' dangerouslySetInnerHTML={{__html: data?.text}}/>
                 </div>
 
 
-                {/* <div className="mt-3">
+                <div className="mt-3">
                 <span
                     className="d-block fs-12 font-weight-bold mb-2"
                     style={{ color: "#767581" }}
                 >
                     Attached Files
                 </span>
-                {data?.attach ? (
+                {_.size(attaches) > 0 ? (
                     <FileUploader>
-                        {data?.attach?.map((file) => (
+                        {_.map(attaches, (file, index) => (
                             <FileUploader.Preview
-                                key={file?.name}
-                                fileName={file?.name}
+                                key={`${file}_${index}`}
+                                fileName={file}
                                 downloadAble={true}
                                 deleteAble={false}
-                                downloadUrl={file?.url}
-                                previewUrl={file?.url}
-                                fileType={file?.type}
+                                downloadUrl={`/storage/TaskSubmission/${file}`}
+                                previewUrl={`/storage/TaskSubmission/${file}`}
+                                fileType={_.includes(["png","jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others'}
                                 ext=""
                             />
                         ))}
@@ -231,7 +291,7 @@ const SubmittedWorkCard = ({data, className="", style}) => {
                             No Attachment is available
                         </span>
                     )}
-                </div> */}
+                </div>
             </div>
         </div>
     )

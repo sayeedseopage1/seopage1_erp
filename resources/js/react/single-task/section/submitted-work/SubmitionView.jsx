@@ -6,8 +6,8 @@ import dayjs from "dayjs";
 import FileUploader from "../../../file-upload/FileUploader";
 
 const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
-    const user = data && data.user ? new User(data?.user) : null;
-
+    const links = _.split(data?.links, ',');
+    const attaches = _.split(data?.attaches, ','); 
     return (
         <CustomModal isOpen={isOpen} toggleRef={toggle}>
             <div className="sp1-subtask-form --modal-panel --modal-submitted">
@@ -37,138 +37,90 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                 </div>
 
                 <div className="sp1-subtask-form --modal-panel-body --modal-submitted-body">
-                    <div
-                        className="mt-3 d-flex flex-column"
-                        style={{ gap: "10px" }}
-                    >
+                    <div className="mt-3 d-flex flex-column" style={{ gap: "10px" }} >
                         <div>
-                            <span
-                                className="fs-14 font-weight-bold d-block mb-3"
-                                style={{ color: "#767581" }}
-                            >
+                            <span className="fs-14 font-weight-bold d-block mb-3" style={{ color: "#767581" }} >
                                 Submitted By
                             </span>
+
                             <div className="d-flex align-items-center">
                                 <div>
-                                    <img
-                                        src={user?.getAvatar()}
-                                        alt={user?.getName()}
-                                        width={32}
-                                        height={32}
-                                        className="rounded-circle"
-                                    />
+                                    {
+                                        data?.image ? (
+                                            <img
+                                            src={`/user-uploads/avatar/${data?.image}`}
+                                            alt={data?.name}
+                                            width={32}
+                                            height={32}
+                                            className="rounded-circle"
+                                        />):(
+                                            <div className="sp1-item-center rounded-circle border" style={{ width: '32px', height: '32px' }} >
+                                                <span className="font-weight-bold" style={{fontSize:'1.2rem'}}>{data?.name?.slice(0,1)}</span>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                                 <div className="d-flex flex-column px-2">
-                                    <a
-                                        className="text-underline text-primary"
-                                        href={user?.getUserLink()}
-                                        style={{ color: "#767581" }}
-                                    >
-                                        {user?.getName()}
-                                    </a>
-                                    <span
-                                        className="d-block"
-                                        style={{ color: "#767581" }}
-                                    >
-                                        {dayjs(data?.crated_at).format(
-                                            "MMM DD, YYYY"
-                                        )}{" "}
-                                        at
-                                        {dayjs(data?.crated_at).format(
-                                            "hh:mm a"
-                                        )}
+                                    <a className="text-underline text-primary" href={`/account/employees/${data?.user_id}`} style={{ color: "#767581" }} > {data?.name} </a>
+                                    <span className="d-block" style={{ color: "#767581" }}>
+                                        {dayjs(data?.submission_date).format( "MMM DD, YYYY" )} at {dayjs(data?.submission_date).format("hh:mm a" )}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div
-                            className="d-flex flex-column mt-3"
-                            style={{ gap: "10px" }}
-                        >
-                            <span
-                                className="d-block fs-14 font-weight-bold"
-                                style={{ color: "#767581" }}
-                            >
-                                Links
-                            </span>
-                            <ul
-                                style={{
-                                    listStyle: "unset",
-                                    marginLeft: "30px",
-                                }}
-                            >
-                                {data?.link?.map((link, i) => (
-                                    <li
-                                        style={{ listStyle: "unset" }}
-                                        key={link + i}
-                                    >
-                                        <a
-                                            className="hover-underline text-primary"
-                                            target="_blank"
-                                            href={link}
-                                        >
-                                            {link}
-                                        </a>
+                        <div className="d-flex flex-column mt-3" style={{ gap: "10px" }} >
+                            <span className="d-block fs-14 font-weight-bold" style={{ color: "#767581" }} > Links </span>
+                            <ul style={{  listStyle: "unset", marginLeft: "30px"}} >
+                                {links?.map((link, i) => (
+                                    <li style={{ listStyle: "unset" }}  key={link + i} >
+                                        <a className="hover-underline text-primary" target="_blank" href={link} > {link} </a>
                                     </li>
                                 ))}
                             </ul>
                         </div>
 
                         <div className="mt-2 mt-3">
-                            <span
-                                className="d-block fs-12 font-weight-bold mb-2"
-                                style={{ color: "#767581" }}
-                            >
+                            <span className="d-block fs-12 font-weight-bold mb-2" style={{ color: "#767581" }}>
                                 Description
                             </span>
                             {data?.text ? (
-                                <div
-                                    className="sp1_ck_content"
-                                    dangerouslySetInnerHTML={{
-                                        __html: data?.text,
-                                    }}
-                                />
+                                <div className="sp1_ck_content" dangerouslySetInnerHTML={{ __html: data?.text }} />
                             ) : (
-                                <span
-                                    className=""
-                                    style={{ color: "rgb(180, 188, 196)" }}
-                                >
+                                <span style={{ color: "rgb(180, 188, 196)" }}>
                                     No description is available
                                 </span>
                             )}
                         </div>
 
                         <div className="mt-3">
-                            <span
-                                className="d-block fs-12 font-weight-bold mb-2"
-                                style={{ color: "#767581" }}
-                            >
+                            <span className="d-block fs-12 font-weight-bold mb-2" style={{ color: "#767581" }}>
                                 Attached Files
                             </span>
-                            {data?.attach ? (
+
+                            {_.size(attaches) > 0 ? (
                                 <FileUploader>
-                                    {data?.attach?.map((file) => (
+                                    {_.map(attaches, (file, index) => (
                                         <FileUploader.Preview
-                                            key={file?.name}
-                                            fileName={file?.name}
+                                            key={`${file}_${index}`}
+                                            fileName={file}
                                             downloadAble={true}
                                             deleteAble={false}
-                                            downloadUrl={file?.url}
-                                            previewUrl={file?.url}
-                                            fileType={file?.type}
+                                            downloadUrl={`/storage/TaskSubmission/${file}`}
+                                            previewUrl={`/storage/TaskSubmission/${file}`}
+                                            fileType={_.includes(["png","jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others'}
                                             ext=""
                                         />
                                     ))}
                                 </FileUploader>
-                            ) : (
-                                <span
-                                    className=""
-                                    style={{ color: "rgb(180, 188, 196)" }}
-                                >
-                                    No Attachment is available
-                                </span>
-                            )}
+                                ) : (
+                                    <span
+                                        className=""
+                                        style={{ color: "rgb(180, 188, 196)" }}
+                                    >
+                                        No Attachment is available
+                                    </span>
+                                )}
                         </div>
                     </div>
                 </div>

@@ -5,16 +5,14 @@ import SubmitionView from './SubmitionView';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import SubmittedModalView from './SubmittedModalView';
 
-
 const fetcher = (url) => axios.get(url).then(res => res.data); 
-
 
 const SubmittedWork = ({task}) => { 
   const [modalRefButton, setModalRefButton] = React.useState(null); 
   const [isOpen, setIsOpen] = React.useState(false);
   const navigate = useNavigate(); 
   const location = useLocation();
-  const { data, error, isLoading } = useSWR(`/account/task/${task?.id}/json?mode=task_submission_list`, fetcher, {refreshInterval: 1000 * 3600});
+  const { data, error, isLoading } = useSWR(`/account/tasks/get-task-submissions/${task?.id}`, fetcher, {refreshInterval: 1000 * 3600});
   const [searchParams] = useSearchParams();
   const preview = searchParams.get('submitted-work');
   const modal = searchParams.get('view-modal')
@@ -35,6 +33,7 @@ const SubmittedWork = ({task}) => {
     }else{navigate(`/account/tasks/${task?.id}`);} 
   }
  
+  console.log({data})
   return (
     <div className='sp1_task_right_card mb-3'>
         <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
@@ -68,6 +67,8 @@ const SubmittedWork = ({task}) => {
                 style={{color: "#276fec"}} 
               />
           </button>
+
+           
 
         <SubmittedModalView
             isOpen={modal === 'submitted-work'}

@@ -5,6 +5,7 @@ import { convertTime } from "../../utils/converTime";
 import TableFooter from "./TableFooter";
 import { Placeholder } from "../../global/Placeholder";
 import TimeLogTableLoader from "./TimeLogTableLoader";
+import ProjectWiseTimeLogTableLoader from "./ProjectWiseTableLoader";
 
 const DataTable = ({
     data,
@@ -42,53 +43,56 @@ const DataTable = ({
                                 ? "sp1_tlr_td f-14 sp1_tlr_td_border"
                                 : "sp1_tlr_td f-14";
                         rows.push(
-                            <React.Fragment key={item.time_log_start_time}>
+                            <React.Fragment key={item.start_time}>
                                 <tr className="sp1_tlr_tr">
                                     {index === 0 && (
-                                        <td
-                                            className={`sp1_tlr_td sp1_tlr_td_border ${
-                                                value.length > 1
-                                                    ? "sp1_tlr_td_hover-disable"
-                                                    : ""
-                                            }`}
-                                            rowSpan={value.length}
-                                        >
-                                            <UserRender
-                                                name={item?.employee_name}
-                                                profileUrl={`/account/employees/${item?.employee_id}`}
-                                                image={item?.employee_image}
-                                                role={
-                                                    item?.employee_designation
-                                                }
-                                                id={item?.employee_id}
-                                            />
-                                        </td>
+                                        <React.Fragment>
+                                             <td
+                                                className={`sp1_tlr_td sp1_tlr_td_border ${ value.length > 1? "sp1_tlr_td_hover-disable": ""}`}
+                                                rowSpan={value.length}
+                                            >
+                                                <a  href={`/account/projects/${item?.project_id}`} >
+                                                    {item?.project_name}
+                                                </a>
+                                            </td>
+                                            <td 
+                                                className={`sp1_tlr_td sp1_tlr_td_border ${ value.length > 1 ? "sp1_tlr_td_hover-disable" : ""}`}
+                                                rowSpan={value.length}
+                                            >
+                                                <UserRender
+                                                    name={item?.client_name}
+                                                    profileUrl={`/account/clients/${item?.client_id}`}
+                                                    image={item?.client_image}
+                                                    role="Freelancer.com"
+                                                    roleLink={item?.client_from}
+                                                    id={item?.client_id}
+                                                />
+                                            </td>
+                                            <td 
+                                                className={`sp1_tlr_td sp1_tlr_td_border ${ value.length > 1 ? "sp1_tlr_td_hover-disable" : ""}`}
+                                                rowSpan={value.length}
+                                            >
+                                                <UserRender
+                                                    name={item?.pm_name}
+                                                    profileUrl={`/account/employees/${item?.pm_id}`}
+                                                    image={item?.pm_image}
+                                                    role={item?.pm_roles}
+                                                    id={item?.pm_id}
+                                                />
+                                            </td>
+                                        </React.Fragment>
                                     )}
 
-                                    <td className={className}>
-                                        <a
-                                            href={`/account/projects/${item?.project_id}`}
-                                        >
-                                            {item?.project_name}
-                                        </a>
-                                    </td>
+                                   
                                     <td className={className}>
                                         <UserRender
-                                            name={item?.client_name}
-                                            profileUrl={`/account/clients/${item?.client_id}`}
-                                            image={item?.client_image}
-                                            role="Freelancer.com"
-                                            roleLink={item?.client_from}
-                                            id={item?.client_id}
-                                        />
-                                    </td>
-                                    <td className={className}>
-                                        <UserRender
-                                            name={item?.pm_name}
-                                            profileUrl={`/account/employees/${item?.pm_id}`}
-                                            image={item?.pm_image}
-                                            role={item?.pm_roles}
-                                            id={item?.pm_id}
+                                            name={item?.employee_name}
+                                            profileUrl={`/account/employees/${item?.employee_id}`}
+                                            image={item?.employee_image}
+                                            role={
+                                                item?.employee_designation
+                                            }
+                                            id={item?.employee_id}
                                         />
                                     </td>
                                     <td className={className}>
@@ -150,9 +154,9 @@ const DataTable = ({
                             </tr>
                         </thead>
                         <tbody className="sp1_tlr_tbody">
-                                {!isLoading && renderRow(data)}
-                            
-                                {isLoading && <TimeLogTableLoader/>}
+                            {!isLoading && renderRow(data)}
+
+                            {isLoading && <ProjectWiseTimeLogTableLoader />}
                         </tbody>
                     </table>
                 </div>

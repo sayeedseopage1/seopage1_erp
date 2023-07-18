@@ -41,7 +41,7 @@ const SubmittedModalView = ({
 
             <div className="sp1-subtask-form --modal-panel-body px-0">
                 {data?.map(d => (
-                    <InnerWorkItem key={d.id} data={d} />
+                    <InnerWorkItem key={`${d.task_id}_${d.submission_no}`} data={d} />
                 ))}
             </div>
         </div>

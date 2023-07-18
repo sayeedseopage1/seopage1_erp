@@ -7,6 +7,7 @@ import './styles/time-log-table.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import EmployeeWiseTimeLogTable from './pages/EmployeeWiseTimeLogTable';
 import TimeLogHistory from './pages/TimeLogHistory';
+import ProjectWiseTimeLog from './pages/ProjectWiseTimeLog';
 
 
 
@@ -24,6 +25,7 @@ if (timeLogTableContainer) {
                         <Route path="/" element={<TimeLogTable />} >
                             <Route index element={<Navigate to="employee-wise" replace />} />
                             <Route path='/employee-wise' element={<EmployeeWiseTimeLogTable />} />
+                            <Route path='/project-wise' element={<ProjectWiseTimeLog />} />
                             <Route path='/time-log-history' element={<TimeLogHistory />} />
                         </Route>
                     </Routes>

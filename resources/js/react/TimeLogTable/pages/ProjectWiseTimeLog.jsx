@@ -1,42 +1,40 @@
 import React, {useState, useEffect} from "react";
-import { EmployeeTableColumn } from "../components/EmployeeTableColumn";
-import EmployeeTimeLogDataTable from '../components/EmployeeTimeLogDataTable';
-import { useGetEmployeeWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
+import { useGetProjectWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
 import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
 import Tabbar from "../components/Tabbar";
+import ProjectWiseTable from '../components/ProjectWiseTable'
+import TimeLogTableFilterBar from "../../TimeLogTable-backup/components/TimeLogTableFilterBar";
+import { ProjectWiseTableColumn } from "../components/ProjectWiseTableColumn";
 
-const EmployeeWiseTimeLogTable = () => {
+const ProjectWiseTimeLog = () => {
     const [data, setData] = useState([]);
     const [perPageData, setParPageData] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
 
-    const [getEmployeeWiseData, {isLoading}] = useGetEmployeeWiseDataMutation();
+    const [getProjectWiseData, {isLoading}] = useGetProjectWiseDataMutation();
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
         const paginated = paginate(data, currentPage, perPageData);
-        const grouped = groupBy(paginated, 'employee_id');
+        const grouped = groupBy(paginated, 'project_id');
         const sorted = Object.entries(grouped).sort(([keyA], [keyB]) => keyB - keyA);
         setRenderData([...sorted]);
     }
 
     // handle fetch data
     const handleFetchData = (filter) => {
-        getEmployeeWiseData(filter)
+        getProjectWiseData(filter)
         .unwrap()
         .then(res => {
-            const sortedData = orderBy(res?.data, ["employee_id"], ["desc"]);
+            const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
             handleData(sortedData, currentPage, perPageData);
             setData(sortedData);
         })
     }
-
-    useEffect(() => {
-        handleFetchData({});
-    }, []);
+ 
 
     // data sort handle 
     const handleSorting = (sort) => {
@@ -55,17 +53,17 @@ const EmployeeWiseTimeLogTable = () => {
         setParPageData(number);
         handleData(data, currentPage, number);
     }
-
+console.log({data})
     return (
         <div className="sp1_tlr_container">
-            <div className="bg-white">Filter bar</div>
+            <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="">
                     <Tabbar/>
                 </div>
-                <EmployeeTimeLogDataTable
+                <ProjectWiseTable
                     data={renderData}
-                    columns={EmployeeTableColumn}
+                    columns={ProjectWiseTableColumn}
                     tableName="employee_timelog_report"
                     onSort={handleSorting}
                     height="calc(100vh - 325px)"
@@ -81,4 +79,4 @@ const EmployeeWiseTimeLogTable = () => {
     );
 };
 
-export default EmployeeWiseTimeLogTable;
+export default ProjectWiseTimeLog;

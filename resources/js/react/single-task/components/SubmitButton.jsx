@@ -2,10 +2,14 @@ import React from "react";
 import Button from "./Button";
 
 const SubmitButton = ({onClick, isLoading, title}) => {
+    const handleOnClick = (e) => {
+        e.stopPropagation();
+        onClick(e)
+    }
     return (
         <React.Fragment>
             {!isLoading ? (
-                <Button onClick={onClick} className="">
+                <Button onClick={handleOnClick} className="">
                     {title}
                 </Button>
             ) : (

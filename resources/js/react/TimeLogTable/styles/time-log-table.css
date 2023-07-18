@@ -1,9 +1,3 @@
-.sp1_tlr_container{
-    display: grid;
-    grid-template-rows: 60px 1fr;
-    gap: 10px;
-}
-
 .sp1_tlr_tbl_container{ 
     overflow-x: hidden;
     overflow-y: hidden; 

@@ -3,12 +3,22 @@ import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import FileUploader from "../../../file-upload/FileUploader";
 import CKEditorComponent from "../../../ckeditor/index";
+import { useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
+import _ from "lodash";
+import SubmitButton from "../../components/SubmitButton";
+import { useDispatch } from "react-redux";
+import { setTaskStatus } from "../../../services/features/subTaskSlice";
 
-const MarkAsComplete = () => {
+const MarkAsComplete = ({task, auth}) => {
     // form data
+    const dispatch = useDispatch();
     const [links, setLinks] = useState([""]);
+    const [linkErr, setLinkErr] = useState('');
     const [files, setFiles] = useState([]);
-    const [comment, setComment] = useState();
+    const [comment, setComment] = useState('');
+    const [commentErr, setCommentErr] = useState('');
+
+    const [markAsComplete, {isLoading: isSubmitting}] = useMarkAsCompleteMutation();
 
     const [markAsCompleteModaIsOpen, setMarkAsCompleteModalIsOpen] =
         useState(false);
@@ -44,18 +54,53 @@ const MarkAsComplete = () => {
     }
 
 
+    // check validation
+    const isValid = () => {
+        let valid = true;
+        if(!_.size(links) || links[0] === ''){
+            setLinkErr('You must provide at least one link to your work');
+            valid = false;
+        }
+        if(comment === ''){
+            setCommentErr("Please describe what you've done !");
+            valid = false;
+        }
+
+        return valid;
+    }
+
     // handle submit 
     const handleSubmit = (e) => {
         const formData = new FormData(); 
-        formData.append('comment', comment);
-        links.map( link => formData.append('link', link)); 
-        files?.map(file => formData.append('file', file));
+        formData.append('text', comment);
+        formData.append('user_id', auth?.getId());
+        formData.append('task_id', task?.id);
+        links.map( link => formData.append('link[]', link)); 
+        files?.map(file => formData.append('file[]', file));
+        formData.append('_token', document
+        .querySelector("meta[name='csrf-token']")
+        .getAttribute("content"));
 
-        console.log({
-            comment: formData.get('comment'),
-            link: formData.getAll('link'),
-            file: formData.getAll('file')
-        })
+        if(isValid()){
+            markAsComplete(formData)
+            .unwrap()
+            .then(res => {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                })
+                
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Task submitted successfully'
+                })
+                dispatch(setTaskStatus(res?.task_status));
+            })
+            .catch(err => console.log(err))
+        }
     }
 
     return (
@@ -83,7 +128,7 @@ const MarkAsComplete = () => {
                     </div>
 
                     {/* body */}
-                    <div className="sp1_mark-as--modal-body" style={{overflow: 'unset'}}>
+                    <div className="sp1_mark-as--modal-body px-3" style={{overflow: 'unset'}}>
                         <form>
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlInput1">
@@ -125,6 +170,8 @@ const MarkAsComplete = () => {
                                     </div>
                                 ))}
 
+                                {linkErr && <small id="emailHelp" class="form-text text-danger">{linkErr}</small>}
+
                                 <button
                                     className="mt-2 d-flex align-items-center bg-transparent"
                                     style={{ gap: "10px" }}
@@ -141,7 +188,7 @@ const MarkAsComplete = () => {
                             {/* upload files */}
                             <div className="form-group">
                                 <label htmlFor="exampleFormControlInput1">
-                                    Attachments<sup>*</sup>
+                                    Attachments
                                     <span
                                         className="ml-2"
                                         data-toggle="tooltip"
@@ -195,6 +242,7 @@ const MarkAsComplete = () => {
                                         onChange={handleEditorChange}
                                     />
                                 </div>
+                                {commentErr && <small id="emailHelp" class="form-text text-danger">{commentErr}</small>}
                             </div>
 
                             <div className="mt-3 d-flex align-items-center">
@@ -204,8 +252,8 @@ const MarkAsComplete = () => {
                                     onClick={close}
                                 >
                                     Close
-                                </Button>
-                                <Button className="" onClick={handleSubmit}> Submit </Button>
+                                </Button> 
+                                <SubmitButton onClick={handleSubmit} isLoading={isSubmitting} title="Submit" />
                             </div>
                         </form>
                     </div>

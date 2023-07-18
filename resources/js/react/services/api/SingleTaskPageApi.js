@@ -146,6 +146,44 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
 
         getDeveloperTasks: build.query({
             query: (id) =>  `/account/tasks/get-developer-tasks/${id}` 
+        }),
+
+
+        /**
+         *  * Approve task
+         */
+
+        approveSubmittedTask: build.mutation({
+            query: (data) => ({
+                url: `/tasks/task-stage/approve`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),
+
+        /**
+         *  * Approve task
+         */
+
+        markAsComplete: build.mutation({
+            query: (data) => ({
+                url: `/tasks/task-stage/store`,
+                method: "POST",
+                body: data,
+            })
+        }),
+
+        /**
+         *  * Get Task Submitted subtask 
+         * @param id  is TaskId
+         */
+        getSubmittedTask: build.query({
+            query: (id) => `/account/tasks/get-task-submissions/${id}`
         })
     }),
 });
@@ -165,5 +203,8 @@ export const {
     useGetDeveloperTasksQuery,
     useStoreStopTrackTimerMutation,
     useGetUserTrackTimeQuery,
-    useLazyGetUserTrackTimeQuery
+    useLazyGetUserTrackTimeQuery,
+    useApproveSubmittedTaskMutation,
+    useMarkAsCompleteMutation,
+    useGetSubmittedTaskQuery
 } = singleTaskPageApiSlice;

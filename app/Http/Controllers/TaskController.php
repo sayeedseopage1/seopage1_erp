@@ -108,6 +108,7 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
+    // dd($request);
         $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
@@ -118,28 +119,28 @@ class TaskController extends AccountBaseController
             'text.required' => 'Please describe what you\'ve done !',
         ]);
 
-        $link = [];
-        foreach ($validator->errors()->toArray() as $key => $value) {
-            if (strpos($key, 'link.') !== false) {
-                $exp = explode('.', $key);
-                $link[$exp[1]] = $value[0];
-            }
-        }
+    //    $link = [];
+    //     foreach ($validator->errors()->toArray() as $key => $value) {
+    //         if (strpos($key, 'link.') !== false) {
+    //             $exp = explode('.', $key);
+    //             $link[$exp[1]] = $value[0];
+    //         }
+    //     }
 
-        $errors = $validator->errors()->toArray();
-        $errors = array_merge($errors, ['link' => $link]);
+    //     $errors = $validator->errors()->toArray();
+    //     $errors = array_merge($errors, ['link' => $link]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $errors
-            ], 422);
-        }
-
-        $order = TaskSubmission::orderBy('id', 'desc')->where('user_id', $request->user_id)->where('task_id', $request->id)->first();
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'errors' => $errors
+    //         ], 422);
+    //    }
+ 
+        $order = TaskSubmission::orderBy('id', 'desc')->where('user_id', $request->user_id)->where('task_id', $request->task_id)->first();
 
         if ($request->text != null) {
             $task_submit = new TaskSubmission();
-            $task_submit->task_id = $request->id;
+            $task_submit->task_id = $request->task_id;
             $task_submit->user_id = $request->user_id;
 
             //$task_submit->table=$request->table;
@@ -155,15 +156,11 @@ class TaskController extends AccountBaseController
 
         if ($request->link != null) {
 
-
-
-
-            $links = explode(',', $request->link);
-            foreach ($links as $lin) {
+            foreach ( $request->link as $lin) {
 
 
                 $task_submit = new TaskSubmission();
-                $task_submit->task_id = $request->id;
+                $task_submit->task_id = $request->task_id;
                 $task_submit->user_id = $request->user_id;
 
                 $task_submit->link = $lin;
@@ -176,6 +173,7 @@ class TaskController extends AccountBaseController
                 $task_submit->save();
             }
         }
+       // dd($task_submit);
 
         if ($request->file('file') != null) {
             foreach ($request->file('file') as $att) {
@@ -191,7 +189,7 @@ class TaskController extends AccountBaseController
                     );
                 }
                 $task_submit->attach = $filename;
-                $task_submit->task_id = $request->id;
+                $task_submit->task_id = $request->task_id;
                 $task_submit->user_id = $request->user_id;
                 if ($order == null) {
                     $task_submit->submission_no = 1;
@@ -204,36 +202,15 @@ class TaskController extends AccountBaseController
 
 
 
-        $task = Task::find($request->id);
+        $task = Task::find($request->task_id);
         $task->board_column_id = 6;
         $task->task_status = "submitted";
         $task->save();
+        $board_column = TaskBoardColumn::where('id',$task->board_column_id)->first();
+     //   dd($task_submit,$task,$board_column);
 
-        if ($this->user->role_id == 6) {
-            $type = 'task_submission_by_lead_developer';
-            $authorization_for = $task->project->pm_id;
-        } else {
-            $type = 'task_submission_by_developer';
-            $task_user = TaskUser::where('task_id', $task->id)->get();
-
-            foreach ($task_user as $value) {
-                if ($value->user->role_id == 5) {
-                    $authorization_for = $value->user_id;
-                }
-            }
-        }
-
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $task->getMorphClass();
-        $authorization_action->model_id = $task->id;
-        $authorization_action->type = $type;
-        $authorization_action->deal_id = $task->project->deal_id;
-        $authorization_action->project_id = $task->project->id;
-        $authorization_action->link = route('projects.show', $task->project->id) . '?tab=tasks';
-        $authorization_action->title = Auth::user()->name . ' submitted task for approved';
-        $authorization_action->authorization_for = $authorization_for;
-        $authorization_action->save();
-
+       
+        
         $task_id = Task::where('id', $task->id)->first();
 
         $user = User::where('id', $task->added_by)->first();
@@ -253,29 +230,133 @@ class TaskController extends AccountBaseController
 
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
-        Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
-        return Redirect::back()->with('messages.taskSubmitNotification');
+        //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
+        return response()->json([
+            'status' => 200,
+            'task_status'=> $board_column,
+        ]);
     }
+
+
+    // public function TaskApprove(Request $request)
+    // {
+    //     $request->validate([
+    //         'rating' => 'required',
+    //         'rating2' => 'required',
+    //         'rating3' => 'required',
+    //         'comments' => 'required',
+    //     ], [
+    //         'rating.required' => 'This field is required!',
+    //         'rating2.required' => 'This field is required!',
+    //         'rating3.required' => 'This field is required!',
+    //         'comments.required' => 'This field is required!',
+    //     ]);
+
+    //     $task_status = Task::find($request->task_id);
+    //     $task_status->status = "   completed";
+    //     $task_status->task_status = "approved";
+    //     $task_status->board_column_id = 8;
+    //     $task_status->save();
+
+
+    //     $task = new TaskApprove();
+    //     $task->user_id = $request->user_id;
+    //     $task->task_id = $request->task_id;
+    //     $task->rating = $request->rating;
+    //     $task->rating2 = $request->rating2;
+    //     $task->rating3 = $request->rating3;
+    //     $task->comments = $request->comments;
+    //     $task->save();
+
+    //     //authorizatoin action start here
+    //     $authorization_action = new AuthorizationAction();
+    //     $authorization_action->model_name = $task_status->getMorphClass();
+    //     $authorization_action->model_id = $task_status->id;
+    //     $authorization_action->type = 'task_approved_by_lead_develoer';
+    //     $authorization_action->deal_id = $task_status->project->deal_id;
+    //     $authorization_action->project_id = $task_status->project_id;
+    //     $authorization_action->link = route('tasks.show', $request->task_id);
+    //     $authorization_action->title = Auth::user()->name . ' approved this task';
+    //     $authorization_action->authorization_for = 1;
+    //     $authorization_action->save();
+    //     //end authorization action here
+
+    //     $text = Auth::user()->name . ' mark task completed';
+    //     $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+    //     $this->logProjectActivity($task->task->project->id, $link);
+
+    //     $this->triggerPusher('notification-channel', 'notification', [
+    //         'user_id' => $task->user_id,
+    //         'role_id' => User::find($request->user_id)->role_id,
+    //         'title' => 'Task complete request approved',
+    //         'body' => Auth::user()->name . ' mark task completed',
+    //         'redirectUrl' => route('tasks.show', $task->id)
+    //     ]);
+
+    //     $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
+    //     $sender = User::where('id', Auth::id())->first();
+    //     $user = User::where('id', $task_submission->user_id)->first();
+    //     Notification::send($user, new TaskApproveNotification($task_status, $sender));
+    //     return response()->json([
+    //         'status' => 200,
+    //     ]);
+    // }
+
     public function TaskApprove(Request $request)
     {
-        $request->validate([
-            'rating' => 'required',
-            'rating2' => 'required',
-            'rating3' => 'required',
-            'comments' => 'required',
-        ], [
-            'rating.required' => 'This field is required!',
-            'rating2.required' => 'This field is required!',
-            'rating3.required' => 'This field is required!',
-            'comments.required' => 'This field is required!',
-        ]);
-
+      //  dd($request);
+        // $request->validate([
+        //     'rating' => 'required',
+        //     'rating2' => 'required',
+        //     'rating3' => 'required',
+        //     'comments' => 'required',
+        // ], [
+        //     'rating.required' => 'This field is required!',
+        //     'rating2.required' => 'This field is required!',
+        //     'rating3.required' => 'This field is required!',
+        //     'comments.required' => 'This field is required!',
+        // ]);
+        // DB::beginTransaction();
+       // dd($request->task_id);
         $task_status = Task::find($request->task_id);
-        $task_status->status = "   completed";
+        $task_status->status = "completed";
         $task_status->task_status = "approved";
         $task_status->board_column_id = 8;
         $task_status->save();
+        $board_column = TaskBoardColumn::where('id',$task_status->board_column_id)->first();
+        // dd($task_status);
+        // if (Auth::user()->role_id == 6) {
+        //     $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
+        //     //dd($lead_dev_authorization);
+        //     if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
+        //     {
+        //         $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+        //         $lead_dev_authorization_update->status= '1';
+        //         $lead_dev_authorization_update->authorization_by = Auth::id();
+        //         $lead_dev_authorization_update->save();
+    
+        //     }
+        // }
+       
+        // if(Auth::user()->role_id == 4)
+        // {
+        //     $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
+        //     //dd($lead_dev_authorization);
+        //     if($pm_authorization == null && $pm_authorization->status == 0)
+        //     {
+        //         $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+        //         $lead_dev_authorization_update->status= '1';
+        //         $lead_dev_authorization_update->authorization_by = Auth::id();
+        //         $lead_dev_authorization_update->save();
+    
+        //     }
 
+        // }
+        
+       
+        
+    
+        //    / dd( $lead_dev_authorization_update);
 
         $task = new TaskApprove();
         $task->user_id = $request->user_id;
@@ -285,18 +366,20 @@ class TaskController extends AccountBaseController
         $task->rating3 = $request->rating3;
         $task->comments = $request->comments;
         $task->save();
+        //dd($task, $task_status);
+
 
         //authorizatoin action start here
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $task_status->getMorphClass();
-        $authorization_action->model_id = $task_status->id;
-        $authorization_action->type = 'task_approved_by_lead_develoer';
-        $authorization_action->deal_id = $task_status->project->deal_id;
-        $authorization_action->project_id = $task_status->project_id;
-        $authorization_action->link = route('tasks.show', $request->task_id);
-        $authorization_action->title = Auth::user()->name . ' approved this task';
-        $authorization_action->authorization_for = 1;
-        $authorization_action->save();
+        // $authorization_action = new AuthorizationAction();
+        // $authorization_action->model_name = $task_status->getMorphClass();
+        // $authorization_action->model_id = $task_status->id;
+        // $authorization_action->type = 'task_approved_by_lead_develoer';
+        // $authorization_action->deal_id = $task_status->project->deal_id;
+        // $authorization_action->project_id = $task_status->project_id;
+        // $authorization_action->link = route('tasks.show', $request->task_id);
+        // $authorization_action->title = Auth::user()->name . ' approved this task';
+        // $authorization_action->authorization_for = 1;
+        // $authorization_action->save();
         //end authorization action here
 
         $text = Auth::user()->name . ' mark task completed';
@@ -317,8 +400,10 @@ class TaskController extends AccountBaseController
         Notification::send($user, new TaskApproveNotification($task_status, $sender));
         return response()->json([
             'status' => 200,
+            'task_status'=> $board_column,
         ]);
     }
+
     public function TaskRevision(Request $request)
     {
         //DB::beginTransaction();
@@ -2269,5 +2354,20 @@ class TaskController extends AccountBaseController
             return response()->json($total_times);
           
         
+    }
+    public function GetTaskSubmission($id)
+    {
+        //dd($id);
+      
+    //    / $matchingRows = TaskSubmission::whereColumn('task_id', '=', $id)->groupBy('submission_no')->get();
+    
+    $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text, GROUP_CONCAT(link) as links, GROUP_CONCAT(attach) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
+    ->where('task_id', $id)
+    ->join('users','users.id','task_submissions.user_id')
+    ->groupBy('task_id', 'submission_no')
+    ->havingRaw('COUNT(*) > 1')
+    ->get();
+    return response()->json($submissions);
+   // dd($id,$matchingRows);
     }
 }
