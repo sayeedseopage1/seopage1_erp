@@ -222,7 +222,7 @@ class ProjectMilestoneController extends AccountBaseController
             $project_start_date = $project->start_date;
             $diffInDays = $project_start_date->diffInDays($current_date);
 
-           if($$diffInDays <= 30)
+           if($diffInDays <= 30)
            {
             $bonus_point = (1*$milestone->cost)/100;
             if ($find_deal_id->lead_id != null) {
