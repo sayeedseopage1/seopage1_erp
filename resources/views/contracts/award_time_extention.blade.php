@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @push('styles')
-    .btn-danger {
+<style>
+        .btn-danger {
     padding: 7px 11px;
     }
+</style>
 @endpush
 @section('content')
     <div class="content-wrapper">
@@ -10,7 +12,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h5>Award Time Extention</h5>
+                        <h5><a href="/account/contracts">Won Deals</a> - Award Time Extention</h5>
                     </div>
                     <div class="card-body">
                         <table class="table">
@@ -46,7 +48,7 @@
                                                 $givenDateTime = \Carbon\Carbon::parse($value->deal->award_time);
                                                 //dd($value->deal->award_time, $value->deal_id);
                                                 $diff = $currentDateTime->diff($givenDateTime);
-                                                
+
                                                 echo $diff->format('%h hours, %i minutes');
                                             @endphp
                                         </td>

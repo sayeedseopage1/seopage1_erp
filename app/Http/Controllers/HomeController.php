@@ -1524,10 +1524,11 @@ class HomeController extends Controller
 
     function app_requirements()
     {
-        if(Auth::user()->role_id == 1) {
+        if (auth()->check() && auth()->user()->role_id == 1) {
             return view('app_requirements.index');
         } else {
             abort(403);
         }
     }
+
 }

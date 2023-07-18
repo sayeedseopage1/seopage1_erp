@@ -108,7 +108,7 @@
 @php
     $addContractPermission = user()->permission('add_contract');
     $manageContractTemplatePermission = user()->permission('manage_contract_template');
-    
+
 @endphp
 
 @section('content')
@@ -129,7 +129,7 @@
                         @endphp
                         <a class="border-secondary btn btn-warning mr-3" href="{{ route('award_time_check.index') }}">
                             <i class="fa fa-clock"></i>
-                            Incress Award Time Request
+                            Award Time Extension Requests
                             @if ($total_request > 0)
                                 <span class="badge badge-primary">{{ $total_request }}</span>
                             @endif
@@ -370,7 +370,7 @@
                         toastr.options.closeEasing = 'swing';
                         toastr.success('Request Submit to Admin', 'Success');
                         toastr.options.onHidden = function() {
-                           
+
                         }
                     }
                 }
