@@ -187,7 +187,7 @@ class ProjectsDataTable extends BaseDataTable
 
             //dd($deal);
 
-            return $deal->actual_amount . $currency->currency_symbol;
+            return $deal->actual_amount+ $deal->upsell_actual_amount  . $currency->currency_symbol;
         });
 
         $customFieldsId = $customFields->pluck('id');
