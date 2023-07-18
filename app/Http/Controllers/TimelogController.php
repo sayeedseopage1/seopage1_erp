@@ -373,15 +373,15 @@ class TimelogController extends AccountBaseController
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
-        $authorization_action = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_assign_by_lead_developer')->first();
+        // $authorization_action = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_assign_by_lead_developer')->first();
            
-            if ($authorization_action != null && $authorization_action->status == 0) {
-                $authorization= AuthorizationAction::find($authorization_action->id);
-                $authorization->status = '1';
-                $authorization->authorization_by= $authorization_action->authorization_for;
-                $authorization->save();
-        //   dd($authorization);
-            }
+        //     if ($authorization_action != null && $authorization_action->status == 0) {
+        //         $authorization= AuthorizationAction::find($authorization_action->id);
+        //         $authorization->status = '1';
+        //         $authorization->authorization_by= $authorization_action->authorization_for;
+        //         $authorization->save();
+        // //   dd($authorization);
+        //     }
         $timeLog = new ProjectTimeLog();
 
         $activeTimer = ProjectTimeLog::with('user')
