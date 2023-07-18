@@ -1982,7 +1982,7 @@ class ProjectController extends AccountBaseController
         $project->status = 'in progress';
         }else 
         {
-            $project->status = 'under review';
+            $project->status = 'in progress';
 
         }
         $project->project_status = 'Accepted';
@@ -2009,7 +2009,7 @@ class ProjectController extends AccountBaseController
         $project->save();
         if ($request->project_challenge != 'No Challenge') {
             $project_update = Project::find($request->project_id);
-             $project->status = 'under review';
+             $project->status = 'in progress';
             $project_update->save();
  
              $authorization_action = new AuthorizationAction();
