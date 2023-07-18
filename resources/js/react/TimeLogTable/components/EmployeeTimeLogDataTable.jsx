@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import "./data-table.css";
 import UserRender from "./UserRender";
 import { convertTime } from "../../utils/converTime";
@@ -16,6 +16,18 @@ const DataTable = ({
     totalEntry,
     currentPage
 }) => {
+    const [columnOrder, setColumnOrder] = useState([]);
+    
+    // get columns keys
+    useEffect(() => {
+        const column_ids = _.map(columns, 'id');
+        setColumnOrder([...column_ids]);
+    }, []);
+
+
+
+    const _columns = _.sortBy(columns, item => _.indexOf(columnOrder, item.id));
+
     const renderRow = (data) => {
         const rows = [];
         if (data) {
@@ -30,6 +42,7 @@ const DataTable = ({
                             <React.Fragment key={item.time_log_start_time}>
                                 <tr className="sp1_tlr_tr">
                                     {index === 0 && (
+                                        
                                         <td
                                             className={`sp1_tlr_td sp1_tlr_td_border ${ value.length > 1 ? "sp1_tlr_td_hover-disable" : ""}`}
                                             rowSpan={value.length}
@@ -101,7 +114,14 @@ const DataTable = ({
                     <table className="sp1_tlr_table">
                         <thead className="sp1_tlr_thead">
                             <tr className="sp1_tlr_tr">
-                                <th className="sp1_tlr_th ">Employee Name</th>
+                                {
+                                    _.map(_columns, (column) => {
+                                        return(
+                                            <th key={column.id} className="sp1_tlr_th">{column.header}</th>
+                                        )
+                                    })
+                                }
+                                {/* <th className="sp1_tlr_th ">Employee Name</th>
                                 <th className="sp1_tlr_th ">Project Name</th>
                                 <th className="sp1_tlr_th ">Client</th>
                                 <th className="sp1_tlr_th ">Project Manager</th>
@@ -110,7 +130,7 @@ const DataTable = ({
                                 </th>
                                 <th className="sp1_tlr_th ">
                                     Total Track Time
-                                </th>
+                                </th> */}
                             </tr>
                         </thead>
                         <tbody className="sp1_tlr_tbody">

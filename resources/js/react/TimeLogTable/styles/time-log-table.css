@@ -31,3 +31,10 @@
     color: #fff !important;
     background-color: #1558f5 !important;
 }
+
+
+/* modal panel */
+.sp1_tlr--modal-panel{
+    width: 100%;
+    max-width: 60vw;
+}

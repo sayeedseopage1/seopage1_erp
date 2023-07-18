@@ -1150,4 +1150,8 @@
   justify-content: center;
 }
 
+.hover-bold:hover {
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=seopage1.css.map*/
