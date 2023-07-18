@@ -233,7 +233,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $point->user_id = $lead->added_by;
                 $point->project_id = $find_project_id->id;
                 $point->bonus_type = "Bonus";
-                $point->type = "Single Deal Bonus";
+                $point->type = "Bonus";
                 $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the bid Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
                 $point->gained_as = "Individual";
                 $point->points = $bonus_point * 24 / 100;
@@ -261,7 +261,7 @@ class ProjectMilestoneController extends AccountBaseController
             $point->bonus_type = "Bonus";
             $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal qualify deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
             $point->gained_as = "Individual";
-            $point->type = "Single Deal Bonus";
+            $point->type = "Bonus";
             $point->points = $bonus_point * 4 / 100;
 
             if ($cash_points_qualified != null) {
@@ -286,7 +286,7 @@ class ProjectMilestoneController extends AccountBaseController
             $point->bonus_type = "Bonus";
             $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> made the deal requirements defined Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
             $point->gained_as = "Individual";
-            $point->type = "Single Deal Bonus";
+            $point->type = "Bonus";
             $point->points = $bonus_point * 17 / 100;
 
             if ($cash_points_requirements_defined != null) {
@@ -311,7 +311,7 @@ class ProjectMilestoneController extends AccountBaseController
             $point->bonus_type = "Bonus";
             $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the proposal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
             $point->gained_as = "Individual";
-            $point->type = "Single Deal Bonus";
+            $point->type = "Bonus";
             $point->points = $bonus_point * 12 / 100;
 
             if ($cash_points_proposal_made != null) {
@@ -335,7 +335,7 @@ class ProjectMilestoneController extends AccountBaseController
             $point->bonus_type = "Bonus";
             $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> started negotiation started Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
             $point->gained_as = "Individual";
-            $point->type = "Single Deal Bonus";
+            $point->type = "Bonus";
             $point->points = $bonus_point * 12 / 100;
 
             if ($cash_points_negotiation_started != null) {
@@ -360,7 +360,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $point->bonus_type = "Bonus";
                 $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> created the milestone breakdown Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
                 $point->gained_as = "Individual";
-                $point->type = "Single Deal Bonus";
+                $point->type = "Bonus";
                 $point->points = $bonus_point * 14 / 100;
 
                 if ($cash_points_milestone_breakdown != null) {
@@ -385,7 +385,7 @@ class ProjectMilestoneController extends AccountBaseController
             $point->bonus_type = "Bonus";
             $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> closed the deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
             $point->gained_as = "Individual";
-            $point->type = "Single Deal Bonus";
+            $point->type = "Bonus";
             $point->points = $bonus_point * 17 / 100;
 
             if ($cash_points_close_deal != null) {
@@ -397,41 +397,8 @@ class ProjectMilestoneController extends AccountBaseController
             }
             $point->save();
 
-            $cash_points = CashPoint::where('type', 'Single Deal Bonus')
-                ->havingRaw('COUNT(user_id) > 1')
-                ->groupBy('user_id')
-                ->select('user_id', \DB::raw('SUM(points) as total_cash_points'))
-                ->get();
-            foreach ($cash_points as $total_points) {
-                $user_name = User::where('id', $total_points->user_id)->first();
-                $cash_points_user = CashPoint::where('user_id', $total_points->user_id)->orderBy('id', 'desc')->first();
-                $point = new CashPoint();
-                $point->project_id = $find_project_id->id;
-                $point->user_id = $total_points->user_id;
-                $point->bonus_type = "Bonus";
-                $point->activity = '<a style="color:blue" href="' . route('employees.show', $user_name->id) . '">' . $user_name->name . '</a> closed the deal Project : <a style="color:blue" href="' . route('projects.show', $find_project_id->id) . '">' . $find_project_id->project_name . '</a>, Client: <a style="color:blue" href="' . route('clients.show', $find_project_id->client_id) . '">' . $find_project_id->client_name->name . '</a>(Project Manager upsold a milestone)';
-                $point->gained_as = "Individual";
-                $point->points = $total_points->total_cash_points;
-                if ($cash_points_user != null) {
-
-                    $point->total_points_earn = $cash_points_user->total_points_earn + $total_points->total_cash_points;
-                } else {
-                    $point->total_points_earn =
-                        $total_points->total_cash_points;
-                }
-
-
-                // Set other fields as needed
-                $point->save();
-               
-                CashPoint::where('user_id', $total_points->user_id)->where('type', 'Single Deal Bonus')->delete();
-                $updated_total_points=  CashPoint::where('user_id', $total_points->user_id)->orderBy('id','desc')->first();
-                $total_points=  CashPoint::where('user_id', $total_points->user_id)->sum('points');
-               // dd($total_points,$point);
-                $point_update= CashPoint::find($updated_total_points->id);
-                $point_update->total_points_earn = $point->total_points_earn- $point->points;
-                $point_update->save();
-            }
+           
+            
 
 
             // Delete previous duplicated entries for the user
