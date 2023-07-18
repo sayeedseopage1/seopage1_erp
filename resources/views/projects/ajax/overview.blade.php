@@ -255,7 +255,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                     <!-- PROGRESS END DATE END -->
                     <!-- See Task Guideline Start -->
-                    {{-- @php
+                    @php
                     $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->first();
                     @endphp
                     <div class="mt-4">
@@ -263,11 +263,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">See Task Guideline</button>
                         @endif
                     </div>
-                    <!-- See Task Guideline End --> --}}
+                    <!-- See Task Guideline End -->
                 </x-cards.data>
             </div>
             <!--Task Guideline Modal -->
-            {{-- <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
+            <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -459,7 +459,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
             <!-- PROJECT PROGRESS END -->
             <!-- CLIENT START -->
             <div class="col-md-4 mb-4">
@@ -741,12 +741,38 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         <div class="col-12 col-sm-6">
                             <x-cards.widget
                                 :title="__('Project Budget ('. $project->deal->original_currency->currency_code .')')"
-                                :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
+                                :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->actual_amount+$project->deal->upsell_actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
                                 icon="coins"
                             />
                         </div>
                         @endif
                     @endif
+                    @if ($projectBudgetPermission == 'all')
+                    @if($project->deal->upsell_amount != 0)
+                    @if($project->currency_id != $project->deal->currency_id)
+                    <div class="col-12 col-sm-6 mt-3">
+                        <x-cards.widget
+                            :title="__('Upsold Amount ('. $project->currency->currency_code .')')"
+                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->upsell_amount, $project->currency->currency_symbol) : '0')"
+                            icon="coins"
+                        />
+                    </div>
+                    @endif
+                    @endif
+                @endif
+                    @if ($projectBudgetPermission == 'all')
+                    @if($project->deal->upsell_amount != 0)
+                    @if($project->currency_id != $project->deal->original_currency_id)
+                    <div class="col-12 col-sm-6 mt-3">
+                        <x-cards.widget
+                            :title="__('Upsold Amount ('. $project->deal->original_currency->currency_code .')')"
+                            :value="((!is_null($project->project_budget) && $project->currency) ? currency_formatter($project->deal->upsell_actual_amount, $project->deal->original_currency->currency_symbol) : '0')"
+                            icon="coins"
+                        />
+                    </div>
+                    @endif
+                    @endif
+                @endif
                     <div class="col-12 mt-3">
                         <x-cards.widget :title="__('Project Type')" :value="$project->deal->project_type" icon="clock" badge="true"/>
                     </div>
