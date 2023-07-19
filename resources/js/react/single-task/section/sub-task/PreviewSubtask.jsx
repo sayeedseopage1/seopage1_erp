@@ -28,7 +28,7 @@ const PreviewSubtask = () => {
   const [getTaskDetails, {isFetching: detailFetchingStateLoading}] = useLazyGetTaskDetailsQuery();
 
   // task instance
-  const task = new SingleTask(data);
+  const task = new SingleTask({...data?.task, parent_task_title: data?.parent_task_heading?.heading || null});
   const handleClick = (e) => { navigate(-1)} 
  
 //   fetch submitted rtk api
@@ -81,6 +81,15 @@ const PreviewSubtask = () => {
         setComments(_comments)
     }
 
+
+    // rediurect to main view
+    const RedirectToMainView = (e) =>{
+        navigate({
+            url: `/accounts/tasks/${task?.id}`,
+            replace: true
+        })
+    }
+
   return (
     <Modal className={`sp1_subtask_offsetcanvas--modal`} isOpen={previewType}>
         <div className={`sp1_subtask_offsetcanvas ${previewType ? 'open': ''}`}>
@@ -89,7 +98,7 @@ const PreviewSubtask = () => {
                     <span className='font-weight-bold f-16'>Sub Task # {taskID} : <span className='font-weight-normal'>{task?.title}</span> </span>
                 </div>
                 <div className='d-flex align-items-center ml-auto'>
-                    <Button variant='tertiary' className='mr-2 px-2'> 
+                    <Button onClick={RedirectToMainView} variant='tertiary' className='mr-2 px-2'> 
                         <i className="fa-solid fa-up-right-and-down-left-from-center" />
                     </Button>
                     <Button onClick={handleClick} className=''> 

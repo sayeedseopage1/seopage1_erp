@@ -26849,17 +26849,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "useApproveSubmittedTaskMutation": () => (/* binding */ useApproveSubmittedTaskMutation),
 /* harmony export */   "useCrateNoteMutation": () => (/* binding */ useCrateNoteMutation),
+/* harmony export */   "useCreateRevisionMutation": () => (/* binding */ useCreateRevisionMutation),
 /* harmony export */   "useCreateSubtaskMutation": () => (/* binding */ useCreateSubtaskMutation),
 /* harmony export */   "useDeleteNoteUploadedFileMutation": () => (/* binding */ useDeleteNoteUploadedFileMutation),
 /* harmony export */   "useDeleteUplaodedFileMutation": () => (/* binding */ useDeleteUplaodedFileMutation),
 /* harmony export */   "useEditSubtaskMutation": () => (/* binding */ useEditSubtaskMutation),
 /* harmony export */   "useGetDeveloperTasksQuery": () => (/* binding */ useGetDeveloperTasksQuery),
+/* harmony export */   "useGetRevisionDetailsQuery": () => (/* binding */ useGetRevisionDetailsQuery),
 /* harmony export */   "useGetSubmittedTaskQuery": () => (/* binding */ useGetSubmittedTaskQuery),
 /* harmony export */   "useGetTaskDetailsQuery": () => (/* binding */ useGetTaskDetailsQuery),
 /* harmony export */   "useGetUserTrackTimeQuery": () => (/* binding */ useGetUserTrackTimeQuery),
 /* harmony export */   "useLazyGetTaskDetailsQuery": () => (/* binding */ useLazyGetTaskDetailsQuery),
 /* harmony export */   "useLazyGetUserTrackTimeQuery": () => (/* binding */ useLazyGetUserTrackTimeQuery),
 /* harmony export */   "useMarkAsCompleteMutation": () => (/* binding */ useMarkAsCompleteMutation),
+/* harmony export */   "useRevisionAcceptOrDenyMutation": () => (/* binding */ useRevisionAcceptOrDenyMutation),
 /* harmony export */   "useStartTimerApiMutation": () => (/* binding */ useStartTimerApiMutation),
 /* harmony export */   "useStopTimerApiMutation": () => (/* binding */ useStopTimerApiMutation),
 /* harmony export */   "useStoreCommentMutation": () => (/* binding */ useStoreCommentMutation),
@@ -27061,6 +27064,47 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
         query: function query(id) {
           return "/account/tasks/get-task-submissions/".concat(id);
         }
+      }),
+      /**
+       *  * revision by
+       *  @param id is task id;
+       */
+
+      createRevision: build.mutation({
+        query: function query(data) {
+          return {
+            url: "/tasks/task-stage/revision",
+            method: "POST",
+            body: _objectSpread(_objectSpread({}, data), {}, {
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            })
+          };
+        }
+      }),
+      /**
+       *  * get Revision
+       *  @param id  is task id
+       */
+
+      getRevisionDetails: build.query({
+        query: function query(id) {
+          return "/account/tasks/get-task-revision/".concat(id);
+        }
+      }),
+      /**
+       *  * revision accept deny
+       */
+
+      revisionAcceptOrDeny: build.mutation({
+        query: function query(data) {
+          return {
+            url: "/account/tasks/revision/accept-or-revision-by-developer",
+            method: "POST",
+            body: _objectSpread(_objectSpread({}, data), {}, {
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            })
+          };
+        }
       })
     };
   }
@@ -27082,7 +27126,10 @@ var useGetTaskDetailsQuery = singleTaskPageApiSlice.useGetTaskDetailsQuery,
   useLazyGetUserTrackTimeQuery = singleTaskPageApiSlice.useLazyGetUserTrackTimeQuery,
   useApproveSubmittedTaskMutation = singleTaskPageApiSlice.useApproveSubmittedTaskMutation,
   useMarkAsCompleteMutation = singleTaskPageApiSlice.useMarkAsCompleteMutation,
-  useGetSubmittedTaskQuery = singleTaskPageApiSlice.useGetSubmittedTaskQuery;
+  useGetSubmittedTaskQuery = singleTaskPageApiSlice.useGetSubmittedTaskQuery,
+  useCreateRevisionMutation = singleTaskPageApiSlice.useCreateRevisionMutation,
+  useGetRevisionDetailsQuery = singleTaskPageApiSlice.useGetRevisionDetailsQuery,
+  useRevisionAcceptOrDenyMutation = singleTaskPageApiSlice.useRevisionAcceptOrDenyMutation;
 
 
 /***/ }),
@@ -27635,6 +27682,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_single_task__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../utils/single-task */ "./resources/js/react/utils/single-task.js");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
@@ -27674,7 +27724,12 @@ var SingleTaskPage = function SingleTaskPage() {
     isFetching = _useGetTaskDetailsQue.isFetching;
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (data) {
-      dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_16__.storeTask)(data));
+      var _data$parent_task_hea;
+      var _task = _objectSpread(_objectSpread({}, data === null || data === void 0 ? void 0 : data.task), {}, {
+        parent_task_title: (data === null || data === void 0 ? void 0 : (_data$parent_task_hea = data.parent_task_heading) === null || _data$parent_task_hea === void 0 ? void 0 : _data$parent_task_hea.heading) || null,
+        parent_task_action: data === null || data === void 0 ? void 0 : data.parent_task_action
+      });
+      dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_16__.storeTask)(_task));
     }
   }, [data]);
   var loading = isFetching;
@@ -27689,7 +27744,7 @@ var SingleTaskPage = function SingleTaskPage() {
       className: "f-16 mb-3 ".concat(loadingClass),
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("span", {
         children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("strong", {
-          children: "Subtask: "
+          children: "Task: "
         }), " "]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("span", {
         children: task === null || task === void 0 ? void 0 : task.getSubtaskTitle()
@@ -27709,7 +27764,7 @@ var SingleTaskPage = function SingleTaskPage() {
               style: {
                 gap: '10px'
               },
-              children: [task.hasSubtask && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
+              children: [(task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsxs)("div", {
                 className: "sp1_st-list-item",
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_21__.jsx)("div", {
                   className: "sp1_st-list-item-head",
@@ -29282,6 +29337,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "approveButtonPermission": () => (/* binding */ approveButtonPermission),
 /* harmony export */   "markAsCompletedButtonPermission": () => (/* binding */ markAsCompletedButtonPermission),
+/* harmony export */   "needRevisionPermision": () => (/* binding */ needRevisionPermision),
+/* harmony export */   "revisionButtonPermission": () => (/* binding */ revisionButtonPermission),
 /* harmony export */   "timeControlPermision": () => (/* binding */ timeControlPermision)
 /* harmony export */ });
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/utils/user-details.js");
@@ -29322,14 +29379,18 @@ function markAsCompletedButtonPermission(_ref2) {
   var assignedUser = task === null || task === void 0 ? void 0 : task.assigneeTo;
   var _loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_0__.User(loggedUser);
 
-  // if status id 2 or 3 show timer start button
-  if ([2, 3].includes(Number(statusId))) {
-    statusPermission = true;
-  }
-
   // if task assign to 
   if (assignedUser.getId() === _loggedUser.getId()) {
     assigneePermission = true;
+    if ((_loggedUser === null || _loggedUser === void 0 ? void 0 : _loggedUser.getRoleId()) === 6) {
+      if ([8].includes(Number(statusId))) {
+        statusPermission = true;
+      }
+    } else {
+      if ([2, 3].includes(Number(statusId))) {
+        statusPermission = true;
+      }
+    }
   }
   return statusPermission && assigneePermission;
 }
@@ -29354,6 +29415,54 @@ function approveButtonPermission(_ref3) {
   if (assignedUser.getId() === _loggedUser.getId()) {
     assigneePermission = true;
   } else if ((_loggedUser === null || _loggedUser === void 0 ? void 0 : _loggedUser.getRoleId()) === 1) {
+    assigneePermission = true;
+  }
+  return statusPermission && assigneePermission;
+}
+
+// approve button permission
+function needRevisionPermision(_ref4) {
+  var task = _ref4.task,
+    status = _ref4.status,
+    loggedUser = _ref4.loggedUser;
+  var statusPermission = false;
+  var assigneePermission = false;
+  var statusId = status ? status.id : -1;
+  var assignedUser = task === null || task === void 0 ? void 0 : task.assigneeBy;
+  var _loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_0__.User(loggedUser);
+
+  // if status id 6 show timer start button
+  if ([6].includes(Number(statusId))) {
+    statusPermission = true;
+  }
+
+  // if task assign to 
+  if (assignedUser.getId() === _loggedUser.getId()) {
+    assigneePermission = true;
+  } else if ((_loggedUser === null || _loggedUser === void 0 ? void 0 : _loggedUser.getRoleId()) === 1) {
+    assigneePermission = true;
+  }
+  return statusPermission && assigneePermission;
+}
+
+// revision button
+function revisionButtonPermission(_ref5) {
+  var task = _ref5.task,
+    status = _ref5.status,
+    loggedUser = _ref5.loggedUser;
+  var statusPermission = false;
+  var assigneePermission = false;
+  var statusId = status ? status.id : -1;
+  var assignedUser = task === null || task === void 0 ? void 0 : task.assigneeTo;
+  var _loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_0__.User(loggedUser);
+
+  // if status id 6 show timer start button
+  if ([1].includes(Number(statusId))) {
+    statusPermission = true;
+  }
+
+  // if task assign to 
+  if (assignedUser.getId() === _loggedUser.getId()) {
     assigneePermission = true;
   }
   return statusPermission && assigneePermission;
@@ -30506,6 +30615,9 @@ var HistorySection = function HistorySection() {
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_right_card mb-3",
+    style: {
+      zIndex: isOpen ? 99 : ''
+    },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
@@ -31973,6 +32085,9 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -31994,6 +32109,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var PreviewSubtask = function PreviewSubtask() {
+  var _data$parent_task_hea;
   var _useSearchParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useSearchParams)(),
     _useSearchParams2 = _slicedToArray(_useSearchParams, 1),
     searchParams = _useSearchParams2[0];
@@ -32033,7 +32149,9 @@ var PreviewSubtask = function PreviewSubtask() {
     detailFetchingStateLoading = _useLazyGetTaskDetail2[1].isFetching;
 
   // task instance
-  var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_4__.SingleTask(data);
+  var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_4__.SingleTask(_objectSpread(_objectSpread({}, data === null || data === void 0 ? void 0 : data.task), {}, {
+    parent_task_title: (data === null || data === void 0 ? void 0 : (_data$parent_task_hea = data.parent_task_heading) === null || _data$parent_task_hea === void 0 ? void 0 : _data$parent_task_hea.heading) || null
+  }));
   var handleClick = function handleClick(e) {
     navigate(-1);
   };
@@ -32087,6 +32205,14 @@ var PreviewSubtask = function PreviewSubtask() {
     _comments.unshift(comment);
     setComments(_comments);
   };
+
+  // rediurect to main view
+  var RedirectToMainView = function RedirectToMainView(e) {
+    navigate({
+      url: "/accounts/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
+      replace: true
+    });
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
     className: "sp1_subtask_offsetcanvas--modal",
     isOpen: previewType,
@@ -32106,6 +32232,7 @@ var PreviewSubtask = function PreviewSubtask() {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
           className: "d-flex align-items-center ml-auto",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            onClick: RedirectToMainView,
             variant: "tertiary",
             className: "mr-2 px-2",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
@@ -34345,7 +34472,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Accordion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/Accordion */ "./resources/js/react/single-task/components/Accordion.jsx");
 /* harmony import */ var _components_Guideline__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/Guideline */ "./resources/js/react/single-task/components/Guideline.jsx");
 /* harmony import */ var _components_RevisionText__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../components/RevisionText */ "./resources/js/react/single-task/components/RevisionText.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
@@ -34368,9 +34497,10 @@ var Genarel = function Genarel(_ref) {
         },
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("h6", {
           className: "",
-          children: ["Subtask:", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+          children: ["Task:", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Link, {
+            to: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
             className: "text-primary font-weight-normal",
-            children: task === null || task === void 0 ? void 0 : task.title
+            children: task === null || task === void 0 ? void 0 : task.getSubtaskTitle()
           })]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "sp1_st-list-item",
@@ -35409,11 +35539,11 @@ var SubmittedWork = function SubmittedWork(_ref) {
       navigate("/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id));
     }
   };
-  console.log({
-    data: data
-  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "sp1_task_right_card mb-3",
+    style: {
+      zIndex: preview || modal === 'submitted-work' ? 99 : ''
+    },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
@@ -35626,7 +35756,15 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
 
   // toggle
   var toggle = function toggle() {
-    setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
+    if (auth.getRoleId() === 6 && !(task !== null && task !== void 0 && task.isLeadDeveloperAbleToSubmit())) {
+      Swal.fire({
+        title: 'You can\'t complete this task because you have some pending subtask?',
+        showCancelButton: true,
+        confirmButtonText: 'Okey'
+      });
+    } else {
+      setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
+    }
   };
 
   // close
@@ -35898,10 +36036,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _headlessui_react__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @headlessui/react */ "./node_modules/@headlessui/react/dist/components/listbox/listbox.js");
-/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
+/* harmony import */ var _headlessui_react__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @headlessui/react */ "./node_modules/@headlessui/react/dist/components/listbox/listbox.js");
+/* harmony import */ var react_icons_hi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-icons/hi */ "./node_modules/react-icons/hi/index.esm.js");
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -35912,6 +36051,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -36014,23 +36154,23 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
     e.preventDefault();
     onBack();
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("form", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
       action: "",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Revision Acknowledgement", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("sup", {
+          children: ["Revision Acknowledgement", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "f-16",
             children: "*"
           }), " :"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "px-3",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check d-flex align-items-start mb-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               className: "form-check-input mr-2",
               type: "radio",
               name: "exampleRadios",
@@ -36043,7 +36183,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               className: "form-check-label",
               htmlFor: "exampleRadios1",
               style: {
@@ -36051,9 +36191,9 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
               },
               children: "Task Has Revision Because Requirements Are Not Fulfilled According to My Instractions"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check d-flex align-items-start mb-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               className: "form-check-input mr-2",
               type: "radio",
               name: "exampleRadios",
@@ -36066,7 +36206,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               className: "form-check-label",
               htmlFor: "exampleRadios2",
               style: {
@@ -36074,9 +36214,9 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
               },
               children: "Task Has Revision Because I Have Customized Previous Instructions"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check d-flex align-items-start mb-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               className: "form-check-input mr-2",
               type: "radio",
               name: "exampleRadios",
@@ -36089,7 +36229,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               className: "form-check-label mb-1",
               htmlFor: "exampleRadios3",
               style: {
@@ -36098,50 +36238,50 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
               children: "Task Has Revision Because I Have Added Additional Instructions To Previous Instructions"
             })]
           })]
-        }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+        }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Select SubTask", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("sup", {
+          children: ["Select SubTask", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "font-weight-bold f-16",
             children: "*"
           }), " :"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(SubtaskSelectionMenu, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(SubtaskSelectionMenu, {
           task: task,
           subTasks: subtasks,
           setSubtasks: setSubtasks
         })]
-      }), (subtasks === null || subtasks === void 0 ? void 0 : subtasks.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }), (subtasks === null || subtasks === void 0 ? void 0 : subtasks.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
           htmlFor: "",
           className: "font-weight-bold",
           children: "Comment:"
         }), subtasks.map(function (s, i) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "form-group",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
                 htmlFor: "",
                 className: "font-weight-bold",
-                children: [i + 1, ". ", s === null || s === void 0 ? void 0 : s.title, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("sup", {
+                children: [i + 1, ". ", s === null || s === void 0 ? void 0 : s.title, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
                   className: "font-weight-bold f-16",
                   children: "*"
                 }), " :"]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                 className: "ck-editor-holder",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                   onChange: function onChange(e, editor) {
                     return hanldeEditorTextChange(e, editor, s === null || s === void 0 ? void 0 : s.id);
                   }
                 })
-              }), commentError.includes(s.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+              }), commentError.includes(s.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
                 id: "emailHelp",
                 className: "form-text text-danger",
                 children: "You have to explain the revision in details, so that Developer can understand where they need to work."
@@ -36149,14 +36289,14 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
             })
           }, s.id);
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "mt-3 d-flex align-items-center",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           onClick: onBackButtonClick,
           variant: "tertiary",
           className: "ml-auto mr-2",
           children: "Back"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(NextAndContinueButton, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(NextAndContinueButton, {
           onClick: handleSubmition,
           isLoading: isSubmitting
         })]
@@ -36169,14 +36309,14 @@ var NextAndContinueButton = function NextAndContinueButton(_ref2) {
   var onClick = _ref2.onClick,
     isLoading = _ref2.isLoading;
   if (!isLoading) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       onClick: onClick,
       children: "Accept & Continue"
     });
   } else {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "cursor-processing",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "spinner-border text-white mr-2",
         role: "status",
         style: {
@@ -36194,21 +36334,21 @@ var SubtaskSelectionMenu = function SubtaskSelectionMenu(_ref3) {
   var task = _ref3.task,
     subTasks = _ref3.subTasks,
     setSubtasks = _ref3.setSubtasks;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
     className: "position-relative",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_4__.Listbox, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Listbox, {
       value: subTasks,
       onChange: setSubtasks,
       multiple: true,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_4__.Listbox.Button, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Listbox.Button, {
         className: "position-relative w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center justify-content-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
           className: "w-100 mr-auto text-left d-flex flex-wrap align-items-center",
           style: {
             gap: '6px'
           },
           children: (subTasks === null || subTasks === void 0 ? void 0 : subTasks.length) > 0 ? subTasks.map(function (s) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
               className: "badge badge-light",
               style: {
                 fontSize: '13px'
@@ -36216,8 +36356,8 @@ var SubtaskSelectionMenu = function SubtaskSelectionMenu(_ref3) {
               children: [" ", s.id, " ", s === null || s === void 0 ? void 0 : s.title, " "]
             }, s.id);
           }) : "Select Subtasks"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_5__.HiOutlineSelector, {})]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_4__.Listbox.Options, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_icons_hi__WEBPACK_IMPORTED_MODULE_6__.HiOutlineSelector, {})]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Listbox.Options, {
         className: "position-absolute bg-white p-2 shadow w-100",
         style: {
           zIndex: 10,
@@ -36225,7 +36365,7 @@ var SubtaskSelectionMenu = function SubtaskSelectionMenu(_ref3) {
           overflowY: "auto"
         },
         children: (task === null || task === void 0 ? void 0 : (_task$subtask = task.subtask) === null || _task$subtask === void 0 ? void 0 : _task$subtask.length) > 0 ? task === null || task === void 0 ? void 0 : (_task$subtask2 = task.subtask) === null || _task$subtask2 === void 0 ? void 0 : _task$subtask2.map(function (s) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_4__.Listbox.Option, {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Listbox.Option, {
             value: s,
             tabIndex: -1,
             className: function className(_ref4) {
@@ -36234,18 +36374,18 @@ var SubtaskSelectionMenu = function SubtaskSelectionMenu(_ref3) {
             },
             children: function children(_ref5) {
               var selected = _ref5.selected;
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                   children: s.title
-                }), selected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+                }), selected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
                     className: "fa-solid fa-check"
                   })
                 })]
               });
             }
           }, s.id);
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           children: "No Data Found"
         })
       })]
@@ -36270,7 +36410,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -36282,7 +36423,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var DenyAndContinue = function DenyAndContinue(_ref) {
+  var _window, _window$Laravel;
   var onSubmit = _ref.onSubmit,
     isSubmitting = _ref.isSubmitting,
     onBack = _ref.onBack,
@@ -36295,6 +36438,7 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
     _useState4 = _slicedToArray(_useState3, 2),
     err = _useState4[0],
     setErr = _useState4[1];
+  var auth = (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user;
   var handleEditorDataChange = function handleEditorDataChange(e, editor) {
     var data = editor.getData();
     setComment(data);
@@ -36307,43 +36451,49 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
       setErr("You have to Explain Why Did You Deny!");
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("form", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("form", {
       action: "",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Please Explain Why Did You Deny? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("sup", {
+          children: ["Please Explain Why Did You Deny? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "f-16 text-red",
             children: "*"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "ck-editor-holder",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
             onChange: handleEditorDataChange
           })
-        }), err && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+        }), err && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: err
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "mt-3 d-flex align-items-center",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
             onClick: onBack,
             variant: "tertiary",
             className: "ml-auto mr-2",
             children: "Back"
-          }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-              onClick: handleOnSubmit,
-              children: "Next"
+          }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+              children: _.includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.role_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                onClick: handleOnSubmit,
+                children: "Next"
+              }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                title: "Submit",
+                isLoading: isSubmitting,
+                onClick: handleOnSubmit
+              })
             })
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
               className: "cursor-processing",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
                 className: "spinner-border text-white",
                 role: "status",
                 style: {
@@ -36379,13 +36529,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -36398,15 +36550,15 @@ var AcceptAndContinueButton = function AcceptAndContinueButton(_ref) {
   var isLoading = _ref.isLoading,
     onClick = _ref.onClick;
   if (!isLoading) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
       onClick: onClick,
       children: "Accept & Continue"
     });
   } else {
-    /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
         className: "cursor-processing",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "spinner-border text-white",
           role: "status",
           style: {
@@ -36421,6 +36573,7 @@ var AcceptAndContinueButton = function AcceptAndContinueButton(_ref) {
 
 // component
 var RevisionAcceptAndContinue = function RevisionAcceptAndContinue(_ref2) {
+  var _window, _window$Laravel;
   var task = _ref2.task,
     revision = _ref2.revision,
     onSubmit = _ref2.onSubmit,
@@ -36448,43 +36601,48 @@ var RevisionAcceptAndContinue = function RevisionAcceptAndContinue(_ref2) {
       setErr("You have to Explain Why & How Did This Happen!");
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("form", {
+  var auth = (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("form", {
       action: "",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Please Explain Why & How Did This Happen?", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
+          children: ["Please Explain Why & How Did This Happen?", " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("sup", {
             className: "f-16 text-red",
             children: "*"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
           className: "ck-editor-holder",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_3__["default"], {
             onChange: handleEditorDataChange
           })
-        }), err && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
+        }), err && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: err
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: "mt-3 d-flex align-items-center",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             onClick: close,
             variant: "tertiary",
             className: "ml-auto mr-2",
             children: "Back"
-          }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: _.includes([4, 6], auth === null || auth === void 0 ? void 0 : auth.role_id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
               onClick: handleOnSubmit,
               children: "Next"
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              title: "Submit",
+              isLoading: isSubmitting,
+              onClick: handleOnSubmit
             })
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
               className: "cursor-processing",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "spinner-border text-white",
                 role: "status",
                 style: {
@@ -36534,7 +36692,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var RevisionControl = function RevisionControl(_ref) {
-  var task = _ref.task;
+  var task = _ref.task,
+    auth = _ref.auth;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     revisionModal = _useState2[0],
@@ -36559,6 +36718,7 @@ var RevisionControl = function RevisionControl(_ref) {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "sp1_single_task--modal-panerl-wrapper",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_RevisionCreationModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          auth: auth,
           task: singleTask,
           close: function close() {
             return setRevisionModal(false);
@@ -36587,7 +36747,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
+/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -36599,13 +36763,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
+
 var RevisionCreationModal = function RevisionCreationModal(_ref) {
-  var isOpen = _ref.isOpen,
-    close = _ref.close,
-    onSubmitForm = _ref.onSubmitForm,
-    _ref$isSubmitting = _ref.isSubmitting,
-    isSubmitting = _ref$isSubmitting === void 0 ? false : _ref$isSubmitting,
-    task = _ref.task;
+  var close = _ref.close,
+    task = _ref.task,
+    auth = _ref.auth;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
     reason = _useState2[0],
@@ -36622,6 +36787,11 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     _useState8 = _slicedToArray(_useState7, 2),
     commentError = _useState8[0],
     setCommentError = _useState8[1];
+  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_4__.useDispatch)();
+  var _useCreateRevisionMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__.useCreateRevisionMutation)(),
+    _useCreateRevisionMut2 = _slicedToArray(_useCreateRevisionMut, 2),
+    createRevision = _useCreateRevisionMut2[0],
+    isLoading = _useCreateRevisionMut2[1].isLoading;
 
   // radio button change
   var handleChange = function handleChange(e) {
@@ -36638,66 +36808,83 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
   var validate = function validate() {
     var errorCount = 0;
     if (comment === "") {
-      console.log("open");
       errorCount++;
       setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.');
     }
     if (reason === '') {
-      console.log('first');
       errorCount++;
-      setReasonError('You have to select a reason from below options');
+      setReasonError('You have to select a reason from above options');
     }
     return errorCount === 0;
   };
+  console.log({
+    task: task
+  });
 
   // handle submiton
   var handleSubmition = function handleSubmition(e) {
     e.preventDefault();
     var data = {
       task_id: task === null || task === void 0 ? void 0 : task.id,
-      reason: reason,
-      comment: comment
+      user_id: auth === null || auth === void 0 ? void 0 : auth.id,
+      revision_acknowledgement: reason,
+      comments2: comment
     };
     if (validate()) {
-      console.log(data);
+      createRevision(data).unwrap().then(function (res) {
+        var Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true
+        });
+        Toast.fire({
+          icon: 'success',
+          title: 'Task submitted for Revision successfully'
+        });
+        dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_5__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
+      })["catch"](function (err) {
+        return console.log(err);
+      });
     } else {
       console.log('Your forgot to fillup some requried fields');
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
       style: {
         maxWidth: "550px"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "font-weight-bold f-14",
           children: ["Revision - Task: ", task === null || task === void 0 ? void 0 : task.id, "#", (task === null || task === void 0 ? void 0 : task.title) || (task === null || task === void 0 ? void 0 : task.heading)]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
           onClick: close,
           className: "",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
             className: "fa-solid fa-xmark"
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("form", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("form", {
         className: "px-3",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "form-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
             htmlFor: "",
             className: "font-weight-bold",
-            children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("sup", {
+            children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
               className: "f-16",
               children: "*"
             }), " :"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "px-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                 className: "form-check-input mr-2",
                 type: "radio",
                 name: "exampleRadios",
@@ -36710,7 +36897,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                   height: "16px",
                   marginTop: "3px"
                 }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
                 className: "form-check-label",
                 htmlFor: "exampleRadios1",
                 style: {
@@ -36718,9 +36905,9 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                 },
                 children: "Task Has Revision Because Requirements Are Not Fullfilled Accordiong To My Instructions"
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                 className: "form-check-input mr-2",
                 type: "radio",
                 name: "exampleRadios",
@@ -36733,7 +36920,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                   height: "16px",
                   marginTop: "3px"
                 }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
                 className: "form-check-label",
                 htmlFor: "exampleRadios2",
                 style: {
@@ -36741,9 +36928,9 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                 },
                 children: "Task Has Revision Because I Have Customized Previous Instructions"
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
                 className: "form-check-input mr-2",
                 type: "radio",
                 name: "exampleRadios",
@@ -36756,7 +36943,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                   height: "16px",
                   marginTop: "3px"
                 }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("label", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
                 className: "form-check-label mb-1",
                 htmlFor: "exampleRadios3",
                 style: {
@@ -36765,55 +36952,42 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                 children: "Task Has Revision Because I Have Added Additional Instructions To Previous Instructions"
               })]
             })]
-          }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+          }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
             id: "emailHelp",
             className: "form-text text-danger",
             children: reasonError
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "form-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
             htmlFor: "",
             className: "font-weight-bold",
-            children: ["Explain or Comment", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("sup", {
+            children: ["Explain or Comment", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
               className: "f-16",
               children: "*"
             }), " :"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
             className: "ck-editor-holder",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
               onChange: hanldeEditorTextChange
             })
-          }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("small", {
+          }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
             id: "emailHelp",
             className: "form-text text-danger",
             children: commentError
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
             className: "mt-3 d-flex align-items-center",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
               onClick: close,
               variant: "tertiary",
               className: "ml-auto mr-2",
               children: "Close"
-            }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                onClick: handleSubmition,
-                children: "Submit"
-              })
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                className: "cursor-processing",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-                  className: "spinner-border text-white",
-                  role: "status",
-                  style: {
-                    width: "18px",
-                    height: "18px"
-                  }
-                }), " ", "Processing..."]
-              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+              title: "Submit",
+              onClick: handleSubmition,
+              isLoading: isLoading
             })]
           })
         })]
@@ -36840,40 +37014,67 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./RevisionAcceptAndContinue */ "./resources/js/react/single-task/section/task-actions/Revision/RevisionAcceptAndContinue.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
 
 
 var RevisionVeiw = function RevisionVeiw(_ref) {
-  var onAccept = _ref.onAccept,
+  var revision = _ref.revision,
+    isLoading = _ref.isLoading,
+    onAccept = _ref.onAccept,
     onDeny = _ref.onDeny;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("p", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      children: !isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
           className: "font-weight-bold text-danger f-16",
           children: "Reason: "
-        }), "Task Has Revision Because Project Manager Made Some Changes Outside Instructions."]
+        }), revision === null || revision === void 0 ? void 0 : revision.revision_acknowledgement]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
+          width: "450px",
+          className: "mb-2"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
+          width: "100px",
+          className: "mb-3"
+        })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "st_revision_comment",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+      children: [!isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "sp1_ck_content",
-        children: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat totam minima deleniti, unde cupiditate ea, officia qui harum quia veniam fuga non nulla ullam in architecto quasi nostrum suscipit omnis!"
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "mt-4 mb-2 d-flex align-items-center",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        onClick: onDeny,
-        variant: "tertiary",
-        className: "ml-auto mr-2",
-        children: "Deny & Continue"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_2__.AcceptAndContinueButton, {
-        onClick: onAccept,
-        isLoading: false
+        dangerouslySetInnerHTML: {
+          __html: revision === null || revision === void 0 ? void 0 : revision.comment
+        }
+      }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
+          width: "100%",
+          className: "mb-2"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
+          width: "100%",
+          className: "mb-2"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_3__.Placeholder, {
+          width: "30%",
+          className: "mb-2"
+        })]
       })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "mt-4 mb-2 d-flex align-items-center",
+      children: !isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          onClick: onDeny,
+          variant: "tertiary",
+          className: "ml-auto mr-2",
+          children: "Deny & Continue"
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_2__.AcceptAndContinueButton, {
+          onClick: onAccept,
+          isLoading: false
+        })]
+      })
     })]
   });
 };
@@ -36969,7 +37170,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RevisionAcceptAndContinue */ "./resources/js/react/single-task/section/task-actions/Revision/RevisionAcceptAndContinue.jsx");
 /* harmony import */ var _AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AssigneeRevisionToDev */ "./resources/js/react/single-task/section/task-actions/Revision/AssigneeRevisionToDev.jsx");
 /* harmony import */ var _DenyAndContinue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DenyAndContinue */ "./resources/js/react/single-task/section/task-actions/Revision/DenyAndContinue.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -36984,75 +37188,115 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
 var RevisionViewModal = function RevisionViewModal(_ref) {
+  var _window, _window$Laravel;
   var task = _ref.task,
     close = _ref.close;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("REVISION"),
     _useState2 = _slicedToArray(_useState, 2),
     show = _useState2[0],
     setShow = _useState2[1];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
+    _useState4 = _slicedToArray(_useState3, 2),
+    accept = _useState4[0],
+    setAccept = _useState4[1];
+  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_7__.useDispatch)();
+  var _useGetRevisionDetail = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__.useGetRevisionDetailsQuery)(task === null || task === void 0 ? void 0 : task.id),
+    revision = _useGetRevisionDetail.data,
+    isFetchingRevision = _useGetRevisionDetail.isFetching;
+  var _useRevisionAcceptOrD = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__.useRevisionAcceptOrDenyMutation)(),
+    _useRevisionAcceptOrD2 = _slicedToArray(_useRevisionAcceptOrD, 2),
+    revisionAcceptOrDeny = _useRevisionAcceptOrD2[0],
+    isLoadingRevisionReview = _useRevisionAcceptOrD2[1].isLoading;
+  var auth = (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user;
+
+  // handle Accept and continue submition
+  var hanldeAcceptAndContinueSubmition = function hanldeAcceptAndContinueSubmition(data, type) {
+    revisionAcceptOrDeny({
+      text2: data,
+      task_id: task === null || task === void 0 ? void 0 : task.id,
+      user_id: auth === null || auth === void 0 ? void 0 : auth.id,
+      revision_id: revision === null || revision === void 0 ? void 0 : revision.id,
+      mode: accept ? 'accept' : 'deny'
+    }).unwrap().then(function (res) {
+      if (_.includes([4, 6], Number(auth === null || auth === void 0 ? void 0 : auth.role_id))) {
+        setShow(type);
+      } else {
+        dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
+        close();
+      }
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
       style: {
         maxWidth: "550px"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "font-weight-bold f-16",
-          children: ["Task#", task === null || task === void 0 ? void 0 : task.id, ": ", show === "ASSINEE_TO_DEV" || show === "ASSINEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          children: ["Task#", task === null || task === void 0 ? void 0 : task.id, ": ", show === "ASSINEE_TO_DEV" || show === "ASSINEE_TO_DEV" ? "Revision For Developer" : "Revision By Lead Developer", Number(auth === null || auth === void 0 ? void 0 : auth.role_id) === 6 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: show === "ASSINEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager"
+          }) : Number(auth === null || auth === void 0 ? void 0 : auth.role_id) === 4 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+            children: show === "ASSINEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager"
+          }) : "Revision By Lead Developer Manager"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           onClick: close,
           className: "",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
             className: "fa-solid fa-xmark"
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "px-3",
-        children: [show === 'REVISION' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_RevisionVeiw__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: [show === 'REVISION' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_RevisionVeiw__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          revision: revision,
+          isLoading: isFetchingRevision,
           onAccept: function onAccept() {
-            return setShow('ACCEPT_AND_CONTINUE');
+            setAccept(true);
+            setShow('ACCEPT_AND_CONTINUE');
           },
           onDeny: function onDeny() {
-            return setShow('DENY_AND_CONTINUE');
+            setAccept(false);
+            setShow('DENY_AND_CONTINUE');
           }
-        }), show === 'ACCEPT_AND_CONTINUE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
+        }), show === 'ACCEPT_AND_CONTINUE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
           task: task,
+          isSubmitting: isLoadingRevisionReview,
           onSubmit: function onSubmit(data) {
-            console.log({
-              ASSINEE_TO_DEV: data
-            });
-            setShow("ASSINEE_TO_DEV");
+            return hanldeAcceptAndContinueSubmition(data, "ASSINEE_TO_DEV");
           },
           close: function close() {
             return setShow("REVISION");
           }
-        }), show === "ASSINEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }), show === "ASSINEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
           task: task,
           onSubmit: function onSubmit(data) {
             return console.log({
               ASSINEE_TO_DEV: data
             });
           },
-          isSubmitting: false,
+          isSubmitting: isLoadingRevisionReview,
           onBack: function onBack() {
             return setShow("ACCEPT_AND_CONTINUE");
           }
-        }), show === "DENY_AND_CONTINUE" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_DenyAndContinue__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), show === "DENY_AND_CONTINUE" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_DenyAndContinue__WEBPACK_IMPORTED_MODULE_5__["default"], {
           task: task,
           onSubmit: function onSubmit(data) {
-            console.log({
-              DENY_AND_CONTINUE: data
-            });
-            setShow("DENY_ASSINEE_TO_DEV");
+            return hanldeAcceptAndContinueSubmition(data, "DENY_ASSINEE_TO_DEV");
           },
-          isSubmitting: false,
+          isSubmitting: isLoadingRevisionReview,
           onBack: function onBack() {
             return setShow("REVISION");
           }
-        }), show === "DENY_ASSINEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        }), show === "DENY_ASSINEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
           task: task,
           onSubmit: function onSubmit(data) {
             return console.log({
@@ -37320,9 +37564,18 @@ var TaskAction = function TaskAction(_ref) {
       task: task,
       status: status,
       auth: loggedUser
-    }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Revision_RevisionControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      task: task
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Revision_RevisionViewControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }) : null, (0,_permissions__WEBPACK_IMPORTED_MODULE_4__.needRevisionPermision)({
+      task: task,
+      status: status,
+      loggedUser: loggedUser
+    }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Revision_RevisionControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      task: task,
+      auth: loggedUser
+    }) : null, (0,_permissions__WEBPACK_IMPORTED_MODULE_4__.revisionButtonPermission)({
+      task: task,
+      status: status,
+      loggedUser: loggedUser
+    }) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_Revision_RevisionViewControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
       task: task
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_time_extension_TimeExtension__WEBPACK_IMPORTED_MODULE_8__["default"], {
       task: task
@@ -39270,6 +39523,58 @@ var TimeExtension = function TimeExtension(_ref) {
 
 /***/ }),
 
+/***/ "./resources/js/react/single-task/section/time-logs/InnerTableRow.jsx":
+/*!****************************************************************************!*\
+  !*** ./resources/js/react/single-task/section/time-logs/InnerTableRow.jsx ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+var TableRow = function TableRow(_ref) {
+  var log = _ref.log;
+  var user = log !== null && log !== void 0 && log.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_0__.User(log.user) : null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+    className: "__tbody_tr",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("td", {
+      className: "__tbody_td _tbody_td_employee",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("img", {
+        src: user === null || user === void 0 ? void 0 : user.getAvatar(),
+        alt: user === null || user === void 0 ? void 0 : user.getName()
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        className: "px-2",
+        children: user === null || user === void 0 ? void 0 : user.getName()
+      })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("td", {
+      className: "__tbody_td _tbody_td_start_time",
+      children: [dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.start_time).format('MMM DD, YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.start_time).format('hh:mm a')]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("td", {
+      className: "__tbody_td _tbody_td_start_time _tbody_td_start_end",
+      children: [dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.end_time).format('MMM DD, YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.end_time).format('hh:mm a')]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: "__tbody_td _tbody_td_memo",
+      children: log === null || log === void 0 ? void 0 : log.memo
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: "__tbody_td _tbody_td_hour_logged",
+      children: log === null || log === void 0 ? void 0 : log.hours_logged
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TableRow);
+
+/***/ }),
+
 /***/ "./resources/js/react/single-task/section/time-logs/TimeLogItemLoader.jsx":
 /*!********************************************************************************!*\
   !*** ./resources/js/react/single-task/section/time-logs/TimeLogItemLoader.jsx ***!
@@ -39423,6 +39728,9 @@ var TimeLogSection = function TimeLogSection() {
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_right_card mb-3",
+    style: {
+      zIndex: isOpen ? '99' : ''
+    },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
       className: "d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
@@ -39444,7 +39752,7 @@ var TimeLogSection = function TimeLogSection() {
       className: "sp1_task_right_dl_toggle",
       onClick: toggle,
       style: {
-        zIndex: isOpen ? '110' : ''
+        zIndex: isOpen ? 110 : ''
       },
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
         className: "fa-solid fa-circle-chevron-".concat(isOpen ? 'right' : 'left'),
@@ -39491,7 +39799,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/CustomModal */ "./resources/js/react/single-task/components/CustomModal.jsx");
 /* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useClickAway.js");
-/* harmony import */ var _history_InnerHistoryItemLoader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../history/InnerHistoryItemLoader */ "./resources/js/react/single-task/section/history/InnerHistoryItemLoader.jsx");
+/* harmony import */ var _InnerTableRow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./InnerTableRow */ "./resources/js/react/single-task/section/time-logs/InnerTableRow.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
@@ -39499,9 +39807,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var TableRow = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().lazy(function () {
-  return __webpack_require__.e(/*! import() */ "resources_js_react_single-task_section_time-logs_InnerTableRow_jsx").then(__webpack_require__.bind(__webpack_require__, /*! ./InnerTableRow */ "./resources/js/react/single-task/section/time-logs/InnerTableRow.jsx"));
-});
 var TimeLogTable = function TimeLogTable(_ref) {
   var isOpen = _ref.isOpen,
     close = _ref.close,
@@ -39540,7 +39845,7 @@ var TimeLogTable = function TimeLogTable(_ref) {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
               className: "__tbody",
               children: data ? data.map(function (log) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(TableRow, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_InnerTableRow__WEBPACK_IMPORTED_MODULE_2__["default"], {
                   log: log
                 }, log.id);
               }) : null
@@ -39840,8 +40145,9 @@ var SingleTask = /*#__PURE__*/function () {
     var _task$users;
     _classCallCheck(this, SingleTask);
     this.id = task === null || task === void 0 ? void 0 : task.id;
-    this.title = _.startCase(task === null || task === void 0 ? void 0 : task.subtask_title);
-    this.parentTaskTitle = _.startCase(task === null || task === void 0 ? void 0 : task.heading);
+    this.title = _.startCase(task === null || task === void 0 ? void 0 : task.heading);
+    this.parentTaskId = task === null || task === void 0 ? void 0 : task.parent_task_id;
+    this.parentTaskTitle = _.startCase(task === null || task === void 0 ? void 0 : task.parent_task_title);
     this.projectName = _.startCase(task === null || task === void 0 ? void 0 : task.project_name);
     this.boardColumn = new BoardColumn(task === null || task === void 0 ? void 0 : task.board_column);
     this.assigneeTo = new _user_details__WEBPACK_IMPORTED_MODULE_1__.User(task === null || task === void 0 ? void 0 : (_task$users = task.users) === null || _task$users === void 0 ? void 0 : _task$users[0]);
@@ -39860,12 +40166,21 @@ var SingleTask = /*#__PURE__*/function () {
     this.guidelines = task === null || task === void 0 ? void 0 : task.project_summary;
     this.description = task === null || task === void 0 ? void 0 : task.description;
     this.subtask = task === null || task === void 0 ? void 0 : task.subtask;
-    this.hasSubtask = task !== null && task !== void 0 && task.subtask_id ? true : false;
+    this.isSubtask = this.parentTaskId ? true : false;
+    this.leadDeveloperParentTaskAction = task === null || task === void 0 ? void 0 : task.parent_task_action;
   }
   _createClass(SingleTask, [{
+    key: "isLeadDeveloperAbleToSubmit",
+    value: function isLeadDeveloperAbleToSubmit() {
+      var text = "Lead Developer Can not Complete Parent Task";
+      var compareWith = _.lowerCase(text.replace(/\s/g, ''));
+      var compareText = _.lowerCase(this.leadDeveloperParentTaskAction.replace(/\s/g, ''));
+      return compareText === compareWith ? false : true;
+    }
+  }, {
     key: "getSubtaskTitle",
     value: function getSubtaskTitle() {
-      return this.hasSubtask ? this.title : this.parentTaskTitle;
+      return this.title;
     }
   }, {
     key: "getStartDate",

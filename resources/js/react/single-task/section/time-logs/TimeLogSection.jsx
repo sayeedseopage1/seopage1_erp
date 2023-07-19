@@ -46,7 +46,7 @@ const TimeLogSection = () => {
   const close = () => setIsOpen(false);
 
   return (
-    <div className='sp1_task_right_card mb-3'>
+    <div className='sp1_task_right_card mb-3' style={{zIndex: isOpen ? '99' : ''}}>
         <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
         <span className="f-16">Session Logs</span> 
         {isFetching && 
@@ -70,7 +70,7 @@ const TimeLogSection = () => {
             ref={setModalRefButton}
             className='sp1_task_right_dl_toggle'
             onClick={toggle}
-            style={{zIndex: isOpen ? '110' : ''}}
+            style={{zIndex: isOpen ? 110 : ''}}
           >
             <i 
               className={`fa-solid fa-circle-chevron-${ isOpen ? 'right' : 'left'}`} 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "../../../components/Modal";
 import Button from "../../../components/Button";
 import CKEditorComponent from "../../../../ckeditor";
+import SubmitButton from "../../../components/SubmitButton";
 
 // button
 export const AcceptAndContinueButton = ({ isLoading, onClick }) => {
@@ -50,6 +51,8 @@ export const RevisionAcceptAndContinue = ({
         }
     }
 
+    const auth = window?.Laravel?.user;
+
     return (
         <React.Fragment>
             <form action="">
@@ -76,7 +79,15 @@ export const RevisionAcceptAndContinue = ({
 
                         {!isSubmitting ? (
                             <React.Fragment>
-                                <Button onClick={handleOnSubmit}>Next</Button>
+                                {_.includes([4, 6], auth?.role_id) ? (
+                                    <Button onClick={handleOnSubmit}>Next</Button>
+                                ): 
+                                    <SubmitButton
+                                        title="Submit" 
+                                        isLoading={isSubmitting}
+                                        onClick={handleOnSubmit}
+                                    />
+                                }
                             </React.Fragment>
                         ) : (
                             <React.Fragment>

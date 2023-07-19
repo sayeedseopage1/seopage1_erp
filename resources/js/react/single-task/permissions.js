@@ -31,14 +31,21 @@ export function markAsCompletedButtonPermission({task, status, loggedUser}){
     let assignedUser = task?.assigneeTo;
     let _loggedUser = new User(loggedUser);
     
-    // if status id 2 or 3 show timer start button
-    if([2,3].includes(Number(statusId))){
-        statusPermission = true;
-    }
+    
 
     // if task assign to 
     if(assignedUser.getId() === _loggedUser.getId()){
         assigneePermission = true;
+        if(_loggedUser?.getRoleId() === 6){ 
+            if([8].includes(Number(statusId))){
+                statusPermission = true;
+            }
+        }else{ 
+            if([2,3].includes(Number(statusId))){
+                statusPermission = true;
+            }
+        }
+
     }
 
     return statusPermission && assigneePermission;
@@ -68,3 +75,52 @@ export function approveButtonPermission({task, status, loggedUser}){
 
     return statusPermission && assigneePermission;
 }
+
+
+// approve button permission
+export function needRevisionPermision({task, status, loggedUser}){
+    let statusPermission = false;
+    let assigneePermission = false;
+
+    let statusId = status ? status.id : -1;
+    let assignedUser = task?.assigneeBy;
+    let _loggedUser = new User(loggedUser);
+    
+    // if status id 6 show timer start button
+    if([6].includes(Number(statusId))){
+        statusPermission = true;
+    }
+
+    // if task assign to 
+    if(assignedUser.getId() === _loggedUser.getId()){
+        assigneePermission = true;
+    }else if(_loggedUser?.getRoleId() === 1){
+        assigneePermission = true
+    }
+
+    return statusPermission && assigneePermission;
+}
+
+
+// revision button
+export function revisionButtonPermission ({task, status, loggedUser}){
+    let statusPermission = false;
+    let assigneePermission = false;
+
+    let statusId = status ? status.id : -1;
+    let assignedUser = task?.assigneeTo;
+    let _loggedUser = new User(loggedUser);
+    
+    // if status id 6 show timer start button
+    if([1].includes(Number(statusId))){
+        statusPermission = true;
+    }
+
+    // if task assign to 
+    if(assignedUser.getId() === _loggedUser.getId()){
+        assigneePermission = true;
+    }
+
+    return statusPermission && assigneePermission;
+}
+

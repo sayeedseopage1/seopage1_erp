@@ -4,9 +4,39 @@ import RevisionVeiw from './RevisionVeiw'
 import { RevisionAcceptAndContinue } from './RevisionAcceptAndContinue';
 import AssigneeRevisionToDev from './AssigneeRevisionToDev';
 import DenyAndContinue from './DenyAndContinue';
+import { useGetRevisionDetailsQuery, useRevisionAcceptOrDenyMutation } from '../../../../services/api/SingleTaskPageApi';
+import { useDispatch } from 'react-redux';
+import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 
 const RevisionViewModal = ({task, close}) => {
   const [show, setShow] = useState("REVISION");
+  const [accept, setAccept] = useState();
+  const dispatch = useDispatch();
+  const { data: revision, isFetching: isFetchingRevision } = useGetRevisionDetailsQuery(task?.id);
+  const [revisionAcceptOrDeny, {isLoading: isLoadingRevisionReview}] = useRevisionAcceptOrDenyMutation();
+  const auth = window?.Laravel?.user;
+
+  // handle Accept and continue submition
+  const hanldeAcceptAndContinueSubmition = (data, type) => {
+
+    revisionAcceptOrDeny({
+        text2: data,
+        task_id: task?.id,
+        user_id: auth?.id,
+        revision_id: revision?.id,
+        mode: accept ? 'accept': 'deny'
+    })
+    .unwrap()
+    .then(res => {
+        if(_.includes([4, 6], Number(auth?.role_id))){
+            setShow(type);
+        }else{
+            dispatch(setTaskStatus(res?.task_status));
+            close();
+        }
+    })
+    .catch(err => console.log(err))
+  }
 
   return (
     <React.Fragment>
@@ -16,7 +46,16 @@ const RevisionViewModal = ({task, close}) => {
         >
             <div className="border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between">
                 <div className="font-weight-bold f-16">
-                    Task#{task?.id}: {(show === "ASSINEE_TO_DEV" || show === "ASSINEE_TO_DEV") ? "Revision For Developer":"Revision By Project Manager"}
+                    Task#{task?.id}: {(show === "ASSINEE_TO_DEV" || show === "ASSINEE_TO_DEV") ? "Revision For Developer":"Revision By Lead Developer"}
+                    {Number(auth?.role_id) === 6 ? (
+                        <React.Fragment>
+                            {show === "ASSINEE_TO_DEV"  ? "Revision For Developer":"Revision By Project Manager"}
+                        </React.Fragment>
+                    ): Number(auth?.role_id) === 4 ? (
+                        <React.Fragment>
+                            {show === "ASSINEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager"}
+                        </React.Fragment>
+                    ): "Revision By Lead Developer Manager"}
                 </div>
                 <Button onClick={close} className="">
                     <i className="fa-solid fa-xmark" />
@@ -26,8 +65,16 @@ const RevisionViewModal = ({task, close}) => {
             <div className="px-3">
                {show === 'REVISION' && 
                     <RevisionVeiw 
-                        onAccept={() => setShow('ACCEPT_AND_CONTINUE')} 
-                        onDeny={() => setShow('DENY_AND_CONTINUE')}
+                        revision={revision}
+                        isLoading= {isFetchingRevision}
+                        onAccept={() => {
+                            setAccept(true);
+                            setShow('ACCEPT_AND_CONTINUE'); 
+                        }} 
+                        onDeny={() => {
+                            setAccept(false);
+                            setShow('DENY_AND_CONTINUE')
+                        }}
                     />
                 } 
 
@@ -35,10 +82,8 @@ const RevisionViewModal = ({task, close}) => {
                     show === 'ACCEPT_AND_CONTINUE' &&
                     <RevisionAcceptAndContinue
                         task={task}
-                        onSubmit={(data) => {
-                            console.log({ASSINEE_TO_DEV: data}); 
-                            setShow("ASSINEE_TO_DEV")
-                        }}
+                        isSubmitting={isLoadingRevisionReview}
+                        onSubmit={data => hanldeAcceptAndContinueSubmition(data, "ASSINEE_TO_DEV")}
                         close={() => setShow("REVISION")}
                     />
                 }
@@ -47,7 +92,7 @@ const RevisionViewModal = ({task, close}) => {
                     <AssigneeRevisionToDev 
                         task={task}
                         onSubmit={(data) => console.log({ASSINEE_TO_DEV: data})}
-                        isSubmitting = {false}
+                        isSubmitting = {isLoadingRevisionReview}
                         onBack={() => setShow("ACCEPT_AND_CONTINUE")}
                     />
                 }
@@ -55,11 +100,8 @@ const RevisionViewModal = ({task, close}) => {
                 {show === "DENY_AND_CONTINUE" && 
                     <DenyAndContinue
                         task={task} 
-                        onSubmit={(data) => {
-                            console.log({DENY_AND_CONTINUE: data});
-                            setShow("DENY_ASSINEE_TO_DEV")
-                        }}
-                        isSubmitting = {false}
+                        onSubmit={data => hanldeAcceptAndContinueSubmition(data, "DENY_ASSINEE_TO_DEV")}
+                        isSubmitting = {isLoadingRevisionReview}
                         onBack={() => setShow("REVISION")}
                     />
                 }

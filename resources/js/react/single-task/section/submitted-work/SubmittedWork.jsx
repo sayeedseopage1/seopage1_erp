@@ -33,9 +33,9 @@ const SubmittedWork = ({task}) => {
     }else{navigate(`/account/tasks/${task?.id}`);} 
   }
  
-  console.log({data})
   return (
-    <div className='sp1_task_right_card mb-3'>
+    <div className='sp1_task_right_card mb-3' 
+    style={{zIndex:  (preview || modal === 'submitted-work') ? 99 : ''}}>
         <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
         <span className="f-16">Submitted Works</span> 
           {isLoading && 
@@ -54,21 +54,18 @@ const SubmittedWork = ({task}) => {
 
 
         {/* side drop toggle button */}
-          
-          <button 
-              aria-label='openCommentModalButton'  
-              ref={setModalRefButton}
-              className='sp1_task_right_dl_toggle'
-              onClick={toggle}
-              style={{zIndex:  (preview || modal === 'submitted-work') ? '110' : ''}}
-            >
-              <i 
-                className={`fa-solid fa-circle-chevron-${ (preview || modal === 'submitted-work') ? 'right' : 'left'}`} 
-                style={{color: "#276fec"}} 
-              />
-          </button>
-
-           
+        <button 
+            aria-label='openCommentModalButton'  
+            ref={setModalRefButton}
+            className='sp1_task_right_dl_toggle'
+            onClick={toggle}
+            style={{zIndex:  (preview || modal === 'submitted-work') ? '110' : ''}}
+          >
+            <i 
+              className={`fa-solid fa-circle-chevron-${ (preview || modal === 'submitted-work') ? 'right' : 'left'}`} 
+              style={{color: "#276fec"}} 
+            />
+        </button>
 
         <SubmittedModalView
             isOpen={modal === 'submitted-work'}
@@ -77,7 +74,6 @@ const SubmittedWork = ({task}) => {
             close={close}
             isLoading={isLoading}
         />
-
 
         {/* side drop toggle button end */} 
         <div className="sp1_task_right_card--body"> 
@@ -94,7 +90,6 @@ const SubmittedWork = ({task}) => {
           )))
         }
         </div>
-
     </div>
   )
 }

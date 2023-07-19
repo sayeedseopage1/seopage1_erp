@@ -184,7 +184,54 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
          */
         getSubmittedTask: build.query({
             query: (id) => `/account/tasks/get-task-submissions/${id}`
-        })
+        }),
+
+
+        /**
+         *  * revision by
+         *  @param id is task id;
+         */
+
+        createRevision: build.mutation({
+            query: (data) => ({
+                url: `/tasks/task-stage/revision`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),
+
+
+        /**
+         *  * get Revision
+         *  @param id  is task id
+         */
+
+        getRevisionDetails: build.query({
+            query: (id) => `/account/tasks/get-task-revision/${id}`
+        }), 
+
+        /**
+         *  * revision accept deny
+         */
+
+        revisionAcceptOrDeny: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/revision/accept-or-revision-by-developer`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),
+        
     }),
 });
 
@@ -206,5 +253,8 @@ export const {
     useLazyGetUserTrackTimeQuery,
     useApproveSubmittedTaskMutation,
     useMarkAsCompleteMutation,
-    useGetSubmittedTaskQuery
+    useGetSubmittedTaskQuery,
+    useCreateRevisionMutation,
+    useGetRevisionDetailsQuery,
+    useRevisionAcceptOrDenyMutation
 } = singleTaskPageApiSlice;

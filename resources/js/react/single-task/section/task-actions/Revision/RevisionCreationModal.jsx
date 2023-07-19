@@ -1,18 +1,20 @@
 import React, { useState, useRef } from "react";
 import CKEditorComponent from "../../../../ckeditor";
 import Button from "../../../components/Button";
+import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
+import { useDispatch } from "react-redux";
+import { setTaskStatus } from "../../../../services/features/subTaskSlice";
+import SubmitButton from "../../../components/SubmitButton";
 
-const RevisionCreationModal = ({
-    isOpen,
-    close,
-    onSubmitForm,
-    isSubmitting = false,
-    task,
-}) => {
+const RevisionCreationModal = ({ close, task, auth }) => {
     const [reason, setReason] = useState("");
     const [reasonError, setReasonError] = useState("");
     const [comment, setComment] = useState("");
     const [commentError, setCommentError] = useState("");
+    const dispatch = useDispatch();
+
+
+    const [createRevision, {isLoading}] = useCreateRevisionMutation();
 
     // radio button change
     const handleChange = (e) => {
@@ -30,19 +32,19 @@ const RevisionCreationModal = ({
        let errorCount = 0;
        
        if(comment === ""){
-        console.log("open")
             errorCount++;
             setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
        }
 
        if(reason === ''){
-        console.log('first')
             errorCount++;
-            setReasonError('You have to select a reason from below options')
+            setReasonError('You have to select a reason from above options')
        }
 
        return errorCount === 0; 
     }
+
+    console.log({task})
 
     // handle submiton
     const handleSubmition=(e)=>{
@@ -50,12 +52,32 @@ const RevisionCreationModal = ({
 
         const data = {
             task_id: task?.id,
-            reason,
-            comment
+            user_id: auth?.id,
+            revision_acknowledgement: reason,
+            comments2: comment 
         }
+ 
+ 
         
-        if(validate()){
-           console.log(data)
+        if(validate()){            
+            createRevision(data)
+            .unwrap()
+            .then(res => {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                })
+                
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Task submitted for Revision successfully'
+                })
+                dispatch(setTaskStatus(res?.task_status));
+            })
+            .catch(err => console.log(err));
         }else{
             console.log('Your forgot to fillup some requried fields')
         } 
@@ -182,26 +204,7 @@ const RevisionCreationModal = ({
                             <Button onClick={close} variant="tertiary" className="ml-auto mr-2">
                                 Close
                             </Button>
-
-                            {!isSubmitting ? (
-                                <React.Fragment>
-                                    <Button onClick={handleSubmition}>Submit</Button>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    <Button className="cursor-processing">
-                                        <div
-                                            className="spinner-border text-white"
-                                            role="status"
-                                            style={{
-                                                width: "18px",
-                                                height: "18px",
-                                            }}
-                                        />{" "}
-                                        Processing...
-                                    </Button>
-                                </React.Fragment>
-                            )}
+                            <SubmitButton title="Submit" onClick={handleSubmition} isLoading={isLoading} />
                         </div>
                     </div>
                 </form>

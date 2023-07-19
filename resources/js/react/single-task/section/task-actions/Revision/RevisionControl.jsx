@@ -4,7 +4,7 @@ import Modal from '../../../components/Modal';
 import { SingleTask } from '../../../../utils/single-task';
 import RevisionCreationModal from './RevisionCreationModal';
 
-const RevisionControl = ({task}) => {
+const RevisionControl = ({task, auth}) => {
     const [revisionModal, setRevisionModal] = useState(false);
     const singleTask = new SingleTask(task)
 
@@ -21,7 +21,7 @@ const RevisionControl = ({task}) => {
 
         <Modal isOpen={revisionModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
-                <RevisionCreationModal task={singleTask} close={() => setRevisionModal(false)} />
+                <RevisionCreationModal auth={auth} task={singleTask} close={() => setRevisionModal(false)} />
             </div>
         </Modal> 
     </React.Fragment>

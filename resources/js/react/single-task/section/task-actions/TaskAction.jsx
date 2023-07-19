@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '../../components/Button'
 import TimerControl from './TimerControl'
 import MarkAsComplete from './MarkAsComplete'
-import { timeControlPermision, markAsCompletedButtonPermission, approveButtonPermission, isApproved } from '../../permissions'
+import { timeControlPermision, markAsCompletedButtonPermission, approveButtonPermission, needRevisionPermision, revisionButtonPermission} from '../../permissions'
 import RevisionControl from './Revision/RevisionControl'
 import RevisionViewControl from './Revision/RevisionViewControl'
 import ApproveTask from './approve-task/ApproveTask'
@@ -24,8 +24,9 @@ const TaskAction = ({task, status}) => {
 
             {/* develop */}
             {approveButtonPermission({task, status, loggedUser}) ? <ApproveTask task={task} status={status} auth={loggedUser} /> : null}
-            <RevisionControl task={task} />
-            <RevisionViewControl task={task} />
+            {needRevisionPermision({task, status, loggedUser}) ? <RevisionControl task={task} auth={loggedUser} /> : null} 
+            
+            {revisionButtonPermission({task, status, loggedUser}) && <RevisionViewControl task={task} />}
             <TimeExtension task={task} />
             <ClientApproval task={task} />
             <ReportControl task={task} />

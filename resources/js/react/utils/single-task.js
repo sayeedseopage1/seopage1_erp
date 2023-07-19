@@ -104,8 +104,9 @@ export class TimeLog{
 export class SingleTask {
     constructor(task){
         this.id = task?.id;
-        this.title = _.startCase(task?.subtask_title);
-        this.parentTaskTitle = _.startCase(task?.heading);
+        this.title = _.startCase(task?.heading);
+        this.parentTaskId = task?.parent_task_id;
+        this.parentTaskTitle = _.startCase(task?.parent_task_title);
         this.projectName = _.startCase(task?.project_name);
         this.boardColumn = new BoardColumn(task?.board_column);
         this.assigneeTo = new User(task?.users?.[0]);
@@ -124,11 +125,20 @@ export class SingleTask {
         this.guidelines = task?.project_summary;
         this.description = task?.description;
         this.subtask = task?.subtask;
-        this.hasSubtask = task?.subtask_id ? true : false;
+        this.isSubtask = this.parentTaskId ? true : false;
+        this.leadDeveloperParentTaskAction =  task?.parent_task_action; 
     }
 
+    isLeadDeveloperAbleToSubmit () {
+        let text = "Lead Developer Can not Complete Parent Task";
+        let compareWith = _.lowerCase(text.replace(/\s/g, ''));
+        let compareText  = _.lowerCase(this.leadDeveloperParentTaskAction.replace(/\s/g, ''));
+ 
+        return  compareText === compareWith ? false : true
+    } 
+
     getSubtaskTitle(){
-        return this.hasSubtask ? this.title : this.parentTaskTitle;
+        return this.title;
     }
 
     getStartDate(format){

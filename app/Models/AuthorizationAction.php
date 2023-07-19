@@ -59,7 +59,7 @@ class AuthorizationAction extends Model
                 'approved', 'reject', 'review'
             ],
             'project_qc' => [
-                'approved', 'reject', 'review'
+                'approved', 'reject', 'review', 'modification'
             ],
             'project_completion' => [
                 'approved', 'reject', 'review'
@@ -68,22 +68,29 @@ class AuthorizationAction extends Model
                 'approved', 'review'
             ],
             'milestone_cancel' => [
-                'approved', 'review', 'review'
+                'approved', 'review'
             ],
             'deliverable_modification_by_top_managment' => [
                 'approved', 'review'
             ],
             'deliverable_modification_by_client' => [
-                'approved', 'review'
+                 'review'
             ],
             'task_submission_by_lead_developer' => [
-                'approved', 'review'
+                 'review'
             ],
+            'task_submission_by_developer' => [
+                 'review'
+            ],
+          
             'task_approved_by_lead_develoer' => [
-                'approved', 'review'
+                 'review'
             ],
             'task_revision_by_lead_developer' => [
-                'approved', 'review'
+                'review'
+            ],
+            'task_revision_by_project_manager' => [
+                'review'
             ],
             'complete_milestone' => [
                 'approved', 'review'
@@ -95,10 +102,24 @@ class AuthorizationAction extends Model
                 'approved', 'review'
             ],
             'task_assigned_on_lead_developer' => [
-                'approved', 'review'
+                 'review'
             ],
+            'task_assign_by_lead_developer' => [
+                'review'
+            ],
+           
             'award_time_extension' => [
                 'review'
+            ],
+            'project_manager_accept_project' => [
+
+                'review'
+
+            ],
+            'saleslead_price_authorization' => [
+
+                'review'
+
             ]
         ];
 

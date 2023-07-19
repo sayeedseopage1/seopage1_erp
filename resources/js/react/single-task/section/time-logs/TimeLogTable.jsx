@@ -1,8 +1,7 @@
 import React from "react";
 import CustomModal from "../../components/CustomModal";
 import { useClickAway } from "react-use";
-import InnerHistoryItemLoader from "../history/InnerHistoryItemLoader";
-const TableRow = React.lazy(() => import("./InnerTableRow"));
+import TableRow from "./InnerTableRow";
 
 const TimeLogTable = ({ isOpen, close, toggle, data = [] }) => {
     const ref = React.useRef(null);

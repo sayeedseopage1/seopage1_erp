@@ -3,6 +3,7 @@ import Button from "../../../components/Button";
 import { Listbox } from "@headlessui/react";
 import { HiOutlineSelector } from "react-icons/hi";
 import CKEditorComponent from "../../../../ckeditor";
+import SubmitButton from "../../../components/SubmitButton";
 
 const AssigneeRevisionToDev = ({
     task,
@@ -81,8 +82,7 @@ const AssigneeRevisionToDev = ({
     const onBackButtonClick = (e) => {
         e.preventDefault();
         onBack();
-    };
-
+    }; 
     return (
         <React.Fragment>
             <form action="">
@@ -220,10 +220,10 @@ const AssigneeRevisionToDev = ({
                     >
                         Back
                     </Button>
-                    <NextAndContinueButton
-                        onClick={handleSubmition}
-                        isLoading={isSubmitting}
-                    />
+                        <NextAndContinueButton
+                            onClick={handleSubmition}
+                            isLoading={isSubmitting}
+                         />
                 </div>
             </form>
         </React.Fragment>

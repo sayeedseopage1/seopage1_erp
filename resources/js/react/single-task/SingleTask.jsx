@@ -32,7 +32,12 @@ const SingleTaskPage = () => {
 
     useEffect(() => {
         if (data) {
-            dispatch(storeTask(data));
+            let task = {
+                ...data?.task, 
+                parent_task_title: data?.parent_task_heading?.heading || null,
+                parent_task_action: data?.parent_task_action
+            } 
+            dispatch(storeTask(task));
         }
     }, [data]);
 
@@ -41,13 +46,12 @@ const SingleTaskPage = () => {
     const loggedUser = new User(window?.Laravel?.user);
 
     const task = new SingleTask(Task);
-   
-
+  
     return (
         <div className="postion-relative">
             <Loading isLoading={isFetching} />
             <div className={`f-16 mb-3 ${loadingClass}`}>
-                <span> <strong>Subtask: </strong> </span>
+                <span> <strong>Task: </strong> </span>
                 <span>{task?.getSubtaskTitle()}</span>
             </div>
 
@@ -59,7 +63,7 @@ const SingleTaskPage = () => {
                         {/* task information */}
                         <div>
                             <div className="d-flex flex-column py-3" style={{gap: '10px'}}>
-                                {task.hasSubtask && (
+                                {task?.isSubtask && (
                                     <div className="sp1_st-list-item">
                                         <div className="sp1_st-list-item-head"> Parent Task: </div>
                                         <div className="sp1_st-list-item-value"> {task?.parentTaskTitle} </div>

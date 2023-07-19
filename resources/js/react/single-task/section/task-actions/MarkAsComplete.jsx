@@ -25,7 +25,15 @@ const MarkAsComplete = ({task, auth}) => {
 
     // toggle
     const toggle = () => {
-        setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
+        if (auth.getRoleId() === 6 && !task?.isLeadDeveloperAbleToSubmit()) {
+            Swal.fire({
+                title: 'You can\'t complete this task because you have some pending subtask?',
+                showCancelButton: true,
+                confirmButtonText: 'Okey', 
+              })
+        }else{
+            setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
+        }
     };
 
     // close

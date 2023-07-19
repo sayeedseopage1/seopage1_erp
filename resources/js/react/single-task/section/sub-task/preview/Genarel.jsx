@@ -3,10 +3,9 @@ import { User } from "../../../../utils/user-details";
 import Accordion from "../../../components/Accordion";
 import Guideline from "../../../components/Guideline";
 import RevisionText from "../../../components/RevisionText";
+import { Link } from "react-router-dom";
 
-const Genarel = ({task}) => {
-    
-    
+const Genarel = ({task}) => { 
     const loggedUser = new User(window?.Laravel?.user);
 
     return (
@@ -14,10 +13,10 @@ const Genarel = ({task}) => {
             <div className="col-12 col-xl-6 pb-3 pb-xl-0">
                 <div className="d-flex flex-column" style={{ gap: "10px" }}>
                     <h6 className="">
-                        Subtask:{" "}
-                        <span className="text-primary font-weight-normal">
-                            {task?.title}
-                        </span>
+                        Task:{" "}
+                        <Link to={`/account/tasks/${task?.id}`} className="text-primary font-weight-normal">
+                            {task?.getSubtaskTitle()}
+                        </Link>
                     </h6>
                     <div className="sp1_st-list-item">
                         <div className="sp1_st-list-item-head">

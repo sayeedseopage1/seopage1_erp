@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
 import Button from '../../../components/Button';
 import CKEditorComponent from '../../../../ckeditor';
+import SubmitButton from '../../../components/SubmitButton';
 
 const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
     const [comment, setComment] = useState("");
-    const [err, setErr] = useState("");
+    const [err, setErr] = useState(""); 
+    const auth = window?.Laravel?.user;
 
     const handleEditorDataChange = (e, editor) => {
         const data = editor.getData();
@@ -40,7 +42,17 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
 
                         {!isSubmitting ? (
                             <React.Fragment>
-                                <Button onClick={handleOnSubmit}>Next</Button>
+                                <React.Fragment>
+                                {_.includes([4, 6], auth?.role_id) ? (
+                                    <Button onClick={handleOnSubmit}>Next</Button>
+                                ): 
+                                    <SubmitButton
+                                        title="Submit" 
+                                        isLoading={isSubmitting}
+                                        onClick={handleOnSubmit}
+                                    />
+                                }
+                            </React.Fragment>
                             </React.Fragment>
                         ) : (
                             <React.Fragment>
