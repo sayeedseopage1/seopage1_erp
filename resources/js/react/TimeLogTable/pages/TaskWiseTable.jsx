@@ -1,20 +1,20 @@
 import React, {useState, useEffect} from "react";
-import { useGetProjectWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
+import {useGetTaskWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
 import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
 import Tabbar from "../components/Tabbar";
-import ProjectWiseTable from '../components/ProjectWiseTable'
+import TaskWiseLogTable from '../components/TaskWiseLogTable'
 import TimeLogTableFilterBar from "../../TimeLogTable-backup/components/TimeLogTableFilterBar";
-import { ProjectWiseTableColumn } from "../components/ProjectWiseTableColumn";
+import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 
-const ProjectWiseTimeLog = () => {
+const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
     const [perPageData, setParPageData] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
 
-    const [getProjectWiseData, {isLoading}] = useGetProjectWiseDataMutation();
+    const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
@@ -26,12 +26,13 @@ const ProjectWiseTimeLog = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
-        getProjectWiseData(filter)
+        getTaskWiseData(filter)
         .unwrap()
         .then(res => {
             const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
-            handleData(sortedData, currentPage, perPageData);
+            handleData(sortedData, 1, perPageData);
             setData(sortedData);
+            setCurrentPage(1);
         })
     }
  
@@ -61,9 +62,9 @@ const ProjectWiseTimeLog = () => {
                 <div className="">
                     <Tabbar/>
                 </div>
-                <ProjectWiseTable
+                <TaskWiseLogTable
                     data={renderData}
-                    columns={ProjectWiseTableColumn}
+                    columns={TaskWiseTableColumn}
                     tableName="employee_timelog_report"
                     onSort={handleSorting}
                     height="calc(100vh - 325px)"
@@ -79,4 +80,4 @@ const ProjectWiseTimeLog = () => {
     );
 };
 
-export default ProjectWiseTimeLog;
+export default TaskWiseLogReport;

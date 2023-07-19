@@ -10,7 +10,7 @@ const TableFooter = ({
   
 }) => {
 
-  const showingFrom = (currentPage - 1) * perpageData
+  const showingFrom = (currentPage - 1) * perpageData;
 
   return (
     <div className="cnx__table_footer mt-3">
