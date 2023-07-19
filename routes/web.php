@@ -710,6 +710,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('event-files', EventFileController::class);
 
     /* TASKS */
+    Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
+    Route::get('tasks/get-developer-tasks/{id}', [TaskController::class, 'DeveloperTask'])->name('get-developer-tasks');
+    Route::get('tasks/get-task-submissions/{id}', [TaskController::class, 'GetTaskSubmission'])->name('get-task-submission');
     Route::post('tasks/change-status', [TaskController::class, 'changeStatus'])->name('tasks.change_status');
     Route::post('tasks/apply-quick-action', [TaskController::class, 'applyQuickAction'])->name('tasks.apply_quick_action');
     Route::post('tasks/store-pin', [TaskController::class, 'storePin'])->name('tasks.store_pin');
@@ -729,7 +732,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/accept-continue', [TaskController::class, 'acceptContinue'])->name('tasks.accept_continue');
     Route::post('tasks/deny-continue', [TaskController::class, 'denyContinue'])->name('tasks.deny_continue');
     Route::post('tasks/revision-reason', [TaskController::class, 'revisionReason'])->name('tasks.revision_reason');
-    Route::post('tesks/revision/accept-or-revision-by-developer', [TaskController::class, 'accept_or_revision_by_developer'])->name('accept_or_revision_by_developer');
+    Route::post('tasks/revision/accept-or-revision-by-developer', [TaskController::class, 'accept_or_revision_by_developer'])->name('accept_or_revision_by_developer');
     Route::group(
         ['prefix' => 'tasks'],
         function () {

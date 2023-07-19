@@ -356,7 +356,7 @@ class TaskController extends AccountBaseController
     }
     public function TaskRevision(Request $request)
     {
-       // dd($request);
+      // dd($request);
        // DB::beginTransaction();
         $request->validate([
             'comments2' => 'required',
@@ -1607,7 +1607,7 @@ class TaskController extends AccountBaseController
     //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     {
-//        dd($request->all());
+        dd($request->all());
         $request->validate([
             'text3' => 'required',
         ], [
@@ -1674,6 +1674,7 @@ class TaskController extends AccountBaseController
     //        DENY AND CONTINUE BUTTON SECTION
     public function denyContinue(Request $request)
     {
+        dd($request);
         $request->validate([
             'text2' => 'required',
         ], [
@@ -1749,6 +1750,7 @@ class TaskController extends AccountBaseController
 
     public function accept_or_revision_by_developer(Request $request)
     {
+        dd($request);
         // DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
@@ -1773,8 +1775,9 @@ class TaskController extends AccountBaseController
         }
         $tasks_accept->task_id = $task_status->id;
         $tasks_accept->subtask_id = $task_status->subTask;
-        $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
-        $tasks_accept->dev_comment = $request->comment;
+      //  $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
+        $tasks_accept->dev_comment =  $request->text2;
+        $tasks_accept->approval_status ='accepted';
         $tasks_accept->save();
 
         return response()->json([
@@ -1863,17 +1866,17 @@ class TaskController extends AccountBaseController
 
     public function task_json(Request $request, $id)
     {
-      //  dd($request);
         if ($request->mode == 'basic') {
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
 
-                'sub_tasks.id as subtask_id',
-                'sub_tasks.title as subtask_title',
+                 'sub_tasks.task_id as parent_task_id',
+                //'tasks.title as parent_task_title',
 
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.project_summary',
+                
 
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
@@ -1881,10 +1884,13 @@ class TaskController extends AccountBaseController
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
                 ->join('projects', 'tasks.project_id', 'projects.id')
-                ->leftJoin('sub_tasks', 'tasks.id', 'sub_tasks.task_id')
+                ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
+            //    / ->leftJoin('tasks', 'sub_tasks.task_id', 'tasks.id')
                 ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->where('tasks.id', $id)
                 ->first();
+            $parent_task_heading= Task::where('id',$task->parent_task_id)->select('heading')->first();
+          //  dd($task,$parent_task);
 
             $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
             $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
@@ -1943,7 +1949,11 @@ class TaskController extends AccountBaseController
 
                 $task->running_timer = $time_log_data;
             }
-            return response()->json($task);
+            return response()->json([
+                'task' => $task,
+                'parent_task_heading'=> $parent_task_heading,
+            ]);
+          //  return response()->json($task,$parent_task_heading);
         } elseif ($request->mode == 'sub_task') {
             $sub_tasks = SubTask::select(['id', 'title'])->where('task_id', $id)->get();
             $array = [];
@@ -2142,8 +2152,6 @@ class TaskController extends AccountBaseController
                 $file = [];
                 foreach ($files as $item) {
                     if ($item != $request->query('files')) {
-
-
                         array_push($file, $item);
                     }
                 }
@@ -2296,6 +2304,7 @@ class TaskController extends AccountBaseController
                 'task_id' => $id,
                 'user_id' => $this->user->id
             ])->first();
+            //  dd($data);
 
             return response()->json([
                 'is_first_task' => ($data) ? false : true,
@@ -2333,6 +2342,7 @@ class TaskController extends AccountBaseController
             $stop_time->task_id = $request->task_id;
             $stop_time->user_id = $request->user_id;
             $stop_time->save();
+           
             return response()->json($stop_time);
         }
     }
@@ -2364,5 +2374,42 @@ class TaskController extends AccountBaseController
             return response()->json($total_times);
           
         
+    }
+    public function DeveloperTask($id)
+    {
+        // /$id = 225;
+        $data = Task::select([
+
+            'tasks.*',
+            'tasks.id as task_id',
+            'tasks.heading as task_name',
+
+        ])->join('projects', 'projects.id', '=', 'tasks.project_id',)
+
+            ->join('task_users as task_assign_on', 'task_assign_on.task_id', '=', 'tasks.id')->where('task_assign_on.user_id', $id)->where('projects.status', '=', 'in progress')->get();
+        return response()->json($data);
+    }
+    
+    
+    public function GetTaskSubmission($id)
+    {
+        //dd($id);
+      
+    //    / $matchingRows = TaskSubmission::whereColumn('task_id', '=', $id)->groupBy('submission_no')->get();
+    
+    $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text, GROUP_CONCAT(link) as links, GROUP_CONCAT(attach) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
+    ->where('task_id', $id)
+    ->join('users','users.id','task_submissions.user_id')
+    ->groupBy('task_id', 'submission_no')
+    ->havingRaw('COUNT(*) > 1')
+    ->get();
+    return response()->json($submissions);
+   // dd($id,$matchingRows);
+    }
+
+    public function GetRevision($id)
+    {
+        $task_revision= TaskRevision::where('task_id',$id)->where('status','pending')->first();
+        return response()->json($task_revision);
     }
 }
