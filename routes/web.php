@@ -710,7 +710,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('event-files', EventFileController::class);
 
     /* TASKS */
+
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
+
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
     Route::get('tasks/get-developer-tasks/{id}', [TaskController::class, 'DeveloperTask'])->name('get-developer-tasks');
     Route::get('tasks/get-task-submissions/{id}', [TaskController::class, 'GetTaskSubmission'])->name('get-task-submission');
