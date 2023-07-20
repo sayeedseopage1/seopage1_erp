@@ -711,6 +711,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /* TASKS */
 
+
+    Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
+
+
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
 
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
