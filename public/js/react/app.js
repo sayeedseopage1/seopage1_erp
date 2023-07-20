@@ -22896,20 +22896,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "EmployeeTableColumn": () => (/* binding */ EmployeeTableColumn)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
+/* harmony import */ var _UserRender__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserRender */ "./resources/js/react/TimeLogTable/components/UserRender.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
 
 var EmployeeTableColumn = [{
   id: 'employee_id',
   header: 'Employee Name',
   className: '',
-  sorted: true,
+  sorted: false,
+  group: true,
   sortAccessor: '',
-  cell: function cell(row, rowSpan) {
-    return;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
-      className: "sp1_tlr_td sp1_tlr_td_border ".concat(rowSpan > 1 ? "sp1_tlr_td_hover-disable" : ""),
+  cell: function cell(_ref) {
+    var row = _ref.row,
+      col = _ref.col,
+      className = _ref.className,
+      rowSpan = _ref.rowSpan;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
       rowSpan: rowSpan,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(UserRender, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_1__["default"], {
         name: row === null || row === void 0 ? void 0 : row.employee_name,
         profileUrl: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.employee_id),
         image: row === null || row === void 0 ? void 0 : row.employee_image,
@@ -22923,9 +22932,15 @@ var EmployeeTableColumn = [{
   header: 'Project Name',
   className: '',
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Project Name "
+  cell: function cell(_ref2) {
+    var row = _ref2.row,
+      className = _ref2.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+        href: "/account/projects/".concat(row === null || row === void 0 ? void 0 : row.project_id),
+        children: row === null || row === void 0 ? void 0 : row.project_name
+      })
     });
   }
 }, {
@@ -22934,9 +22949,19 @@ var EmployeeTableColumn = [{
   className: '',
   sorted: false,
   sortAccessor: 'employee_id',
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: "Employee Name"
+  cell: function cell(_ref3) {
+    var row = _ref3.row,
+      className = _ref3.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        name: row === null || row === void 0 ? void 0 : row.client_name,
+        profileUrl: "/account/clients/".concat(row === null || row === void 0 ? void 0 : row.client_id),
+        image: row === null || row === void 0 ? void 0 : row.client_image,
+        role: "Freelancer.com",
+        roleLink: row === null || row === void 0 ? void 0 : row.client_from,
+        id: row === null || row === void 0 ? void 0 : row.client_id
+      })
     });
   }
 }, {
@@ -22944,9 +22969,18 @@ var EmployeeTableColumn = [{
   header: 'Project Manager',
   className: '',
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Project Manager "
+  cell: function cell(_ref4) {
+    var row = _ref4.row,
+      className = _ref4.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        name: row === null || row === void 0 ? void 0 : row.pm_name,
+        profileUrl: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.pm_id),
+        image: row === null || row === void 0 ? void 0 : row.pm_image,
+        role: row === null || row === void 0 ? void 0 : row.pm_roles,
+        id: row === null || row === void 0 ? void 0 : row.pm_id
+      })
     });
   }
 }, {
@@ -22954,9 +22988,12 @@ var EmployeeTableColumn = [{
   header: 'Number Of Session',
   className: '',
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Number Of Session "
+  cell: function cell(_ref5) {
+    var row = _ref5.row,
+      className = _ref5.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: row === null || row === void 0 ? void 0 : row.number_of_session
     });
   }
 }, {
@@ -22964,9 +23001,20 @@ var EmployeeTableColumn = [{
   header: 'Total Track Time',
   className: '',
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Total Track Time "
+  cell: function cell(_ref6) {
+    var row = _ref6.row,
+      className = _ref6.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: row !== null && row !== void 0 && row.total_minutes ? (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_0__.convertTime)(row === null || row === void 0 ? void 0 : row.total_minutes) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+        className: "text-danger",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+          className: "fa-solid fa-chevron-left mr-1",
+          style: {
+            fontSize: "10px"
+          }
+        }), "1 min"]
+      })
     });
   }
 }];
@@ -22992,7 +23040,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _TableFooter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TableFooter */ "./resources/js/react/TimeLogTable/components/TableFooter.jsx");
 /* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
 /* harmony import */ var _TimeLogTableLoader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TimeLogTableLoader */ "./resources/js/react/TimeLogTable/components/TimeLogTableLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _DragHeader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DragHeader */ "./resources/js/react/TimeLogTable/components/DragHeader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -23004,6 +23053,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -23055,59 +23105,26 @@ var DataTable = function DataTable(_ref) {
           {
             value === null || value === void 0 ? void 0 : value.map(function (item, index) {
               var className = value.length === index + 1 ? "sp1_tlr_td f-14 sp1_tlr_td_border" : "sp1_tlr_td f-14";
-              rows.push( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tr", {
+              rows.push( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
                   className: "sp1_tlr_tr",
-                  children: [index === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
-                    className: "sp1_tlr_td sp1_tlr_td_border ".concat(value.length > 1 ? "sp1_tlr_td_hover-disable" : ""),
-                    rowSpan: value.length,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                      name: item === null || item === void 0 ? void 0 : item.employee_name,
-                      profileUrl: "/account/employees/".concat(item === null || item === void 0 ? void 0 : item.employee_id),
-                      image: item === null || item === void 0 ? void 0 : item.employee_image,
-                      role: item === null || item === void 0 ? void 0 : item.employee_designation,
-                      id: item === null || item === void 0 ? void 0 : item.employee_id
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
-                    className: className,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
-                      href: "/account/projects/".concat(item === null || item === void 0 ? void 0 : item.project_id),
-                      children: item === null || item === void 0 ? void 0 : item.project_name
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
-                    className: className,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                      name: item === null || item === void 0 ? void 0 : item.client_name,
-                      profileUrl: "/account/clients/".concat(item === null || item === void 0 ? void 0 : item.client_id),
-                      image: item === null || item === void 0 ? void 0 : item.client_image,
-                      role: "Freelancer.com",
-                      roleLink: item === null || item === void 0 ? void 0 : item.client_from,
-                      id: item === null || item === void 0 ? void 0 : item.client_id
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
-                    className: className,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                      name: item === null || item === void 0 ? void 0 : item.pm_name,
-                      profileUrl: "/account/employees/".concat(item === null || item === void 0 ? void 0 : item.pm_id),
-                      image: item === null || item === void 0 ? void 0 : item.pm_image,
-                      role: item === null || item === void 0 ? void 0 : item.pm_roles,
-                      id: item === null || item === void 0 ? void 0 : item.pm_id
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
-                    className: className,
-                    children: item === null || item === void 0 ? void 0 : item.number_of_session
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("td", {
-                    className: className,
-                    children: item !== null && item !== void 0 && item.total_minutes ? (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_3__.convertTime)(item === null || item === void 0 ? void 0 : item.total_minutes) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
-                      className: "text-danger",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
-                        className: "fa-solid fa-chevron-left mr-1",
-                        style: {
-                          fontSize: "10px"
-                        }
-                      }), "1 min"]
-                    })
-                  })]
+                  children: _.map(_columns, function (col) {
+                    if (col.group) {
+                      return index === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                        children: col.cell({
+                          row: item,
+                          rowSpan: _.size(value)
+                        })
+                      }, col.id);
+                    } else {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                        children: col.cell({
+                          row: item,
+                          className: "".concat(className, " sp1_drag_col_").concat(col === null || col === void 0 ? void 0 : col.id)
+                        })
+                      }, col.id);
+                    }
+                  })
                 })
               }, item.time_log_start_time));
             });
@@ -23124,33 +23141,38 @@ var DataTable = function DataTable(_ref) {
     }
     return rows;
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "p-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "position-relative sp1_tlr_tbl_wrapper",
         style: {
           height: height
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("table", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("table", {
           className: "sp1_tlr_table",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("thead", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("thead", {
             className: "sp1_tlr_thead",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
               className: "sp1_tlr_tr",
               children: _.map(_columns, function (column) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("th", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_DragHeader__WEBPACK_IMPORTED_MODULE_7__["default"], {
                   className: "sp1_tlr_th",
-                  children: column.header
+                  column: column,
+                  columns: _columns,
+                  onSort: function onSort() {},
+                  onDrop: setColumnOrder,
+                  order: columnOrder,
+                  tableName: tableName
                 }, column.id);
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("tbody", {
             className: "sp1_tlr_tbody",
-            children: [!isLoading && renderRow(data), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_TimeLogTableLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {})]
+            children: [!isLoading && renderRow(data), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_TimeLogTableLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {})]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_4__["default"], {
         onPaginate: onPaginate,
         perpageData: perpageData,
         totalEntry: totalEntry,
@@ -23398,7 +23420,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
 /* harmony import */ var _TimeLogTableLoader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TimeLogTableLoader */ "./resources/js/react/TimeLogTable/components/TimeLogTableLoader.jsx");
 /* harmony import */ var _ProjectWiseTableLoader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ProjectWiseTableLoader */ "./resources/js/react/TimeLogTable/components/ProjectWiseTableLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _DragHeader__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./DragHeader */ "./resources/js/react/TimeLogTable/components/DragHeader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -23410,6 +23433,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -23462,63 +23486,26 @@ var DataTable = function DataTable(_ref) {
           {
             value === null || value === void 0 ? void 0 : value.map(function (item, index) {
               var className = value.length === index + 1 ? "sp1_tlr_td f-14 sp1_tlr_td_border" : "sp1_tlr_td f-14";
-              rows.push( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("tr", {
+              rows.push( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("tr", {
                   className: "sp1_tlr_tr",
-                  children: [index === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
-                      className: "sp1_tlr_td sp1_tlr_td_border ".concat(value.length > 1 ? "sp1_tlr_td_hover-disable" : ""),
-                      rowSpan: value.length,
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
-                        href: "/account/projects/".concat(item === null || item === void 0 ? void 0 : item.project_id),
-                        children: item === null || item === void 0 ? void 0 : item.project_name
-                      })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
-                      className: "sp1_tlr_td sp1_tlr_td_border ".concat(value.length > 1 ? "sp1_tlr_td_hover-disable" : ""),
-                      rowSpan: value.length,
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                        name: item === null || item === void 0 ? void 0 : item.client_name,
-                        profileUrl: "/account/clients/".concat(item === null || item === void 0 ? void 0 : item.client_id),
-                        image: item === null || item === void 0 ? void 0 : item.client_image,
-                        role: "Freelancer.com",
-                        roleLink: item === null || item === void 0 ? void 0 : item.client_from,
-                        id: item === null || item === void 0 ? void 0 : item.client_id
-                      })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
-                      className: "sp1_tlr_td sp1_tlr_td_border ".concat(value.length > 1 ? "sp1_tlr_td_hover-disable" : ""),
-                      rowSpan: value.length,
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                        name: item === null || item === void 0 ? void 0 : item.pm_name,
-                        profileUrl: "/account/employees/".concat(item === null || item === void 0 ? void 0 : item.pm_id),
-                        image: item === null || item === void 0 ? void 0 : item.pm_image,
-                        role: item === null || item === void 0 ? void 0 : item.pm_roles,
-                        id: item === null || item === void 0 ? void 0 : item.pm_id
-                      })
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
-                    className: className,
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
-                      name: item === null || item === void 0 ? void 0 : item.employee_name,
-                      profileUrl: "/account/employees/".concat(item === null || item === void 0 ? void 0 : item.employee_id),
-                      image: item === null || item === void 0 ? void 0 : item.employee_image,
-                      role: item === null || item === void 0 ? void 0 : item.employee_designation,
-                      id: item === null || item === void 0 ? void 0 : item.employee_id
-                    })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
-                    className: className,
-                    children: item === null || item === void 0 ? void 0 : item.number_of_session
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
-                    className: className,
-                    children: item !== null && item !== void 0 && item.total_minutes ? (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_3__.convertTime)(item === null || item === void 0 ? void 0 : item.total_minutes) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("span", {
-                      className: "text-danger",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
-                        className: "fa-solid fa-chevron-left mr-1",
-                        style: {
-                          fontSize: "10px"
-                        }
-                      }), "1 min"]
-                    })
-                  })]
+                  children: _.map(_columns, function (col) {
+                    if (col.group) {
+                      return index === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                        children: col.cell({
+                          row: item,
+                          rowSpan: _.size(value)
+                        })
+                      }, col.id);
+                    } else {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                        children: col.cell({
+                          row: item,
+                          className: "".concat(className, " sp1_drag_col_").concat(col === null || col === void 0 ? void 0 : col.id)
+                        })
+                      }, col.id);
+                    }
+                  })
                 })
               }, item.start_time));
             });
@@ -23535,33 +23522,38 @@ var DataTable = function DataTable(_ref) {
     }
     return rows;
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "p-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "position-relative sp1_tlr_tbl_wrapper",
         style: {
           height: height
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("table", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("table", {
           className: "sp1_tlr_table",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("thead", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("thead", {
             className: "sp1_tlr_thead",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("tr", {
               className: "sp1_tlr_tr",
               children: _.map(_columns, function (column) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("th", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_DragHeader__WEBPACK_IMPORTED_MODULE_8__["default"], {
                   className: "sp1_tlr_th",
-                  children: column.header
+                  column: column,
+                  columns: _columns,
+                  onSort: function onSort() {},
+                  onDrop: setColumnOrder,
+                  order: columnOrder,
+                  tableName: tableName
                 }, column.id);
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("tbody", {
             className: "sp1_tlr_tbody",
-            children: [!isLoading && renderRow(data), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ProjectWiseTableLoader__WEBPACK_IMPORTED_MODULE_7__["default"], {})]
+            children: [!isLoading && renderRow(data), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_ProjectWiseTableLoader__WEBPACK_IMPORTED_MODULE_7__["default"], {})]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_4__["default"], {
         onPaginate: onPaginate,
         perpageData: perpageData,
         totalEntry: totalEntry,
@@ -23586,38 +23578,81 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "ProjectWiseTableColumn": () => (/* binding */ ProjectWiseTableColumn)
 /* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
+/* harmony import */ var _UserRender__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserRender */ "./resources/js/react/TimeLogTable/components/UserRender.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
 
 var ProjectWiseTableColumn = [{
   id: 'project_id',
   header: 'Project Name',
   className: '',
+  group: true,
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Project Name "
+  sortAccessor: 'project_id',
+  cell: function cell(_ref) {
+    var row = _ref.row,
+      col = _ref.col,
+      _ref$rowSpan = _ref.rowSpan,
+      rowSpan = _ref$rowSpan === void 0 ? 1 : _ref$rowSpan;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: "sp1_tlr_td sp1_tlr_td_border sp1_drag_col_".concat(col === null || col === void 0 ? void 0 : col.id, " ").concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+      rowSpan: rowSpan,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+        href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.task_id),
+        children: row === null || row === void 0 ? void 0 : row.project_name
+      })
     });
   }
 }, {
   id: 'client_id',
   header: 'Client Name',
   className: '',
+  group: true,
   sorted: false,
-  sortAccessor: 'employee_id',
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: "Employee Name"
+  sortAccessor: 'client_id',
+  cell: function cell(_ref2) {
+    var row = _ref2.row,
+      col = _ref2.col,
+      _ref2$rowSpan = _ref2.rowSpan,
+      rowSpan = _ref2$rowSpan === void 0 ? 1 : _ref2$rowSpan;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: "sp1_tlr_td sp1_tlr_td_border  sp1_drag_col_".concat(col === null || col === void 0 ? void 0 : col.id, " ").concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+      rowSpan: rowSpan,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        name: row === null || row === void 0 ? void 0 : row.client_name,
+        profileUrl: "/account/clients/".concat(row === null || row === void 0 ? void 0 : row.client_id),
+        image: row === null || row === void 0 ? void 0 : row.client_image,
+        role: "Freelancer.com",
+        roleLink: row === null || row === void 0 ? void 0 : row.client_from,
+        id: row === null || row === void 0 ? void 0 : row.client_id
+      })
     });
   }
 }, {
   id: 'pm_id',
   header: 'Project Manager',
   className: '',
+  group: true,
   sorted: false,
   sortAccessor: 'pm_id',
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: "Employee Name"
+  cell: function cell(_ref3) {
+    var row = _ref3.row,
+      col = _ref3.col,
+      _ref3$rowSpan = _ref3.rowSpan,
+      rowSpan = _ref3$rowSpan === void 0 ? 1 : _ref3$rowSpan;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: "sp1_tlr_td sp1_tlr_td_border sp1_drag_col_".concat(col === null || col === void 0 ? void 0 : col.id, " ").concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+      rowSpan: rowSpan,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        name: row === null || row === void 0 ? void 0 : row.pm_name,
+        profileUrl: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.pm_id),
+        image: row === null || row === void 0 ? void 0 : row.pm_image,
+        role: row === null || row === void 0 ? void 0 : row.pm_roles,
+        id: row === null || row === void 0 ? void 0 : row.pm_id
+      })
     });
   }
 }, {
@@ -23625,17 +23660,21 @@ var ProjectWiseTableColumn = [{
   header: 'Employee Name',
   className: '',
   sorted: true,
+  group: false,
   sortAccessor: '',
-  cell: function cell(row, rowSpan) {
-    return;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("td", {
-      className: "sp1_tlr_td sp1_tlr_td_border ".concat(rowSpan > 1 ? "sp1_tlr_td_hover-disable" : ""),
+  cell: function cell(_ref4) {
+    var row = _ref4.row,
+      col = _ref4.col,
+      className = _ref4.className,
+      rowSpan = _ref4.rowSpan;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
       rowSpan: rowSpan,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(UserRender, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_1__["default"], {
         name: row === null || row === void 0 ? void 0 : row.employee_name,
         profileUrl: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.employee_id),
         image: row === null || row === void 0 ? void 0 : row.employee_image,
-        role: row === null || row === void 0 ? void 0 : row.employee_designation,
+        role: row === null || row === void 0 ? void 0 : row.employee_roles,
         id: row === null || row === void 0 ? void 0 : row.employee_id
       })
     });
@@ -23645,9 +23684,12 @@ var ProjectWiseTableColumn = [{
   header: 'Number Of Session',
   className: '',
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Number Of Session "
+  cell: function cell(_ref5) {
+    var row = _ref5.row,
+      className = _ref5.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: row === null || row === void 0 ? void 0 : row.number_of_session
     });
   }
 }, {
@@ -23655,9 +23697,20 @@ var ProjectWiseTableColumn = [{
   header: 'Total Track Time',
   className: '',
   sorted: false,
-  cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: " Total Track Time "
+  cell: function cell(_ref6) {
+    var row = _ref6.row,
+      className = _ref6.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      className: className,
+      children: row !== null && row !== void 0 && row.total_minutes ? (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_0__.convertTime)(row === null || row === void 0 ? void 0 : row.total_minutes) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+        className: "text-danger",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("i", {
+          className: "fa-solid fa-chevron-left mr-1",
+          style: {
+            fontSize: "10px"
+          }
+        }), "1 min"]
+      })
     });
   }
 }];
@@ -23872,7 +23925,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var Tabbar = function Tabbar() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: "d-flex align-items-center px-3 mb-2",
+    className: "d-flex flex-wrap align-items-center px-3 mb-2",
     style: {
       gap: '10px'
     },
@@ -24194,7 +24247,7 @@ var TaskWiseTableColumn = [{
   className: '',
   group: true,
   sorted: false,
-  sortAccessor: 'employee_id',
+  sortAccessor: 'project_id',
   cell: function cell(_ref2) {
     var row = _ref2.row,
       col = _ref2.col,

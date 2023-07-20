@@ -24,7 +24,7 @@ export const TaskWiseTableColumn = [
         className: '',
         group: true,
         sorted: false,
-        sortAccessor: 'employee_id',
+        sortAccessor: 'project_id',
         cell:  ({row, col, rowSpan=1}) => {
             return <td
                 className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}

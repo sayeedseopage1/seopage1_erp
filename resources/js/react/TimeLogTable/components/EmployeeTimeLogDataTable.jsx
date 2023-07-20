@@ -5,6 +5,7 @@ import { convertTime } from "../../utils/converTime";
 import TableFooter from "./TableFooter";
 import { Placeholder } from "../../global/Placeholder";
 import TimeLogTableLoader from "./TimeLogTableLoader";
+import TableDragAbleHeader from "./DragHeader";
 
 const DataTable = ({
     data,
@@ -44,69 +45,22 @@ const DataTable = ({
                         rows.push(
                             <React.Fragment key={item.time_log_start_time}>
                                 <tr className="sp1_tlr_tr">
-                                    {index === 0 && (
-                                        <td
-                                            className={`sp1_tlr_td sp1_tlr_td_border ${
-                                                value.length > 1
-                                                    ? "sp1_tlr_td_hover-disable"
-                                                    : ""
-                                            }`}
-                                            rowSpan={value.length}
-                                        >
-                                            <UserRender
-                                                name={item?.employee_name}
-                                                profileUrl={`/account/employees/${item?.employee_id}`}
-                                                image={item?.employee_image}
-                                                role={
-                                                    item?.employee_designation
+                                    {
+                                        _.map(_columns, col =>{
+                                            if(col.group){
+                                                return index === 0 && (
+                                                    <React.Fragment key={col.id}>
+                                                        {col.cell({row: item, rowSpan: _.size(value)})}
+                                                    </React.Fragment>
+                                                );
+                                            }else{
+                                                    return <React.Fragment key={col.id}>
+                                                        { col.cell({ row: item, className: `${className} sp1_drag_col_${col?.id}`})}
+                                                    </React.Fragment>
                                                 }
-                                                id={item?.employee_id}
-                                            />
-                                        </td>
-                                    )}
-
-                                    <td className={className}>
-                                        <a
-                                            href={`/account/projects/${item?.project_id}`}
-                                        >
-                                            {item?.project_name}
-                                        </a>
-                                    </td>
-                                    <td className={className}>
-                                        <UserRender
-                                            name={item?.client_name}
-                                            profileUrl={`/account/clients/${item?.client_id}`}
-                                            image={item?.client_image}
-                                            role="Freelancer.com"
-                                            roleLink={item?.client_from}
-                                            id={item?.client_id}
-                                        />
-                                    </td>
-                                    <td className={className}>
-                                        <UserRender
-                                            name={item?.pm_name}
-                                            profileUrl={`/account/employees/${item?.pm_id}`}
-                                            image={item?.pm_image}
-                                            role={item?.pm_roles}
-                                            id={item?.pm_id}
-                                        />
-                                    </td>
-                                    <td className={className}>
-                                        {item?.number_of_session}
-                                    </td>
-                                    <td className={className}>
-                                        {item?.total_minutes ? (
-                                            convertTime(item?.total_minutes)
-                                        ) : (
-                                            <span className="text-danger">
-                                                <i
-                                                    className="fa-solid fa-chevron-left mr-1"
-                                                    style={{ fontSize: "10px" }}
-                                                />
-                                                1 min
-                                            </span>
-                                        )}
-                                    </td>
+                                            }
+                                        )
+                                    }
                                 </tr>
                             </React.Fragment>
                         );
@@ -129,29 +83,22 @@ const DataTable = ({
                             <tr className="sp1_tlr_tr">
                                 {_.map(_columns, (column) => {
                                     return (
-                                        <th
+                                        <TableDragAbleHeader
                                             key={column.id}
                                             className="sp1_tlr_th"
-                                        >
-                                            {column.header}
-                                        </th>
+                                            column={column}
+                                            columns = {_columns}
+                                            onSort={() => {}}
+                                            onDrop={setColumnOrder}
+                                            order={columnOrder}
+                                            tableName={tableName}
+                                        />
                                     );
                                 })}
-                                {/* <th className="sp1_tlr_th ">Employee Name</th>
-                                <th className="sp1_tlr_th ">Project Name</th>
-                                <th className="sp1_tlr_th ">Client</th>
-                                <th className="sp1_tlr_th ">Project Manager</th>
-                                <th className="sp1_tlr_th ">
-                                    Number of Session
-                                </th>
-                                <th className="sp1_tlr_th ">
-                                    Total Track Time
-                                </th> */}
                             </tr>
                         </thead>
                         <tbody className="sp1_tlr_tbody">
                                 {!isLoading && renderRow(data)}
-                            
                                 {isLoading && <TimeLogTableLoader/>}
                         </tbody>
                     </table>
