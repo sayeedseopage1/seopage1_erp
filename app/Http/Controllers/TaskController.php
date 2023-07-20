@@ -281,7 +281,7 @@ class TaskController extends AccountBaseController
         if (Auth::user()->role_id == 6) {
             $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
             //dd($lead_dev_authorization);
-            if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
+            if($lead_dev_authorization != null && $lead_dev_authorization->status == 0)
             {
                 $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
                 $lead_dev_authorization_update->status= '1';
@@ -294,8 +294,8 @@ class TaskController extends AccountBaseController
         if(Auth::user()->role_id == 4)
         {
             $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
-            //dd($lead_dev_authorization);
-            if($pm_authorization == null && $pm_authorization->status == 0)
+            //dd($pm_authorization);
+            if($pm_authorization != null && $pm_authorization->status == '0')
             {
                 $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
                 $lead_dev_authorization_update->status= '1';
@@ -372,7 +372,7 @@ class TaskController extends AccountBaseController
        // dd($lead_dev_authorization);
        if (Auth::user()->role_id == 6) {
         $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
-        if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
+        if($lead_dev_authorization != null && $lead_dev_authorization->status == 0)
         {
             $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
             $lead_dev_authorization_update->status= '1';
@@ -384,7 +384,7 @@ class TaskController extends AccountBaseController
       if (Auth::user()->role_id == 4) {
      $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
     //dd($lead_dev_authorization);
-    if($pm_authorization == null && $pm_authorization->status == 0)
+    if($pm_authorization != null && $pm_authorization->status == 0)
     {
         $pm_authorization_update= AuthorizationAction::find($pm_authorization->id);
         $pm_authorization_update->status= '1';
@@ -1607,51 +1607,69 @@ class TaskController extends AccountBaseController
     //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     {
-        dd($request->all());
+    //   /  dd($request->all());
         $request->validate([
             'text3' => 'required',
         ], [
             'text3.required' => 'This field is required!',
         ]);
+      //  DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
-
+        //dd($request->subTask);
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
         if ($request->subTask != null){
-            $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
+           // $selected_subtasks = SubTask::whereIn('id', $request->subTask->subtask_id)->get();
+           $selected_subtasks  = $request->subTask;
+           // dd($selected_subtasks);
             foreach ($selected_subtasks as $key => $selected_subtask) {
-
-                $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
+               // dd($selected_subtask);
+                $find_task_id = Task::where('id', $selected_subtask['subtask_id'])->first();
                 $sub_task_status = Task::find($find_task_id->id);
                 $sub_task_status->task_status = "incomplete";
                 $sub_task_status->board_column_id = 1;
                 $sub_task_status->save();
+              
 
                 $tasks_accept = new TaskRevision();
                 $tasks_accept->accept_and_continue = $request->text3;
-                $tasks_accept->subtask_id = $request->subTask[$key];
+                $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
                 $tasks_accept->revision_reason = $request->revision_acknowledgement;
-                $tasks_accept->comment = $request->comment[$key];
+                $tasks_accept->comment = $selected_subtask['comment'];
                 $tasks_accept->save();
+              //  dd($tasks_accept,$sub_task_status);
             }
         }
 
         if ($request->subTask== null) {
             $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->accept_and_continue = $request->text2;
 //        $tasks_accept->subtask_id = implode(",", $request->subTask);
             $tasks_accept->revision_reason = $request->revision_acknowledgement;
 //        $tasks_accept->comment = implode(",", $request->comment);
             $tasks_accept->save();
         }else{
+            $subTaskArray = $request->subTask;
+            $subTaskString = '';
+            $subTaskCommentString= '';
+            
+            foreach ($subTaskArray as $subTask) {
+                // Make sure $subTask is a string
+                $subTaskString .= (string) $subTask['subtask_id'] . ',';
+                $subTaskCommentString .= (string) $subTask['comment'] . ',';
+            }
+            $subTaskString = rtrim($subTaskString, ',');
+            $subTaskCommentString = rtrim($subTaskCommentString, ',');
+        //  /   dd($subTaskString);
             $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->deny_and_continue = $request->text2;
-            $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->accept_and_continue = $request->text2;
+            $tasks_accept->subtask_id = $subTaskString;
             $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->comment = $subTaskCommentString;
             $tasks_accept->save();
+            
         }
 
         foreach ($subtasks as $subtask) {
@@ -1666,6 +1684,7 @@ class TaskController extends AccountBaseController
             }
         }
 
+       // dd($tasks_accept,$sub_task_status);
         return response()->json([
             'status' => 200,
         ]);

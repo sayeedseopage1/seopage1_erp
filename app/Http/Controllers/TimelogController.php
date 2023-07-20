@@ -417,9 +417,9 @@ class TimelogController extends AccountBaseController
             $timeLog->user_id = $this->user->id;
             $timeLog->start_time = now();
             $timeLog->hourly_rate = 0;
-            $timeLog->memo = $request->memo;
+            $timeLog->memo = $task_status->heading;
             $timeLog->save();
-        //   /  dd($timeLog);
+         // dd($timeLog);
             
 
         if ($request->project_id != '') {

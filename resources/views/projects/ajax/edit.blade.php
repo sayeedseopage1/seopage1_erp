@@ -14,8 +14,10 @@ $createPublicProjectPermission = user()->permission('create_public_project');
   vertical-align: middle;
   border-top: 1px solid #dee2e6;
 }
+</style>
 
 @if($project->deal->project_type == 'hourly')
+<style media="screen">
     .selectpicker + .dropdown-toggle {
         pointer-events: none;
         touch-action: none;
@@ -25,8 +27,9 @@ $createPublicProjectPermission = user()->permission('create_public_project');
         background-color: #f8f9fa;
         cursor: not-allowed;
     }
-@endif
 </style>
+@endif
+
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 
 <div class="row">
@@ -232,7 +235,7 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                                         id="selectEmployee" data-live-search="true" data-size="8">
                                         <?php
                                         $users= App\Models\User::where('role_id',5)->get();
-                                        $user= App\Models\User::where('role_id',6)->first();
+                                        $user= App\Models\User::where('role_id',6)->orderBy('id', 'DESC')->first();
                                          ?>
                                         @foreach ($users as $item)
                                             @php
