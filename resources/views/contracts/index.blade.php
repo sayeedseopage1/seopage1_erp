@@ -344,6 +344,7 @@
             $('#task_id').val($(this).data('id'));
             $('#award_time_incress_modal').modal('toggle');
         });
+        
 
         $('#award_time_incress_submit').click(function() {
             var task_id = $('#task_id').val();

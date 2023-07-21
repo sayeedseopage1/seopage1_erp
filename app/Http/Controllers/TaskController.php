@@ -1636,6 +1636,7 @@ class TaskController extends AccountBaseController
                 $tasks_accept = new TaskRevision();
                 $tasks_accept->accept_and_continue = $request->text3;
                 $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
+                $tasks_accept->task_id = $selected_subtask['subtask_id'];
                 $tasks_accept->revision_reason = $request->revision_acknowledgement;
                 $tasks_accept->comment = $selected_subtask['comment'];
                 $tasks_accept->save();
