@@ -108,6 +108,7 @@ export class SingleTask {
         this.parentTaskId = task?.parent_task_id;
         this.parentTaskTitle = _.startCase(task?.parent_task_title);
         this.projectName = _.startCase(task?.project_name);
+        this.projectId = task?.project_id;
         this.boardColumn = new BoardColumn(task?.board_column);
         this.assigneeTo = new User(task?.users?.[0]);
         this.assigneeBy = new User(task?.create_by);
@@ -127,6 +128,7 @@ export class SingleTask {
         this.subtask = task?.subtask;
         this.isSubtask = this.parentTaskId ? true : false;
         this.leadDeveloperParentTaskAction =  task?.parent_task_action; 
+        this.ranningTimer= task?.running_timer;
     }
 
     isLeadDeveloperAbleToSubmit () {

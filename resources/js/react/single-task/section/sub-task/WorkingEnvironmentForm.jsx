@@ -22,9 +22,9 @@ const WorkingEnvironmentForm = () => {
     };
 
     return (
-        <div className="sp1-subtask-form --form -row">
+        <div className="sp1-subtask-form w-100 --form -row">
             <div className="row">
-                <div className="col-6">
+                <div className="col-12 lg:col-6">
                     <Input
                         id="siteURL"
                         label="Working/Staging Site's URL"
@@ -37,7 +37,7 @@ const WorkingEnvironmentForm = () => {
                     />
                 </div>
 
-                <div className="col-6">
+                <div className="col-12 lg:col-6">
                     <Input
                         id="frontendPassword"
                         label="Frontend Password"
@@ -52,7 +52,7 @@ const WorkingEnvironmentForm = () => {
             </div>
 
             <div className="row">
-                <div className="col-4">
+                <div className="col-12 col-md-4">
                     <Input
                         id="loginUrl"
                         label="Working/Staging Site's Login URL"
@@ -65,7 +65,7 @@ const WorkingEnvironmentForm = () => {
                     />
                 </div>
 
-                <div className="col-5">
+                <div className="col-12 col-md-5 h-100">
                     <Input
                         id="siteLoginCredential"
                         label="Working/Staging Site's Login Username/Email"
@@ -84,16 +84,19 @@ const WorkingEnvironmentForm = () => {
                 </div>
 
                 <div className="col-12 col-md-3">
+                   <div className="h-100 d-md-flex align-items-end">
                     <Input
-                        id="password"
-                        label="Password"
-                        type="text"
-                        placeholder="Password"
-                        name="password"
-                        required={true}
-                        value={password}
-                        onChange={(e) => handleChange(e, setPassword)}
-                    />
+                            id="password"
+                            label="Password"
+                            type="text"
+                            placeholder="Password"
+                            name="password"
+                            className="mt-md-auto"
+                            required={true}
+                            value={password}
+                            onChange={(e) => handleChange(e, setPassword)}
+                        />
+                    </div> 
                 </div>
             </div>
 

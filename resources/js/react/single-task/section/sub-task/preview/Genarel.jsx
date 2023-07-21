@@ -3,154 +3,166 @@ import { User } from "../../../../utils/user-details";
 import Accordion from "../../../components/Accordion";
 import Guideline from "../../../components/Guideline";
 import RevisionText from "../../../components/RevisionText";
-import { Link } from "react-router-dom";
+import GenarelLoader from "../../../components/loader/GenarelLoader";
+import ArticleLoader from "../../../components/loader/ArticleLoader";
 
-const Genarel = ({task}) => { 
+const Genarel = ({task, isFetching}) => { 
     const loggedUser = new User(window?.Laravel?.user);
 
     return (
         <div className="row">
-            <div className="col-12 col-xl-6 pb-3 pb-xl-0">
-                <div className="d-flex flex-column" style={{ gap: "10px" }}>
-                    <h6 className="">
-                        Task:{" "}
-                        <Link to={`/account/tasks/${task?.id}`} className="text-primary font-weight-normal">
-                            {task?.getSubtaskTitle()}
-                        </Link>
-                    </h6>
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">
-                            Parent Task :{" "}
-                        </div>
-                        <div className="sp1_st-list-item-value">
-                            {task?.parentTaskTitle}{" "}
-                        </div>
-                    </div>
+            {isFetching ? <GenarelLoader /> : 
+                <React.Fragment>
+                    <div className="col-12 col-xl-6 pb-3 pb-xl-0">
+                        <div className="d-flex flex-column" style={{ gap: "10px" }}>
+                            <h6 className="">
+                                Task: <a target="__blank" href={`/account/tasks/${task?.id}`} className="text-primary font-weight-normal">
+                                    {task?.getSubtaskTitle()}
+                                </a>
+                            </h6>
+                            {
+                                task?.isSubtask && (
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">
+                                            Parent Task :
+                                        </div>
+                                        <div className="sp1_st-list-item-value">
+                                            <a href={`/account/tasks/${task?.parentTaskId}`} className="text-dark text-hover-underline">
+                                                {task?.parentTaskTitle}
+                                            </a>
+                                        </div>
+                                    </div>
+                                )
+                            }
 
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">Project : </div>
-                        <div className="sp1_st-list-item-value">
-                            <span className="dot-color bg-danger mr-2" />
-                            {task?.projectName}
-                        </div>
-                    </div>
-
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">
-                            Milestone :{" "}
-                        </div>
-                        <div className="sp1_st-list-item-value">
-                            <span className="dot-color bg-primary mr-2" />
-                            {task?.milestoneTitle}
-                        </div>
-                    </div>
-
-                    {/* asignee to */}
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">
-                            Assigned To :{" "}
-                        </div>
-                        <div className="sp1_st-list-item-value">
-                            <div style={{ width: "32px", height: "32px" }}>
-                                <img
-                                    src={task?.assigneeTo?.getAvatar()}
-                                    alt={task?.assigneeTo?.getName()}
-                                    width="32px"
-                                    height="32px"
-                                    className="rounded-circle"
-                                />
-                            </div>
-                            <div className="ml-2">
-                                <span
-                                    className={`d-block f-14 font-weight-bold`}
-                                >
-                                    <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a> 
-                                    {Number(task?.assigneeTo?.getId()) ===
-                                        Number(loggedUser?.getId()) && (
-                                        <sup
-                                            className="rounded-pill bg-dark text-white px-1"
-                                            style={{ fontSize: "10px" }}
-                                        >
-                                            {" "}
-                                            It's You{" "}
-                                        </sup>
-                                    )}
-                                </span>
-
-                                <span style={{ fontSize: "12px" }}>
-                                    {task?.assigneeTo?.getDesignationName()}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* assignee by */}
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">
-                            Assigned by:{" "}
-                        </div>
-                        <div className="sp1_st-list-item-value">
-                            <div style={{ width: "32px", height: "32px" }}>
-                                <img
-                                    src={task?.assigneeBy?.getAvatar()}
-                                    alt={task?.assigneeBy?.getName()}
-                                    width="32px"
-                                    height="32px"
-                                    className="rounded-circle"
-                                />
-                            </div>
-                            <div className="ml-2">
-                                <span
-                                    className={`d-block f-14 font-weight-bold`}
-                                >
-                                    <a 
-                                        href={task?.assigneeBy?.getUserLink()}
-                                        className="text-dark hover-underline"
-                                    >
-                                        {task?.assigneeBy?.getName()}
+                            <div className="sp1_st-list-item">
+                                <div className="sp1_st-list-item-head">Project : </div>
+                                <div className="sp1_st-list-item-value">
+                                    <span className="dot-color bg-danger mr-2" />
+                                    <a href={`/account/projects/${task?.projectID}`} className="text-dark text-hover-underline"> 
+                                        {task?.projectName} 
                                     </a>
-                                    {Number(task?.assigneeBy?.getId()) ===
-                                        Number(loggedUser?.getId()) && (
-                                        <sup
-                                            className="rounded-pill bg-dark text-white px-1"
-                                            style={{ fontSize: "10px" }}
-                                        >
-                                            It's You
-                                        </sup>
-                                    )}
-                                </span>
+                                </div>
+                            </div>
 
-                                <span style={{ fontSize: "12px" }}>
-                                    {task?.assigneeBy?.getDesignationName()}
-                                </span>
+                            <div className="sp1_st-list-item">
+                                <div className="sp1_st-list-item-head">
+                                    Milestone :{" "}
+                                </div>
+                                <div className="sp1_st-list-item-value">
+                                    <span className="dot-color bg-primary mr-2" />
+                                    {task?.milestoneTitle}
+                                </div>
+                            </div>
+
+                            {/* asignee to */}
+                            <div className="sp1_st-list-item">
+                                <div className="sp1_st-list-item-head">
+                                    Assigned To :{" "}
+                                </div>
+                                <div className="sp1_st-list-item-value">
+                                    <div style={{ width: "32px", height: "32px" }}>
+                                        <img
+                                            src={task?.assigneeTo?.getAvatar()}
+                                            alt={task?.assigneeTo?.getName()}
+                                            width="32px"
+                                            height="32px"
+                                            className="rounded-circle"
+                                        />
+                                    </div>
+                                    <div className="ml-2">
+                                        <span
+                                            className={`d-block f-14 font-weight-bold`}
+                                        >
+                                            <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a> 
+                                            {Number(task?.assigneeTo?.getId()) ===
+                                                Number(loggedUser?.getId()) && (
+                                                <sup
+                                                    className="rounded-pill bg-dark text-white px-1"
+                                                    style={{ fontSize: "10px" }}
+                                                >
+                                                    {" "}
+                                                    It's You{" "}
+                                                </sup>
+                                            )}
+                                        </span>
+
+                                        <span style={{ fontSize: "12px" }}>
+                                            {task?.assigneeTo?.getDesignationName()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* assignee by */}
+                            <div className="sp1_st-list-item">
+                                <div className="sp1_st-list-item-head">
+                                    Assigned by:{" "}
+                                </div>
+                                <div className="sp1_st-list-item-value">
+                                    <div style={{ width: "32px", height: "32px" }}>
+                                        <img
+                                            src={task?.assigneeBy?.getAvatar()}
+                                            alt={task?.assigneeBy?.getName()}
+                                            width="32px"
+                                            height="32px"
+                                            className="rounded-circle"
+                                        />
+                                    </div>
+                                    <div className="ml-2">
+                                        <span
+                                            className={`d-block f-14 font-weight-bold`}
+                                        >
+                                            <a 
+                                                href={task?.assigneeBy?.getUserLink()}
+                                                className="text-dark hover-underline"
+                                            >
+                                                {task?.assigneeBy?.getName()}
+                                            </a>
+                                            {Number(task?.assigneeBy?.getId()) ===
+                                                Number(loggedUser?.getId()) && (
+                                                <sup
+                                                    className="rounded-pill bg-dark text-white px-1"
+                                                    style={{ fontSize: "10px" }}
+                                                >
+                                                    It's You
+                                                </sup>
+                                            )}
+                                        </span>
+
+                                        <span style={{ fontSize: "12px" }}>
+                                            {task?.assigneeBy?.getDesignationName()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* PRIORITY */}
+
+                            <div className="sp1_st-list-item">
+                                <div className="sp1_st-list-item-head">Priority : </div>
+                                <div className="sp1_st-list-item-value">
+                                    <span
+                                        className="dot-color mr-2"
+                                        style={{ background: "rgba(252, 189, 1, 1)" }}
+                                    />
+                                    {task?.priority}
+                                </div>
+                            </div>
+
+                            {/* category */}
+                            <div className="sp1_st-list-item">
+                                <div className="sp1_st-list-item-head">
+                                    Task Category :{" "}
+                                </div>
+                                <div className="sp1_st-list-item-value">
+                                    {task?.category?.name}
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {/* PRIORITY */}
-
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">Priority : </div>
-                        <div className="sp1_st-list-item-value">
-                            <span
-                                className="dot-color mr-2"
-                                style={{ background: "rgba(252, 189, 1, 1)" }}
-                            />
-                            {task?.priority}
-                        </div>
-                    </div>
-
-                    {/* category */}
-                    <div className="sp1_st-list-item">
-                        <div className="sp1_st-list-item-head">
-                            Task Category :{" "}
-                        </div>
-                        <div className="sp1_st-list-item-value">
-                            {task?.category?.name}
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </React.Fragment>
+            }
 
             <div
                 className="col-12 col-xl-6 d-flex flex-column py-3"
@@ -226,7 +238,11 @@ const Genarel = ({task}) => {
 
             <div className="col-12 border-top py-4 mt-4">
                 <Accordion expendable={false} title="General Guidelines">
-                    <Guideline text={task?.guidelines} editorContainerClass="modal-guideline-editor-text" />
+                    {
+                        isFetching ? 
+                        <ArticleLoader /> :
+                        <Guideline text={task?.guidelines} editorContainerClass="modal-guideline-editor-text" />
+                    }
                 </Accordion>
 
                 <Accordion

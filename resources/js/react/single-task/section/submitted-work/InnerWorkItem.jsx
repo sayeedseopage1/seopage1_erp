@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 const InnerWorkItem = ({data}) => { 
-
-  console.log({inner: data})
   return (
     <div className="d-flex align-items-center justify-content-between sp1_tark_right_item px-0 py-2" styte={{gap: "16px"}}>
         <div> 

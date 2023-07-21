@@ -116,8 +116,8 @@ class TimelogReportController extends AccountBaseController
                 'tasks.due_date as task_end',
                 'project_time_logs.start_time as time_log_start_time',
                 'project_time_logs.start_time as time_log_end_time',
-                DB::raw('COUNT(project_time_logs.id) as number_of_session'),
-                DB::raw('sum(project_time_logs.total_minutes) as total_minutes'),
+                DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
+                DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
             ])
                 ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
 
@@ -137,6 +137,7 @@ class TimelogReportController extends AccountBaseController
 
                 ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
                 ->whereIn('project_time_logs.user_id', $id_array)
+                ->where('total_minutes', '>', 0)
                 ->groupBy('project_time_logs.user_id', 'employee.id');
 
             if (is_null($project_id)) {
@@ -172,12 +173,12 @@ class TimelogReportController extends AccountBaseController
                     }
                 }
             }
-            /*if (!is_null($pmId)) {
+           if (!is_null($pmId)) {
                 $data = $data->where('projects.pm_id' , $pmId)->orderBy('projects.pm_id' , 'desc');
             } 
             if (!is_null($employeeId)) {
                 $data = $data->where('project_time_logs.user_id' , $employeeId)->orderBy('project_time_logs.user_id' , 'desc');
-            }*/
+            }
             if (!is_null($clientId)) {
                 //$data = $data->where('projects.client_id' , $clientId)->orderBy('projects.client_id' , 'desc');
                 $data = $data->where('projects.client_id', $clientId);
@@ -191,7 +192,22 @@ class TimelogReportController extends AccountBaseController
             $data = $data->orderBy('project_time_logs.task_id' , 'desc')
             ->offset($offset)
             ->limit($perPage)*/
-            $data = $data->orderBy('project_time_logs.task_id', 'desc')->get();
+           // $data = $data->orderBy('project_time_logs.task_id', 'desc')->get();
+            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
+        {
+            // $data = $data->groupBy('project_time_logs.task_id','project_time_logs.created_at')
+         // ->orderBy('project_time_logs.id', 'desc')
+         $data = $data->orderBy('project_time_logs.task_id', 'desc')
+          ->get();
+
+
+        }else {
+        //    / $data = $data->groupBy('project_time_logs.task_id','project_time_logs.created_at')
+            $data = $data->orderBy('project_time_logs.task_id', 'desc')
+            ->where('project_time_logs.user_id',Auth::id())
+         // ->orderBy('project_time_logs.id', 'desc')
+          ->get();
+        }
         }else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',

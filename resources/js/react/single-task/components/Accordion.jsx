@@ -41,7 +41,7 @@ const Accordion = ({expendable=true, children, title, headingClass, headingStyle
                     {children}
                 </motion.div> 
             ): <div className='sp1_task_card--body'>
-                {children} 
+               {children}  
             </div>
         }
         </AnimatePresence>

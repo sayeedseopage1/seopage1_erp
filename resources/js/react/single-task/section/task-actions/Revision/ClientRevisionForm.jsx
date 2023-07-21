@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import CKEditorComponent from "../../../../ckeditor";
 import Button from "../../../components/Button";
+import SubmitButton from "../../../components/SubmitButton";
 
 const ClientRevisionForm = ({
     isOpen,
@@ -56,27 +57,14 @@ const ClientRevisionForm = ({
         
         if(validate()){
            console.log(data)
+           onSubmitForm(data);
         }else{
             console.log('Your forgot to fillup some requried fields')
         } 
     }
 
     return (
-        <React.Fragment>
-            <div
-                className="sp1_single_task--modal-panel"
-                style={{ maxWidth: "550px" }}
-            >
-                <div className="border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between">
-                    <div className="font-weight-bold f-14">
-                        Client Revision - Task: {task?.id}#
-                        {task?.title || task?.heading}
-                    </div>
-                    <Button onClick={close} className="">
-                        <i className="fa-solid fa-xmark" />
-                    </Button>
-                </div>
-
+        <React.Fragment> 
                 <form className="px-3">
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold">
@@ -199,29 +187,14 @@ const ClientRevisionForm = ({
                                 Close
                             </Button>
 
-                            {!isSubmitting ? (
-                                <React.Fragment>
-                                    <Button onClick={handleSubmition}>Submit</Button>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    <Button className="cursor-processing">
-                                        <div
-                                            className="spinner-border text-white"
-                                            role="status"
-                                            style={{
-                                                width: "18px",
-                                                height: "18px",
-                                            }}
-                                        />{" "}
-                                        Processing...
-                                    </Button>
-                                </React.Fragment>
-                            )}
+                            <SubmitButton 
+                                onClick={handleSubmition} 
+                                isLoading={isSubmitting} 
+                                title="Accept & Continue" 
+                            /> 
                         </div>
                     </div>
-                </form>
-            </div>
+                </form> 
         </React.Fragment>
     );
 };

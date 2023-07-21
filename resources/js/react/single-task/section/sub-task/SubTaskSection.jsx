@@ -2,7 +2,6 @@ import React from "react";
 import SubTask from "./SubTask";
 import SubTaskForm from "./SubTaskForm";
 import Button from "../../components/Button";
-import SubTaskFormModal from "./SubTaskFormModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
     useGetTaskDetailsQuery,
@@ -12,7 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { storeSubTasks } from "../../../services/features/subTaskSlice";
 import SubtTaskEditForm from "./SubTaskEditForm";
 import CustomModal from "../../components/CustomModal";
-import PreviewSubtask from "./PreviewSubtask";
+import {useWindowSize} from 'react-use';
+import Modal from "../../components/Modal";
 
 const SubTaskSection = () => {
     const { task, subTask } = useSelector((s) => s.subTask);
@@ -23,6 +23,7 @@ const SubTaskSection = () => {
     const [isTaskModalOpen, setIsTaskModalOpen] = React.useState(false);
     const [subtaskModalToggleRef, setSubtaskModalToggleRef] =
         React.useState(null);
+    const {width} = useWindowSize();
 
     const toggleAddButton = () => setIsTaskModalOpen(!isTaskModalOpen);
     const closeAddModal = () => {
@@ -94,26 +95,42 @@ const SubTaskSection = () => {
             className="sp1_task_right_card mb-3"
             style={{ zIndex: isTaskModalOpen ? "99" : "" }}
         >
-            <PreviewSubtask />
+            
 
-            {/* modal */}
-            <CustomModal
-                toggleRef={subtaskModalToggleRef}
-                isOpen={isTaskModalOpen}
-                close={closeAddModal}
-                formMode={formMode}
-            >
-                {!edit ? (
-                    <SubTaskForm
-                        close={closeAddModal}
-                        isFirstSubtask={
-                            !isFetching && subTask?.length ? true : false
-                        }
-                    />
-                ) : (
-                    <SubtTaskEditForm close={closeEditForm} editId={edit} />
-                )}
-            </CustomModal>
+            {
+                width > 1200 ?
+                <React.Fragment>
+                    {/* modal */}
+                        <CustomModal
+                            toggleRef={subtaskModalToggleRef}
+                            isOpen={isTaskModalOpen}
+                            close={closeAddModal}
+                            formMode={formMode}
+                        >
+                            {!edit ? (
+                                <SubTaskForm
+                                    close={closeAddModal}
+                                    isFirstSubtask={
+                                        !isFetching && subTask?.length ? true : false
+                                    }
+                                />
+                            ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
+                        </CustomModal>
+                </React.Fragment>:
+                <React.Fragment>
+                    {/* modal */}
+                        <Modal isOpen={isTaskModalOpen}>
+                            {!edit ? (
+                                <SubTaskForm
+                                    close={closeAddModal}
+                                    isFirstSubtask={
+                                        !isFetching && subTask?.length ? true : false
+                                    }
+                                />
+                            ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
+                        </Modal>
+                </React.Fragment>
+            }
 
             {/* left dropdown */}
 
@@ -159,23 +176,13 @@ const SubTaskSection = () => {
                     onClick={toggleAddButton}
                 >
                     {isTaskModalOpen ? (
-                        <>
-                            {" "}
-                            <i
-                                className="fa-solid fa-xmark"
-                                style={{ fontSize: "12px" }}
-                            />{" "}
-                            Close{" "}
-                        </>
+                        <React.Fragment>
+                            <i className="fa-solid fa-xmark" style={{ fontSize: "12px" }} /> Close
+                        </React.Fragment>
                     ) : (
-                        <>
-                            {" "}
-                            <i
-                                className="fa-solid fa-plus"
-                                style={{ fontSize: "12px" }}
-                            />{" "}
-                            Sub Task{" "}
-                        </>
+                        <React.Fragment>
+                            <i className="fa-solid fa-plus" style={{ fontSize: "12px" }} />  Sub Task
+                        </React.Fragment>
                     )}
                 </Button>
             </div>

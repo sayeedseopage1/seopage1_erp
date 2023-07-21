@@ -2,6 +2,12 @@ import { apiSlice } from "./apiSlice";
 
 const singleTaskPageApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
+        // get task status
+       getTaskStatus: build.query({
+            query: (taskId) => `/account/tasks/get-task-status/${taskId}`,
+            providesTags: ["TASK_STATUS"]
+       }),
+
         // get task details
         getTaskDetails: build.query({
             query: (query) => `/account/task${query}`,
@@ -90,6 +96,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
+            
+            invalidatesTags: ['TASK_STATUS']
         }),
 
         // subtask status
@@ -117,6 +125,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
+            
+            invalidatesTags: ['TASK_STATUS']
         }),
 
         /**
@@ -134,7 +144,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ['TASK_STATUS']
         }),
 
 
@@ -163,7 +175,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ['TASK_STATUS']
         }),
 
         /**
@@ -175,7 +189,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 url: `/tasks/task-stage/store`,
                 method: "POST",
                 body: data,
-            })
+            }),
+            
+            invalidatesTags: ['TASK_STATUS']
         }),
 
         /**
@@ -202,7 +218,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            invalidatesTags: ['TASK_STATUS']
         }),
 
 
@@ -229,7 +246,65 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ['TASK_STATUS']
+        }),
+
+        // * accept by lead developer
+        
+
+        revisionAcceptOrDenyByLeadDeveloper: build.mutation({
+            query: ({fdata, params}) => ({
+                url: `/account/tasks/${params}`,
+                method: "POST",
+                body: {
+                    ...fdata,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            
+            invalidatesTags: ['TASK_STATUS']
+        }),
+        
+
+
+        /**
+         *  * submit for client approval 
+         */
+
+        submitForClientApproval: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/client-approval`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },    
+            }),
+            invalidatesTags: ['TASK_STATUS']
+        }),
+
+        /**
+         *  * submit for client approval 
+         */
+
+        confirmClientApproval: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/client-approved-task`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },    
+            }),
+            invalidatesTags: ['TASK_STATUS']
         }),
         
     }),
@@ -256,5 +331,9 @@ export const {
     useGetSubmittedTaskQuery,
     useCreateRevisionMutation,
     useGetRevisionDetailsQuery,
-    useRevisionAcceptOrDenyMutation
+    useRevisionAcceptOrDenyMutation,
+    useSubmitForClientApprovalMutation,
+    useGetTaskStatusQuery,
+    useRevisionAcceptOrDenyByLeadDeveloperMutation,
+    useConfirmClientApprovalMutation
 } = singleTaskPageApiSlice;

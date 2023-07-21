@@ -466,6 +466,8 @@
 
 
 .sp1_ck_content{
+    word-wrap: break-word !important;
+
     ul{
         margin-left: 40px !important;
         list-style: unset !important;

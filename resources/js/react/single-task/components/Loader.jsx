@@ -1,4 +1,4 @@
-const Loader = () => {
+const Loader = ({title ="Loading..."}) => {
   return (
         <div className='d-flex align-items-center'>
             <div
@@ -11,7 +11,7 @@ const Loader = () => {
                     borderRightColor: "transparent",
                 }}
             /> 
-            <span>Loading...</span>
+            <span>{title}</span>
         </div>
   )
 }

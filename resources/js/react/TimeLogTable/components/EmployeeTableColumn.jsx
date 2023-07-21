@@ -1,4 +1,5 @@
 import { convertTime } from "../../utils/converTime"
+import EmployeeTrackTimeButton from "./EmployeeTrackTimeButton"
 import UserRender from "./UserRender"
 
 
@@ -11,7 +12,7 @@ export const EmployeeTableColumn = [
         group: true,
         sortAccessor: '', 
         cell: ({row, col, className, rowSpan}) => {
-            return <td className={className} rowSpan={rowSpan}>
+            return <td className={`sp1_tlr_td sp1_tlr_td_border ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`} rowSpan={rowSpan}>
                 <UserRender
                     name={row?.employee_name}
                     profileUrl={`/account/employees/${row?.employee_id}`}
@@ -87,7 +88,9 @@ export const EmployeeTableColumn = [
         cell: ({row, className}) =>{
             return(
                 <td className={className}>
-                   {row?.number_of_session}
+                    <EmployeeTrackTimeButton row={row}>
+                        {row?.number_of_session}
+                    </EmployeeTrackTimeButton> 
                 </td>
             )
         }
@@ -100,17 +103,17 @@ export const EmployeeTableColumn = [
         cell: ({row, className}) =>{
             return(
                 <td className={className}>
-                  {row?.total_minutes ? (
-                        convertTime(row?.total_minutes)
-                    ) : (
-                        <span className="text-danger">
-                            <i
-                                className="fa-solid fa-chevron-left mr-1"
-                                style={{ fontSize: "10px" }}
-                            />
-                            1 min
-                        </span>
-                    )}
+                        {row?.total_minutes ? (
+                            convertTime(row?.total_minutes)
+                        ) : (
+                            <span className="text-danger">
+                                <i
+                                    className="fa-solid fa-chevron-left mr-1"
+                                    style={{ fontSize: "10px" }}
+                                />
+                                1 min
+                            </span>
+                        )}
                 </td>
             )
         }

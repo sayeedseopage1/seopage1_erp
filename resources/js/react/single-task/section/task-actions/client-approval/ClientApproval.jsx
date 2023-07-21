@@ -2,15 +2,21 @@ import React from 'react'
 import { SubmitForClientApproval } from './SubmitForClientApproval'
 import ClientAcceptedTask from './ClientAcceptedTask'
 import { SingleTask } from '../../../../utils/single-task'
-import ClientRevision from './ClientRevision'
+import ClientRevision from './../Revision/ClientRevision'
+import { submitForClientApproval, clientApproveConfirmationButtonPermission } from '../../../permissions'
 
-const ClientApproval = ({task}) => {
+const ClientApproval = ({task, status, auth}) => {
   const _task = new SingleTask(task);
+
   return (
     <React.Fragment>
-        <SubmitForClientApproval task={_task} />
-        <ClientAcceptedTask task={_task} />
-        <ClientRevision task={_task} />
+        { submitForClientApproval({task, status, auth}) && <SubmitForClientApproval task={_task} auth={auth} /> }
+        { clientApproveConfirmationButtonPermission({task, status, auth}) && 
+          <React.Fragment>
+            <ClientAcceptedTask task={_task} auth={auth} />
+            <ClientRevision task={_task} auth={auth} />
+          </React.Fragment>
+        }
     </React.Fragment>
   )
 }

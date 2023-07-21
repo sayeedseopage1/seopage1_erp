@@ -9,10 +9,12 @@ const UserSelectionList = ({ person, setPerson }) => {
     const { users, usersIsFetching } = useUsers();
     const [search, setSearch] = useState("");
 
+    let _user = _.filter(users, (user) => !_.isNull(user.role_id));
+
     let filteredUsers =
         search === ""
-            ? users
-            : users?.filter((user) =>
+            ? _user
+            : _user?.filter((user) =>
                   _.lowerCase(user.name).includes(_.lowerCase(search))
               );
 
@@ -43,14 +45,40 @@ const UserSelectionList = ({ person, setPerson }) => {
                 <Combobox.Options
                     className="position-absolute bg-white p-2 shadow w-100"
                     style={{
-                        zIndex: "1",
+                        zIndex: 10,
                         maxHeight: "350px",
                         overflowY: "auto",
                     }}
                 >
                     {filteredUsers && filteredUsers.length ? (
                         filteredUsers.map((user) => (
-                            <UserList key={user.id} user={user} />
+                            <Combobox.Option
+                                key={user.id}
+                                value={user}
+                                className={({ selected, active }) =>
+                                selected
+                                    ? "task-selection-list-option selected"
+                                    : active
+                                    ? "task-selection-list-option active"
+                                    : "task-selection-list-option"
+                            }
+                            >
+                                {({selected}) => (
+                                    <div className="d-flex align-items-center bg-transparent f-14" style={{ gap: "10px" }}>
+                                        <img
+                                            src={user?.image_url}
+                                            alt={user?.name}
+                                            width={24}
+                                            height={24}
+                                            className="rounded-circle"
+                                        />
+                                        {selected}
+                                        <span className="w-100">{user?.name}</span>
+
+                                        {selected && <span className="ml-auto"> <i className="fa-solid fa-check text-white" /> </span> }
+                                    </div>
+                                )}
+                            </Combobox.Option>
                         ))
                     ) : (
                         <div className="task-selection-list-option">
@@ -65,31 +93,11 @@ const UserSelectionList = ({ person, setPerson }) => {
 
 export default UserSelectionList;
 
-const UserList = (props) => {
-    const user = new User(props.user);
+// const UserList = (props) => {
+//     const user = new User(props.user);
 
-    if (!user?.getRoleId()) return null;
-    return (
-        <Combobox.Option
-            value={user}
-            className={({ selected, active }) =>
-                selected
-                    ? "task-selection-list-option selected"
-                    : active
-                    ? "task-selection-list-option active"
-                    : "task-selection-list-option"
-            }
-        >
-            <div className="d-flex align-items-center" style={{ gap: "10px" }}>
-                <img
-                    src={user?.getAvatar()}
-                    alt={user?.name}
-                    width={32}
-                    height={32}
-                    className="rounded-circle"
-                />
-                <span>{user?.name}</span>
-            </div>
-        </Combobox.Option>
-    );
-};
+//     if (!user?.getRoleId()) return null;
+//     return (
+        
+//     );
+// };

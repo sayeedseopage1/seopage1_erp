@@ -44,7 +44,10 @@ var UserSelectionList = function UserSelectionList(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     search = _useState2[0],
     setSearch = _useState2[1];
-  var filteredUsers = search === "" ? users : users === null || users === void 0 ? void 0 : users.filter(function (user) {
+  var _user = lodash__WEBPACK_IMPORTED_MODULE_3___default().filter(users, function (user) {
+    return !lodash__WEBPACK_IMPORTED_MODULE_3___default().isNull(user.role_id);
+  });
+  var filteredUsers = search === "" ? _user : _user === null || _user === void 0 ? void 0 : _user.filter(function (user) {
     return lodash__WEBPACK_IMPORTED_MODULE_3___default().lowerCase(user.name).includes(lodash__WEBPACK_IMPORTED_MODULE_3___default().lowerCase(search));
   });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
@@ -75,13 +78,42 @@ var UserSelectionList = function UserSelectionList(_ref) {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Combobox.Options, {
         className: "position-absolute bg-white p-2 shadow w-100",
         style: {
-          zIndex: "1",
+          zIndex: 10,
           maxHeight: "350px",
           overflowY: "auto"
         },
         children: filteredUsers && filteredUsers.length ? filteredUsers.map(function (user) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(UserList, {
-            user: user
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Combobox.Option, {
+            value: user,
+            className: function className(_ref2) {
+              var selected = _ref2.selected,
+                active = _ref2.active;
+              return selected ? "task-selection-list-option selected" : active ? "task-selection-list-option active" : "task-selection-list-option";
+            },
+            children: function children(_ref3) {
+              var selected = _ref3.selected;
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+                className: "d-flex align-items-center bg-transparent f-14",
+                style: {
+                  gap: "10px"
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
+                  src: user === null || user === void 0 ? void 0 : user.image_url,
+                  alt: user === null || user === void 0 ? void 0 : user.name,
+                  width: 24,
+                  height: 24,
+                  className: "rounded-circle"
+                }), selected, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  className: "w-100",
+                  children: user === null || user === void 0 ? void 0 : user.name
+                }), selected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+                  className: "ml-auto",
+                  children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                    className: "fa-solid fa-check text-white"
+                  }), " "]
+                })]
+              });
+            }
           }, user.id);
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "task-selection-list-option",
@@ -92,33 +124,15 @@ var UserSelectionList = function UserSelectionList(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (UserSelectionList);
-var UserList = function UserList(props) {
-  var user = new _utils_user_details__WEBPACK_IMPORTED_MODULE_2__.User(props.user);
-  if (!(user !== null && user !== void 0 && user.getRoleId())) return null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_5__.Combobox.Option, {
-    value: user,
-    className: function className(_ref2) {
-      var selected = _ref2.selected,
-        active = _ref2.active;
-      return selected ? "task-selection-list-option selected" : active ? "task-selection-list-option active" : "task-selection-list-option";
-    },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-      className: "d-flex align-items-center",
-      style: {
-        gap: "10px"
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("img", {
-        src: user === null || user === void 0 ? void 0 : user.getAvatar(),
-        alt: user === null || user === void 0 ? void 0 : user.name,
-        width: 32,
-        height: 32,
-        className: "rounded-circle"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-        children: user === null || user === void 0 ? void 0 : user.name
-      })]
-    })
-  });
-};
+
+// const UserList = (props) => {
+//     const user = new User(props.user);
+
+//     if (!user?.getRoleId()) return null;
+//     return (
+
+//     );
+// };
 
 /***/ })
 

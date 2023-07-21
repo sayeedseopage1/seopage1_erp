@@ -1,19 +1,30 @@
 import React from "react";
 import Button from "./Button";
 
-const SubmitButton = ({onClick, isLoading, title}) => {
+const SubmitButton = ({onClick, isLoading, className, variant="primary", children, title}) => {
+    let body = document.querySelector('#body');
+
     const handleOnClick = (e) => {
         e.stopPropagation();
         onClick(e)
     }
+
+    React.useEffect(() => {
+        if(isLoading){
+            body.style.cursor = 'progress';
+        }else{
+            body.style.cursor = 'default';
+        }
+    }, [isLoading])
+    
     return (
         <React.Fragment>
             {!isLoading ? (
-                <Button onClick={handleOnClick} className="">
-                    {title}
+                <Button variant={variant} onClick={handleOnClick} className={className}>
+                    {children || title}
                 </Button>
             ) : (
-                <Button className="cursor-processing">
+                <div className="cursor-processing cnx__btn cnx__btn_sm cnx__btn_primary">
                     <div
                         className="spinner-border text-white"
                         role="status"
@@ -23,7 +34,7 @@ const SubmitButton = ({onClick, isLoading, title}) => {
                         }}
                     ></div>
                     Processing...
-                </Button>
+                </div>
             )}
         </React.Fragment>
     );

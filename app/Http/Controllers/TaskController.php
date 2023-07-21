@@ -238,84 +238,21 @@ class TaskController extends AccountBaseController
     }
 
 
-    // public function TaskApprove(Request $request)
-    // {
-    //     $request->validate([
-    //         'rating' => 'required',
-    //         'rating2' => 'required',
-    //         'rating3' => 'required',
-    //         'comments' => 'required',
-    //     ], [
-    //         'rating.required' => 'This field is required!',
-    //         'rating2.required' => 'This field is required!',
-    //         'rating3.required' => 'This field is required!',
-    //         'comments.required' => 'This field is required!',
-    //     ]);
-
-    //     $task_status = Task::find($request->task_id);
-    //     $task_status->status = "   completed";
-    //     $task_status->task_status = "approved";
-    //     $task_status->board_column_id = 8;
-    //     $task_status->save();
-
-
-    //     $task = new TaskApprove();
-    //     $task->user_id = $request->user_id;
-    //     $task->task_id = $request->task_id;
-    //     $task->rating = $request->rating;
-    //     $task->rating2 = $request->rating2;
-    //     $task->rating3 = $request->rating3;
-    //     $task->comments = $request->comments;
-    //     $task->save();
-
-    //     //authorizatoin action start here
-    //     $authorization_action = new AuthorizationAction();
-    //     $authorization_action->model_name = $task_status->getMorphClass();
-    //     $authorization_action->model_id = $task_status->id;
-    //     $authorization_action->type = 'task_approved_by_lead_develoer';
-    //     $authorization_action->deal_id = $task_status->project->deal_id;
-    //     $authorization_action->project_id = $task_status->project_id;
-    //     $authorization_action->link = route('tasks.show', $request->task_id);
-    //     $authorization_action->title = Auth::user()->name . ' approved this task';
-    //     $authorization_action->authorization_for = 1;
-    //     $authorization_action->save();
-    //     //end authorization action here
-
-    //     $text = Auth::user()->name . ' mark task completed';
-    //     $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-    //     $this->logProjectActivity($task->task->project->id, $link);
-
-    //     $this->triggerPusher('notification-channel', 'notification', [
-    //         'user_id' => $task->user_id,
-    //         'role_id' => User::find($request->user_id)->role_id,
-    //         'title' => 'Task complete request approved',
-    //         'body' => Auth::user()->name . ' mark task completed',
-    //         'redirectUrl' => route('tasks.show', $task->id)
-    //     ]);
-
-    //     $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
-    //     $sender = User::where('id', Auth::id())->first();
-    //     $user = User::where('id', $task_submission->user_id)->first();
-    //     Notification::send($user, new TaskApproveNotification($task_status, $sender));
-    //     return response()->json([
-    //         'status' => 200,
-    //     ]);
-    // }
-
+   
     public function TaskApprove(Request $request)
     {
       //  dd($request);
-        // $request->validate([
-        //     'rating' => 'required',
-        //     'rating2' => 'required',
-        //     'rating3' => 'required',
-        //     'comments' => 'required',
-        // ], [
-        //     'rating.required' => 'This field is required!',
-        //     'rating2.required' => 'This field is required!',
-        //     'rating3.required' => 'This field is required!',
-        //     'comments.required' => 'This field is required!',
-        // ]);
+        $request->validate([
+            'rating' => 'required',
+            'rating2' => 'required',
+            'rating3' => 'required',
+            'comment' => 'required',
+        ], [
+            'rating.required' => 'This field is required!',
+            'rating2.required' => 'This field is required!',
+            'rating3.required' => 'This field is required!',
+            'comment.required' => 'This field is required!',
+        ]);
         // DB::beginTransaction();
        // dd($request->task_id);
         $task_status = Task::find($request->task_id);
@@ -325,33 +262,33 @@ class TaskController extends AccountBaseController
         $task_status->save();
         $board_column = TaskBoardColumn::where('id',$task_status->board_column_id)->first();
         // dd($task_status);
-        // if (Auth::user()->role_id == 6) {
-        //     $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
-        //     //dd($lead_dev_authorization);
-        //     if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
-        //     {
-        //         $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
-        //         $lead_dev_authorization_update->status= '1';
-        //         $lead_dev_authorization_update->authorization_by = Auth::id();
-        //         $lead_dev_authorization_update->save();
+        if (Auth::user()->role_id == 6) {
+            $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
+            //dd($lead_dev_authorization);
+            if($lead_dev_authorization != null && $lead_dev_authorization->status == 0)
+            {
+                $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+                $lead_dev_authorization_update->status= '1';
+                $lead_dev_authorization_update->authorization_by = Auth::id();
+                $lead_dev_authorization_update->save();
     
-        //     }
-        // }
+            }
+        }
        
-        // if(Auth::user()->role_id == 4)
-        // {
-        //     $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
-        //     //dd($lead_dev_authorization);
-        //     if($pm_authorization == null && $pm_authorization->status == 0)
-        //     {
-        //         $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
-        //         $lead_dev_authorization_update->status= '1';
-        //         $lead_dev_authorization_update->authorization_by = Auth::id();
-        //         $lead_dev_authorization_update->save();
+        if(Auth::user()->role_id == 4)
+        {
+            $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
+            //dd($lead_dev_authorization);
+            if($pm_authorization != null && $pm_authorization->status == 0)
+            {
+                $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+                $lead_dev_authorization_update->status= '1';
+                $lead_dev_authorization_update->authorization_by = Auth::id();
+                $lead_dev_authorization_update->save();
     
-        //     }
+            }
 
-        // }
+        }
         
        
         
@@ -406,7 +343,7 @@ class TaskController extends AccountBaseController
 
     public function TaskRevision(Request $request)
     {
-       //dd($request);
+    //    dd($request);
        // DB::beginTransaction();
         $request->validate([
             'comments2' => 'required',
@@ -421,32 +358,31 @@ class TaskController extends AccountBaseController
         $board_column = TaskBoardColumn::where('id',$task_status->board_column_id)->first();
        
       
-    //    if (Auth::user()->role_id == 6) {
-    //     $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
-    //     if($lead_dev_authorization == null && $lead_dev_authorization->status == 0)
-    //     {
-    //         $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
-    //         $lead_dev_authorization_update->status= '1';
-    //         $lead_dev_authorization_update->authorization_by = Auth::id();
-    //         $lead_dev_authorization_update->save();
+       if (Auth::user()->role_id == 6) {
+        $lead_dev_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_developer')->where('authorization_for',Auth::id())->first();
+        if($lead_dev_authorization != null && $lead_dev_authorization->status == '0')
+        {
+            $lead_dev_authorization_update= AuthorizationAction::find($lead_dev_authorization->id);
+            $lead_dev_authorization_update->status= '1';
+            $lead_dev_authorization_update->authorization_by = Auth::id();
+            $lead_dev_authorization_update->save();
     
-    //     }
-    //    }
-    //   if (Auth::user()->role_id == 4) {
-    //  $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
+        }
+       }
+      if (Auth::user()->role_id == 4) {
+     $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
     
-    // if($pm_authorization == null && $pm_authorization->status == 0)
-    // {
-    //     $pm_authorization_update= AuthorizationAction::find($pm_authorization->id);
-    //     $pm_authorization_update->status= '1';
-    //     $pm_authorization->authorization_by = Auth::id();
-    //     $pm_authorization->save();
+    if($pm_authorization != null && $pm_authorization->status == '1')
+    {
+        $pm_authorization_update= AuthorizationAction::find($pm_authorization->id);
+        $pm_authorization_update->status= '1';
+        $pm_authorization->authorization_by = Auth::id();
+        $pm_authorization->save();
 
-    // }
-    //   }
-    
-     
+    }
 
+      }
+    
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
@@ -1584,19 +1520,20 @@ class TaskController extends AccountBaseController
     //    CLIENT APPROVAL SECTION
     public function clientApproval(Request $request)
     {
+        // dd($request);
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
         return response()->json([
-            'status' => 400,
+            'status' => 200,
         ]);
     }
 
     //    CLIENT APPROVED TASK SECTION
     public function clientApprovedTask(Request $request)
     {
-
+        // /dd($request);
         $task_status = Task::find($request->task_id);
         $task_status->status = "completed";
         $task_status->board_column_id = 4;
@@ -1617,7 +1554,7 @@ class TaskController extends AccountBaseController
     //    CLIENT HAS REVISION
     public function clientHasRevision(Request $request)
     {
-        //        dd($request->all());
+               // dd($request->all());
         $request->validate([
             'comments3' => 'required',
         ], [
@@ -1661,41 +1598,75 @@ class TaskController extends AccountBaseController
     //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     {
-        dd("developer");
+    //   /  dd($request->all());
         $request->validate([
             'text3' => 'required',
         ], [
             'text3.required' => 'This field is required!',
         ]);
+       // DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
-
+      //  dd($request->revision_id);
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
-        $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
-        foreach ($selected_subtasks as $key => $selected_subtask) {
+        if ($request->subTask != null){
+           // $selected_subtasks = SubTask::whereIn('id', $request->subTask->subtask_id)->get();
+           $selected_subtasks  = $request->subTask;
+           // dd($selected_subtasks);
+            foreach ($selected_subtasks as $key => $selected_subtask) {
+               // dd($selected_subtask);
+                $find_task_id = Task::where('id', $selected_subtask['subtask_id'])->first();
+                $sub_task_status = Task::find($find_task_id->id);
+                $sub_task_status->task_status = "incomplete";
+                $sub_task_status->board_column_id = 1;
+                $sub_task_status->save();
+              
 
-            $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
-            $sub_task_status = Task::find($find_task_id->id);
-            $sub_task_status->task_status = "incomplete";
-            $sub_task_status->board_column_id = 1;
-            $sub_task_status->save();
-
-            $tasks_accept = new TaskRevision();
-            $tasks_accept->accept_and_continue = $request->text3;
-            $tasks_accept->subtask_id = $request->subTask[$key];
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = $request->comment[$key];
-            $tasks_accept->save();
+                $tasks_accept = new TaskRevision();
+                $tasks_accept->accept_and_continue = $request->text3;
+                $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
+                $tasks_accept->task_id = $selected_subtask['subtask_id'];
+                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->revision_status = 'Lead Developer Revision';
+                $tasks_accept->comment = $selected_subtask['comment'];
+                $tasks_accept->save();
+              //  dd($tasks_accept,$sub_task_status);
+            }
         }
 
-        $tasks_accept = TaskRevision::find($request->revision_id);
-        $tasks_accept->deny_and_continue = $request->text2;
-        $tasks_accept->subtask_id = implode(",", $request->subTask);
-        $tasks_accept->revision_reason = $request->revision_acknowledgement;
-        $tasks_accept->comment = implode(",", $request->comment);
-        $tasks_accept->save();
+        if ($request->subTask== null) {
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->accept_and_continue = $request->text2;
+//        $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+//        $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->approval_status = 'accepted';
+            $tasks_accept->save();
+            dd($tasks_accept);
+        }else{
+            $subTaskArray = $request->subTask;
+            $subTaskString = '';
+            $subTaskCommentString= '';
+            
+            foreach ($subTaskArray as $subTask) {
+                // Make sure $subTask is a string
+                $subTaskString .= (string) $subTask['subtask_id'] . ',';
+                $subTaskCommentString .= (string) $subTask['comment'] . ',';
+            }
+            $subTaskString = rtrim($subTaskString, ',');
+            $subTaskCommentString = rtrim($subTaskCommentString, ',');
+        //  /   dd($subTaskString);
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->accept_and_continue = $request->text3;
+            $tasks_accept->subtask_id = $tasks_accept->subtask_id;
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->approval_status = 'accepted';
+            $tasks_accept->dev_comment = $request->text3;
+            $tasks_accept->save();
+            
+        }
 
         foreach ($subtasks as $subtask) {
 
@@ -1709,6 +1680,7 @@ class TaskController extends AccountBaseController
             }
         }
 
+       // dd($tasks_accept,$sub_task_status);
         return response()->json([
             'status' => 200,
         ]);
@@ -1717,41 +1689,74 @@ class TaskController extends AccountBaseController
     //        DENY AND CONTINUE BUTTON SECTION
     public function denyContinue(Request $request)
     {
-        dd("lead_developer");
         $request->validate([
-            'text2' => 'required',
+            'text3' => 'required',
         ], [
-            'text2.required' => 'This field is required!',
+            'text3.required' => 'This field is required!',
         ]);
+       // DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
         $task_status->save();
-
+      //  dd($request->revision_id);
         $subtasks = SubTask::where('task_id', $request->task_id)->get();
-        $selected_subtasks = SubTask::whereIn('id', $request->subTask)->get();
-        foreach ($selected_subtasks as $key => $selected_subtask) {
+        if ($request->subTask != null){
+           // $selected_subtasks = SubTask::whereIn('id', $request->subTask->subtask_id)->get();
+           $selected_subtasks  = $request->subTask;
+           // dd($selected_subtasks);
+            foreach ($selected_subtasks as $key => $selected_subtask) {
+               // dd($selected_subtask);
+                $find_task_id = Task::where('id', $selected_subtask['subtask_id'])->first();
+                $sub_task_status = Task::find($find_task_id->id);
+                $sub_task_status->task_status = "incomplete";
+                $sub_task_status->board_column_id = 1;
+                $sub_task_status->save();
+              
 
-            $find_task_id = Task::where('subtask_id', $selected_subtask->id)->first();
-            $sub_task_status = Task::find($find_task_id->id);
-            $sub_task_status->task_status = "incomplete";
-            $sub_task_status->board_column_id = 1;
-            $sub_task_status->save();
-            //dd($request->subTask[$key]);
-            $tasks_accept = new TaskRevision();
-            $tasks_accept->deny_and_continue = $request->text3;
-            $tasks_accept->subtask_id = $request->subTask[$key];
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->comment = $request->comment[$key];
-            $tasks_accept->save();
+                $tasks_accept = new TaskRevision();
+                $tasks_accept->accept_and_continue = $request->text3;
+                $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
+                $tasks_accept->task_id = $selected_subtask['subtask_id'];
+                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->revision_status = 'Lead Developer Revision';
+                $tasks_accept->comment = $selected_subtask['comment'];
+                $tasks_accept->save();
+              //  dd($tasks_accept,$sub_task_status);
+            }
         }
 
-        $tasks_accept = TaskRevision::find($request->revision_id);
-        $tasks_accept->deny_and_continue = $request->text2;
-        $tasks_accept->subtask_id = implode(",", $request->subTask);
-        $tasks_accept->revision_reason = $request->revision_acknowledgement;
-        $tasks_accept->comment = implode(",", $request->comment);
-        $tasks_accept->save();
+        if ($request->subTask== null) {
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text2;
+//        $tasks_accept->subtask_id = implode(",", $request->subTask);
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+//        $tasks_accept->comment = implode(",", $request->comment);
+            $tasks_accept->approval_status = 'accepted';
+            $tasks_accept->save();
+            dd($tasks_accept);
+        }else{
+            $subTaskArray = $request->subTask;
+            $subTaskString = '';
+            $subTaskCommentString= '';
+            
+            foreach ($subTaskArray as $subTask) {
+                // Make sure $subTask is a string
+                $subTaskString .= (string) $subTask['subtask_id'] . ',';
+                $subTaskCommentString .= (string) $subTask['comment'] . ',';
+            }
+            $subTaskString = rtrim($subTaskString, ',');
+            $subTaskCommentString = rtrim($subTaskCommentString, ',');
+        //  /   dd($subTaskString);
+            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept->deny_and_continue = $request->text3;
+            $tasks_accept->subtask_id = $tasks_accept->subtask_id;
+            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->approval_status = 'accepted';
+            $tasks_accept->dev_comment = $request->text3;
+            $tasks_accept->save();
+            
+        }
 
         foreach ($subtasks as $subtask) {
 
@@ -1764,6 +1769,8 @@ class TaskController extends AccountBaseController
                 $sub_task_status->save();
             }
         }
+
+       // dd($tasks_accept,$sub_task_status);
         return response()->json([
             'status' => 200,
         ]);
@@ -1938,6 +1945,15 @@ class TaskController extends AccountBaseController
 
             $parent_task_heading= Task::where('id',$task->parent_task_id)->select('heading')->first();
           //  dd($task,$parent_task);
+          $subtasks= SubTask::where('task_id',$task->id)->select('tasks.id as subtask_id','sub_tasks.title','taskboard_columns.*')
+          ->join('tasks','tasks.subtask_id','sub_tasks.id')
+          ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+          ->get();
+          if($subtasks == null)
+          {
+            $subtasks = '';
+          }
+         // dd($subtasks);
 
             $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
             $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
@@ -2000,6 +2016,7 @@ class TaskController extends AccountBaseController
                 'task' => $task,
                 'parent_task_heading'=> $parent_task_heading,
                 'parent_task_action'=> $parent_task_action,
+                'subtasks'=> $subtasks,
             ]);
           //  return response()->json($task,$parent_task_heading);
         } elseif ($request->mode == 'sub_task') {
@@ -2066,6 +2083,7 @@ class TaskController extends AccountBaseController
                 ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->where('tasks.id', $id)
                 ->first();
+           
 
             $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
             $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
@@ -2483,5 +2501,11 @@ class TaskController extends AccountBaseController
         $task_revision= TaskRevision::where('task_id',$id)->where('approval_status','pending')->first();
         // /dd($task_revision);
         return response()->json($task_revision);
+    }
+    public function GetTaskStatus($id)
+    {
+        $task= Task::where('id',$id)->first();
+        $board_column = TaskBoardColumn::where('id',$task->board_column_id)->first();
+        return response()->json($board_column);
     }
 }

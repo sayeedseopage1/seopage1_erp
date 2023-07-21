@@ -6,8 +6,8 @@ import dayjs from "dayjs";
 import FileUploader from "../../../file-upload/FileUploader";
 
 const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
-    const links = _.split(data?.links, ',');
-    const attaches = _.split(data?.attaches, ','); 
+    const links = _.compact(_.split(data?.links, ','));
+    const attaches = _.compact(_.split(data?.attaches, ',')); 
     return (
         <CustomModal isOpen={isOpen} toggleRef={toggle}>
             <div className="sp1-subtask-form --modal-panel --modal-submitted">

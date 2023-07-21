@@ -48,9 +48,11 @@ const InnerComment = ({comment}) => {
                         />
                     </div> 
                 </div> 
-                <div>
-                    <span className="font-weight-bold d-block mr-2">{user?.getName()} ({user?.getDesignationName()})</span>
-                    <span className='' style={{fontSize: '13px', color: '#888'}}>
+                <div className='sp1_comment'>
+                    <span className="sp1_comment_user--name">
+                        {user?.getName()} ({user?.getDesignationName()})
+                    </span>
+                    <span className='sp1_comment_time' style={{color: '#888'}}>
                     {
                         comment?.last_updated_at &&
                         <> 
@@ -64,7 +66,7 @@ const InnerComment = ({comment}) => {
 
             <div className='__box __reply_text w-100 my-1 text-dark'>
                 <div 
-                    className='sp1_ck_content' 
+                    className='sp1_ck_content sp1_message--body' 
                     style={{overflow: 'hidden'}} 
                     dangerouslySetInnerHTML={{__html: comment?.comment}} 
                 /> 

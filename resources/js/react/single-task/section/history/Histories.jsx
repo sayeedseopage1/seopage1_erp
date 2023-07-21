@@ -3,13 +3,15 @@ import CustomModal from '../../components/CustomModal'
 import Button from '../../components/Button';
 const InnerHistoryItem = lazy(() => import('./InnerHistoryItem'));
 import InnerHistoryItemLoader from './InnerHistoryItemLoader';
+import Modal from '../../components/Modal';
+import { useWindowSize } from "react-use";
+
 
 const Histories = ({isOpen, close, toggle, data = []}) => {
-  return (
-    <CustomModal
-        isOpen={isOpen}
-        toggleRef={toggle} 
-    >
+  const {width: deviceWidth} = useWindowSize();
+  
+  const content = () => {
+    return (
         <div className='sp1-subtask-form --modal-panel'>
             <div className='sp1-subtask-form --modal-panel-header'> 
                  <h6> History </h6> 
@@ -34,8 +36,23 @@ const Histories = ({isOpen, close, toggle, data = []}) => {
                 </div>      
             </div>
         </div>
-    </CustomModal>
-  )
+    )
+  }
+ 
+
+  if(deviceWidth > 1200){
+    return (
+        <CustomModal isOpen={isOpen} toggleRef={toggle}>
+            <React.Fragment>{content()}</React.Fragment>       
+        </CustomModal>
+    );
+    }else{
+        return (
+            <Modal isOpen={isOpen}>
+                <React.Fragment>{content()}</React.Fragment>       
+            </Modal>
+        );
+    }
 }
 
 export default Histories

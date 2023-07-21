@@ -105,7 +105,7 @@ const MarkAsComplete = ({task, auth}) => {
                     icon: 'success',
                     title: 'Task submitted successfully'
                 })
-                dispatch(setTaskStatus(res?.task_status));
+                close();
             })
             .catch(err => console.log(err))
         }

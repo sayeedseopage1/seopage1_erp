@@ -12,6 +12,7 @@ import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import FileUploader from '../../../../file-upload/FileUploader';
+import { Placeholder } from '../../../../global/Placeholder';
 
 const ApproveTask = ({task, status, auth}) => {
   const dispatch = useDispatch();
@@ -64,6 +65,8 @@ const ApproveTask = ({task, status, auth}) => {
     approveSubmittedTask(data)
     .unwrap()
     .then(res => {
+        
+        setShowApproveForm(false);
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -75,8 +78,7 @@ const ApproveTask = ({task, status, auth}) => {
         Toast.fire({
             icon: 'success',
             title: 'Task Approved Successfully'
-        })
-        dispatch(setTaskStatus(res?.task_status));
+        }) 
     })
     .catch(err => console.log(err))
 
@@ -107,35 +109,37 @@ const ApproveTask = ({task, status, auth}) => {
                     </div>
 
                     <div className="px-3">
-                         <div className='mb-3'>
-                            <div className="sp1_st--approve-card"> 
-                                <div className="sp1_st--approve-card-header" data-toggle="collapse" href="#oldSubmittedSuccess" role="button"   aria-expanded="false" aria-controls="oldSubmittedSuccess">
-                                    Old Submitted Works ({_.size(oldSubmittion)})
-                                    <button>
-                                        <HiOutlineSelector />
-                                    </button>
+                         { _.size(oldSubmittion) > 0 &&
+                            <div className='mb-3'>
+                                <div className="sp1_st--approve-card"> 
+                                    <div className="sp1_st--approve-card-header" data-toggle="collapse" href="#oldSubmittedSuccess" role="button"   aria-expanded="false" aria-controls="oldSubmittedSuccess">
+                                        Old Submitted Works ({_.size(oldSubmittion)})
+                                        <button>
+                                            <HiOutlineSelector />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="collapse multi-collapse shadow-none" id="oldSubmittedSuccess">
-                                <div className="card card-body">
-                                    {
-                                        _.size(oldSubmittion) > 0 ?
-                                        _.map(oldSubmittion, (task)=>(
-                                            <SubmittedWorkCard key={`${task.id}_${task?.submission_no}`} data={task}/>
-                                        )):
-                                        <span>
-                                            No Old Submittion!
-                                        </span>
-                                    }
+                                <div className="collapse multi-collapse shadow-none" id="oldSubmittedSuccess">
+                                    <div className="card card-body">
+                                        {
+                                            _.size(oldSubmittion) > 0 ?
+                                            _.map(oldSubmittion, (task)=>(
+                                                <SubmittedWorkCard key={`${task.id}_${task?.submission_no}`} data={task} isLoading={isFetching}/>
+                                            )):
+                                            <span>
+                                                No Old Submittion!
+                                            </span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                         </div>
+                         }
                         {/* content */}
                         {
                             // getSubmittedTask?.submission_no === getSubmittedTask.
                         }
-                        <SubmittedWorkCard data={latestSubmittion} latest={true} />
+                        <SubmittedWorkCard data={latestSubmittion} latest={true} isLoading={isFetching} />
                     </div>
 
                     <div className="mt-4 px-3">
@@ -229,17 +233,50 @@ export default ApproveTask
 
 // Submitted work
 
-const SubmittedWorkCard = ({data, latest=false, className="", style}) => {
+const SubmittedWorkCard = ({data, latest=false, className="", style, isLoading = false}) => {
 
-    const links = _.split(data?.links, ',');
-    const attaches = _.split(data?.attaches, ',');
+    const links = _.compact(_.split(data?.links, ','));
+    const attaches =  _.compact(_.split(data?.attaches, ','));
    
+
+    if(isLoading){
+        return <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}> 
+            <div className="sp1_st--approve-card-header">
+                <Placeholder height="14px" width='80px' className='mb-2' />
+                <Placeholder height="14px" width='50px' className='mb-2' />
+            </div>
+
+            <div className='sp1_st--approve-card-body'>
+                <div className='mb-2'>
+                    <Placeholder height="14px" width='80px' className='mb-2'/>
+
+                    <div className='ml-2'>
+                        <Placeholder height="14px" width='100%' className='mb-2'/>
+                        <Placeholder height="14px" width='100%' className='mb-2'/>
+                        <Placeholder height="14px" width='100%' className='mb-2'/>
+                    </div> 
+                </div>
+
+                <div className='mb-2'>
+                    <Placeholder height="14px" width='80px' className='mb-2'/>
+
+                    <div className='ml-2'>
+                        <Placeholder height="14px" width='100%' className='mb-2'/>
+                        <Placeholder height="14px" width='100%' className='mb-2'/>
+                        <Placeholder height="14px" width='50%' className='mb-2'/>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    }
+
+    
     return(
         <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}> 
             <div className="sp1_st--approve-card-header">
                 <span>{latest ? 'Latest': "Old"} Submittion {!latest && `(${data?.submission_no})`}</span>
                 <span>
-                    {dayjs(data?.submission_date).format('MMM DD, YYYY')}
+                    {dayjs(data?.submission_date).format('MMM DD, YYYY hh:mm a')}
                 </span>
             </div>
 
@@ -257,13 +294,13 @@ const SubmittedWorkCard = ({data, latest=false, className="", style}) => {
 
                 <div className='mb-2'>
                     <div className="font-weight-bold f-12" style={{color: '#81868E'}}>Description</div>
-                    <div className='sp1_ck_content p-2' dangerouslySetInnerHTML={{__html: data?.text}}/>
+                    <div className='sp1_ck_content p-2' dangerouslySetInnerHTML={{__html: data?.text ?? `<span style="color:rgb(180,188,196);">Comment Not Available</span>`}}/>
                 </div>
 
 
                 <div className="mt-3">
                 <span
-                    className="d-block fs-12 font-weight-bold mb-2"
+                    className="d-block f-12 font-weight-bold mb-2"
                     style={{ color: "#767581" }}
                 >
                     Attached Files
@@ -285,7 +322,7 @@ const SubmittedWorkCard = ({data, latest=false, className="", style}) => {
                     </FileUploader>
                     ) : (
                         <span
-                            className=""
+                            className="px-2"
                             style={{ color: "rgb(180, 188, 196)" }}
                         >
                             No Attachment is available

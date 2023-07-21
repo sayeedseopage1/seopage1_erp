@@ -10,7 +10,7 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny}) => {
             {!isLoading ? (
                 <p>
                     <span className='font-weight-bold text-danger f-16'>Reason: </span>
-                    { revision?.revision_acknowledgement }
+                    { revision?.revision_acknowledgement ?? revision?.revision_reason }
                 </p>
             ): <div>
                 <Placeholder width='450px' className='mb-2' />

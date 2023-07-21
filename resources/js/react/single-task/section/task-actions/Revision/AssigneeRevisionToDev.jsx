@@ -4,10 +4,11 @@ import { Listbox } from "@headlessui/react";
 import { HiOutlineSelector } from "react-icons/hi";
 import CKEditorComponent from "../../../../ckeditor";
 import SubmitButton from "../../../components/SubmitButton";
+import _ from "lodash";
 
 const AssigneeRevisionToDev = ({
     task,
-    onBack,
+    // onBack,
     onSubmit,
     isSubmitting = false,
 }) => {
@@ -28,19 +29,19 @@ const AssigneeRevisionToDev = ({
         const data = editor.getData(); 
         const _comments = [...comments];
 
-        const index = _comments?.findIndex(d => d.task_id === id);
-        console.log(index)
+        const index = _comments?.findIndex(d => d.subtask_id === id); 
         if(index === -1){
             _comments.push({
-                task_id: id,
+                subtask_id: id,
                 comment: data
             })
         }else{
-           _comments[index] = {task_id: id, comment: data}
+           _comments[index] = {subtask_id: id, comment: data}
         }
 
         setComments([..._comments]);
     };
+
 
     // validation
     const validate = () => {
@@ -50,18 +51,30 @@ const AssigneeRevisionToDev = ({
             setReasonError("You have to select a reason from below options");
         }
 
-        if(subtasks.length === 0){
-            errorCount++;
-            setSubtaskError('You need to selecd at least one sub task to continue.')
-        }
+       if(_.size(task?.subtask) > 0){
+            if(subtasks.length === 0){
+                errorCount++;
+                setSubtaskError('You need to selecd at least one sub task to continue.')
+            }
 
-        if(comments.length !== subtasks.length){
-            const err = [];
-            comments?.map(c => err.push(c.task_id))
-            setCommentError(err)
-        }
+            if(comments.length === 0 || comments.length !== subtasks.length){
+                const err = [];
+                errorCount++;
+                comments?.map(c => err.push(c.subtask_id))
+                setCommentError(err)
+            }
 
-        return errorCount === 0;
+            comments?.map( comment =>{
+                if(comment?.comment === ''){
+                    const err = [];
+                    errorCount++;
+                    comments?.map(c => err.push(c.subtask_id))
+                    setCommentError(err)
+                }
+            })
+       } 
+
+        return errorCount === 0 ? true : false;
     };
 
     // handle submiton
@@ -72,17 +85,17 @@ const AssigneeRevisionToDev = ({
             task_id: task?.id,
             reason,
             comments,
-        };
-
+        }; 
         if(validate()){
             onSubmit(data)
-        }else console.log(data)
+        }
     };
 
     const onBackButtonClick = (e) => {
         e.preventDefault();
         onBack();
     }; 
+
     return (
         <React.Fragment>
             <form action="">
@@ -176,16 +189,18 @@ const AssigneeRevisionToDev = ({
                     )}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="" className="font-weight-bold">
-                        Select SubTask<sup className="font-weight-bold f-16">*</sup> : 
-                    </label>
-                    <SubtaskSelectionMenu
-                        task={task}
-                        subTasks={subtasks}
-                        setSubtasks={setSubtasks}
-                    />
-                </div>
+                {task?.subtask?.length > 0 && (
+                    <div className="form-group">
+                        <label htmlFor="" className="font-weight-bold">
+                            Select SubTask<sup className="font-weight-bold f-16">*</sup> : 
+                        </label>
+                        <SubtaskSelectionMenu
+                            task={task}
+                            subTasks={subtasks}
+                            setSubtasks={setSubtasks}
+                        />
+                    </div>
+                )}
 
                 {subtasks?.length > 0 && (
                     <div className="form-group">
@@ -193,13 +208,13 @@ const AssigneeRevisionToDev = ({
                             Comment:
                         </label>
                         {subtasks.map((s, i) => (
-                            <React.Fragment key={s.id}>
+                            <React.Fragment key={s.subtask_id}>
                                 <div className="form-group">
                                     <label htmlFor="" className="font-weight-bold">{i+1}. {s?.title}<sup className="font-weight-bold f-16">*</sup> :</label>
                                     <div className="ck-editor-holder">
-                                        <CKEditorComponent onChange={(e, editor) =>hanldeEditorTextChange(e, editor, s?.id)} />
+                                        <CKEditorComponent onChange={(e, editor) =>hanldeEditorTextChange(e, editor, s?.subtask_id)} />
                                     </div>
-                                    {commentError.includes(s.id) && (
+                                    {commentError.includes(s.subtask_id) && (
                                         <small id="emailHelp" className="form-text text-danger">
                                             You have to explain the revision in details, so that Developer can understand where they need to work.
                                         </small>
@@ -212,7 +227,7 @@ const AssigneeRevisionToDev = ({
 
                 
 
-                <div className="mt-3 d-flex align-items-center">
+                <div className="mt-3 mb-3 d-flex align-items-center">
                     <Button
                         onClick={onBackButtonClick}
                         variant="tertiary"
@@ -220,10 +235,11 @@ const AssigneeRevisionToDev = ({
                     >
                         Back
                     </Button>
-                        <NextAndContinueButton
-                            onClick={handleSubmition}
-                            isLoading={isSubmitting}
-                         />
+                    
+                    <NextAndContinueButton
+                        onClick={handleSubmition}
+                        isLoading={isSubmitting}
+                    />
                 </div>
             </form>
         </React.Fragment>
@@ -261,7 +277,7 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                     <span className="w-100 mr-auto text-left d-flex flex-wrap align-items-center" style={{gap:'6px'}}>
                         {subTasks?.length > 0
                             ?  subTasks.map((s) =>(
-                                <span key={s.id} className="badge badge-light" style={{fontSize: '13px'}}> {s.id} {s?.title} </span>
+                                <span key={s.id} className="badge badge-light" style={{fontSize: '13px'}}> {s?.title} </span>
                             ))
                             : "Select Subtasks"}
                     </span>
@@ -279,7 +295,7 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                         task?.subtask?.map((s) => (
                             <Listbox.Option
                                 value={s}
-                                key={s.id}
+                                key={s.subtask_id}
                                 tabIndex={-1}
                                 className={({ active }) => active
                                         ? "task-selection-list-option active"

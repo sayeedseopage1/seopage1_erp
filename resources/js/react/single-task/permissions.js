@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { User } from "../utils/user-details";
 
 // permission for timer control
@@ -6,8 +7,8 @@ export function timeControlPermision({task, status, loggedUser }){
     let assigneePermission = false;
 
     let statusId = status ? status.id : -1;
-    let assignedUser = new User(task?.users?.[0]);
-    let _loggedUser = new User(loggedUser);
+    let assignedUser = task?.assigneeTo;
+    let _loggedUser = loggedUser;
     
     // if status id 2 or 3 show timer start button
     if([2,3].includes(Number(statusId))){
@@ -18,7 +19,7 @@ export function timeControlPermision({task, status, loggedUser }){
     if(assignedUser.getId() === _loggedUser.getId()){
         assigneePermission = true;
     }  
-    return statusPermission && assigneePermission;
+    return statusPermission && assigneePermission && _.size(task?.subtask) === 0
 } 
 
 
@@ -109,8 +110,8 @@ export function revisionButtonPermission ({task, status, loggedUser}){
 
     let statusId = status ? status.id : -1;
     let assignedUser = task?.assigneeTo;
-    let _loggedUser = new User(loggedUser);
-    
+    let _loggedUser = loggedUser;
+//    console.log(statusId) 
     // if status id 6 show timer start button
     if([1].includes(Number(statusId))){
         statusPermission = true;
@@ -124,3 +125,47 @@ export function revisionButtonPermission ({task, status, loggedUser}){
     return statusPermission && assigneePermission;
 }
 
+
+
+// submit for client approval button permission
+
+export function submitForClientApproval({task, status, auth}){
+    let statusPermission = false;
+    let assigneePermission = false;
+    let statusId = status ? status.id : -1;
+    let assignedUser = task?.assigneeBy; 
+    
+    // if status id 6 show timer start button
+    if([8].includes(Number(statusId))){ statusPermission = true; }
+
+    // if task assign to 
+    if(
+        (assignedUser?.getId() === auth?.getId() && 
+        auth?.getRoleId() === 4) || 
+        auth?.getRoleId() === 1
+    ){
+        assigneePermission = true;
+    }
+
+    return statusPermission && assigneePermission;
+}
+
+export function clientApproveConfirmationButtonPermission({task, status, auth}){
+    let statusPermission = false;
+    let assigneePermission = false;
+    let statusId = status ? status.id : -1;
+    let assignedUser = task?.assigneeBy; 
+    
+    // if status id 6 show timer start button
+    if([9].includes(Number(statusId))){ statusPermission = true; }
+
+    // if task assign to 
+    if(
+        (assignedUser?.getId() === auth?.getId() &&  auth?.getRoleId() === 4) || 
+        auth?.getRoleId() === 1
+    ){
+        assigneePermission = true;
+    }
+
+    return statusPermission && assigneePermission;
+}

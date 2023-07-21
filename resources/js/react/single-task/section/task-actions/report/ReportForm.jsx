@@ -4,6 +4,7 @@ import { HiOutlineSelector } from "react-icons/hi";
 import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
 import CKEditorComponent from "../../../../ckeditor";
+import UserSelectionList from "../stop-timer/options/UserSelectionList";
 
 const reports = [
     {
@@ -25,8 +26,8 @@ const ReportForm = ({close}) => {
     const onSubmit =(e)=>{
         e.preventDefault();
         const data = {
-            reason,
-            person,
+            reason: reason?.name,
+            person: person?.id,
             comment,
             previousNotedIssue
         }
@@ -44,8 +45,7 @@ const ReportForm = ({close}) => {
                         <Listbox value={reason} onChange={setReason}>
                             <Listbox.Button className="w-100 bg-white py-2 pl-2 pr-1 border text-left d-flex align-items-center justify-content-between">
                                 <span className="mr-auto">
-                                    {reason?.name ||
-                                        "Select Reason for report."}
+                                    {reason?.name ?? <span style={{color: '#aaa'}}> -- </span>}
                                 </span>
                                 <HiOutlineSelector className="f-16" />
                             </Listbox.Button>
@@ -84,7 +84,8 @@ const ReportForm = ({close}) => {
                         Responsible Person
                     </label>
                     <div className="position-relative w-100 mb-3">
-                        <Listbox value={person} onChange={setPerson}>
+                        <UserSelectionList person={person} setPerson={setPerson} />
+                        {/* <Listbox value={person} onChange={setPerson}>
                             <Listbox.Button className="w-100 bg-white py-2 pl-2 pr-1 border text-left d-flex align-items-center justify-content-between">
                                 <span className="mr-auto">
                                     {reason?.name ||
@@ -117,7 +118,7 @@ const ReportForm = ({close}) => {
                                     </Listbox.Option>
                                 ))}
                             </Listbox.Options>
-                        </Listbox>
+                        </Listbox> */}
                     </div>
                 </div>
 

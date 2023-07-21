@@ -11,6 +11,7 @@ import ProjectWiseTimeLog from './pages/ProjectWiseTimeLog';
 import TaskWiseLogReport from './pages/TaskWiseTable';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import ContextProvider from './context/ContextProvider';
 
 
 
@@ -24,17 +25,19 @@ if (timeLogTableContainer) {
         <React.StrictMode>
             <Provider store={store}>    
                 <DndProvider backend={HTML5Backend}>
+                   <ContextProvider>
                     <BrowserRouter basename='/account/time-log-report'>
-                        <Routes>
-                            <Route path="/" element={<TimeLogTable />} >
-                                <Route index element={<Navigate to="employee-wise" replace />} />
-                                <Route path='/employee-wise' element={<EmployeeWiseTimeLogTable />} />
-                                <Route path='/project-wise' element={<ProjectWiseTimeLog />} />
-                                <Route path='/task-wise' element={<TaskWiseLogReport />} />
-                                <Route path='/time-log-history' element={<TimeLogHistory />} />
-                            </Route>
-                        </Routes>
-                    </BrowserRouter>
+                            <Routes>
+                                <Route path="/" element={<TimeLogTable />} >
+                                    <Route index element={<Navigate to="employee-wise" replace />} />
+                                    <Route path='/employee-wise' element={<EmployeeWiseTimeLogTable />} />
+                                    <Route path='/project-wise' element={<ProjectWiseTimeLog />} />
+                                    <Route path='/task-wise' element={<TaskWiseLogReport />} />
+                                    <Route path='/time-log-history' element={<TimeLogHistory />} />
+                                </Route>
+                            </Routes>
+                        </BrowserRouter> 
+                    </ContextProvider> 
                 </DndProvider>
             </Provider>
         </React.StrictMode>

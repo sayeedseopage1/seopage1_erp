@@ -534,6 +534,9 @@
     display: none;
   }
 }
+.sp1_ck_content {
+  word-wrap: break-word !important;
+}
 .sp1_ck_content ul {
   margin-left: 40px !important;
   list-style: unset !important;

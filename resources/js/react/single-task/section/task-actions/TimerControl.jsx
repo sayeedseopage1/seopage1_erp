@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Button from "../../components/Button";
 import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
 import {
@@ -29,17 +29,19 @@ const TimerControl = ({ task }) => {
 
     const openLessTrackTimerModal = () => dispatch(setLessTrackModal(true)) // open less hours track explaination modal 
 
+    const timerStatus = task?.ranningTimer?.status;
+    const taskRunning = useMemo(() => timerStatus, [timerStatus])
     // check timer is already running
     useEffect(() => {
-        if (task?.running_timer?.status === "running") {
-            let serverTime = task.running_timer.time;
+        if (taskRunning === "running") {
+            let serverTime = task?.ranningTimer?.time;
             let localTime = dayjs.dayjs().unix();
             let timer = localTime - serverTime;
             setTimerStart(true);
             setSeconds(timer);
-            setTimerId(task?.running_timer?.id);
+            setTimerId(task?.ranningTimer?.id);
         }
-    }, [task]);
+    }, [taskRunning]);
 
     //   timer control
     useEffect(() => {
@@ -98,8 +100,8 @@ const TimerControl = ({ task }) => {
         setIsOpenConfirmationModal(false);
         startTimerApi({
             task_id: task?.id,
-            project_id: task?.project_id,
-            memo: task?.heading,
+            project_id: task?.projectId,
+            memo: task?.title,
             user_id: window?.Laravel?.user?.id,
         })
             .unwrap()
@@ -147,13 +149,14 @@ const TimerControl = ({ task }) => {
             .unwrap()
             .then((res) => {
                 if (res?.status === "success") {
+                    
+                    setTimerStart(false);
+                    setSeconds(0);
+                    timerId(null);
                     Toast.fire({
                         icon: res?.status,
                         title: _.startCase(res?.message),
                     });
-                    setTimerStart(false);
-                    setSeconds(0);
-                    timerId(null);
                 } else {
                     Toast.fire({
                         icon: res?.status,
@@ -177,8 +180,7 @@ const TimerControl = ({ task }) => {
         // fetch data
         getUserTrackTime(loggedUser?.getId())
         .unwrap()
-        .then(res => {
-            console.log({res})
+        .then(res => { 
             res < 435 ? openLessTrackTimerModal() : stopTimer()
         })
         .catch(err => console.log(err))

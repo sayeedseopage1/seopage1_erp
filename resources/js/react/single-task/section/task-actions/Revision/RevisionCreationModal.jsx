@@ -44,7 +44,6 @@ const RevisionCreationModal = ({ close, task, auth }) => {
        return errorCount === 0; 
     }
 
-    console.log({task})
 
     // handle submiton
     const handleSubmition=(e)=>{
@@ -57,8 +56,6 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             comments2: comment 
         }
  
- 
-        
         if(validate()){            
             createRevision(data)
             .unwrap()
@@ -75,7 +72,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                     icon: 'success',
                     title: 'Task submitted for Revision successfully'
                 })
-                dispatch(setTaskStatus(res?.task_status));
+
+                close();
             })
             .catch(err => console.log(err));
         }else{

@@ -8,6 +8,7 @@ const Input = ({
     inputClass='', 
     labelClass='', 
     type='text', 
+    className='',
     value, 
     defaultValue,
     onChange, 
@@ -15,7 +16,7 @@ const Input = ({
     ...rest 
 }) => {
   return (
-    <div className="form-group my-3">
+    <div className={`form-group my-3 w-100 ${className}`}>
         <label 
             htmlFor={id}
             className={`f-14 text-dark-gray mb-1 ${labelClass}`} 
@@ -26,7 +27,7 @@ const Input = ({
         </label>
         <input 
             type={type}
-            className={`form-control height-35 f-14 ${inputClass}`}
+            className={`form-control height-35 w-100 f-14 ${inputClass}`}
             placeholder={placeholder}
             id={id}
             value={value}

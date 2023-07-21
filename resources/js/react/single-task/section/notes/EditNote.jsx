@@ -9,7 +9,9 @@ import { storeNotes } from '../../../services/features/subTaskSlice'
 import Input from '../../components/form/Input'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import CustomModal from '../../components/CustomModal' 
+import CustomModal from '../../components/CustomModal'
+import { useWindowSize } from 'react-use' 
+import Modal from '../../components/Modal'
 
 const EditNote = ({isOpen, close, toggleRef}) => {
   const {task, notes} = useSelector(s => s.subTask); 
@@ -19,7 +21,7 @@ const EditNote = ({isOpen, close, toggleRef}) => {
   const [note,setNote] = React.useState('');
   const [attachedFiles, setAttachedFiles] = React.useState([]);
   const dispatch = useDispatch();
-
+  const { width: deviceWidth} = useWindowSize();
   const [searchParams] = useSearchParams();
   const noteId = searchParams.get('note');
   const type = searchParams.get('type');
@@ -144,11 +146,9 @@ const handleFileDelete = (e, file) => {
     setAttachedFiles(previousFile);
 }
 
-  return (
-    <CustomModal 
-        isOpen={isOpen} 
-        toggleRef={toggleRef}
-    > 
+
+    const content = () => {
+        return (
         <div className='sp1-subtask-form --modal-panel'>
             <div className='sp1-subtask-form --modal-panel-header'> 
                  <h6>Update Notes
@@ -246,8 +246,30 @@ const handleFileDelete = (e, file) => {
                 </div>
             </div>
         </div>
-    </CustomModal>
-  )
+        )
+    }
+
+
+ if(deviceWidth > 1200){
+    return (
+        <CustomModal 
+            isOpen={isOpen} 
+            toggleRef={toggleRef}
+        > 
+            <React.Fragment>
+            {content()}
+            </React.Fragment>
+        </CustomModal>
+      )
+ }else{
+    return (
+        <Modal isOpen={isOpen}> 
+            <React.Fragment>
+            {content()}
+            </React.Fragment>
+        </Modal>
+      )
+ }
 }
 
 export default EditNote;

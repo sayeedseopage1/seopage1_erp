@@ -50,12 +50,12 @@ const DataTable = ({
                                             if(col.group){
                                                 return index === 0 && (
                                                     <React.Fragment key={col.id}>
-                                                        {col.cell({row: item, rowSpan: _.size(value)})}
+                                                        {col.cell({row: item, data: value, rowSpan: _.size(value)})}
                                                     </React.Fragment>
                                                 );
                                             }else{
                                                     return <React.Fragment key={col.id}>
-                                                        { col.cell({ row: item, className: `${className} sp1_drag_col_${col?.id}`})}
+                                                        { col.cell({ row: item, data: value, className: `${className} sp1_drag_col_${col?.id}`})}
                                                     </React.Fragment>
                                                 }
                                             }

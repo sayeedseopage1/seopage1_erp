@@ -80,7 +80,7 @@ const SubmittedWork = ({task}) => {
         {
           data?.map((item => (
             <WorkItem 
-              key={item.id} 
+              key={item?.submission_date + item?.submission_no} 
               data={item} 
               toggle={toggle} 
               close={close}

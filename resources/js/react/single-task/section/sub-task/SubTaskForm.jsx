@@ -168,12 +168,12 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body">
                     {/* working environment form */}
-                    {!isFirstSubtask && <WorkingEnvironmentForm /> }
+                    {isFirstSubtask && <WorkingEnvironmentForm /> }
                     {/* end working environment form */}
 
-                    {isFirstSubtask && (
+                    {!isFirstSubtask && (
                         <div className="sp1-subtask-form --form row">
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <Input
                                     id="title"
                                     label="Title"
@@ -187,7 +187,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 />
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -203,7 +203,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 </div>
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -219,7 +219,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 </div>
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -235,7 +235,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 </div>
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label htmlFor="">
                                         Start Date <sup className="f-14">*</sup>
@@ -266,7 +266,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 </div>
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label htmlFor="">
                                         Due Date <sup className="f-14">*</sup>
@@ -297,14 +297,14 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 </div>
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <TaskCategorySelectionBox
                                     selected={taskCategory}
                                     onSelect={setTaskCategory}
                                 />
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
@@ -315,18 +315,18 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                         <TaskObserverSelection />
                     </div> */}
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <StatusSelection />
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <PrioritySelection
                                     selected={priority}
                                     setSelected={setPriority}
                                 />
                             </div>
 
-                            <div className="col-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         htmlFor=""
@@ -394,7 +394,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 />
                             </div>
 
-                            <div className="col-12 mt-3">
+                            <div className="col-12 mt-3 pb-3">
                                 <div className="d-flex align-items-center justify-content-end">
                                     <Button
                                         variant="secondary"

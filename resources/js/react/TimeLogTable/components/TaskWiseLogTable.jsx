@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./data-table.css";
-import UserRender from "./UserRender";
-import { convertTime } from "../../utils/converTime";
 import TableFooter from "./TableFooter";
-import dayjs from "dayjs";
 import TaskWiseTimeLogTableLoader from "./TaskWiseTableLoader";
 import TableDragAbleHeader from "./DragHeader";
 

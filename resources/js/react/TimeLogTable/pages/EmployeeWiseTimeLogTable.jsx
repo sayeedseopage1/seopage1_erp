@@ -1,10 +1,14 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { EmployeeTableColumn } from "../components/EmployeeTableColumn";
 import EmployeeTimeLogDataTable from '../components/EmployeeTimeLogDataTable';
 import { useGetEmployeeWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
 import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
-import Tabbar from "../components/Tabbar";
+import Tabbar from "../components/Tabbar"; 
+import { EmployeeTableCtx } from "../context/EmployeeTableContext";
+import TimeLogTableFilterBar from "../../TimeLogTable-backup/components/TimeLogTableFilterBar";
+
+
 
 const EmployeeWiseTimeLogTable = () => {
     const [data, setData] = useState([]);
@@ -12,6 +16,7 @@ const EmployeeWiseTimeLogTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
+    const { setFilter } = useContext(EmployeeTableCtx)
 
     const [getEmployeeWiseData, {isLoading}] = useGetEmployeeWiseDataMutation();
 
@@ -25,6 +30,7 @@ const EmployeeWiseTimeLogTable = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
+        setFilter(filter);
         getEmployeeWiseData(filter)
         .unwrap()
         .then(res => {
@@ -33,10 +39,6 @@ const EmployeeWiseTimeLogTable = () => {
             setData(sortedData);
         })
     }
-
-    useEffect(() => {
-        handleFetchData({});
-    }, []);
 
     // data sort handle 
     const handleSorting = (sort) => {
@@ -58,7 +60,7 @@ const EmployeeWiseTimeLogTable = () => {
 
     return (
         <div className="sp1_tlr_container">
-            <div className="bg-white">Filter bar</div>
+        <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="">
                     <Tabbar/>
