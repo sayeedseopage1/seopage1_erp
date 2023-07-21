@@ -75,9 +75,11 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="form-group height-35 f-14">
+                                                        
                                                         <label for="hours">
-                                                            Select Hours (Request for {{ $value->incress_hours }} Hrs)
+                                                            Select Hours <strong>(Requested for {{ $value->incress_hours }} Hrs) </strong>
                                                         </label>
+                                                        
                                                         <select name="hours" id="task_hours{{ $value->id }}" class="form-control height-35 f-14">
                                                             <option value="">Select Hours</option>
                                                             @for ($i = 1; $i <= 20; $i++)
@@ -86,6 +88,8 @@
                                                                 </option>
                                                             @endfor
                                                         </select>
+                                                    
+
                                                     </div>
                                                     <div class="card mt-5">
                                                         <div class="card-body">

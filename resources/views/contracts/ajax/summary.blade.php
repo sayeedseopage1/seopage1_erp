@@ -226,7 +226,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
    @endif
    @endif
 
-   <div class="d-flex justify-content-center">
+   <div class="">
 
      @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
      @if($contract->deal->status == 'pending')
@@ -242,7 +242,24 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
      @elseif($contract->deal->status == 'Accepted')
        <h3 class="d-flex justify-content-center" style="color:green;">{{$contract->deal->status}}</h3>
        @else
-     <h3 class="d-flex justify-content-center" style="color:red;">{{$contract->deal->status}}</h3>
+       @if($contract->deal->status == 'Denied')  
+     <h3 class="d-flex justify-content-left" style="color:red;">
+       
+            Time Expired
+        </h3>
+        <span class="mt-5 d-flex justify-content-start">
+            @php 
+        $award_time_request = App\Models\AwardTimeIncress::where('deal_id',$contract->deal->id)->where('status',1)->first();
+            @endphp
+            @if($award_time_request == null)
+            <button class="btn btn-success award_time_incress">Request for time extension</button>
+            @endif
+
+        </span>
+        
+      
+   
+    @endif
 
      @endif
      @else
@@ -862,6 +879,40 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
     <!-- CARD FOOTER END -->
 </div>
+<div class="modal fade" id="award_time_incress_modal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Award Time Extention</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id" value="{{$contract->deal->id}}" id="task_id">
+                    <div class="form-group">
+                        <label for="hours">Select Hours</label>
+                        <select name="hours" id="task_hours" class="form-control height-35 f-14">
+                            <option value="">Select Hours</option>
+                            <option value="2">2 Hours</option>
+                            <option value="4">4 Hours</option>
+                            <option value="10">10 Hours</option>
+                            <option value="20">20 Hours</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea name="descripton" id="task_description" class="form-control" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="award_time_incress_submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <!-- INVOICE CARD END -->
 <?php
 $currentDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$contract->deal->award_time)->format('Y-m-d H:i:s');
@@ -878,6 +929,44 @@ $newDateTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s',$currentDateTime)-
 
 
       <script>
+        $('body').on('click', '.award_time_incress', function(e) {
+            e.preventDefault();
+            $('#task_id').val($(this).data('id'));
+            $('#award_time_incress_modal').modal('toggle');
+        });
+        
+
+        $('#award_time_incress_submit').click(function() {
+            var task_id = {{$contract->deal->id}};
+            var task_hours = $('#task_hours').val();
+            var task_description = $('#task_description').val();
+
+            $.easyAjax({
+                url: '{{ route('award_time_check.store') }}',
+                //container: '#quick-action-form',
+                type: "POST",
+                disableButton: true,
+                buttonSelector: "#award_time_incress_submit",
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    id: task_id,
+                    hours: task_hours,
+                    description: task_description,
+                },
+                success: function(resp) {
+                    if (resp.status == 'success') {
+                        $('#award_time_incress_modal').modal('hide');
+                        toastr.options.closeMethod = 'fadeOut';
+                        toastr.options.closeDuration = 120;
+                        toastr.options.closeEasing = 'swing';
+                        toastr.success('Request Submit to Admin', 'Success');
+                        toastr.options.onHidden = function() {
+
+                        }
+                    }
+                }
+            })
+        });
 
 
 

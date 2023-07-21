@@ -17,6 +17,7 @@ use App\Models\Currency;
 use App\Models\kpiSettingGenerateSale;
 use App\Models\User;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -2289,8 +2290,10 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
+    //    / 
+   //  dd($request);
         $data = new AwardTimeIncress();
-        $data->request_from = $this->user->id;
+        $data->request_from = Auth::id();
         $data->deal_id = $request->id;
         $data->incress_hours = $request->hours;
         $data->pm_comment = $request->description;
@@ -2316,7 +2319,10 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_update(Request $request)
     {
+       // dd($request);
+       // DB::beginTransaction();
         $deal = Deal::find($request->id);
+//    / dd($deal->id);
         if ($deal) {
             $mode = '0';
             if ($request->mode == 'approve') {
@@ -2324,13 +2330,31 @@ class ContractController extends AccountBaseController
                 //$total_secoends = 20 * 60 * 60;
                 $second_left = Carbon::now()->diffInSeconds($deal->award_time);
                 //$total_secoend_left = $total_secoends - $secoend_left;
+               
                 $request_seconds = $request->hours * 60 * 60;
-
-                if ($second_left >= $request_seconds) {
-                    $deal->award_time = Carbon::parse($deal->award_time)->addSeconds($request_seconds);
-                } else {
-                    $deal->award_time = Carbon::now()->addSeconds($second_left);
+              //  $total_seconds= $second_left;
+               // dd($second_left+$request_seconds);
+                $old_award_time = $deal->award_time;
+                //$original_format = 'Y-m-d H:i:s'; // Change this format to match the format of $deal->award_time
+              
+               
+                
+               
+                $award_time = Carbon::now()->addHours($request->hours);
+                $award_time= $award_time->addHours(-20);
+              //  dd($award_time);
+               
+               // dd($second_left);
+                if ($deal->status =='Denied') {
+                    $deal->award_time = $award_time;
+                    $deal->old_award_time = $old_award_time;
+                  //  dd("false",$deal->award_time);
+                } elseif($deal->status =='pending') {
+                    $deal->award_time = $award_time;
+                    $deal->old_award_time = $old_award_time;
+                    //dd("true",$deal->award_time);
                 }
+               // dd($deal->award_time);
                 $deal->status= 'pending';
 
                 $deal->save();
