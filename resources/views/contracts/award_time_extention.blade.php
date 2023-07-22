@@ -21,7 +21,7 @@
                                 <th>Project Name</th>
                                 <th>Client Name</th>
                                 <th>Requested Hours</th>
-                                <th>Hours Left</th>
+                                {{-- <th>Hours Left</th> --}}
                                 <th>Request From</th>
                                 <th>Request At</th>
                                 <th>action</th>
@@ -42,7 +42,7 @@
                                             </a>
                                         </td>
                                         <td>{{ $value->incress_hours }} Hrs</td>
-                                        <td>
+                                        {{-- <td>
                                             @php
                                                 $currentDateTime = \Carbon\Carbon::now()->addHour(20);
                                                 $givenDateTime = \Carbon\Carbon::parse($value->deal->award_time);
@@ -51,7 +51,7 @@
 
                                                 echo $diff->format('%h hours, %i minutes');
                                             @endphp
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             <a href="{{ route('employees.show', $value->request_from) }}">{{ $value->request_from_user->name }}
                                             </a>
@@ -113,7 +113,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="6" class="t">
-                                            <x-cards.no-record icon="user" :message="__('messages.noAgentAdded')" />
+                                            <x-cards.no-record icon="user" :message="__('No data found')" />
                                         </td>
                                     </tr>
                                 @endforelse
