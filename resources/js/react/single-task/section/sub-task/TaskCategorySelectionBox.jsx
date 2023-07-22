@@ -1,9 +1,10 @@
 import { Combobox } from '@headlessui/react'
 import * as React from 'react'
 import SearchBox from '../../components/form/Searchbox';
-import _, { filter } from 'lodash';
+import _  from 'lodash';
 import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 import { useParams } from 'react-router-dom';
+import Loader from '../../components/Loader';
 
 const people = [
     { id: 1, name: 'Durward Reynolds', unavailable: false },
@@ -30,12 +31,12 @@ const TaskCategorySelectionBox = ({selected, onSelect}) => {
     const filteredData =
     query === ''
       ? categories
-      : categories.filter((cat) => {
+      : categories?.filter((cat) => {
           return cat?.category_name.toLowerCase().includes(query.toLowerCase())
         })
 
   return (
-    <Combobox  value={selected} onChange={onSelect}>
+    <Combobox value={selected} onChange={onSelect}>
         <div className="form-group position-relative my-3">
             <label htmlFor="">Task category</label>
             <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
@@ -52,6 +53,12 @@ const TaskCategorySelectionBox = ({selected, onSelect}) => {
                  
             <Combobox.Options className="sp1-select-options">
                 
+                {isFetching && (
+                    <div className='sp1-select-option-nodata'>
+                        <Loader />
+                    </div>
+                )}
+
                 {filteredData?.length===0 ? 
                     <div className='sp1-select-option-nodata'>
                          Nothing found.
@@ -72,9 +79,7 @@ const TaskCategorySelectionBox = ({selected, onSelect}) => {
                                 {cat?.category_name}
                             </span>
                             {selected ? (
-                                <span className="">
-                                
-                                </span>
+                                <span className="ml-auto"> <i className='fa-solid fa-check'/> </span>
                             ) : null}
                         </>
                     )}

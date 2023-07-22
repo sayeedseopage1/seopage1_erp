@@ -8,7 +8,6 @@ const CommentPreview = ({isOpen, close, comment}) => {
     <div className='sp1_st_comment_preview'>
         <div className='sp1_st_comment_panel'> 
             <div className='border-bottom pb-2 d-flex align-items-center'>
-                
                 <Button
                     aria-label="close-modal"
                     className='_close-modal'

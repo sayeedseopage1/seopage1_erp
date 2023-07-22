@@ -1,3 +1,8 @@
+.word-break {
+  -ms-word-break: break-all;
+  word-break: break-all;
+}
+
 .dot-color {
   display: block;
   width: 8px;

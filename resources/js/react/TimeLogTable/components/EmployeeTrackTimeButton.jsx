@@ -100,7 +100,7 @@ const EmployeeTrackTimeButton = ({ row, children }) => {
                                     <EmployeeSessionTable
                                         data={renderData}
                                         columns={EmployeeSessionTableColumn}
-                                        height="80vh"
+                                        height="70vh"
                                         tableName="employee_timelog_sesson_report"
                                         onSort={handleSorting}
                                         onPaginate={handlePagination}

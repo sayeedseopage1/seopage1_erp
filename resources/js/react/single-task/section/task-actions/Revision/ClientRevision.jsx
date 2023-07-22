@@ -3,17 +3,59 @@ import Button from '../../../components/Button'
 import Modal from '../../../components/Modal';
 import { SingleTask } from '../../../../utils/single-task';
 import ClientRevisionForm from './ClientRevisionForm';
-import AssigneeRevisionToDev from './AssigneeRevisionToDev';
+import AssigneeToLeadFromClientRevision from './AssigneeToLeadFromClientRevision';
+import { useStoreClientRevisionTaskMutation } from '../../../../services/api/SingleTaskPageApi';
 
-const ClientRevision = ({task}) => {
+const ClientRevision = ({task, auth}) => {
     const [revisionModal, setRevisionModal] = useState(false);
     const [show,setShow] = useState('CLIENT_REVISION');
     const singleTask = new SingleTask(task)
 
-    const handleSubmit = () => {
+    // client revision data
+    const [clientComment, setClientComment] = useState('');
+    const [clientAcknowledgement, setClientAcknowladgement] = useState('');
+
+
+    const [storeClientRevisionTask, {isLoading}] = useStoreClientRevisionTaskMutation();
+
+    const handleSubmit = (data) => {
+       setClientAcknowladgement(data?.reason);
+       setClientComment(data?.comment); 
        setShow('ASSINEE_TO_DEV'); 
     }
 
+    const close = () => {
+        setRevisionModal(false)
+    }
+
+    const handleSubmitToStore = (data) =>{
+        const fData = {
+            ...data,
+            client_comment: clientComment,
+            client_revision_acknowledgement: clientAcknowledgement
+        }
+
+        const showToster= () =>{
+            const Toast = Swal.mixin({
+                toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+            }) 
+            Toast.fire({
+                icon: 'success',
+                title: 'Task submitted for Revision successfully'
+            })
+        }
+
+        console.log({fData})
+
+        storeClientRevisionTask(fData)
+        .unwrap()
+        .then(res => showToster())
+        .catch(err => console.log(err))
+    }
   return (
     <React.Fragment>
         <Button
@@ -28,12 +70,12 @@ const ClientRevision = ({task}) => {
         <Modal isOpen={revisionModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
                 <div
-                    className="sp1_single_task--modal-panel"
+                    className="sp1_single_task--modal-panel w-100 pb-3"
                     style={{ maxWidth: "550px" }}
                 >
                     <div className="border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between">
                         <div className="font-weight-bold f-14">
-                            Client Revision - Task#{task?.id}
+                            Task#{task?.id} - Client Revision
                         </div>
                         <Button onClick={close} className="">
                             <i className="fa-solid fa-xmark" />
@@ -43,17 +85,20 @@ const ClientRevision = ({task}) => {
                     {show === 'CLIENT_REVISION' && 
                         <ClientRevisionForm 
                             task={singleTask}
-                            onSubmitForm={handleSubmit}
                             close={() => setRevisionModal(false)} 
+                            onSubmitForm={(data) => handleSubmit(data)}
                         />
-                    }
+                    } 
                     {show === "ASSINEE_TO_DEV" &&
-                        <AssigneeRevisionToDev 
+                        <AssigneeToLeadFromClientRevision 
                             task={task}
-                            onSubmit={(data) => console.log({ASSINEE_TO_DEV: data})}
-                            isSubmitting = {false}
+                            auth={auth}
+                            isSubmitting = {isLoading}
+                            onSubmit={handleSubmitToStore}
+                            close={() => setRevisionModal(false)}
+                            onBack={() => setShow('CLIENT_REVISION')}
                         />
-                    }
+                    } 
                 </div>
             </div>
         </Modal> 
@@ -62,3 +107,4 @@ const ClientRevision = ({task}) => {
 }
 
 export default ClientRevision 
+

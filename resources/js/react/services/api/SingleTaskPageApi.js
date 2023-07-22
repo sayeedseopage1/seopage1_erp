@@ -306,6 +306,42 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ['TASK_STATUS']
         }),
+
+        /**
+         *  * submit for client approval 
+         */
+
+        storeClientRevisionTask: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/client-has-revision-task`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },    
+            }),
+            invalidatesTags: ['TASK_STATUS']
+        }),
+
+
+        /**
+         * * Working Environment
+         */
+
+        workingEnvironment: build.mutation({
+            query: (data) => ({
+                url: `/account/working-environment-store`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        })
         
     }),
 });
@@ -335,5 +371,7 @@ export const {
     useSubmitForClientApprovalMutation,
     useGetTaskStatusQuery,
     useRevisionAcceptOrDenyByLeadDeveloperMutation,
-    useConfirmClientApprovalMutation
+    useConfirmClientApprovalMutation,
+    useStoreClientRevisionTaskMutation,
+    useWorkingEnvironmentMutation
 } = singleTaskPageApiSlice;

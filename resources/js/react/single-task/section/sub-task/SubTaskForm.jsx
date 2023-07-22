@@ -20,9 +20,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { storeSubTasks } from "../../../services/features/subTaskSlice";
 import { CompareDate } from "../../../utils/dateController";
 import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
+import { SingleTask } from "../../../utils/single-task";
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
-    const { task, subTask } = useSelector((s) => s.subTask);
+    const { task:taskDetails, subTask } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
     //   form data
@@ -42,6 +43,8 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const [estimateTimeMin, setEstimateTimeMin] = useState("");
     const [files, setFiles] = React.useState([]);
 
+    const task = new SingleTask(taskDetails);
+
     const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
 
@@ -52,9 +55,9 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const required_error = error?.status === 422 ? error?.data : null;
     // handle change
     React.useEffect(() => {
-        setMilestone(task?.milestone_title);
-        setProject(task?.project_name);
-        setParentTask(task?.heading);
+        setMilestone(task?.milestoneTitle);
+        setProject(task?.projectName);
+        setParentTask(task?.title);
     }, [task]);
 
     // handle onchange
@@ -71,16 +74,16 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
 
         const fd = new FormData();
-        fd.append("milestone_id", task?.milestone_id);
+        fd.append("milestone_id", task?.milestoneID);
         fd.append("task_id", task?.id);
         fd.append("title", title);
         fd.append("start_date", _startDate);
         fd.append("due_date", _dueDate);
-        fd.append("project_id", task?.project_id);
-        fd.append("task_category_id", taskCategory?.id);
+        fd.append("project_id", task?.projectId);
+        fd.append("task_category_id", task?.category?.id);
         fd.append("user_id", assignedTo?.id);
         fd.append("description", description);
-        fd.append("board_column_id", task?.board_column_id);
+        fd.append("board_column_id", task?.boardColumn?.id);
         fd.append("priority", _.lowerCase(priority));
         fd.append("estimate_hours", estimateTimeHour);
         fd.append("estimate_minutes", estimateTimeMin);
@@ -152,11 +155,16 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         return errText;
     };
 
+
+    const showEnv = task?.workingEnvironment === 0 ? _.size(task?.subtask) === 0 ? true : false : false
+
     return (
         <>
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
-                    <h6>{!isFirstSubtask ? "Working Environment" : "Create Sub Task"}</h6>
+                    <h6>
+                        { showEnv ? "Working Environment" : "Create Sub Task"}
+                    </h6>
                     <Button
                         aria-label="close-modal"
                         className="_close-modal"
@@ -168,10 +176,10 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body">
                     {/* working environment form */}
-                    {isFirstSubtask && <WorkingEnvironmentForm /> }
+                    {showEnv && <WorkingEnvironmentForm task={task} /> }
                     {/* end working environment form */}
 
-                    {!isFirstSubtask && (
+                    {!showEnv && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
                                 <Input
@@ -245,14 +253,10 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                             placeholderText={`Ex: ${dayjs
                                                 .dayjs()
                                                 .format("DD-MM-YYYY")}`}
-                                            minDate={dayjs
-                                                .dayjs(task?.start_date)
-                                                .toDate()}
+                                            minDate={dayjs.dayjs(task?.startDate).toDate()}
                                             maxDate={
                                                 dueDate ||
-                                                dayjs
-                                                    .dayjs(task?.due_date)
-                                                    .toDate()
+                                                dayjs.dayjs(task?.dueDate).toDate()
                                             }
                                             date={startDate}
                                             setDate={setStateDate}
@@ -277,14 +281,9 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                 .dayjs()
                                                 .format("DD-MM-YYYY")}`}
                                             minDate={
-                                                startDate ||
-                                                dayjs
-                                                    .dayjs(task?.start_date)
-                                                    .toDate()
+                                                startDate || dayjs.dayjs(task?.startDate).toDate()
                                             }
-                                            maxDate={dayjs
-                                                .dayjs(task?.due_date)
-                                                .toDate()}
+                                            maxDate={dayjs.dayjs(task?.dueDate).toDate()}
                                             date={dueDate}
                                             setDate={setDueDate}
                                         />
@@ -340,12 +339,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                             type="Number"
                                             className="form-control height-35 f-14 mr-2"
                                             value={estimateTimeHour}
-                                            onChange={(e) =>
-                                                handleChange(
-                                                    e,
-                                                    setEstimateTimeHour
-                                                )
-                                            }
+                                            onChange={(e) =>handleChange( e,setEstimateTimeHour)}
                                         />{" "}
                                         hrs
                                         <input

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Input from "../../components/form/Input";
 import Button from "../../components/Button";
+import { useWorkingEnvironmentMutation } from "../../../services/api/SingleTaskPageApi";
+import SubmitButton from "../../components/SubmitButton";
 
-const WorkingEnvironmentForm = () => {
+const WorkingEnvironmentForm = ({task}) => {
     const [siteUrl, setSiteUrl] = useState("");
     const [frontendPassword, setFrontendPassword] = useState("");
     const [loginUrl, setLoginUrl] = useState("");
@@ -12,13 +14,28 @@ const WorkingEnvironmentForm = () => {
     ] = useState("");
     const [password, setPassword] = useState("");
 
+
+    const [ workingEnvironment, {isLoading}] = useWorkingEnvironmentMutation();
+
+
     // handle input change
-    const handleInputChange = (e, setState) => {
+    const handleChange = (e, setState) => {
+        e.preventDefault()
         setState(e.target.value);
     };
 
+
     const handleSubmit = (e) => {
-        console.log();
+        const data = {
+            project_id: task?.projectId,
+            site_url: siteUrl,
+            login_url: loginUrl,
+            email: siteLoginCredentialUserNameOrEmail,
+            password: password,
+            frontend_password: frontendPassword
+        }
+
+        workingEnvironment(data).unwrap();
     };
 
     return (
@@ -46,7 +63,7 @@ const WorkingEnvironmentForm = () => {
                         name="frontend-end-password"
                         required={true}
                         value={frontendPassword}
-                        onChange={(e) => handleChange(e, frontendPassword)}
+                        onChange={(e) => handleChange(e, setFrontendPassword)}
                     />
                 </div>
             </div>
@@ -110,10 +127,14 @@ const WorkingEnvironmentForm = () => {
                         Cancel
                     </Button>
 
-                    {true ? (
-                        <Button onClick={handleSubmit}>
-                            <i className="fa-regular fa-paper-plane"></i>
+                    <SubmitButton onClick={handleSubmit} isLoading={isLoading}>
+                            <i className="fa-regular fa-paper-plane" />
                             Create
+                    </SubmitButton>
+
+                    {/* {isLoading ? (
+                        <Button onClick={handleSubmit}>
+                            
                         </Button>
                     ) : (
                         <Button className="cursor-processing">
@@ -127,7 +148,7 @@ const WorkingEnvironmentForm = () => {
                             ></div>
                             Processing...
                         </Button>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>

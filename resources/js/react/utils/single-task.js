@@ -100,6 +100,35 @@ export class TimeLog{
 }
 
 
+// project manager guideline
+
+export class ProjectMangerGuideline {
+    constructor(data){
+        this.id = data?.id;
+        this.theme_name = data?.theme_name;
+        this.theme_details = data?.theme_details;
+        this.theme_url = data?.theme_url;
+        this.color = data?.color ? JSON.parse(data.color) : [];
+        this.color_description = data?.color_description ? JSON.parse(data.color_description) : [];
+        this.color_schema = data?.color_schema;
+        this.created_at = data?.created_at;
+        this.design = data?.design;
+        this.drive_url = data?.drive_url;
+        this.google_drive_link = data?.google_drive_link;
+        this.instruction = data?.instruction;
+        this.instruction_plugin = data?.instruction_plugin;
+        this.plugin_name = data?.plugin_name;
+        this.plugin_research = data?.plugin_research;
+        this.plugin_url = data?.plugin_url;
+        this.project_id = data?.project_id;
+        this.reference_link = data?.reference_link;
+        this.xd_url = data?.xd_url;
+        this.updated_at = data?.updated_at;
+    }
+}
+
+
+
 // single task 
 export class SingleTask {
     constructor(task){
@@ -129,6 +158,9 @@ export class SingleTask {
         this.isSubtask = this.parentTaskId ? true : false;
         this.leadDeveloperParentTaskAction =  task?.parent_task_action; 
         this.ranningTimer= task?.running_timer;
+        this.workingEnvironment = task?.working_environment;
+        this.workEnvData = task?.working_environment_data;
+        this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline)
     }
 
     isLeadDeveloperAbleToSubmit () {

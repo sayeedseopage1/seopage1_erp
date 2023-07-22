@@ -1,8 +1,9 @@
 import { Combobox } from '@headlessui/react'
 import * as React from 'react' 
-import _, { filter } from 'lodash';
+import _  from 'lodash';
 import { useParams } from 'react-router-dom';
 import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
+import Loader from '../../components/Loader';
 
 
 const AssginedToSelection = ({selected, onSelect}) => {
@@ -39,6 +40,12 @@ const AssginedToSelection = ({selected, onSelect}) => {
             </Combobox.Button>
                  
             <Combobox.Options className="sp1-select-options">
+
+                {isFetching && (
+                    <div className='sp1-select-option-nodata'>
+                        <Loader />
+                    </div>
+                )}
                 
                 {filteredData?.length===0 ? 
                     <div className='sp1-select-option-nodata'>

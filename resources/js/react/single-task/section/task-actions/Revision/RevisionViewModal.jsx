@@ -23,7 +23,7 @@ const RevisionViewModal = ({task, close}) => {
   ] = useRevisionAcceptOrDenyByLeadDeveloperMutation();
 
   // handle Accept and continue submition
-  const hanldeAcceptAndContinueSubmition = (data, accept, type) => {
+  const hanldeAcceptAndContinueSubmition = (data, type) => {
     setComment(data);
     setShow(type); 
   }

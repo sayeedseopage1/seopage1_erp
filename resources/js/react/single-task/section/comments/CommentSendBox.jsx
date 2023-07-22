@@ -60,10 +60,7 @@ const CommentSendBox = ({onCommentPost, task}) => {
                       <div 
                           className="spinner-border text-white" 
                           role="status"
-                          style={{
-                              width: '18px',
-                              height: '18px', 
-                          }}
+                          style={{width: '18px', height: '18px' }}
                       >
                       </div>
                       Processing...
@@ -90,11 +87,11 @@ const CommentSendBox = ({onCommentPost, task}) => {
         <>
             <div className='__avatar rounded-circle'>
                 <img 
-                src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                alt='sender_name'
-                width="32px"
-                height="32px"
-                className='rounded-circle'
+                  src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
+                  alt='sender_name'
+                  width="32px"
+                  height="32px"
+                  className='rounded-circle'
                 />
             </div> 
         </>

@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import SubmitionView from './SubmitionView';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import SubmittedModalView from './SubmittedModalView';
+import _ from 'lodash';
 
 const fetcher = (url) => axios.get(url).then(res => res.data); 
 
@@ -54,6 +55,8 @@ const SubmittedWork = ({task}) => {
 
 
         {/* side drop toggle button */}
+       {
+        _.size(data) > 0 &&
         <button 
             aria-label='openCommentModalButton'  
             ref={setModalRefButton}
@@ -66,6 +69,7 @@ const SubmittedWork = ({task}) => {
               style={{color: "#276fec"}} 
             />
         </button>
+       } 
 
         <SubmittedModalView
             isOpen={modal === 'submitted-work'}
@@ -78,16 +82,29 @@ const SubmittedWork = ({task}) => {
         {/* side drop toggle button end */} 
         <div className="sp1_task_right_card--body"> 
         {
-          data?.map((item => (
-            <WorkItem 
-              key={item?.submission_date + item?.submission_no} 
-              data={item} 
-              toggle={toggle} 
-              close={close}
-              isLoading={isLoading}
-              modalRef={modalRefButton} 
-            />
-          )))
+          _.size(data) > 0 ? 
+            _.map(data, item => (
+              <WorkItem 
+                key={item?.submission_date + item?.submission_no} 
+                data={item} 
+                toggle={toggle} 
+                close={close}
+                isLoading={isLoading}
+                modalRef={modalRefButton} 
+              />
+            )):
+            <div
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                    color: "#B4BCC4",
+                    fontSize: "15px",
+                    textAlign: "center",
+                    height: "100%",
+                    width: "100%",
+                }}
+            >
+                No Submitted Work is Available
+            </div>
         }
         </div>
     </div>

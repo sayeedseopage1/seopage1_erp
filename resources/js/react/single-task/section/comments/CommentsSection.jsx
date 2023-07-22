@@ -4,6 +4,7 @@ import CommentModal from './CommentModal';
 import Button from '../../components/Button';
 import CommentWritingModal from './CommentWritingModal';
 import { useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
+import _ from 'lodash';
  
   
 const CommentSection = ({task, isLoading}) => {
@@ -11,32 +12,27 @@ const CommentSection = ({task, isLoading}) => {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
   const [openAddCommentModal, setOpenAddCommentModal] = React.useState(false);
   const [modalToggleRef, setModalToggleRef] = React.useState(null);
-
-
+  
   const toggleModalButton = () => setModalIsOpen(!modalIsOpen);
   const toggleAddCommentModal = () => setOpenAddCommentModal(!openAddCommentModal);
   const closeAddCommentModal = () => setOpenAddCommentModal(false);
 
+  const [getTaskDetails, {isFetching}] = useLazyGetTaskDetailsQuery()
 
-  const [getTaskDetails, {isFetching}] = useLazyGetTaskDetailsQuery('')
-
-  const memo_task = React.useMemo(() => task , [task]); 
   // if task notes fetch completed store data into redux store
   React.useEffect(()=> {
-    if(memo_task && memo_task.id){
-      getTaskDetails(`/${memo_task?.id}/json?mode=task_comment`)
+    if(task && task.id){
+      getTaskDetails(`/${task?.id}/json?mode=task_comment`)
       .unwrap()
       .then(res => {
-        if(res){ 
-          let _r = [...res].sort((a,b) => b.id - a.id);
-          setComments(_r);  
-        }
+          let r = _.orderBy([...res], "id", "desc")
+          setComments(r);
       })
       .catch(err => {
         console.log(err)
       })
     } 
-  }, [memo_task]);
+  }, []);
 
  
 
@@ -58,6 +54,7 @@ const CommentSection = ({task, isLoading}) => {
               toggleRef={modalToggleRef} 
               comments={comments}
               task={task}
+              close={() => setModalIsOpen(false)}
               onCommentPost={onCommentPost}
             />
 
@@ -123,14 +120,14 @@ const CommentSection = ({task, isLoading}) => {
                     No Comment is Avaliable
                   </div> : 
                   <div className='d-flex align-items-center justify-content-center'
-                  style={{
-                    color: '#5A6169',
-                    fontSize: '15px',
-                    textAlign: 'center',
-                    height: '100%',
-                    width: '100%',
-                  }}
-                > 
+                    style={{
+                      color: '#5A6169',
+                      fontSize: '15px',
+                      textAlign: 'center',
+                      height: '100%',
+                      width: '100%',
+                    }}
+                  > 
                     <div 
                           className="spinner-border text-dark ml-2" 
                           role="status"

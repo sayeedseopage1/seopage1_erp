@@ -56,7 +56,6 @@ const ClientRevisionForm = ({
         }
         
         if(validate()){
-           console.log(data)
            onSubmitForm(data);
         }else{
             console.log('Your forgot to fillup some requried fields')
@@ -90,7 +89,7 @@ const ClientRevisionForm = ({
                                 <label
                                     className="form-check-label"
                                     htmlFor="exampleRadios1"
-                                    style={{ marginBottom: "3px" }}
+                                    style={{ marginBottom: "3px", }}
                                 >
                                    Client's Requirements Are Not Fulfilled As Per Instruction 
                                 </label>
@@ -144,7 +143,7 @@ const ClientRevisionForm = ({
                                 </label>
                             </div> 
 
-                            <div className="form-check d-flex align-items-start mb-2">
+                            {/* <div className="form-check d-flex align-items-start mb-2">
                                 <input
                                     className="form-check-input mr-2"
                                     type="radio"
@@ -166,14 +165,14 @@ const ClientRevisionForm = ({
                                 >
                                    Revision Due To The Sales Team 
                                 </label>
-                            </div> 
+                            </div>  */}
                         </div>
                         {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold"> 
-                            Explain or Comment<sup className="f-16">*</sup> :
+                            Enter exactly what client said about this revision<sup className="f-16">*</sup> :
                         </label>
                         <div className="ck-editor-holder">
                             <CKEditorComponent onChange={hanldeEditorTextChange}/>

@@ -13,6 +13,7 @@ import SubtTaskEditForm from "./SubTaskEditForm";
 import CustomModal from "../../components/CustomModal";
 import {useWindowSize} from 'react-use';
 import Modal from "../../components/Modal";
+import _ from "lodash";
 
 const SubTaskSection = () => {
     const { task, subTask } = useSelector((s) => s.subTask);
@@ -189,7 +190,7 @@ const SubTaskSection = () => {
 
             <div className="sp1_task_right_card--body">
                 {!isFetching ? (
-                    subTask.length !== 0 ? (
+                    _.size(subTask) !== 0 ? (
                         subTask?.map((sub) => (
                             <SubTask
                                 key={sub.id}

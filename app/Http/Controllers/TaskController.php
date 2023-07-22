@@ -1554,24 +1554,23 @@ class TaskController extends AccountBaseController
     //    CLIENT HAS REVISION
     public function clientHasRevision(Request $request)
     {
-               // dd($request->all());
-        $request->validate([
-            'comments3' => 'required',
-        ], [
-            'comments3.required' => 'This field is required!',
-        ]);
+   //  dd($request->all());
+        
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
         $task_status->board_column_id = 1;
         $task_status->save();
 
         $task_revision = new TaskRevision();
+        $task_revision->pm_comment= $request->project_manager_comment;
+        $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
         $task_revision->task_id = $request->task_id;
+        $task_revision->client_revision_acknowledgement = $request->client_revision_acknowledgement;
         if ($task_status->subtask_id != null) {
             $task_revision->subtask_id = $task_status->subtask_id;
         }
-        $task_revision->comment = $request->comments3;
-        $task_revision->revision_status = $request->revision_status;
+        $task_revision->comment = $request->client_comment;
+        $task_revision->revision_status = "Client has Revision";
 
         $task_revision->project_id = $task_status->project_id;
         $task_revision->added_by = Auth::id();
@@ -1890,6 +1889,7 @@ class TaskController extends AccountBaseController
         $working_environment->login_url = $request->login_url;
         $working_environment->email = $request->email;
         $working_environment->password = $request->password;
+        $working_environment->frontend_password = $request->frontend_password;
         $working_environment->save();
 
         return response()->json(['status' => 200]);
@@ -1949,11 +1949,15 @@ class TaskController extends AccountBaseController
           ->join('tasks','tasks.subtask_id','sub_tasks.id')
           ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
           ->get();
+         
           if($subtasks == null)
           {
             $subtasks = '';
           }
          // dd($subtasks);
+         $working_environment_check = WorkingEnvironment::where('project_id',$task->project_id)->count();
+         $working_environment = WorkingEnvironment::where('project_id',$task->project_id)->first();
+         $pm_task_guideline= PmTaskGuideline::where('project_id',$task->project_id)->first();
 
             $totalMinutes = $task->timeLogged->sum('total_minutes') - ProjectTimeLogBreak::taskBreakMinutes($task->id);
             $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
@@ -2017,6 +2021,9 @@ class TaskController extends AccountBaseController
                 'parent_task_heading'=> $parent_task_heading,
                 'parent_task_action'=> $parent_task_action,
                 'subtasks'=> $subtasks,
+                'working_environment' => $working_environment_check,
+                'task_guideline'=> $pm_task_guideline,
+                'working_environment_data'=> $working_environment,
             ]);
           //  return response()->json($task,$parent_task_heading);
         } elseif ($request->mode == 'sub_task') {

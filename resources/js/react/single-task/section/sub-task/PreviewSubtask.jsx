@@ -34,6 +34,9 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         ...data?.task,
         parent_task_action: data?.parent_task_action,
         parent_task_title: data?.parent_task_heading?.heading || null,
+        working_environment: data?.working_environment,
+        working_environment_data: data?.working_environment_data,
+        pm_task_guideline: data?.task_guideline,
     });
 
     //   fetch submitted rtk api

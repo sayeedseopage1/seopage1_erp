@@ -22,6 +22,7 @@ import Loading from "./components/Loading";
 import { SingleTask } from "../utils/single-task";
 import { User } from "../utils/user-details";
 import GenarelLoader from "./components/loader/GenarelLoader";
+import PMGuideline from "./components/PMGuideline";
 
 const SingleTaskPage = () => {
     const { task:Task } = useSelector((s) => s.subTask);
@@ -36,7 +37,10 @@ const SingleTaskPage = () => {
                 ...data?.task, 
                 parent_task_title: data?.parent_task_heading?.heading || null,
                 parent_task_action: data?.parent_task_action,
-                subtask: data?.subtasks
+                subtask: data?.subtasks,
+                working_environment: data?.working_environment,
+                working_environment_data: data?.working_environment_data,
+                pm_task_guideline: data?.task_guideline,
             } 
             dispatch(storeTask(task));
         }
@@ -45,10 +49,14 @@ const SingleTaskPage = () => {
     const loadingClass = isFetching ? "skeleton-loading" : "";
     const loggedUser = new User(window?.Laravel?.user);
     const task = new SingleTask(Task);
-  
+
+    if(isFetching){
+        return <Loading isLoading={isFetching} />
+    }
+ 
     return (
         <div className="postion-relative">
-            <Loading isLoading={isFetching} />
+            
             <div className={`f-16 mb-3 ${loadingClass}`}>
                 <span> <strong>Task: </strong> </span>
                 <a href={`/account/tasks/${task?.id}`}>{task?.getSubtaskTitle()}</a>
@@ -67,7 +75,11 @@ const SingleTaskPage = () => {
                                     {task?.isSubtask && (
                                         <div className="sp1_st-list-item">
                                             <div className="sp1_st-list-item-head"> Parent Task: </div>
-                                            <div className="sp1_st-list-item-value"> {task?.parentTaskTitle} </div>
+                                            <div className="sp1_st-list-item-value">
+                                                <a href={`/account/tasks/${task?.parentTaskId}`} className="text-dark text-hover-underline">
+                                                    {task?.parentTaskTitle}
+                                                </a>
+                                            </div>
                                         </div>
                                     )}
                                     
@@ -76,7 +88,9 @@ const SingleTaskPage = () => {
                                         <div className="sp1_st-list-item-head">Project : </div>
                                         <div className="sp1_st-list-item-value">
                                             <span className="dot-color bg-danger mr-2" />
-                                            {task?.projectName}
+                                            <a href={`/account/projects/${task?.projectID}`} className="text-dark text-hover-underline"> 
+                                                {task?.projectName} 
+                                            </a>
                                         </div>
                                     </div>
 
@@ -113,7 +127,7 @@ const SingleTaskPage = () => {
                                                     {Number(task?.assigneeTo?.getId()) ===
                                                         Number(loggedUser?.getId()) && (
                                                         <sup
-                                                            className="rounded-pill bg-dark text-white px-1"
+                                                            className="rounded-pill bg-dark text-white px-2"
                                                             style={{ fontSize: "10px" }}
                                                         >
                                                             {" "}
@@ -201,8 +215,41 @@ const SingleTaskPage = () => {
                                 <Accordion
                                     expendable={false}
                                     title="General Guidelines"
-                                >
-                                    <Guideline text={task?.guidelines} />
+                                > 
+                                    <PMGuideline guideline={task?.PMTaskGuideline} />
+
+
+
+                                    {!_.isEmpty(task?.workEnvData)  && (
+                                        <div className="sp1_task_card--sub-card">
+                                            <div className="px-4 py-3" style={{background: '#F3F5F9'}}>
+                                                <h6 className="mb-2">Working Environment</h6>
+                                                <hr/>
+                                                <div className="row">
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                        <span><strong>Working/Staging Site's URL</strong>: <br/> {task?.workEnvData?.site_url}</span> 
+                                                    </div>
+
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                        <span><strong>Frontend Password</strong>: <br/> {task?.workEnvData?.frontend_password}</span> 
+                                                    </div>
+
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                        <span><strong>Working/Staging Site's Login URL</strong>: <br/>{task?.workEnvData?.login_url}</span> 
+                                                    </div>
+
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                        <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {task?.workEnvData?.email}</span> 
+                                                    </div>
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                        <span><strong>Password</strong>: <br/> {task?.workEnvData?.password}</span> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) }
+                                    
+                                    <Guideline text={task?.guidelines} workEnv={task?.workEnvData} />
                                 </Accordion>
 
                                 <Accordion
@@ -229,7 +276,30 @@ const SingleTaskPage = () => {
                                 </Accordion>
 
                                 <Accordion
-                                    title="Task Revision from Client"
+                                    title="Task Revision from Project Manager"
+                                    headingClass="d-flex align-items-center justify-content-between"
+                                    headingStyle={{
+                                        background: "rgba(227,62,79,1)",
+                                        color: "#fff",
+                                    }}
+                                >
+                                    <RevisionText
+                                        index="01"
+                                        date="Jan 06, 2023"
+                                        time="03:33PM"
+                                        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with"
+                                    />
+
+                                    <RevisionText
+                                        index="01"
+                                        date="Jan 06, 2023"
+                                        time="03:33PM"
+                                        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with"
+                                    />
+                                </Accordion>
+
+                                <Accordion
+                                    title="Task Revision from Lead Developer"
                                     headingClass="d-flex align-items-center justify-content-between"
                                     headingStyle={{
                                         background: "rgba(227,62,79,1)",
@@ -345,7 +415,7 @@ const SingleTaskPage = () => {
                         </div>
 
                         {/* comments */}
-                        <CommentSection task={task} isLoading={isFetching} />
+                        {task && task?.id && <CommentSection task={task} isLoading={isFetching} /> }
                         <SubTaskSection />
                         <NoteSection />
                         {task && task?.id && <SubmittedWork task={task} />}

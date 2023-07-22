@@ -17,8 +17,6 @@ import _ from 'lodash'
 const TaskAction = ({task, status}) => {
    const loggedUser = new User(window?.Laravel?.user); 
 
-   console.log(task)
-
   return ( 
         <div className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group" style={{gap: '10px'}}>
             {/* with permision */}

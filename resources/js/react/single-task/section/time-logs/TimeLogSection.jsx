@@ -6,6 +6,7 @@ import { useLazyGetTaskDetailsQuery } from '../../../services/api/SingleTaskPage
 import { storeTimeLogs } from '../../../services/features/subTaskSlice';
 import { Placeholder } from '../../../global/Placeholder';
 import TimeLogItemLoader from './TimeLogItemLoader';
+import _ from 'lodash';
 
 
 const fetcher = (url) => axios.get(url).then(res => res.data); 
@@ -65,18 +66,19 @@ const TimeLogSection = () => {
 
 
         {/* side drop toggle button */}
+        {_.size(timeLogs) > 0 &&
           <button 
-            aria-label='openCommentModalButton'  
-            ref={setModalRefButton}
-            className='sp1_task_right_dl_toggle'
-            onClick={toggle}
-            style={{zIndex: isOpen ? 110 : ''}}
-          >
-            <i 
-              className={`fa-solid fa-circle-chevron-${ isOpen ? 'right' : 'left'}`} 
-              style={{color: "#276fec"}} 
-            />
-        </button>
+              aria-label='openCommentModalButton'  
+              ref={setModalRefButton}
+              className='sp1_task_right_dl_toggle'
+              onClick={toggle}
+              style={{zIndex: isOpen ? 110 : ''}}
+            >
+              <i 
+                className={`fa-solid fa-circle-chevron-${ isOpen ? 'right' : 'left'}`} 
+                style={{color: "#276fec"}} 
+              />
+          </button>}
         {/* side drop toggle button end */}
 
 
@@ -89,14 +91,26 @@ const TimeLogSection = () => {
 
 
         <div className="sp1_task_right_card--body">
-          {
-            timeLogs?.map(log => (
+          { _.size(timeLogs) > 0 ?
+            _.map(timeLogs, log => (
               <React.Fragment key={log.id}>
                 <Suspense fallback={<TimeLogItemLoader />}>
                   <TimeLogItem log={log}/>
                 </Suspense>
               </React.Fragment>
-            ))
+            )):
+            <div
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                    color: "#B4BCC4",
+                    fontSize: "15px",
+                    textAlign: "center",
+                    height: "100%",
+                    width: "100%",
+                }}
+            >
+                No Logged Session is Available
+            </div>
           } 
         </div>
 
