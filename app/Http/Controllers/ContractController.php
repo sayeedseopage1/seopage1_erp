@@ -2301,7 +2301,8 @@ class ContractController extends AccountBaseController
             $authorization_action->model_id = $data->id;
             $authorization_action->type = 'award_time_extension';
             $authorization_action->deal_id = $data->deal_id;
-            $authorization_action->project_id = 0;
+            $project= Project::where('deal_id',$data->deal_id)->first();
+            $authorization_action->project_id = $project->id;
             $authorization_action->link = route('deals.show', $data->id);
             $authorization_action->title = 'Won deal award time extension';
             $authorization_action->authorization_for = 62;
