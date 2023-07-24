@@ -29,7 +29,7 @@
 
 	.sp1_styled-table tbody td{
 		color: #555;
-		padding: 12px 12px; 
+		padding: 12px 12px;
 		/* white-space: nowrap; */
 	}
 
@@ -43,7 +43,7 @@
 		border-bottom: 2px solid #009879;
 	}
 
-	.sp1_inc_pdf_dl_btn{ 
+	.sp1_inc_pdf_dl_btn{
 		background: #009879;
 		color: #fff;
 		padding: 6px 12px;
@@ -57,7 +57,7 @@
 		color: inherit;
 	}
 
-	.sp1_inc_pdf_dl_btn:hover{ 
+	.sp1_inc_pdf_dl_btn:hover{
 		background: #008369;
 		color: #fff !important;
 	}
@@ -68,22 +68,26 @@
 
 @php
     $data = $user_incentive;
-@endphp    
+@endphp
 
     <section>
         <div class="d-flex align-items-center justify-content-center py-5">
+
             <div class="sp1_incentive_pdf_container bg-white" >
-                <div class="">
-                    <img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
-                        class="logo" style="height:70px;" />
+                        <a href="/account/monthly-incentive" class="btn-primary rounded p-2">
+                            <i class="fa-regular fa-hand-point-left"></i>
+                            <span class="d-none d-sm-inline">Go Back</span>
+                        </a>
+                    <div class="">
+                        <img src="{{ invoice_setting()->logo_url }}" alt="{{ mb_ucwords(global_setting()->company_name) }}"
+                            class="logo pt-4" style="height:70px;"
+                        />
+                        <a href="{{ route('monthly-incentive.download', $user_incentive->id) }}" aria-label="download" class="sp1_inc_pdf_dl_btn">
 
-
-                    <a href="{{ route('monthly-incentive.download', $user_incentive->id) }}" aria-label="download" class="sp1_inc_pdf_dl_btn">
-
-                        <i class="fa-solid fa-download"></i>
-                        <span class="d-none d-sm-inline">Download</span>
-                    </a>
-                </div>
+                            <i class="fa-solid fa-download"></i>
+                            <span class="d-none d-sm-inline">Download</span>
+                        </a>
+                    </div>
 
                 <ul class="mt-3">
                     <li class="mb-1"> {{ mb_ucwords(global_setting()->company_name) }} </li>
@@ -100,10 +104,10 @@
 
                 <ul class="mt-3">
                     <li class="mb-2"><span class="f-14 font-weight-bold text-secondary">@lang('app.subject')</span></li>
-                    <li>Incentive Disbursment</li> 
+                    <li>Incentive Disbursment</li>
                 </ul>
 
-                <ul class="mt-4"> 
+                <ul class="mt-4">
                     <li class="mb-2"><span class="f-14 font-weight-bold text-secondary">Project Deliverables</span></li>
                 </ul>
 
@@ -111,12 +115,12 @@
                     <table class="sp1_styled-table">
                         <thead>
                             <tr>
-                                
+
                                 <th>Month</th>
-                                
+
                                 <th>Non Incentive Points</th>
-                              
-                              
+
+
                                 <th>User's Achieved Point</th>
                                 {{-- <th>Incentive Deduction</th> --}}
                                 <th>Amount Before Deduction</th>
@@ -133,20 +137,20 @@
                         </thead>
                         <tbody>
                             <tr>
-                               
+
                                 <td>{{\Carbon\Carbon::parse($user_incentive->month)->format('M (Y)')}}</td>
-                                   
+
                                     <td>
                                         @php
                                             $non_incentive_point = App\Models\IncentiveSetting::where('start_month', $user_incentive->month)->first();
                                         @endphp
                                         {{$non_incentive_point->every_shift_every_point_above}}
                                     </td>
-                                   
-                                  
+
+
                                     <td>{{$user_incentive->user_achieved_points}}</td>
                                     <td>{{$user_incentive->amount_before_deduction}}</td>
-                                    
+
                                     <td>{{$user_incentive->user_deducted_points}}</td>
                                     <td>{{$user_incentive->user_point_after_deduction}}</td>
                                     <td>{{$user_incentive->amount_after_deduction}} BDT</td>
@@ -159,7 +163,7 @@
                                 {{-- <td>Total Goal</td>
                                 <td>Achieved Goal</td> --}}
 
-                            </tr>  
+                            </tr>
                         </tbody>
                     </table>
                 </div>
