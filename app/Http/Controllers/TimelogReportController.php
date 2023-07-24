@@ -65,6 +65,7 @@ class TimelogReportController extends AccountBaseController
 
     public function getTimeLog(Request $request, $type)
     {
+       // dd($type);
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page_row', 10);
         $offset = ($page - 1) * $perPage;
@@ -96,7 +97,7 @@ class TimelogReportController extends AccountBaseController
                 'projects.client_id',
                 'client.name as client_name',
                 'client.image as client_image',
-                'deals.profile_link as client_from',
+               
 
                 'pm.id as pm_id',
                 'pm.image as pm_image',
@@ -106,14 +107,7 @@ class TimelogReportController extends AccountBaseController
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.status as project_status',
-                'projects.start_date as project_start_date',
-                'projects.deadline as project_end_date',
 
-                'tasks.id as task_id',
-                'tasks.heading as task_name',
-                'tasks.id as task_id',
-                'tasks.start_date as task_start',
-                'tasks.due_date as task_end',
                 'project_time_logs.start_time as time_log_start_time',
                 'project_time_logs.start_time as time_log_end_time',
                 DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
@@ -135,7 +129,7 @@ class TimelogReportController extends AccountBaseController
                 ->join('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
 
 
-                ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
+           
                 ->whereIn('project_time_logs.user_id', $id_array)
                 ->where('total_minutes', '>', 0)
                 ->groupBy('project_time_logs.user_id', 'employee.id');
@@ -333,7 +327,9 @@ class TimelogReportController extends AccountBaseController
           ->get();
         }
           
-        } else if($type == 'projects') {
+        } 
+        else if($type == 'projects') {
+        //    dd("projects");
             $data = ProjectTimeLog::select([
                 'projects.id as project_id',
                 'projects.project_name',   
@@ -449,6 +445,90 @@ class TimelogReportController extends AccountBaseController
             //'total_rows' => $total_rows,
             'data' => $data
         ]);
+    }
+    public function timelog_history(Request $request)
+    {
+        $page = $request->input('page', 1);
+        $perPage = $request->input('per_page_row', 10);
+        $offset = ($page - 1) * $perPage;
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $employeeId = $request->input('employee_id', null);
+      //  $pmId = $request->input('pm_id', null);
+     //   $clientId = $request->input('client_id', null);
+     //   $status = $request->input('status', null);
+     //   $project_id = $request->input('project_id', null);
+
+
+        $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();
+        $filtered_array = array_filter($users, function($item) {
+            return isset($item->id);
+        });
+
+        $id_array = array_map(function($item) {
+            return $item->id;
+        }, $filtered_array);
+          
+        $data = ProjectTimeLog::select([
+            'employee.id as employee_id',
+            'employee.name as employee_name',
+            'employee.image as employee_image',
+            'emp_roles.display_name as employee_roles',
+            'project_time_logs.start_time',
+            'project_time_logs.end_time',
+            DB::raw('(SELECT COUNT(developer_stop_timers.id) FROM developer_stop_timers WHERE  employee.id = developer_stop_timers.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as missed_hours_count'),
+            // DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'" GROUP BY DATE(project_time_logs.created_at)) as missed_hours_count'),
+            DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
+        ])
+        ->leftJoin('users as employee', 'project_time_logs.user_id', 'employee.id')
+        ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
+        ->leftJoin('developer_stop_timers','developer_stop_timers.user_id','employee.id')
+        ->groupBy('project_time_logs.user_id')
+        ->where('total_minutes', '>', 0)
+        ->orderBy('project_time_logs.user_id' , 'desc')
+        ->get();
+        
+        // Calculate the ideal tracked hours
+        $startDate = Carbon::createFromFormat('Y-m-d', $startDate);
+        $endDate = Carbon::createFromFormat('Y-m-d', $endDate);
+        $currentDate = $startDate->copy();
+        $idealTrackedMinutes = 0;
+        
+        while ($currentDate->lte($endDate)) {
+            if ($currentDate->isWeekday()) {
+                // Monday to Friday (weekdays)
+                $idealTrackedMinutes += (7 * 60 + 15); // Convert 7 hours 15 minutes to minutes
+            } elseif ($currentDate->isSaturday()) {
+                // Saturday
+                $idealTrackedMinutes += (4 * 60 + 30); // Convert 4 hours 30 minutes to minutes
+            }
+            // Sunday is skipped as it's 0 hours
+        
+            // Move to the next day
+            $currentDate->addDay();
+        }
+        
+        // Convert the result into a collection
+        $data = collect($data);
+        
+        
+        $data->ideal_tracked_minutes = $idealTrackedMinutes;
+        
+        // Calculate the `missed_hours` and `missed_hours_count` attributes for each item in $data
+        $data = $data->map(function ($item) use ($idealTrackedMinutes) {
+            $item->ideal_minutes = $idealTrackedMinutes;
+            $item->missed_hours = max($idealTrackedMinutes - $item->total_minutes, 0); 
+            return $item;
+          
+        });
+        
+        //$data->missed_hours_count = $missedNumber;
+        return response()->json([
+            //'total_rows' => $total_rows,
+            'data' => $data
+        ]);
+        
+        
     }
 
     public function timelogChartData(Request $request)

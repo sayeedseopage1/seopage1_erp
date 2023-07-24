@@ -44,8 +44,7 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmi
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
             child_reason: "I Had Half Day Of Leave Today",
-            duration_form: duratonStart,
-            duration_to: durationEnd,
+            durations: JSON.stringify([{id: 'de2sew', start: duratonStart, end: durationEnd}]),
             comment,
             leave_period: leavePeriod,
         };

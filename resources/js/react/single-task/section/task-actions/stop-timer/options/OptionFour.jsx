@@ -70,8 +70,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
 
         const data = {
             reason_for_less_tracked_hours_a_day_task: "I Can't Log Hours",
-            duration_form: duratonStart,
-            duration_to: durationEnd,
+            durations: JSON.stringify([{id: 'de2sew', start: duratonStart, end: durationEnd}]),
             comment,
             responsible_person:
                 loggedUser?.getId() === Number(person?.id)

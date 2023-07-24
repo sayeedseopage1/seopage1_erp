@@ -6,7 +6,7 @@ import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
 import Tabbar from "../components/Tabbar"; 
 import { EmployeeTableCtx } from "../context/EmployeeTableContext";
-import TimeLogTableFilterBar from "../../TimeLogTable-backup/components/TimeLogTableFilterBar";
+import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 
 
 
@@ -34,6 +34,7 @@ const EmployeeWiseTimeLogTable = () => {
         getEmployeeWiseData(filter)
         .unwrap()
         .then(res => {
+            console.table(res.data);
             const sortedData = orderBy(res?.data, ["employee_id"], ["desc"]);
             handleData(sortedData, currentPage, perPageData);
             setData(sortedData);

@@ -1,12 +1,12 @@
-
-
-
 import EmployeeTableCtxProvider from "./EmployeeTableContext";
+import ProjectWiseTableCtxProvider from "./ProjectWiseTableContext";
 
-export default function ContextProvider({children}){
+export default function ContextProvider({ children }) {
     return (
         <EmployeeTableCtxProvider>
-            {children}
-        </EmployeeTableCtxProvider>
-    )
+            <ProjectWiseTableCtxProvider>
+                {children}
+            </ProjectWiseTableCtxProvider>
+        </EmployeeTableCtxProvider> 
+    );
 }

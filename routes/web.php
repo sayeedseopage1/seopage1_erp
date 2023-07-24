@@ -1356,7 +1356,7 @@ Route::controller(DealController::class)->group(function () {
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'createAutoMilestone'])->name('create-auto-milestone');
-
+Route::post('get-timelogs/time_log_history', [TimelogReportController::class, 'timelog_history'])->name('get-timelogs-report');
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
 Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);

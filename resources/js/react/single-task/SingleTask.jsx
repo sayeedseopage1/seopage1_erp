@@ -50,6 +50,7 @@ const SingleTaskPage = () => {
     const loggedUser = new User(window?.Laravel?.user);
     const task = new SingleTask(Task);
 
+
     if(isFetching){
         return <Loading isLoading={isFetching} />
     }
@@ -127,11 +128,10 @@ const SingleTaskPage = () => {
                                                     {Number(task?.assigneeTo?.getId()) ===
                                                         Number(loggedUser?.getId()) && (
                                                         <sup
-                                                            className="rounded-pill bg-dark text-white px-2"
-                                                            style={{ fontSize: "10px" }}
+                                                            className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                            style={{ fontSize: "10px", whiteSpace: 'nowrap' }}
                                                         >
-                                                            {" "}
-                                                            It's You{" "}
+                                                            It's You
                                                         </sup>
                                                     )}
                                                 </span>
@@ -208,7 +208,7 @@ const SingleTaskPage = () => {
                                                 {task?.category?.name}
                                             </div>
                                         </div>
-                                    </div>
+                                </div>
                             </div>
 
                             <div className="mt-3">
@@ -216,7 +216,7 @@ const SingleTaskPage = () => {
                                     expendable={false}
                                     title="General Guidelines"
                                 > 
-                                    <PMGuideline guideline={task?.PMTaskGuideline} />
+                                   {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> }
 
 
 

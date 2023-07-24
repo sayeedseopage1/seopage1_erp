@@ -26,13 +26,11 @@ const OptionTwo = ({ id, onChecked, checked, onSubmit, isSubmitting}) => {
         const data = {
             reason_for_less_tracked_hours_a_day_task:
                 "During Transition From One Task To Another, I Had To Wait For a While",
-            transition_hours: transitionHours,
-            transition_minutes: transitionMinutes,
+            transition_hours: Number(transitionHours),
+            transition_minutes: Number(transitionMinutes),
             comment,
         };
-
-        console.log({ data });
-
+  
         onSubmit(data);
     };
 

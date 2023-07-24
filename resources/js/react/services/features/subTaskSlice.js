@@ -7,6 +7,7 @@ const initialState = {
     timeLogs: [],
     histories: [],
     taskStatus: null,
+    lessTrackModalFor: '',
     lessTrackModal: false,
 };
 
@@ -44,7 +45,8 @@ const subTaskSlice = createSlice({
 
         // set less track a day modal
         setLessTrackModal: (state, action) => {
-            state.lessTrackModal = action.payload;
+            state.lessTrackModal = action.payload.show;
+            state.lessTrackModalFor = action.payload.type
         },
     },
 });

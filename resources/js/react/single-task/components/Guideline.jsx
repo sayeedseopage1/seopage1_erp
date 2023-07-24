@@ -21,7 +21,7 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
 
   return (
     <div className='sp1_task_card--sub-card'>
-       <div className={editorContainerClass} dangerouslySetInnerHTML={{__html: showText}}></div> 
+       <div className={`sp1_ck_content sp1_guideline_text ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: showText}}></div> 
        {isLong ? <a href="#" onClick={handleExpend} className=''> Read full guideline </a> : ''}
 
        <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>

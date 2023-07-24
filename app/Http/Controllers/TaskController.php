@@ -2374,8 +2374,8 @@ class TaskController extends AccountBaseController
         } elseif ($request->mode == 'developer_first_task_check') {
             $data = ProjectTimeLog::where([
                 'project_id' => $request->project_id,
-                'task_id' => $id,
-                'user_id' => $this->user->id
+               // 'task_id' => $id,
+                'user_id' => Auth::id()
             ])->first();
             //  dd($data);
 
@@ -2403,15 +2403,15 @@ class TaskController extends AccountBaseController
     public function DeveloperStopTask(Request $request)
     {
         $currentDateTime = Carbon::now();
-        $desiredTime = Carbon::createFromTime(9, 29, 0); // 4:29 PM
+        $desiredTime = Carbon::createFromTime(10, 29, 0); // 4:29 PM
         
-        // if ($currentDateTime <= $desiredTime) {
-        //     // Current time is not greater than 4:29 PM
-        //     // Add your logic here
-        //     return response()->json([
-        //         'error' => 'Something went wrong'
-        //     ], 400);
-        // } else {
+        if ($currentDateTime <= $desiredTime) {
+            // Current time is not greater than 4:29 PM
+            // Add your logic here
+            return response()->json([
+                'error' => 'Something went wrong'
+            ], 400);
+        } else {
             // Current time is greater than 4:29 PM
             // Add your logic here
             $stop_time = new DeveloperStopTimer();
@@ -2427,6 +2427,8 @@ class TaskController extends AccountBaseController
             $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
             $stop_time->task_id = $request->task_id;
             $stop_time->user_id = $request->user_id;
+            $stop_time->transition_hours= $request->transition_hours;
+            $stop_time->transition_minutes= $request->transition_minutes; 
             $stop_time->save(); 
             $task= Task::where('id',$request->task_id)->first();
             if($task->subtask_id == null)
@@ -2456,7 +2458,7 @@ class TaskController extends AccountBaseController
                
                 'parent_task_action'=> $parent_task_action,
             ]);
-        // }
+         }
     }
     public function DeveloperTrackedTime($id)
     {
@@ -2464,6 +2466,7 @@ class TaskController extends AccountBaseController
 
         //$currentDate = Carbon::now()->toDateString();
         $currentDate = Carbon::now()->toDateString();
+        
 
         $totalMinutes = DB::table('project_time_logs')
             ->where('user_id', $userID)
@@ -2476,14 +2479,35 @@ class TaskController extends AccountBaseController
                 $currentTime = Carbon::now();
                 
                 $minutesDifference = $currentTime->diffInMinutes($startTime);
-            $total_times = $totalMinutes+ $minutesDifference;
+            $tracked_times = $totalMinutes+ $minutesDifference;
 
             }else 
             {
-                $total_times = $totalMinutes;
+                $tracked_times = $totalMinutes;
             }
+
+           // $target_time=  $dayOfWeek = 
+           $current_day = Carbon::now();
+       // dd($current_day->dayOfWeek);
+        $dayOfWeek = $current_day->dayOfWeek;
+        if ($dayOfWeek === Carbon::SATURDAY) {
+            // It's Monday
+           $target_time = 270; 
+        } elseif ($dayOfWeek === Carbon::SUNDAY) {
+            // It's Tuesday
+            $target_time = 0; 
+        }else 
+        {
+            $target_time = 435; 
+        }
+        $current_time = Carbon::now();
            
-            return response()->json($total_times);
+            return response()->json([
+                'tracked_times'=> $tracked_times,
+                'target_time'=> $target_time,
+                'current_time'=> $current_time,
+              
+            ]);
           
         
     }

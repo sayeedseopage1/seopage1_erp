@@ -160,7 +160,8 @@ export class SingleTask {
         this.ranningTimer= task?.running_timer;
         this.workingEnvironment = task?.working_environment;
         this.workEnvData = task?.working_environment_data;
-        this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline)
+        this.hasProjectManagerGuideline = task?.pm_task_guideline ? true : false;
+        this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
     }
 
     isLeadDeveloperAbleToSubmit () {

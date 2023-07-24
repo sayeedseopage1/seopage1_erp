@@ -43,8 +43,7 @@ const LateExplainationOption = ({ id, onChecked, checked, parentReason, onSubmit
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
             child_reason: "I Came Late",
-            duration_form: duratonStart,
-            duration_to: durationEnd,
+            durations: JSON.stringify([{id: 'de2sew', start: duratonStart, end: durationEnd}]),
             comment,
         };
         console.log({ data });

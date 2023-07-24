@@ -12,7 +12,7 @@ import { useGetProjectsOptionsQuery } from '../../services/api/FilterBarOptionsA
 import ProjectFilterItem from './ProjectFilter';
 
 
-export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFilter}){
+export default function TimeLogTableFilterBar ({onFilter}){
     const { users } = useSelector(s => s.users);
     const dispatch = useDispatch();
     const [startDate, setStartDate] = React.useState(null);
@@ -73,7 +73,7 @@ export default function TimeLogTableFilterBar ({handleDataRequest, handleTimeFil
 
     React.useEffect(()=> {
         if(_startDate && endDate){
-            handleTimeFilter({
+            onFilter({
                 start_date: dayjs(_startDate).format('YYYY-MM-DD'),
                 end_date: dayjs(_endDate).format('YYYY-MM-DD'),
                 employee_id: _selectedEmployeeId,

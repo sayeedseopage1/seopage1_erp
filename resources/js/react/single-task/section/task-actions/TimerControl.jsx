@@ -16,6 +16,9 @@ import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
 
 
+
+
+// component
 const TimerControl = ({ task }) => {
     const [timerStart, setTimerStart] = useState(false);
     const [timerId, setTimerId] = useState(null);
@@ -27,7 +30,6 @@ const TimerControl = ({ task }) => {
     const dayjs = new CompareDate(); 
     const loggedUser = new User(window?.Laravel?.user);
 
-    const openLessTrackTimerModal = () => dispatch(setLessTrackModal(true)) // open less hours track explaination modal 
 
     const timerStatus = task?.ranningTimer?.status;
     const taskRunning = useMemo(() => timerStatus, [timerStatus])
@@ -129,8 +131,9 @@ const TimerControl = ({ task }) => {
     // start timer function
     const startTimer = (e) => {
         e.preventDefault();
+        dispatch(setLessTrackModal({show: true, type: 'START_TIMER'}))
         startTimerFirstCheck(
-            `/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.project_id}`
+            `/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.projectId}`
         )
             .unwrap()
             .then((res) => {
@@ -141,6 +144,8 @@ const TimerControl = ({ task }) => {
             .catch((err) => console.log(err));
     };
 
+    
+
     /*********** End of Start Timer control ***************/
 
     // stop timer
@@ -149,14 +154,13 @@ const TimerControl = ({ task }) => {
             .unwrap()
             .then((res) => {
                 if (res?.status === "success") {
-                    
-                    setTimerStart(false);
-                    setSeconds(0);
-                    timerId(null);
                     Toast.fire({
                         icon: res?.status,
                         title: _.startCase(res?.message),
                     });
+                    setTimerStart(false);
+                    setSeconds(0);
+                    timerId(null);
                 } else {
                     Toast.fire({
                         icon: res?.status,
@@ -171,17 +175,21 @@ const TimerControl = ({ task }) => {
 
     // handle stop timer 
     const handleStopTimer = () => {
-        /**
-         *  TODO: Fetch Developer track hours for a day
-         *  TODO: if track time less then 7 hours and 15 minutes show trackTimerModal to explain reason
-         *  TODO: else stop timer 
-         */
-
         // fetch data
         getUserTrackTime(loggedUser?.getId())
         .unwrap()
         .then(res => { 
-            res < 435 ? openLessTrackTimerModal() : stopTimer()
+            if(res){
+                let currentTime = dayjs.dayjs(res.current_time);
+                let target = currentTime.set('hour', 16).set('minute', 30).set('second', 0);
+                let check = dayjs.dayjs(currentTime).isBefore(target);
+                if(!check){
+                    res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER'})) : stopTimer()
+                }else{
+                    stopTimer();
+                }
+            }
+            
         })
         .catch(err => console.log(err))
     }
@@ -207,7 +215,7 @@ const TimerControl = ({ task }) => {
                             className="d-flex align-items-center btn-outline-dark text-dark"
                         >
                             <i className="fa-solid fa-circle-play" />
-                            Start Timer
+                            <span>Start Timer</span> 
                         </Button>
                     ) : (
                         <Button className="cursor-processing mr-2">
@@ -277,10 +285,10 @@ const TimerControl = ({ task }) => {
 
 
             {/* LessTrackTimerModal */}
-            <LessTrackTimerModal stopTimer={stopTimer} />
+            <LessTrackTimerModal stopTimer={stopTimer} startTimer={startTimerControl} />
 
         </React.Fragment>
     );
 };
 
-export default TimerControl;
+export default TimerControl

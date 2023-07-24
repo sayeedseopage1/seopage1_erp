@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import TableFooter from "./TableFooter";
+import TimeLogHistoryLoader from "./TimeLogHistoryLoader";
 
 const TimeLogHistoryTable = ({
     data,
@@ -13,6 +14,7 @@ const TimeLogHistoryTable = ({
     handlePerPageData,
     totalEntry,
     currentPage,
+    isLoading
 }) => {
     const [columnOrder, setColumnOrder] = useState([]);
 
@@ -49,9 +51,9 @@ const TimeLogHistoryTable = ({
                             </tr>
                         </thead>
                         <tbody className="sp1_tlr_tbody">
-                            {(_.size(data) > 0) &&
+                            {!isLoading && (_.size(data) > 0) &&
                                 _.map(data, (row) => (
-                                    <tr key={row.id} className="sp1_tlr_tr">
+                                    <tr key={row.employee_id} className="sp1_tlr_tr">
                                         {_.map(_columns, (col) => (
                                             <td key={col.id} className="sp1_tlr_td">
                                                 {col.cell(row)}
@@ -59,6 +61,8 @@ const TimeLogHistoryTable = ({
                                         ))}
                                     </tr>
                                 ))}
+
+                            {isLoading && <TimeLogHistoryLoader />}
                         </tbody>
                     </table>
                 </div>

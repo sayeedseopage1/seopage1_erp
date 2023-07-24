@@ -24,7 +24,7 @@ const UserRender = ({ image, name, role, id, profileUrl, roleLink }) => {
                             fontWeight: "bold",
                         }}
                     >
-                        {name.slice(0, 1).toUpperCase()}
+                        {name?.slice(0, 1).toUpperCase()}
                     </span>
                 </div>
             )}

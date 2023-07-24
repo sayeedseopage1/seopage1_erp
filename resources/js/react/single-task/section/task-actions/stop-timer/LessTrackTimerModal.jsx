@@ -6,17 +6,24 @@ import Loader from "../../../components/Loader";
 
 const StopTimerConfrimationPopUp  = React.lazy(() => import('./StopTimerConfrimationPopUp'));
 
-const LessTrackTimerModal = ({stopTimer}) => {
-    const { task, lessTrackModal } = useSelector((s) => s.subTask);
+const LessTrackTimerModal = ({stopTimer, startTimer}) => {
+    const { task, lessTrackModal, lessTrackModalFor} = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
 
     const close = () => {
-        dispatch(setLessTrackModal(false))
+        dispatch(setLessTrackModal({show: false, type: ''}))
     }
 
     // temprarily stop timer now
     const stopTimerTemprorily = () => {
-        stopTimer();
+        if(lessTrackModalFor === 'STOP_TIEMR'){
+            stopTimer();
+        }
+
+        if(lessTrackModalFor === 'STOP_TIEMR'){
+            startTimer()
+        }
+
         close();
     } 
 

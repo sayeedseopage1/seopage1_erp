@@ -3,40 +3,44 @@ import TimeLogHistoryTable from "../components/TimeLogHistoryTable";
 import Tabbar from "../components/Tabbar";
 import { TimeLogHistoryColumn } from "../components/TimeLogHistoryColumn";
 import { paginate } from "../../utils/paginate";
+import '../styles/time-log-history.css';
+import '../components/data-table.css';
+import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
+import { useGetTimeLogHistoryMutation } from "../../services/api/timeLogTableApiSlice";
+import TimeLogHistoryTableFilterBar from "../components/TimeLogHistoryFilterBar";
+import _ from "lodash";
 
 const TimeLogHistory = () => {
     const [data, setData] = useState([]);
     const [perPageData, setParPageData] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const [renderData, setRenderData] = useState([{id:'demo'}, {id:'demo2'}]);
+    const [renderData, setRenderData] = useState([]);
     const [sortConfig, setSortConfig] = useState([]);
 
-    // const [getEmployeeWiseData, {isLoading}] = useGetEmployeeWiseDataMutation();
+    const [getTimeLogHistory, {isLoading}] = useGetTimeLogHistoryMutation();
 
     // handle data
     const handleData = useCallback((data, currentPage, perPageData) => {
         const paginated = paginate(data, currentPage, perPageData);
-        setRenderData([...paginate]);
+        setRenderData([...paginated]);
     }, [data, currentPage, perPageData]);
 
-    // // handle fetch data
-    // const handleFetchData = (filter) => {
-    //     getEmployeeWiseData(filter)
-    //     .unwrap()
-    //     .then(res => {
-    //         const sortedData = orderBy(res?.data, ["employee_id"], ["desc"]);
-    //         handleData(sortedData, currentPage, perPageData);
-    //         setData(sortedData);
-    //     })
-    // }
-
-    // useEffect(() => {
-    //     handleFetchData({});
-    // }, []);
+    // handle fetch data
+    const handleFetchData = (filter) => {
+        getTimeLogHistory(filter)
+        .unwrap()
+        .then(res => {
+            console.table(res.data)
+            const sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
+            handleData(sortedData, currentPage, perPageData);
+            setData(sortedData);
+        })
+        .catch(err => console.log(err))
+    }
 
     // data sort handle 
     const handleSorting = (sort) => {
-        const sortData = orderBy(data, ...sort);
+        const sortData = _.orderBy(data, ...sort);
         handleData(sortData, currentPage, perPageData);
     }
 
@@ -52,12 +56,9 @@ const TimeLogHistory = () => {
         handleData(data, currentPage, number);
     }
 
-
-
-
     return (
         <div className="sp1_tlr_container">
-            <div className="bg-white">Filter bar</div>
+            <TimeLogHistoryTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="">
                     <Tabbar />
@@ -73,6 +74,7 @@ const TimeLogHistory = () => {
                     handlePerPageData={handlePerPageData}
                     currentPage={currentPage}
                     totalEntry={data.length}
+                    isLoading={isLoading}
                 />
             </div>
         </div>

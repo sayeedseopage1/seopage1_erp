@@ -18,7 +18,13 @@
 
         .sp1_task_btn_group button{
             border-color: rgba(0,0,0,.3);
+
+            @media (max-width:376px) {
+                font-size: 13px !important;
+            }
         }
+
+       
 
         .sp1_task_card{
             border-radius: 10px;
@@ -648,11 +654,29 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    @media (max-width: 576px){
+        align-items: flex-start;
+    }
+
+    @media (max-width: 376px) {
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
 }
 
 .sp1_st-list-item-head{
     width: 120px;
     color: #383b42;
+
+    @media (max-width: 576px) {
+        width: 100px;
+    }
+
+    @media (max-width: 376px) {
+        font-size: 13px;
+        font-weight: 600;
+        color: #3f3f46;
+    }
 }
 
 .sp1_st-list-item-value{
@@ -663,8 +687,13 @@
     & > .dot-color {
         margin-top: 6px;
     }
-}
 
+    @media (max-width: 376px){
+        font-size: 13px;
+        color: #3f3f46;
+        padding-left: 10px;
+    }
+}
 
 
 .sp1-selection-display{
@@ -1290,3 +1319,11 @@
         width: 100%;
     }
 }
+
+// report button
+.sp1_report_btn{
+    @media (max-width: 490px ) {
+        margin-left: 0 !important ; 
+    }            
+}
+ 

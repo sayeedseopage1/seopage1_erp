@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-const TimeLogHIstoryModal = React.lazy(() =>
-    import("./TimeLogHistoryModal")
-);
+import TimeLogHIstoryModal from "./TimeLogHistoryModal";
+
 
 const MissedDayCount = ({ row }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,13 +14,11 @@ const MissedDayCount = ({ row }) => {
                 type="button"
                 aria-level="MissedDayCountModalToggleButton"
                 onClick={() => setIsOpen(true)}
-                className="px-2 bg-transparent hover-bold"
+                className="px-2 font-weight-bold sp1_tlh_resolve_btn"
             >
-                32
+                <span className="text-success">10</span> + <span className="text-danger"> 8</span> = <span>18 / {row?.missed_hours_count}</span>
             </button>
-            <React.Suspense fallback={<>Loading...</>}>
             <TimeLogHIstoryModal isOpen={isOpen} close={close} row={row} />
-            </React.Suspense>
         </React.Fragment>
     );
 };

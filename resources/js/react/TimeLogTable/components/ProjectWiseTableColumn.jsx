@@ -1,4 +1,5 @@
 import { convertTime } from "../../utils/converTime"
+import ProjectSessionTrackTimeButton from "./ProjectSessionTrackTimeButton"
 import UserRender from "./UserRender"
 
 
@@ -94,7 +95,9 @@ export const ProjectWiseTableColumn = [
         cell: ({row, className}) =>{
             return(
                 <td className={className}>
-                   {row?.number_of_session}
+                   <ProjectSessionTrackTimeButton row={row}>
+                        {row?.number_of_session}
+                    </ProjectSessionTrackTimeButton> 
                 </td>
             )
         }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./data-table.css";
 import TableFooter from "./TableFooter";
-import TaskWiseTimeLogTableLoader from "./TaskWiseTableLoader";
 import TableDragAbleHeader from "./DragHeader";
+import EmployeeSessionTableLoader from "./EmployeeSessionTableLoader";
 
 
 
@@ -100,7 +100,7 @@ const DataTable = ({
                         </thead>
                         <tbody className="sp1_tlr_tbody">
                             {!isLoading && renderRow(data)}
-                            {isLoading && <TaskWiseTimeLogTableLoader />}
+                            {isLoading && <EmployeeSessionTableLoader />}
                         </tbody>
                     </table>
                 </div>

@@ -2,6 +2,8 @@ import React, {useState, useEffect, useCallback} from "react";
 import TableFooter from "./TableFooter";
 import { paginate } from "../../utils/paginate";
 import _ from "lodash";
+import ReportResolvePreviewModal from "./ReportResolvePreviewModal";
+import TableDragAbleHeader from "./DragHeader";
 
 
 const columns = [
@@ -75,7 +77,9 @@ const columns = [
         className: '',
         sorted: false,
         sortAccessor: '',
-        cell: (row) => <span>Resolve</span> 
+        cell: (row) => (
+            <ReportResolvePreviewModal row={row} />
+        ) 
     }
 ]
 
@@ -135,13 +139,17 @@ const TimeLogHIstoryModalTable = ({ row, isOpen, close }) => {
                         <thead className="sp1_tlr_thead">
                             <tr className="sp1_tlr_tr">
                                 {_.map(_columns, (column) => {
-                                    return (
-                                        <th
+                                    return ( 
+                                        <TableDragAbleHeader
                                             key={column.id}
                                             className="sp1_tlr_th"
-                                        >
-                                            {column.header}
-                                        </th>
+                                            column={column}
+                                            columns = {_columns}
+                                            onSort={() => {}}
+                                            onDrop={setColumnOrder}
+                                            order={columnOrder}
+                                            tableName="time_log_history_modal"
+                                        />
                                     );
                                 })}
                             </tr>

@@ -1,4 +1,6 @@
+import { convertTime } from "../../utils/converTime";
 import MissedDayCount from "./MissedDayCount";
+import UserRender from "./UserRender";
 
 
 export const TimeLogHistoryColumn = [
@@ -6,9 +8,19 @@ export const TimeLogHistoryColumn = [
         id: 'employee_id',
         header: 'Employee Name',
         className: '',
-        sorted: true,
+        sorted: false,
         sortAccessor: '', 
-        cell: (row, rowSpan) =>  <span>Employee Name</span>
+        cell: (row, className) => {
+            return (
+                <UserRender
+                    name={row?.employee_name}
+                    profileUrl={`/account/employees/${row?.employee_id}`}
+                    image={row?.employee_image}
+                    role={row?.employee_roles}
+                    id={row?.employee_id}
+                />
+            )
+        }
     }, 
     {
         id: 'ideal_tracked_hours',
@@ -16,7 +28,9 @@ export const TimeLogHistoryColumn = [
         className: '',
         sorted: false,
         sortAccessor: '',
-        cell: (row) => <span> Ideal Tracked Hours </span>
+        cell: (row) => {
+            return <span> {convertTime(row?.ideal_minutes)} </span>
+        }
     },
     {
         id: 'actual_logged_hours',
@@ -24,7 +38,10 @@ export const TimeLogHistoryColumn = [
         className: '',
         sorted: false,
         sortAccessor: '',
-        cell: (row) => <span>Actual Logged Hours</span>
+        cell: (row) => {
+            let totalMinute = row?.total_minutes ?? 0;
+            return <span> {convertTime(totalMinute)} </span>
+        }
     },
     {
         id: 'missed_hours',
@@ -32,7 +49,9 @@ export const TimeLogHistoryColumn = [
         className: '',
         sorted: false,
         sortAccessor: '',
-        cell: (row) => <span> Missed Hours </span>
+        cell: (row) => {
+            return <span> {convertTime(row?.missed_hours)} </span>
+        }
     },
     {
         id: 'missed_day_count',

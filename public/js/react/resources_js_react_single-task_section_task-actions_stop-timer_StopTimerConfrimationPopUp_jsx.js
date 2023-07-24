@@ -164,7 +164,8 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_9__.useSelector)(function (s) {
       return s.subTask;
     }),
-    task = _useSelector.task;
+    task = _useSelector.task,
+    lessTrackModalFor = _useSelector.lessTrackModalFor;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     optionId = _React$useState2[0],
@@ -191,7 +192,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
     isFetching = _useGetUserTrackTimeQ.isFetching;
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (!isFetching && trackTime) {
-      var m = Math.abs(435 - trackTime);
+      var m = Math.abs(435 - (trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times));
       var h = Math.floor(m / 60);
       m = m % 60;
       setTrackHours(h);
@@ -199,14 +200,15 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
     }
   }, [trackTime, isFetching]);
   var handleSubmitForm = function handleSubmitForm(data) {
-    console.log(data);
     storeStopTrackTimer(_objectSpread(_objectSpread({}, data), {}, {
       task_id: task === null || task === void 0 ? void 0 : task.id,
       user_id: loggedUser.id
     })).unwrap().then(function (res) {
-      console.log(res);
+      handleTemporarilyStopTimer();
     })["catch"](function (err) {
       return console.log(err);
+    })["finally"](function () {
+      return close();
     });
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
@@ -218,7 +220,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
       className: "border-bottom pb-2 px-3 d-flex align-items-center justify-content-between",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "font-weight-bold f-16",
-        children: "Stop Timer"
+        children: lessTrackModalFor === "STOP_TIMER" ? 'Stop Timer' : "Start Timer"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_6__["default"], {
         variant: "tertiary",
         onClick: close,
@@ -227,7 +229,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
           className: "fa-solid fa-xmark"
         })
       })]
-    }), !closingToday && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    }), !closingToday && lessTrackModalFor === "STOP_TIMER" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "py-2 px-4",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h3", {
         className: "mb-3 text-center",
@@ -250,16 +252,16 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
           children: ["No, I am temporarily ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " stopping the tracker"]
         })]
       })]
-    }), closingToday ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+    }), lessTrackModalFor === "START_TIMER" || lessTrackModalFor === "STOP_TIMER" && closingToday ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_single_task--modal-body p-3",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "alert alert-warning",
         children: ["Your tracked time for today is ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
           className: "font-weight-bold",
-          children: [Math.floor(trackTime / 60), " hours"]
+          children: [Math.floor((trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times) / 60), " hours"]
         }), " and ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
           className: "font-weight-bold",
-          children: [Math.floor(trackTime % 60), " minutes."]
+          children: [Math.floor((trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times) % 60), " minutes."]
         }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " Your minimum tracked hours should have been ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           className: "font-weight-bold",
           children: " 7 hours "
@@ -631,8 +633,11 @@ var LateExplainationOption = function LateExplainationOption(_ref) {
     var data = {
       reason_for_less_tracked_hours_a_day_task: parentReason,
       child_reason: "I Came Late",
-      duration_form: duratonStart,
-      duration_to: durationEnd,
+      durations: JSON.stringify([{
+        id: 'de2sew',
+        start: duratonStart,
+        end: durationEnd
+      }]),
       comment: comment
     };
     console.log({
@@ -818,8 +823,11 @@ var LeaveExplainationOption = function LeaveExplainationOption(_ref) {
     var data = {
       reason_for_less_tracked_hours_a_day_task: parentReason,
       child_reason: "I Had Half Day Of Leave Today",
-      duration_form: duratonStart,
-      duration_to: durationEnd,
+      durations: JSON.stringify([{
+        id: 'de2sew',
+        start: duratonStart,
+        end: durationEnd
+      }]),
       comment: comment,
       leave_period: leavePeriod
     };
@@ -1034,8 +1042,11 @@ var LeavingEarlyExplainationOption = function LeavingEarlyExplainationOption(_re
     var data = {
       reason_for_less_tracked_hours_a_day_task: parentReason,
       child_reason: "I Am Leaving Early",
-      duration_form: duratonStart,
-      duration_to: durationEnd,
+      durations: JSON.stringify([{
+        id: 'de2sew',
+        start: duratonStart,
+        end: durationEnd
+      }]),
       comment: comment
     };
     onSubmit(data);
@@ -1211,6 +1222,7 @@ var OptionFive = function OptionFive(_ref) {
   // handle submittion
   var handleSubmittion = function handleSubmittion() {
     var data = {
+      reason_for_less_tracked_hours_a_day_task: 'I Forgot To Track Hours',
       forgot_to_track_task_id: task === null || task === void 0 ? void 0 : task.id,
       durations: JSON.stringify(durations)
     };
@@ -1451,8 +1463,11 @@ var OptionFour = function OptionFour(_ref) {
     e.preventDefault();
     var data = {
       reason_for_less_tracked_hours_a_day_task: "I Can't Log Hours",
-      duration_form: duratonStart,
-      duration_to: durationEnd,
+      durations: JSON.stringify([{
+        id: 'de2sew',
+        start: duratonStart,
+        end: durationEnd
+      }]),
       comment: comment,
       responsible_person: (loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) === Number(person === null || person === void 0 ? void 0 : person.id) ? "Due To MySelf" : "Due To Another Person",
       responsible_person_id: person === null || person === void 0 ? void 0 : person.id,
@@ -2034,13 +2049,10 @@ var OptionTwo = function OptionTwo(_ref) {
     e.preventDefault();
     var data = {
       reason_for_less_tracked_hours_a_day_task: "During Transition From One Task To Another, I Had To Wait For a While",
-      transition_hours: transitionHours,
-      transition_minutes: transitionMinutes,
+      transition_hours: Number(transitionHours),
+      transition_minutes: Number(transitionMinutes),
       comment: comment
     };
-    console.log({
-      data: data
-    });
     onSubmit(data);
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.Fragment, {

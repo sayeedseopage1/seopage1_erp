@@ -1,11 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useContext} from "react";
 import { useGetProjectWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
 import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
 import Tabbar from "../components/Tabbar";
 import ProjectWiseTable from '../components/ProjectWiseTable'
-import TimeLogTableFilterBar from "../../TimeLogTable-backup/components/TimeLogTableFilterBar";
+import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { ProjectWiseTableColumn } from "../components/ProjectWiseTableColumn";
+import { ProjectTableCtx } from "../context/ProjectWiseTableContext";
 
 const ProjectWiseTimeLog = () => {
     const [data, setData] = useState([]);
@@ -14,6 +15,7 @@ const ProjectWiseTimeLog = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
 
+    const {setFilter} = useContext(ProjectTableCtx);
     const [getProjectWiseData, {isLoading}] = useGetProjectWiseDataMutation();
 
     // handle data
@@ -26,6 +28,7 @@ const ProjectWiseTimeLog = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
+        setFilter(filter);
         getProjectWiseData(filter)
         .unwrap()
         .then(res => {

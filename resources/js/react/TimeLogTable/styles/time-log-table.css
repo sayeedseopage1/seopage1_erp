@@ -30,5 +30,13 @@
 /* modal panel */
 .sp1_tlr--modal-panel{
     width: 100%;
-    max-width: 60vw;
+    max-width: 80vw;
+}
+
+.sp1_tlr_loader{
+    width: 100%;
+    height: calc(100vh - 250px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import Modal from "./Modal";
 import Button from "./Button";
-import TimeLogHIstoryModalTable from "./TimeLogHIstoryModalTable";
+import Loader from "../../single-task/components/Loader";
+const TimeLogHIstoryModalTable = React.lazy(() => import( "./TimeLogHIstoryModalTable" ));
 
 const TimeLogHistoryModal = ({ row, isOpen, close }) => {
     return (
@@ -19,7 +20,9 @@ const TimeLogHistoryModal = ({ row, isOpen, close }) => {
                     </div>
 
                     <div className="px-3">
-                        <TimeLogHIstoryModalTable row={row} />
+                        <React.Suspense fallback={<Loader />} >
+                            <TimeLogHIstoryModalTable row={row} />
+                        </React.Suspense>
                     </div>
                 </div>
             </div>

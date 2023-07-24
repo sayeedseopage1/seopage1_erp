@@ -4,8 +4,8 @@ import { paginate } from '../../utils/paginate';
 import { groupBy, orderBy } from "lodash";
 import Tabbar from "../components/Tabbar";
 import TaskWiseLogTable from '../components/TaskWiseLogTable'
-import TimeLogTableFilterBar from "../../TimeLogTable-backup/components/TimeLogTableFilterBar";
 import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
+import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);

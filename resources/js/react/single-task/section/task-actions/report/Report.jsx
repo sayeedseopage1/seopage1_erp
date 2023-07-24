@@ -16,7 +16,7 @@ const ReportControl = ({ task }) => {
             <Button
                 variant="tertiary"
                 onClick={() => setReportModalOpen(true)}
-                className="ml-auto d-flex align-items-center sp1-st-revision-btn --view-revision"
+                className="ml-auto d-flex align-items-center sp1-st-revision-btn --view-revision sp1_report_btn"
             >
                 <i className="fa-solid fa-flag"></i>
                 <span className="d-inline ml-1">Report</span>

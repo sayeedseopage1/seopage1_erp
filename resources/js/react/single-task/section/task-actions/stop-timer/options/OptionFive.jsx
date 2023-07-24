@@ -28,6 +28,7 @@ const OptionFive = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     // handle submittion
     const handleSubmittion = () => {
         const data = {
+            reason_for_less_tracked_hours_a_day_task: 'I Forgot To Track Hours',
             forgot_to_track_task_id: task?.id,
             durations: JSON.stringify(durations),
         };

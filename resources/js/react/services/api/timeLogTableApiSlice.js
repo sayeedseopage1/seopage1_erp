@@ -37,6 +37,18 @@ const timeLogTableApiSlice = apiSlice.injectEndpoints({
             }) 
         }),  
 
+        getTimeLogHistory: build.mutation({
+            query: (data) => ({
+                url: `/get-timelogs/time_log_history`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+                }
+            }) 
+        }),  
+
+
     })
 }) ;
 
@@ -45,6 +57,7 @@ const timeLogTableApiSlice = apiSlice.injectEndpoints({
 export const { 
      useGetEmployeeWiseDataMutation,
      useGetTaskWiseDataMutation,
-     useGetProjectWiseDataMutation
+     useGetProjectWiseDataMutation,
+     useGetTimeLogHistoryMutation
 } = timeLogTableApiSlice;
 

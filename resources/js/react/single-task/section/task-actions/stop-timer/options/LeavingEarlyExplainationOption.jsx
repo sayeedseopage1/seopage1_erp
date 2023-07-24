@@ -50,8 +50,7 @@ const LeavingEarlyExplainationOption = ({
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
             child_reason: "I Am Leaving Early",
-            duration_form: duratonStart,
-            duration_to: durationEnd,
+            durations: JSON.stringify([{id: 'de2sew', start: duratonStart, end: durationEnd}]),
             comment,
         };
 
