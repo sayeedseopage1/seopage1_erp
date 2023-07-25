@@ -145,7 +145,7 @@ export class SingleTask {
         this.startDate = task?.start_date;
         this.dueDate = task?.due_date;
         this.estimateHours = task?.estimate_hours;
-        this.estimateMinutesa = task?.estimate_minutes;
+        this.estimateMinutes = task?.estimate_minutes;
         this.parentTaskTimeLog = task?.parent_task_time_log;
         this.subTaskTimeLog = task?.sub_task_time_log;
         this.totalTimeLog = task?.timeLog;
@@ -185,12 +185,14 @@ export class SingleTask {
     }
 
     getEstimateTime(){
-        if(this.estimateHours && this.estimateMinutesa){
-            return `${this.estimateHours} hrs ${this.estimateMinutesa} mins`;
-        }else if( !this.estimateHours && this.estimateMinutesa){
-            return `${this.estimateMinutesa} mins`;
+        if(this.estimateHours && this.estimateMinutes){
+            return `${this.estimateHours} hrs ${this.estimateMinutes} mins`;
+        }else if(this.estimateHours && !this.estimateMinutes){
+            return `${this.estimateHours} hrs ${this.estimateMinutes} mins`;
+        }else if( !this.estimateHours && this.estimateMinutes){
+            return `${this.estimateMinutes} mins`;
         }else{
-            return `--`
+            return `Not Provided!`
         }
     }
 
