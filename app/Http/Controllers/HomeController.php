@@ -70,6 +70,7 @@ use App\Notifications\PusherNotificaiton;
 use Notification;
 use App\Models\TaskUser;
 use App\Models\AuthorizationAction;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -1519,5 +1520,14 @@ class HomeController extends Controller
         return response()->json([
             'filename' => \URL::asset('uploads/'.$imageName)
         ]);
+    }
+
+    function app_requirements()
+    {
+        if(Auth::user()->role_id == 1) {
+            return view('app_requirements.index');
+        } else {
+            abort(403);
+        }
     }
 }
