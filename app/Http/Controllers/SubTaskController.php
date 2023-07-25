@@ -48,6 +48,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
+       // dd($request);
         $setting = global_setting();
         $task = Task::find(request()->task_id);
         $startDate = $task->start_date->format($setting->date_format);
@@ -59,7 +60,15 @@ class SubTaskController extends AccountBaseController
             'description' => 'required',
             'user_id' => 'required',
 
+
         ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($request->start_date == "Invalid Date" ) {
+            return response($validator->errors(), 422);
+        };
+        if ($request->end_date == "Invalid Date") {
+            return response($validator->errors(), 422);
+        };
 
         $dueDateRule = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
 
@@ -75,7 +84,7 @@ class SubTaskController extends AccountBaseController
 
         $rules['due_date'] = !is_null(request()->start_date) ? ($dueDateRule . '|after_or_equal:' . Carbon::createFromFormat($setting->date_format, request()->start_date)->format($setting->date_format)) : $dueDateRule;
 
-        $validator = Validator::make($request->all(), $rules);
+       
 
         if ($validator->fails()) {
             return response($validator->errors(), 422);
