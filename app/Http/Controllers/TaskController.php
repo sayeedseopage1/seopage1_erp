@@ -1975,11 +1975,13 @@ class TaskController extends AccountBaseController
 
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;
-
-            if ($task->has_subtask != 0) {
+           // dd($task);
+            
                 $task->subtask = Subtask::select([
                     'id', 'title'
                 ])->where('task_id', $task->id)->get();
+                //dd($task->subtask);
+               
 
                 $tas_id = Task::where('id', $task->id)->first();
                 $subtasks = Subtask::where('task_id', $tas_id->id)->get();
@@ -2006,7 +2008,7 @@ class TaskController extends AccountBaseController
                     $task->timeLog = $timeLo;
                     $task->sub_task_time_log = $timeL;
                 }
-            }
+            
             $task->running_timer = null;
             $running_timer = ProjectTimeLog::where([
                 'task_id' => $id,
@@ -2130,11 +2132,13 @@ class TaskController extends AccountBaseController
 
             $task->parent_task_time_log = $timeLog;
             $task->task_category = $task->category;
+            
 
             if ($task->has_subtask != 0) {
                 $task->subtask = Subtask::select([
                     'id', 'title'
                 ])->where('task_id', $task->id)->get();
+              
 
                 $tas_id = Task::where('id', $task->id)->first();
                 $subtasks = Subtask::where('task_id', $tas_id->id)->get();
