@@ -93,6 +93,19 @@
                 </select>
             </div>
         </div>
+
+        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }} border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Status')</p>
+            <div class="select-status">
+                <select class="form-control select-picker status" name="status" id="status" data-live-search="true" data-size="8">
+                    <option selected value="all">@lang('All')</option>
+                    <option value="Accepted">@lang('Accepted')</option>
+                    <option value="Denied">@lang('Denied')</option>
+                    <option value="pending">@lang('Pending')</option>
+                </select>
+            </div>
+        </div>
+
         <!-- SEARCH BY TASK END -->
 
         <!-- RESET START -->
@@ -196,6 +209,8 @@
             var clientID = $('#client_id').val();
             var pm_id = $('#pm_id').val();
             var closed_by = $('#closed_by').val();
+            var status = $('#status').val();
+            //alert(status);
 
             if (startDate == '') {
                 startDate = null;
@@ -211,6 +226,7 @@
             data['client_id'] = clientID;
             data['pm_id'] = pm_id;
             data['closed_by'] = closed_by;
+            data['status'] = status;
 
             data['searchText'] = searchText;
             //console.log(searchText);
@@ -219,7 +235,7 @@
             window.LaravelDataTables["Wondeals-table"].draw();
         }
 
-        $('#pm_id, #client_id, #closed_by, #search-text-field').on('change keyup', function() {
+        $('#pm_id, #client_id, #closed_by, #status, #search-text-field').on('change keyup', function() {
             if ($('#client_id').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
@@ -230,6 +246,9 @@
                 $('#reset-filters').removeClass('d-none');
                 showTable();
             } else if ($('#closed_by').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#status').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
             } else if ($('#search-text-field').val() != "") {
@@ -344,7 +363,7 @@
             $('#task_id').val($(this).data('id'));
             $('#award_time_incress_modal').modal('toggle');
         });
-        
+
 
         $('#award_time_incress_submit').click(function() {
             var task_id = $('#task_id').val();
