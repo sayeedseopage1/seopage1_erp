@@ -10,8 +10,8 @@ import {
 import { CompareDate } from "../../../utils/dateController";
 import _ from "lodash";
 import StopTimerControl from "./StopTimerControl";
-import { useDispatch } from "react-redux";
-import { setLessTrackModal, setTaskStatus } from "../../../services/features/subTaskSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setLessTrackModal, setTaskStatus, setTimerStatus } from "../../../services/features/subTaskSlice";
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
 
@@ -19,8 +19,7 @@ import { User } from "../../../utils/user-details";
 
 
 // component
-const TimerControl = ({ task }) => {
-    const [timerStart, setTimerStart] = useState(false);
+const TimerControl = ({ task, timerStart, setTimerStart }) => {
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
@@ -108,30 +107,44 @@ const TimerControl = ({ task }) => {
         })
             .unwrap()
             .then((res) => {
-                if (res?.status === "success") {
+                  if (res?.status === "success" || res?.status === 200) {
                     setTimerStart(true);
                     setTimerId(res?.id);
                     dispatch(setTaskStatus(res?.task_status));
                     Toast.fire({
-                        icon: res?.status,
+                        icon: 'success',
                         title: _.startCase(res?.message),
                     });
                 } else {
                     Toast.fire({
-                        icon: res?.status,
+                        icon: 'warning',
                         title: _.startCase(res?.message),
                     });
                 }
             })
             .catch((err) => {
-                console.log(err);
+                if(err.status === 400){
+                    Swal.fire({
+                        title:  "You have not meet last day's minimum hour count. Want to submit acknowledgement form?",
+                        showDenyButton: true,
+                        confirmButtonText: 'Yes',
+                        denyButtonText: `Close`,
+                        icon: 'warning'
+                      }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            dispatch(setLessTrackModal({show: true, type: 'START_TIMER'}))
+                        } 
+                      })
+                    
+                 }
             });
     };
 
     // start timer function
     const startTimer = (e) => {
         e.preventDefault();
-        dispatch(setLessTrackModal({show: true, type: 'START_TIMER'}))
+        
         startTimerFirstCheck(
             `/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.projectId}`
         )
@@ -141,7 +154,6 @@ const TimerControl = ({ task }) => {
                     setIsOpenConfirmationModal(true);
                 } else startTimerControl();
             })
-            .catch((err) => console.log(err));
     };
 
     
@@ -153,9 +165,9 @@ const TimerControl = ({ task }) => {
         stopTimerApi({ timeId: timerId })
             .unwrap()
             .then((res) => {
-                if (res?.status === "success") {
+                if (res?.status === "success" || res?.status === 200) {
                     Toast.fire({
-                        icon: res?.status,
+                        icon: "success",
                         title: _.startCase(res?.message),
                     });
                     setTimerStart(false);
@@ -163,7 +175,7 @@ const TimerControl = ({ task }) => {
                     timerId(null);
                 } else {
                     Toast.fire({
-                        icon: res?.status,
+                        icon: 'warning',
                         title: _.startCase(res?.message),
                     });
                 }
@@ -182,6 +194,12 @@ const TimerControl = ({ task }) => {
             if(res){
                 let currentTime = dayjs.dayjs(res.current_time);
                 let target = currentTime.set('hour', 16).set('minute', 30).set('second', 0);
+                const isSaturday = currentTime.day() === 6;
+
+                if(isSaturday){
+                    target = currentTime.set('hour', 12).set('minute', 30).set('second', 0);
+                }
+
                 let check = dayjs.dayjs(currentTime).isBefore(target);
                 if(!check){
                     res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER'})) : stopTimer()

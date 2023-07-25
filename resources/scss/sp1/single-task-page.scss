@@ -1327,3 +1327,14 @@
     }            
 }
  
+.sp1_task-edit-button{
+    margin-left: auto;
+    &:hover{
+        color: #fff !important;
+        background-color: #084bc7 !important;
+    }
+
+    @media (max-width: 490px ) {
+        margin-left: 0 !important ; 
+    }        
+}

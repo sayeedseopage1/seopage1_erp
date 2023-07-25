@@ -218,8 +218,8 @@ var JqueryDateRangePicker = function JqueryDateRangePicker(_ref) {
       // let today = moment().format('D'); 
 
       $(function () {
-        var start = moment().startOf('month');
-        var end = moment().endOf('month');
+        var start = moment().subtract(1, 'day').startOf('day');
+        var end = moment().subtract(1, 'day').endOf('day');
 
         // if(today > 20){
         //     end = moment().add(1, 'months').date(20);

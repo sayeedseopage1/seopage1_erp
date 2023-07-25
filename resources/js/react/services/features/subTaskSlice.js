@@ -9,6 +9,8 @@ const initialState = {
     taskStatus: null,
     lessTrackModalFor: '',
     lessTrackModal: false,
+    timerRunningTime: 0,
+    isTimerRunning: false,
 };
 
 const subTaskSlice = createSlice({
@@ -43,6 +45,11 @@ const subTaskSlice = createSlice({
             state.taskStatus = action.payload;
         },
 
+        setTimerStatus: (state, action) => {
+            state.timerRunningTime = action.payload.time;
+            state.isTimerRunning = action.payload.isTimerRunning;
+        },
+
         // set less track a day modal
         setLessTrackModal: (state, action) => {
             state.lessTrackModal = action.payload.show;
@@ -60,5 +67,6 @@ export const {
     storeTimeLogs,
     storeHistories,
     setLessTrackModal,
+    setTimerStatus,
 } = subTaskSlice.actions;
 export default subTaskSlice.reducer;

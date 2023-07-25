@@ -7,6 +7,7 @@ import ProjectWiseTable from '../components/ProjectWiseTable'
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { ProjectWiseTableColumn } from "../components/ProjectWiseTableColumn";
 import { ProjectTableCtx } from "../context/ProjectWiseTableContext";
+import { convertTime } from "../../utils/converTime";
 
 const ProjectWiseTimeLog = () => {
     const [data, setData] = useState([]);
@@ -14,6 +15,8 @@ const ProjectWiseTimeLog = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
+    const [nSession, setNSession] = useState(0);
+    const [trackedTime, setTractedTime] = useState(0);
 
     const {setFilter} = useContext(ProjectTableCtx);
     const [getProjectWiseData, {isLoading}] = useGetProjectWiseDataMutation();
@@ -32,9 +35,14 @@ const ProjectWiseTimeLog = () => {
         getProjectWiseData(filter)
         .unwrap()
         .then(res => {
+            setCurrentPage(1);
             const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
             handleData(sortedData, currentPage, perPageData);
+            const totalSession = _.sumBy(sortedData, 'number_of_session');
+            const totalTrackTime = _.sumBy(sortedData, 'total_minutes');
             setData(sortedData);
+            setNSession(totalSession);
+            setTractedTime(totalTrackTime);
         })
     }
  
@@ -61,15 +69,22 @@ const ProjectWiseTimeLog = () => {
         <div className="sp1_tlr_container">
             <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="">
+                <div className="mb-2">
                     <Tabbar/>
                 </div>
+                
+                <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
+                    <span className="mx-auto">
+                        <span>Total No. of Session: <strong> {nSession} </strong> </span> <span className="mx-2">||</span> <span>Total Tracked Time: <strong>{convertTime(trackedTime)}</strong></span>
+                    </span>
+                </div>
+
                 <ProjectWiseTable
                     data={renderData}
                     columns={ProjectWiseTableColumn}
                     tableName="employee_timelog_report"
                     onSort={handleSorting}
-                    height="calc(100vh - 325px)"
+                    height="calc(100vh - 370px)"
                     onPaginate={handlePagination}
                     perpageData={perPageData}
                     handlePerPageData={handlePerPageData}

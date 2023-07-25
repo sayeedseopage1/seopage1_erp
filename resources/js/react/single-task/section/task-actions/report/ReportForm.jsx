@@ -5,6 +5,7 @@ import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
 import CKEditorComponent from "../../../../ckeditor";
 import UserSelectionList from "../stop-timer/options/UserSelectionList";
+import { useCreateReportMutation } from "../../../../services/api/SingleTaskPageApi";
 
 const reports = [
     {
@@ -23,16 +24,36 @@ const ReportForm = ({close}) => {
     const [comment, setComment] = useState("");
     const [previousNotedIssue, setPreviousNotedIssue] = useState("");
 
+
+    const [createReport, {isLoading}] = useCreateReportMutation();
+
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+    });
+
     const onSubmit =(e)=>{
         e.preventDefault();
         const data = {
             reason: reason?.name,
             person: person?.id,
             comment,
-            previousNotedIssue
+            previousNotedIssue,
+            user_id: window?.Laravel?.user?.id
         }
-
-        console.log(data)
+        
+        createReport(data).unwrap()
+        .then((res) => { 
+            Toast.fire({
+                icon: 'success',
+                title: "Report Issued Successfully!"
+            });  
+            close();
+        })
     }
 
     return (
@@ -85,40 +106,6 @@ const ReportForm = ({close}) => {
                     </label>
                     <div className="position-relative w-100 mb-3">
                         <UserSelectionList person={person} setPerson={setPerson} />
-                        {/* <Listbox value={person} onChange={setPerson}>
-                            <Listbox.Button className="w-100 bg-white py-2 pl-2 pr-1 border text-left d-flex align-items-center justify-content-between">
-                                <span className="mr-auto">
-                                    {reason?.name ||
-                                        "Select Responsible Person."}
-                                </span>
-                                <HiOutlineSelector className="f-16" />
-                            </Listbox.Button>
-
-                            <Listbox.Options
-                                className="position-absolute bg-white p-2 shadow w-100"
-                                style={{
-                                    zIndex: 10,
-                                    maxHeight: "350px",
-                                    overflowY: "auto",
-                                }}
-                            >
-                                {reports?.map((report) => (
-                                    <Listbox.Option
-                                        key={report.id}
-                                        value={report}
-                                        className={({ selected, active }) =>
-                                            selected
-                                                ? "task-selection-list-option selected"
-                                                : active
-                                                ? "task-selection-list-option active"
-                                                : "task-selection-list-option"
-                                        }
-                                    >
-                                        {report?.name}
-                                    </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                        </Listbox> */}
                     </div>
                 </div>
 
@@ -189,7 +176,7 @@ const ReportForm = ({close}) => {
                         Close
                     </Button>
 
-                    <SubmitButton onClick={onSubmit} isLoading={false} title="Report" />
+                    <SubmitButton onClick={onSubmit} isLoading={isLoading} title="Report" />
                 </div>
             </form>
         </React.Fragment>

@@ -365,38 +365,58 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(Request $request)
     {
-     //    / DB::beginTransaction();
-    //  $userID = Auth::id(); // Replace with the actual user ID
+       //  DB::beginTransaction();
+     $userID = Auth::id(); // Replace with the actual user ID
 
-    //  $yesterdayDate = Carbon::yesterday()->toDateString();
-     
-    //  $totalMinutes = DB::table('project_time_logs')
-    //      ->where('user_id', $userID)
-    //      ->whereDate('created_at', $yesterdayDate)
-    //      ->sum('total_minutes');
-    //  $acknowlendement = DeveloperStopTimer::where('user_id',Auth::id())->where('created_at',$yesterdayDate)->first();
-     // if($totalMinutes < 435 && $acknowlendement == null) 
-     // {
-     //     return response()->json([
-     //         'error' => 'Developer did not submit the acknowledgement form'
-     //     ], 400);
+     $yesterdayDate = ProjectTimeLog::where('user_id', $userID)
+     ->orderBy('id', 'desc')
+     ->select('created_at')
+     ->first();
+     $today_timelog_count = ProjectTimeLog::where('user_id', $userID)
+    
+     ->whereDate('created_at',Carbon::today())
+     ->count();
+     //dd($today_timelog_count);
  
-     // };
-    //    / dd($request);
-      $task_status= Task::find($request->task_id);
-      $task_status->task_status="in progress";
-      $task_status->board_column_id= 3;
-      $task_status->save();
-       // $authorization_action = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_assign_by_lead_developer')->first();
-           
-        //     if ($authorization_action != null && $authorization_action->status == 0) {
-        //         $authorization= AuthorizationAction::find($authorization_action->id);
-        //         $authorization->status = '1';
-        //         $authorization->authorization_by= $authorization_action->authorization_for;
-        //         $authorization->save();
-        // //   dd($authorization);
-        //     }
-      $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+ // Check if the query returned any result
+ if ($yesterdayDate && $today_timelog_count < 1  ) {
+     // $yesterdayDate is an object, so you need to access the "created_at" property
+     $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $yesterdayDate->created_at);
+ 
+     // Get the day of the month
+     $day = $carbonDate->format('l');
+     $totalMinutes = DB::table('project_time_logs')
+     ->where('user_id', $userID)
+     ->whereDate('created_at', $yesterdayDate->created_at)
+     ->sum('total_minutes');
+  //   dd($totalMinutes);
+    $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->first();
+   
+// dd()
+//dd($acknowledgement);
+//dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
+ if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
+ {
+   
+     return response()->json([
+         'error' => 'Developer did not submit the acknowledgement form'
+     ], 400);
+
+ }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null)
+ {
+   // dd("Saturday");
+    return response()->json([
+        'error' => 'Developer did not submit the acknowledgement form'
+    ], 400);
+
+
+ }else 
+ {
+    $task_status= Task::find($request->task_id);
+    $task_status->task_status="in progress";
+    $task_status->board_column_id= 3;
+    $task_status->save();
+    $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
     //  dd($task_status);
       $timeLog = new ProjectTimeLog();
 
@@ -458,12 +478,93 @@ class TimelogController extends AccountBaseController
             'message' => 'timer already running',
            
         ]);
+
+ }
+ 
+    
+ } else {
+    $task_status= Task::find($request->task_id);
+    $task_status->task_status="in progress";
+    $task_status->board_column_id= 3;
+    $task_status->save();
+    $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+    //  dd($task_status);
+      $timeLog = new ProjectTimeLog();
+
+        $activeTimer = ProjectTimeLog::with('user')
+            ->whereNull('end_time')
+            ->join('users', 'users.id', '=', 'project_time_logs.user_id')
+            ->where('user_id', $this->user->id)->first();
+        if (is_null($activeTimer)) {
+            $taskId = $request->task_id;
+
+            if ($request->has('create_task')) {
+                $task = new Task();
+                $task->heading = $request->memo;
+                $task->board_column_id = $this->global->default_task_status;
+                $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
+                $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+                $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+
+                if ($request->project_id != '') {
+                    $task->project_id = $request->project_id;
+                }
+
+                $task->save();
+                $taskId = $task->id;
+            }
+
+            if ($request->project_id != '') {
+                $timeLog->project_id = $request->project_id;
+            }
+
+            $timeLog->task_id = $taskId;
+
+            $timeLog->user_id = $this->user->id;
+            $timeLog->start_time = now();
+            $timeLog->hourly_rate = 0;
+            $timeLog->memo = $task_status->heading;
+            $timeLog->save();
+
+            if ($request->project_id != '') {
+                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+            }
+            else {
+                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+            }
+
+            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'task timer started',
+                'id' => $timeLog->id,
+                'task_status'=> $task_board_column,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'timer already running',
+           
+        ]);
+    
+ }
+   // dd($day);
+     
+
+     
     }
 
     public function stopTimer(Request $request)
     {
-        $timeId = $request->timeId;
-        $timeLog = ProjectTimeLog::with('activeBreak')->findOrFail($timeId);
+        //dd($request);
+    //  /  DB::beginTransaction();
+        $timeId = $request->id;
+        //dd( $timeId);
+        $timeLog = ProjectTimeLog::find($timeId);
+       // dd($timeLog);
         $editTimelogPermission = user()->permission('edit_timelogs');
         $activeTimelogPermission = user()->permission('manage_active_timelogs');
 
@@ -478,6 +579,7 @@ class TimelogController extends AccountBaseController
 
         $timeLog->end_time = now();
         $timeLog->save();
+       // dd($timeLog);
 
         $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
@@ -504,6 +606,7 @@ class TimelogController extends AccountBaseController
         $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
 
         /** @phpstan-ignore-next-line */
+       
         $html = $this->showActiveTimer()->render();
 
         $this->activeTimerCount = ProjectTimeLog::whereNull('end_time')
@@ -515,8 +618,16 @@ class TimelogController extends AccountBaseController
         }
 
         $this->activeTimerCount = $this->activeTimerCount->count();
+        // /dd("sjdnkasdnas");
+        return response()->json([
+            'html' => $html,
+            'activeTimerCount'=> $this->activeTimerCount,
+            'status' => 200,
+            'message'=> 'Timer Stopped Successfully',
+        ]);
+       
 
-        return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
+       // return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
     }
 
     /**

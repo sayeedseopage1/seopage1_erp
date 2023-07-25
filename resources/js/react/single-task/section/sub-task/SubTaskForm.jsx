@@ -21,11 +21,13 @@ import { storeSubTasks } from "../../../services/features/subTaskSlice";
 import { CompareDate } from "../../../utils/dateController";
 import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
 import { SingleTask } from "../../../utils/single-task";
+import { useEffect } from "react";
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const { task:taskDetails, subTask } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
+    const [showEnvForm, setShowEnvForm] = useState(false);
     //   form data
     const [title, setTitle] = useState("");
     const [milestone, setMilestone] = useState("");
@@ -156,14 +158,21 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     };
 
 
-    const showEnv = task?.workingEnvironment === 0 ? _.size(task?.subtask) === 0 ? true : false : false
+    
+
+    useEffect(() => {
+        const showEnv = task?.workingEnvironment === 0 ? _.size(task?.subtask) === 0 ? true : false : false;
+        setShowEnvForm(showEnv);
+
+        return () => setShowEnvForm(false);
+    }, [])
 
     return (
         <>
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <h6>
-                        { showEnv ? "Working Environment" : "Create Sub Task"}
+                        { showEnvForm ? "Working Environment" : "Create Sub Task"}
                     </h6>
                     <Button
                         aria-label="close-modal"
@@ -176,10 +185,10 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body">
                     {/* working environment form */}
-                    {showEnv && <WorkingEnvironmentForm task={task} /> }
+                    {showEnvForm && <WorkingEnvironmentForm task={task} close={() => setShowEnvForm(false)} /> }
                     {/* end working environment form */}
 
-                    {!showEnv && (
+                    {!showEnvForm && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
                                 <Input

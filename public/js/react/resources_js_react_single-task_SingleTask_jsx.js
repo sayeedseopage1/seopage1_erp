@@ -942,6 +942,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useApproveSubmittedTaskMutation": () => (/* binding */ useApproveSubmittedTaskMutation),
 /* harmony export */   "useConfirmClientApprovalMutation": () => (/* binding */ useConfirmClientApprovalMutation),
 /* harmony export */   "useCrateNoteMutation": () => (/* binding */ useCrateNoteMutation),
+/* harmony export */   "useCreateReportMutation": () => (/* binding */ useCreateReportMutation),
 /* harmony export */   "useCreateRevisionMutation": () => (/* binding */ useCreateRevisionMutation),
 /* harmony export */   "useCreateSubtaskMutation": () => (/* binding */ useCreateSubtaskMutation),
 /* harmony export */   "useDeleteNoteUploadedFileMutation": () => (/* binding */ useDeleteNoteUploadedFileMutation),
@@ -1296,6 +1297,21 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
             })
           };
         }
+      }),
+      /**
+       * * create report
+       */
+
+      createReport: build.mutation({
+        query: function query(data) {
+          return {
+            url: "/account/tasks/develoepr/report-issue",
+            method: "POST",
+            body: _objectSpread(_objectSpread({}, data), {}, {
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            })
+          };
+        }
       })
     };
   }
@@ -1326,7 +1342,8 @@ var useGetTaskDetailsQuery = singleTaskPageApiSlice.useGetTaskDetailsQuery,
   useRevisionAcceptOrDenyByLeadDeveloperMutation = singleTaskPageApiSlice.useRevisionAcceptOrDenyByLeadDeveloperMutation,
   useConfirmClientApprovalMutation = singleTaskPageApiSlice.useConfirmClientApprovalMutation,
   useStoreClientRevisionTaskMutation = singleTaskPageApiSlice.useStoreClientRevisionTaskMutation,
-  useWorkingEnvironmentMutation = singleTaskPageApiSlice.useWorkingEnvironmentMutation;
+  useWorkingEnvironmentMutation = singleTaskPageApiSlice.useWorkingEnvironmentMutation,
+  useCreateReportMutation = singleTaskPageApiSlice.useCreateReportMutation;
 
 
 /***/ }),
@@ -3596,6 +3613,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "needRevisionPermision": () => (/* binding */ needRevisionPermision),
 /* harmony export */   "revisionButtonPermission": () => (/* binding */ revisionButtonPermission),
 /* harmony export */   "submitForClientApproval": () => (/* binding */ submitForClientApproval),
+/* harmony export */   "taskEditPermision": () => (/* binding */ taskEditPermision),
 /* harmony export */   "timeControlPermision": () => (/* binding */ timeControlPermision)
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
@@ -3753,6 +3771,26 @@ function clientApproveConfirmationButtonPermission(_ref7) {
   var task = _ref7.task,
     status = _ref7.status,
     auth = _ref7.auth;
+  var statusPermission = false;
+  var assigneePermission = false;
+  var statusId = status ? status.id : -1;
+  var assignedUser = task === null || task === void 0 ? void 0 : task.assigneeBy;
+
+  // if status id 6 show timer start button
+  if ([9].includes(Number(statusId))) {
+    statusPermission = true;
+  }
+
+  // if task assign to 
+  if ((assignedUser === null || assignedUser === void 0 ? void 0 : assignedUser.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 4 || (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) {
+    assigneePermission = true;
+  }
+  return statusPermission && assigneePermission;
+}
+function taskEditPermision(_ref8) {
+  var task = _ref8.task,
+    status = _ref8.status,
+    auth = _ref8.auth;
   var statusPermission = false;
   var assigneePermission = false;
   var statusId = status ? status.id : -1;
@@ -6414,7 +6452,13 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
                   className: "block truncate ".concat(selected ? 'font-medium' : 'font-normal'),
-                  children: [employee === null || employee === void 0 ? void 0 : employee.name, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                    className: "mr-2",
+                    children: employee === null || employee === void 0 ? void 0 : employee.name
+                  }), (employee === null || employee === void 0 ? void 0 : employee.developer_status) === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                    className: "badge badge-warning",
+                    children: "Working..."
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
                     className: "badge badge-primary",
                     children: "Open to Work"
                   })]
@@ -7617,6 +7661,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var SubTaskForm = function SubTaskForm(_ref) {
   var _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2;
   var close = _ref.close,
@@ -7629,63 +7674,67 @@ var SubTaskForm = function SubTaskForm(_ref) {
     subTask = _useSelector.subTask;
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_12__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_14__.CompareDate();
-  //   form data
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
-    title = _useState2[0],
-    setTitle = _useState2[1];
+    showEnvForm = _useState2[0],
+    setShowEnvForm = _useState2[1];
+  //   form data
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
-    milestone = _useState4[0],
-    setMilestone = _useState4[1];
+    title = _useState4[0],
+    setTitle = _useState4[1];
   var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState6 = _slicedToArray(_useState5, 2),
-    parentTask = _useState6[0],
-    setParentTask = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    milestone = _useState6[0],
+    setMilestone = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState8 = _slicedToArray(_useState7, 2),
-    startDate = _useState8[0],
-    setStateDate = _useState8[1];
+    parentTask = _useState8[0],
+    setParentTask = _useState8[1];
   var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState10 = _slicedToArray(_useState9, 2),
-    dueDate = _useState10[0],
-    setDueDate = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    startDate = _useState10[0],
+    setStateDate = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    project = _useState12[0],
-    setProject = _useState12[1];
+    dueDate = _useState12[0],
+    setDueDate = _useState12[1];
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState14 = _slicedToArray(_useState13, 2),
-    taskCategory = _useState14[0],
-    setTaskCategory = _useState14[1];
+    project = _useState14[0],
+    setProject = _useState14[1];
   var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState16 = _slicedToArray(_useState15, 2),
-    assignedTo = _useState16[0],
-    setAssignedTo = _useState16[1];
+    taskCategory = _useState16[0],
+    setTaskCategory = _useState16[1];
   var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState18 = _slicedToArray(_useState17, 2),
-    taskObserver = _useState18[0],
-    setTaskObserver = _useState18[1];
+    assignedTo = _useState18[0],
+    setAssignedTo = _useState18[1];
   var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState20 = _slicedToArray(_useState19, 2),
-    description = _useState20[0],
-    setDescription = _useState20[1];
+    taskObserver = _useState20[0],
+    setTaskObserver = _useState20[1];
   var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState22 = _slicedToArray(_useState21, 2),
-    status = _useState22[0],
-    setStatus = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Medium"),
+    description = _useState22[0],
+    setDescription = _useState22[1];
+  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState24 = _slicedToArray(_useState23, 2),
-    priority = _useState24[0],
-    setPriority = _useState24[1];
-  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    status = _useState24[0],
+    setStatus = _useState24[1];
+  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Medium"),
     _useState26 = _slicedToArray(_useState25, 2),
-    estimateTimeHour = _useState26[0],
-    setEstimateTimeHour = _useState26[1];
+    priority = _useState26[0],
+    setPriority = _useState26[1];
   var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState28 = _slicedToArray(_useState27, 2),
-    estimateTimeMin = _useState28[0],
-    setEstimateTimeMin = _useState28[1];
+    estimateTimeHour = _useState28[0],
+    setEstimateTimeHour = _useState28[1];
+  var _useState29 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState30 = _slicedToArray(_useState29, 2),
+    estimateTimeMin = _useState30[0],
+    setEstimateTimeMin = _useState30[1];
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState([]),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     files = _React$useState2[0],
@@ -7793,14 +7842,20 @@ var SubTaskForm = function SubTaskForm(_ref) {
     if (minErr) errText += minErr;
     return errText;
   };
-  var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? lodash__WEBPACK_IMPORTED_MODULE_10___default().size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? lodash__WEBPACK_IMPORTED_MODULE_10___default().size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
+    setShowEnvForm(showEnv);
+    return function () {
+      return setShowEnvForm(false);
+    };
+  }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.Fragment, {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
         className: "sp1-subtask-form --modal-panel-header",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("h6", {
-          children: showEnv ? "Working Environment" : "Create Sub Task"
+          children: showEnvForm ? "Working Environment" : "Create Sub Task"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
           "aria-label": "close-modal",
           className: "_close-modal",
@@ -7811,9 +7866,12 @@ var SubTaskForm = function SubTaskForm(_ref) {
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
         className: "sp1-subtask-form --modal-panel-body",
-        children: [showEnv && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_15__["default"], {
-          task: task
-        }), !showEnv && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+        children: [showEnvForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          task: task,
+          close: function close() {
+            return setShowEnvForm(false);
+          }
+        }), !showEnvForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
           className: "sp1-subtask-form --form row",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
             className: "col-12 col-md-6",
@@ -8630,7 +8688,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var WorkingEnvironmentForm = function WorkingEnvironmentForm(_ref) {
-  var task = _ref.task;
+  var task = _ref.task,
+    close = _ref.close;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState2 = _slicedToArray(_useState, 2),
     siteUrl = _useState2[0],
@@ -8670,7 +8729,9 @@ var WorkingEnvironmentForm = function WorkingEnvironmentForm(_ref) {
       password: password,
       frontend_password: frontendPassword
     };
-    workingEnvironment(data).unwrap();
+    workingEnvironment(data).unwrap().then(function (res) {
+      return close();
+    });
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "sp1-subtask-form w-100 --form -row",
@@ -12753,6 +12814,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_12__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -12773,6 +12840,10 @@ var TaskAction = function TaskAction(_ref) {
   var task = _ref.task,
     status = _ref.status;
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_11__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    timerStart = _React$useState2[0],
+    setTimerStart = _React$useState2[1];
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
     className: "d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group",
     style: {
@@ -12783,8 +12854,10 @@ var TaskAction = function TaskAction(_ref) {
       status: status,
       loggedUser: loggedUser
     }) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_TimerControl__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      task: task
-    }) : null, (0,_permissions__WEBPACK_IMPORTED_MODULE_4__.markAsCompletedButtonPermission)({
+      task: task,
+      timerStart: timerStart,
+      setTimerStart: setTimerStart
+    }) : null, !timerStart && (0,_permissions__WEBPACK_IMPORTED_MODULE_4__.markAsCompletedButtonPermission)({
       task: task,
       status: status,
       loggedUser: loggedUser
@@ -12820,6 +12893,18 @@ var TaskAction = function TaskAction(_ref) {
       auth: loggedUser
     }), lodash__WEBPACK_IMPORTED_MODULE_12___default().includes([5, 8, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_10__["default"], {
       task: task
+    }), (0,_permissions__WEBPACK_IMPORTED_MODULE_4__.taskEditPermision)({
+      task: task,
+      status: status,
+      auth: loggedUser
+    }) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("a", {
+      className: "cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("i", {
+        className: "fa-solid fa-file-pen"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+        className: "mx-2",
+        children: "Edit"
+      })]
     })]
   });
 };
@@ -12875,23 +12960,21 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var TimerControl = function TimerControl(_ref) {
   var _window, _window$Laravel, _task$ranningTimer;
-  var task = _ref.task;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var task = _ref.task,
+    timerStart = _ref.timerStart,
+    setTimerStart = _ref.setTimerStart;
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
-    timerStart = _useState2[0],
-    setTimerStart = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    timerId = _useState2[0],
+    setTimerId = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState4 = _slicedToArray(_useState3, 2),
-    timerId = _useState4[0],
-    setTimerId = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    seconds = _useState4[0],
+    setSeconds = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    seconds = _useState6[0],
-    setSeconds = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState8 = _slicedToArray(_useState7, 2),
-    isOpenConfirmationModal = _useState8[0],
-    setIsOpenConfirmationModal = _useState8[1];
+    isOpenConfirmationModal = _useState6[0],
+    setIsOpenConfirmationModal = _useState6[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_7__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_4__.CompareDate();
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
@@ -12980,38 +13063,48 @@ var TimerControl = function TimerControl(_ref) {
       memo: task === null || task === void 0 ? void 0 : task.title,
       user_id: (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$Laravel = _window2.Laravel) === null || _window2$Laravel === void 0 ? void 0 : (_window2$Laravel$user = _window2$Laravel.user) === null || _window2$Laravel$user === void 0 ? void 0 : _window2$Laravel$user.id
     }).unwrap().then(function (res) {
-      if ((res === null || res === void 0 ? void 0 : res.status) === "success") {
+      if ((res === null || res === void 0 ? void 0 : res.status) === "success" || (res === null || res === void 0 ? void 0 : res.status) === 200) {
         setTimerStart(true);
         setTimerId(res === null || res === void 0 ? void 0 : res.id);
         dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
         Toast.fire({
-          icon: res === null || res === void 0 ? void 0 : res.status,
+          icon: 'success',
           title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       } else {
         Toast.fire({
-          icon: res === null || res === void 0 ? void 0 : res.status,
+          icon: 'warning',
           title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       }
     })["catch"](function (err) {
-      console.log(err);
+      if (err.status === 400) {
+        Swal.fire({
+          title: "You have not meet last day's minimum hour count. Want to submit acknowledgement form?",
+          showDenyButton: true,
+          confirmButtonText: 'Yes',
+          denyButtonText: "Close",
+          icon: 'warning'
+        }).then(function (result) {
+          /* Read more about isConfirmed, isDenied below */
+          if (result.isConfirmed) {
+            dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__.setLessTrackModal)({
+              show: true,
+              type: 'START_TIMER'
+            }));
+          }
+        });
+      }
     });
   };
 
   // start timer function
   var startTimer = function startTimer(e) {
     e.preventDefault();
-    dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__.setLessTrackModal)({
-      show: true,
-      type: 'START_TIMER'
-    }));
     startTimerFirstCheck("/".concat(task === null || task === void 0 ? void 0 : task.id, "/json?mode=developer_first_task_check&project_id=").concat(task === null || task === void 0 ? void 0 : task.projectId)).unwrap().then(function (res) {
       if (res.is_first_task) {
         setIsOpenConfirmationModal(true);
       } else startTimerControl();
-    })["catch"](function (err) {
-      return console.log(err);
     });
   };
 
@@ -13022,9 +13115,9 @@ var TimerControl = function TimerControl(_ref) {
     stopTimerApi({
       timeId: timerId
     }).unwrap().then(function (res) {
-      if ((res === null || res === void 0 ? void 0 : res.status) === "success") {
+      if ((res === null || res === void 0 ? void 0 : res.status) === "success" || (res === null || res === void 0 ? void 0 : res.status) === 200) {
         Toast.fire({
-          icon: res === null || res === void 0 ? void 0 : res.status,
+          icon: "success",
           title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
         setTimerStart(false);
@@ -13032,7 +13125,7 @@ var TimerControl = function TimerControl(_ref) {
         timerId(null);
       } else {
         Toast.fire({
-          icon: res === null || res === void 0 ? void 0 : res.status,
+          icon: 'warning',
           title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       }
@@ -13050,6 +13143,10 @@ var TimerControl = function TimerControl(_ref) {
       if (res) {
         var currentTime = dayjs.dayjs(res.current_time);
         var target = currentTime.set('hour', 16).set('minute', 30).set('second', 0);
+        var isSaturday = currentTime.day() === 6;
+        if (isSaturday) {
+          target = currentTime.set('hour', 12).set('minute', 30).set('second', 0);
+        }
         var check = dayjs.dayjs(currentTime).isBefore(target);
         if (!check) {
           res.tracked_times < res.target_time ? dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_8__.setLessTrackModal)({

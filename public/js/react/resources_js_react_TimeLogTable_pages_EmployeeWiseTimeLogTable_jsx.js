@@ -997,8 +997,8 @@ var JqueryDateRangePicker = function JqueryDateRangePicker(_ref) {
       // let today = moment().format('D'); 
 
       $(function () {
-        var start = moment().startOf('month');
-        var end = moment().endOf('month');
+        var start = moment().subtract(1, 'day').startOf('day');
+        var end = moment().subtract(1, 'day').endOf('day');
 
         // if(today > 20){
         //     end = moment().add(1, 'months').date(20);
@@ -2247,7 +2247,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Tabbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Tabbar */ "./resources/js/react/TimeLogTable/components/Tabbar.jsx");
 /* harmony import */ var _context_EmployeeTableContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../context/EmployeeTableContext */ "./resources/js/react/TimeLogTable/context/EmployeeTableContext.jsx");
 /* harmony import */ var _components_TimeLogTableFilterBar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/TimeLogTableFilterBar */ "./resources/js/react/TimeLogTable/components/TimeLogTableFilterBar.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -2258,6 +2259,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -2292,6 +2294,14 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
     setSortConfig = _useState10[1];
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_EmployeeTableContext__WEBPACK_IMPORTED_MODULE_7__.EmployeeTableCtx),
     setFilter = _useContext.setFilter;
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState12 = _slicedToArray(_useState11, 2),
+    nSession = _useState12[0],
+    setNSession = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState14 = _slicedToArray(_useState13, 2),
+    trackedTime = _useState14[0],
+    setTractedTime = _useState14[1];
   var _useGetEmployeeWiseDa = (0,_services_api_timeLogTableApiSlice__WEBPACK_IMPORTED_MODULE_3__.useGetEmployeeWiseDataMutation)(),
     _useGetEmployeeWiseDa2 = _slicedToArray(_useGetEmployeeWiseDa, 2),
     getEmployeeWiseData = _useGetEmployeeWiseDa2[0],
@@ -2313,15 +2323,17 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
 
   // handle fetch data
   var handleFetchData = function handleFetchData(filter) {
-    console.log("fetching start...");
     setFilter(filter);
     getEmployeeWiseData(filter).unwrap().then(function (res) {
-      console.table(res.data);
+      setCurrentPage(1);
       var sortedData = (0,lodash__WEBPACK_IMPORTED_MODULE_5__.orderBy)(res === null || res === void 0 ? void 0 : res.data, ["employee_id"], ["desc"]);
+      var totalSession = lodash__WEBPACK_IMPORTED_MODULE_5___default().sumBy(sortedData, 'number_of_session');
+      var totalTrackTime = lodash__WEBPACK_IMPORTED_MODULE_5___default().sumBy(sortedData, 'total_minutes');
       handleData(sortedData, currentPage, perPageData);
       setData(sortedData);
+      setNSession(totalSession);
+      setTractedTime(totalTrackTime);
     });
-    console.log("end...");
   };
 
   // data sort handle 
@@ -2341,21 +2353,41 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
     setParPageData(number);
     handleData(data, currentPage, number);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "sp1_tlr_container",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_TimeLogTableFilterBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_TimeLogTableFilterBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
       onFilter: handleFetchData
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_tlr_tbl_container",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-        className: "",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_6__["default"], {})
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_EmployeeTimeLogDataTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        className: "mb-3",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_6__["default"], {})
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+        className: " w-100 d-flex flex-wrap justify-center align-items-center",
+        style: {
+          gap: '10px'
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+          className: "mx-auto",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+            children: ["Total No. of Session: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("strong", {
+              children: [" ", nSession, " "]
+            }), " "]
+          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+            className: "mx-2",
+            children: "||"
+          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+            children: ["Total Tracked Time: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
+              children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_9__.convertTime)(trackedTime)
+            })]
+          })]
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_EmployeeTimeLogDataTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
         data: renderData,
         columns: _components_EmployeeTableColumn__WEBPACK_IMPORTED_MODULE_1__.EmployeeTableColumn,
         tableName: "employee_timelog_report",
         onSort: handleSorting,
-        height: "calc(100vh - 325px)",
+        height: "calc(100vh - 370px)",
         onPaginate: handlePagination,
         perpageData: perPageData,
         handlePerPageData: handlePerPageData,

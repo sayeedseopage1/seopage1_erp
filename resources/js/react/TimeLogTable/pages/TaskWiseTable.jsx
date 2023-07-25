@@ -6,6 +6,7 @@ import Tabbar from "../components/Tabbar";
 import TaskWiseLogTable from '../components/TaskWiseLogTable'
 import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
+import { convertTime } from "../../utils/converTime";
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
@@ -13,6 +14,7 @@ const TaskWiseLogReport = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
+    const [trackedTime, setTractedTime] = useState(0);
 
     const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
 
@@ -29,10 +31,12 @@ const TaskWiseLogReport = () => {
         getTaskWiseData(filter)
         .unwrap()
         .then(res => {
+            setCurrentPage(1);
             const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
             handleData(sortedData, 1, perPageData);
             setData(sortedData);
-            setCurrentPage(1);
+            const totalTrackTime = _.sumBy(sortedData, (d) => Number( d.total_minutes));
+            setTractedTime(totalTrackTime);
         })
     }
  
@@ -59,15 +63,19 @@ const TaskWiseLogReport = () => {
         <div className="sp1_tlr_container">
             <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="">
-                    <Tabbar/>
+                <div className="mb-2"> <Tabbar/></div>
+                <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
+                    <span className="mx-auto">
+                        Total Tracked Time: <strong>{convertTime(trackedTime)}</strong>
+                    </span>
                 </div>
+
                 <TaskWiseLogTable
                     data={renderData}
                     columns={TaskWiseTableColumn}
                     tableName="employee_timelog_report"
                     onSort={handleSorting}
-                    height="calc(100vh - 325px)"
+                    height="calc(100vh - 370px)"
                     onPaginate={handlePagination}
                     perpageData={perPageData}
                     handlePerPageData={handlePerPageData}

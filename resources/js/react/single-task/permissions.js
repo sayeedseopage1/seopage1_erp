@@ -169,3 +169,24 @@ export function clientApproveConfirmationButtonPermission({task, status, auth}){
 
     return statusPermission && assigneePermission;
 }
+
+
+export function taskEditPermision({task, status, auth}){
+    let statusPermission = false;
+    let assigneePermission = false;
+    let statusId = status ? status.id : -1;
+    let assignedUser = task?.assigneeBy; 
+    
+    // if status id 6 show timer start button
+    if([9].includes(Number(statusId))){ statusPermission = true; }
+
+    // if task assign to 
+    if(
+        (assignedUser?.getId() === auth?.getId() &&  auth?.getRoleId() === 4) || 
+        auth?.getRoleId() === 1
+    ){
+        assigneePermission = true;
+    }
+
+    return statusPermission && assigneePermission;
+}

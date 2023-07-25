@@ -60,6 +60,7 @@ use function _PHPStan_7d6f0f6a4\React\Promise\all;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
 use App\Models\AuthorizationAction;
+use App\Models\DeveloperReportIssue;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
 
@@ -1954,6 +1955,12 @@ class TaskController extends AccountBaseController
           {
             $subtasks = '';
           }
+          $revisions= TaskRevision::where('task_id',$task->id)->get();
+          if($revisions == null)
+          {
+            $revisions = '';
+          }
+
          // dd($subtasks);
          $working_environment_check = WorkingEnvironment::where('project_id',$task->project_id)->count();
          $working_environment = WorkingEnvironment::where('project_id',$task->project_id)->first();
@@ -2024,6 +2031,7 @@ class TaskController extends AccountBaseController
                 'working_environment' => $working_environment_check,
                 'task_guideline'=> $pm_task_guideline,
                 'working_environment_data'=> $working_environment,
+                'revisions'=> $revisions,
             ]);
           //  return response()->json($task,$parent_task_heading);
         } elseif ($request->mode == 'sub_task') {
@@ -2046,11 +2054,29 @@ class TaskController extends AccountBaseController
             $data = TaskCategory::all();
             return response()->json($data);
         } elseif ($request->mode == 'employees') {
+           // dd("snknaslkndas");
             $data = User::where('role_id', 5)->get()->map(function ($row) {
+
+                $task_assign= Task::select('tasks.*')
+                ->join('task_users','task_users.task_id','tasks.id')
+                ->join('projects','projects.id','tasks.project_id')
+                ->where('projects.status','in progress')
+                ->where('task_users.user_id',$row->id)
+                
+                ->where('tasks.board_column_id',3)
+                ->count();
+                //dd($task_assign);
+                if ($task_assign > 0) {
+                    $developer_status = 1;
+                }else 
+                {
+                    $developer_status= 0;
+                }
                 return [
                     'id' => $row->id,
                     'name' => $row->name,
-                    'image_url' => $row->image_url
+                    'image_url' => $row->image_url,
+                    'developer_status' => $developer_status,
                 ];
             });
             return response()->json($data);
@@ -2538,5 +2564,21 @@ class TaskController extends AccountBaseController
         $task= Task::where('id',$id)->first();
         $board_column = TaskBoardColumn::where('id',$task->board_column_id)->first();
         return response()->json($board_column);
+    }
+    public function DeveloperReportIssue(Request $request)
+    {
+      //  dd($request);
+      $report= new DeveloperReportIssue();
+      $report->comment= $request->comment;
+      $report->person= $request->person;
+      $report->previousNotedIssue= $request->previousNotedIssue;
+      $report->added_by= Auth::id();
+      $report->reason= $request->reason;
+      $report->save();
+      return response()->json([
+          'status' => 200,
+          'report'=> $report,
+      ]);
+
     }
 }

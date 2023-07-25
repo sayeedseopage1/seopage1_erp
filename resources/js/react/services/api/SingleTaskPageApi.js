@@ -341,6 +341,23 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             })
+        }),
+
+        /**
+         * * create report
+         */
+
+        createReport: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/develoepr/report-issue`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
         })
         
     }),
@@ -373,5 +390,6 @@ export const {
     useRevisionAcceptOrDenyByLeadDeveloperMutation,
     useConfirmClientApprovalMutation,
     useStoreClientRevisionTaskMutation,
-    useWorkingEnvironmentMutation
+    useWorkingEnvironmentMutation,
+    useCreateReportMutation
 } = singleTaskPageApiSlice;

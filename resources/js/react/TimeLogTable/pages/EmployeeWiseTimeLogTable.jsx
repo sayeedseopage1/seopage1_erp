@@ -3,10 +3,11 @@ import { EmployeeTableColumn } from "../components/EmployeeTableColumn";
 import EmployeeTimeLogDataTable from '../components/EmployeeTimeLogDataTable';
 import { useGetEmployeeWiseDataMutation } from "../../services/api/timeLogTableApiSlice";
 import { paginate } from '../../utils/paginate';
-import { groupBy, orderBy } from "lodash";
+import _, { groupBy, orderBy } from "lodash";
 import Tabbar from "../components/Tabbar"; 
 import { EmployeeTableCtx } from "../context/EmployeeTableContext";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
+import { convertTime } from "../../utils/converTime";
 
 
 
@@ -16,7 +17,9 @@ const EmployeeWiseTimeLogTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
-    const { setFilter } = useContext(EmployeeTableCtx)
+    const { setFilter } = useContext(EmployeeTableCtx);
+    const [nSession, setNSession] = useState(0);
+    const [trackedTime, setTractedTime] = useState(0);
 
     const [getEmployeeWiseData, {isLoading}] = useGetEmployeeWiseDataMutation();
 
@@ -34,10 +37,14 @@ const EmployeeWiseTimeLogTable = () => {
         getEmployeeWiseData(filter)
         .unwrap()
         .then(res => {
-            console.table(res.data);
+            setCurrentPage(1);
             const sortedData = orderBy(res?.data, ["employee_id"], ["desc"]);
+            const totalSession = _.sumBy(sortedData, 'number_of_session');
+            const totalTrackTime = _.sumBy(sortedData, 'total_minutes');
             handleData(sortedData, currentPage, perPageData);
             setData(sortedData);
+            setNSession(totalSession);
+            setTractedTime(totalTrackTime);
         })
     }
 
@@ -63,15 +70,21 @@ const EmployeeWiseTimeLogTable = () => {
         <div className="sp1_tlr_container">
         <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="">
+                <div className="mb-3">
                     <Tabbar/>
                 </div>
+                <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
+                    <span className="mx-auto">
+                        <span>Total No. of Session: <strong> {nSession} </strong> </span> <span className="mx-2">||</span> <span>Total Tracked Time: <strong>{convertTime(trackedTime)}</strong></span>
+                    </span>
+                </div>
+
                 <EmployeeTimeLogDataTable
                     data={renderData}
                     columns={EmployeeTableColumn}
                     tableName="employee_timelog_report"
                     onSort={handleSorting}
-                    height="calc(100vh - 325px)"
+                    height="calc(100vh - 370px)"
                     onPaginate={handlePagination}
                     perpageData={perPageData}
                     handlePerPageData={handlePerPageData}

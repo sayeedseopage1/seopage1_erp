@@ -84,8 +84,15 @@ const AssginedToSelection = ({selected, onSelect}) => {
                                 className={`block truncate ${
                                 selected ? 'font-medium' : 'font-normal'
                                 }`}
-                            >
-                                {employee?.name} <span className='badge badge-primary'>Open to Work</span> 
+                            >   
+                                <span className='mr-2'>{employee?.name}</span>
+                                {
+                                    employee?.developer_status === 1 ?
+                                    <span className='badge badge-warning'>Working...</span> :
+                                    <span className='badge badge-primary'>Open to Work</span> 
+                                }
+                                 
+
                             </span>
                             {selected ? (
                                 <span className="ml-auto">
