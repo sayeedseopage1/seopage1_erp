@@ -389,6 +389,4 @@ class IncentiveController extends AccountBaseController
         return response()->json($data); 
 
     }
-
 }
-

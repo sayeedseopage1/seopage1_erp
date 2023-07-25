@@ -710,16 +710,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('event-files', EventFileController::class);
 
     /* TASKS */
-
-
-    Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
-
-
-    Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
-
-    Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
-    Route::get('tasks/get-developer-tasks/{id}', [TaskController::class, 'DeveloperTask'])->name('get-developer-tasks');
-    Route::get('tasks/get-task-submissions/{id}', [TaskController::class, 'GetTaskSubmission'])->name('get-task-submission');
     Route::post('tasks/change-status', [TaskController::class, 'changeStatus'])->name('tasks.change_status');
     Route::post('tasks/apply-quick-action', [TaskController::class, 'applyQuickAction'])->name('tasks.apply_quick_action');
     Route::post('tasks/store-pin', [TaskController::class, 'storePin'])->name('tasks.store_pin');
@@ -933,8 +923,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //qualified sales Settings
 
 
+
     Route::resource('qualified-sales',QualifiedSalesController::class);
     Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
+
 
 
 
@@ -1192,13 +1184,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
 
 
-    Route::post('/tasks/develoepr/report-issue', [TaskController::class,'DeveloperReportIssue'])->name('developer-report-issue');
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-    Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
-
-    Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
-    
-
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
 });
 //custom route for seopage1
@@ -1406,9 +1392,3 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
-
-Route::get('account/app_requirements', [HomeController::class, 'app_requirements']);
-
-
-
-
