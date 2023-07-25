@@ -16,11 +16,11 @@ const LessTrackTimerModal = ({stopTimer, startTimer}) => {
 
     // temprarily stop timer now
     const stopTimerTemprorily = () => {
-        if(lessTrackModalFor === 'STOP_TIEMR'){
+        if(lessTrackModalFor === 'STOP_TIMER'){
             stopTimer();
         }
 
-        if(lessTrackModalFor === 'STOP_TIEMR'){
+        if(lessTrackModalFor === 'START_TIMER'){
             startTimer()
         }
 
