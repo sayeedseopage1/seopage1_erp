@@ -216,6 +216,7 @@
                                         <label for="">Write Instructions for Using This Plugin</label>
                                         <textarea name="instruction_plugin" id="instruction_plugin" cols="30" rows="5" class="form-control"></textarea>
                                     </div>
+
                                 </div>
 
                             </div>

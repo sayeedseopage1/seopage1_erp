@@ -1,0 +1,14 @@
+.sp1_rating_input_control{
+    position: relative;
+    overflow: hidden;
+}
+
+.sp1_rating--star{
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+}
+.sp1_rating--star-fill{
+    border: 1px solid red;
+}

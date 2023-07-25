@@ -10,9 +10,10 @@ const mix = require("laravel-mix");
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.js("resources/js/app.jsx", "public/js")
+mix.js("resources/js/app.jsx", "public/js/react")
     .react()
-    .js('resources/js/sp1-editor.js', "public/js/sp1-editor.js")
+    .extract()
+    .js("resources/js/sp1-editor.js", "public/js/sp1-editor.js")
     .scripts(
         [
             "public/js/bootstrap.js",
@@ -42,18 +43,17 @@ mix.js("resources/js/app.jsx", "public/js")
     .sourceMaps(true, "source-map")
     .webpackConfig((webpack) => {
         return {
-           resolve: {
-              fallback: {
-                 crypto: require.resolve('crypto-browserify'),
-                 fs: false,
-                 stream: false,
-              },
-           },
+            resolve: {
+                fallback: {
+                    crypto: require.resolve("crypto-browserify"),
+                    fs: false,
+                    stream: false,
+                },
+            },
         };
-     });
+    })
+    .version();
 
-
-     mix.browserSync({
-            proxy: 'http://127.0.0.1:8000',
-      });
-
+mix.browserSync({
+    proxy: "http://127.0.0.1:8000",
+});

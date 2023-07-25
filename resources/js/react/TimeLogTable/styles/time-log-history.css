@@ -1,0 +1,30 @@
+.sp1_tlh_resolve_btn{
+    padding-inline: 6px;
+    transition: all .3 ease-in-out;
+    border: 1px solid rgb(0 0 0 / 0%);
+}
+
+.sp1_tlh_resolve_btn:hover{
+    border: 1px solid rgb(0 0 0 / 10%);
+}
+
+.resolve--modal-panel{
+    width: 576px;
+}
+
+@media only screen and (max-width: 576px){
+    .resolve--modal-panel{
+        width: 95vw;
+    }
+}
+
+.deny_button{
+    color: #fff;
+    border-color: rgb(245, 29, 29);
+    background: rgb(245, 29, 29);
+}
+
+.deny_button:hover{ 
+    border-color: rgb(185, 14, 14);
+    background: rgb(185, 14, 14);
+}

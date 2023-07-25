@@ -1,12 +1,12 @@
 import "./bootstrap";
-import "./components/TimeLogTable";
-import "./components/Insights/main";
-import "./components/Points/main";
-import "./components/Incentives/main";
-import "./components/QualifiedSales/main";
-// import "./components/PendingAction/main";
+import "./react/TimeLogTable";
+import "./react/Insights/main";
+import "./react/Points/main";
+import "./react/Incentives/main";
+import "./react/QualifiedSales/main";
+// import "./react/PendingAction/main";
 
-// /import "./components/single-task/index"
+import "./react/single-task/index"
 
 
 

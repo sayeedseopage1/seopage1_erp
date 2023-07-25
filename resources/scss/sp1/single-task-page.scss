@@ -1,10 +1,30 @@
+        .word-break {
+            -ms-word-break: break-all;
+            word-break: break-all;
+        }
+
+        .dot-color{
+            display: block;
+            width: 8px;
+            height: 8px;
+            min-width: 8px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,.1);
+        }
+
         .sp1_task_btn_group{
             border-color: #E7EFFC;
         }
 
         .sp1_task_btn_group button{
             border-color: rgba(0,0,0,.3);
+
+            @media (max-width:376px) {
+                font-size: 13px !important;
+            }
         }
+
+       
 
         .sp1_task_card{
             border-radius: 10px;
@@ -186,7 +206,19 @@
             box-shadow: 0 0 10px rgba(0,0,0,.1);
             background: rgb(250, 250, 252);
             border-radius: 16px; 
+
+            &.--small-device{
+                position: absolute;
+                top: 20px !important;
+                left: 50% !important;
+                transform: translateX(-50%);
+                width: 95vw;
+                max-width: 800px;
+                border-radius: 12px;
+            }
         }
+
+
 
 
 /* comment */
@@ -227,10 +259,7 @@
             padding: 10px 12px;
             border: 1px solid #e1e1e1;
             border-radius: 6px;
-            cursor: pointer;
-            span{
-                color: #777;
-            } 
+            span{ color: #777;} 
 
             &.__reply_text{
                 background: #f5f9fd;
@@ -243,6 +272,40 @@
                     padding-left: 28px;
                 }
             }
+        }
+    }  
+}
+
+.sp1_comment_user--name{
+        font-weight: 600;
+        margin-right: 10px;
+        font-size: 14px;
+        display: block;
+        @media (max-width: 557px){
+            font-size: 13px;
+            line-height: 13px;
+        }
+    }
+
+.sp1_comment_time{
+    font-size: 13px; 
+    @media (max-width: 557px){
+        font-size: 11px;
+    }
+}
+
+.sp1_message--body{
+    @media (max-width: 557px){
+        h1{font-size: 22px !important;}
+        h2{font-size: 20px !important;}
+        h3{font-size: 18px !important;}
+        h4{font-size: 16px !important;}
+        h5{font-size: 14px !important;}
+        h6{font-size: 12px !important;}
+
+        p,i,a {
+            font-size: 13px !important;
+            line-height: 14px;
         }
     }
 }
@@ -287,6 +350,7 @@
     color: #777;
     padding-left: 16px;
 
+
     a{
         color: #777;
         font-size: 14px;
@@ -326,6 +390,12 @@
             text-decoration: underline;
             color: rgb(39, 111, 236);
         }
+    }
+
+    @media (max-width: 557px){
+       & > a {
+        font-size: 13px !important;
+       } 
     }
 }
  
@@ -519,14 +589,41 @@
 
 .sp1-subtask-form {
 
-    &.--modal-panel{
-        width: 50vw;
-        height: 80vh;
+    &.--modal-panel{ 
+        width: 800px;
+        height: 100%;
+        min-height: 300px;
+        max-height: 80vh;
         overflow-y: hidden;
         background: #FAFAFC ;
         border-radius: 16px;
         padding: 16px; 
         border: 1px solid var(--header_color);
+
+        @media (max-width: 1200px){ 
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            height: fit-content;
+            transform: translateX(-50%);
+        }
+
+        @media (max-width: 800px){
+            width: 95vw;
+            height: fit-content;
+        }
+        
+        &.--modal-submitted{
+            width: 600px;
+            @media (max-width: 1200px) {
+                top: 50%;
+                transform: translate(-50%, -50%);  
+            } 
+            @media (max-width: 768px){
+                width: 95vw;
+                height: 80vh;
+            }
+        }
 
         &-header{
             display: flex;
@@ -543,8 +640,59 @@
             max-height: 70vh;
             overflow-x: hidden;
             overflow-y: auto;
-        }
+            width: 100%;
+            @media (max-width: 768px){
+                padding-inline: 16px;
+                max-height: 90vh;
+            }
+        } 
+  
     } 
+}
+
+.sp1_st-list-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    @media (max-width: 576px){
+        align-items: flex-start;
+    }
+
+    @media (max-width: 376px) {
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+}
+
+.sp1_st-list-item-head{
+    width: 120px;
+    color: #383b42;
+
+    @media (max-width: 576px) {
+        width: 100px;
+    }
+
+    @media (max-width: 376px) {
+        font-size: 13px;
+        font-weight: 600;
+        color: #3f3f46;
+    }
+}
+
+.sp1_st-list-item-value{
+    flex: 1;
+    display: flex;
+    gap: 6px;
+
+    & > .dot-color {
+        margin-top: 6px;
+    }
+
+    @media (max-width: 376px){
+        font-size: 13px;
+        color: #3f3f46;
+        padding-left: 10px;
+    }
 }
 
 
@@ -710,6 +858,28 @@
     text-overflow:ellipsis !important;
 }
 
+/* subtask modal */
+.sp1_task_modal-view_item{
+    width: 100%;
+    display: flex;
+    padding: 6px 10px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgb(0 0 0 / 3%);
+
+    &:hover{
+        background: rgb(0 0 0 / 2%)
+    }
+} 
+
+.sp1-sumittion_task_modal-view{  
+    width: 100% !important;
+    max-width: 500px;
+    height: fit-content !important;
+    max-height: 80vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 
 // time log
 .sp1_subtask_log-tbl{
@@ -772,18 +942,11 @@
         margin: 0 !important;
     }
 }
-
-
-
-
-
-
-
+ 
 
 // offset canvas
 .sp1_subtask_offsetcanvas{
-    width: 80vw;
-    height: 80vh;
+    width: 1080px;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
@@ -802,19 +965,20 @@
     &--body{
         padding:0;  
         background: #fdfdfd;
-        width: 100%;
-        height: 100%; 
+        height: 80vh;
         display: -ms-grid;
         display: -moz-grid;
         display: grid; 
-        grid-template-columns: 200px 1fr;
-        gap: 10px;
+        grid-template-columns: 200px 1fr; 
+        position: relative; 
 
         & .sp1-subtask-modal-sidebar{
             background: #fff;
             border-right: 1px solid rgb(0 0 0 / 10%);
             padding: 10px; 
-            gap: 3px;
+            gap: 3px; 
+            width: 200px;
+            z-index: 1;
 
             & .nav-link{
                 color : #444958 !important;
@@ -830,8 +994,347 @@
 
             }
         }
+
+        & .sp1-subtask-modal-tab-content{
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            position: relative;
+            padding-bottom: 20px;
+        }
     } 
 }
 
+.sp1_modal_timelog_view{
+    display: grid;
+    grid-template-rows: 30px 1fr;
+    padding-bottom: 16px;
+    gap: 10px;
+    & h6{
+        font-weight: bold;
+    }
+}
 
+.sp1_modal_timelog_view-tbl-contanier{
+    overflow-y: auto; 
+    height: calc(80vh - 160px); 
+}
+
+.sp1_st_tab_panel{
+    height: calc(80vh - 80px); 
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.modal-guideline-editor-text{
+    & > h1{font-size: 32px !important;}
+    & > h2{font-size: 28px !important;}
+    & > h3{font-size: 24px !important;}
+    & > h4{font-size: 20px !important;}
+    & > h5{font-size: 18px !important;}
+    & > h6{font-size: 16px !important;}
+}
+
+
+// single task page timer start confirmation modal 
+.subtask-timer-confirmation{
+    &--modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &--panel{
+        width: 100%;
+        max-width: 550px;
+        height: fit-content;
+        background: #ffff;
+        padding: 16px 10px;
+        border-radius: 16px;
+        overflow: hidden;  
+    }
+
+    &--content{
+        width: 100%;
+        height: 100%;
+        max-height: 80vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 6px 16px;
+
+        ol li{
+            list-style: unset;
+            margin-bottom: 5px;
+        }
+    }
+
+} 
+
+
+
+// mark as complete button control
+.sp1_mark-as{
+    &--modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &-panel{
+            width: 100%;
+            max-width: 650px;
+            margin-inline: auto; 
+            background: #fff;
+            padding: 8px 16px;
+            border-radius: 12px;
+        }
+
+        &-heading{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgb(0 0 0 / 10%);
+            padding-bottom: 10px;
+        }
+
+        &-body{ 
+            height: fit-content;
+            padding: 16px 0;
+
+            & form > .form-group > label{
+                font-size: 14px;
+                color: #777;
+                font-weight: bold;
+            }
+
+            & form > .form-group > input.form-control{
+                padding: 10px 12px;
+                border: 1px solid rgb(0 0 0 / 10%);
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+
+// single task stop button controller
+.sp1_conf--button-group{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 10px;
+
+    & > button{ 
+        padding: 3px 16px;
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 14px;
+        color: #fff;
+        transition: background 0.2s ease-in-out;
+
+        &:first-child{
+            font-size: 1rem; 
+            background-color: var(--header_color);
+            &:hover{
+                color: #fff;
+                background: #444958;
+            }
+        } 
+        &:nth-child(2){
+            background-color: #444958;
+            &:hover{
+                color: #fff;
+                background: #1e6cff;
+            }
+        }  
+    }
+}
+
+// single task page
+.sp1_single_task--modal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; 
+}
+
+.sp1_single_task--modal-panerl-wrapper{
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 20px;
+    background:rgba(24, 27, 32, 0.089);
+}
+
+.sp1_single_task--modal-panel{
+    width: fit-content;
+    max-width: 90vw;
+    height: fit-content; 
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.sp1_single_task--modal-body{
+    height: 100%;
+}
+
+
+.sp1_stop-button-confirmation-option{
+    h6{ font-weight: bold; }
+}
+
+.task-selection-list-option{
+    padding: 8px 10px;
+    margin-bottom: 2px;
+    border-radius: 3px;
+    display: grid;
+    grid-template-columns: 1fr 24px;
+    border-bottom: 1px dashed rgb(0 0 0 / 10%);
+    &:last-child{
+        border: none;
+    }
+
+    &.selected{
+        background-color: rgb(24, 96, 240);
+        color: #fff;
+    }
+
+    &.active{
+        background-color: rgba(24, 96, 240, 0.3);
+        color: #000;
+    }
+}
+
+
+
+.mark-as-compeleted-link{
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.mark-as-compeleted-link button{
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    display: none;
+    background-color: transparent;
+    color: rgb(88, 77, 77);
+    padding: 4px;
+    transform: translateY(-50%);
+}
+
+
+.mark-as-compeleted-link:hover button{
+    color: #f51b1b;
+    display: block;
+}
+
+.sp1_remove-time-duration{
+    background: rgb(250, 226, 226);
+    color: #f00;
+    height: 100%;
+    width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.4 ease-in-out;
+
+    &:hover{
+        background: #f00;
+        color: #fff;
+    }
+}
+
+
+/* revision button */
+.sp1-st-revision-btn{
+    background: rgb(240, 17, 17) !important;
+    color: #fff !important;
+    border-color: rgb(240, 17, 17) !important;
+    cursor: pointer !important;
+
+    &:hover{
+        background: rgb(224, 4, 4) !important;
+        color: #fff !important;
+        border-color: rgb(224, 4, 4) !important;
+    }
+
+    &.--view-revision{
+        background: rgb(250, 234, 234) !important;
+        color: red !important;
+        border-color: rgb(247, 214, 214) !important;
+
+        &:hover{
+            background: rgb(240, 17, 17) !important;
+            color: #fff !important;
+            border-color: red !important;
+        }
+    }
+}
+
+/* end revision button */
+
+/* revision commet view */
+.st_revision_comment{
+    border: 1px solid rgb(0 0 0 / 5%);
+    padding: 16px;
+    border-radius: 6px;
+}
+/* end revision comment */
+
+/* approve */
+.sp1_st--approve-card{
+    border: 1px solid rgb(0 0 0 / 10%); 
+
+    &-header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 5px 10px;
+        background-color: rgb(238, 238, 240);
+    }
+
+    &-body{
+        padding: 6px 10px;
+    }
+}
+
+
+.task-report-form--modal-panel{
+    width: 550px;
+}
+
+@media only screen and (max-width:632px){
+    .task-report-form--modal-panel{
+        width: 100%;
+    }
+}
+
+// report button
+.sp1_report_btn{
+    @media (max-width: 490px ) {
+        margin-left: 0 !important ; 
+    }            
+}
  
+.sp1_task-edit-button{
+    margin-left: auto;
+    &:hover{
+        color: #fff !important;
+        background-color: #084bc7 !important;
+    }
+
+    @media (max-width: 490px ) {
+        margin-left: 0 !important ; 
+    }        
+}

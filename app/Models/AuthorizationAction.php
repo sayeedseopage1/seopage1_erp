@@ -77,10 +77,7 @@ class AuthorizationAction extends Model
                  'review'
             ],
             'task_submission_by_lead_developer' => [
-                 'review'
-            ],
-            'task_submission_by_developer' => [
-                 'review'
+                'approved', 'review'
             ],
           
             'task_approved_by_lead_develoer' => [
@@ -102,24 +99,11 @@ class AuthorizationAction extends Model
                 'approved', 'review'
             ],
             'task_assigned_on_lead_developer' => [
-                 'review'
-            ],
-            'task_assign_by_lead_developer' => [
-                'review'
+                'approved', 'review'
             ],
            
             'award_time_extension' => [
                 'review'
-            ],
-            'project_manager_accept_project' => [
-
-                'review'
-
-            ],
-            'saleslead_price_authorization' => [
-
-                'review'
-
             ]
         ];
 

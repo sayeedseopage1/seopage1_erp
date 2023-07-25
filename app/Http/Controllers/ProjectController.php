@@ -3849,6 +3849,7 @@ class ProjectController extends AccountBaseController
 
 
 
+
     public function ProjectDeny(Request $request)
     {
         //dd($request);
@@ -3858,6 +3859,7 @@ class ProjectController extends AccountBaseController
         $project->admin_comment = $request->admin_comment;
         $project->save();
         $user = User::where('id', $project->pm_id)->first();
+
 
         if (is_null($request->authorization_form)) {
             $authorization_action = AuthorizationAction::where([

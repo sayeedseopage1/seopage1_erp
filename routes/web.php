@@ -710,10 +710,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('event-files', EventFileController::class);
 
     /* TASKS */
-    Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
-    Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
-    Route::get('tasks/get-developer-tasks/{id}', [TaskController::class, 'DeveloperTask'])->name('get-developer-tasks');
-    Route::get('tasks/get-task-submissions/{id}', [TaskController::class, 'GetTaskSubmission'])->name('get-task-submission');
     Route::post('tasks/change-status', [TaskController::class, 'changeStatus'])->name('tasks.change_status');
     Route::post('tasks/apply-quick-action', [TaskController::class, 'applyQuickAction'])->name('tasks.apply_quick_action');
     Route::post('tasks/store-pin', [TaskController::class, 'storePin'])->name('tasks.store_pin');
@@ -928,9 +924,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
 
-    Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
+    Route::resource('qualified-sales',QualifiedSalesController::class);
+    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
 
-    Route::resource('qualified-sales', QualifiedSalesController::class);
 
 
 
@@ -1122,7 +1118,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         'employee_id' => '[0-9]+',
     ]);
 
-    // Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
+    Route::get('time-log-report/{any?}', [TimelogReportController::class, 'index'])->where('any', '.*');
     Route::resource('time-log-report', TimelogReportController::class);
     Route::post('finance-report-chart', [FinanceReportController::class, 'financeChartData'])->name('finance-report.chart');
     Route::resource('finance-report', FinanceReportController::class);
@@ -1189,8 +1185,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
 
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
-    Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
-    Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
 });
 //custom route for seopage1
@@ -1360,7 +1354,7 @@ Route::controller(DealController::class)->group(function () {
 Route::post('/cancel-milestone', [ProjectMilestoneController::class, 'CancelMilestone'])->name('cancel-milestone');
 Route::post('/cancel-milestone-approve', [ProjectMilestoneController::class, 'CancelMilestoneApprove'])->name('cancel-milestone-approve');
 Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'createAutoMilestone'])->name('create-auto-milestone');
-
+Route::post('get-timelogs/time_log_history', [TimelogReportController::class, 'timelog_history'])->name('get-timelogs-report');
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
 Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
@@ -1398,8 +1392,3 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
-
-Route::get('account/app_requirements', [HomeController::class, 'app_requirements']);
-
-
-

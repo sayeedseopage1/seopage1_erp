@@ -8,18 +8,19 @@ use App\Helper\Reply;
 use App\Http\Requests\TimeLogs\StartTimer;
 use App\Http\Requests\TimeLogs\StoreTimeLog;
 use App\Http\Requests\TimeLogs\UpdateTimeLog;
-use App\Models\DeveloperStopTimer;
 use App\Models\Project;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
+use App\Models\TaskboardColumn;
 use App\Models\User;
-use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Models\AuthorizationAction;
+use Auth;
+use App\Models\DeveloperStopTimer;
+
 class TimelogController extends AccountBaseController
 {
 
@@ -44,18 +45,19 @@ class TimelogController extends AccountBaseController
         }
 
         return $dataTable->render('timelogs.index', $this->data);
+
     }
 
     public function applyQuickAction(Request $request)
     {
         switch ($request->action_type) {
-            case 'delete':
-                $this->deleteRecords($request);
+        case 'delete':
+            $this->deleteRecords($request);
                 return Reply::success(__('messages.deleteSuccess'));
-            case 'change-status':
-                $this->changeStatus($request);
+        case 'change-status':
+            $this->changeStatus($request);
                 return Reply::success(__('messages.statusUpdatedSuccessfully'));
-            default:
+        default:
                 return Reply::error(__('messages.selectAction'));
         }
     }
@@ -89,13 +91,15 @@ class TimelogController extends AccountBaseController
             $this->projects = $projects = Project::whereHas('members', function ($query) use ($assignId) {
                 $query->where('user_id', $assignId);
             })
-                ->orWhere('projects.public', 1)
-                ->orderBy('project_name', 'asc')->get();
-        } elseif (request()->has('default_project') && request('default_project') != '') {
+            ->orWhere('projects.public', 1)
+            ->orderBy('project_name', 'asc')->get();
+        }
+        elseif (request()->has('default_project') && request('default_project') != '') {
             $defaultProject = request('default_project');
             $this->projects = $projects = Project::where('id', $defaultProject)
                 ->get();
-        } else {
+        }
+        else {
             $this->projects = Project::allProjects();
         }
 
@@ -114,17 +118,18 @@ class TimelogController extends AccountBaseController
 
         $this->view = 'timelogs.ajax.create';
         return view('timelogs.create', $this->data);
+
     }
 
     public function store(StoreTimeLog $request)
     {
-      
+    //  dd($request);
         $startDateTime = Carbon::createFromFormat($this->global->date_format, $request->start_date, $this->global->timezone)->format('Y-m-d') . ' ' . Carbon::createFromFormat($this->global->time_format, $request->start_time)->format('H:i:s');
         $startDateTime = Carbon::parse($startDateTime, $this->global->timezone)->setTimezone('UTC');
 
         $endDateTime = Carbon::createFromFormat($this->global->date_format, $request->end_date, $this->global->timezone)->format('Y-m-d') . ' ' . Carbon::createFromFormat($this->global->time_format, $request->end_time)->format('H:i:s');
         $endDateTime = Carbon::parse($endDateTime, $this->global->timezone)->setTimezone('UTC');
-       
+
         $timeLog = new ProjectTimeLog();
 
         if ($request->has('project_id')) {
@@ -138,17 +143,17 @@ class TimelogController extends AccountBaseController
         $activeTimer = ProjectTimeLog::with('user')
             ->where(function ($query) use ($startDateTime, $endDateTime) {
                 $query->where(
-                    function ($q1) use ($startDateTime, $endDateTime) {
-                        $q1->where('end_time', '>', $startDateTime->format('Y-m-d H:i:s'));
-                        $q1->where('end_time', '<', $endDateTime->format('Y-m-d H:i:s'));
-                    }
-                )
-                    ->orWhere(
-                        function ($q1) use ($startDateTime) {
-                            $q1->whereDate('start_time', $startDateTime->format('Y-m-d'));
-                            $q1->whereNull('end_time');
+                        function ($q1) use ($startDateTime, $endDateTime) {
+                            $q1->where('end_time', '>', $startDateTime->format('Y-m-d H:i:s'));
+                            $q1->where('end_time', '<', $endDateTime->format('Y-m-d H:i:s'));
                         }
-                    );
+                    )
+                    ->orWhere(
+                    function ($q1) use ($startDateTime) {
+                        $q1->whereDate('start_time', $startDateTime->format('Y-m-d'));
+                        $q1->whereNull('end_time');
+                    }
+                );
             })
             ->join('users', 'users.id', '=', 'project_time_logs.user_id')
             ->where('user_id', $userID)
@@ -189,21 +194,24 @@ class TimelogController extends AccountBaseController
         $this->pageTitle = __('modules.timeLogs.logTime');
         $editTimelogPermission = $this->editTimelogPermission = user()->permission('edit_timelogs');
         $timeLog = $this->timeLog = ProjectTimeLog::with('user', 'project', 'task')->findOrFail($id)->withCustomFields();
-        abort_403(!($editTimelogPermission == 'all'
-            || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
-            || ($editTimelogPermission == 'owned'
-                && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
+        abort_403(!(
+            $editTimelogPermission == 'all'
+        || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
+        || ($editTimelogPermission == 'owned'
+            && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
             )
-            || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
+        || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
         ));
 
         if (!is_null($this->timeLog->task_id) && !is_null($this->timeLog->project_id)) {
             $this->tasks = Task::timelogTasks($this->timeLog->project_id);
             $this->employees = $this->timeLog->task->users;
-        } else if (!is_null($this->timeLog->project_id)) {
+        }
+        else if (!is_null($this->timeLog->project_id)) {
             $this->tasks = Task::timelogTasks($this->timeLog->project_id);
             $this->employees = $this->timeLog->project->membersMany;
-        } else {
+        }
+        else {
             $this->tasks = Task::timelogTasks();
             $this->employees = $this->timeLog->task->users;
         }
@@ -221,6 +229,7 @@ class TimelogController extends AccountBaseController
 
         $this->view = 'timelogs.ajax.edit';
         return view('timelogs.create', $this->data);
+
     }
 
     public function update(UpdateTimeLog $request, $id)
@@ -242,18 +251,19 @@ class TimelogController extends AccountBaseController
 
         if ($request->has('user_id')) {
             $userID = $request->user_id;
-        } else {
+        }
+        else {
             $userID = $timeLog->user_id;
         }
 
         $activeTimer = ProjectTimeLog::with('user')
             ->where(function ($query) use ($startDateTime, $endDateTime) {
                 $query->where(
-                    function ($q1) use ($startDateTime, $endDateTime) {
-                        $q1->where('end_time', '>', $startDateTime->format('Y-m-d H:i:s'));
-                        $q1->where('end_time', '<', $endDateTime->format('Y-m-d H:i:s'));
-                    }
-                )
+                        function ($q1) use ($startDateTime, $endDateTime) {
+                            $q1->where('end_time', '>', $startDateTime->format('Y-m-d H:i:s'));
+                            $q1->where('end_time', '<', $endDateTime->format('Y-m-d H:i:s'));
+                        }
+                    )
                     ->orWhere(
                         function ($q1) use ($startDateTime) {
                             $q1->whereDate('start_time', $startDateTime->format('Y-m-d'));
@@ -295,12 +305,13 @@ class TimelogController extends AccountBaseController
         $this->editTimelogPermission = user()->permission('edit_timelogs');
         $this->timeLog = ProjectTimeLog::with('user', 'user.employeeDetail', 'project', 'task', 'breaks', 'activeBreak')->findOrFail($id)->withCustomFields();
 
-        abort_403(!($this->viewTimelogPermission == 'all'
-            || ($this->viewTimelogPermission == 'added' && $this->timeLog->added_by == user()->id)
-            || ($this->viewTimelogPermission == 'owned'
-                && (($this->timeLog->project && $this->timeLog->project->client_id == user()->id) || $this->timeLog->user_id == user()->id)
+        abort_403(!(
+            $this->viewTimelogPermission == 'all'
+        || ($this->viewTimelogPermission == 'added' && $this->timeLog->added_by == user()->id)
+        || ($this->viewTimelogPermission == 'owned'
+            && (($this->timeLog->project && $this->timeLog->project->client_id == user()->id) || $this->timeLog->user_id == user()->id)
             )
-            || ($this->viewTimelogPermission == 'both' && (($this->timeLog->project && $this->timeLog->project->client_id == user()->id) || $this->timeLog->user_id == user()->id || $this->timeLog->added_by == user()->id))
+        || ($this->viewTimelogPermission == 'both' && (($this->timeLog->project && $this->timeLog->project->client_id == user()->id) || $this->timeLog->user_id == user()->id || $this->timeLog->added_by == user()->id))
         ));
 
         if (!empty($this->timeLog->getCustomFieldGroupsWithFields())) {
@@ -314,6 +325,7 @@ class TimelogController extends AccountBaseController
 
         $this->view = 'timelogs.ajax.show';
         return view('timelogs.create', $this->data);
+
     }
 
     /**
@@ -340,6 +352,7 @@ class TimelogController extends AccountBaseController
                 ->get();
 
             return view('timelogs.ajax.timer', $this->data);
+
         } else {
             return $this->showActiveTimer();
         }
@@ -350,45 +363,67 @@ class TimelogController extends AccountBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function startTimer(StartTimer $request)
+    public function startTimer(Request $request)
     {
-    //    / DB::beginTransaction();
-    $userID = Auth::id(); // Replace with the actual user ID
+       //  DB::beginTransaction();
+     $userID = Auth::id(); // Replace with the actual user ID
 
-    $yesterdayDate = Carbon::yesterday()->toDateString();
+     $yesterdayDate = ProjectTimeLog::where('user_id', $userID)
+     ->orderBy('id', 'desc')
+     ->select('created_at')
+     ->first();
+     $today_timelog_count = ProjectTimeLog::where('user_id', $userID)
     
-    $totalMinutes = DB::table('project_time_logs')
-        ->where('user_id', $userID)
-        ->whereDate('created_at', $yesterdayDate)
-        ->sum('total_minutes');
-    $acknowlendement = DeveloperStopTimer::where('user_id',Auth::id())->where('created_at',$yesterdayDate)->first();
-    // if($totalMinutes < 435 && $acknowlendement == null) 
-    // {
-    //     return response()->json([
-    //         'error' => 'Developer did not submit the acknowledgement form'
-    //     ], 400);
+     ->whereDate('created_at',Carbon::today())
+     ->count();
+     //dd($today_timelog_count);
+ 
+ // Check if the query returned any result
+ if ($yesterdayDate && $today_timelog_count < 1  ) {
+     // $yesterdayDate is an object, so you need to access the "created_at" property
+     $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $yesterdayDate->created_at);
+ 
+     // Get the day of the month
+     $day = $carbonDate->format('l');
+     $totalMinutes = DB::table('project_time_logs')
+     ->where('user_id', $userID)
+     ->whereDate('created_at', $yesterdayDate->created_at)
+     ->sum('total_minutes');
+  //   dd($totalMinutes);
+    $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->first();
+   
+// dd()
+//dd($acknowledgement);
+//dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
+ if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
+ {
+   
+     return response()->json([
+         'error' => 'Developer did not submit the acknowledgement form'
+     ], 400);
 
-    // };
-        $task_status = Task::find($request->task_id);
-        $task_status->task_status = "in progress";
-        $task_status->board_column_id = 3;
-        $task_status->save();
-        // $authorization_action = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_assign_by_lead_developer')->first();
-           
-        //     if ($authorization_action != null && $authorization_action->status == 0) {
-        //         $authorization= AuthorizationAction::find($authorization_action->id);
-        //         $authorization->status = '1';
-        //         $authorization->authorization_by= $authorization_action->authorization_for;
-        //         $authorization->save();
-        // //   dd($authorization);
-        //     }
-        $timeLog = new ProjectTimeLog();
+ }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null)
+ {
+   // dd("Saturday");
+    return response()->json([
+        'error' => 'Developer did not submit the acknowledgement form'
+    ], 400);
+
+
+ }else 
+ {
+    $task_status= Task::find($request->task_id);
+    $task_status->task_status="in progress";
+    $task_status->board_column_id= 3;
+    $task_status->save();
+    $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+    //  dd($task_status);
+      $timeLog = new ProjectTimeLog();
 
         $activeTimer = ProjectTimeLog::with('user')
             ->whereNull('end_time')
             ->join('users', 'users.id', '=', 'project_time_logs.user_id')
             ->where('user_id', $this->user->id)->first();
-
         if (is_null($activeTimer)) {
             $taskId = $request->task_id;
 
@@ -419,42 +454,132 @@ class TimelogController extends AccountBaseController
             $timeLog->hourly_rate = 0;
             $timeLog->memo = $task_status->heading;
             $timeLog->save();
-         // dd($timeLog);
-            
 
-        if ($request->project_id != '') {
-            //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
-            $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+            if ($request->project_id != '') {
+                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+            }
+            else {
+                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+            }
+
+            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'task timer started',
+                'id' => $timeLog->id,
+                'task_status'=> $task_board_column,
+            ]);
         }
-        else {
-            $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'timer already running',
+           
+        ]);
+
+ }
+ 
+    
+ } else {
+    $task_status= Task::find($request->task_id);
+    $task_status->task_status="in progress";
+    $task_status->board_column_id= 3;
+    $task_status->save();
+    $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+    //  dd($task_status);
+      $timeLog = new ProjectTimeLog();
+
+        $activeTimer = ProjectTimeLog::with('user')
+            ->whereNull('end_time')
+            ->join('users', 'users.id', '=', 'project_time_logs.user_id')
+            ->where('user_id', $this->user->id)->first();
+        if (is_null($activeTimer)) {
+            $taskId = $request->task_id;
+
+            if ($request->has('create_task')) {
+                $task = new Task();
+                $task->heading = $request->memo;
+                $task->board_column_id = $this->global->default_task_status;
+                $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
+                $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+                $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+
+                if ($request->project_id != '') {
+                    $task->project_id = $request->project_id;
+                }
+
+                $task->save();
+                $taskId = $task->id;
+            }
+
+            if ($request->project_id != '') {
+                $timeLog->project_id = $request->project_id;
+            }
+
+            $timeLog->task_id = $taskId;
+
+            $timeLog->user_id = $this->user->id;
+            $timeLog->start_time = now();
+            $timeLog->hourly_rate = 0;
+            $timeLog->memo = $task_status->heading;
+            $timeLog->save();
+
+            if ($request->project_id != '') {
+                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+            }
+            else {
+                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+            }
+
+            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'task timer started',
+                'id' => $timeLog->id,
+                'task_status'=> $task_board_column,
+            ]);
         }
 
-        $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+        return response()->json([
+            'status' => 'error',
+            'message' => 'timer already running',
+           
+        ]);
+    
+ }
+   // dd($day);
+     
 
-        return Reply::success(__('messages.timerStartedSuccessfully'));
-    }
-
-    return Reply::error(__('messages.timerAlreadyRunning'));
+     
     }
 
     public function stopTimer(Request $request)
     {
-        $timeId = $request->timeId;
-        $timeLog = ProjectTimeLog::with('activeBreak')->findOrFail($timeId);
+        //dd($request);
+    //  /  DB::beginTransaction();
+        $timeId = $request->id;
+        //dd( $timeId);
+        $timeLog = ProjectTimeLog::find($timeId);
+       // dd($timeLog);
         $editTimelogPermission = user()->permission('edit_timelogs');
         $activeTimelogPermission = user()->permission('manage_active_timelogs');
 
-        abort_403(!($editTimelogPermission == 'all'
-            || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
-            || ($editTimelogPermission == 'owned'
-                && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
+        abort_403(!(
+            $editTimelogPermission == 'all'
+        || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
+        || ($editTimelogPermission == 'owned'
+            && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
             )
-            || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
+        || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
         ));
 
         $timeLog->end_time = now();
         $timeLog->save();
+       // dd($timeLog);
 
         $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
@@ -481,6 +606,7 @@ class TimelogController extends AccountBaseController
         $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
 
         /** @phpstan-ignore-next-line */
+       
         $html = $this->showActiveTimer()->render();
 
         $this->activeTimerCount = ProjectTimeLog::whereNull('end_time')
@@ -488,12 +614,20 @@ class TimelogController extends AccountBaseController
             ->select('project_time_logs.id');
 
         if ($this->viewTimelogPermission != 'all' && manage_active_timelogs() != 'all') {
-            $this->activeTimerCount->where('project_time_logs.user_id', $this->user->id);
+                $this->activeTimerCount->where('project_time_logs.user_id', $this->user->id);
         }
 
         $this->activeTimerCount = $this->activeTimerCount->count();
+        // /dd("sjdnkasdnas");
+        return response()->json([
+            'html' => $html,
+            'activeTimerCount'=> $this->activeTimerCount,
+            'status' => 200,
+            'message'=> 'Timer Stopped Successfully',
+        ]);
+       
 
-        return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
+       // return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
     }
 
     /**
@@ -671,12 +805,13 @@ class TimelogController extends AccountBaseController
         $editTimelogPermission = user()->permission('edit_timelogs');
         $activeTimelogPermission = user()->permission('manage_active_timelogs');
 
-        abort_403(!($editTimelogPermission == 'all'
-            || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
-            || ($editTimelogPermission == 'owned'
-                && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
+        abort_403(!(
+            $editTimelogPermission == 'all'
+        || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
+        || ($editTimelogPermission == 'owned'
+            && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
             )
-            || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
+        || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
         ));
 
         $timeLogBreak = new ProjectTimeLogBreak();
@@ -708,12 +843,13 @@ class TimelogController extends AccountBaseController
         $timeLog = ProjectTimeLog::findOrFail($timeLogBreak->project_time_log_id);
         $editTimelogPermission = user()->permission('edit_timelogs');
 
-        abort_403(!($editTimelogPermission == 'all'
-            || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
-            || ($editTimelogPermission == 'owned'
-                && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
+        abort_403(!(
+            $editTimelogPermission == 'all'
+        || ($editTimelogPermission == 'added' && $timeLog->added_by == user()->id)
+        || ($editTimelogPermission == 'owned'
+            && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id)
             )
-            || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
+        || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
         ));
 
         $endTime = now();
@@ -731,4 +867,5 @@ class TimelogController extends AccountBaseController
 
         return Reply::successWithData(__('messages.timerStartedSuccessfully'), ['html' => $html]);
     }
+
 }

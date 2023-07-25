@@ -1,8 +1,1 @@
-/******/ (() => { // webpackBootstrap
-var __webpack_exports__ = {};
-/*!************************************!*\
-  !*** ./resources/js/sp1-editor.js ***!
-  \************************************/
-
-/******/ })()
-;
+(self.webpackChunk=self.webpackChunk||[]).push([[242],{45302:()=>{}},e=>{var k;k=45302,e(e.s=k)}]);
