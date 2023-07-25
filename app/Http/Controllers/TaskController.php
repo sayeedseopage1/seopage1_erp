@@ -66,8 +66,11 @@ use App\Models\TaskNoteFile;
 
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
+<<<<<<< HEAD
 use App\Models\DeveloperStopTimer;
 
+=======
+>>>>>>> 76c1181d1 (update with portfolio page)
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
 
@@ -2251,6 +2254,11 @@ class TaskController extends AccountBaseController
                 $file = [];
                 foreach ($files as $item) {
                     if ($item != $request->query('files')) {
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 76c1181d1 (update with portfolio page)
                         array_push($file, $item);
                     }
                 }
@@ -2397,7 +2405,11 @@ class TaskController extends AccountBaseController
             }
             $data = TaskComment::find($data->id);
             return response()->json($data);
+<<<<<<< HEAD
         } elseif ($request->mode == 'developer_first_task_check') {
+=======
+        } elseif ($request->mode == 'develoer_first_task_check') {
+>>>>>>> 76c1181d1 (update with portfolio page)
             $data = ProjectTimeLog::where([
                 'project_id' => $request->project_id,
                // 'task_id' => $id,
