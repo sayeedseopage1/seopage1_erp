@@ -925,9 +925,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     //qualified sales Settings
 
 
-    Route::get('qualified-sales/get-points/{id}', [QualifiedSalesController::class, 'get_point_details']);
+    Route::resource('qualified-sales',QualifiedSalesController::class);
+    Route::get('qualified-sales/get-points/{id}',[QualifiedSalesController::class,'get_point_details']);
 
-    Route::resource('qualified-sales', QualifiedSalesController::class);
 
 
     // Estimates
@@ -1395,7 +1395,8 @@ Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_da
 Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
 
-Route::get('app_requirements', [HomeController::class, 'app_requirements']);
+Route::get('account/app_requirements', [HomeController::class, 'app_requirements']);
+
 
 
 
