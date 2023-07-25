@@ -57,6 +57,7 @@ use App\Models\DealStageChange;
 use App\Models\QualifiedSale;
 use App\Models\AuthorizationAction;
 use App\Models\AwardTimeIncress;
+use DataTables;
 
 class ContractController extends AccountBaseController
 {
@@ -98,6 +99,8 @@ class ContractController extends AccountBaseController
 
         return $dataTable->render('contracts.index', $this->data);
     }
+
+   
 
     public function applyQuickAction(Request $request)
     {
@@ -1043,7 +1046,7 @@ class ContractController extends AccountBaseController
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
-            
+
             $project->deadline = $request->deadline;
 
             $currency = Currency::where('id', $request->original_currency_id)->first();
@@ -1276,7 +1279,7 @@ class ContractController extends AccountBaseController
             if ($deal->project_type == 'fixed') {
                 Mail::to($user->email)->send(new WonDealMail($project_id));
             }
-           
+
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
             if ($deal->project_type == 'fixed') {
@@ -1516,7 +1519,7 @@ class ContractController extends AccountBaseController
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
-            
+
             $project->deadline = $request->deadline;
             $currency = Currency::where('id', $request->original_currency_id)->first();
             //dd($currency);
@@ -2286,7 +2289,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
-    //    / 
+    //    /
    //  dd($request);
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
@@ -2327,20 +2330,20 @@ class ContractController extends AccountBaseController
                 //$total_secoends = 20 * 60 * 60;
                 $second_left = Carbon::now()->diffInSeconds($deal->award_time);
                 //$total_secoend_left = $total_secoends - $secoend_left;
-               
+
                 $request_seconds = $request->hours * 60 * 60;
               //  $total_seconds= $second_left;
                // dd($second_left+$request_seconds);
                 $old_award_time = $deal->award_time;
                 //$original_format = 'Y-m-d H:i:s'; // Change this format to match the format of $deal->award_time
-              
-               
-                
-               
+
+
+
+
                 $award_time = Carbon::now()->addHours($request->hours);
                 $award_time= $award_time->addHours(-20);
               //  dd($award_time);
-               
+
                // dd($second_left);
                 if ($deal->status =='Denied') {
                     $deal->award_time = $award_time;

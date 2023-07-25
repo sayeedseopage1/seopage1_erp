@@ -132,8 +132,8 @@ class WonDealsDataTable extends BaseDataTable
                     if ($award_time_request) {
                         if ($award_time_request->status == '2') {
                             $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
-                        } 
-                    } else 
+                        }
+                    } else
                     {
                         $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                     }
@@ -161,16 +161,18 @@ class WonDealsDataTable extends BaseDataTable
      */
     public function query(Deal $model)
     {
+
         $request = $this->request();
+       // dd($request);
         $startDate = null;
         $endDate = null;
         if (Auth::user()->role_id == 4) {
 
             $model = $model->where('pm_id',Auth::id());
-        } 
+        }
         // elseif (Auth::user()->role_id == 7) {
         //     $model = $model->where('added_by',Auth::id());
-        // } 
+        // }
         else {
             $model = $model->orderBy('id','desc');
 
@@ -185,7 +187,7 @@ class WonDealsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
         }
 
-        $model = $model->select('deals.*')->leftJoin('users', 'users.id', 'deals.added_by');
+        $model = $model->select('deals.*','deals.status as deal_status')->leftJoin('users', 'users.id', 'deals.added_by');
 
         if ($startDate !== null && $endDate !== null) {
             $model->where(function ($q) use ($startDate, $endDate) {
@@ -210,6 +212,10 @@ class WonDealsDataTable extends BaseDataTable
         }
         if ($request->closed_by != 'all') {
             $model->where('added_by', $request->closed_by);
+        }
+       // dd($request->status);
+        if ($request->status != 'all') {
+            $model->where('deals.status', $request->status);
         }
 
         $model->orderBy('id', 'desc');
