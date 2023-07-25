@@ -4,12 +4,16 @@ import Button from "../../components/Button";
 import { User } from "../../../utils/user-details";
 import dayjs from "dayjs";
 import FileUploader from "../../../file-upload/FileUploader";
+import { useWindowSize } from 'react-use'
+import Modal from "../../components/Modal";
 
 const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
     const links = _.compact(_.split(data?.links, ','));
     const attaches = _.compact(_.split(data?.attaches, ',')); 
-    return (
-        <CustomModal isOpen={isOpen} toggleRef={toggle}>
+    const { width: deviceWidth } = useWindowSize();
+
+    const content = () => {
+        return(
             <div className="sp1-subtask-form --modal-panel --modal-submitted">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <div className="d-flex align-items-center">
@@ -125,8 +129,22 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                     </div>
                 </div>
             </div>
-        </CustomModal>
-    );
+        )
+    }
+
+    if(deviceWidth > 1200){
+        return (
+            <CustomModal isOpen={isOpen} toggleRef={toggle}>
+                {content()}
+            </CustomModal>
+        )
+    }else{
+        return (
+            <React.Fragment>
+                <Modal isOpen={isOpen}> { content() } </Modal> 
+            </React.Fragment>
+        );
+    }
 };
 
 export default SubmitionView;
