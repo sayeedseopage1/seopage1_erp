@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use App\Http\Requests\Tasks\StoreTask;
 use App\Http\Requests\Tasks\UpdateTask;
 use App\Models\BaseModel;
+use App\Models\DeveloperReportIssue;
 use App\Models\EmployeeDetails;
 use App\Models\Pinned;
 use App\Models\PmTaskGuideline;
@@ -2431,5 +2432,21 @@ class TaskController extends AccountBaseController
     {
         $task_revision= TaskRevision::where('task_id',$id)->where('status','pending')->first();
         return response()->json($task_revision);
+    }
+    public function DeveloperReportIssue(Request $request)
+    {
+        $report= new DeveloperReportIssue();
+        $report->comment= $request->comment;
+        $report->person= $request->person;
+        $report->previousNotedIssue= $request->previousNotedIssue;
+        $report->added_by= Auth::id();
+        $report->reason= $request->reason;
+        $report->save();
+        return response()->json([
+            'status' => 200,
+            'report'=> $report,
+        ]);
+
+
     }
 }
