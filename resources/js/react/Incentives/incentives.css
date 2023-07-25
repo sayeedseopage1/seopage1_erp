@@ -1,0 +1,89 @@
+
+
+.sp1__incentive_item_container{
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 0;
+    overflow: hidden;
+}
+
+
+.sp1__incentive_row{
+    display: -moz-grid;
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.sp1__incentive_row_1{
+    display: -moz-grid;
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.sp1__incentive_row_item{
+    padding: 16px;
+    background-color: #F3F9FF; 
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.sp1_inc_month_wrapper{
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr)
+}
+
+.sp1_inc_month{
+    width: 35px;
+    height: 35px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.sp1_inc_month:hover{
+    background-color: #ececec;
+    cursor: pointer;
+}
+
+.sp1_inc_month.active{
+    background-color: var(--header_color);
+    color: #fff;
+}
+ 
+
+.sp1_da_tab{
+    padding: 6px 16px;
+    border-radius: 6px;
+    margin-right: 10px;
+    border: 1px solid var(--header_color);
+}
+
+.sp1_da_tab:hover{
+    cursor: pointer;
+}
+
+.sp1_da_tab.active{
+    color: #fff;
+    background-color: var(--header_color);
+}
+
+
+.sp1__dis_amount_tbl_tr{
+    background-color: rgba(243, 249, 255, 1);
+    border-color: #fff !important;
+}
+
+
+.sp1-order-list{
+    margin: 0;
+    padding: 16px;
+    list-style: decimal;
+}

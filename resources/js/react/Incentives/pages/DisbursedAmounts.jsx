@@ -2,7 +2,6 @@ import * as React from 'react'
 import IncentiveNavbar from '../components/IncentiveNavbar'
 import DataTable from '../table/DisbursedAmountTable';
 import FilterBar from '../components/FilterBar';
-<<<<<<<< HEAD:resources/js/react/Incentives/pages/DisbursedAmounts.jsx
 import { useLazyGetDisbursedAmountQuery } from '../../services/api/IncentiveApiSlice';
 import _ from 'lodash';
 import dayjs from 'dayjs';
@@ -21,22 +20,6 @@ const DisbursedAmounts = () => {
         getDisbursedAmount,
         {isFetching}
     ] = useLazyGetDisbursedAmountQuery();
-========
-import { useLazyGetHeldAmountQuery } from '../../services/api/IncentiveApiSlice';
-import dayjs from 'dayjs';
-
-
-const HeldAmounts = () => {
-    const [period, setPeriod]  = React.useState("Monthly");
-    const [dataShowFor, setDataShowFor] = React.useState("Shift");
-    const [data, setData] = React.useState([]);
-    const [isLoading, setIsLoading] = React.useState(true);
- 
-    const [
-        getHeldAmount,
-        {isFetching}
-    ] = useLazyGetHeldAmountQuery();
->>>>>>>> ec62a13b0 (employee_wise_timelog_report):resources/js/components/Incentives/pages/HeldAmounts.jsx
 
     const handleDataShowFor = (e, type) => {
         e.preventDefault(); 
@@ -45,7 +28,6 @@ const HeldAmounts = () => {
 
 
     const handleDataRequest = (filter) => {
-<<<<<<<< HEAD:resources/js/react/Incentives/pages/DisbursedAmounts.jsx
        const query = {
         employee_id: filter?.employee_id,
         start_date: filter?._startDate,
@@ -56,18 +38,6 @@ const HeldAmounts = () => {
 
        // fetch data
        getDisbursedAmount(`?${queryString.toString()}`).unwrap().then(res => {
-========
-        const query = {
-         employee_id: filter?.employee_id,
-         start_date: filter?._startDate,
-         end_date: filter?._endDate
-        }
- 
-        let queryString = new URLSearchParams(query);
- 
-        // fetch data
-       getHeldAmount(`?${queryString.toString()}`).unwrap().then(res => {
->>>>>>>> ec62a13b0 (employee_wise_timelog_report):resources/js/components/Incentives/pages/HeldAmounts.jsx
         if(!_.isArray(res)){
             let r = {...res}
             r.id = 1; 
@@ -80,7 +50,6 @@ const HeldAmounts = () => {
        }).finally(() => {
         setIsLoading(false);
        })
-<<<<<<<< HEAD:resources/js/react/Incentives/pages/DisbursedAmounts.jsx
 
     }
  
@@ -88,15 +57,6 @@ const HeldAmounts = () => {
     return (
        <>
         <FilterBar handleDataRequest={handleDataRequest} /> 
-========
- 
-     }
-
-    return (
-       <>
-        <FilterBar handleDataRequest={handleDataRequest} />
-
->>>>>>>> ec62a13b0 (employee_wise_timelog_report):resources/js/components/Incentives/pages/HeldAmounts.jsx
         <div className='sp1_point_page_container'>
             <IncentiveNavbar />
 
@@ -135,21 +95,12 @@ const HeldAmounts = () => {
                 
                 <section className='border-top'>
                     <div className='d-flex align-items-center justify-content-center font-weight-bold py-3'>
-<<<<<<<< HEAD:resources/js/react/Incentives/pages/DisbursedAmounts.jsx
                         <h4> Total disbursed amount during this period: {data[0]?.total_disbursed_amount_during_this_period} BDT</h4>
                     </div>
                 <DataTable
                         data={data}
                         isLoading={isFetching || isLoading}
                         pagination={false}
-========
-                        <h4> Total Held amount during this period: {data[0]?.total_held_amount_during_this_period} Tk</h4>
-                    </div>
-                <DataTable
-                        data={data}
-                        pagination={false}
-                        isLoading={isLoading || isFetching}
->>>>>>>> ec62a13b0 (employee_wise_timelog_report):resources/js/components/Incentives/pages/HeldAmounts.jsx
                         defaultColumns={[
                             {
                                 header: 'Month',
@@ -195,18 +146,9 @@ const HeldAmounts = () => {
                     />
                 </section>
             </main>
-<<<<<<<< HEAD:resources/js/react/Incentives/pages/DisbursedAmounts.jsx
         </div>  
-========
-        </div>
-       
->>>>>>>> ec62a13b0 (employee_wise_timelog_report):resources/js/components/Incentives/pages/HeldAmounts.jsx
        </> 
     )
 }
 
-<<<<<<<< HEAD:resources/js/react/Incentives/pages/DisbursedAmounts.jsx
 export default DisbursedAmounts
-========
-export default HeldAmounts 
->>>>>>>> ec62a13b0 (employee_wise_timelog_report):resources/js/components/Incentives/pages/HeldAmounts.jsx

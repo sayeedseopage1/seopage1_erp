@@ -1,0 +1,181 @@
+.sp1_qs_tbl_container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.sp1_qs_table {
+    width: fit-content;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.sp1_qs_table_tr {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.sp1_qs_table_tr:last-child {
+    border-bottom: none;
+}
+
+.sp1_qs_table_th {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.sp1_qs_table_td {
+    width: 150px;
+    padding: 3px 6px;
+    white-space: wrap;
+    border-right: 1px solid #ddd;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
+.sp1_qs_table_td:last-child {
+    border: 0;
+}
+
+.sp1_qs_table_th_sub {
+    padding: 3px 6px;
+}
+
+.sp1_qs_table_th_date > .sp1_qs_table_th_text {
+    transform: rotate(-90deg);
+    -ms-word-break: normal;
+    word-break: normal;
+}
+
+.sp1_qs_table_th_date > div > span.table_asc_dec {
+    margin-right: 3px;
+}
+.sp1_qs_table_td_date {
+    width: 60px;
+}
+
+.sp1_qs_table_td_status {
+    width: 120px;
+}
+
+.sp1_qs_table_td_project_name {
+    width: 80px;
+}
+
+.sp1_qs_table_td_client_name {
+    width: 70px;
+}
+
+.sp1_qs_table_td_project_budget {
+    width: 90px;
+}
+
+.sp1_qs_table_td_closed_by {
+    width: 75px;
+}
+
+.sp1_qs_table_td_pm_name {
+    width: 90px;
+}
+
+.sp1_qs_table_td_contact_form {
+    width: 70px;
+}
+
+.sp1_qs_table_td_authorized_by_sales_lead,
+.sp1_qs_table_td_accepted_by_project_manager,
+.sp1_qs_table_td_authorized_by_top_management {
+    width: 100px;
+}
+
+.sp1_qs_table_td_authorized_by_sales_lead span,
+.sp1_qs_table_td_accepted_by_project_manager span,
+.sp1_qs_table_td_authorized_by_top_management span {
+    transform: rotate(-90deg);
+    -ms-word-break: normal;
+    word-break: normal;
+}
+
+.sp1_qs_table_th_authorized_by_sales_lead span,
+.sp1_qs_table_th_accepted_by_project_manager span,
+.sp1_qs_table_th_authorized_by_top_management span {
+    transform: rotate(0);
+}
+
+.sp1_qs_table_td_status {
+    width: 60px;
+    padding: 0;
+}
+
+.sp1_qs_table_td_status span {
+    transform: rotate(-90deg);
+    display: inline-block;
+    white-space: nowrap;
+    -ms-word-break: normal;
+    word-break: normal;
+}
+.sp1_qs_table_th_status {
+    padding: 3px 6px;
+}
+
+.sp1_qs_table_td_points_earned {
+    width: 90px;
+}
+
+.sp1_qs_table_th_status span {
+    transform: rotate(0);
+}
+
+.sp1_qs_table_td_notes {
+    width: auto;
+}
+
+.sp1_qs_table_th_sub_head {
+    background: rgba(60, 62, 65, 0.08);
+}
+
+.sp1_qs_comment_view:hover {
+    font-weight: bold;
+}
+
+.sp1_qs_table_td .__loading {
+    background-color: rgb(235, 234, 234);
+    color: rgb(235, 234, 234);
+    pointer-events: none;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.sp1_qualified_filterbar {
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    gap: 10px;
+}
+
+.sp1_qs_table_sub_td {
+    padding: 3px 6px;
+}
+
+.sp1_qs_table_td_notes > span.sp1_qs_table_th_text {
+    height: 100%;
+}
+
+/* .sp1_qs_table_td_sub_needs_defined {
+    width: 120px;
+}
+
+.sp1_qs_table_td_sub_prices,
+.sp1_qs_table_td_sub_needs_deadline {
+    width: 80px;
+}
+
+.sp1_qs_table_td_sub_needs_top_management {
+    width: 150px;
+} */
