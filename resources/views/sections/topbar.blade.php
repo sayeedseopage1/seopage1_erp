@@ -32,7 +32,7 @@
 
     <div class="page-header-right float-right d-flex align-items-center">
 
-    @if (!is_null($selfActiveTimer))
+    <!-- @if (!is_null($selfActiveTimer))
 
         <span class="border rounded f-14 py-2 px-2 d-none d-sm-block mr-3">
             <span id="active-timer" class="mr-2">{{ $selfActiveTimer->timer }}</span>
@@ -57,7 +57,7 @@
                 {{ __('modules.timeLogs.stopTimer') }}
             </a>
         @endif
-    @endif
+    @endif -->
         <ul>
             <!-- SEARCH START -->
           {{--  <li>
