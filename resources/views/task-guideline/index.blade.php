@@ -195,6 +195,7 @@
                                 </div>
                                 <!--Plugin Research End-->
                              </div>
+
                             <div style="display: none;" id="plugin_research_info">
                                 <div class="row mb-3">
                                     <div class="col-md-4">
@@ -215,8 +216,15 @@
                                         <label for="">Write Instructions for Using This Plugin</label>
                                         <textarea name="instruction_plugin" id="instruction_plugin" cols="30" rows="5" class="form-control"></textarea>
                                     </div>
+
                                 </div>
                             </div>
+                            <div class="row mb-5">
+                                    <div class="col-md-12">
+                                        <label for="">Write Instructions for Using This Plugin</label>
+                                        <textarea name="instruction_plugin" id="instruction_plugin" cols="30" rows="5" class="form-control"></textarea>
+                                    </div>
+                                </div>
                             <div class="justify-content-center d-flex">
                                 <button type="submit" class="btn btn-primary py-2" id="submit-button">Submit</button>
                             </div>
