@@ -3,24 +3,35 @@ import InnerNavbar from "../../Points/components/InnerNavbar";
 import IncentivesFilterBar from '../components/IncentiveFilterBar';
 import IncentiveNavbar from '../components/IncentiveNavbar';
 import { useParams } from 'react-router-dom';
+import IncentiveCurrentFilterBar from '../components/IncentiveCurrentFilterbar';
+import { useIncentiveCurrentDataMutation } from '../../services/api/IncentiveApiSlice';
 
 
 
 const IncentiveCurrent = () => {
     const [data, setData] = React.useState(null);
-    const [firstLoading, setFirstLoading] = React.useState(true);
-    const [tableDataIsFetching, setTableDataIsFetching] = React.useState(true);
+    const [firstLoading, setFirstLoading] = React.useState(true); 
     const params = useParams(); 
+    const [incentiveCurrentData, {isLoading: tableDataIsFetching}] = useIncentiveCurrentDataMutation();
+ 
 
-    React.useEffect(() => {
-        setFirstLoading(true);
-        let timeOut = setTimeout(() => {
+    const handleDataRequest = (filter) => { 
+        let data = {
+            team_id: filter?.shift_id,
+            user_id: filter?.employee_id,
+            start_date: filter?._startDate,
+            end_date: filter?._endDate,
+            period: _.startCase(params.period)
+        }  
+
+        incentiveCurrentData(data).unwrap().then(res => {
+            setData(res)
+        }).catch(err => {
+            console.log(err)
+        }).finally(() => {
             setFirstLoading(false);
-        }, 1000);
-
-
-        return () => clearTimeout(timeOut)
-    }, [])
+        })
+    }
 
 
     let isLoading = firstLoading || tableDataIsFetching; 
@@ -30,10 +41,15 @@ const IncentiveCurrent = () => {
 
     return (
         <div className="">
-            <IncentivesFilterBar
+            {/* <IncentivesFilterBar
                 setData={setData}
                 setIsDataFetching={setTableDataIsFetching}
                 defaultSelectedDate={params.period || 'monthly'}
+            /> */}
+
+            <IncentiveCurrentFilterBar 
+                handleDataRequest={handleDataRequest}
+                type={params.period || 'monthly'}
             />
             <div className='sp1_point_page_container'>
                 <IncentiveNavbar />
@@ -118,7 +134,7 @@ const IncentiveCurrent = () => {
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
                                         <span>
-                                            *Your share of approximate incentive: {Number(data?.percentage_of_share).toFixed(2)}% of BDT {approximateIncentive.toFixed(2)} = BDT { (approximateIncentive * Number(data?.percentage_of_share)/100).toFixed(2)} 
+                                            *Your share of approximate incentive: {data?.percentage_of_share ? Number(data?.percentage_of_share).toFixed(2): 0}% of BDT  {approximateIncentive.toFixed(2)} = BDT { (approximateIncentive * (Number(data?.percentage_of_share) || 0)/100).toFixed(2)} 
                                         </span>
                                     )} 
                                     
@@ -129,7 +145,7 @@ const IncentiveCurrent = () => {
                                 <div className="sp1__incentive_item">
                                     {!isLoading && (
                                         <span>
-                                            *Confirmed incentive so far: {data?.incentive_final_amount?.final_payable_incentive_amount? Number(data?.incentive_final_amount?.final_payable_incentive_amount).toFixed(2):0} BDT
+                                            *Confirmed incentive so far: BDT {data?.incentive_final_amount?.final_payable_incentive_amount? Number(data?.incentive_final_amount?.final_payable_incentive_amount).toFixed(2):0}
                                         </span>
                                     )}
                                 </div>

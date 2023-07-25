@@ -74,12 +74,16 @@ class PendingActionController extends AccountBaseController
         $this->users = User::select([
             'id', 'name', 'image'
         ])->whereIn('id', $uniqueUsers)->get();
-
+       
         if ($this->user->role_id != 1) {
-            $this->authorization_action = $this->authorization_action->where('authorization_for', $this->user->id);
+            //dd("True");
+            $this->authorization_action = $this->authorization_action->where('authorization_for', $this->user->id)->orderBy('id', 'desc')->paginate($per_page);
+        }else 
+        {
+            $this->authorization_action = $this->authorization_action->where('type','!=','task_assigned_on_lead_developer' )->orderBy('id', 'desc')->paginate($per_page);
         }
 
-        $this->authorization_action = $this->authorization_action->orderBy('id', 'desc')->paginate($per_page);
+       
         //dd($this->authorization_action->get());
         return view('pending-action.index', $this->data);
     }
@@ -458,7 +462,31 @@ class PendingActionController extends AccountBaseController
                 'type' => 'redirect',
                 'url' => $authorization_action->link
             ]);
+        }elseif ($type == 'task_assign_by_lead_developer') {
+            $authorization_action->description = $request->description;
+            $authorization_action->authorization_by = $this->user->id;
+            $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
+            $authorization_action->status = '1';
+            $authorization_action->save();
+
+            return response()->json([
+                'type' => 'redirect',
+                'url' => $authorization_action->link
+            ]);
+        }elseif ($type == ' task_submission_by_developer') {
+            $authorization_action->description = $request->description;
+            $authorization_action->authorization_by = $this->user->id;
+            $authorization_action->approved_at = Carbon::now()->format('Y-m-d H:i:s');
+            $authorization_action->status = '1';
+            $authorization_action->save();
+
+            return response()->json([
+                'type' => 'redirect',
+                'url' => $authorization_action->link
+            ]);
         }
+       
+        
         //DB::commit();
         if ($error == false) {
             return response()->json([

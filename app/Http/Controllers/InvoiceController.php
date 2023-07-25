@@ -299,16 +299,9 @@ class InvoiceController extends AccountBaseController
        
        //authorization action start
 
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $invoice->getMorphClass();
-        $authorization_action->model_id = $invoice->id;
-        $authorization_action->type = 'invoice_created';
-        $authorization_action->deal_id = $invoice->project->deal_id;
-        $authorization_action->project_id = $invoice->project->id;
-        $authorization_action->link = route('projects.show', $invoice->project->id).'?tab=milestones';
-        $authorization_action->title = Auth::user()->name.' create invoice for this project';
-        $authorization_action->authorization_for = 62;
-        $authorization_action->save();
+         
+
+       
         //authorization action end
 
         if($milestone_check->status == 'incomplete')

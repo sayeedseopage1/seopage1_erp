@@ -332,6 +332,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/incentives/disbursed-amounts/disbursed-get', [IncentiveController::class, 'DisbursedAmount'])->name('disbursed-amount');
     Route::get('/incentives/held-amounts/held-get', [IncentiveController::class, 'HeldAmount'])->name('held-amount');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
+    
+   
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */

@@ -36,7 +36,10 @@ export class User {
       this.modules = data?.modules;
       this.role = data?.role.map(roleData => new UserRole(roleData));
       this.rtl = data?.rtl;
+
       this.roleId = Number(data?.role_id);
+
+
       this.salutation = data?.salutation;
       this.session = data?.session;
       this.status = data?.status;

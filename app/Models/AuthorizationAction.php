@@ -80,7 +80,9 @@ class AuthorizationAction extends Model
                  'review'
             ],
             'task_submission_by_developer' => [
+
                  'review'
+
             ],
           
             'task_approved_by_lead_develoer' => [
@@ -105,7 +107,9 @@ class AuthorizationAction extends Model
                  'review'
             ],
             'task_assign_by_lead_developer' => [
+
                 'review'
+
             ],
            
             'award_time_extension' => [
@@ -116,6 +120,7 @@ class AuthorizationAction extends Model
 
                 'review'
 
+
             ],
             'saleslead_price_authorization' => [
 
@@ -127,10 +132,10 @@ class AuthorizationAction extends Model
             ],
             'saleslead_price_authorization' => [
                 'review'
+
 
 
             ]
-          
         ];
 
         return $options[$this->type];
