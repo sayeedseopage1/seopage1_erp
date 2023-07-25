@@ -109,11 +109,7 @@ class TimelogReportController extends AccountBaseController
                 'projects.start_date as project_start_date',
                 'projects.deadline as project_end_date',
 
-                'tasks.id as task_id',
-                'tasks.heading as task_name',
-                'tasks.id as task_id',
-                'tasks.start_date as task_start',
-                'tasks.due_date as task_end',
+                
                 'project_time_logs.start_time as time_log_start_time',
                 'project_time_logs.start_time as time_log_end_time',
                 DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
@@ -135,7 +131,6 @@ class TimelogReportController extends AccountBaseController
                 ->join('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
 
 
-                ->join('tasks', 'project_time_logs.task_id', 'tasks.id')
                 ->whereIn('project_time_logs.user_id', $id_array)
                 ->where('total_minutes', '>', 0)
                 ->groupBy('project_time_logs.user_id', 'employee.id');
@@ -193,21 +188,13 @@ class TimelogReportController extends AccountBaseController
             ->offset($offset)
             ->limit($perPage)*/
            // $data = $data->orderBy('project_time_logs.task_id', 'desc')->get();
-            if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
-        {
-            // $data = $data->groupBy('project_time_logs.task_id','project_time_logs.created_at')
-         // ->orderBy('project_time_logs.id', 'desc')
-         $data = $data->orderBy('project_time_logs.task_id', 'desc')
-          ->get();
-
-
-        }else {
+          
         //    / $data = $data->groupBy('project_time_logs.task_id','project_time_logs.created_at')
             $data = $data->orderBy('project_time_logs.task_id', 'desc')
             ->where('project_time_logs.user_id',Auth::id())
          // ->orderBy('project_time_logs.id', 'desc')
           ->get();
-        }
+      
         }else if($type == 'tasks') {
             $data = ProjectTimeLog::select([
                 'tasks.id as task_id',

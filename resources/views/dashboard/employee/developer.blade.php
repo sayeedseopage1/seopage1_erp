@@ -275,7 +275,7 @@
                                                         @endphp
                                                     </td>
                                                     <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                    <td>{{$value->project->deadline->format('Y-m-d')}}</td>
+                                                    <td>{{$value->project->deadline}}</td>
                                                 </tr>
                                                 @empty
                                                 <tr>
@@ -355,7 +355,7 @@
                                                         @endphp
                                                     </td>
                                                     <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                    <td>{{$value->project->deadline->format('Y-m-d')}}</td>
+                                                    <td>{{$value->project->deadline}}</td>
                                                 </tr>
                                                 @empty
                                                 <tr>
