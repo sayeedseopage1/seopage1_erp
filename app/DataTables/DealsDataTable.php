@@ -399,6 +399,7 @@ class DealsDataTable extends BaseDataTable
      */
     public function query(DealStage $model)
     {
+        //dd($model);
         $request = $this->request();
         $startDate = null;
         $endDate = null;
@@ -411,15 +412,26 @@ class DealsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
         }
 
-        $model = $model->with('lead')
+        // $model = $model->with('lead')
 
-            // ->join('users', 'users.id', '=', 'contracts.client_id')
-            // ->join('client_details', 'users.id', '=', 'client_details.user_id')
-            ->select('deal_stages.*')
-              ->leftJoin('leads', 'leads.id', 'deal_stages.lead_id')
+        //     // ->join('users', 'users.id', '=', 'contracts.client_id')
+        //     // ->join('client_details', 'users.id', '=', 'client_details.user_id')
+        //     // ->select('deal_stages.*','deal_stages.converted_by as deal_stages_converted_by')
+        //     //   ->leftJoin('leads', 'leads.id', 'deal_stages.lead_id')
 
-                ->leftJoin('users', 'users.id', 'deal_stages.added_by')
-            ;
+        //     //     ->leftJoin('users as lead_added_by', 'lead_added_by.id', 'deal_stages.added_by')
+        //     //     ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', 'deal_stages.converted_by')
+        //     // ;
+
+        $model = $model
+            ->select('deal_stages.*', 'deal_stages.converted_by as deal_stages_converted_by', 'deal_stages.added_by as lead_added_by')
+            ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+            ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by') // Alias added_by from leads table
+            ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by');
+
+
+
+           // dd($model->get());
 
         if ($startDate !== null && $endDate !== null) {
             $model->where(function ($q) use ($startDate, $endDate) {
@@ -446,7 +458,7 @@ class DealsDataTable extends BaseDataTable
                     ->orWhere('deal_stages.short_code', 'like', '%' . request('searchText') . '%')
                     ->orWhere('leads.project_link', 'like', '%' . request('searchText') . '%')
 
-                   
+
                     ->orWhere('deal_stages.client_username', 'like', '%' . request('searchText') . '%')
                     ->orWhere('deal_stages.client_name', 'like', '%' . request('searchText') . '%')
 
@@ -468,6 +480,41 @@ class DealsDataTable extends BaseDataTable
         //             ->orWhere('contracts.client_id', '=', user()->id);
         //     });
         // }
+
+        if ($request->client_id != 'all') {
+            if($request->client_id == client_username)
+            $model->where('deal_stages', $request->client_username)->where('client_name', '=',null);
+            else{
+                $model->where('deal_stages', $request->client_name);
+            }
+        }
+
+
+        // Filter by "closed_by" if selected
+        if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
+            $model->where('deal_stages.converted_by', $request->input('closed_by'));
+        }
+
+        // if ($request->closed_by != 'all') {
+        //     $model->where('deal_stages.converted_by', $request->closed_by);
+        // }
+       // dd($request->status);
+        if ($request->status != 'all') {
+            if ($request->status == 5) {
+                $model->where('deal_stage', $request->status)->where('won_lost', '=',null);
+            }
+            elseif ($request->status == 'won') {
+                $model->where('won_lost', '=','Yes');
+            }
+            elseif ($request->status == 'lost') {
+                $model->where('won_lost', '=','No');
+            }
+            else{
+                $model->where('deal_stage', $request->status);
+            }
+
+        }
+
         $model->orderBy('id', 'desc');
         return $model;
     }

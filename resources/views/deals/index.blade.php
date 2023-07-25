@@ -21,12 +21,6 @@
         <!-- DATE END -->
 
 
-
-        <!-- CLIENT END -->
-        <!-- STATUS START -->
-
-        <!-- STATUS END -->
-
         <!-- SEARCH BY TASK START -->
         <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
             <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
@@ -42,6 +36,69 @@
             </form>
         </div>
         <!-- SEARCH BY TASK END -->
+
+        <!-- CLIENT START -->
+        <div
+            class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.clientName')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="client_id" id="client_id" data-live-search="true"
+                    data-size="8">
+                    @if (!in_array('client', user_roles()))
+                        <option value="all">@lang('app.all')</option>
+                    @endif
+                    @foreach ($clients as $client)
+                        <option
+                            data-content="<div class='d-inline-block mr-1'><img class='taskEmployeeImg rounded-circle' src='{{ $client->image_url }}' ></div> {{ ucfirst($client->name) }}"
+                            value="{{ $client->id }}">{{ ucfirst($client->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <!-- CLIENT END -->
+
+        <!-- CLOSED BY START -->
+
+        <div
+            class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Closed By')</p>
+            <div class="select-status">
+                <select class="form-control select-picker" name="closed_by" id="closed_by" data-live-search="true"
+                    data-size="8">
+                    <option selected value="all">@lang('All')</option>
+                    @php
+                        $project_manager = App\Models\User::whereIn('role_id', ['1', '7', '8'])->get();
+                    @endphp
+                    @foreach ($project_manager as $value)
+                        <option value="{{ $value->id }}">{{ ucfirst($value->name) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <!-- CLOSED BY END -->
+
+        <!-- STATUS START -->
+
+        <div class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }} border-right-grey border-right-grey-sm-0">
+            <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Status')</p>
+            <div class="select-status">
+                <select class="form-control select-picker status" name="status" id="status" data-live-search="true" data-size="8">
+                    <option selected value="all">@lang('All')</option>
+                    <option value="0">@lang('Contact Made')</option>
+                    <option value="1">@lang('Qualified')</option>
+                    <option value="2">@lang('Requirements Defined')</option>
+                    <option value="3">@lang('Proposal Made')</option>
+                    <option value="4">@lang('Negotiation Started')</option>
+                    <option value="5">@lang('Milestone Breakdown')</option>
+                    <option value="won">@lang('Won')</option>
+                    <option value="lost">@lang('Lost')</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- STATUS END -->
 
         <!-- RESET START -->
         <div class="select-box d-flex py-1 px-lg-2 px-md-2 px-0">
@@ -134,6 +191,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
         $('#deals-table').on('preXhr.dt', function(e, settings, data) {
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
+            var clientID = $('#client_id').val();
+            var closed_by = $('#closed_by').val();
+            var status = $('#status').val();
 
             if (startDate == '') {
                 startDate = null;
@@ -146,6 +206,9 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             var searchText = $('#search-text-field').val();
             data['startDate'] = startDate;
             data['endDate'] = endDate;
+            data['client_id'] = clientID;
+            data['closed_by'] = closed_by;
+            data['status'] = status;
 
             data['searchText'] = searchText;
             //console.log(searchText);
@@ -154,7 +217,7 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
             window.LaravelDataTables["deals-table"].draw();
         }
 
-        $('#project_name, #short_code, #search-text-field').on('change keyup', function() {
+        $('#project_name, #short_code, #search-text-field, #client_id, #closed_by, #status').on('change keyup', function() {
             if ($('#short_code').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
@@ -162,6 +225,15 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
                 $('#reset-filters').removeClass('d-none');
                 showTable();
             }else if ($('#project_link').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            }else if ($('#client_id').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#closed_by').val() != "all") {
+                $('#reset-filters').removeClass('d-none');
+                showTable();
+            } else if ($('#status').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
             }
@@ -315,5 +387,5 @@ $manageContractTemplatePermission = user()->permission('manage_contract_template
 
     });
     </script>
-    
+
 @endpush
