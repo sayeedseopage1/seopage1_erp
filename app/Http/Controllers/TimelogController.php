@@ -390,13 +390,15 @@ class TimelogController extends AccountBaseController
      ->whereDate('created_at', $yesterdayDate->created_at)
      ->sum('total_minutes');
   //   dd($totalMinutes);
-    $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->first();
+    $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
+   // dd($acknowledgement);
    
 // dd()
 //dd($acknowledgement);
 //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
  if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
  {
+   // dd("regular day");
    
      return response()->json([
          'error' => 'Developer did not submit the acknowledgement form'
@@ -404,6 +406,8 @@ class TimelogController extends AccountBaseController
 
  }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null)
  {
+   // dd("regular day");
+   
    // dd("Saturday");
     return response()->json([
         'error' => 'Developer did not submit the acknowledgement form'

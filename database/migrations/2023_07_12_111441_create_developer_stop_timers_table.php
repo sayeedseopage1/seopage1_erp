@@ -25,6 +25,8 @@ return new class extends Migration
             $table->integer('responsible_person_id')->nullable();
             $table->integer('project_id')->nullable();
             $table->integer('forgot_to_track_task_id')->nullable();
+            $table->bigInteger('transition_hours')->nullable();
+            $table->bigInteger('transition_minutes')->nullable();
             $table->integer('task_id');
             $table->integer('user_id');
             $table->timestamps();

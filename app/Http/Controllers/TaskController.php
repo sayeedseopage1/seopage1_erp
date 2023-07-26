@@ -2409,14 +2409,21 @@ class TaskController extends AccountBaseController
                    // 'task_id' => $id,
                     'user_id' => Auth::id()
                 ])->first();
+                return response()->json([
+                    'is_first_task' => ($data) ? false : true,
+                ]);
+               
+            }else 
+            {
+                return response()->json([
+                    'is_first_task' => false,
+                ]);
             }
             
            
             //  dd($data);
 
-            return response()->json([
-                'is_first_task' => ($data) ? false : true,
-            ]);
+          
         } else {
             abort(404);
         }
