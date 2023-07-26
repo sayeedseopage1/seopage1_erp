@@ -4,19 +4,20 @@ import Button from "./Button";
 import { useLazyGetSessionDetailsQuery } from "../../services/api/timeLogTableSessionDetails";
 import { EmployeeTableCtx } from "../context/EmployeeTableContext";
 import { EmployeeSessionTableColumn } from "./EmployeeSessionTableColumn";
-import { groupBy, orderBy } from "lodash";
+import _, { groupBy, orderBy } from "lodash";
 import { paginate } from "../../utils/paginate";
 const EmployeeSessionTable = lazy(() => import("./EmployeeSessionTable"));
 
 const EmployeeTrackTimeButton = ({ row, children }) => {
-    const { filter } = useContext(EmployeeTableCtx);
+    const { filter, setEmployeeName, setEmployeeId, setProjectName, setProjectId } = useContext(EmployeeTableCtx);
     const [isOpen, setIsOpen] = useState(false);
     const [data, setData] = useState([]);
     const [perPageData, setParPageData] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
-    
+    const [totalWokingHour, setTotalWorkingHour] = useState(0);
+   
     const [getSessionDetails, {isFetching }] =
         useLazyGetSessionDetailsQuery("");
 
@@ -53,6 +54,11 @@ const EmployeeTrackTimeButton = ({ row, children }) => {
         e.preventDefault();
         toggle();
 
+        setProjectId(row?.project_id);
+        setProjectName(row?.project_name);
+        setEmployeeId(row?.employee_id);
+        setEmployeeName(row?.employee_name);
+
         getSessionDetails({
             projectID: row?.project_id,
             employeeID: row?.employee_id,
@@ -62,8 +68,11 @@ const EmployeeTrackTimeButton = ({ row, children }) => {
             .unwrap()
             .then((res) => {
                 const sortedData = orderBy(res, ["task_id"], ["desc"]);
-                handleData(sortedData, currentPage, perPageData);
-                setData(sortedData);
+                const total = _.sumBy(sortedData, (d) => Number(d.total_minutes));
+                let _data = _.map(sortedData, (d) => ({...d, totalLogTime: total}));
+                handleData(_data, currentPage, perPageData);
+                setData(_data);
+                setTotalWorkingHour(total);
             });
     };
 

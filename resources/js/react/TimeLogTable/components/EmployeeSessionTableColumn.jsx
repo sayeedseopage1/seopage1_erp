@@ -66,14 +66,14 @@ export const EmployeeSessionTableColumn = [
                     className={`sp1_tlr_td sp1_tlr_td_border ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                     rowSpan={rowSpan}
                 >
-                    {convertTime(row?.project_total_time_log)}
+                    {convertTime(row?.totalLogTime)}/ <br/>{convertTime(row?.project_total_time_log)}
                 </td>
             )
         }
     }, 
     {
         id: 'total_tracked_time_td',
-        header: 'Total Tracked Time (TD)',
+        header: '(TTD) On This Task',
         className: '',
         group: false,
         sorted: false,
