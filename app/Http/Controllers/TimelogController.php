@@ -379,182 +379,256 @@ class TimelogController extends AccountBaseController
      //dd($today_timelog_count);
  
  // Check if the query returned any result
- if ($yesterdayDate && $today_timelog_count < 1  ) {
-     // $yesterdayDate is an object, so you need to access the "created_at" property
-     $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $yesterdayDate->created_at);
- 
-     // Get the day of the month
-     $day = $carbonDate->format('l');
-     $totalMinutes = DB::table('project_time_logs')
-     ->where('user_id', $userID)
-     ->whereDate('created_at', $yesterdayDate->created_at)
-     ->sum('total_minutes');
-  //   dd($totalMinutes);
-    $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
-   // dd($acknowledgement);
-   
-// dd()
-//dd($acknowledgement);
-//dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
- if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
- {
-   // dd("regular day");
-   
-     return response()->json([
-         'error' => 'Developer did not submit the acknowledgement form'
-     ], 400);
+        if(Auth::user()->role_id == 5 )
+        {
+            if ($yesterdayDate && $today_timelog_count < 1  ) {
+                // $yesterdayDate is an object, so you need to access the "created_at" property
+                $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $yesterdayDate->created_at);
+            
+                // Get the day of the month
+                $day = $carbonDate->format('l');
+                $totalMinutes = DB::table('project_time_logs')
+                ->where('user_id', $userID)
+                ->whereDate('created_at', $yesterdayDate->created_at)
+                ->sum('total_minutes');
+             //   dd($totalMinutes);
+               $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
+              // dd($acknowledgement);
+              
+           // dd()
+           //dd($acknowledgement);
+           //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
+            if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
+            {
+              // dd("regular day");
+              
+                return response()->json([
+                    'error' => 'Developer did not submit the acknowledgement form'
+                ], 400);
+           
+            }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null)
+            {
+              // dd("regular day");
+              
+              // dd("Saturday");
+               return response()->json([
+                   'error' => 'Developer did not submit the acknowledgement form'
+               ], 400);
+           
+           
+            }else 
+            {
+               $task_status= Task::find($request->task_id);
+               $task_status->task_status="in progress";
+               $task_status->board_column_id= 3;
+               $task_status->save();
+               $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+               //  dd($task_status);
+                 $timeLog = new ProjectTimeLog();
+           
+                   $activeTimer = ProjectTimeLog::with('user')
+                       ->whereNull('end_time')
+                       ->join('users', 'users.id', '=', 'project_time_logs.user_id')
+                       ->where('user_id', $this->user->id)->first();
+                   if (is_null($activeTimer)) {
+                       $taskId = $request->task_id;
+           
+                       if ($request->has('create_task')) {
+                           $task = new Task();
+                           $task->heading = $request->memo;
+                           $task->board_column_id = $this->global->default_task_status;
+                           $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
+                           $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+                           $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+           
+                           if ($request->project_id != '') {
+                               $task->project_id = $request->project_id;
+                           }
+           
+                           $task->save();
+                           $taskId = $task->id;
+                       }
+           
+                       if ($request->project_id != '') {
+                           $timeLog->project_id = $request->project_id;
+                       }
+           
+                       $timeLog->task_id = $taskId;
+           
+                       $timeLog->user_id = $this->user->id;
+                       $timeLog->start_time = now();
+                       $timeLog->hourly_rate = 0;
+                       $timeLog->memo = $task_status->heading;
+                       $timeLog->save();
+           
+                       if ($request->project_id != '') {
+                           //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                           $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+                       }
+                       else {
+                           $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+                       }
+           
+                       $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+           
+                       return response()->json([
+                           'status' => 'success',
+                           'message' => 'task timer started',
+                           'id' => $timeLog->id,
+                           'task_status'=> $task_board_column,
+                       ]);
+                   }
+           
+                   return response()->json([
+                       'status' => 'error',
+                       'message' => 'timer already running',
+                      
+                   ]);
+           
+            }
+            
+               
+            } else {
+               $task_status= Task::find($request->task_id);
+               $task_status->task_status="in progress";
+               $task_status->board_column_id= 3;
+               $task_status->save();
+               $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+               //  dd($task_status);
+                 $timeLog = new ProjectTimeLog();
+           
+                   $activeTimer = ProjectTimeLog::with('user')
+                       ->whereNull('end_time')
+                       ->join('users', 'users.id', '=', 'project_time_logs.user_id')
+                       ->where('user_id', $this->user->id)->first();
+                   if (is_null($activeTimer)) {
+                       $taskId = $request->task_id;
+           
+                       if ($request->has('create_task')) {
+                           $task = new Task();
+                           $task->heading = $request->memo;
+                           $task->board_column_id = $this->global->default_task_status;
+                           $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
+                           $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+                           $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+           
+                           if ($request->project_id != '') {
+                               $task->project_id = $request->project_id;
+                           }
+           
+                           $task->save();
+                           $taskId = $task->id;
+                       }
+           
+                       if ($request->project_id != '') {
+                           $timeLog->project_id = $request->project_id;
+                       }
+           
+                       $timeLog->task_id = $taskId;
+           
+                       $timeLog->user_id = $this->user->id;
+                       $timeLog->start_time = now();
+                       $timeLog->hourly_rate = 0;
+                       $timeLog->memo = $task_status->heading;
+                       $timeLog->save();
+           
+                       if ($request->project_id != '') {
+                           //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                           $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+                       }
+                       else {
+                           $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+                       }
+           
+                       $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+           
+                       return response()->json([
+                           'status' => 'success',
+                           'message' => 'task timer started',
+                           'id' => $timeLog->id,
+                           'task_status'=> $task_board_column,
+                       ]);
+                   }
+           
+                   return response()->json([
+                       'status' => 'error',
+                       'message' => 'timer already running',
+                      
+                   ]);
+               
+            }
 
- }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null)
- {
-   // dd("regular day");
-   
-   // dd("Saturday");
-    return response()->json([
-        'error' => 'Developer did not submit the acknowledgement form'
-    ], 400);
-
-
- }else 
- {
-    $task_status= Task::find($request->task_id);
-    $task_status->task_status="in progress";
-    $task_status->board_column_id= 3;
-    $task_status->save();
-    $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
-    //  dd($task_status);
-      $timeLog = new ProjectTimeLog();
-
-        $activeTimer = ProjectTimeLog::with('user')
-            ->whereNull('end_time')
-            ->join('users', 'users.id', '=', 'project_time_logs.user_id')
-            ->where('user_id', $this->user->id)->first();
-        if (is_null($activeTimer)) {
-            $taskId = $request->task_id;
-
-            if ($request->has('create_task')) {
-                $task = new Task();
-                $task->heading = $request->memo;
-                $task->board_column_id = $this->global->default_task_status;
-                $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
-                $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-                $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-
-                if ($request->project_id != '') {
-                    $task->project_id = $request->project_id;
+        } else 
+        {
+            $task_status= Task::find($request->task_id);
+            $task_status->task_status="in progress";
+            $task_status->board_column_id= 3;
+            $task_status->save();
+            $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
+            //  dd($task_status);
+              $timeLog = new ProjectTimeLog();
+        
+                $activeTimer = ProjectTimeLog::with('user')
+                    ->whereNull('end_time')
+                    ->join('users', 'users.id', '=', 'project_time_logs.user_id')
+                    ->where('user_id', $this->user->id)->first();
+                if (is_null($activeTimer)) {
+                    $taskId = $request->task_id;
+        
+                    if ($request->has('create_task')) {
+                        $task = new Task();
+                        $task->heading = $request->memo;
+                        $task->board_column_id = $this->global->default_task_status;
+                        $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
+                        $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+                        $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
+        
+                        if ($request->project_id != '') {
+                            $task->project_id = $request->project_id;
+                        }
+        
+                        $task->save();
+                        $taskId = $task->id;
+                    }
+        
+                    if ($request->project_id != '') {
+                        $timeLog->project_id = $request->project_id;
+                    }
+        
+                    $timeLog->task_id = $taskId;
+        
+                    $timeLog->user_id = $this->user->id;
+                    $timeLog->start_time = now();
+                    $timeLog->hourly_rate = 0;
+                    $timeLog->memo = $task_status->heading;
+                    $timeLog->save();
+        
+                    if ($request->project_id != '') {
+                        //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
+                        $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
+                    }
+                    else {
+                        $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
+                    }
+        
+                    $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
+        
+                    return response()->json([
+                        'status' => 'success',
+                        'message' => 'task timer started',
+                        'id' => $timeLog->id,
+                        'task_status'=> $task_board_column,
+                    ]);
                 }
-
-                $task->save();
-                $taskId = $task->id;
-            }
-
-            if ($request->project_id != '') {
-                $timeLog->project_id = $request->project_id;
-            }
-
-            $timeLog->task_id = $taskId;
-
-            $timeLog->user_id = $this->user->id;
-            $timeLog->start_time = now();
-            $timeLog->hourly_rate = 0;
-            $timeLog->memo = $task_status->heading;
-            $timeLog->save();
-
-            if ($request->project_id != '') {
-                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
-            }
-            else {
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
-            }
-
-            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'task timer started',
-                'id' => $timeLog->id,
-                'task_status'=> $task_board_column,
-            ]);
+        
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'timer already running',
+                   
+                ]);
+            
         }
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'timer already running',
-           
-        ]);
-
- }
- 
-    
- } else {
-    $task_status= Task::find($request->task_id);
-    $task_status->task_status="in progress";
-    $task_status->board_column_id= 3;
-    $task_status->save();
-    $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
-    //  dd($task_status);
-      $timeLog = new ProjectTimeLog();
-
-        $activeTimer = ProjectTimeLog::with('user')
-            ->whereNull('end_time')
-            ->join('users', 'users.id', '=', 'project_time_logs.user_id')
-            ->where('user_id', $this->user->id)->first();
-        if (is_null($activeTimer)) {
-            $taskId = $request->task_id;
-
-            if ($request->has('create_task')) {
-                $task = new Task();
-                $task->heading = $request->memo;
-                $task->board_column_id = $this->global->default_task_status;
-                $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
-                $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-                $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-
-                if ($request->project_id != '') {
-                    $task->project_id = $request->project_id;
-                }
-
-                $task->save();
-                $taskId = $task->id;
-            }
-
-            if ($request->project_id != '') {
-                $timeLog->project_id = $request->project_id;
-            }
-
-            $timeLog->task_id = $taskId;
-
-            $timeLog->user_id = $this->user->id;
-            $timeLog->start_time = now();
-            $timeLog->hourly_rate = 0;
-            $timeLog->memo = $task_status->heading;
-            $timeLog->save();
-
-            if ($request->project_id != '') {
-                //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
-            }
-            else {
-                $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
-            }
-
-            $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'task timer started',
-                'id' => $timeLog->id,
-                'task_status'=> $task_board_column,
-            ]);
-        }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'timer already running',
-           
-        ]);
-    
- }
    // dd($day);
      
 
