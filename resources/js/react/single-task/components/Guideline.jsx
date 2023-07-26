@@ -40,22 +40,22 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                             <hr/>
                             <div className="row">
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.site_url}>View on new tab</a></span> 
+                                    <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={workEnv?.site_url}>View on new tab</a></span> 
                                 </div>
 
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Frontend Password</strong>: <br/> {task?.workEnvData?.frontend_password}</span> 
+                                    <span><strong>Frontend Password</strong>: <br/> {workEnv?.frontend_password}</span> 
                                 </div>
 
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.login_url}>View on new tab</a> </span> 
+                                    <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={workEnv?.login_url}>View on new tab</a> </span> 
                                 </div>
 
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {task?.workEnvData?.email}</span> 
+                                    <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {workEnv?.email}</span> 
                                 </div>
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Password</strong>: <br/> {task?.workEnvData?.password}</span> 
+                                    <span><strong>Password</strong>: <br/> {workEnv?.password}</span> 
                                 </div>
                             </div>
                         </div>
