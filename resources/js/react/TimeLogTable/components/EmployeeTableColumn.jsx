@@ -12,7 +12,7 @@ export const EmployeeTableColumn = [
         group: true,
         sortAccessor: '', 
         cell: ({row, col, className, rowSpan}) => {
-            return <td className={`sp1_tlr_td sp1_tlr_td_border ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`} rowSpan={rowSpan}>
+            return <td className={`sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`} rowSpan={rowSpan}>
                 <UserRender
                     name={row?.employee_name}
                     profileUrl={`/account/employees/${row?.employee_id}`}

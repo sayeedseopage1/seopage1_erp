@@ -11,7 +11,7 @@ export const TaskWiseTableColumn = [
         sorted: false,
         cell: ({row, col, rowSpan=1}) => {
             return <td
-                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                 rowSpan={rowSpan}
             >
                 <a  href={`/account/tasks/${row?.task_id}`} >{row?.task_name}</a>
@@ -27,7 +27,7 @@ export const TaskWiseTableColumn = [
         sortAccessor: 'project_id',
         cell:  ({row, col, rowSpan=1}) => {
             return <td
-                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                 rowSpan={rowSpan}
             >
                 <a  href={`/account/tasks/${row?.task_id}`} >{row?.project_name}</a>
@@ -43,7 +43,7 @@ export const TaskWiseTableColumn = [
         sortAccessor: 'pm_id',
         cell:  ({row, col, rowSpan=1}) => {
             return <td
-                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                 rowSpan={rowSpan}
             >
                 <UserRender
@@ -65,7 +65,7 @@ export const TaskWiseTableColumn = [
         sortAccessor: 'client_id',
         cell:  ({row, col, rowSpan=1}) => {
             return <td
-                className={`sp1_tlr_td sp1_tlr_td_border  sp1_drag_col_${col?.id} ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                className={`sp1_tlr_td sp1_tlr_td_border  sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                 rowSpan={rowSpan}
             >
                 <UserRender

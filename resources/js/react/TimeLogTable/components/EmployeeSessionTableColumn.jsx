@@ -12,7 +12,7 @@ export const EmployeeSessionTableColumn = [
         cell: ({row, rowSpan, className}) =>{
                 return(
                  <td
-                    className={`sp1_tlr_td sp1_tlr_td_border ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                    className={`sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                     rowSpan={rowSpan}
                 >
                     <a  href={`/account/tasks/${row?.task_id}`} >{row?.task_name}</a>
@@ -31,7 +31,7 @@ export const EmployeeSessionTableColumn = [
             const totalLogTime = _.sumBy(data,  (d) => Number(d['total_minutes']));
                 return(
                  <td
-                    className={`sp1_tlr_td sp1_tlr_td_border ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                    className={`sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                     rowSpan={rowSpan}
                 >
                     Total Session: {totalSession} <br/>
@@ -63,7 +63,7 @@ export const EmployeeSessionTableColumn = [
         cell: ({row, rowSpan, className}) =>{
                 return(
                  <td
-                    className={`sp1_tlr_td sp1_tlr_td_border ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
+                    className={`sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                     rowSpan={rowSpan}
                 >
                     {convertTime(row?.totalLogTime)}/ <br/>{convertTime(row?.project_total_time_log)}
