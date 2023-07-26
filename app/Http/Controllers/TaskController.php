@@ -2402,11 +2402,16 @@ class TaskController extends AccountBaseController
             $data = TaskComment::find($data->id);
             return response()->json($data);
         } elseif ($request->mode == 'developer_first_task_check') {
-            $data = ProjectTimeLog::where([
-                'project_id' => $request->project_id,
-               // 'task_id' => $id,
-                'user_id' => Auth::id()
-            ])->first();
+            $user= Auth::user();
+            if (Auth::user()->role_id == 5) {
+                $data = ProjectTimeLog::where([
+                    'project_id' => $request->project_id,
+                   // 'task_id' => $id,
+                    'user_id' => Auth::id()
+                ])->first();
+            }
+            
+           
             //  dd($data);
 
             return response()->json([
