@@ -2446,14 +2446,9 @@ class TaskController extends AccountBaseController
     {
         $currentDateTime = Carbon::now();
         $desiredTime = Carbon::createFromTime(16, 29, 0); // 4:29 PM
+       // dd($desiredTime);
         
-        if ($currentDateTime <= $desiredTime) {
-            // Current time is not greater than 4:29 PM
-            // Add your logic here
-            return response()->json([
-                'error' => 'Something went wrong'
-            ], 400);
-        } else {
+       
             // Current time is greater than 4:29 PM
             // Add your logic here
             $stop_time = new DeveloperStopTimer();
@@ -2500,7 +2495,7 @@ class TaskController extends AccountBaseController
                
                 'parent_task_action'=> $parent_task_action,
             ]);
-         }
+         
     }
     public function DeveloperTrackedTime($id)
     {
