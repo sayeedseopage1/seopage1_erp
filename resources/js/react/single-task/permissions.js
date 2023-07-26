@@ -190,3 +190,31 @@ export function taskEditPermision({task, status, auth}){
 
     return statusPermission && assigneePermission;
 }
+
+
+// sub task creation permission
+
+export function subTaskCreationPermision({task, status, auth}){
+    let statusPermission = false;
+    let assigneePermission = false;
+    let statusId = status ? status.id : -1;
+    let assignedUser = task?.assigneeTo; 
+    let assignedBy = task?.assignedBy;
+    
+    // if status id 6 show timer start button
+    if([1,2,3].includes(Number(statusId))){ statusPermission = true }
+
+    // if task assign to 
+    if(
+        (
+            assignedUser?.getId() === auth?.getId() || 
+            assignedBy?.getId() === auth?.getId() 
+            &&  _.includes([5,6,9,10], auth?.getRoleId())
+        ) || 
+        auth?.getRoleId() === 1
+    ){
+        assigneePermission = true;
+    }
+
+    return statusPermission && assigneePermission;
+}

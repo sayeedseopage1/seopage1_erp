@@ -54,7 +54,7 @@ const PMGuideline = ({guideline}) => {
                         guideline?.theme_details > 0 &&
                         <div>
                             <span className='f-14 font-weight-bold d-block mb-2'>Provide Theme Details:</span>
-                            <div className="row">
+                            <div className="row word-break">
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2">
                                     <span><strong>Theme Name</strong>: <br/> {guideline?.theme_name}</span> 
                                 </div>
@@ -67,7 +67,7 @@ const PMGuideline = ({guideline}) => {
                     }
 
 
-                    <div className="row">
+                    <div className="row word-break">
                         <div className="col-12 col-lg-6 col-xl-4 mb-2">
                             <span><strong>Design</strong>: <br/> {guideline?.design}</span> 
                         </div>
@@ -78,7 +78,7 @@ const PMGuideline = ({guideline}) => {
 
                     {
                         _.size(_.toArray(colors)) > 0 &&
-                        <div>
+                        <div className='word-break'>
                             <span className='f-14 font-weight-bold d-block mb-2'>Color Details</span>
                             <div className='row'>
                                 {_.map(_.toArray(colors), (color, index) => ( 
@@ -92,7 +92,7 @@ const PMGuideline = ({guideline}) => {
                         guideline?.plugin_research > 0 && 
                         <div>
                             <span className='f-14 font-weight-bold d-block mb-2'> Necessary Plugins: </span>
-                            <div className="row">
+                            <div className="row word-break">
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2">
                                     <span><strong>Plugin Name</strong>: <br/> {guideline?.plugin_name}</span> 
                                 </div>

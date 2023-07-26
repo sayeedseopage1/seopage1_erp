@@ -39,23 +39,23 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                             <h6 className="mb-2">Working Environment</h6>
                             <hr/>
                             <div className="row">
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                    <span><strong>Working/Staging Site's URL</strong>: <br/> {workEnv?.site_url}</span> 
+                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                    <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.site_url}>View on new tab</a></span> 
                                 </div>
 
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                    <span><strong>Frontend Password</strong>: <br/> {workEnv?.frontend_password}</span> 
+                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                    <span><strong>Frontend Password</strong>: <br/> {task?.workEnvData?.frontend_password}</span> 
                                 </div>
 
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                    <span><strong>Working/Staging Site's Login URL</strong>: <br/>{workEnv?.login_url}</span> 
+                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                    <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.login_url}>View on new tab</a> </span> 
                                 </div>
 
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                    <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {workEnv?.email}</span> 
+                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                    <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {task?.workEnvData?.email}</span> 
                                 </div>
-                                <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                    <span><strong>Password</strong>: <br/> {workEnv?.password}</span> 
+                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                    <span><strong>Password</strong>: <br/> {task?.workEnvData?.password}</span> 
                                 </div>
                             </div>
                         </div>
@@ -63,7 +63,7 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                 )}
 
                 <div className='__content'> 
-                    <div className={`sp1_ck_content ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
+                    <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
                 </div>
 
                 <div className=' __footer'>

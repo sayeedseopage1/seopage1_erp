@@ -4,7 +4,7 @@ import Button from "../../components/Button";
 import { useWorkingEnvironmentMutation } from "../../../services/api/SingleTaskPageApi";
 import SubmitButton from "../../components/SubmitButton";
 
-const WorkingEnvironmentForm = ({task, close}) => {
+const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
     const [siteUrl, setSiteUrl] = useState("");
     const [frontendPassword, setFrontendPassword] = useState("");
     const [loginUrl, setLoginUrl] = useState("");
@@ -35,7 +35,11 @@ const WorkingEnvironmentForm = ({task, close}) => {
             frontend_password: frontendPassword
         }
 
-        workingEnvironment(data).unwrap().then(res => close())
+        workingEnvironment(data).unwrap().then(res => {
+            close(),
+            onSubmit();
+        })
+
     };
 
     return (

@@ -11,6 +11,7 @@ const initialState = {
     lessTrackModal: false,
     timerRunningTime: 0,
     isTimerRunning: false,
+    isWorkingEnvironmentSubmit: false,
 };
 
 const subTaskSlice = createSlice({
@@ -55,6 +56,11 @@ const subTaskSlice = createSlice({
             state.lessTrackModal = action.payload.show;
             state.lessTrackModalFor = action.payload.type
         },
+
+        // set working environment sumbition
+        setWorkingEnvironmentStatus: (state, action) => {
+            state.isWorkingEnvironmentSubmit = action.payload;
+        }
     },
 });
 
@@ -68,5 +74,6 @@ export const {
     storeHistories,
     setLessTrackModal,
     setTimerStatus,
+    setWorkingEnvironmentStatus
 } = subTaskSlice.actions;
 export default subTaskSlice.reducer;

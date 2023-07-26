@@ -19,7 +19,7 @@ import { User } from "../../../utils/user-details";
 
 
 // component
-const TimerControl = ({ task, timerStart, setTimerStart }) => {
+const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
@@ -201,7 +201,8 @@ const TimerControl = ({ task, timerStart, setTimerStart }) => {
                 }
 
                 let check = dayjs.dayjs(currentTime).isBefore(target);
-                if(!check){
+                let isDev = _.includes([5], Number(auth.getRoleId()));
+                if(!check && isDev){
                     res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER'})) : stopTimer()
                 }else{
                     stopTimer();

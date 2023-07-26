@@ -1,5 +1,4 @@
-import * as React from "react";
-import Button from "./components/Button";
+import * as React from "react"; 
 import Accordion from "./components/Accordion";
 import Guideline from "./components/Guideline";
 import RevisionText from "./components/RevisionText";
@@ -16,7 +15,7 @@ import _ from "lodash";
 import dayjs from "dayjs";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { storeTask } from "../services/features/subTaskSlice";
+import { setWorkingEnvironmentStatus, storeTask } from "../services/features/subTaskSlice";
 import TaskAction from "./section/task-actions/TaskAction";
 import Loading from "./components/Loading";
 import { SingleTask } from "../utils/single-task";
@@ -226,22 +225,22 @@ const SingleTaskPage = () => {
                                                 <h6 className="mb-2">Working Environment</h6>
                                                 <hr/>
                                                 <div className="row">
-                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                                        <span><strong>Working/Staging Site's URL</strong>: <br/> {task?.workEnvData?.site_url}</span> 
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                        <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.site_url}>View on new tab</a></span> 
                                                     </div>
 
-                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                         <span><strong>Frontend Password</strong>: <br/> {task?.workEnvData?.frontend_password}</span> 
                                                     </div>
 
-                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
-                                                        <span><strong>Working/Staging Site's Login URL</strong>: <br/>{task?.workEnvData?.login_url}</span> 
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                        <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.login_url}>View on new tab</a> </span> 
                                                     </div>
 
-                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                         <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {task?.workEnvData?.email}</span> 
                                                     </div>
-                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2">
+                                                    <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                         <span><strong>Password</strong>: <br/> {task?.workEnvData?.password}</span> 
                                                     </div>
                                                 </div>
@@ -374,7 +373,7 @@ const SingleTaskPage = () => {
 
                         {/* comments */}
                         {task && task?.id && <CommentSection task={task} isLoading={isFetching} /> }
-                        <SubTaskSection />
+                        <SubTaskSection status={taskStatus} />
                         <NoteSection />
                         {task && task?.id && <SubmittedWork task={task} />}
                         <TimeLogSection />

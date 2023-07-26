@@ -17,14 +17,14 @@ import {
 import { useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
-import { storeSubTasks } from "../../../services/features/subTaskSlice";
+import { setWorkingEnvironmentStatus, storeSubTasks } from "../../../services/features/subTaskSlice";
 import { CompareDate } from "../../../utils/dateController";
 import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
 import { SingleTask } from "../../../utils/single-task";
 import { useEffect } from "react";
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
-    const { task:taskDetails, subTask } = useSelector((s) => s.subTask);
+    const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
     const [showEnvForm, setShowEnvForm] = useState(false);
@@ -156,15 +156,11 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         if (minErr) errText += minErr;
         return errText;
     };
-
-
-    
+ 
 
     useEffect(() => {
         const showEnv = task?.workingEnvironment === 0 ? _.size(task?.subtask) === 0 ? true : false : false;
-        setShowEnvForm(showEnv);
-
-        return () => setShowEnvForm(false);
+        dispatch(setWorkingEnvironmentStatus(showEnv)) 
     }, [])
 
     return (
@@ -172,7 +168,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <h6>
-                        { showEnvForm ? "Working Environment" : "Create Sub Task"}
+                        { isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
                     </h6>
                     <Button
                         aria-label="close-modal"
@@ -185,10 +181,15 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body">
                     {/* working environment form */}
-                    {showEnvForm && <WorkingEnvironmentForm task={task} close={() => setShowEnvForm(false)} /> }
+                    {isWorkingEnvironmentSubmit && 
+                    <WorkingEnvironmentForm 
+                        task={task} 
+                        onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
+                        close={() => setShowEnvForm(false)} 
+                    /> }
                     {/* end working environment form */}
 
-                    {!showEnvForm && (
+                    {!isWorkingEnvironmentSubmit && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
                                 <Input
@@ -369,9 +370,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                         {estimateError(required_error)}
                                     </div>
                                     <div style={{ color: "red" }}>
-                                        Estimation time can't exceed{" "}
-                                        {estimation?.hours_left} hours{" "}
-                                        {estimation?.minutes_left} minutes
+                                        Estimation time can't exceed {task?.getEstimateTime()}
                                     </div>
                                 </div>
                             </div>

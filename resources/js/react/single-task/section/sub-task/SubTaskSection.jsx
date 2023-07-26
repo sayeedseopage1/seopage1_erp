@@ -14,8 +14,11 @@ import CustomModal from "../../components/CustomModal";
 import {useWindowSize} from 'react-use';
 import Modal from "../../components/Modal";
 import _ from "lodash";
+import { User } from "../../../utils/user-details";
+import { SingleTask } from '../../../utils/single-task';
+import { subTaskCreationPermision } from "../../permissions";
 
-const SubTaskSection = () => {
+const SubTaskSection = ({status}) => {
     const { task, subTask } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,6 +28,7 @@ const SubTaskSection = () => {
     const [subtaskModalToggleRef, setSubtaskModalToggleRef] =
         React.useState(null);
     const {width} = useWindowSize();
+    const auth = new User(window?.Laravel?.user);
 
     const toggleAddButton = () => setIsTaskModalOpen(!isTaskModalOpen);
     const closeAddModal = () => {
@@ -90,6 +94,8 @@ const SubTaskSection = () => {
     //     dispatch(storeSubTasks(data));
     //   }
     // },[data])
+
+    const Task = new SingleTask(task);
 
     return (
         <div
@@ -170,7 +176,9 @@ const SubTaskSection = () => {
                     )}
                 </div>
 
-                <Button
+               {
+                    subTaskCreationPermision({task: Task, auth, status}) && 
+                    <Button
                     variant="tertiary"
                     className="sp1_tark_add_item"
                     aria-label="addButton"
@@ -186,6 +194,7 @@ const SubTaskSection = () => {
                         </React.Fragment>
                     )}
                 </Button>
+               } 
             </div>
 
             <div className="sp1_task_right_card--body">

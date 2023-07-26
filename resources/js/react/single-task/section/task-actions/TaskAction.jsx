@@ -22,7 +22,7 @@ const TaskAction = ({task, status}) => {
   return ( 
         <div className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group" style={{gap: '10px'}}>
             {/* with permision */}
-            {timeControlPermision({task, status, loggedUser}) ? <TimerControl task={task} timerStart={timerStart} setTimerStart={setTimerStart} /> : null }  
+            {timeControlPermision({task, status, loggedUser}) ? <TimerControl task={task} timerStart={timerStart} setTimerStart={setTimerStart} auth={loggedUser} /> : null }  
             {!timerStart && markAsCompletedButtonPermission({task, status, loggedUser}) ? <MarkAsComplete task={task} auth={loggedUser} />  : null }
 
             {/* develop */}

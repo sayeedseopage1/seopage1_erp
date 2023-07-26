@@ -2445,7 +2445,7 @@ class TaskController extends AccountBaseController
     public function DeveloperStopTask(Request $request)
     {
         $currentDateTime = Carbon::now();
-        $desiredTime = Carbon::createFromTime(10, 29, 0); // 4:29 PM
+        $desiredTime = Carbon::createFromTime(16, 29, 0); // 4:29 PM
         
         if ($currentDateTime <= $desiredTime) {
             // Current time is not greater than 4:29 PM
