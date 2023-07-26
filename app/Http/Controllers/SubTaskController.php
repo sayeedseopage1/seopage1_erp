@@ -180,7 +180,7 @@ class SubTaskController extends AccountBaseController
 
         $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
         //dd($parent_task_authorization);
-        if($parent_task_authorization->status == 0)
+        if($parent_task_authorization != null && $parent_task_authorization->status == 0)
         {
             $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
             $task_authorization= AuthorizationAction::find($parent_task_authorization->id);
