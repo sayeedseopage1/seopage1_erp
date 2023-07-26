@@ -252,74 +252,32 @@ const SingleTaskPage = () => {
                                     <Guideline text={task?.guidelines} workEnv={task?.workEnvData} />
                                 </Accordion>
 
-                                <Accordion
-                                    title={_.last(task?.revisions)?.revisionStatus}
-                                    headingClass="d-flex align-items-center justify-content-between"
-                                    headingStyle={{
-                                        background: "rgba(227,62,79,1)",
-                                        color: "#fff",
-                                    }}
-                                >
+                                {
+                                    _.size(task?.revisions) > 0 &&
+                                    <Accordion
+                                        title={_.last(task?.revisions)?.revisionStatus}
+                                        headingClass="d-flex align-items-center justify-content-between"
+                                        headingStyle={{
+                                            background: "rgba(227,62,79,1)",
+                                            color: "#fff",
+                                        }}
+                                    >
 
-                                    {
-                                       _.map(task?.revisions, (revision, index) => (
-                                            <RevisionText
-                                                key={revision.id}
-                                                index={index + 1}
-                                                date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
-                                                time={dayjs(revision.createdAt).format('hh:mm a')}
-                                                text={revision?.comment}
-                                            />
-                                        ))
-                                    }
-                                    
-                                </Accordion>
+                                        {
+                                        _.map(task?.revisions, (revision, index) => (
+                                                <RevisionText
+                                                    key={revision.id}
+                                                    index={index + 1}
+                                                    date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
+                                                    time={dayjs(revision.createdAt).format('hh:mm a')}
+                                                    text={revision?.comment}
+                                                />
+                                            ))
+                                        }
+                                        
+                                    </Accordion>
 
-                                {/* <Accordion
-                                    title="Task Revision from Project Manager"
-                                    headingClass="d-flex align-items-center justify-content-between"
-                                    headingStyle={{
-                                        background: "rgba(227,62,79,1)",
-                                        color: "#fff",
-                                    }}
-                                >
-                                    <RevisionText
-                                        index="01"
-                                        date="Jan 06, 2023"
-                                        time="03:33PM"
-                                        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with"
-                                    />
-
-                                    <RevisionText
-                                        index="01"
-                                        date="Jan 06, 2023"
-                                        time="03:33PM"
-                                        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with"
-                                    />
-                                </Accordion> */}
-
-                                {/* <Accordion
-                                    title="Task Revision from Lead Developer"
-                                    headingClass="d-flex align-items-center justify-content-between"
-                                    headingStyle={{
-                                        background: "rgba(227,62,79,1)",
-                                        color: "#fff",
-                                    }}
-                                >
-                                    <RevisionText
-                                        index="01"
-                                        date="Jan 06, 2023"
-                                        time="03:33PM"
-                                        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with  a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with"
-                                    />
-
-                                    <RevisionText
-                                        index="01"
-                                        date="Jan 06, 2023"
-                                        time="03:33PM"
-                                        text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with"
-                                    />
-                                </Accordion> */}
+                                }
 
                                 <Accordion
                                     expendable={false}

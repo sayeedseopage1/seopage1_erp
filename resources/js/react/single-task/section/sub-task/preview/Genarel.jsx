@@ -245,28 +245,29 @@ const Genarel = ({task, isFetching}) => {
                     }
                 </Accordion>
 
-                <Accordion
-                    title={_.last(task?.revisions)?.revisionStatus}
-                    headingClass="d-flex align-items-center justify-content-between"
-                    headingStyle={{
-                        background: "rgba(227,62,79,1)",
-                        color: "#fff",
-                    }}
-                >
+                {_.size(task?.revisions) > 0 &&
+                    <Accordion
+                        title={_.last(task?.revisions)?.revisionStatus}
+                        headingClass="d-flex align-items-center justify-content-between"
+                        headingStyle={{
+                            background: "rgba(227,62,79,1)",
+                            color: "#fff",
+                        }}
+                    >
 
-                    {
-                        _.map(task?.revisions, (revision, index) => (
-                            <RevisionText
-                                key={revision.id}
-                                index={index + 1}
-                                date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
-                                time={dayjs(revision.createdAt).format('hh:mm a')}
-                                text={revision?.comment}
-                            />
-                        ))
-                    }
-                    
-                </Accordion>
+                        {_.map(task?.revisions, (revision, index) => (
+                                <RevisionText
+                                    key={revision.id}
+                                    index={index + 1}
+                                    date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
+                                    time={dayjs(revision.createdAt).format('hh:mm a')}
+                                    text={revision?.comment}
+                                />
+                            ))
+                        }
+                        
+                    </Accordion>
+                }
 
                 <Accordion expendable={false} title="Task Descriptions">
                     <Guideline text={task?.description} />
