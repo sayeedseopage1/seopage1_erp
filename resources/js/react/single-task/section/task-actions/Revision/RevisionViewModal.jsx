@@ -111,7 +111,7 @@ const RevisionViewModal = ({task, close}) => {
                 {show === "DENY_AND_CONTINUE" && 
                     <DenyAndContinue
                         task={task} 
-                        onSubmit={data => hanldeAcceptAndContinueSubmition(data, 'deny', "DENY_ASSINEE_TO_DEV")}
+                        onSubmit={data => hanldeAcceptAndContinueSubmition(data, "DENY_ASSINEE_TO_DEV")}
                         isSubmitting = {isLoadingRevisionReview}
                         onBack={() => setShow("REVISION")}
                     />

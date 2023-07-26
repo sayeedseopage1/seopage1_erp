@@ -178,7 +178,7 @@ export function taskEditPermision({task, status, auth}){
     let assignedUser = task?.assigneeBy; 
     
     // if status id 6 show timer start button
-    if([9].includes(Number(statusId))){ statusPermission = true; }
+    if([1,2,3].includes(Number(statusId))){ statusPermission = true; }
 
     // if task assign to 
     if(

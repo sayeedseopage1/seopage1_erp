@@ -8,14 +8,14 @@ import _ from "lodash";
 
 const AssigneeRevisionToDev = ({
     task,
-    // onBack,
+    onBack,
     onSubmit,
     isSubmitting = false,
 }) => {
     const [reason, setReason] = useState("");
     const [reasonError, setReasonError] = useState("");
     const [comments, setComments] = useState([]);
-    const [commentError, setCommentError] = useState([]);
+    const [commentError, setCommentError] = useState(false);
     const [subtasks, setSubtasks] = useState([]);
     const [subtaskError, setSubtaskError] = useState("");
 
@@ -29,14 +29,14 @@ const AssigneeRevisionToDev = ({
         const data = editor.getData(); 
         const _comments = [...comments];
 
-        const index = _comments?.findIndex(d => d.subtask_id === id); 
+        const index = _comments?.findIndex(d => d.id === id); 
         if(index === -1){
             _comments.push({
-                subtask_id: id,
+                id: id,
                 comment: data
             })
         }else{
-           _comments[index] = {subtask_id: id, comment: data}
+           _comments[index] = {id: id, comment: data}
         }
 
         setComments([..._comments]);
@@ -58,20 +58,16 @@ const AssigneeRevisionToDev = ({
             }
 
             if(comments.length === 0 || comments.length !== subtasks.length){
-                const err = [];
                 errorCount++;
-                comments?.map(c => err.push(c.subtask_id))
-                setCommentError(err)
+                setCommentError(true)
             }
 
             comments?.map( comment =>{
                 if(comment?.comment === ''){
-                    const err = [];
                     errorCount++;
-                    comments?.map(c => err.push(c.subtask_id))
-                    setCommentError(err)
+                    setCommentError(true)
                 }
-            })
+            })  
        } 
 
         return errorCount === 0 ? true : false;
@@ -86,7 +82,8 @@ const AssigneeRevisionToDev = ({
             reason,
             comments,
         }; 
-        if(validate()){
+        console.log({comments, sub: task?.subtask, subtasks})
+        if(validate()){ 
             onSubmit(data)
         }
     };
@@ -207,14 +204,16 @@ const AssigneeRevisionToDev = ({
                         <label htmlFor="" className="font-weight-bold">
                             Comment:
                         </label>
+                        {console.log(subtasks)}
                         {subtasks.map((s, i) => (
-                            <React.Fragment key={s.subtask_id}>
+                            <React.Fragment key={s.id}>
                                 <div className="form-group">
-                                    <label htmlFor="" className="font-weight-bold">{i+1}. {s?.title}<sup className="font-weight-bold f-16">*</sup> :</label>
+                                    <label htmlFor="" className="font-weight-bold">{i+1}. Task: {s?.title}</label> <br/>
+                                    <label className="font-weight-bold">Write Your Revision<sup className="font-weight-bold f-16">*</sup>: </label>
                                     <div className="ck-editor-holder">
-                                        <CKEditorComponent onChange={(e, editor) =>hanldeEditorTextChange(e, editor, s?.subtask_id)} />
+                                        <CKEditorComponent onChange={(e, editor) =>hanldeEditorTextChange(e, editor, s?.id)} />
                                     </div>
-                                    {commentError.includes(s.subtask_id) && (
+                                    {commentError && (
                                         <small id="emailHelp" className="form-text text-danger">
                                             You have to explain the revision in details, so that Developer can understand where they need to work.
                                         </small>
@@ -228,14 +227,14 @@ const AssigneeRevisionToDev = ({
                 
 
                 <div className="mt-3 mb-3 d-flex align-items-center">
-                    <Button
+                    {/* <Button
                         onClick={onBackButtonClick}
                         variant="tertiary"
                         className="ml-auto mr-2"
                     >
                         Back
                     </Button>
-                    
+                     */}
                     <NextAndContinueButton
                         onClick={handleSubmition}
                         isLoading={isSubmitting}
@@ -295,7 +294,7 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                         task?.subtask?.map((s) => (
                             <Listbox.Option
                                 value={s}
-                                key={s.subtask_id}
+                                key={s.id}
                                 tabIndex={-1}
                                 className={({ active }) => active
                                         ? "task-selection-list-option active"
