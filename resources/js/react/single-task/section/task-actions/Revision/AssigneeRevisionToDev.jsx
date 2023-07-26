@@ -33,10 +33,11 @@ const AssigneeRevisionToDev = ({
         if(index === -1){
             _comments.push({
                 id: id,
+                subtask_id: id,
                 comment: data
             })
         }else{
-           _comments[index] = {id: id, comment: data}
+           _comments[index] = {id: id, subtask_id: id, comment: data}
         }
 
         setComments([..._comments]);
@@ -82,7 +83,6 @@ const AssigneeRevisionToDev = ({
             reason,
             comments,
         }; 
-        console.log({comments, sub: task?.subtask, subtasks})
         if(validate()){ 
             onSubmit(data)
         }
@@ -204,7 +204,6 @@ const AssigneeRevisionToDev = ({
                         <label htmlFor="" className="font-weight-bold">
                             Comment:
                         </label>
-                        {console.log(subtasks)}
                         {subtasks.map((s, i) => (
                             <React.Fragment key={s.id}>
                                 <div className="form-group">
@@ -249,10 +248,10 @@ export default AssigneeRevisionToDev;
 
 const NextAndContinueButton = ({ onClick, isLoading }) => {
     if (!isLoading) {
-        return <Button onClick={onClick}>Accept & Continue</Button>;
+        return <Button className="ml-auto" onClick={onClick}>Accept & Continue</Button>;
     } else {
         return (
-            <Button className="cursor-processing">
+            <Button className="cursor-processing ml-auto">
                 <div
                     className="spinner-border text-white mr-2"
                     role="status"

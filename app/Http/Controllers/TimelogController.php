@@ -637,7 +637,7 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-        //dd($request);
+       // dd($request);
     //  /  DB::beginTransaction();
         $timeId = $request->id;
         //dd( $timeId);
@@ -655,9 +655,9 @@ class TimelogController extends AccountBaseController
         || ($editTimelogPermission == 'both' && (($timeLog->project && $timeLog->project->client_id == user()->id) || $timeLog->user_id == user()->id || $timeLog->added_by == user()->id))
         ));
 
-        $timeLog->end_time = now();
+        $timeLog->end_time = Carbon::now();
         $timeLog->save();
-       // dd($timeLog);
+     //   dd($timeLog);
 
         $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
