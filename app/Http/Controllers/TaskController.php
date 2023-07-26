@@ -2592,4 +2592,44 @@ class TaskController extends AccountBaseController
       ]);
 
     }
+    public function TaskTimeCheck($id)
+    {
+        $subtasks= Subtask::where('task_id',$id)->get();
+        foreach ($subtasks as $subtask) {
+            $task_id= Task::where('subtask_id',$subtask->id)->first();
+            $task =ProjectTimelog::where('task_id',$task_id->id)->where('end_time',null)->first();
+            if ($task != null) {
+
+                return response()->json([
+                    'status' => 400,
+                    'task'=> $task,
+                    'message'=> 'You cannot edit the task because timer is already running',
+                ]);
+            }else 
+            {
+                return response()->json([
+                    'status' => 200,
+                   
+                ]);
+    
+            }
+            
+
+        }
+        $task= ProjectTimeLOg::where('task_id',$id)->where('end_time',null)->first();
+        if ($task != null) {
+            return response()->json([
+                'status' => 400,
+                'task'=> $task,
+                'message'=> 'You cannot edit the task because timer is already running',
+            ]);
+        }else 
+        {
+            return response()->json([
+                'status' => 200,
+               
+            ]);
+
+        }
+    }
 }

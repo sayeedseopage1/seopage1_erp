@@ -5,6 +5,7 @@ import Guideline from "../../../components/Guideline";
 import RevisionText from "../../../components/RevisionText";
 import GenarelLoader from "../../../components/loader/GenarelLoader";
 import ArticleLoader from "../../../components/loader/ArticleLoader";
+import dayjs from "dayjs";
 
 const Genarel = ({task, isFetching}) => { 
     const loggedUser = new User(window?.Laravel?.user);

@@ -56,7 +56,7 @@ const NoteSection = () => {
   }
 
   return (
-    <div className='sp1_task_right_card mb-3' style={{zIndex: mode ? '99' : ''}}>
+    <div className='sp1_task_right_card mb-3' ref={setModalRefButton} style={{zIndex: mode ? '99' : ''}}>
        <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
           <span className="f-16">Notes</span>
           {isFetching && 
@@ -90,7 +90,7 @@ const NoteSection = () => {
         {/* left dropdown */}
         {mode && <button 
           aria-label='openCommentModalButton'  
-          ref={setModalRefButton}
+          
           className='sp1_task_right_dl_toggle'
           onClick={close}
           style={{zIndex: mode ? '110' : ''}}

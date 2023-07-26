@@ -3,16 +3,59 @@ import { Link, useNavigate } from "react-router-dom";
 import PreviewSubtask from "./PreviewSubtask";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
+import { User } from "../../../utils/user-details";
+import { SingleTask } from "../../../utils/single-task";
+import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
 
 const SubTask = ({ subTask, task, toggleEditForm }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const navigate = useNavigate()
+    const [isOpen, setIsOpen] = useState(false); 
+    const auth = new User(window?.Laravel?.user);
+    const _task = new SingleTask(task); 
+
+    const [checkSubTaskTimer, {isFetching}] = useLazyCheckSubTaskTimerQuery()
 
     const toggle = (e) => {
       e.preventDefault();
       e.stopPropagation();
-
       setIsOpen(true);
+    }
+ 
+    const hasEditPermission = () => {
+        return _task?.assigneeBy.getId() === auth?.getId() || auth?.getRoleId() === 1;
+    }
+
+    const onEdit = (e) => {
+        e.preventDefault();
+        checkSubTaskTimer(subTask?.id)
+        .unwrap()
+        .then(res=>{
+            if(res?.status === 200){
+                toggleEditForm(e, subTask?.id)
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'You cannot edit the task because timer is already running', 
+                })
+            }
+        })
+    }
+
+    const onModalEditButtonClick = (e) => {
+        e.preventDefault();
+        checkSubTaskTimer(subTask?.id)
+        .unwrap()
+        .then(res=>{
+            if(res?.status === 200){
+                window.location = `/account/tasks/${subTask?.id}/edit`
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'You cannot edit the task because timer is already running', 
+                })
+            }
+        })
     }
 
     return (
@@ -21,26 +64,38 @@ const SubTask = ({ subTask, task, toggleEditForm }) => {
             style={{ gap: "16px" }}
         >
             <div className="w-100 text-ellipsis">
-                <Link to="#" onClick={toggle} >
+                <div onClick={toggle} className="hover-underline" style={{cursor: 'pointer'}}>
                     {subTask?.title}
-                </Link>
+                </div>
             </div>
 
             <div className="d-flex align-items-center">
-                <Link
-                    to="#"
+                <div 
                     onClick={toggle}
                     className="mr-2 py-2 sp1_task_righ_action_btn"
+                    style={{cursor: 'pointer'}}
                 >
                     <i className="fa-regular fa-eye"></i>
-                </Link>
-                <Link
-                    to="#"
-                    onClick={(e) => toggleEditForm(e, subTask?.id)}
-                    className="mr-2 py-2 sp1_task_righ_action_btn"
-                >
-                    <i className="fa-regular fa-pen-to-square"></i>
-                </Link>
+                </div>
+                {
+                    hasEditPermission() && <div 
+                        onClick={onEdit}
+                        className="mr-2 py-2 sp1_task_righ_action_btn"
+                        style={{cursor: 'pointer'}}
+                    >
+                        {isFetching ?  <div
+                            className="spinner-border text-dark ml-2"
+                            role="status"
+                            style={{
+                                width: "16px",
+                                height: "16px",
+                                border: "0.14em solid rgba(0, 0, 0, .25)",
+                                borderRightColor: "transparent",
+                            }}
+                        /> :<i className="fa-regular fa-pen-to-square"></i>}
+                    </div>
+                }
+                
             </div>
 
 
@@ -65,7 +120,19 @@ const SubTask = ({ subTask, task, toggleEditForm }) => {
                                 </span>
                             </div>
                             <div className="d-flex align-items-center ml-auto">
-                                <a href={`/account/tasks/${subTask?.id}`} target="__blank" className="border text-dark mr-2 px-2">
+                                {hasEditPermission() && <a href="#" onClick={onModalEditButtonClick} className="border text-dark mr-2 py-1 px-2">
+                                    {isFetching ?  <div
+                                        className="spinner-border text-dark ml-2"
+                                        role="status"
+                                        style={{
+                                            width: "16px",
+                                            height: "16px",
+                                            border: "0.14em solid rgba(0, 0, 0, .25)",
+                                            borderRightColor: "transparent",
+                                        }}
+                                    /> :<i className="fa-regular fa-pen-to-square"></i>}
+                                </a>}
+                                <a href={`/account/tasks/${subTask?.id}`} target="__blank" className="border text-dark mr-2 py-1 px-2">
                                     <i className="fa-solid fa-up-right-and-down-left-from-center" />
                                 </a>
                                 <Button onClick={() => setIsOpen(false)} className="">

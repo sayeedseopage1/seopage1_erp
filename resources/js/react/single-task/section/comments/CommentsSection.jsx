@@ -47,6 +47,7 @@ const CommentSection = ({task, isLoading}) => {
     <>
         <div 
             className='sp1_task_right_card mb-3'
+            ref={setModalToggleRef} 
             style={{zIndex:modalIsOpen ? '99': '' }}
         >
             <CommentModal 
@@ -60,7 +61,6 @@ const CommentSection = ({task, isLoading}) => {
 
             <button 
               aria-label='openCommentModalButton' 
-              ref={setModalToggleRef} 
               className='sp1_task_right_dl_toggle'
               onClick={toggleModalButton} 
               style={{zIndex:modalIsOpen ? '110': '' }}

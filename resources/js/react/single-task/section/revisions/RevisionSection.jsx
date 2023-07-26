@@ -31,13 +31,13 @@ const RevisionSection = ({task}) => {
   comment = comment || `<span className='' style="color: #A7A9B2">No Comment is Available</span>`
  
   return (
-    <div className="sp1_task_right_card mb-3" style={{maxHeight:'450px'}}>  
+    <div className="sp1_task_right_card mb-3" ref={setToggleRef} style={{maxHeight:'450px'}}>  
 
         {/* side drop toggle button */}
         {isOpen && (
             <button 
                 aria-label='openCommentModalButton'  
-                ref={setToggleRef}
+                
                 className='sp1_task_right_dl_toggle'
                 onClick={toggle}
                 style={{zIndex: isOpen ? '110' : ''}}

@@ -35,7 +35,8 @@ const SubmittedWork = ({task}) => {
   }
  
   return (
-    <div className='sp1_task_right_card mb-3' 
+    <div className='sp1_task_right_card mb-3'  
+    ref={setModalRefButton} 
     style={{zIndex:  (preview || modal === 'submitted-work') ? 99 : ''}}>
         <div className='d-flex border-bottom pb-2 align-items-center justify-content-between mb-2 font-weight-bold'>
         <span className="f-16">Submitted Works</span> 
@@ -58,8 +59,7 @@ const SubmittedWork = ({task}) => {
        {
         _.size(data) > 0 &&
         <button 
-            aria-label='openCommentModalButton'  
-            ref={setModalRefButton}
+            aria-label='openCommentModalButton'
             className='sp1_task_right_dl_toggle'
             onClick={toggle}
             style={{zIndex:  (preview || modal === 'submitted-work') ? '110' : ''}}

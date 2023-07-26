@@ -100,6 +100,7 @@ const SubTaskSection = ({status}) => {
     return (
         <div
             className="sp1_task_right_card mb-3"
+            ref={setSubtaskModalToggleRef}
             style={{ zIndex: isTaskModalOpen ? "99" : "" }}
         >
             
@@ -144,7 +145,7 @@ const SubTaskSection = ({status}) => {
             {isTaskModalOpen && (
                 <button
                     aria-label="openCommentModalButton"
-                    ref={setSubtaskModalToggleRef}
+                    
                     className="sp1_task_right_dl_toggle"
                     onClick={toggleAddButton}
                     style={{ zIndex: isTaskModalOpen ? "110" : "" }}
