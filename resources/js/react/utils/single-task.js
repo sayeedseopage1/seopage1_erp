@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import { User } from './user-details';
+import _ from 'lodash';
 
 // board column
 export class BoardColumn{
@@ -128,6 +129,30 @@ export class ProjectMangerGuideline {
 }
 
 
+// task revisions
+export class TaskRevision {
+    constructor(data) {
+      this.acceptAndContinue = data?.accept_and_continue;
+      this.addedBy = data?.added_by;
+      this.approvalStatus = data?.approval_status;
+      this.clientRevisionAcknowledgement = data?.client_revision_acknowledgement;
+      this.comment = data?.comment;
+      this.createdAt = data?.created_at;
+      this.denyAndContinue = data?.deny_and_continue;
+      this.devComment = data?.dev_comment;
+      this.id = data?.id;
+      this.pmComment = data?.pm_comment;
+      this.projectId = data?.project_id;
+      this.revisionAcknowledgement = data?.revision_acknowledgement;
+      this.revisionNo = data?.revision_no;
+      this.revisionReason = data?.revision_reason;
+      this.revisionStatus = data?.revision_status;
+      this.subtaskId = data?.subtask_id;
+      this.taskId = data?.task_id;
+      this.updatedAt = data?.updated_at;
+    } 
+  }
+  
 
 // single task 
 export class SingleTask {
@@ -162,6 +187,7 @@ export class SingleTask {
         this.workEnvData = task?.working_environment_data;
         this.hasProjectManagerGuideline = task?.pm_task_guideline ? true : false;
         this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
+        this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision)) 
     }
 
     isLeadDeveloperAbleToSubmit () {
