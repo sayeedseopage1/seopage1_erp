@@ -640,8 +640,25 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-     dd($request);
-    //  /  DB::beginTransaction();
+    // dd($request);
+     if(Auth::user()->role_id == 1)
+     {
+        $timeId = $request->timeId;
+     //   dd( $timeId);
+        $timeLog = ProjectTimeLog::find($timeId);
+       // dd($timeLog);
+        $timeLog->end_time = Carbon::now();
+        $timeLog->save();
+     //   dd($timeLog);
+
+        $timeLog->total_hours = (int)$timeLog->end_time->diff($timeLog->start_time)->format('%d') * 24 + (int)$timeLog->end_time->diff($timeLog->start_time)->format('%H');
+        $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
+        $timeLog->edited_by_user = $this->user->id;
+        $timeLog->save();
+       
+
+     }else 
+     {
         $timeId = $request->id;
         //dd( $timeId);
         $timeLog = ProjectTimeLog::find($timeId);
@@ -677,7 +694,7 @@ class TimelogController extends AccountBaseController
         }
 
         if (!is_null($timeLog->project_id)) {
-            //$this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerStoppedBy');
+            $this->logProjectActivity($timeLog->project_id, 'modules.tasks.timerStoppedBy');
         }
 
         if (!is_null($timeLog->task_id)) {
@@ -707,6 +724,9 @@ class TimelogController extends AccountBaseController
             'message'=> 'Timer Stopped Successfully',
         ]);
        
+     }
+    //  /  DB::beginTransaction();
+      
 
        // return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
     }
