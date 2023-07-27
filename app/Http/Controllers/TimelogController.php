@@ -398,11 +398,13 @@ class TimelogController extends AccountBaseController
            // dd()
            //dd($acknowledgement);
            //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
+          // $date= $acknowledgement->created_at;
             if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
             {
               // dd("regular day");
               
                 return response()->json([
+                    'date'=> $yesterdayDate->created_at,
                     'error' => 'Developer did not submit the acknowledgement form'
                 ], 400);
            
@@ -412,6 +414,7 @@ class TimelogController extends AccountBaseController
               
               // dd("Saturday");
                return response()->json([
+                    'date'=> $yesterdayDate->created_at,
                    'error' => 'Developer did not submit the acknowledgement form'
                ], 400);
            

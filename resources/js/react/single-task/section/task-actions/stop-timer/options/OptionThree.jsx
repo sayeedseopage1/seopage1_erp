@@ -4,10 +4,12 @@ import LateExplainationOption from "./LateExplanationOption";
 import LeavingEarlyExplainationOption from "./LeavingEarlyExplainationOption";
 import Button from "../../../../components/Button";
 import DidNotWorkForAFewHours from "./DidNotWorkForAFewHours";
+import { useSelector } from "react-redux";
 
 const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     const [selectedOption, setSelectedOption] = useState(null);
     const _checked = useMemo(() => checked, [checked]);
+    const {lessTrackDate} = useSelector(s => s.subTask);
 
     useEffect(() => {
         if (_checked) {
@@ -21,6 +23,8 @@ const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             onChecked(id);
         } else onChecked(null);
     };
+
+    const parentReason = `I Had Less Hours To Work ${lessTrackDate} `
     return (
         <>
             <div className={checked ? "--option-item mt-3" : "--option-item"}>
@@ -35,7 +39,7 @@ const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                         onChange={handleOnChange}
                     />
                     <span className={checked ? "font-weight-bold" : ""}>
-                        I Had Less Hours To Work Today
+                        I Had Less Hours To Work <strong> {lessTrackDate} </strong>
                     </span>
                 </div>
 
@@ -50,7 +54,7 @@ const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                             onSubmit={onSubmit}
                             isSubmitting={isSubmitting}
                             checked={selectedOption === "half-leave-option"}
-                            parentReason="I Had Less Hours To Work Today"
+                            parentReason={parentReason}
                         />
 
                         <LateExplainationOption
@@ -59,7 +63,7 @@ const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                             onSubmit={onSubmit}
                             isSubmitting={isSubmitting}
                             checked={selectedOption === "late-option"}
-                            parentReason="I Had Less Hours To Work Today"
+                            parentReason={parentReason}
                         />
 
                         <LeavingEarlyExplainationOption
@@ -68,7 +72,7 @@ const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                             onSubmit={onSubmit}
                             isSubmitting={isSubmitting}
                             checked={selectedOption === "leaving-early-option"}
-                            parentReason="I Had Less Hours To Work Today"
+                            parentReason={parentReason}
                         />
 
                         <DidNotWorkForAFewHours
@@ -79,7 +83,7 @@ const OptionThree = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                             checked={
                                 selectedOption === "did-not-work-few-hours"
                             }
-                            parentReason="I Had Less Hours To Work Today"
+                            parentReason={parentReason}
                         />
                     </div>
                 )}
