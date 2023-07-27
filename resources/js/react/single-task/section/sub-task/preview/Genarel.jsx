@@ -5,12 +5,11 @@ import Guideline from "../../../components/Guideline";
 import RevisionText from "../../../components/RevisionText";
 import GenarelLoader from "../../../components/loader/GenarelLoader";
 import ArticleLoader from "../../../components/loader/ArticleLoader";
-import { BoardColumn } from "../../../../utils/single-task";
 import dayjs from "dayjs";
 
 const Genarel = ({task, isFetching}) => { 
     const loggedUser = new User(window?.Laravel?.user);
-    const _taskStatus = new BoardColumn(task?.boardColumn);
+
     
     return (
         <div className="row">
@@ -168,7 +167,7 @@ const Genarel = ({task, isFetching}) => {
             }
 
             <div
-                className="col-12 col-xl-6 d-flex flex-column py-3"
+                className="col-12 col-xl-6 d-flex flex-column py-3 px-3"
                 style={{ gap: "10px", background: "#F0F2F6" }}
             >
                 <div className="font-weight-bold d-block"> Status: </div>
@@ -181,8 +180,7 @@ const Genarel = ({task, isFetching}) => {
                         className="dot-color mr-2"
                         style={{ background: task?.boardColumn?.labelColor }}
                     />
-                    {/* <span>{task?.boardColumn.columnName}</span> */}
-                    {_taskStatus.getTaskStatusName(loggedUser?.getRoleId(), task?.isSubtask)}
+                    <span className="font-weight-bold">{task?.boardColumn.columnName}</span>
                 </div>
 
                 <div className="row">

@@ -2652,23 +2652,13 @@ class TaskController extends AccountBaseController
         $task= Task::where('id',$id)->first();
         //dd($task);
 
-        $subtasks = Subtask::
-      
-        where('task_id',$task->id)
-       
+        $subtasks = Subtask::select('sub_tasks.*')
+        ->join('tasks','tasks.subtask_id','sub_tasks.id')
+        ->whereIn('tasks.board_column_id',[1,2,3,6])
+        ->where('sub_tasks.task_id',$task->id)     
         
-        ->get();
-//    / dd($subtasks);
-        if($subtasks != null)
-        {
-            foreach ($subtasks as $row) {
-                // /dd($row->id);
-                $subtask_count = Task::where('subtask_id',$row->id)
-                ->whereIn('board_column_id',[1,2,3,6])
-                ->first();
-            //    / dd($subtask_count);
-                
-                if($subtask_count != null)
+        ->count();
+        if($subtasks > 0)
                 {
                   //  dd("true");
                  return response()->json([
@@ -2685,21 +2675,10 @@ class TaskController extends AccountBaseController
                      'status'=> false,
                     
                  ]);
-         
                 }
-                
-    
-            }
-
-        }else 
-        {
-            return response()->json([
-                'message' => 'You can complete this task',
-                'status'=> false,
-               
-            ]);
-
-        }
+         
+ //dd($subtasks);
+       
         //dd($subtasks);
        // $subtask_count = 0;
         
