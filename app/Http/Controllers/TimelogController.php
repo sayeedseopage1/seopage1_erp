@@ -655,6 +655,8 @@ class TimelogController extends AccountBaseController
         $timeLog->total_minutes = ((int)$timeLog->total_hours * 60) + (int)($timeLog->end_time->diff($timeLog->start_time)->format('%i'));
         $timeLog->edited_by_user = $this->user->id;
         $timeLog->save();
+        $html = $this->showActiveTimer()->render();
+        return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
        
 
      }else 
