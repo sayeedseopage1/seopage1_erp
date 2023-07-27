@@ -22,14 +22,14 @@ const RevisionText = ({text, index, date, time}) => {
   
 
   return (
-    <div className="sp1_task_card--sub-card">
+    <div className="sp1_task_card--sub-card" style={{minHeight: '110px'}}>
         <div className="sp1_tc_sc-inx">
             <h2>{index}</h2>
             <span className="d-block"><strong>Date</strong> {date} </span>
             <span className="d-block"><strong>Time</strong>: {time}</span>
         </div>
         <div className="">
-            {showText} 
+            <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: showText}} />
             {isLong ? <a href="#" className='ml-2' onClick={toggleModal}>Read full guideline</a> : ''}
 
             <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
@@ -45,9 +45,7 @@ const RevisionText = ({text, index, date, time}) => {
                             <span className="d-block"><strong>Date</strong> {date} </span>
                             <span className="d-block"><strong>Time</strong>: {time}</span>
                         </div>
-                        <div className='sp1_ck_content'>
-                            {text}
-                        </div>
+                        <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: text}} />
                     </div>
 
                     <div className=' __footer'>

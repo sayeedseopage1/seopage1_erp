@@ -6,10 +6,17 @@ import _ from 'lodash';
 export class BoardColumn{
     constructor(boardColume){
         this.id = boardColume?.id;
-        this.columnName = _.startCase(boardColume?.column_name);
+        this.columnName = boardColume?.column_name;
         this.labelColor = boardColume?.label_color;
         this.priority = boardColume?.priority;
         this.slug = boardColume?.slug;
+    }
+
+
+    getTaskStatusName(authRoleId, isSubtask){
+        if(!isSubtask && this.id === 8 && _.includes([1, 4, 6], authRoleId)){
+            return "Awaiting for Client Approval"
+        }else return this.columnName;
     }
 }
 
@@ -152,7 +159,8 @@ export class TaskRevision {
       this.updatedAt = data?.updated_at;
     } 
   }
-  
+
+ 
 
 // single task 
 export class SingleTask {
@@ -187,7 +195,8 @@ export class SingleTask {
         this.workEnvData = task?.working_environment_data;
         this.hasProjectManagerGuideline = task?.pm_task_guideline ? true : false;
         this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
-        this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision)) 
+        this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision));
+        this.taskSubTask = task?.taskSubTask;
     }
 
     isLeadDeveloperAbleToSubmit () {
@@ -221,5 +230,4 @@ export class SingleTask {
             return `Not Provided!`
         }
     }
-
 }

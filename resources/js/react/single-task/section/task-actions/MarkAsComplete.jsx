@@ -3,11 +3,12 @@ import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import FileUploader from "../../../file-upload/FileUploader";
 import CKEditorComponent from "../../../ckeditor/index";
-import { useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
+import { useLazyCheckSubTaskStateQuery, useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
 import _ from "lodash";
 import SubmitButton from "../../components/SubmitButton";
 import { useDispatch } from "react-redux";
 import { setTaskStatus } from "../../../services/features/subTaskSlice";
+import Loader from "../../components/Loader";
 
 const MarkAsComplete = ({task, auth}) => {
     // form data
@@ -19,19 +20,28 @@ const MarkAsComplete = ({task, auth}) => {
     const [commentErr, setCommentErr] = useState('');
 
     const [markAsComplete, {isLoading: isSubmitting}] = useMarkAsCompleteMutation();
+    const [ checkSubTaskState, {isFetching} ] = useLazyCheckSubTaskStateQuery();
 
     const [markAsCompleteModaIsOpen, setMarkAsCompleteModalIsOpen] =
         useState(false);
 
     // toggle
     const toggle = () => {
-        if (auth.getRoleId() === 6 && !task?.isLeadDeveloperAbleToSubmit()) {
-            Swal.fire({
-                title: 'You can\'t complete this task because you have some pending subtask?',
-                showCancelButton: true,
-                confirmButtonText: 'Okey', 
-              })
-        }else{
+        if (auth.getRoleId() === 6) {
+            checkSubTaskState(task?.id)
+            .unwrap()
+            .then(res => {
+                if(res.status === 'true' || res.status === true){
+                    Swal.fire({
+                        title: 'You can\'t complete this task because you have some pending subtask?',
+                        showCancelButton: true,
+                        confirmButtonText: 'Okey', 
+                      })
+                }else {
+                    setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
+                } 
+            }) 
+        } else {
             setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
         }
     };
@@ -118,8 +128,8 @@ const MarkAsComplete = ({task, auth}) => {
                 onClick={toggle}
                 className="d-flex align-items-center btn-outline-dark text-dark"
             >
-                <i className="fa-solid fa-check" />
-                <span className="d-inline ml-1">Mark As Complete</span>
+                {isFetching ? <Loader title="Processing..." /> : <i className="fa-solid fa-check" />}
+                <span className="d-inline ml-1"> {isFetching? '': "Mark As Complete" }</span>
             </Button>
 
             <Modal isOpen={markAsCompleteModaIsOpen} className="sp1_mark-as--modal"> 

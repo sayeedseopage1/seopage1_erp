@@ -11,7 +11,7 @@ const ClientAcceptedTask = ({task}) => {
     e.preventDefault();
     confirmClientApproval({
         task_id: task?.id
-    })
+    }).unwrap()
   }
 
   return (

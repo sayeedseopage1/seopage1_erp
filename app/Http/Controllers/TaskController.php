@@ -1526,6 +1526,17 @@ class TaskController extends AccountBaseController
         $task_status->task_status = "submit task to client approval";
         $task_status->board_column_id = 9;
         $task_status->save();
+
+        $subtasks = Subtask::where('task_id',$task_status->id)->get();
+        foreach($subtasks as $subtask)
+        {
+            $task_id= Task::where('subtask_id',$subtask->id)->first();
+            $task= Task::find($task_id->id);
+            $task->task_status = "submit task to client approval";
+            $task->board_column_id = 9;
+            $task->save();
+
+        }
         return response()->json([
             'status' => 200,
         ]);
@@ -1955,6 +1966,7 @@ class TaskController extends AccountBaseController
           {
             $subtasks = '';
           }
+          $Sub_Tasks= $subtasks;
           $revisions= TaskRevision::where('task_id',$task->id)->get();
           if($revisions == null)
           {
@@ -2030,6 +2042,7 @@ class TaskController extends AccountBaseController
                 'parent_task_heading'=> $parent_task_heading,
                 'parent_task_action'=> $parent_task_action,
                 'subtasks'=> $subtasks,
+                'Sub_Tasks'=>$Sub_Tasks,
                 'working_environment' => $working_environment_check,
                 'task_guideline'=> $pm_task_guideline,
                 'working_environment_data'=> $working_environment,
@@ -2631,5 +2644,65 @@ class TaskController extends AccountBaseController
             ]);
 
         }
+    }
+
+    public function CHeckSubtasks($id)
+    {
+        $task= Task::where('id',$id)->first();
+        //dd($task);
+
+        $subtasks = Subtask::
+      
+        where('task_id',$task->id)
+       
+        
+        ->get();
+//    / dd($subtasks);
+        if($subtasks != null)
+        {
+            foreach ($subtasks as $row) {
+                // /dd($row->id);
+                $subtask_count = Task::where('subtask_id',$row->id)
+                ->whereIn('board_column_id',[1,2,3,6])
+                ->first();
+            //    / dd($subtask_count);
+                
+                if($subtask_count != null)
+                {
+                  //  dd("true");
+                 return response()->json([
+                     'message' => 'You cannot complete this task',
+                     'status'=> true,
+                    
+                 ]);
+         
+                }else 
+                {
+                  //  dd("false");
+                 return response()->json([
+                     'message' => 'You can complete this task',
+                     'status'=> false,
+                    
+                 ]);
+         
+                }
+                
+    
+            }
+
+        }else 
+        {
+            return response()->json([
+                'message' => 'You can complete this task',
+                'status'=> false,
+               
+            ]);
+
+        }
+        //dd($subtasks);
+       // $subtask_count = 0;
+        
+      
+
     }
 }

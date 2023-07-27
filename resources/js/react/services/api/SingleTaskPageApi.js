@@ -363,6 +363,10 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // check sub task clock
         checkSubTaskTimer: build.query({
             query: (taskId) => `/account/tasks/task-timer-check/${taskId}`
+        }),
+        // check sub task state
+        checkSubTaskState: build.query({
+            query: (taskId) => `/account/tasks/parent-task-subtasks/${taskId}`
         })
         
     }),
@@ -398,5 +402,6 @@ export const {
     useWorkingEnvironmentMutation,
     useCreateReportMutation,
     useCheckSubTaskTimerQuery,
-    useLazyCheckSubTaskTimerQuery
+    useLazyCheckSubTaskTimerQuery,
+    useLazyCheckSubTaskStateQuery
 } = singleTaskPageApiSlice;

@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { setWorkingEnvironmentStatus, storeTask } from "../services/features/subTaskSlice";
 import TaskAction from "./section/task-actions/TaskAction";
 import Loading from "./components/Loading";
-import { SingleTask } from "../utils/single-task";
+import { BoardColumn, SingleTask } from "../utils/single-task";
 import { User } from "../utils/user-details";
 import GenarelLoader from "./components/loader/GenarelLoader";
 import PMGuideline from "./components/PMGuideline";
@@ -41,6 +41,7 @@ const SingleTaskPage = () => {
                 working_environment_data: data?.working_environment_data,
                 pm_task_guideline: data?.task_guideline,
                 task_revisions: data?.revisions,
+                taskSubTask: data?.Sub_Tasks,
             } 
             dispatch(storeTask(task));
         }
@@ -53,6 +54,9 @@ const SingleTaskPage = () => {
     if(isFetching){
         return <Loading isLoading={isFetching} />
     }
+
+    const _taskStatus = new BoardColumn(taskStatus);
+ 
  
     return (
         <div className="postion-relative">
@@ -309,7 +313,8 @@ const SingleTaskPage = () => {
                                         boxShadow: "0 0 10px rgba(0,0,0,.1)",
                                     }}
                                 />
-                                {taskStatus?.column_name}
+                                
+                                {_taskStatus.getTaskStatusName(loggedUser?.getRoleId(), task.isSubtask)}
                             </div>
 
                             <div className="d-flex align-items-center mb-2">

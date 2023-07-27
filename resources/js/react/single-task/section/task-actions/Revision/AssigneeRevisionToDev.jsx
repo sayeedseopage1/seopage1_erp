@@ -29,7 +29,7 @@ const AssigneeRevisionToDev = ({
         const data = editor.getData(); 
         const _comments = [...comments];
 
-        const index = _comments?.findIndex(d => d.id === id); 
+        const index = _comments?.findIndex(d => d.subtask_id === id); 
         if(index === -1){
             _comments.push({
                 id: id,
@@ -83,7 +83,7 @@ const AssigneeRevisionToDev = ({
             reason,
             comments,
         }; 
-        if(validate()){ 
+        if(validate()){  
             onSubmit(data)
         }
     };
@@ -92,6 +92,7 @@ const AssigneeRevisionToDev = ({
         e.preventDefault();
         onBack();
     }; 
+
 
     return (
         <React.Fragment>
@@ -186,7 +187,7 @@ const AssigneeRevisionToDev = ({
                     )}
                 </div>
 
-                {task?.subtask?.length > 0 && (
+                {task?.taskSubTask?.length > 0 && (
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold">
                             Select SubTask<sup className="font-weight-bold f-16">*</sup> : 
@@ -205,12 +206,12 @@ const AssigneeRevisionToDev = ({
                             Comment:
                         </label>
                         {subtasks.map((s, i) => (
-                            <React.Fragment key={s.id}>
+                            <React.Fragment key={s.subtask_id}>
                                 <div className="form-group">
                                     <label htmlFor="" className="font-weight-bold">{i+1}. Task: {s?.title}</label> <br/>
                                     <label className="font-weight-bold">Write Your Revision<sup className="font-weight-bold f-16">*</sup>: </label>
                                     <div className="ck-editor-holder">
-                                        <CKEditorComponent onChange={(e, editor) =>hanldeEditorTextChange(e, editor, s?.id)} />
+                                        <CKEditorComponent onChange={(e, editor) =>hanldeEditorTextChange(e, editor, s?.subtask_id)} />
                                     </div>
                                     {commentError && (
                                         <small id="emailHelp" className="form-text text-danger">
@@ -289,8 +290,8 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                         overflowY: "auto",
                     }}
                 >
-                    {task?.subtask?.length > 0 ? (
-                        task?.subtask?.map((s) => (
+                    {task?.taskSubTask?.length > 0 ? (
+                        task?.taskSubTask?.map((s) => (
                             <Listbox.Option
                                 value={s}
                                 key={s.id}

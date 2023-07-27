@@ -9,7 +9,8 @@ import dayjs from "dayjs";
 
 const Genarel = ({task, isFetching}) => { 
     const loggedUser = new User(window?.Laravel?.user);
-
+    const _taskStatus = new BoardColumn(task?.boardColumn);
+    
     return (
         <div className="row">
             {isFetching ? <GenarelLoader /> : 
@@ -179,7 +180,8 @@ const Genarel = ({task, isFetching}) => {
                         className="dot-color mr-2"
                         style={{ background: task?.boardColumn?.labelColor }}
                     />
-                    <span>{task?.boardColumn.columnName}</span>
+                    {/* <span>{task?.boardColumn.columnName}</span> */}
+                    {_taskStatus.getTaskStatusName(loggedUser?.getRoleId(), task?.isSubtask)}
                 </div>
 
                 <div className="row">
