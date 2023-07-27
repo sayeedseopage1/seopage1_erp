@@ -206,6 +206,7 @@ const SubTaskSection = ({status}) => {
                                 key={sub.id}
                                 subTask={sub}
                                 task={task}
+                                status={status}
                                 toggleEditForm={toggleEditForm}
                             />
                         ))

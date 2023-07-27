@@ -6,8 +6,9 @@ import Button from "../../components/Button";
 import { User } from "../../../utils/user-details";
 import { SingleTask } from "../../../utils/single-task";
 import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
+import _ from "lodash";
 
-const SubTask = ({ subTask, task, toggleEditForm }) => {
+const SubTask = ({ subTask, task, status, toggleEditForm }) => {
     const [isOpen, setIsOpen] = useState(false); 
     const auth = new User(window?.Laravel?.user);
     const _task = new SingleTask(task); 
@@ -20,9 +21,9 @@ const SubTask = ({ subTask, task, toggleEditForm }) => {
       setIsOpen(true);
     } 
 
-    
+ 
     const hasEditPermission = () => {
-        return Number(subTask?.added_by) === auth?.getId();
+        return Number(subTask?.added_by) === auth?.getId() && _.includes([1,2,3], status?.id);
     }
 
     const onEdit = (e) => {
