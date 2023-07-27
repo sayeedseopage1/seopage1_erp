@@ -640,7 +640,7 @@ class TimelogController extends AccountBaseController
 
     public function stopTimer(Request $request)
     {
-       // dd($request);
+     dd($request);
     //  /  DB::beginTransaction();
         $timeId = $request->id;
         //dd( $timeId);
