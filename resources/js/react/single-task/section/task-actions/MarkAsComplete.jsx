@@ -34,8 +34,8 @@ const MarkAsComplete = ({task, auth}) => {
                 if(res.status === 'true' || res.status === true){
                     Swal.fire({
                         title: 'You can\'t complete this task because you have some pending subtask?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Okey', 
+                        // showCancelButton: true,
+                        confirmButtonText: 'Ok', 
                       })
                 }else {
                     setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);

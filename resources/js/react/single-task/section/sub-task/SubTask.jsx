@@ -18,10 +18,11 @@ const SubTask = ({ subTask, task, toggleEditForm }) => {
       e.preventDefault();
       e.stopPropagation();
       setIsOpen(true);
-    }
- 
+    } 
+
+    
     const hasEditPermission = () => {
-        return _task?.assigneeBy.getId() === auth?.getId() || auth?.getRoleId() === 1;
+        return Number(subTask?.added_by) === auth?.getId();
     }
 
     const onEdit = (e) => {

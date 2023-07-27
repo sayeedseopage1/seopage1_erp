@@ -2053,11 +2053,18 @@ class TaskController extends AccountBaseController
             $sub_tasks = SubTask::select(['id', 'title'])->where('task_id', $id)->get();
             $array = [];
             foreach ($sub_tasks as $value) {
-                $task = Task::where('subtask_id', $value->id)->first();
+                $task = Task::
+                select('tasks.*','users.role_id')
+                ->join('users','users.id','tasks.added_by')
+                ->where('tasks.subtask_id', $value->id)
+                ->first();
+            //  /dd($task);
 
                 array_push($array, [
                     'id' => $task->id,
                     'title' => $task->heading,
+                    'added_by'=>$task->added_by,
+                    'role_id'=>$task->role_id,
                     //'edit_url' => route('tasks.edit', $task->id),
                     //'show_url' => route('tasks.edit', $task->id),
                     'subtask_id' => $value->id,
