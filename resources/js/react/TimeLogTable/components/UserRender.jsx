@@ -31,10 +31,10 @@ const UserRender = ({ image, name, role, id, profileUrl, roleLink }) => {
 
             <div className="">
                 <h6 className="mb-0 f-14">
-                    <a href={profileUrl}>{name}</a>
+                    <a href={profileUrl} className="text-hover-underline">{name}</a>
                 </h6>
-                <span className="f-12 text-hover-underline">
-                    {roleLink ? <a href={roleLink} className="text-dark ">{role}</a> : role}
+                <span className="f-12">
+                    {roleLink ? <a href={roleLink} className="text-dark text-hover-underline">{role}</a> : role}
                 </span>
             </div>
         </div>

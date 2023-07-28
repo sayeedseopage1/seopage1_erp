@@ -2104,11 +2104,29 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'estimation_time') {
             $task  = Task::find($id);
+           // dd($task);
             $project = Project::find($task->project_id);
-            $task_estimation_hours = Task::where('project_id', $project->id)->where('subtask_id', null)->sum('estimate_hours');
-            $task_estimation_minutes = Task::where('project_id', $project->id)->where('subtask_id', null)->sum('estimate_minutes');
-            $toal_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-            $left_minutes = $project->hours_allocated * 60 - $toal_task_estimation_minutes;
+            // $task_estimation_hours = Task::where('project_id', $project->id)->sum('estimate_hours');
+            // $task_estimation_minutes = Task::where('project_id', $project->id)->sum('estimate_minutes');
+            $task_estimation_hours = SubTask::join('tasks','tasks.subtask_id','sub_tasks.id')
+            
+            // /->where('tasks.project_id', $project->id)
+            ->where('sub_tasks.task_id',$task->id)
+            ->sum('tasks.estimate_hours');
+            
+            $task_estimation_minutes = SubTask::join('tasks','tasks.subtask_id','sub_tasks.id')
+            
+           // ->where('tasks.project_id', $project->id)
+            ->where('sub_tasks.task_id',$task->id)
+            ->sum('tasks.estimate_minutes');
+        //    / dd($task_estimation_hours,$task_estimation_minutes);
+           // $task_estimation_minutes = SubTask::where('project_id', $project->id)->sum('estimate_minutes');
+            $toal_task_estimation_minutes = ($task_estimation_hours * 60) + $task_estimation_minutes;
+            //dd($toal_task_estimation_minutes ,(($task->estimate_hours * 60) + $task->estimate_minutes));
+            
+            $left_minutes = (($task->estimate_hours * 60) + $task->estimate_minutes)  - $toal_task_estimation_minutes;
+
+          //  dd($left_minutes);
 
             $left_in_hours = round($left_minutes / 60, 0);
             $left_in_minutes = $left_minutes % 60;

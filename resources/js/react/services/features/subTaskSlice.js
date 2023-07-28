@@ -11,7 +11,7 @@ const initialState = {
     lessTrackModal: false,
     timerRunningTime: 0,
     isTimerRunning: false,
-    isWorkingEnvironmentSubmit: false,
+    isWorkingEnvironmentSubmit: undefined,
 };
 
 const subTaskSlice = createSlice({

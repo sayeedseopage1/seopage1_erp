@@ -12,7 +12,7 @@ import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 import _ from "lodash";
 import {
     useCreateSubtaskMutation,
-    useGetTaskDetailsQuery,
+    useLazyGetTaskDetailsQuery,
 } from "../../../services/api/SingleTaskPageApi";
 import { useParams } from "react-router-dom";
 
@@ -22,6 +22,7 @@ import { CompareDate } from "../../../utils/dateController";
 import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
 import { SingleTask } from "../../../utils/single-task";
 import { useEffect } from "react";
+import { User } from "../../../utils/user-details";
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -46,13 +47,14 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const [files, setFiles] = React.useState([]);
 
     const task = new SingleTask(taskDetails);
+    const auth = new User(window?.Laravel?.user);
 
     const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
+    // const {  } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=estimation_time`);
+    const [ getTaskDetails, {data: estimation, isFetching}] = useLazyGetTaskDetailsQuery();
 
-    const { data: estimation, isFetching } = useGetTaskDetailsQuery(
-        `/${params?.taskId}/json?mode=estimation_time`
-    );
+    
 
     const required_error = error?.status === 422 ? error?.data : null;
     // handle change
@@ -61,6 +63,10 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         setProject(task?.projectName);
         setParentTask(task?.title);
     }, [task]);
+
+    React.useEffect(() => {
+        getTaskDetails(`/${task?.id}/json?mode=estimation_time`).unwrap();
+    }, [])
 
     // handle onchange
     const handleChange = (e, setState) => {
@@ -160,7 +166,11 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
     useEffect(() => {
         const showEnv = task?.workingEnvironment === 0 ? _.size(task?.subtask) === 0 ? true : false : false;
-        dispatch(setWorkingEnvironmentStatus(showEnv)) 
+        if(auth.getRoleId() === 6){
+            if(isWorkingEnvironmentSubmit === undefined){
+                dispatch(setWorkingEnvironmentStatus(showEnv)) 
+            }
+        }
     }, [])
 
     return (
@@ -179,14 +189,14 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                     </Button>
                 </div>
 
-                <div className="sp1-subtask-form --modal-panel-body">
+                <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
                     {/* working environment form */}
                     {isWorkingEnvironmentSubmit && 
-                    <WorkingEnvironmentForm 
-                        task={task} 
-                        onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
-                        close={() => setShowEnvForm(false)} 
-                    /> }
+                        <WorkingEnvironmentForm 
+                            task={task} 
+                            onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
+                            close={() => setShowEnvForm(false)} 
+                        /> }
                     {/* end working environment form */}
 
                     {!isWorkingEnvironmentSubmit && (
@@ -370,7 +380,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                         {estimateError(required_error)}
                                     </div>
                                     <div style={{ color: "red" }}>
-                                        Estimation time can't exceed {task?.getEstimateTime()}
+                                    Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>
                                 </div>
                             </div>
