@@ -35,7 +35,7 @@ const TaskWiseLogReport = () => {
             const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
             handleData(sortedData, 1, perPageData);
             setData(sortedData);
-            const totalTrackTime = _.sumBy(sortedData, (d) => Number( d.total_minutes));
+            const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
             setTractedTime(totalTrackTime);
         })
     }

@@ -21,6 +21,7 @@ const TimeLogHistory = () => {
     const dispatch = useDispatch();
 
     const [getTimeLogHistory, {isLoading}] = useGetTimeLogHistoryMutation();
+    
 
     // handle data
     const handleData = useCallback((data, currentPage, perPageData) => {
@@ -36,7 +37,7 @@ const TimeLogHistory = () => {
             const sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
             handleData(sortedData, currentPage, perPageData);
             // setData(sortedData);
-            dispatch(storeData({data}));
+            dispatch(storeData({data: sortedData}));
             dispatch(setFilterOption({filter}));
             setCurrentPage(1); 
         })
@@ -78,7 +79,7 @@ const TimeLogHistory = () => {
                     perpageData={perPageData}
                     handlePerPageData={handlePerPageData}
                     currentPage={currentPage}
-                    totalEntry={data.length}
+                    totalEntry={_.size(data)}
                     isLoading={isLoading}
                 />
             </div>

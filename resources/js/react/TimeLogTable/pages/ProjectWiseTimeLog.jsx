@@ -38,8 +38,8 @@ const ProjectWiseTimeLog = () => {
             setCurrentPage(1);
             const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
             handleData(sortedData, currentPage, perPageData);
-            const totalSession = _.sumBy(sortedData, 'number_of_session');
-            const totalTrackTime = _.sumBy(sortedData, 'total_minutes');
+            const totalSession = _.sumBy(sortedData, (d) => Number(d.number_of_session));
+            const totalTrackTime = _.sumBy(sortedData, d => Number(d.total_minutes));
             setData(sortedData);
             setNSession(totalSession);
             setTractedTime(totalTrackTime);

@@ -11,6 +11,8 @@ const TableFooter = ({
 }) => {
 
   const showingFrom = (currentPage - 1) * perpageData;
+  let showingTo = showingFrom + perpageData;
+  if(showingTo > totalEntry) showingTo = totalEntry;
 
   return (
     <div className="cnx__table_footer mt-3">
@@ -30,7 +32,7 @@ const TableFooter = ({
         </div>
 
         <div className="__total_entries">
-            Showing {showingFrom + 1} to {showingFrom + perpageData} of {totalEntry} entries
+           {totalEntry > 0 ? `Showing ${showingFrom + 1} to ${showingTo} of ${totalEntry} entries`: `Showing 0 to 0 of 0 entries`} 
         </div>
 
         {/* pagination */}

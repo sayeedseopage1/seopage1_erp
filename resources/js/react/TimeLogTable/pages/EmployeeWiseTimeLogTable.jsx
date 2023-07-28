@@ -39,8 +39,9 @@ const EmployeeWiseTimeLogTable = () => {
         .then(res => {
             setCurrentPage(1);
             const sortedData = orderBy(res?.data, ["employee_id"], ["desc"]);
-            const totalSession = _.sumBy(sortedData, 'number_of_session');
-            const totalTrackTime = _.sumBy(sortedData, 'total_minutes');
+            const totalSession = _.sumBy(sortedData, (d) => Number(d.number_of_session));
+            const totalTrackTime = _.sumBy(sortedData, d => Number(d.total_minutes));
+
             handleData(sortedData, currentPage, perPageData);
             setData(sortedData);
             setNSession(totalSession);
