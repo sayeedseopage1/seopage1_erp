@@ -16,7 +16,7 @@ const MissedDayCount = ({ row }) => {
                 onClick={() => setIsOpen(true)}
                 className="px-2 font-weight-bold sp1_tlh_resolve_btn"
             >
-                <span className="text-success">10</span> + <span className="text-danger"> 8</span> = <span>18 / {row?.missed_hours_count}</span>
+                <span className="">{row?.missed_hours_count}</span>
             </button>
             <TimeLogHIstoryModal isOpen={isOpen} close={close} row={row} />
         </React.Fragment>

@@ -2486,6 +2486,7 @@ class TaskController extends AccountBaseController
             $stop_time->user_id = $request->user_id;
             $stop_time->transition_hours= $request->transition_hours;
             $stop_time->transition_minutes= $request->transition_minutes; 
+            $stop_time->date= $request->date;
             $stop_time->save(); 
             $task= Task::where('id',$request->task_id)->first();
             if($task->subtask_id == null)

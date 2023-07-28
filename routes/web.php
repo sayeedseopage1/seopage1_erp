@@ -1188,7 +1188,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/goals/edit/{id}', [InsightsController::class, 'editGoal'])->name('insights/goals/edit');
     Route::post('/insights/goal-title/edit/title/{data}', [InsightsController::class, 'editGoalTitle'])->name('insights.goals-title.edit');
     Route::post('/insights/dashboards/add', [InsightsController::class, 'storeDashboard'])->name('insights/dashboards/add');
-
+    Route::get('/tasks/developer-task-history/{id}', [TimelogReportController::class,'DeveloperTaskHistory']);
     Route::get('/tasks/parent-task-subtasks/{id}', [TaskController::class,'CHeckSubtasks'])->name('check-subtasks');
     Route::post('/tasks/develoepr/report-issue', [TaskController::class,'DeveloperReportIssue'])->name('developer-report-issue');
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');

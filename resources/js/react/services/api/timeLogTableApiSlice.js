@@ -48,6 +48,10 @@ const timeLogTableApiSlice = apiSlice.injectEndpoints({
             }) 
         }),  
 
+        getTimeLogHistoryDetails: build.query({
+            query: (userId) => `/account/tasks/developer-task-history/${userId}`
+        })
+
 
     })
 }) ;
@@ -58,6 +62,7 @@ export const {
      useGetEmployeeWiseDataMutation,
      useGetTaskWiseDataMutation,
      useGetProjectWiseDataMutation,
-     useGetTimeLogHistoryMutation
+     useGetTimeLogHistoryMutation,
+     useLazyGetTimeLogHistoryDetailsQuery 
 } = timeLogTableApiSlice;
 

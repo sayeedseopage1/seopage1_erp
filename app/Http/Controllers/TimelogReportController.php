@@ -13,7 +13,7 @@ use Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\DeveloperStopTimer;
 class TimelogReportController extends AccountBaseController
 {
 
@@ -454,6 +454,7 @@ class TimelogReportController extends AccountBaseController
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
         $employeeId = $request->input('employee_id', null);
+       // dd($employeeId);
       //  $pmId = $request->input('pm_id', null);
      //   $clientId = $request->input('client_id', null);
      //   $status = $request->input('status', null);
@@ -483,10 +484,28 @@ class TimelogReportController extends AccountBaseController
         ->leftJoin('users as employee', 'project_time_logs.user_id', 'employee.id')
         ->join('roles as emp_roles', 'employee.role_id', 'emp_roles.id')
         ->leftJoin('developer_stop_timers','developer_stop_timers.user_id','employee.id')
-        ->groupBy('project_time_logs.user_id')
-        ->where('total_minutes', '>', 0)
-        ->orderBy('project_time_logs.user_id' , 'desc')
-        ->get();
+        
+        ->where('total_minutes', '>', 0);
+       // ->orderBy('project_time_logs.user_id' , 'desc')
+       
+        // if (is_null($employeeId)) {
+        //    // dd("false");
+        //     $data = $data->groupBy('project_time_logs.user_id')->get();
+        // } else {
+        //   //  dd("true");
+        //     $data = $data
+        //     ->where('project_time_logs.user_id', $employeeId)->get();
+         
+
+        // }
+        if (!is_null($employeeId)) {
+            $filteredData = $data->where('project_time_logs.user_id', $employeeId);
+        } else {
+            $filteredData = $data;
+        }
+        
+        $data = $filteredData->groupBy('project_time_logs.user_id')->get();
+        
         
         // Calculate the ideal tracked hours
         $startDate = Carbon::createFromFormat('Y-m-d', $startDate);
@@ -512,7 +531,9 @@ class TimelogReportController extends AccountBaseController
         $data = collect($data);
         
         
+        
         $data->ideal_tracked_minutes = $idealTrackedMinutes;
+       // dd($data);
         
         // Calculate the `missed_hours` and `missed_hours_count` attributes for each item in $data
         $data = $data->map(function ($item) use ($idealTrackedMinutes) {
@@ -521,7 +542,8 @@ class TimelogReportController extends AccountBaseController
             return $item;
           
         });
-        
+    //   /  dd($data);
+       
         //$data->missed_hours_count = $missedNumber;
         return response()->json([
             //'total_rows' => $total_rows,
@@ -646,5 +668,35 @@ class TimelogReportController extends AccountBaseController
     {
         $data = TaskboardColumn::select(['id', 'column_name'])->get();
         return response()->json($data);
+    }
+    public function DeveloperTaskHistory(Request $request,$id)
+    {
+       // dd($request);
+        $task_history = DeveloperStopTimer::select(
+            'developer_stop_timers.*',
+            'projects.project_name',
+            'tasks.heading AS original_task_heading',
+            'forget_tasks.heading AS forget_task_heading','projects.client_id'  
+        )
+        ->leftJoin('projects', 'projects.id', '=', 'developer_stop_timers.project_id')
+        ->leftJoin('tasks', 'tasks.id', '=', 'developer_stop_timers.task_id')
+        ->leftJoin('tasks AS forget_tasks', 'forget_tasks.id', '=', 'developer_stop_timers.forgot_to_track_task_id')
+        ->where('user_id', $id)
+        ;
+        if(!is_null($request->start_date) && !is_null($request->end_date) && $request->start_date == $request->end_date) {
+            $task_history = $task_history->where('developer_stop_timers.date', Carbon::parse($request->start_date)->format('Y-m-d'));
+        } else {
+            if(!is_null($request->start_date)) {
+            
+                $task_history = $task_history->where('developer_stop_timers.date', '>=', Carbon::parse($request->start_date)->format('Y-m-d'));
+            }
+            if(!is_null($request->end_date)) {
+                $task_history = $task_history->where('developer_stop_timers.date', '<=', Carbon::parse($request->end_date)->format('Y-m-d'));
+            }
+        }
+        $task_history= $task_history->get();
+        return response()->json($task_history);
+        
+
     }
 }

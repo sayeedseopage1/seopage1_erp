@@ -6,6 +6,7 @@ import taskWiseDataTableReducer from './features/taskWiseTableDataSlice';
 import usersReducer from './features/usersSlice';
 import pointPageFilterReducer from "./features/pointPageFilterSlice";
 import subtaskReducer from './features/subTaskSlice';
+import timeLogHistoryReducer from "./features/timeLogHistorySlice";
 
 export const store = configureStore({
     reducer: {
@@ -15,8 +16,10 @@ export const store = configureStore({
         taskWiseDataTable: taskWiseDataTableReducer,
         users: usersReducer,
         pointPageFilterOption: pointPageFilterReducer,
-        subTask: subtaskReducer
+        subTask: subtaskReducer,
+        timeLogHistory: timeLogHistoryReducer,
     },
+
    // serializableCheck: false, 
 
    middleware: (getDefaultMiddleware) =>

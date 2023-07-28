@@ -133,7 +133,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                       }).then((result) => {
                         /* Read more about isConfirmed, isDenied below */
                         if (result.isConfirmed) {
-                            dispatch(setLessTrackModal({show: true, type: 'START_TIMER', date: dayjs.dayjs(err?.date).format("MMM DD, YYYY")}))
+                            dispatch(setLessTrackModal({show: true, type: 'START_TIMER', date: dayjs.dayjs(err?.data?.date).format("MMM DD, YYYY")}))
                         } 
                       })
                  }
@@ -200,7 +200,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 }
 
                 let check = dayjs.dayjs(currentTime).isBefore(target);
-                let isDev = _.includes([5], Number(auth.getRoleId()));
+                let isDev = _.includes([5, 9 , 10], Number(auth.getRoleId()));
                 if(!check && isDev){
                     res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER', date: 'Today'})) : stopTimer()
                 }else{

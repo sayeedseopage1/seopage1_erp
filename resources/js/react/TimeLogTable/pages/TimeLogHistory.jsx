@@ -1,21 +1,24 @@
-import React, {useState, useCallback} from "react";
-import TimeLogHistoryTable from "../components/TimeLogHistoryTable";
+import _ from "lodash";
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useGetTimeLogHistoryMutation } from "../../services/api/timeLogTableApiSlice";
+import { setFilterOption, storeData } from "../../services/features/timeLogHistorySlice";
+import { paginate } from "../../utils/paginate";
 import Tabbar from "../components/Tabbar";
 import { TimeLogHistoryColumn } from "../components/TimeLogHistoryColumn";
-import { paginate } from "../../utils/paginate";
-import '../styles/time-log-history.css';
-import '../components/data-table.css';
-import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
-import { useGetTimeLogHistoryMutation } from "../../services/api/timeLogTableApiSlice";
 import TimeLogHistoryTableFilterBar from "../components/TimeLogHistoryFilterBar";
-import _ from "lodash";
+import TimeLogHistoryTable from "../components/TimeLogHistoryTable";
+import '../components/data-table.css';
+import '../styles/time-log-history.css';
 
 const TimeLogHistory = () => {
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
+    const {data} = useSelector(s=> s.timeLogHistory);
     const [perPageData, setParPageData] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState([]);
     const [sortConfig, setSortConfig] = useState([]);
+    const dispatch = useDispatch();
 
     const [getTimeLogHistory, {isLoading}] = useGetTimeLogHistoryMutation();
 
@@ -30,10 +33,12 @@ const TimeLogHistory = () => {
         getTimeLogHistory(filter)
         .unwrap()
         .then(res => {
-            console.table(res.data)
             const sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
             handleData(sortedData, currentPage, perPageData);
-            setData(sortedData);
+            // setData(sortedData);
+            dispatch(storeData({data}));
+            dispatch(setFilterOption({filter}));
+            setCurrentPage(1); 
         })
         .catch(err => console.log(err))
     }

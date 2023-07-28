@@ -379,7 +379,7 @@ class TimelogController extends AccountBaseController
      //dd($today_timelog_count);
  
  // Check if the query returned any result
-        if(Auth::user()->role_id == 5 )
+        if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
         {
             if ($yesterdayDate && $today_timelog_count < 1  ) {
                 // $yesterdayDate is an object, so you need to access the "created_at" property

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import TableFooter from "./TableFooter";
 import TimeLogHistoryLoader from "./TimeLogHistoryLoader";
+import TableDragAbleHeader from "./DragHeader";
+import EmptyTable from "./EmptyTable";
 
 const TimeLogHistoryTable = ({
     data,
@@ -40,12 +42,17 @@ const TimeLogHistoryTable = ({
                             <tr className="sp1_tlr_tr">
                                 {_.map(_columns, (column) => {
                                     return (
-                                        <th
+                                        <TableDragAbleHeader
                                             key={column.id}
                                             className="sp1_tlr_th"
-                                        >
-                                            {column.header}
-                                        </th>
+                                            column={column}
+                                            columns = {_columns}
+                                            onSort={() => {}}
+                                            onDrop={setColumnOrder}
+                                            order={columnOrder}
+                                            tableName="time_log_history_modal"
+                                        />
+                                        
                                     );
                                 })}
                             </tr>
@@ -67,13 +74,20 @@ const TimeLogHistoryTable = ({
                     </table>
                 </div>
 
-                <TableFooter
-                    onPaginate={onPaginate}
-                    perpageData={perpageData}
-                    totalEntry={totalEntry}
-                    currentPage={currentPage}
-                    handlePerPageData={handlePerPageData}
-                />
+                {!isLoading && _.size(data) === 0 && (
+                    <EmptyTable colSpan={_.size(_columns)} />
+                )}
+
+                {!isLoading && _.size(data) > 0 && (
+                    <TableFooter
+                        onPaginate={onPaginate}
+                        perpageData={perpageData}
+                        totalEntry={totalEntry}
+                        currentPage={currentPage}
+                        handlePerPageData={handlePerPageData}
+                    />
+                )}
+                
             </div>
         </React.Fragment>
     );

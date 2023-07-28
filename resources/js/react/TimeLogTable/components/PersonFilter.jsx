@@ -38,9 +38,6 @@ export default function PersonFilterItem({
                     <div>
                         {!selected ? 'All' : 
                             <div 
-                                data-toggle="tooltip" 
-                                data-placement="bottom" 
-                                title={selected?.name}
                             >{selected?.name}</div>
                         }
                     </div>

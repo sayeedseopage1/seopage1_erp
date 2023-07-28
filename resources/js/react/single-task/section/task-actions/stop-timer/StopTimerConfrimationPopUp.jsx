@@ -8,9 +8,11 @@ import Button from "../../../components/Button";
 import { useGetUserTrackTimeQuery, useStoreStopTrackTimerMutation } from "../../../../services/api/SingleTaskPageApi";
 import { User } from "../../../../utils/user-details";
 import { useSelector } from "react-redux";
+import { Placeholder } from "../../../../global/Placeholder";
+import dayjs from "dayjs";
 
 const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
-    const { task, lessTrackModalFor } = useSelector(s => s.subTask)
+    const { task, lessTrackModalFor, lessTrackDate } = useSelector(s => s.subTask)
     const [optionId, setOptionId] = React.useState(null);
     const [closingToday, setClosingToday] = React.useState(false); 
     const [trackHours, setTrackHours] = React.useState('');
@@ -35,7 +37,8 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     }, [trackTime, isFetching])
 
     const handleSubmitForm = (data) => {
-        storeStopTrackTimer({...data, task_id: task?.id, user_id: loggedUser.id})
+        let date = lessTrackDate === 'Today' ? dayjs().format('YYYY-MM-DD') : dayjs(lessTrackDate).format(date);
+        storeStopTrackTimer({...data, date, task_id: task?.id, user_id: loggedUser.id})
         .unwrap()
         .then(res => {
             handleTemporarilyStopTimer();
@@ -86,8 +89,15 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                 <div className="sp1_single_task--modal-body p-3">
                     {/* show track time */}
                     <div className="alert alert-warning">
-                        Your tracked time for today is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> 7 hours </span> and <span className="font-weight-bold"> 15 minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span>
-                        less. 
+                        {isFetching ? <React.Fragment>
+                            <Placeholder width="80%" height={14} className="mb-1" />
+                            <Placeholder width="100%" height={14} className="mb-1" />
+                            <Placeholder width="60%" height={14} />
+                        </React.Fragment> :
+                        <React.Fragment>
+                            Your tracked time for today is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> 7 hours </span> and <span className="font-weight-bold"> 15 minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less. 
+                        </React.Fragment> 
+                        }
                     </div>
 
                     
@@ -95,6 +105,15 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
 
                     <div className="sp1_stop-button-confirmation-option">
                         <h6>Why is that?</h6>
+                        {isFetching ? <React.Fragment>
+                            <div className="confirmation--options" style={{width: 250}}>
+                                <Placeholder width="80%" height={14} className="mb-1" />
+                                <Placeholder width="80%" height={14} className="mb-1" />
+                                <Placeholder width="60%" height={14} className="mb-1" />
+                                <Placeholder width="70%" height={14} className="mb-1" />
+                                <Placeholder width="60%" height={14} />
+                            </div>
+                        </React.Fragment>:
                         <div className="confirmation--options">
                             {optionId ? (
                                 <>
@@ -183,7 +202,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                                     />
                                 </>
                             )}
-                        </div>
+                        </div>}
 
                         {!optionId && closingToday && (
                             <div className="mt-3 d-flex align-items-center">
