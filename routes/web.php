@@ -304,6 +304,11 @@ Route::get('cropper/{element}', [\App\Http\Controllers\ImageController::class, '
 
 // Sync user permissions
 Route::get('sync-user-permissions', [HomeController::class, 'syncPermissions'])->name('sync_user_permissions');
+Route::post('/tasks/task-stage/store', [TaskController::class, 'TaskReview'])->name('task-status-change');
+Route::post('/tasks/task-stage/approve', [TaskController::class, 'TaskApprove'])->name('task-status-approve');
+Route::post('/tasks/task-stage/revision', [TaskController::class, 'TaskRevision'])->name('task-status-revision');
+Route::post('/tasks/task-time/extension', [TaskController::class, 'TaskExtension'])->name('user-time-extension');
+Route::post('/tasks/task-time/extension/approve', [TaskController::class, 'TaskExtensionApprove'])->name('accept-task-extension');
 
 /* Account routes starts from here */
 Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
@@ -770,7 +775,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::resource('task-calendar', TaskCalendarController::class);
         }
     );
-    Route::resource('tasks', TaskController::class);
+    //Route::resource('tasks', TaskController::class)->only([ 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::get('tasks/{any?}', [TaskController::class, 'index'])
+    ->where('any', '^(?!api\/)[\/\w\.-]*');
+    Route::resource('tasks', TaskController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+    
     Route::get('task-guideline/{project_id}', [TaskController::class, 'viewTaskGuideline'])->name('task-guideline');
     Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
     Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
@@ -1195,7 +1204,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
     Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
+   
+    
+   
+  //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
+
 //custom route for seopage1
 Route::get('/deals/client-form/{id}', [HomeController::class, 'deal']);
 Route::get('/deals/details/{id}', [ContractController::class, 'dealDetails'])->name('dealDetails');
@@ -1236,11 +1250,7 @@ Route::put('/deals/update-milestone/{id}', [ContractController::class, 'updateMi
 Route::delete('/deals/delete-milestone/{id}', [ContractController::class, 'deleteMilestone']);
 Route::get('/deals/milestone-get/{id}', [ContractController::class, 'Milestone']);
 //task review
-Route::post('/tasks/task-stage/store', [TaskController::class, 'TaskReview'])->name('task-status-change');
-Route::post('/tasks/task-stage/approve', [TaskController::class, 'TaskApprove'])->name('task-status-approve');
-Route::post('/tasks/task-stage/revision', [TaskController::class, 'TaskRevision'])->name('task-status-revision');
-Route::post('/tasks/task-time/extension', [TaskController::class, 'TaskExtension'])->name('user-time-extension');
-Route::post('/tasks/task-time/extension/approve', [TaskController::class, 'TaskExtensionApprove'])->name('accept-task-extension');
+
 
 //milestone route
 Route::post('/milestone/complete', [ProjectMilestoneController::class, 'CompleteMilestone'])->name('milestone-complete');

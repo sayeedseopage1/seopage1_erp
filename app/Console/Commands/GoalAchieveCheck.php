@@ -50,6 +50,7 @@ class GoalAchieveCheck extends Command
     public function handle()
     {
         $currentMonth = Carbon::now()->startOfMonth();
+        
     //    /dd($currentMonth);
        // dd($currentMonth);
         
@@ -359,7 +360,7 @@ class GoalAchieveCheck extends Command
                                     } else {
                                         $point->total_points_earn=  $distribute_amount;
                                     }
-                                    $point->created_at = '2023-06-30';
+                                    $point->created_at = '2023-07-30';
         
                                     $point->save();
                                 }
@@ -638,7 +639,7 @@ class GoalAchieveCheck extends Command
                                         } else {
                                             $point->total_points_earn=  $distribute_amount;
                                         }
-                                        $point->created_at = '2023-06-30';
+                                        $point->created_at = '2023-07-30';
         
                                         $point->save();
                                     }
@@ -779,7 +780,7 @@ class GoalAchieveCheck extends Command
                             } else {
                                 $point->total_points_earn=  $distribute_amount;
                             }
-                            $point->created_at = '2023-06-30';
+                            $point->created_at = '2023-07-30';
     
                             $point->save();
                         }
@@ -867,7 +868,7 @@ class GoalAchieveCheck extends Command
                             } else {
                                 $point->total_points_earn=  $distribute_amount;
                             }
-                            $point->created_at = '2023-06-30';
+                            $point->created_at = '2023-07-30';
     
                             $point->save();
                         }

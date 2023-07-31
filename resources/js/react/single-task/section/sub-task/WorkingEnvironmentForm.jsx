@@ -76,9 +76,9 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                 <div className="col-12 col-md-4">
                     <Input
                         id="loginUrl"
-                        label="Working/Staging Site's Login URL"
+                        label="Working/Staging Site's Admin Panel URL"
                         type="text"
-                        placeholder="Type Working/Staging Site's Login URL"
+                        placeholder="Type Working/Staging Site's Admin Panel URL"
                         name="login_url"
                         required={true}
                         value={loginUrl}
@@ -89,9 +89,9 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                 <div className="col-12 col-md-5 h-100">
                     <Input
                         id="siteLoginCredential"
-                        label="Working/Staging Site's Login Username/Email"
+                        label="Working/Staging Site's Admin Panel Username/Email"
                         type="text"
-                        placeholder="Type Working/Staging Site's Login Username/Email"
+                        placeholder="Type Working/Staging Site's Admin Panel Username/Email"
                         name="site-login-credential"
                         required={true}
                         value={siteLoginCredentialUserNameOrEmail}

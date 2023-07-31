@@ -3,6 +3,31 @@ import Modal from '../../components/Modal'
 import Button from '../../components/Button'
 
 const StartTimerConfirmationModal = ({isOpen, onConfirm}) => {
+  const [buttonVisible, setButtonVisible] = React.useState(false);
+  const [countDown, setCountDown] = React.useState(20);
+
+  React.useEffect(() => {
+    let count = countDown ?? 0;
+
+    let timeIntervelId = setInterval(() => {
+        setCountDown(count--);
+    }, 1000);
+
+
+    let timeOutId = setTimeout(() => {
+      setButtonVisible(true);
+      clearInterval(timeIntervelId)
+    }, 22000);
+
+    
+
+    return () => {
+      clearTimeout(timeOutId);
+      clearInterval(timeIntervelId);
+    };
+  }, []);
+
+
   return (
     <Modal isOpen={isOpen} className="subtask-timer-confirmation--modal">
         <div className='subtask-timer-confirmation--panel'>
@@ -23,7 +48,13 @@ const StartTimerConfirmationModal = ({isOpen, onConfirm}) => {
                 <p>In general, anything that has to do with requirements define (of any sort) has to be done by the project manager. Your job is to execute the work based on the defined requirements. If for any reason, project manager needs your help for any of those things, he will have to create a separate task for each of them and those tasks have to be authorized by the top management mandatorily. Report immediately if you are asked to do any of these and if it wasn’t authorized by top management. You should see a text like “Authorized by top management” on the right side of the task title if it was authorized. In case, you don’t report, the extra time taken for these will be considered as your lacking (as they will remain unaccountable) and you will receive negative performance score.”</p>
 
                 <div className='d-flex align-items-center'>
-                    <Button onClick={onConfirm} className='ml-auto'> Yes, I Fully Understand This </Button>
+                     <Button 
+                        onClick={onConfirm} 
+                        className='ml-auto'
+                        disabled={!buttonVisible}
+                      > 
+                        Yes, I Fully Understand This {!buttonVisible && `(${countDown})`}
+                      </Button> 
                 </div>
            </div>
         </div>

@@ -88,22 +88,37 @@ class TaskController extends AccountBaseController
         });
     }
 
-    public function index(TasksDataTable $dataTable)
+    public function index()
     {
-        $viewPermission = user()->permission('view_tasks');
-        abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
+        // $viewPermission = user()->permission('view_tasks');
+        // abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
 
-        if (!request()->ajax()) {
-            $this->projects = Project::allProjects();
-            $this->clients = User::allClients();
-            $this->employees = User::allEmployees(null, true, ($viewPermission == 'all' ? 'all' : null));
-            $this->taskBoardStatus = TaskboardColumn::all();
-            $this->taskCategories = TaskCategory::all();
-            $this->taskLabels = TaskLabelList::all();
-            $this->milestones = ProjectMilestone::all();
-        }
+        // if (!request()->ajax()) {
+        //     $this->projects = Project::allProjects();
+        //     $this->clients = User::allClients();
+        //     $this->employees = User::allEmployees(null, true, ($viewPermission == 'all' ? 'all' : null));
+        //     $this->taskBoardStatus = TaskboardColumn::all();
+        //     $this->taskCategories = TaskCategory::all();
+        //     $this->taskLabels = TaskLabelList::all();
+        //     $this->milestones = ProjectMilestone::all();
+        // }
+        $tasks= Task::select('tasks.*','tasks.heading as task_name','projects.project_name','projects.id as project_id','client.id as client_id',
+        'client.name as client_name','client.image as client_avatar','tasks.estimate_minutes','tasks.estimate_hours','assigned_to.id as assigned_to_id',
+        'assigned_to.name as assigned_to_name','assigned_to.image as assigned_to_avatar','added_by.name as added_by_name','added_by.image as added_by_avatar')
+                ->where('tasks.subtask_id',null)
+                ->join('projects','projects.id','tasks.project_id')
+                ->join('users as client','client.id','projects.client_id')
+                ->join('task_users','task_users.task_id','tasks.id')
+                ->join('users as assigned_to','assigned_to.id','task_users.user_id')
+                ->join('users as added_by','added_by.id','tasks.added_by')
+                ->orderBy('id','desc')
+                ->get()
+                ->take(5);
+        dd($tasks);
+        
+        return view('tasks.index', $this->data);
 
-        return $dataTable->render('tasks.index', $this->data);
+      //  return $dataTable->render('tasks.index', $this->data);
     }
 
 

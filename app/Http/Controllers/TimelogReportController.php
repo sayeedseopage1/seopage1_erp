@@ -477,7 +477,7 @@ class TimelogReportController extends AccountBaseController
             'emp_roles.display_name as employee_roles',
             'project_time_logs.start_time',
             'project_time_logs.end_time',
-            DB::raw('(SELECT COUNT(developer_stop_timers.id) FROM developer_stop_timers WHERE  employee.id = developer_stop_timers.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as missed_hours_count'),
+            DB::raw('(SELECT COUNT(developer_stop_timers.id) FROM developer_stop_timers WHERE  employee.id = developer_stop_timers.user_id AND DATE(developer_stop_timers.date) >= "'.$startDate.'" AND DATE(developer_stop_timers.date) <= "'.$endDate.'") as missed_hours_count'),
             // DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'" GROUP BY DATE(project_time_logs.created_at)) as missed_hours_count'),
             DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
         ])
