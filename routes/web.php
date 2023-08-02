@@ -776,8 +776,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     //Route::resource('tasks', TaskController::class)->only([ 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
-    ->where('any', '^(?!api\/)[\/\w\.-]*');
+    ->where('any', '^(?!api\/)[\/\w\.-]*')
+    ->where('any', '^(?:(?!\d+).)*');
     Route::resource('tasks', TaskController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
     
     Route::get('task-guideline/{project_id}', [TaskController::class, 'viewTaskGuideline'])->name('task-guideline');

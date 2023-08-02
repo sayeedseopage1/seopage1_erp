@@ -90,35 +90,109 @@ class TaskController extends AccountBaseController
 
     public function index()
     {
-        // $viewPermission = user()->permission('view_tasks');
-        // abort_403(!in_array($viewPermission, ['all', 'added', 'owned', 'both']));
-
-        // if (!request()->ajax()) {
-        //     $this->projects = Project::allProjects();
-        //     $this->clients = User::allClients();
-        //     $this->employees = User::allEmployees(null, true, ($viewPermission == 'all' ? 'all' : null));
-        //     $this->taskBoardStatus = TaskboardColumn::all();
-        //     $this->taskCategories = TaskCategory::all();
-        //     $this->taskLabels = TaskLabelList::all();
-        //     $this->milestones = ProjectMilestone::all();
-        // }
-        $tasks= Task::select('tasks.*','tasks.heading as task_name','projects.project_name','projects.id as project_id','client.id as client_id',
-        'client.name as client_name','client.image as client_avatar','tasks.estimate_minutes','tasks.estimate_hours','assigned_to.id as assigned_to_id',
-        'assigned_to.name as assigned_to_name','assigned_to.image as assigned_to_avatar','added_by.name as added_by_name','added_by.image as added_by_avatar')
-                ->where('tasks.subtask_id',null)
-                ->join('projects','projects.id','tasks.project_id')
-                ->join('users as client','client.id','projects.client_id')
-                ->join('task_users','task_users.task_id','tasks.id')
-                ->join('users as assigned_to','assigned_to.id','task_users.user_id')
-                ->join('users as added_by','added_by.id','tasks.added_by')
-                ->orderBy('id','desc')
-                ->get()
-                ->take(5);
-        dd($tasks);
         
         return view('tasks.index', $this->data);
 
+
       //  return $dataTable->render('tasks.index', $this->data);
+    }
+    public function get_tasks()
+    {
+        $tasks = Task::select(
+            'tasks.*', 'tasks.heading as task_name', 'projects.project_name', 'projects.id as project_id',
+            'client.id as client_id', 'client.name as client_name', 'client.image as client_avatar',
+            'tasks.estimate_minutes', 'tasks.estimate_hours', 'assigned_to.id as assigned_to_id',
+            'assigned_to.name as assigned_to_name', 'assigned_to.image as assigned_to_avatar',
+            'added_by.name as added_by_name', 'added_by.image as added_by_avatar','project_milestones.milestone_title',
+            'project_deliverables.title','task_approves.created_at as task_approval_date',
+            'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
+        
+            DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id) as subtasks_count')
+            
+        )
+            ->where('tasks.subtask_id', null)
+            ->join('projects', 'projects.id', 'tasks.project_id')
+            ->join('users as client', 'client.id', 'projects.client_id')
+            ->join('task_users', 'task_users.task_id', 'tasks.id')
+            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
+            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
+            ->join('project_milestones','project_milestones.id','tasks.milestone_id')
+            ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+            ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
+            ->leftJoin('project_deliverables','project_deliverables.id','tasks.deliverable_id')         
+            ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+            ->orderBy('id', 'desc')
+            ->get();
+        
+           foreach ($tasks as $task) {
+            $subtasks_hours_logged = Subtask::select('tasks.*')
+            
+            ->where('sub_tasks.task_id', $task->id) 
+                ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+                ->sum('project_time_logs.total_minutes');
+                $subtasks_completed_count = Subtask::select('tasks.*')
+            
+                ->where('sub_tasks.task_id', $task->id)
+                    ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                  
+                    ->whereIn('tasks.board_column_id',['4','8'])
+                    ->count();
+                    $subtasks_timer_active = Subtask::select('tasks.*')
+            
+                    ->where('sub_tasks.task_id', $task->id) 
+                        ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                        ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+                        ->where('project_time_logs.end_time',null)
+                        ->count();
+            $task->subtasks_hours_logged = $subtasks_hours_logged;
+            $task->subtasks_completed_count = $subtasks_completed_count;
+            $task->subtasks_timer_active = $subtasks_timer_active;
+        }
+                return response()->json([
+                    'status' => 200,
+                    'tasks'=> $tasks,
+                   
+                ]);
+    
+               
+       
+        
+    }
+    public function get_task_subtask($id)
+    {
+        $tasks = Subtask::select(
+            'tasks.*', 'tasks.heading as task_name', 'projects.project_name', 'projects.id as project_id',
+            'client.id as client_id', 'client.name as client_name', 'client.image as client_avatar',
+            'tasks.estimate_minutes', 'tasks.estimate_hours', 'assigned_to.id as assigned_to_id',
+            'assigned_to.name as assigned_to_name', 'assigned_to.image as assigned_to_avatar',
+            'added_by.name as added_by_name', 'added_by.image as added_by_avatar','project_milestones.milestone_title',
+            'project_deliverables.title','task_approves.created_at as task_approval_date',
+            'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
+        
+            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as hours_logged')
+        )
+            ->where('sub_tasks.task_id', $id)
+            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+            ->join('projects', 'projects.id', 'tasks.project_id')
+            ->join('users as client', 'client.id', 'projects.client_id')
+            ->join('task_users', 'task_users.task_id', 'tasks.id')
+            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
+            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
+            ->join('project_milestones','project_milestones.id','tasks.milestone_id')
+            ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+            ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
+            ->leftJoin('project_deliverables','project_deliverables.id','tasks.deliverable_id')
+            ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+        ->groupBy('tasks.id')
+            ->orderBy('id', 'desc')
+            ->get();
+       
+            return response()->json([
+                'status' => 200,
+                'tasks'=> $tasks,
+               
+            ]);
     }
 
 
