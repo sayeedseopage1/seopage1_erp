@@ -228,6 +228,7 @@ return [
         Froiden\LaravelInstaller\Providers\LaravelInstallerServiceProvider::class,
         Brian2694\Toastr\ToastrServiceProvider::class,
         Xetaio\Mentions\Providers\MentionServiceProvider::class,
+        App\Providers\CustomValidationServiceProvider::class,
      
         // NunoMaduro\LaravelDesktopNotifier\LaravelDesktopNotifierServiceProvider::class,
     ],

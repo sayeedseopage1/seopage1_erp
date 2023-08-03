@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('previousNotedIssue');
             $table->longText('reason')->nullable();
             $table->integer('added_by');
+            $table->integer('task_id');
             $table->timestamps();
         });
     }

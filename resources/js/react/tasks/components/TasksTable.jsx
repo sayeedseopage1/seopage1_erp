@@ -3,6 +3,8 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useDrop, useDrag } from 'react-dnd';
 import Loader from './Loader'
 import { convertTime } from '../../utils/converTime';
+import {CompareDate} from '../../utils/dateController';
+const compareDate = new CompareDate(); 
 
 import {
   Column,
@@ -28,6 +30,9 @@ import { useLazyGetSubTasksQuery } from '../../services/api/tasksApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSubtaskToParenttask } from '../../services/features/tasksSlice';
 import { useLocalStorage } from 'react-use';
+import Dropdown from './Dropdown';
+import Button from './Button';
+import StopWatch from './Timer';
 
 
 // reorder column
@@ -128,14 +133,54 @@ const DragableColumnHeader = ({header, table}) => {
 
 
 
+const Person = ({avatar, url, name}) => {
+  return(
+    <div className='d-flex align-items-center'>
+      <div className='' style={{width: '28px'}}>
+        {avatar ? 
+            <div style={{width: '32px', height: '28px'}}>
+              <img 
+                src={`/user-uploads/avatar/${avatar}`}
+                alt={name}
+                width={24}
+                height={24}
+                style={{width: '28px', height: '28px'}}
+                className='rounded-circle'
+              />
+            </div>
+          : <div
+                className="sp1-item-center border rounded-circle"
+                style={{
+                    width: "28px",
+                    height: "28px",
+                }}
+            >
+                <div
+                    style={{
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                    }}
+                >
+                    {name?.slice(0, 1).toUpperCase()}
+                </div>
+            </div>
+        }
+      </div>
 
-export default function TasksTable({isLoading, filter, tableName}){
+      <a href={url} className='pl-2 '>{name}</a>
+    </div>
+  )
+}
+
+
+export default function TasksTable({isLoading, filter, tableName,search}){
   const { tasks } = useSelector(s => s.tasks);
   const [data, setData] = React.useState([])
   const [expanded, setExpanded] = React.useState({}); 
   const [sorting, setSorting] = React.useState([]);
   const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10}); 
   const [skipPageReset, setSkipPageReset] = React.useState(false);
+  const [ globalFilter, setGlobalFilter ] = React.useState('');
 
   const _tasks = React.useMemo(()=> tasks, [tasks]);
 
@@ -164,7 +209,6 @@ export default function TasksTable({isLoading, filter, tableName}){
         return(
           <ExpandTask 
             row={row} 
-            filter={filter} 
             table={table}
             pageIndex={pageIndex}
           />
@@ -189,16 +233,34 @@ export default function TasksTable({isLoading, filter, tableName}){
     {
       id: 'timer_status',
       header: 'Timer Status',
+      accessorKey: 'subtasks_timer_active',
       cell: ({row}) => {
         const data = row?.original;
         const count = data?.subtasks_timer_active;
+        const subtaskCount = _.size(data?.subtasks_count)
         const isActive = count > 0;
-        const color = isActive ? '#54B688' : '#DCDEE1'
+        let serverTime = 0;
+        let localTime = 0;
+        let timer = 0;
 
+         if(data?.start_time && _.isNull(data?.end_time)){
+            serverTime =compareDate.dayjs(data?.start_time).unix();
+            localTime = compareDate.dayjs().unix();
+            timer = localTime - serverTime;
+         }
+
+         const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
+         
+        const color = (isActive || clockIsRunning) ? '#54B688' : '#DCDEE1'
         return(
-          <div style={{color}}>
+          <div style={{color}} className='d-flex align-items-center'>
             <i className="fa-solid fa-stopwatch f-18"/>
-            <span className='ml-2'><strong>{count}</strong></span>
+            {row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && <span className='ml-2'><strong>{count}</strong></span>}
+            {clockIsRunning && 
+              <span className='ml-1 badge badge-primary text-white' style={{fontSize: '11px'}}>
+                {<StopWatch time={timer} run={clockIsRunning} />}
+              </span>
+            }
           </div>
         )
       }
@@ -206,6 +268,7 @@ export default function TasksTable({isLoading, filter, tableName}){
     {
       id: 'milestone',
       header: 'Milestone',
+      accessorKey: 'milestone_title',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -220,17 +283,23 @@ export default function TasksTable({isLoading, filter, tableName}){
     {
       id: 'deliverable',
       header: 'Deliverable',
+      accessorKey: 'deliverable_title',
       cell: ({row}) => {
+        const data = row?.original;
         return(
-          <div>
-            Milestone
-          </div>
+          <abbr title={data?.deliverable_title} style={{textDecoration: 'none'}}>
+            <span className='multine-ellipsis word-break'>
+              {data?.deliverable_title ?? '--'}
+            </span>
+          </abbr>
+          
         )
       }
     },
     {
       id: 'project',
       header: 'Project',
+      accessorKey: 'project_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -245,25 +314,32 @@ export default function TasksTable({isLoading, filter, tableName}){
     {
       id: 'client',
       header: 'Client',
+      accessorKey: 'client_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <span>
-             {data?.client_name} 
-          </span>
+          <div>
+            <Person
+              url={`/account/clients/${data?.client_id}`}
+              avatar={data?.client_avatar}
+              name={data?.client_name}
+            /> 
+          </div>
         )
       }
     }, 
     {
       id: 'project_manager',
       header: 'Project Manager',
-      accessorKey: '',
+      accessorKey: 'pm_id_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <span>
-             {data?.pm_id_name} 
-          </span>
+          <Person
+            url={`/account/employees/${data?.project_manager_id}`}
+            name={data?.pm_id_name}
+            avatar={data?.pm_id_avatar}
+          /> 
         )
       }
     },
@@ -271,60 +347,74 @@ export default function TasksTable({isLoading, filter, tableName}){
     {
       id: 'creation_date',
       header: 'Creation Date',
+      accessorKey: 'creation_date',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
-            { data?.create_on}
-          </div>
+          <span>
+            { data?.creation_date}
+          </span>
         )
       }
     }, 
     {
       id: 'due_date',
       header: 'Due Date',
+      accessorKey: "due_date",
       cell: ({row}) => {
         const data = row?.original;
+        let date = data?.due_date;
+        const currentDate = compareDate.dayjs();
+        let color = ''
+
+        if(compareDate.isSame(currentDate, date)){
+          date = 'Today';
+          color= 'red';
+        }else if(compareDate.isAfter(currentDate, date)){
+          color= 'red'
+        }
+        
+        date = date === 'Today' ? date : dayjs(date).format('DD-MM-YYYY');
         return(
-          <div>
-            {data?.due_date ? (
-              <>
-                {dayjs(data?.due_date).format('DD-MM-YYYY')} <br/> 
-              </>
-            ): '--'}
-          </div>
+          <span style={{color: color}}>
+           <strong>{date ?? '--'}</strong> 
+          </span>
         )
       }
     }, 
     {
       id: 'start_date',
       header: 'Started Date',
+      accessorKey: 'start_date',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
+          <strong>
             {data?.start_date ? (
               <>
                 {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
               </>
             ): '--'}
-          </div>
+          </strong>
         )
       }
     }, 
     {
       id: 'completion_date',
       header: 'Completion Date',
+      accessorKey: 'completion_date',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
-            {data?.due_date ? (
-              <>
-                {dayjs(data?.due_date).format('DD-MM-YYYY')} <br/> 
-              </>
-            ): '--'}
-          </div>
+          <strong>
+            {Number(data?.board_column_id) === 4 ? 
+              data?.completion_date && (
+                <>
+                  {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
+                </>
+              ): '--'
+            } 
+          </strong>
         )
       }
     }, 
@@ -335,13 +425,13 @@ export default function TasksTable({isLoading, filter, tableName}){
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div> 
+          <strong> 
             {data?.task_approval_date ? (
               <>
                 {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
               </>
             ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
-          </div>
+          </strong>
         )
       }
     }, 
@@ -376,10 +466,13 @@ export default function TasksTable({isLoading, filter, tableName}){
       header: 'Assigned By',
       cell: ({row}) => {
         const data = row?.original;
+        
         return(
-          <a href={`/account/employees/${data?.added_by}`}>
-            {data?.added_by_name}
-          </a>
+          <Person
+            url={`/account/employees/${data?.added_by}` }
+            avatar={data?.added_by_avatar}
+            name={data?.added_by_name}
+          /> 
         )
       }
     },
@@ -388,10 +481,12 @@ export default function TasksTable({isLoading, filter, tableName}){
       header: 'Assigned To',
       cell: ({row}) => {
         const data = row?.original;
-        return(
-          <a href={`/account/employees/${data?.assigned_to_id}`}>
-            {data?.assigned_to_name}
-          </a>
+        return( 
+          <Person
+            url={`/account/employees/${data?.assigned_to_id}` }
+            avatar={data?.assigned_to_avatar}
+            name={data?.assigned_to_name}
+          /> 
         )
       }
     },
@@ -456,7 +551,9 @@ export default function TasksTable({isLoading, filter, tableName}){
         const data = row?.original;
         return(
           <div>
-            <div className='badge badge-danger'>Report</div>
+            <div className='badge badge-danger'>
+              <strong>3</strong> Reports
+            </div>
           </div>
         )
       }
@@ -469,7 +566,23 @@ export default function TasksTable({isLoading, filter, tableName}){
         const data = row?.original;
         return(
           <div>
-            <div dangerouslySetInnerHTML={{__html: data?.action}} />
+            <Dropdown>
+              <Dropdown.Toggle icon={false}>
+                <Button variant='tertiary'>
+                  <i className="fa-solid fa-ellipsis-vertical"></i>
+                </Button>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="p-1">
+                <Dropdown.Item className="sp1_tasks_tbl_action">
+                  <i className="fa-regular fa-pen-to-square mr-2"></i>
+                  Edit
+                </Dropdown.Item>
+                <Dropdown.Item className="sp1_tasks_tbl_del">
+                  <i className="fa-solid fa-trash-can mr-2"></i>
+                  Delete
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         )
       }
@@ -495,8 +608,11 @@ export default function TasksTable({isLoading, filter, tableName}){
       expanded,
       columnOrder,
       pagination,
-      tableName
+      tableName,
+      filter,
+      globalFilter:search
     },
+    onGlobalFilterChange: setGlobalFilter,
     autoResetPageIndex: !skipPageReset,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
@@ -571,13 +687,14 @@ export default function TasksTable({isLoading, filter, tableName}){
 }
 
 // expend sub task
-export const ExpandTask = ({row, filter, table, pageIndex}) => {
+export const ExpandTask = ({row, table, pageIndex}) => {
         const [loading, setLoading] = React.useState(false);
         const data = row?.original;
         const subtasks = data?.subtasks_count 
         const pageIdx = pageIndex;
         const dispatch = useDispatch();
         const [getSubTasks, {isFetching}] = useLazyGetSubTasksQuery();
+        const { filter } = table.getState();
 
         const handleExpanding = (e) => {
           setLoading(true); 
@@ -586,6 +703,7 @@ export const ExpandTask = ({row, filter, table, pageIndex}) => {
             if (!row.getCanExpand()) return;
             row.toggleExpanded();
           }else{
+            console.log({filter})
             getSubTasks({
               taskId: data?.id,
               query: new URLSearchParams(filter).toString()

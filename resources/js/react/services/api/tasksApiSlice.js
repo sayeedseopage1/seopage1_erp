@@ -9,6 +9,10 @@ const taskApiSlice = apiSlice.injectEndpoints({
         }),
         getSubTasks: build.query({
             query:({taskId, query}) => `/account/tasks/get-tasks-subtasks/${taskId}?${query}`,
+        }),
+
+        getAllSubtask: build.query({
+            query: (query) => `/account/tasks/get-subtasks?${query}`
         })
     })
 }) ;
@@ -19,6 +23,8 @@ export const {
      useGetTasksQuery,
      useLazyGetTasksQuery,
      useGetSubTasksQuery,
-     useLazyGetSubTasksQuery
+     useLazyGetSubTasksQuery,
+     useGetAllSubtaskQuery,
+     useLazyGetAllSubtaskQuery
 } = taskApiSlice;
 

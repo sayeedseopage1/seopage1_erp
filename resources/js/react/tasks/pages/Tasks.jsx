@@ -7,12 +7,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLazyGetTasksQuery } from "../../services/api/tasksApiSlice";
 import { storeTasks } from "../../services/features/tasksSlice";
 import _ from "lodash";
+import SearchBox from "../components/Searchbox";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
     const dispatch = useDispatch(); 
     const [getTasks, {isFetching}] = useLazyGetTasksQuery();
     const [filter, setFilter] = React.useState(null);
+    const [search,setSearch] = React.useState('');
    
 
     const onFilter = (filter) => {
@@ -40,14 +42,18 @@ const Tasks = () => {
 
             <div className="sp1_tlr_container"> 
                 <div className="sp1_tlr_tbl_container">
-                    <div className="mb-3">
+                    <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar/>
+                        <div style={{maxWidth: '300px'}}>
+                            <SearchBox value={search} onChange={setSearch} />
+                        </div>
                     </div>
-                    
+                     
                     <TasksTable 
                         isLoading={isFetching} 
                         filter={filter} 
                         tableName="tasksTable"
+                        search={search}
                     />
                 </div>
             </div>

@@ -18,7 +18,7 @@ const reports = [
     },
 ];
 
-const ReportForm = ({close}) => {
+const ReportForm = ({close, task}) => {
     const [reason, setReason] = useState({});
     const [person, setPerson] = useState({});
     const [comment, setComment] = useState("");
@@ -43,7 +43,8 @@ const ReportForm = ({close}) => {
             person: person?.id,
             comment,
             previousNotedIssue,
-            user_id: window?.Laravel?.user?.id
+            user_id: window?.Laravel?.user?.id,
+            task_id: task?.id
         }
         
         createReport(data).unwrap()

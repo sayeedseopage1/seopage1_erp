@@ -91,6 +91,7 @@
     87 => 'Froiden\\LaravelInstaller\\Providers\\LaravelInstallerServiceProvider',
     88 => 'Brian2694\\Toastr\\ToastrServiceProvider',
     89 => 'Xetaio\\Mentions\\Providers\\MentionServiceProvider',
+    90 => 'App\\Providers\\CustomValidationServiceProvider',
   ),
   'eager' => 
   array (
@@ -166,6 +167,7 @@
     69 => 'Froiden\\LaravelInstaller\\Providers\\LaravelInstallerServiceProvider',
     70 => 'Brian2694\\Toastr\\ToastrServiceProvider',
     71 => 'Xetaio\\Mentions\\Providers\\MentionServiceProvider',
+    72 => 'App\\Providers\\CustomValidationServiceProvider',
   ),
   'deferred' => 
   array (

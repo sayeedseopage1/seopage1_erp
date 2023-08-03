@@ -17,7 +17,8 @@ const SearchBox = ({value, onChange, placeholder="Search", autoFocus=false, clas
                     value={value}
                     className={`cnx__ins__ui_search_input ${className}`}
                     onChange={e => onChange(e.currentTarget.value)}  
-                    ref={ref}   
+                    ref={ref} 
+                    style={{marginTop: '2px', ...props?.style}}
                     {...props}
                 />
 

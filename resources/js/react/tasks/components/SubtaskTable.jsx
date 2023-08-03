@@ -1,7 +1,10 @@
 import * as React from 'react'; 
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { useDrop, useDrag } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend'
 import Loader from './Loader'
+import { convertTime } from '../../utils/converTime';
+import {CompareDate} from '../../utils/dateController';
+const compareDate = new CompareDate(); 
 
 import {
   Column,
@@ -19,8 +22,17 @@ import {
 import IndeterminateCheckbox from './table/IndeterminateCheckbox';
 
 import demoData from './demo.json';
-import _, { head, size } from 'lodash';
+import _, { head, size, transform } from 'lodash';
 import TasksTablePagination from './TasksTablePagination';
+import dayjs from 'dayjs';
+import TaskTableLoader from './loader/TaskTableLoader';
+import { useLazyGetSubTasksQuery } from '../../services/api/tasksApiSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addSubtaskToParenttask } from '../../services/features/tasksSlice';
+import { useLocalStorage } from 'react-use';
+import Dropdown from './Dropdown';
+import Button from './Button';
+import StopWatch from './Timer';
 
 
 // reorder column
@@ -48,7 +60,7 @@ const DragableColumnHeader = ({header, table}) => {
   const [{isOver}, drop] = useDrop({
     accept: 'column',
     drop: (draggedColumn) => {
-      if(column.id === "expend") return; 
+      if(column.id === "expend" || column.id === 'action') return; 
       const newColumnOrder = reorderColumn(
         draggedColumn.id,
         column.id,
@@ -64,13 +76,12 @@ const DragableColumnHeader = ({header, table}) => {
   const [{ isDragging }, drag, preview] = useDrag({
     collect: monitor => ({
       isDragging: monitor.isDragging(),
-    }),
-    item: () => column,
+    }), 
+    item: () => column.id === "expend" || column.id === 'action' ? null : column,
     type: 'column',
   })
 
   
-
 //   
   React.useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true })
@@ -85,12 +96,12 @@ const DragableColumnHeader = ({header, table}) => {
         colSpan={header.colSpan}
         style={{ 
           opacity: isDragging ? 0.5 : 1, 
-          background: isOver && column.id !== "expend" ? '#f3f3f3' : '', 
+          background: isOver && (column.id !== "expend" || column.id === 'action') ? '#f3f3f3' : '', 
         }}
         className={`sp1_tasks_th sp1_tasks_th--${column.id}`}
       >
         <div className="d-flex align-items-start">
-          {column.id !== 'expend' &&
+          {column.id !== 'expend' && column.id !== 'action' &&
               <button 
               {...{
                 onClick: header.column.getToggleSortingHandler(),
@@ -107,7 +118,7 @@ const DragableColumnHeader = ({header, table}) => {
 
             </button>
           } 
-          <div className='w-100'> 
+          <div> 
             <div>
               {header.isPlaceholder
                 ? null
@@ -122,12 +133,73 @@ const DragableColumnHeader = ({header, table}) => {
 
 
 
-export default function SubTasksTable(){
-  const [data, setData] = React.useState([...demoData])
+const Person = ({avatar, url, name}) => {
+  return(
+    <div className='d-flex align-items-center'>
+      <div className='' style={{width: '28px'}}>
+        {avatar ? 
+            <div style={{width: '32px', height: '28px'}}>
+              <img 
+                src={`/user-uploads/avatar/${avatar}`}
+                alt={name}
+                width={24}
+                height={24}
+                style={{width: '28px', height: '28px'}}
+                className='rounded-circle'
+              />
+            </div>
+          : <div
+                className="sp1-item-center border rounded-circle"
+                style={{
+                    width: "28px",
+                    height: "28px",
+                }}
+            >
+                <div
+                    style={{
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                    }}
+                >
+                    {name?.slice(0, 1).toUpperCase()}
+                </div>
+            </div>
+        }
+      </div>
+
+      <a href={url} className='pl-2 '>{name}</a>
+    </div>
+  )
+}
+
+
+export default function SubTasksTable({isLoading, filter, tableName,search}){
+  const { subtasks } = useSelector(s => s.tasks);
+  const [data, setData] = React.useState([])
   const [expanded, setExpanded] = React.useState({}); 
   const [sorting, setSorting] = React.useState([]);
-  const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 3});
-  
+  const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10}); 
+  const [skipPageReset, setSkipPageReset] = React.useState(false);
+  const [ globalFilter, setGlobalFilter ] = React.useState('');
+
+  const _tasks = React.useMemo(()=> subtasks, [subtasks]);
+
+  React.useEffect(() => {
+    if(_.size(_tasks) === _.size(data)){
+      setSkipPageReset(true);
+      _tasks && setData(_tasks) 
+    }else{
+      _tasks && setData(_tasks);
+    }
+  }, [_tasks])
+
+  // clear skipPageReset 
+  React.useEffect(() => {
+    if(skipPageReset){ 
+      setSkipPageReset(false);
+    }
+  }, [data])
+    
 
   // column
   const defaultColumns = React.useMemo(() => [
@@ -138,20 +210,45 @@ export default function SubTasksTable(){
       cell: ({row}) => {
         const data = row?.original;  
         return (
-          <div className='d-flex align-items-center' style={{gap: '10px'}}> 
-              Products Page
-          </div>
+          <abbr title={data?.heading} style={{textDecoration: 'none'}}>
+            <div className='d-flex align-items-center' style={{gap: '10px'}}>
+                <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
+            </div>
+          </abbr>
         )
       }
     },
     {
       id: 'timer_status',
-      header: 'Timer Active/Inactive',
+      header: 'Timer Status',
+      accessorKey: 'subtasks_timer_active',
       cell: ({row}) => {
         const data = row?.original;
+        const count = data?.subtasks_timer_active;
+        const subtaskCount = _.size(data?.subtasks_count)
+        const isActive = count > 0;
+        let serverTime = 0;
+        let localTime = 0;
+        let timer = 0;
+
+         if(data?.start_time && _.isNull(data?.end_time)){
+            serverTime =compareDate.dayjs(data?.start_time).unix();
+            localTime = compareDate.dayjs().unix();
+            timer = localTime - serverTime;
+         }
+
+         const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
+         
+        const color = (isActive || clockIsRunning) ? '#54B688' : '#DCDEE1'
         return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.timer_action}} />
+          <div style={{color}} className='d-flex align-items-center'>
+            <i className="fa-solid fa-stopwatch f-18"/>
+            {row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && <span className='ml-2'><strong>{count}</strong></span>}
+            {clockIsRunning && 
+              <span className='ml-1 badge badge-primary text-white' style={{fontSize: '11px'}}>
+                {<StopWatch time={timer} run={clockIsRunning} />}
+              </span>
+            }
           </div>
         )
       }
@@ -159,83 +256,170 @@ export default function SubTasksTable(){
     {
       id: 'milestone',
       header: 'Milestone',
+      accessorKey: 'milestone_title',
       cell: ({row}) => {
+        const data = row?.original;
         return(
-          <div>
-            Milestone
-          </div>
+          <abbr title={data?.milestone_title} style={{textDecoration: 'none'}}>
+            <span className='multine-ellipsis word-break'>
+              {data?.milestone_title}
+            </span>
+          </abbr>
         )
       }
     },
     {
       id: 'deliverable',
       header: 'Deliverable',
+      accessorKey: 'deliverable_title',
       cell: ({row}) => {
+        const data = row?.original;
         return(
-          <div>
-            Milestone
-          </div>
+          <abbr title={data?.deliverable_title} style={{textDecoration: 'none'}}>
+            <span className='multine-ellipsis word-break'>
+              {data?.deliverable_title ?? '--'}
+            </span>
+          </abbr>
+          
         )
       }
     },
     {
       id: 'project',
       header: 'Project',
+      accessorKey: 'project_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.project_name}} />
-          </div>
+          <abbr title={data?.project_name} style={{textDecoration: 'none'}}>
+            <a href={`/account/projects/${data?.project_id}`} className='multine-ellipsis'>
+              {data?.project_name}
+            </a>
+          </abbr>
         )
       }
     }, 
     {
       id: 'client',
       header: 'Client',
+      accessorKey: 'client_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
           <div>
-            <div dangerouslySetInnerHTML={{__html: data?.client_name}} />
+            <Person
+              url={`/account/clients/${data?.client_id}`}
+              avatar={data?.client_avatar}
+              name={data?.client_name}
+            /> 
           </div>
         )
       }
     }, 
     {
-      id: 'start_date',
-      header: 'Start Date',
+      id: 'project_manager',
+      header: 'Project Manager',
+      accessorKey: 'pm_id_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.due_date}} />
-          </div>
+          <Person
+            url={`/account/employees/${data?.project_manager_id}`}
+            name={data?.pm_id_name}
+            avatar={data?.pm_id_avatar}
+          /> 
+        )
+      }
+    },
+    
+    {
+      id: 'creation_date',
+      header: 'Creation Date',
+      accessorKey: 'creation_date',
+      cell: ({row}) => {
+        const data = row?.original;
+        return(
+          <span>
+            { data?.creation_date}
+          </span>
         )
       }
     }, 
     {
       id: 'due_date',
       header: 'Due Date',
+      accessorKey: "due_date",
+      cell: ({row}) => {
+        const data = row?.original;
+        let date = data?.due_date;
+        const currentDate = compareDate.dayjs();
+        let color = ''
+
+        if(compareDate.isSame(currentDate, date)){
+          date = 'Today';
+          color= 'red';
+        }else if(compareDate.isAfter(currentDate, date)){
+          color= 'red'
+        }
+        
+        date = date === 'Today' ? date : dayjs(date).format('DD-MM-YYYY');
+        return(
+          <span style={{color: color}}>
+           <strong>{date ?? '--'}</strong> 
+          </span>
+        )
+      }
+    }, 
+    {
+      id: 'start_date',
+      header: 'Started Date',
+      accessorKey: 'start_date',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.due_date}} />
-          </div>
+          <strong>
+            {data?.start_date ? (
+              <>
+                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
+              </>
+            ): '--'}
+          </strong>
+        )
+      }
+    }, 
+    {
+      id: 'completion_date',
+      header: 'Completion Date',
+      accessorKey: 'completion_date',
+      cell: ({row}) => {
+        const data = row?.original;
+        return(
+          <strong>
+            {Number(data?.board_column_id) === 4 ? 
+              data?.completion_date && (
+                <>
+                  {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
+                </>
+              ): '--'
+            } 
+          </strong>
         )
       }
     }, 
     
     {
-      id: 'actual_completion_date',
-      header: 'Actual Completion Date',
+      id: 'approved_on',
+      header: 'Approved On',
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.due_date}} />
-          </div>
+          <strong> 
+            {data?.task_approval_date ? (
+              <>
+                {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
+              </>
+            ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
+          </strong>
         )
       }
     }, 
@@ -246,7 +430,8 @@ export default function SubTasksTable(){
         const data = row?.original;
         return(
           <div>
-            <div dangerouslySetInnerHTML={{__html: data?.estimate_time}} />
+            {data?.estimate_hours ?? 0} hrs <br/>
+            {data?.estimate_minutes ?? 0} mins
           </div>
         )
       }
@@ -258,7 +443,7 @@ export default function SubTasksTable(){
         const data = row?.original;
         return(
           <div>
-            <div dangerouslySetInnerHTML={{__html: data?.timeLogged}} />
+            {convertTime(data?.subtasks_hours_logged)}
           </div>
         )
       }
@@ -269,10 +454,13 @@ export default function SubTasksTable(){
       header: 'Assigned By',
       cell: ({row}) => {
         const data = row?.original;
+        
         return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.users}} />
-          </div>
+          <Person
+            url={`/account/employees/${data?.added_by}` }
+            avatar={data?.added_by_avatar}
+            name={data?.added_by_name}
+          /> 
         )
       }
     },
@@ -281,33 +469,65 @@ export default function SubTasksTable(){
       header: 'Assigned To',
       cell: ({row}) => {
         const data = row?.original;
-        return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.users}} />
-          </div>
+        return( 
+          <Person
+            url={`/account/employees/${data?.assigned_to_id}` }
+            avatar={data?.assigned_to_avatar}
+            name={data?.assigned_to_name}
+          /> 
         )
       }
     },
-    {
-      id: 'creation_date',
-      header: 'Creation Date',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.created_at}} />
-          </div>
-        )
-      }
-    }, 
     {
       id: 'status',
       header: 'Task Status',
       cell: ({row}) => {
         const data = row?.original;
         return(
+          <span
+            className='badge text-white' 
+            style={{background: data?.label_color}}
+          >
+            {data?.column_name}
+          </span>
+        )
+      }
+    }, 
+    {
+      id: 'progress',
+      header: 'Progress',
+      cell: ({row}) => {
+        const data = row?.original;
+        const count = Number(data?.subtasks_count);
+        const completed = Number(data?.subtasks_completed_count);
+        let bg = 'bg-transparent';
+        let percent = 0;
+
+        if(count > 0){percent = (completed / count) * 100;}
+        else{percent = data?.board_column_id === 4 ? 100 : 0;}
+
+
+        if(percent === 100){
+          bg = 'bg-success'
+        }else if(percent < 100 && percent >= 75){
+          bg = 'bg-info';
+        }else if( percent < 75 && percent >= 25){
+          bg = 'bg-warning'
+        }else bg='bg-danger'
+
+
+        return(
           <div>
-            <div dangerouslySetInnerHTML={{__html: data?.board_column}} />
+            <div className="progress" style={{height: '16px'}}>
+                <div 
+                  className={`progress-bar progress-bar-striped ${bg}`} 
+                  role="progressbar" 
+                  style={{width: `${percent}%`}} 
+                  aria-valuenow="10" 
+                  aria-valuemin="0" 
+                  aria-valuemax="100"
+                />
+            </div>
           </div>
         )
       }
@@ -319,23 +539,13 @@ export default function SubTasksTable(){
         const data = row?.original;
         return(
           <div>
-            <div className='alert alert-danger'>Report</div>
+            <div className='badge badge-danger'>
+              <strong>3</strong> Reports
+            </div>
           </div>
         )
       }
     },
-    {
-      id: 'progress',
-      header: 'Progress',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <div>
-            <div dangerouslySetInnerHTML={{__html: data?.progress}} />
-          </div>
-        )
-      }
-    },  
      
     {
       id: 'action',
@@ -344,7 +554,23 @@ export default function SubTasksTable(){
         const data = row?.original;
         return(
           <div>
-            <div dangerouslySetInnerHTML={{__html: data?.action}} />
+            <Dropdown>
+              <Dropdown.Toggle icon={false}>
+                <Button variant='tertiary'>
+                  <i className="fa-solid fa-ellipsis-vertical"></i>
+                </Button>
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="p-1">
+                <Dropdown.Item className="sp1_tasks_tbl_action">
+                  <i className="fa-regular fa-pen-to-square mr-2"></i>
+                  Edit
+                </Dropdown.Item>
+                <Dropdown.Item className="sp1_tasks_tbl_del">
+                  <i className="fa-solid fa-trash-can mr-2"></i>
+                  Delete
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         )
       }
@@ -359,6 +585,7 @@ export default function SubTasksTable(){
   // reset columns
   const resetColumnsOrder = () => setColumnOrder(_.map(columns, 'id'))
   const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
+ 
 
   // table instance...
   const table = useReactTable({
@@ -366,16 +593,26 @@ export default function SubTasksTable(){
     columns,
     state: {
       sorting,
+      expanded,
       columnOrder,
-      pagination
+      pagination,
+      tableName,
+      filter,
+      globalFilter:search
     },
+    onGlobalFilterChange: setGlobalFilter,
+    autoResetPageIndex: !skipPageReset,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
+    onExpandedChange: setExpanded,
+    getSubRows: row => row.subtasks,
     onColumnOrderChange: setColumnOrder,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    paginateExpandedRows: false,
     debugTable: true,
     debugColumns: true,
     debugHeaders: true,
@@ -396,7 +633,7 @@ export default function SubTasksTable(){
             ))}
           </thead>
           <tbody className='sp1_tasks_tbody'> 
-            {table.getRowModel().rows.map(row => {
+            {!isLoading && table.getRowModel().rows.map(row => {
               return (
                 <tr
                   className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
@@ -415,6 +652,7 @@ export default function SubTasksTable(){
                 </tr>
               )
             })}
+            {isLoading && <TaskTableLoader />}
           </tbody>
       </table>
     </div>

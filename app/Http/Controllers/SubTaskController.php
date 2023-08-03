@@ -49,10 +49,19 @@ class SubTaskController extends AccountBaseController
     public function store(Request $request)
     {
        // dd($request);
+        
         $setting = global_setting();
         $task = Task::find(request()->task_id);
+       
         $startDate = $task->start_date->format($setting->date_format);
         $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';
+        $task_title = Task::where('project_id', $task->project_id)
+                  ->where('heading', $request->title)
+                  ->first();
+
+        if ($task_title !== null) {
+            return response()->json(['title' => ['Task title should be unique on this project']], 422);
+        }
         $rules = [
             'title' => 'required',
             'estimate_hours' => 'required',
@@ -69,6 +78,7 @@ class SubTaskController extends AccountBaseController
         if ($request->end_date == "Invalid Date") {
             return response($validator->errors(), 422);
         };
+       
 
         $dueDateRule = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
 

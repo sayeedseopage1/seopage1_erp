@@ -121,16 +121,30 @@
     padding-left: 10px !important;
 }
 
-
-
 .sp1_tasks_th--expend{min-width: 70px !important;}
 .sp1_tasks_th--task{min-width: 100px;}
 .sp1_tasks_th--milestone{min-width: 100px;}
 .sp1_tasks_th--deliverable{min-width: 100px}
 .sp1_tasks_th--timer_status{min-width: 70px;}
 .sp1_tasks_th--project{min-width: 100px;}
-.sp1_tasks_th--client{width: 80px}
+.sp1_tasks_th--client{min-width: 100px}
 .sp1_tasks_th--due_date{min-width: 100px}
 .sp1_tasks_th--start_date{min-width: 100px}
-.sp1_tasks_th--action{min-width: 50px;}
+.sp1_tasks_th--action{min-width: 50px;} 
 
+
+
+.sp1_tasks_tbl_action:hover{
+    background: #f8fafc;
+}
+
+
+.sp1_tasks_tbl_del{
+    background-color: rgb(250, 238, 238);
+    color: #ff0404;
+}
+
+.sp1_tasks_tbl_del:hover{
+    background-color: #f00;
+    color: #fff;
+}

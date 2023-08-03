@@ -18,11 +18,15 @@ const tasksSlice = createSlice({
 
        addSubtaskToParenttask: (state, action) => {
             state.tasks = _.map(state.tasks, t => t?.id === action.payload?.id ? action.payload?.task : t);
+       },
+
+       storeSubTasks: (state, action) => {
+        state.subtasks = action.payload.subtasks;
        }
     }
 })
 
 
 
-export const { storeTasks, addSubtaskToParenttask } = tasksSlice.actions;
+export const { storeTasks, addSubtaskToParenttask, storeSubTasks } = tasksSlice.actions;
 export default tasksSlice.reducer;

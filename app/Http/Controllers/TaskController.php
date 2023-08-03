@@ -121,6 +121,7 @@ class TaskController extends AccountBaseController
             'project_deliverables.title as deliverable_title','task_approves.created_at as task_approval_date',
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
+            'project_time_logs.start_time','project_time_logs.end_time',
         
             DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id AND DATE(sub_tasks.created_at) >= "'.$startDate.'" AND DATE(sub_tasks.created_at) <= "'.$endDate.'") as subtasks_count')
             
@@ -234,8 +235,15 @@ class TaskController extends AccountBaseController
                 }
                
             }
+            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+            {
+                $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
 
-            $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+            }else {
+                $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+            }
+
+            
             
         
            foreach ($tasks as $task) {
@@ -261,9 +269,13 @@ class TaskController extends AccountBaseController
 
                         ->where('project_time_logs.end_time',null)
                         ->count();
-            $task->subtasks_hours_logged = $subtasks_hours_logged;
+            $task_hours_logged= Task::select('tasks.*')->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            ->where('task_id',$task->id)
+            ->sum('project_time_logs.total_minutes');
+            $task->subtasks_hours_logged = $subtasks_hours_logged+ $task_hours_logged;
             $task->subtasks_completed_count = $subtasks_completed_count;
             $task->subtasks_timer_active = $subtasks_timer_active;
+            
         }
         
                 return response()->json([
@@ -289,8 +301,10 @@ class TaskController extends AccountBaseController
             'project_deliverables.title as deliverable_title','task_approves.created_at as task_approval_date',
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
+            'project_time_logs.start_time','project_time_logs.end_time',
         
-            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as hours_logged')
+        
+            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged')
         )
             ->where('sub_tasks.task_id', $id)
             ->join('tasks','tasks.subtask_id','sub_tasks.id')
@@ -314,6 +328,187 @@ class TaskController extends AccountBaseController
                 'tasks'=> $tasks,
                
             ]);
+    }
+    public function get_subtasks(Request $request)
+    {
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $assignee_to = $request->input('assignee_to', null);
+        $assignee_by = $request->input('assignee_by', null);
+       
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+        $status = $request->input('status', null);
+        $date_filter_by = $request->input('date_filter_by', null);
+
+        
+
+        $tasks = Task::select(
+            'tasks.*', 'tasks.heading as task_name', 'projects.project_name', 'projects.id as project_id',
+            'client.id as client_id', 'client.name as client_name', 'client.image as client_avatar',
+            'tasks.estimate_minutes', 'tasks.estimate_hours', 'assigned_to.id as assigned_to_id',
+            'assigned_to.name as assigned_to_name', 'assigned_to.image as assigned_to_avatar',
+            'added_by.name as added_by_name', 'added_by.image as added_by_avatar','project_milestones.milestone_title',
+            'pm_id.id as project_manager_id',
+            'pm_id.name as pm_id_name', 'pm_id.image as pm_id_avatar',
+            'project_deliverables.title as deliverable_title','task_approves.created_at as task_approval_date',
+            'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
+            'tasks.created_at as creation_date','tasks.updated_at as completion_date',
+        
+            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged')
+            
+        )
+            ->where('tasks.subtask_id','!=', null)
+            ->join('projects', 'projects.id', 'tasks.project_id')
+            ->join('users as client', 'client.id', 'projects.client_id')
+            ->join('task_users', 'task_users.task_id', 'tasks.id')
+            ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
+            ->join('users as added_by', 'added_by.id', 'tasks.added_by')
+            ->join('users as pm_id', 'pm_id.id', 'projects.pm_id')
+            ->join('project_milestones','project_milestones.id','tasks.milestone_id')
+            ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+            ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
+            ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')        
+            ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+           // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+            ;
+            //->orderBy('id', 'desc');
+            // ->get();
+            if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+            {
+               
+
+                $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
+            }else 
+            {
+                if (!is_null($startDate)) {
+                    $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                }
+                if (!is_null($endDate)) {
+                    $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                }
+
+            }
+            if (!is_null($assignee_to)) {
+                $tasks = $tasks->where('task_users.user_id', $assignee_to);
+            }
+            if (!is_null($assignee_by)) {
+                $tasks = $tasks->where('tasks.added_by', $assignee_by);
+            }
+            if (!is_null($pmId)) {
+                $tasks = $tasks->where('projects.pm_id', $pmId);
+            }
+            if (!is_null($clientId)) {
+                $tasks = $tasks->where('projects.client_id', $clientId);
+            }
+            if (!is_null($date_filter_by)) {
+                if($date_filter_by == 'Created Date')
+                {
+                    if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                    {
+                       
+        
+                        $tasks = $tasks->whereDate('tasks.created_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+        
+                    }else 
+                    {
+                        if (!is_null($startDate)) {
+                            $tasks = $tasks->whereDate('tasks.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                        }
+                        if (!is_null($endDate)) {
+                            $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                        }
+        
+                    }
+                   
+                    
+
+                }elseif($date_filter_by == 'Due Date')
+                {
+                    if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                    {
+                       
+        
+                        $tasks = $tasks->whereDate('tasks.due_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                      
+        
+                    }else 
+                    {
+                        if (!is_null($startDate)) {
+                            $tasks = $tasks->whereDate('tasks.due_date', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                        }
+                        if (!is_null($endDate)) {
+                            $tasks = $tasks->whereDate('tasks.due_date', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                        }
+        
+                    }
+                   
+                }else 
+                {
+                    if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+                    {
+                       
+        
+                        $tasks = $tasks->whereDate('tasks.updated_at', '=', Carbon::parse($startDate)->format('Y-m-d'));
+                      
+        
+                    }else 
+                    {
+                        if (!is_null($startDate)) {
+                            $tasks = $tasks->whereDate('tasks.updated_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                        }
+                        if (!is_null($endDate)) {
+                            $tasks = $tasks->whereDate('tasks.updated_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                        }
+        
+                    }
+                    
+                }
+               
+            }
+
+            $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+           // dd($tasks);
+            
+        
+        //    foreach ($tasks as $task) {
+        //     $subtasks_hours_logged = Subtask::select('tasks.*')
+            
+        //     ->where('sub_tasks.task_id', $task->id) 
+        //         ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+        //         ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+        //         ->sum('project_time_logs.total_minutes');
+        //         $subtasks_completed_count = Subtask::select('tasks.*')
+            
+        //         ->where('sub_tasks.task_id', $task->id)
+        //             ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                  
+        //             ->whereIn('tasks.board_column_id',['4','8'])
+        //             ->count();
+        //             $subtasks_timer_active = Subtask::select('tasks.*')
+            
+        //             ->where('sub_tasks.task_id', $task->id) 
+        //                 ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+        //                 ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+        //                 ->where('project_time_logs.start_time','!=',null)
+
+        //                 ->where('project_time_logs.end_time',null)
+        //                 ->count();
+        //     $task->subtasks_hours_logged = $subtasks_hours_logged;
+        //     $task->subtasks_completed_count = $subtasks_completed_count;
+        //     $task->subtasks_timer_active = $subtasks_timer_active;
+        // }
+        
+                return response()->json([
+                    'status' => 200,
+                    'tasks'=> $tasks,
+                   
+                ]);
+    
+               
+       
+
     }
 
 
@@ -2827,12 +3022,13 @@ class TaskController extends AccountBaseController
     }
     public function DeveloperReportIssue(Request $request)
     {
-      //  dd($request);
+       //dd($request);
       $report= new DeveloperReportIssue();
       $report->comment= $request->comment;
       $report->person= $request->person;
       $report->previousNotedIssue= $request->previousNotedIssue;
       $report->added_by= Auth::id();
+      $report->task_id= $request->task_id;
       $report->reason= $request->reason;
       $report->save();
       return response()->json([

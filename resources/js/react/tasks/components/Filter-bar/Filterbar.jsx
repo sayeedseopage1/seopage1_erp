@@ -71,7 +71,7 @@ const Filterbar = ({onFilter}) => {
 
         {width > 1400 && 
             <React.Fragment>
-                <UserFilter 
+            <UserFilter 
                 title="Assignee To" 
                 state={developer}
                 setState={setDeveloper}
@@ -115,13 +115,13 @@ const Filterbar = ({onFilter}) => {
             </React.Fragment> 
         }
 
-        <div className='search_container'>
+        {/* <div className='search_container'>
             <LiveSearch 
                 handleSearch={data => setSearch(data)}  
                 searchTerm={searchQuery}
                 setSearchTerm={setSearchQuery}
             />
-        </div>
+        </div> */}
         
         {width < 1400 && 
             <React.Fragment>

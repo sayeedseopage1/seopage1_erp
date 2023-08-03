@@ -46,7 +46,8 @@ var reports = [{
 }];
 var ReportForm = function ReportForm(_ref) {
   var _reason$name;
-  var close = _ref.close;
+  var close = _ref.close,
+    task = _ref.task;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
     _useState2 = _slicedToArray(_useState, 2),
     reason = _useState2[0],
@@ -82,7 +83,8 @@ var ReportForm = function ReportForm(_ref) {
       person: person === null || person === void 0 ? void 0 : person.id,
       comment: comment,
       previousNotedIssue: previousNotedIssue,
-      user_id: (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.id
+      user_id: (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.id,
+      task_id: task === null || task === void 0 ? void 0 : task.id
     };
     createReport(data).unwrap().then(function (res) {
       Toast.fire({
