@@ -1,99 +1,6 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_react_TimeLogTable_components_TimeLogHIstoryModalTable_jsx"],{
 
-/***/ "./resources/js/react/TimeLogTable/components/DragHeader.jsx":
-/*!*******************************************************************!*\
-  !*** ./resources/js/react/TimeLogTable/components/DragHeader.jsx ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrag/useDrag.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrop/useDrop.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-
-
-
-var TableDragAbleHeader = function TableDragAbleHeader(_ref) {
-  var onSort = _ref.onSort,
-    column = _ref.column,
-    columns = _ref.columns,
-    order = _ref.order,
-    onDrop = _ref.onDrop,
-    tableName = _ref.tableName,
-    className = _ref.className;
-  var ref = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)(null);
-  var reOrder = function reOrder(curr, target) {
-    order.splice(order.indexOf(target === null || target === void 0 ? void 0 : target.id), 0, order.splice(order.indexOf(curr === null || curr === void 0 ? void 0 : curr.id), 1)[0]);
-    return _toConsumableArray(order);
-  };
-  var _useDrag = (0,react_dnd__WEBPACK_IMPORTED_MODULE_3__.useDrag)({
-      type: "column",
-      item: {
-        column: column
-      },
-      collect: function collect(monitor) {
-        return {
-          isDragging: !!monitor.isDragging()
-        };
-      }
-    }),
-    _useDrag2 = _slicedToArray(_useDrag, 2),
-    isDragging = _useDrag2[0].isDragging,
-    drag = _useDrag2[1];
-
-  // drop
-  var _useDrop = (0,react_dnd__WEBPACK_IMPORTED_MODULE_4__.useDrop)({
-      accept: "column",
-      hover: function hover(item, monitor) {
-        var dragIndex = order.indexOf(item.column);
-        var hoverIndex = order.indexOf(column);
-      },
-      drop: function drop(item, monitor) {
-        if (item.column !== column) {
-          var reOrderColumn = reOrder(item.column, column);
-          onDrop(reOrderColumn);
-          localStorage.setItem("projectWiseTableorder", JSON.stringify(reOrderColumn));
-        }
-      },
-      collect: function collect(monitor) {
-        return {
-          isOver: !!monitor.isOver()
-        };
-      }
-    }),
-    _useDrop2 = _slicedToArray(_useDrop, 2),
-    isOver = _useDrop2[0].isOver,
-    drop = _useDrop2[1];
-  drag(drop(ref));
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("th", {
-    ref: ref,
-    className: "".concat(className, " sp1_drag_th sp1_drag_col_").concat(column === null || column === void 0 ? void 0 : column.id, " ").concat(isDragging ? '__dragging' : '', " ").concat(isOver ? '__drop-area' : ''),
-    children: column.header
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TableDragAbleHeader);
-
-/***/ }),
-
 /***/ "./resources/js/react/TimeLogTable/components/ReportResolvePreviewModal.jsx":
 /*!**********************************************************************************!*\
   !*** ./resources/js/react/TimeLogTable/components/ReportResolvePreviewModal.jsx ***!
@@ -308,7 +215,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ReportResolvePreviewModal */ "./resources/js/react/TimeLogTable/components/ReportResolvePreviewModal.jsx");
 /* harmony import */ var _DragHeader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./DragHeader */ "./resources/js/react/TimeLogTable/components/DragHeader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_api_timeLogTableApiSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/api/timeLogTableApiSlice */ "./resources/js/react/services/api/timeLogTableApiSlice.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _EmptyTable__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EmptyTable */ "./resources/js/react/TimeLogTable/components/EmptyTable.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -327,6 +243,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
+
+
 var columns = [{
   id: 'serial_number',
   header: 'SL. No.',
@@ -334,8 +255,9 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Serial Number"
+    var rendom = Math.random(8).toString(36).substring(7);
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("span", {
+      children: [rendom.toUpperCase(), "-", row === null || row === void 0 ? void 0 : row.id]
     });
   }
 }, {
@@ -345,8 +267,8 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Date"
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      children: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(row === null || row === void 0 ? void 0 : row.created_at).format('MMM DD, YYYY')
     });
   }
 }, {
@@ -356,8 +278,38 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Duration"
+    var duration = row !== null && row !== void 0 && row.durations ? JSON.parse(row === null || row === void 0 ? void 0 : row.durations) : null;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      style: {
+        minWidth: '150px'
+      },
+      children: [duration && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("th", {
+              className: "pr-2",
+              children: "From"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("th", {
+              className: "pr-2",
+              children: "To"
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tbody", {
+          children: duration && lodash__WEBPACK_IMPORTED_MODULE_3___default().map(duration, function (item) {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+                className: "pr-2",
+                children: item === null || item === void 0 ? void 0 : item.start
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+                className: "pr-2",
+                children: item === null || item === void 0 ? void 0 : item.end
+              })]
+            }, item === null || item === void 0 ? void 0 : item.id);
+          })
+        })]
+      }), ((row === null || row === void 0 ? void 0 : row.transition_hours) || (row === null || row === void 0 ? void 0 : row.transition_minutes)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: [row === null || row === void 0 ? void 0 : row.transition_hours, " Hours ", row === null || row === void 0 ? void 0 : row.transition_minutes, " Minutes"]
+      })]
     });
   }
 }, {
@@ -367,8 +319,14 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Task"
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      children: row !== null && row !== void 0 && row.forgot_to_track_task_id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+        href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.forgot_to_track_task_id),
+        children: row === null || row === void 0 ? void 0 : row.forget_task_heading
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        className: "text-danger",
+        children: "Not Applicable"
+      })
     });
   }
 }, {
@@ -378,8 +336,15 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Client"
+    var client = row === null || row === void 0 ? void 0 : row.client;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      children: client ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+        href: client === null || client === void 0 ? void 0 : client.getUserLink(),
+        children: client === null || client === void 0 ? void 0 : client.getName()
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        className: "text-danger",
+        children: "Not Applicable"
+      })
     });
   }
 }, {
@@ -389,8 +354,14 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Project"
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      children: row !== null && row !== void 0 && row.related_to_any_project ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+        href: "/account/projects/".concat(row === null || row === void 0 ? void 0 : row.related_to_any_project),
+        children: row === null || row === void 0 ? void 0 : row.project_name
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+        className: "text-danger",
+        children: "Not Applicable"
+      })
     });
   }
 }, {
@@ -400,8 +371,8 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Reason"
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      children: row === null || row === void 0 ? void 0 : row.reason_for_less_tracked_hours_a_day_task
     });
   }
 }, {
@@ -411,8 +382,16 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-      children: "Explanation From Employee"
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      children: [(row === null || row === void 0 ? void 0 : row.child_reason) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("strong", {
+          children: "Reason "
+        }), row === null || row === void 0 ? void 0 : row.child_reason]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+        dangerouslySetInnerHTML: {
+          __html: row === null || row === void 0 ? void 0 : row.comment
+        }
+      })]
     });
   }
 }, {
@@ -422,19 +401,23 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       row: row
     });
   }
 }];
 var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
   var row = _ref.row,
-    isOpen = _ref.isOpen,
-    close = _ref.close;
+    filter = _ref.filter;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     data = _useState2[0],
     setData = _useState2[1];
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_9__.useSelector)(function (s) {
+      return s.users;
+    }),
+    users = _useSelector.users,
+    usersObject = _useSelector.usersObject;
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(10),
     _useState4 = _slicedToArray(_useState3, 2),
     perPageData = _useState4[0],
@@ -443,11 +426,7 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
     _useState6 = _slicedToArray(_useState5, 2),
     currentPage = _useState6[0],
     setCurrentPage = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([{
-      id: 'demo'
-    }, {
-      id: 'demo2'
-    }]),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState8 = _slicedToArray(_useState7, 2),
     renderData = _useState8[0],
     setRenderData = _useState8[1];
@@ -459,12 +438,26 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
     _useState12 = _slicedToArray(_useState11, 2),
     columnOrder = _useState12[0],
     setColumnOrder = _useState12[1];
+  var _useLazyGetTimeLogHis = (0,_services_api_timeLogTableApiSlice__WEBPACK_IMPORTED_MODULE_6__.useLazyGetTimeLogHistoryDetailsQuery)(),
+    _useLazyGetTimeLogHis2 = _slicedToArray(_useLazyGetTimeLogHis, 2),
+    getTimeLogHistoryDetails = _useLazyGetTimeLogHis2[0],
+    isLoading = _useLazyGetTimeLogHis2[1].isLoading;
 
   // handle data
   var handleData = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (data, currentPage, perPageData) {
     var paginated = (0,_utils_paginate__WEBPACK_IMPORTED_MODULE_2__.paginate)(data, currentPage, perPageData);
     setRenderData(_toConsumableArray(paginated));
   }, [data, currentPage, perPageData]);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    getTimeLogHistoryDetails("".concat(row === null || row === void 0 ? void 0 : row.employee_id, "?start_date=").concat(filter === null || filter === void 0 ? void 0 : filter.start_date, "&end_data=").concat(filter === null || filter === void 0 ? void 0 : filter.end_date)).unwrap().then(function (res) {
+      var sortedData = lodash__WEBPACK_IMPORTED_MODULE_3___default().orderBy(res, ["id"], ["desc"]);
+      handleData(sortedData, currentPage, perPageData);
+      setData(sortedData);
+      setCurrentPage(1);
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+  }, []);
 
   // data sort handle 
   var handleSorting = function handleSorting(sort) {
@@ -492,22 +485,22 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
   var _columns = lodash__WEBPACK_IMPORTED_MODULE_3___default().sortBy(columns, function (item) {
     return lodash__WEBPACK_IMPORTED_MODULE_3___default().indexOf(columnOrder, item.id);
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
       className: "p-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
         className: "position-relative sp1_tlr_tbl_wrapper",
         style: {
           maxHeight: '80vh'
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("table", {
           className: "sp1_tlr_table",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("thead", {
             className: "sp1_tlr_thead",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tr", {
               className: "sp1_tlr_tr",
               children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(_columns, function (column) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_DragHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_DragHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
                   className: "sp1_tlr_th",
                   column: column,
                   columns: _columns,
@@ -518,22 +511,29 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
                 }, column.id);
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tbody", {
             className: "sp1_tlr_tbody",
             children: lodash__WEBPACK_IMPORTED_MODULE_3___default().size(renderData) > 0 && lodash__WEBPACK_IMPORTED_MODULE_3___default().map(renderData, function (row) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
+              var data = _objectSpread(_objectSpread({}, row), {}, {
+                client: usersObject && (row === null || row === void 0 ? void 0 : row.client_id) && new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User(usersObject[row === null || row === void 0 ? void 0 : row.client_id]),
+                responsiblePerson: usersObject && (row === null || row === void 0 ? void 0 : row.responsible_person_id) && new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User(usersObject[row === null || row === void 0 ? void 0 : row.responsible_person_id]),
+                user: usersObject && new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User(usersObject[row === null || row === void 0 ? void 0 : row.user_id])
+              });
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tr", {
                 className: "sp1_tlr_tr",
                 children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(_columns, function (col) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
                     className: "sp1_tlr_td",
-                    children: col.cell(row)
+                    children: col.cell(data)
                   }, col.id);
                 })
               }, row.id);
             })
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }), !isLoading && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data) === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_EmptyTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
+        colSpan: lodash__WEBPACK_IMPORTED_MODULE_3___default().size(_columns)
+      }), !isLoading && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_1__["default"], {
         onPaginate: handlePagination,
         perpageData: perPageData,
         totalEntry: lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data),

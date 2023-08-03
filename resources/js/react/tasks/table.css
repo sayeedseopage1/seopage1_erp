@@ -1,0 +1,136 @@
+.sp1_tasks_table_wrapper{
+    height: calc(100vh - 330px);
+    overflow: auto;
+}
+
+.sp1_tasks_thead{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.sp1_tasks_th,
+.sp1_tasks_td{
+    padding: 6px 0;
+    font-size: 13px;
+    transition: background 0.2s ease-in-out;
+}
+
+.sp1_tasks_tr:nth-child(even){
+    background-color: #f8f8f8;
+}
+
+.sp1_tasks_td{
+    color: #646770 !important;
+}
+
+.sp1_tasks_td a{
+    color: #646770 !important;
+}
+
+.sp1_tasks_td a:hover{
+    text-decoration: underline !important;
+}
+
+.sp1_tasks_th{
+    border-bottom: 2px solid rgb(242, 242, 245);
+    background-color: #ffffff;
+    position: relative;
+    color: #93979c;
+    min-width: 100px;
+}
+
+.sp1_tasks_th > .resizer{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    cursor: col-resize;
+    height: 100% !important;
+}
+
+.sp1_tasks_th > .resizer.isResizing:hover{
+    background: #777;
+}
+
+.sp1_tasks_tr:hover > td{
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #cecece;
+    border-top: 1px solid #cecece;
+    color: #222;
+}
+
+.row_expending_btn{
+    color: #464b55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px; 
+    border-radius: 100%;
+    background-color: transparent;
+}
+
+.row_expending_btn > i{
+    color: #909596;
+} 
+
+.row_expending_btn > span > i.fa-eye{
+    color: #b6bcbd;
+}
+
+.row_expending_btn:hover > span > i.fa-eye,
+.row_expending_btn.active > span > i.fa-eye{color: #0e8bff;}
+ 
+ 
+.row_expending_btn._disable{
+    color: #aaaeb8;
+    cursor: default;
+}
+
+
+.sp1_task_table_expended{
+    position: relative;
+}
+
+
+.sp1_task_table_expended::before{
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 100px;
+}
+
+.sp1_tasks_tr.expended_parent_row > td{
+    background: #fce59b;
+}
+
+.sp1_tasks_tr.expended_row > td{
+    background: #fffaeb;
+    border-color: #fffaeb;
+}
+
+.sp1_tasks_tr.expended_row:hover > td{ 
+    background: rgb(255, 240, 208)
+}
+
+
+.sp1_tasks_td:not(:first-child){
+    padding-left: 10px !important;
+}
+
+
+
+.sp1_tasks_th--expend{min-width: 70px !important;}
+.sp1_tasks_th--task{min-width: 100px;}
+.sp1_tasks_th--milestone{min-width: 100px;}
+.sp1_tasks_th--deliverable{min-width: 100px}
+.sp1_tasks_th--timer_status{min-width: 70px;}
+.sp1_tasks_th--project{min-width: 100px;}
+.sp1_tasks_th--client{width: 80px}
+.sp1_tasks_th--due_date{min-width: 100px}
+.sp1_tasks_th--start_date{min-width: 100px}
+.sp1_tasks_th--action{min-width: 50px;}
+

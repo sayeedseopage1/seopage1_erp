@@ -3,7 +3,10 @@
 .text-hover-underline:hover{
   text-decoration: underline;
 }
-
+.word-break {
+  -ms-word-break: break-all;
+  word-break: break-all;
+}
  
 @keyframes glice {
     0% {
@@ -66,6 +69,52 @@
 
   .hover-bold:hover{
     font-weight: bold;
-
-
   }
+
+
+/* modal */
+.sp1_modal-content-wrapper{
+  width: 100vw;
+  height: 100vh;
+  background: rgb(0 0 0 / 10%);
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.sp1_modal-panel{
+  width: fit-content;
+  max-width: 90vw;
+  margin-inline: auto;
+  margin-top: 40px;
+  background: #fff;
+}
+
+.sp1_modal-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.sp1_modal-body{
+  min-height: 300px;
+}
+
+
+/* end Modal */
+
+
+.multine-ellipsis {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+abbr{
+  text-decoration: none;
+  cursor:default !important;
+}

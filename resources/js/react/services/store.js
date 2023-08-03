@@ -7,6 +7,7 @@ import usersReducer from './features/usersSlice';
 import pointPageFilterReducer from "./features/pointPageFilterSlice";
 import subtaskReducer from './features/subTaskSlice';
 import timeLogHistoryReducer from "./features/timeLogHistorySlice";
+import tasksReducer from './features/tasksSlice';
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         pointPageFilterOption: pointPageFilterReducer,
         subTask: subtaskReducer,
         timeLogHistory: timeLogHistoryReducer,
+        tasks: tasksReducer
     },
 
    // serializableCheck: false, 

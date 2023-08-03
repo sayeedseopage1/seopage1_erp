@@ -209,7 +209,7 @@ var EmployeeSessionTableColumn = [{
       rowSpan = _ref.rowSpan,
       className = _ref.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-      className: "sp1_tlr_td sp1_tlr_td_border ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+      className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
         href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.task_id),
@@ -233,7 +233,7 @@ var EmployeeSessionTableColumn = [{
       return Number(d['total_minutes']);
     });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
-      className: "sp1_tlr_td sp1_tlr_td_border ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+      className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
       children: ["Total Session: ", totalSession, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), "Total Session Duration: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), " ", (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(totalLogTime)]
     });
@@ -262,15 +262,15 @@ var EmployeeSessionTableColumn = [{
     var row = _ref4.row,
       rowSpan = _ref4.rowSpan,
       className = _ref4.className;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-      className: "sp1_tlr_td sp1_tlr_td_border ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
+      className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
-      children: (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.project_total_time_log)
+      children: [(0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.totalLogTime), "/ ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.project_total_time_log)]
     });
   }
 }, {
   id: 'total_tracked_time_td',
-  header: 'Total Tracked Time (TD)',
+  header: '(TTD) On This Task',
   className: '',
   group: false,
   sorted: false,
@@ -371,7 +371,7 @@ var EmployeeTableColumn = [{
       className = _ref.className,
       rowSpan = _ref.rowSpan;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-      className: "sp1_tlr_td sp1_tlr_td_border ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
+      className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_UserRender__WEBPACK_IMPORTED_MODULE_2__["default"], {
         name: row === null || row === void 0 ? void 0 : row.employee_name,
@@ -666,6 +666,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _utils_paginate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/paginate */ "./resources/js/react/utils/paginate.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -694,7 +697,11 @@ var EmployeeTrackTimeButton = function EmployeeTrackTimeButton(_ref) {
   var row = _ref.row,
     children = _ref.children;
   var _useContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_EmployeeTableContext__WEBPACK_IMPORTED_MODULE_4__.EmployeeTableCtx),
-    filter = _useContext.filter;
+    filter = _useContext.filter,
+    setEmployeeName = _useContext.setEmployeeName,
+    setEmployeeId = _useContext.setEmployeeId,
+    setProjectName = _useContext.setProjectName,
+    setProjectId = _useContext.setProjectId;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     isOpen = _useState2[0],
@@ -719,6 +726,10 @@ var EmployeeTrackTimeButton = function EmployeeTrackTimeButton(_ref) {
     _useState12 = _slicedToArray(_useState11, 2),
     sortConfig = _useState12[0],
     setSortConfig = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+    _useState14 = _slicedToArray(_useState13, 2),
+    totalWokingHour = _useState14[0],
+    setTotalWorkingHour = _useState14[1];
   var _useLazyGetSessionDet = (0,_services_api_timeLogTableSessionDetails__WEBPACK_IMPORTED_MODULE_3__.useLazyGetSessionDetailsQuery)(""),
     _useLazyGetSessionDet2 = _slicedToArray(_useLazyGetSessionDet, 2),
     getSessionDetails = _useLazyGetSessionDet2[0],
@@ -766,6 +777,10 @@ var EmployeeTrackTimeButton = function EmployeeTrackTimeButton(_ref) {
   var handleClick = function handleClick(e) {
     e.preventDefault();
     toggle();
+    setProjectId(row === null || row === void 0 ? void 0 : row.project_id);
+    setProjectName(row === null || row === void 0 ? void 0 : row.project_name);
+    setEmployeeId(row === null || row === void 0 ? void 0 : row.employee_id);
+    setEmployeeName(row === null || row === void 0 ? void 0 : row.employee_name);
     getSessionDetails({
       projectID: row === null || row === void 0 ? void 0 : row.project_id,
       employeeID: row === null || row === void 0 ? void 0 : row.employee_id,
@@ -773,8 +788,17 @@ var EmployeeTrackTimeButton = function EmployeeTrackTimeButton(_ref) {
       endDate: filter === null || filter === void 0 ? void 0 : filter.end_date
     }).unwrap().then(function (res) {
       var sortedData = (0,lodash__WEBPACK_IMPORTED_MODULE_6__.orderBy)(res, ["task_id"], ["desc"]);
-      handleData(sortedData, currentPage, perPageData);
-      setData(sortedData);
+      var total = lodash__WEBPACK_IMPORTED_MODULE_6___default().sumBy(sortedData, function (d) {
+        return Number(d.total_minutes);
+      });
+      var _data = lodash__WEBPACK_IMPORTED_MODULE_6___default().map(sortedData, function (d) {
+        return _objectSpread(_objectSpread({}, d), {}, {
+          totalLogTime: total
+        });
+      });
+      handleData(_data, currentPage, perPageData);
+      setData(_data);
+      setTotalWorkingHour(total);
     });
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -1360,9 +1384,6 @@ function PersonFilterItem(_ref) {
         className: "sp1__pp_filter_dd_toggle",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           children: !selected ? 'All' : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
-            "data-toggle": "tooltip",
-            "data-placement": "bottom",
-            title: selected === null || selected === void 0 ? void 0 : selected.name,
             children: selected === null || selected === void 0 ? void 0 : selected.name
           })
         })
@@ -1660,6 +1681,8 @@ var TableFooter = function TableFooter(_ref) {
     handlePerPageData = _ref.handlePerPageData,
     totalEntry = _ref.totalEntry;
   var showingFrom = (currentPage - 1) * perpageData;
+  var showingTo = showingFrom + perpageData;
+  if (showingTo > totalEntry) showingTo = totalEntry;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "cnx__table_footer mt-3",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
@@ -1687,9 +1710,9 @@ var TableFooter = function TableFooter(_ref) {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         children: "entries"
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "__total_entries",
-      children: ["Showing ", showingFrom + 1, " to ", showingFrom + perpageData, " of ", totalEntry, " entries"]
+      children: totalEntry > 0 ? "Showing ".concat(showingFrom + 1, " to ").concat(showingTo, " of ").concat(totalEntry, " entries") : "Showing 0 to 0 of 0 entries"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Pagination__WEBPACK_IMPORTED_MODULE_1__["default"], {
       onPaginate: onPaginate,
       currentPage: currentPage,
@@ -2209,13 +2232,14 @@ var UserRender = function UserRender(_ref) {
         className: "mb-0 f-14",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
           href: profileUrl,
+          className: "text-hover-underline",
           children: name
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
-        className: "f-12 text-hover-underline",
+        className: "f-12",
         children: roleLink ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
           href: roleLink,
-          className: "text-dark ",
+          className: "text-dark text-hover-underline",
           children: role
         }) : role
       })]
@@ -2327,8 +2351,12 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
     getEmployeeWiseData(filter).unwrap().then(function (res) {
       setCurrentPage(1);
       var sortedData = (0,lodash__WEBPACK_IMPORTED_MODULE_5__.orderBy)(res === null || res === void 0 ? void 0 : res.data, ["employee_id"], ["desc"]);
-      var totalSession = lodash__WEBPACK_IMPORTED_MODULE_5___default().sumBy(sortedData, 'number_of_session');
-      var totalTrackTime = lodash__WEBPACK_IMPORTED_MODULE_5___default().sumBy(sortedData, 'total_minutes');
+      var totalSession = lodash__WEBPACK_IMPORTED_MODULE_5___default().sumBy(sortedData, function (d) {
+        return Number(d.number_of_session);
+      });
+      var totalTrackTime = lodash__WEBPACK_IMPORTED_MODULE_5___default().sumBy(sortedData, function (d) {
+        return Number(d.total_minutes);
+      });
       handleData(sortedData, currentPage, perPageData);
       setData(sortedData);
       setNSession(totalSession);
@@ -2402,39 +2430,6 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
 
 /***/ }),
 
-/***/ "./resources/js/react/global/Placeholder.jsx":
-/*!***************************************************!*\
-  !*** ./resources/js/react/global/Placeholder.jsx ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Placeholder": () => (/* binding */ Placeholder)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-var Placeholder = function Placeholder(_ref) {
-  var _ref$width = _ref.width,
-    width = _ref$width === void 0 ? '100%' : _ref$width,
-    _ref$height = _ref.height,
-    height = _ref$height === void 0 ? 16 : _ref$height,
-    _ref$className = _ref.className,
-    className = _ref$className === void 0 ? "" : _ref$className,
-    _ref$type = _ref.type,
-    type = _ref$type === void 0 ? "square" : _ref$type;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-    className: "skeleton-loading ".concat(className),
-    style: {
-      width: width,
-      height: height,
-      borderRadius: type === 'circle' ? '50%' : '4px'
-    }
-  });
-};
-
-/***/ }),
-
 /***/ "./resources/js/react/services/api/timeLogTableApiSlice.js":
 /*!*****************************************************************!*\
   !*** ./resources/js/react/services/api/timeLogTableApiSlice.js ***!
@@ -2446,7 +2441,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useGetEmployeeWiseDataMutation": () => (/* binding */ useGetEmployeeWiseDataMutation),
 /* harmony export */   "useGetProjectWiseDataMutation": () => (/* binding */ useGetProjectWiseDataMutation),
 /* harmony export */   "useGetTaskWiseDataMutation": () => (/* binding */ useGetTaskWiseDataMutation),
-/* harmony export */   "useGetTimeLogHistoryMutation": () => (/* binding */ useGetTimeLogHistoryMutation)
+/* harmony export */   "useGetTimeLogHistoryMutation": () => (/* binding */ useGetTimeLogHistoryMutation),
+/* harmony export */   "useLazyGetTimeLogHistoryDetailsQuery": () => (/* binding */ useLazyGetTimeLogHistoryDetailsQuery)
 /* harmony export */ });
 /* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
@@ -2499,6 +2495,11 @@ var timeLogTableApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injec
             })
           };
         }
+      }),
+      getTimeLogHistoryDetails: build.query({
+        query: function query(userId) {
+          return "/account/tasks/developer-task-history/".concat(userId);
+        }
       })
     };
   }
@@ -2506,7 +2507,8 @@ var timeLogTableApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injec
 var useGetEmployeeWiseDataMutation = timeLogTableApiSlice.useGetEmployeeWiseDataMutation,
   useGetTaskWiseDataMutation = timeLogTableApiSlice.useGetTaskWiseDataMutation,
   useGetProjectWiseDataMutation = timeLogTableApiSlice.useGetProjectWiseDataMutation,
-  useGetTimeLogHistoryMutation = timeLogTableApiSlice.useGetTimeLogHistoryMutation;
+  useGetTimeLogHistoryMutation = timeLogTableApiSlice.useGetTimeLogHistoryMutation,
+  useLazyGetTimeLogHistoryDetailsQuery = timeLogTableApiSlice.useLazyGetTimeLogHistoryDetailsQuery;
 
 
 /***/ }),
@@ -2548,28 +2550,6 @@ var useGetSessionDetailsQuery = timeLogTableApiSlice.useGetSessionDetailsQuery,
 
 /***/ }),
 
-/***/ "./resources/js/react/utils/converTime.js":
-/*!************************************************!*\
-  !*** ./resources/js/react/utils/converTime.js ***!
-  \************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "convertTime": () => (/* binding */ convertTime)
-/* harmony export */ });
-var convertTime = function convertTime(time) {
-  if (time) {
-    var hours = Math.floor(time / 60) || 0;
-    var min = Math.floor(time % 60) || 0;
-    var h = hours ? "".concat(hours < 10 ? "0".concat(hours) : hours, " hours") : "";
-    return "".concat(h, " ").concat(min < 10 ? "0".concat(min) : min, " min");
-  }
-  return "0 min";
-};
-
-/***/ }),
-
 /***/ "./resources/js/react/utils/paginate.js":
 /*!**********************************************!*\
   !*** ./resources/js/react/utils/paginate.js ***!
@@ -2608,7 +2588,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".sp1_tlr_tbl_wrapper{\r\n    overflow-y: auto;\r\n}\r\n\r\n.sp1_tlr_table{\r\n    width: 100%; \r\n}\r\n\r\n.sp1_tlr_th {\r\n    height: 36px;\r\n    padding: 3px 10px;\r\n    background-color: rgb(255, 255, 255);\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n    position: sticky;\r\n    z-index: 10;\r\n    top: 0;\r\n}\r\n\r\n.sp1_tlr_td{\r\n    padding: 10px;\r\n    max-width: 350px;\r\n    min-width: 150px;\r\n    border-bottom: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\r\n    background-color:rgba(233, 235, 240, 0.349);\r\n}\r\n\r\n.sp1_tlr_td_border{\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\r\n   background-color: #fff !important; \r\n}\r\n\r\n\r\n\r\n.sp1_drag_th.__dragging {\r\n    background-color: rgba(170, 173, 180, 0.222);\r\n}\r\n\r\n.sp1_drag_th.__drop-area {\r\n    background-color: rgba(34, 45, 71, 0.349);\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/TimeLogTable/components/data-table.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,oCAAoC;IACpC,2CAA2C;IAC3C,gBAAgB;IAChB,WAAW;IACX,MAAM;AACV;;AAEA;IACI,aAAa;IACb,gBAAgB;IAChB,gBAAgB;IAChB,2CAA2C;AAC/C;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;GACG,iCAAiC;AACpC;;;;AAIA;IACI,4CAA4C;AAChD;;AAEA;IACI,yCAAyC;AAC7C","sourcesContent":[".sp1_tlr_tbl_wrapper{\r\n    overflow-y: auto;\r\n}\r\n\r\n.sp1_tlr_table{\r\n    width: 100%; \r\n}\r\n\r\n.sp1_tlr_th {\r\n    height: 36px;\r\n    padding: 3px 10px;\r\n    background-color: rgb(255, 255, 255);\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n    position: sticky;\r\n    z-index: 10;\r\n    top: 0;\r\n}\r\n\r\n.sp1_tlr_td{\r\n    padding: 10px;\r\n    max-width: 350px;\r\n    min-width: 150px;\r\n    border-bottom: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\r\n    background-color:rgba(233, 235, 240, 0.349);\r\n}\r\n\r\n.sp1_tlr_td_border{\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\r\n   background-color: #fff !important; \r\n}\r\n\r\n\r\n\r\n.sp1_drag_th.__dragging {\r\n    background-color: rgba(170, 173, 180, 0.222);\r\n}\r\n\r\n.sp1_drag_th.__drop-area {\r\n    background-color: rgba(34, 45, 71, 0.349);\r\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".sp1_tlr_tbl_wrapper{\r\n    overflow-y: auto;\r\n}\r\n\r\n.sp1_tlr_table{\r\n    width: 100%; \r\n}\r\n\r\n.sp1_tlr_th {\r\n    height: 36px;\r\n    padding: 3px 10px;\r\n    background-color: rgb(255, 255, 255);\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n    position: sticky;\r\n    z-index: 10;\r\n    top: 0;\r\n}\r\n\r\n.sp1_tlr_td{\r\n    padding: 10px;\r\n    max-width: 350px;\r\n    min-width: 150px;\r\n    border-bottom: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\r\n    background-color:rgba(233, 235, 240, 0.349);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged{\r\n    background-color:rgba(243, 244, 248, 0.349);\r\n    border-inline: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged:first-child,\r\n.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){\r\n    border-left-color: transparent;\r\n}\r\n\r\n.sp1_tlr_td_border{\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n}\r\n\r\n/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\r\n   background-color: #fff !important; \r\n} */\r\n\r\n\r\n\r\n.sp1_drag_th.__dragging {\r\n    background-color: rgba(170, 173, 180, 0.222);\r\n}\r\n\r\n.sp1_drag_th.__drop-area {\r\n    background-color: rgba(34, 45, 71, 0.349);\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/TimeLogTable/components/data-table.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,oCAAoC;IACpC,2CAA2C;IAC3C,gBAAgB;IAChB,WAAW;IACX,MAAM;AACV;;AAEA;IACI,aAAa;IACb,gBAAgB;IAChB,gBAAgB;IAChB,2CAA2C;AAC/C;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;IACI,2CAA2C;IAC3C,2CAA2C;AAC/C;;AAEA;;IAEI,8BAA8B;AAClC;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;;GAEG;;;;AAIH;IACI,4CAA4C;AAChD;;AAEA;IACI,yCAAyC;AAC7C","sourcesContent":[".sp1_tlr_tbl_wrapper{\r\n    overflow-y: auto;\r\n}\r\n\r\n.sp1_tlr_table{\r\n    width: 100%; \r\n}\r\n\r\n.sp1_tlr_th {\r\n    height: 36px;\r\n    padding: 3px 10px;\r\n    background-color: rgb(255, 255, 255);\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n    position: sticky;\r\n    z-index: 10;\r\n    top: 0;\r\n}\r\n\r\n.sp1_tlr_td{\r\n    padding: 10px;\r\n    max-width: 350px;\r\n    min-width: 150px;\r\n    border-bottom: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\r\n    background-color:rgba(233, 235, 240, 0.349);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged{\r\n    background-color:rgba(243, 244, 248, 0.349);\r\n    border-inline: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged:first-child,\r\n.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){\r\n    border-left-color: transparent;\r\n}\r\n\r\n.sp1_tlr_td_border{\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n}\r\n\r\n/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\r\n   background-color: #fff !important; \r\n} */\r\n\r\n\r\n\r\n.sp1_drag_th.__dragging {\r\n    background-color: rgba(170, 173, 180, 0.222);\r\n}\r\n\r\n.sp1_drag_th.__drop-area {\r\n    background-color: rgba(34, 45, 71, 0.349);\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
