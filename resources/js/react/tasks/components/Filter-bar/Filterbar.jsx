@@ -1,31 +1,31 @@
-import React from 'react'
-import JqueryDateRangePicker from './JqueryDateRangePicker'
-import UserFilter from './UserFilter'; 
-import _ from 'lodash';
-import StatusFilter from './StatusFilter';
-import FilterSidebar from './FilterSidebar';
-import { useWindowSize } from 'react-use';
-import DateTypeFilter from './DateTypeFilter';
+import React from "react";
+import JqueryDateRangePicker from "./JqueryDateRangePicker";
+import UserFilter from "./UserFilter";
+import _ from "lodash";
+import StatusFilter from "./StatusFilter";
+import FilterSidebar from "./FilterSidebar";
+import { useWindowSize } from "react-use";
+import DateTypeFilter from "./DateTypeFilter";
 
-const Filterbar = ({onFilter, page="tasks"}) => {
+const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
-    const [search, setSearch] = React.useState('');
-    const [searchQuery, setSearchQuery] = React.useState('');
+    const [search, setSearch] = React.useState("");
+    const [searchQuery, setSearchQuery] = React.useState("");
     const [developer, setDeveloper] = React.useState(null);
     const [client, setClient] = React.useState(null);
     const [leadDeveloper, setLeadDeveloper] = React.useState(null);
     const [pm, setPm] = React.useState(null);
-    const [status, setStatus] = React.useState({id: 101, column_name: 'Hide completed task'});
-    const [dateType, setDateType] = React.useState('Due Date');
+    const [status, setStatus] = React.useState({
+        id: 101,
+        column_name: "Hide completed task",
+    });
+    const [dateType, setDateType] = React.useState("Due Date");
 
-    const {width} = useWindowSize();
+    const { width } = useWindowSize();
 
-    
     const isDev = _.includes([5], window?.Laravel?.user?.role_id);
- 
-
 
     // MEMORIZE VALUES
     const start_date = React.useMemo(() => startDate, [startDate]);
@@ -38,7 +38,6 @@ const Filterbar = ({onFilter, page="tasks"}) => {
     const _status = React.useMemo(() => status, [status]);
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
 
-    
     React.useEffect(() => {
         const filter = {
             start_date,
@@ -48,126 +47,126 @@ const Filterbar = ({onFilter, page="tasks"}) => {
             assignee_by: _leadDeveloper?.id,
             pm_id: _pm?.id,
             status: _status?.id,
-            date_filter_by
-        }
-
+            date_filter_by,
+        };
 
         onFilter(filter);
+    }, [
+        start_date,
+        end_date,
+        _developer,
+        _client,
+        _leadDeveloper,
+        _pm,
+        _status,
+        date_filter_by,
+    ]);
 
-    }, [start_date, end_date, _developer, _client, _leadDeveloper, _pm, _status, date_filter_by])
-
-
-
-  return (
-    <div className='sp1_task_filter_bar'>
-        <JqueryDateRangePicker 
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
-            onApply={() => null}
-        />
-        <HDivider />
-
-        {width > 1400 && 
-            <React.Fragment>
-            
-            {
-                page === 'subtasks' ?
-                <UserFilter 
-                    title="Assignee To" 
-                    state={developer}
-                    setState={setDeveloper}
-                    roleIds={[5]}
-                />: 
-                <UserFilter 
-                    title="Assignee To" 
-                    state={developer}
-                    setState={setDeveloper}
-                    roleIds={[4, 6, 9, 10]}
-                />
-
-            }
-
-            
-            <HDivider />
-
-            <UserFilter 
-                title="Client" 
-                state={client}
-                setState={setClient}
-                roleIds={null}
+    return (
+        <div className="sp1_task_filter_bar">
+            <JqueryDateRangePicker
+                startDate={startDate}
+                setStartDate={setStartDate}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                onApply={() => null}
             />
-            
-            
             <HDivider />
 
-            <UserFilter 
-                title="Assignee By" 
-                state={leadDeveloper}
-                setState={setLeadDeveloper}
-                roleIds={[1, 4]}
-            />
-                    
-            
-            <HDivider />
+            {width > 1400 && (
+                <React.Fragment>
+                    <UserFilter
+                        title="Client"
+                        state={client}
+                        setState={setClient}
+                        roleIds={null}
+                    />
 
-            <UserFilter 
-                title="Project Manager" 
-                state={pm}
-                setState={setPm}
-                roleIds={[4]}
-            />
+                    <HDivider />
 
-            <HDivider />
-            <StatusFilter state={status} setState={setStatus} />
-            <HDivider />
-            <DateTypeFilter state={dateType} setState={setDateType} />
-            <HDivider />
-            </React.Fragment> 
-        }
+                    <UserFilter
+                        title="Project Manager"
+                        state={pm}
+                        setState={setPm}
+                        roleIds={[4]}
+                    />
+                    <HDivider />
 
-        {width < 1400 && 
-            <React.Fragment>
-                <HDivider className='ml-auto'/>
-                <div>
-                    <div className="sp1_filter_button" onClick={() => setIsOpen(true)} style={{gap: '10px'}}>
-                        <i className="fa-solid fa-filter"></i>
-                        <span>Filter</span>
-                    </div>
+                    <UserFilter
+                        title="Assignee By"
+                        state={leadDeveloper}
+                        setState={setLeadDeveloper}
+                        roleIds={[1, 4]}
+                    />
 
-                    {isOpen && (
-                        <FilterSidebar
-                            developer={developer}
-                            setDeveloper={setDeveloper}
-                            client={client}
-                            setClient={setClient}
-                            leadDeveloper={leadDeveloper}
-                            setLeadDeveloper={setLeadDeveloper}
-                            pm={pm}
-                            setPm={setPm}
-                            status={status}
-                            setStatus={setStatus}
-                            search={search}
-                            setSearch={setSearch}
-                            dateType={dateType}
-                            setDateType={setDateType}
-                            close={() => setIsOpen(false)}
-                            isDev={isDev}
+                    {page === "subtasks" ? (
+                        <UserFilter
+                            title="Assignee To"
+                            state={developer}
+                            setState={setDeveloper}
+                            roleIds={[5]}
+                        />
+                    ) : (
+                        <UserFilter
+                            title="Assignee To"
+                            state={developer}
+                            setState={setDeveloper}
+                            roleIds={[4, 6, 9, 10]}
                         />
                     )}
-                </div>
-            </React.Fragment> 
-        }
 
-    </div>
-  )
-}
+                    <HDivider />
 
-export default Filterbar
+                    <HDivider />
+                    <StatusFilter state={status} setState={setStatus} />
+                    <HDivider />
+                    <DateTypeFilter state={dateType} setState={setDateType} />
+                    <HDivider />
+                </React.Fragment>
+            )}
 
-const HDivider = ({className=''}) =>{
-    return(
-        <div className={`filter_divider ${className}`} />
-    )
-}
+            {width < 1400 && (
+                <React.Fragment>
+                    <HDivider className="ml-auto" />
+                    <div>
+                        <div
+                            className="sp1_filter_button"
+                            onClick={() => setIsOpen(true)}
+                            style={{ gap: "10px" }}
+                        >
+                            <i className="fa-solid fa-filter"></i>
+                            <span>Filter</span>
+                        </div>
+
+                        {isOpen && (
+                            <FilterSidebar
+                                developer={developer}
+                                setDeveloper={setDeveloper}
+                                client={client}
+                                setClient={setClient}
+                                leadDeveloper={leadDeveloper}
+                                setLeadDeveloper={setLeadDeveloper}
+                                pm={pm}
+                                setPm={setPm}
+                                status={status}
+                                setStatus={setStatus}
+                                search={search}
+                                setSearch={setSearch}
+                                dateType={dateType}
+                                setDateType={setDateType}
+                                close={() => setIsOpen(false)}
+                                isDev={isDev}
+                            />
+                        )}
+                    </div>
+                </React.Fragment>
+            )}
+        </div>
+    );
+};
+
+export default Filterbar;
+
+const HDivider = ({ className = "" }) => {
+    return <div className={`filter_divider ${className}`} />;
+};

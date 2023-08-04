@@ -2526,6 +2526,7 @@ class ProjectController extends AccountBaseController
 
     public function tasks($projectAdmin = false)
     {
+       // dd("asjdnasknd");
         $dataTable = new TasksDataTable();
 
         if (!$projectAdmin) {
@@ -2539,6 +2540,7 @@ class ProjectController extends AccountBaseController
         $tab = request('tab');
         ($tab == '') ? $this->activeTab = 'overview' : $this->activeTab = $tab;
         $this->view = 'projects.ajax.tasks';
+       // dd($this->data);
         return $dataTable->render('projects.show', $this->data);
     }
 

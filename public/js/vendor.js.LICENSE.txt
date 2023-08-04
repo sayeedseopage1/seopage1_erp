@@ -341,6 +341,28 @@ and limitations under the License.
  * @license MIT
  */
 
+/**
+ * react-table
+ *
+ * Copyright (c) TanStack
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ *
+ * @license MIT
+ */
+
+/**
+ * table-core
+ *
+ * Copyright (c) TanStack
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ *
+ * @license MIT
+ */
+
 /** @license React v0.17.0
  * scheduler.production.min.js
  *

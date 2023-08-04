@@ -35,18 +35,19 @@ const FilterSidebar = ({
         <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>  
             <DateTypeFilter state={dateType} setState={setDateType} />
 
-            {!isDev &&  <UserFilter 
-                title="Developer" 
-                state={developer}
-                setState={setDeveloper}
-                roleIds={[5, 9, 10]}
-            /> } 
-
             <UserFilter 
                 title="Client" 
                 state={client}
                 setState={setClient}
                 roleIds={null}
+            /> 
+            
+
+            <UserFilter 
+                title="Project Manager" 
+                state={pm}
+                setState={setPm}
+                roleIds={[4]}
             /> 
 
             <UserFilter 
@@ -55,13 +56,14 @@ const FilterSidebar = ({
                 setState={setLeadDeveloper}
                 roleIds={[6]}
             /> 
-
-            <UserFilter 
-                title="Project Manager" 
-                state={pm}
-                setState={setPm}
-                roleIds={[4]}
-            /> 
+            
+            {!isDev &&  <UserFilter 
+                title="Developer" 
+                state={developer}
+                setState={setDeveloper}
+                roleIds={[5, 9, 10]}
+            /> } 
+            
             <StatusFilter state={status} setState={setStatus} />
         </div>
     </div>
