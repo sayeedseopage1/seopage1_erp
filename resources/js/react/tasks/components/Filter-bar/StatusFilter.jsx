@@ -31,7 +31,7 @@ const StatusFilter = ({state, setState}) => {
                     <div className="sp1_filter--users">  
 
                         {!isFetching && _.size(status) > 0 && _.map(_.filter(status, i => _.includes(_.lowerCase(i.column_name), _.lowerCase(query))), item => (
-                            <Dropdown.Item key={item} onClick={() => setState(item)} className={state.id === item.id ? 'sp1_filter--user active' : 'sp1_filter--user'}>
+                            <Dropdown.Item key={item.id} onClick={() => setState(item)} className={state.id === item.id ? 'sp1_filter--user active' : 'sp1_filter--user'}>
                                 {item?.column_name}
                             </Dropdown.Item>
                         ))}

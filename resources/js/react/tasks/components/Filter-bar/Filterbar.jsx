@@ -18,7 +18,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [leadDeveloper, setLeadDeveloper] = React.useState(null);
     const [pm, setPm] = React.useState(null);
     const [status, setStatus] = React.useState({
-        id: 101,
+        id: 10,
         column_name: "Hide completed task",
     });
     const [dateType, setDateType] = React.useState("Due Date");
@@ -98,6 +98,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         setState={setLeadDeveloper}
                         roleIds={[1, 4]}
                     />
+                    
+
+                    <HDivider />
 
                     {page === "subtasks" ? (
                         <UserFilter
@@ -114,8 +117,6 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                             roleIds={[4, 6, 9, 10]}
                         />
                     )}
-
-                    <HDivider />
 
                     <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
