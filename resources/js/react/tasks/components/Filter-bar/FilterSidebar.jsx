@@ -19,7 +19,8 @@ const FilterSidebar = ({
     setSearch,
     dateType,
     setDateType,
-    close
+    close,
+    isDev
 }) => {
   return (
     <div className='sp1_filter_sidebar'>
@@ -33,12 +34,13 @@ const FilterSidebar = ({
 
         <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>  
             <DateTypeFilter state={dateType} setState={setDateType} />
-            <UserFilter 
-                title="Assignee To" 
+
+            {!isDev &&  <UserFilter 
+                title="Developer" 
                 state={developer}
                 setState={setDeveloper}
-                roleIds={[4, 6, 9, 10]}
-            />
+                roleIds={[5, 9, 10]}
+            /> } 
 
             <UserFilter 
                 title="Client" 
@@ -48,11 +50,11 @@ const FilterSidebar = ({
             /> 
 
             <UserFilter 
-                title="Assignee By" 
+                title="Lead Developer" 
                 state={leadDeveloper}
                 setState={setLeadDeveloper}
-                roleIds={[1, 4]}
-            />
+                roleIds={[6]}
+            /> 
 
             <UserFilter 
                 title="Project Manager" 

@@ -6,6 +6,7 @@ import TableFooter from "./TableFooter";
 import { Placeholder } from "../../global/Placeholder";
 import TimeLogTableLoader from "./TimeLogTableLoader";
 import TableDragAbleHeader from "./DragHeader";
+import { useLocalStorage } from "react-use";
 
 const DataTable = ({
     data,
@@ -21,11 +22,16 @@ const DataTable = ({
     isLoading,
 }) => {
     const [columnOrder, setColumnOrder] = useState([]);
+    const [value, setValue] = useLocalStorage(tableName);
 
     // get columns keys
     useEffect(() => {
-        const column_ids = _.map(columns, "id");
-        setColumnOrder([...column_ids]);
+        if(value?.columnOrders){
+            setColumnOrder([...value?.columnOrders]);
+        }else{ 
+            const column_ids = _.map(columns, "id");
+            setColumnOrder([...column_ids]);
+        }
     }, []);
 
     const _columns = _.sortBy(columns, (item) =>
@@ -92,6 +98,7 @@ const DataTable = ({
                                             onDrop={setColumnOrder}
                                             order={columnOrder}
                                             tableName={tableName}
+                                            storeOnLocalStore={(columns) => setValue({...value, columnOrders: columns})}
                                         />
                                     );
                                 })}

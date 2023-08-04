@@ -10,6 +10,8 @@ import { User } from "../../utils/user-details";
 
 import { useSelector } from "react-redux";
 import EmptyTable from "./EmptyTable";
+import { Placeholder } from "../../global/Placeholder";
+import { useLocalStorage } from "react-use";
 
 
 const columns = [
@@ -143,7 +145,7 @@ const columns = [
 
 
 
-const TimeLogHIstoryModalTable = ({ row, filter }) => {
+const TimeLogHIstoryModalTable = ({ row, filter, tableName }) => {
     const [data, setData] = useState([]);
     const { users, usersObject } = useSelector(s => s.users);
     const [perPageData, setParPageData] = useState(10);
@@ -151,11 +153,13 @@ const TimeLogHIstoryModalTable = ({ row, filter }) => {
     const [renderData, setRenderData] = useState([]);
     const [sortConfig, setSortConfig] = useState([]);
     const [columnOrder, setColumnOrder] = useState([]);
+
+    const [value, setValue] = useLocalStorage(tableName);
     
 
     const [
         getTimeLogHistoryDetails,
-        {isLoading}
+        {isFetching}
     ] = useLazyGetTimeLogHistoryDetailsQuery();
 
     // handle data
@@ -199,8 +203,12 @@ const TimeLogHIstoryModalTable = ({ row, filter }) => {
 
     // get columns keys
     useEffect(() => {
-        const column_ids = _.map(columns, "id");
-        setColumnOrder([...column_ids]);
+        if(value?.columnOrders){
+            setColumnOrder(value?.columnOrders);
+        }else{
+            const column_ids = _.map(columns, "id");
+            setColumnOrder([...column_ids]);
+        }
     }, []);
 
     const _columns = _.sortBy(columns, (item) =>
@@ -226,14 +234,25 @@ const TimeLogHIstoryModalTable = ({ row, filter }) => {
                                             onSort={() => {}}
                                             onDrop={setColumnOrder}
                                             order={columnOrder}
-                                            tableName="time_log_history_modal"
+                                            tableName={tableName}
+                                            storeOnLocalStore={(columns) => setValue({...value, columnOrders: columns})}
                                         />
                                     );
                                 })}
                             </tr>
                         </thead>
                         <tbody className="sp1_tlr_tbody">
-                            {(_.size(renderData) > 0) &&
+                            {isFetching && _.times(10, item => (
+                                <tr key={item} className="sp1_tlr_tr">
+                                {_.map(_columns, (col) => (
+                                    <td key={col.id} className="sp1_tlr_td">
+                                        <Placeholder height={14} />
+                                    </td>
+                                ))}
+                            </tr>
+                            ))}
+
+                            {!isFetching && _.size(renderData) > 0 &&
                                 _.map(renderData, (row) => {
                                     let data = {
                                         ...row,
@@ -255,11 +274,11 @@ const TimeLogHIstoryModalTable = ({ row, filter }) => {
                     </table>
                 </div>
 
-                {!isLoading && _.size(data) === 0 && (
+                {!isFetching && _.size(data) === 0 && (
                     <EmptyTable colSpan={_.size(_columns)} />
                 )}
 
-                {!isLoading && _.size(data) > 0 && 
+                {!isFetching && _.size(data) > 0 && 
                     <TableFooter
                         onPaginate={handlePagination}
                         perpageData={perPageData}

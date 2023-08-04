@@ -1,42 +1,42 @@
 import React, {useState} from 'react'
 import Dropdown from '../Dropdown';
-import {User} from '../../../utils/user-details';
 import _ from 'lodash';
-import { useUsers } from '../../../hooks/useUsers';
 import Search from '../Searchbox';
 import Loader from '../Loader';
+import { useGetBoardColoumnListQuery } from '../../../services/api/boardColumnsApliSlice';
 
-const status = [
-    "Hide completed task",
-    "All",
-    "Incomplete",
-    "To Do",
-    "Doing",
-    "Completed",
-    "Under Review",
-    "Overdue"
-]
-
+ 
 const StatusFilter = ({state, setState}) => {
   const [query, setQuery] = useState('');  
+  const {data, isFetching} = useGetBoardColoumnListQuery();
+
+  const status = data ? [
+    {id: 11, column_name: 'All'},
+    ...data,
+    {id: 10, column_name: 'Hide Completed Task'},
+  ] : [];
+
   return (
     <div className='sp1_task_filter_item'>
         <div>
             <span className='mr-2 f-13'>Status :</span>
             <Dropdown>
                 <Dropdown.Toggle className="sp1_filter_toggle">
-                    <strong>{state}</strong>
+                    <strong>{state?.column_name}</strong>
                 </Dropdown.Toggle>
                 <Dropdown.Menu >
                     <div>
                         <Search autoFocus={true} value={query} onChange={setQuery} />
                     </div>
-                    <div className="sp1_filter--users">
-                        {_.map(_.filter(status, i => _.includes(_.lowerCase(i), _.lowerCase(query))), item => (
-                            <Dropdown.Item key={item} onClick={() => setState(item)} className={state === item ? 'sp1_filter--user active' : 'sp1_filter--user'}>
-                                {item}
+                    <div className="sp1_filter--users">  
+
+                        {!isFetching && _.size(status) > 0 && _.map(_.filter(status, i => _.includes(_.lowerCase(i.column_name), _.lowerCase(query))), item => (
+                            <Dropdown.Item key={item} onClick={() => setState(item)} className={state.id === item.id ? 'sp1_filter--user active' : 'sp1_filter--user'}>
+                                {item?.column_name}
                             </Dropdown.Item>
                         ))}
+ 
+                        {isFetching && <div className='py-3'><Loader title='Loading...' /> </div>}
                     </div>
                 </Dropdown.Menu>
             </Dropdown>

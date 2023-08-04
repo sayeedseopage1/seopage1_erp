@@ -25,7 +25,7 @@ const TimeLogHistoryModal = ({ row, isOpen, close }) => {
 
                     <div className="px-3">
                         <React.Suspense fallback={<Loader />} >
-                            <TimeLogHIstoryModalTable row={row} filter={filter} />
+                            <TimeLogHIstoryModalTable tableName="timeLogHistoryModalTable"  row={row} filter={filter} />
                         </React.Suspense>
                     </div>
                 </div>

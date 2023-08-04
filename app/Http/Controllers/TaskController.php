@@ -138,6 +138,7 @@ class TaskController extends AccountBaseController
             ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')        
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+            ->groupBy('tasks.id')
            // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
             ;
             //->orderBy('id', 'desc');
@@ -235,6 +236,34 @@ class TaskController extends AccountBaseController
                 }
                
             }
+            if(!is_null($status))
+            {
+                if($status == 11)
+                {
+                    $tasks = $tasks;
+
+                }elseif ($status== 10) {
+                    $tasks = $tasks->where('tasks.board_column_id','!=',4);
+                }elseif ($status == 1) {
+                    $tasks = $tasks->where('tasks.board_column_id',1);
+                }elseif ($status == 2) {
+                    $tasks = $tasks->where('tasks.board_column_id',2);
+                }elseif ($status == 3) {
+                    $tasks = $tasks->where('tasks.board_column_id',3);
+                }elseif ($status == 4) {
+                    $tasks = $tasks->where('tasks.board_column_id',4);
+                }elseif ($status == 6) {
+                    $tasks = $tasks->where('tasks.board_column_id',6);
+                }elseif ($status == 7) {
+                    $tasks = $tasks->where('tasks.board_column_id',7);
+                }elseif ($status == 8) {
+                    $tasks = $tasks->where('tasks.board_column_id',8);
+                }
+                elseif($status == 9) {
+                    $tasks = $tasks->where('tasks.board_column_id',9);
+                }
+
+            }
             if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
             {
                 $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
@@ -242,6 +271,7 @@ class TaskController extends AccountBaseController
             }else {
                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
             }
+          
 
             
             
@@ -272,9 +302,20 @@ class TaskController extends AccountBaseController
             $task_hours_logged= Task::select('tasks.*')->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
             ->where('task_id',$task->id)
             ->sum('project_time_logs.total_minutes');
+            $subtasks_reports_count = Subtask::select('sub_tasks.*','developer_report_issues.id as report_issues')
+            
+                    ->where('sub_tasks.task_id', $task->id) 
+                        ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                       
+                        ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
+                        
+                        ->count('report_issues.id');
+            
             $task->subtasks_hours_logged = $subtasks_hours_logged+ $task_hours_logged;
             $task->subtasks_completed_count = $subtasks_completed_count;
             $task->subtasks_timer_active = $subtasks_timer_active;
+            
+            $task->subtasks_reports_count = $subtasks_reports_count;
             
         }
         
@@ -302,9 +343,11 @@ class TaskController extends AccountBaseController
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
             'project_time_logs.start_time','project_time_logs.end_time',
+          
         
         
-            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged')
+            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
+            DB::raw('(SELECT COUNT(developer_report_issues.id) FROM developer_report_issues WHERE developer_report_issues.task_id = tasks.id) as subtasks_reports_count')
         )
             ->where('sub_tasks.task_id', $id)
             ->join('tasks','tasks.subtask_id','sub_tasks.id')
@@ -314,11 +357,14 @@ class TaskController extends AccountBaseController
             ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
             ->join('users as added_by', 'added_by.id', 'tasks.added_by')
             ->join('users as pm_id', 'pm_id.id', 'projects.pm_id')
+           
+            
             ->join('project_milestones','project_milestones.id','tasks.milestone_id')
             ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
             ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+          
         ->groupBy('tasks.id')
             ->orderBy('id', 'desc')
             ->get();
@@ -343,7 +389,7 @@ class TaskController extends AccountBaseController
 
         
 
-        $tasks = Task::select(
+        $tasks = SubTask::select(
             'tasks.*', 'tasks.heading as task_name', 'projects.project_name', 'projects.id as project_id',
             'client.id as client_id', 'client.name as client_name', 'client.image as client_avatar',
             'tasks.estimate_minutes', 'tasks.estimate_hours', 'assigned_to.id as assigned_to_id',
@@ -354,22 +400,30 @@ class TaskController extends AccountBaseController
             'project_deliverables.title as deliverable_title','task_approves.created_at as task_approval_date',
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
+            
         
-            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged')
+            DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
+            DB::raw('(SELECT COUNT(developer_report_issues.id) FROM developer_report_issues WHERE developer_report_issues.task_id = tasks.id) as subtasks_reports_count')
             
         )
             ->where('tasks.subtask_id','!=', null)
+            ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
             ->join('projects', 'projects.id', 'tasks.project_id')
             ->join('users as client', 'client.id', 'projects.client_id')
             ->join('task_users', 'task_users.task_id', 'tasks.id')
             ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
             ->join('users as added_by', 'added_by.id', 'tasks.added_by')
             ->join('users as pm_id', 'pm_id.id', 'projects.pm_id')
+           
+          
             ->join('project_milestones','project_milestones.id','tasks.milestone_id')
             ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
             ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')        
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+           
+           
+            ->groupBy('tasks.id')
            // ->leftJoin('task_approves','task_approves.task_id','tasks.id')
             ;
             //->orderBy('id', 'desc');
@@ -467,38 +521,47 @@ class TaskController extends AccountBaseController
                 }
                
             }
+            if(!is_null($status))
+            {
+                if($status == 11)
+                {
+                    $tasks = $tasks;
 
-            $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+                }elseif ($status== 10) {
+                    $tasks = $tasks->where('tasks.board_column_id','!=',4);
+                }elseif ($status == 1) {
+                    $tasks = $tasks->where('tasks.board_column_id',1);
+                }elseif ($status == 2) {
+                    $tasks = $tasks->where('tasks.board_column_id',2);
+                }elseif ($status == 3) {
+                    $tasks = $tasks->where('tasks.board_column_id',3);
+                }elseif ($status == 4) {
+                    $tasks = $tasks->where('tasks.board_column_id',4);
+                }elseif ($status == 6) {
+                    $tasks = $tasks->where('tasks.board_column_id',6);
+                }elseif ($status == 7) {
+                    $tasks = $tasks->where('tasks.board_column_id',7);
+                }elseif ($status == 8) {
+                    $tasks = $tasks->where('tasks.board_column_id',8);
+                }
+                elseif($status == 9) {
+                    $tasks = $tasks->where('tasks.board_column_id',9);
+                }
+
+            }
+            if(Auth::user()->role_id == 5)
+            {
+                $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
+
+            }else {
+                $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+            }
+          
+
+          
            // dd($tasks);
             
         
-        //    foreach ($tasks as $task) {
-        //     $subtasks_hours_logged = Subtask::select('tasks.*')
-            
-        //     ->where('sub_tasks.task_id', $task->id) 
-        //         ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-        //         ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
-        //         ->sum('project_time_logs.total_minutes');
-        //         $subtasks_completed_count = Subtask::select('tasks.*')
-            
-        //         ->where('sub_tasks.task_id', $task->id)
-        //             ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-                  
-        //             ->whereIn('tasks.board_column_id',['4','8'])
-        //             ->count();
-        //             $subtasks_timer_active = Subtask::select('tasks.*')
-            
-        //             ->where('sub_tasks.task_id', $task->id) 
-        //                 ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
-        //                 ->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
-        //                 ->where('project_time_logs.start_time','!=',null)
-
-        //                 ->where('project_time_logs.end_time',null)
-        //                 ->count();
-        //     $task->subtasks_hours_logged = $subtasks_hours_logged;
-        //     $task->subtasks_completed_count = $subtasks_completed_count;
-        //     $task->subtasks_timer_active = $subtasks_timer_active;
-        // }
         
                 return response()->json([
                     'status' => 200,
@@ -508,6 +571,82 @@ class TaskController extends AccountBaseController
     
                
        
+
+    }
+    public function get_parent_tasks_report_issues($id)
+    {
+        $tasks = Subtask::select(
+            'developer_report_issues.*',
+            'developer_report_issues.comment','person.id as responsible_person_id','person.name as responsible_person_name',
+            'person.image as responsible_person_avatar','report_issue_added_by.id as report_issue_added_by','report_issue_added_by.name as report_issue_added_by',
+            'report_issue_added_by.image as report_issue_added_by_avatar',  'developer_report_issues.previousNotedIssue',  'developer_report_issues.reason',
+  
+        )
+            ->where('sub_tasks.task_id', $id)
+            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+            ->leftJoin('developer_report_issues','developer_report_issues.task_id','tasks.id')
+          
+           
+            ->join('users as person', 'person.id', 'developer_report_issues.person')
+            ->join('users as report_issue_added_by', 'report_issue_added_by.id', 'developer_report_issues.added_by')
+          
+           
+            
+            ->groupBy('tasks.id')
+            ->orderBy('id', 'desc')
+            ->get();
+       
+            return response()->json([
+                'status' => 200,
+                'tasks'=> $tasks,
+               
+            ]);
+
+    }
+    public function get_sub_tasks_report_issues($id)
+    {
+        $tasks = Task::select(
+            'developer_report_issues.*',
+            'developer_report_issues.comment','person.id as responsible_person_id','person.name as responsible_person_name',
+            'person.image as responsible_person_avatar','report_issue_added_by.id as report_issue_added_by','report_issue_added_by.name as report_issue_added_by',
+            'report_issue_added_by.image as report_issue_added_by_avatar',  'developer_report_issues.previousNotedIssue',  'developer_report_issues.reason',
+  
+        )
+            ->where('tasks.id', $id)
+           
+            ->leftJoin('developer_report_issues','developer_report_issues.task_id','tasks.id')
+          
+           
+            ->join('users as person', 'person.id', 'developer_report_issues.person')
+            ->join('users as report_issue_added_by', 'report_issue_added_by.id', 'developer_report_issues.added_by')
+           
+           
+            
+            ->groupBy('tasks.id')
+            ->orderBy('id', 'desc')
+            ->get();
+       
+            return response()->json([
+                'status' => 200,
+                'tasks'=> $tasks,
+               
+            ]);
+
+    }
+
+    public function resolve_report(Request $request)
+    {
+        $report = DeveloperReportIssue::find($request->report_id);
+        $report->admin_comment = $request->admin_comment;
+       
+        $report->status = $request->status;
+        $report->save();
+        return response()->json([
+            'status' => 200,
+            'reports'=> $report,
+           
+        ]);
+
 
     }
 

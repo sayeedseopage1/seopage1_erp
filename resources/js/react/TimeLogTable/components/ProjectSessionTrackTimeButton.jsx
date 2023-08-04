@@ -81,7 +81,7 @@ const ProjectSessionTrackTimeButton = ({ row, children }) => {
                         >
                             {/* heading bar */}
                             <div className="sp1_mark-as--modal-heading">
-                                <h6 className="mb-0">Employee Wise Session</h6>
+                                <h6 className="mb-0">Project Wise Session</h6>
                                 <Button
                                     variant="tertiary"
                                     aria-label="closeModal"
@@ -101,7 +101,7 @@ const ProjectSessionTrackTimeButton = ({ row, children }) => {
                                         data={renderData}
                                         columns={ProjectSessionTableColumn}
                                         height="70vh"
-                                        tableName="employee_timelog_sesson_report"
+                                        tableName="project_timelog_sesson_report"
                                         onSort={handleSorting}
                                         onPaginate={handlePagination}
                                         perpageData={perPageData}

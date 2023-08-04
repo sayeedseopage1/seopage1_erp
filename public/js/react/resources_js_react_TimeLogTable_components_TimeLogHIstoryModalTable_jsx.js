@@ -221,7 +221,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _EmptyTable__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EmptyTable */ "./resources/js/react/TimeLogTable/components/EmptyTable.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useLocalStorage.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -248,6 +250,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var columns = [{
   id: 'serial_number',
   header: 'SL. No.',
@@ -256,7 +260,7 @@ var columns = [{
   sortAccessor: '',
   cell: function cell(row) {
     var rendom = Math.random(8).toString(36).substring(7);
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("span", {
       children: [rendom.toUpperCase(), "-", row === null || row === void 0 ? void 0 : row.id]
     });
   }
@@ -267,7 +271,7 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
       children: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(row === null || row === void 0 ? void 0 : row.created_at).format('MMM DD, YYYY')
     });
   }
@@ -279,35 +283,35 @@ var columns = [{
   sortAccessor: '',
   cell: function cell(row) {
     var duration = row !== null && row !== void 0 && row.durations ? JSON.parse(row === null || row === void 0 ? void 0 : row.durations) : null;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       style: {
         minWidth: '150px'
       },
-      children: [duration && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("table", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("thead", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("tr", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("th", {
+      children: [duration && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("table", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("thead", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("th", {
               className: "pr-2",
               children: "From"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("th", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("th", {
               className: "pr-2",
               children: "To"
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tbody", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("tbody", {
           children: duration && lodash__WEBPACK_IMPORTED_MODULE_3___default().map(duration, function (item) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("tr", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tr", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("td", {
                 className: "pr-2",
                 children: item === null || item === void 0 ? void 0 : item.start
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("td", {
                 className: "pr-2",
                 children: item === null || item === void 0 ? void 0 : item.end
               })]
             }, item === null || item === void 0 ? void 0 : item.id);
           })
         })]
-      }), ((row === null || row === void 0 ? void 0 : row.transition_hours) || (row === null || row === void 0 ? void 0 : row.transition_minutes)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      }), ((row === null || row === void 0 ? void 0 : row.transition_hours) || (row === null || row === void 0 ? void 0 : row.transition_minutes)) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
         children: [row === null || row === void 0 ? void 0 : row.transition_hours, " Hours ", row === null || row === void 0 ? void 0 : row.transition_minutes, " Minutes"]
       })]
     });
@@ -319,11 +323,11 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
-      children: row !== null && row !== void 0 && row.forgot_to_track_task_id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+      children: row !== null && row !== void 0 && row.forgot_to_track_task_id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
         href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.forgot_to_track_task_id),
         children: row === null || row === void 0 ? void 0 : row.forget_task_heading
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
         className: "text-danger",
         children: "Not Applicable"
       })
@@ -337,11 +341,11 @@ var columns = [{
   sortAccessor: '',
   cell: function cell(row) {
     var client = row === null || row === void 0 ? void 0 : row.client;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
-      children: client ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+      children: client ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
         href: client === null || client === void 0 ? void 0 : client.getUserLink(),
         children: client === null || client === void 0 ? void 0 : client.getName()
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
         className: "text-danger",
         children: "Not Applicable"
       })
@@ -354,11 +358,11 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
-      children: row !== null && row !== void 0 && row.related_to_any_project ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
+      children: row !== null && row !== void 0 && row.related_to_any_project ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
         href: "/account/projects/".concat(row === null || row === void 0 ? void 0 : row.related_to_any_project),
         children: row === null || row === void 0 ? void 0 : row.project_name
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("span", {
         className: "text-danger",
         children: "Not Applicable"
       })
@@ -371,7 +375,7 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
       children: row === null || row === void 0 ? void 0 : row.reason_for_less_tracked_hours_a_day_task
     });
   }
@@ -382,12 +386,12 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-      children: [(row === null || row === void 0 ? void 0 : row.child_reason) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("strong", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+      children: [(row === null || row === void 0 ? void 0 : row.child_reason) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("strong", {
           children: "Reason "
         }), row === null || row === void 0 ? void 0 : row.child_reason]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         dangerouslySetInnerHTML: {
           __html: row === null || row === void 0 ? void 0 : row.comment
         }
@@ -401,14 +405,15 @@ var columns = [{
   sorted: false,
   sortAccessor: '',
   cell: function cell(row) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       row: row
     });
   }
 }];
 var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
   var row = _ref.row,
-    filter = _ref.filter;
+    filter = _ref.filter,
+    tableName = _ref.tableName;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
     _useState2 = _slicedToArray(_useState, 2),
     data = _useState2[0],
@@ -438,10 +443,14 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
     _useState12 = _slicedToArray(_useState11, 2),
     columnOrder = _useState12[0],
     setColumnOrder = _useState12[1];
+  var _useLocalStorage = (0,react_use__WEBPACK_IMPORTED_MODULE_13__["default"])(tableName),
+    _useLocalStorage2 = _slicedToArray(_useLocalStorage, 2),
+    value = _useLocalStorage2[0],
+    setValue = _useLocalStorage2[1];
   var _useLazyGetTimeLogHis = (0,_services_api_timeLogTableApiSlice__WEBPACK_IMPORTED_MODULE_6__.useLazyGetTimeLogHistoryDetailsQuery)(),
     _useLazyGetTimeLogHis2 = _slicedToArray(_useLazyGetTimeLogHis, 2),
     getTimeLogHistoryDetails = _useLazyGetTimeLogHis2[0],
-    isLoading = _useLazyGetTimeLogHis2[1].isLoading;
+    isFetching = _useLazyGetTimeLogHis2[1].isFetching;
 
   // handle data
   var handleData = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (data, currentPage, perPageData) {
@@ -479,61 +488,82 @@ var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {
 
   // get columns keys
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var column_ids = lodash__WEBPACK_IMPORTED_MODULE_3___default().map(columns, "id");
-    setColumnOrder(_toConsumableArray(column_ids));
+    if (value !== null && value !== void 0 && value.columnOrders) {
+      setColumnOrder(value === null || value === void 0 ? void 0 : value.columnOrders);
+    } else {
+      var column_ids = lodash__WEBPACK_IMPORTED_MODULE_3___default().map(columns, "id");
+      setColumnOrder(_toConsumableArray(column_ids));
+    }
   }, []);
   var _columns = lodash__WEBPACK_IMPORTED_MODULE_3___default().sortBy(columns, function (item) {
     return lodash__WEBPACK_IMPORTED_MODULE_3___default().indexOf(columnOrder, item.id);
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
       className: "p-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
         className: "position-relative sp1_tlr_tbl_wrapper",
         style: {
           maxHeight: '80vh'
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("table", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("table", {
           className: "sp1_tlr_table",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("thead", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("thead", {
             className: "sp1_tlr_thead",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tr", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("tr", {
               className: "sp1_tlr_tr",
               children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(_columns, function (column) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_DragHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_DragHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
                   className: "sp1_tlr_th",
                   column: column,
                   columns: _columns,
                   onSort: function onSort() {},
                   onDrop: setColumnOrder,
                   order: columnOrder,
-                  tableName: "time_log_history_modal"
+                  tableName: tableName,
+                  storeOnLocalStore: function storeOnLocalStore(columns) {
+                    return setValue(_objectSpread(_objectSpread({}, value), {}, {
+                      columnOrders: columns
+                    }));
+                  }
                 }, column.id);
               })
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tbody", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("tbody", {
             className: "sp1_tlr_tbody",
-            children: lodash__WEBPACK_IMPORTED_MODULE_3___default().size(renderData) > 0 && lodash__WEBPACK_IMPORTED_MODULE_3___default().map(renderData, function (row) {
+            children: [isFetching && lodash__WEBPACK_IMPORTED_MODULE_3___default().times(10, function (item) {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("tr", {
+                className: "sp1_tlr_tr",
+                children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(_columns, function (col) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("td", {
+                    className: "sp1_tlr_td",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_11__.Placeholder, {
+                      height: 14
+                    })
+                  }, col.id);
+                })
+              }, item);
+            }), !isFetching && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(renderData) > 0 && lodash__WEBPACK_IMPORTED_MODULE_3___default().map(renderData, function (row) {
               var data = _objectSpread(_objectSpread({}, row), {}, {
                 client: usersObject && (row === null || row === void 0 ? void 0 : row.client_id) && new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User(usersObject[row === null || row === void 0 ? void 0 : row.client_id]),
                 responsiblePerson: usersObject && (row === null || row === void 0 ? void 0 : row.responsible_person_id) && new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User(usersObject[row === null || row === void 0 ? void 0 : row.responsible_person_id]),
                 user: usersObject && new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User(usersObject[row === null || row === void 0 ? void 0 : row.user_id])
               });
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tr", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("tr", {
                 className: "sp1_tlr_tr",
                 children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(_columns, function (col) {
-                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("td", {
                     className: "sp1_tlr_td",
                     children: col.cell(data)
                   }, col.id);
                 })
               }, row.id);
-            })
+            })]
           })]
         })
-      }), !isLoading && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data) === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_EmptyTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
+      }), !isFetching && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data) === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_EmptyTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
         colSpan: lodash__WEBPACK_IMPORTED_MODULE_3___default().size(_columns)
-      }), !isLoading && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }), !isFetching && lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_TableFooter__WEBPACK_IMPORTED_MODULE_1__["default"], {
         onPaginate: handlePagination,
         perpageData: perPageData,
         totalEntry: lodash__WEBPACK_IMPORTED_MODULE_3___default().size(data),

@@ -13,7 +13,26 @@ const taskApiSlice = apiSlice.injectEndpoints({
 
         getAllSubtask: build.query({
             query: (query) => `/account/tasks/get-subtasks?${query}`
-        })
+        }),
+
+        getTasksReports: build.query({
+            query: ({taskId, type}) => `/account/tasks/${type === 'parent' ? 'get-parent-tasks': 'get-sub-tasks'}/report-issues/${taskId}`,
+            providesTags: ["TASKSREPORT"]
+        }),
+ 
+        resolveReport: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/report-issues/resolve`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },   
+            }), 
+            invalidatesTags: ['TASKSREPORT']
+        }),
     })
 }) ;
 
@@ -25,6 +44,9 @@ export const {
      useGetSubTasksQuery,
      useLazyGetSubTasksQuery,
      useGetAllSubtaskQuery,
-     useLazyGetAllSubtaskQuery
+     useLazyGetAllSubtaskQuery,
+     useGetTasksReportsQuery,
+     useLazyGetTasksReportsQuery,
+     useResolveReportMutation
 } = taskApiSlice;
 

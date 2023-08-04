@@ -54,6 +54,7 @@ const Tasks = () => {
                         filter={filter} 
                         tableName="tasksTable"
                         search={search}
+                        reportPermission={[5, 1, 8]}
                     />
                 </div>
             </div>

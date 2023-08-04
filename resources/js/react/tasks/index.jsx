@@ -33,7 +33,7 @@ const DragLayer = () => {
       style={{ 
         position: 'fixed', 
         pointerEvents: 'none', 
-        zIndex: 100, 
+        zIndex: 999999, 
         left: currentOffset.x, 
         top: currentOffset.y, 
       }}>
@@ -87,7 +87,7 @@ if(container){
                 <Route path='/' element={<Container />}>
                   <Route index element={<Tasks />} /> 
                   <Route path='/subtasks' element ={<SubtasksContainer />} />
-                  <Route path='/my-tasks' element ={<h1>My Tasks</h1>} /> 
+                  <Route path='/my-tasks' element ={<SubtasksContainer />} /> 
                 </Route>
             </Routes>
         </BrowserRouter> 

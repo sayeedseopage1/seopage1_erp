@@ -21984,14 +21984,51 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDragLayer.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
+
+// custom drag layer 
+
+
+var DragLayer = function DragLayer() {
+  var _item$column;
+  var _useDragLayer = (0,react_dnd__WEBPACK_IMPORTED_MODULE_2__.useDragLayer)(function (monitor) {
+      return {
+        item: monitor.getItem(),
+        itemType: monitor.getItemType(),
+        currentOffset: monitor.getClientOffset()
+      };
+    }),
+    item = _useDragLayer.item,
+    itemType = _useDragLayer.itemType,
+    currentOffset = _useDragLayer.currentOffset;
+  if (!currentOffset) {
+    return null;
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+    style: {
+      position: 'fixed',
+      pointerEvents: 'none',
+      zIndex: 999999,
+      left: currentOffset.x,
+      top: currentOffset.y
+    },
+    children: itemType === 'column' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "py-2 px-2 pl-3 bg-white shadow border",
+      style: {
+        width: 200
+      },
+      children: item === null || item === void 0 ? void 0 : (_item$column = item.column) === null || _item$column === void 0 ? void 0 : _item$column.header
+    })
+  });
+};
 var TimeLogTable = function TimeLogTable() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Outlet, {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(DragLayer, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_3__.Outlet, {})]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (TimeLogTable);
@@ -22286,6 +22323,74 @@ if (timeLogTableContainer) {
     })
   }));
 }
+
+/***/ }),
+
+/***/ "./resources/js/react/global/EmptyTable.jsx":
+/*!**************************************************!*\
+  !*** ./resources/js/react/global/EmptyTable.jsx ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+var EmptyTable = function EmptyTable() {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    className: "d-flex flex-column align-items-center justify-content-center",
+    style: {
+      height: '30vh'
+    },
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("svg", {
+        width: "130",
+        height: "130",
+        viewBox: "0 0 80 80",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("g", {
+          fill: "none",
+          fillRule: "evenodd",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+            d: "M0 0h80v80H0z"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("g", {
+            stroke: "#CBCCCD",
+            strokeLinecap: "round",
+            strokeLinejoin: "round",
+            strokeWidth: "2",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+              d: "M75 21.5V30M75 37v30.5a1.5 1.5 0 0 1-1.5 1.5h-67A1.5 1.5 0 0 1 5 67.5V41M5 36.264v-2.57M13 33h12M13 46h12M13 59h12"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("g", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+                d: "M34 33h12M34 46h12M34 59h12"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("g", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+                d: "M55 33h12M55 46h12M55 59h12"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("path", {
+              fill: "#CBCCCD",
+              d: "M6.5 12h67a1.5 1.5 0 0 1 1.5 1.5V22H5v-8.5A1.5 1.5 0 0 1 6.5 12z"
+            })]
+          })]
+        })
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "font-weight-bold",
+      style: {
+        color: '#CBCCCD'
+      },
+      children: "Data Not Available"
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EmptyTable);
 
 /***/ }),
 
@@ -22595,6 +22700,35 @@ var apiSlice = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.crea
 
 /***/ }),
 
+/***/ "./resources/js/react/services/api/boardColumnsApliSlice.js":
+/*!******************************************************************!*\
+  !*** ./resources/js/react/services/api/boardColumnsApliSlice.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useGetBoardColoumnListQuery": () => (/* binding */ useGetBoardColoumnListQuery)
+/* harmony export */ });
+/* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
+
+var boardColumnApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndpoints({
+  endpoints: function endpoints(build) {
+    return {
+      getBoardColoumnList: build.query({
+        query: function query() {
+          return "/get-board-column-list";
+        }
+      })
+    };
+  }
+});
+var useGetBoardColoumnListQuery = boardColumnApiSlice.useGetBoardColoumnListQuery;
+
+
+/***/ }),
+
 /***/ "./resources/js/react/services/api/qualifiedSalesApiSlice.js":
 /*!*******************************************************************!*\
   !*** ./resources/js/react/services/api/qualifiedSalesApiSlice.js ***!
@@ -22647,11 +22781,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useGetAllSubtaskQuery": () => (/* binding */ useGetAllSubtaskQuery),
 /* harmony export */   "useGetSubTasksQuery": () => (/* binding */ useGetSubTasksQuery),
 /* harmony export */   "useGetTasksQuery": () => (/* binding */ useGetTasksQuery),
+/* harmony export */   "useGetTasksReportsQuery": () => (/* binding */ useGetTasksReportsQuery),
 /* harmony export */   "useLazyGetAllSubtaskQuery": () => (/* binding */ useLazyGetAllSubtaskQuery),
 /* harmony export */   "useLazyGetSubTasksQuery": () => (/* binding */ useLazyGetSubTasksQuery),
-/* harmony export */   "useLazyGetTasksQuery": () => (/* binding */ useLazyGetTasksQuery)
+/* harmony export */   "useLazyGetTasksQuery": () => (/* binding */ useLazyGetTasksQuery),
+/* harmony export */   "useLazyGetTasksReportsQuery": () => (/* binding */ useLazyGetTasksReportsQuery),
+/* harmony export */   "useResolveReportMutation": () => (/* binding */ useResolveReportMutation)
 /* harmony export */ });
 /* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var taskApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndpoints({
   endpoints: function endpoints(build) {
@@ -22673,6 +22813,26 @@ var taskApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndpoin
         query: function query(_query3) {
           return "/account/tasks/get-subtasks?".concat(_query3);
         }
+      }),
+      getTasksReports: build.query({
+        query: function query(_ref2) {
+          var taskId = _ref2.taskId,
+            type = _ref2.type;
+          return "/account/tasks/".concat(type === 'parent' ? 'get-parent-tasks' : 'get-sub-tasks', "/report-issues/").concat(taskId);
+        },
+        providesTags: ["TASKSREPORT"]
+      }),
+      resolveReport: build.mutation({
+        query: function query(data) {
+          return {
+            url: "/account/tasks/report-issues/resolve",
+            method: "POST",
+            body: _objectSpread(_objectSpread({}, data), {}, {
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            })
+          };
+        },
+        invalidatesTags: ['TASKSREPORT']
       })
     };
   }
@@ -22682,7 +22842,10 @@ var useGetTasksQuery = taskApiSlice.useGetTasksQuery,
   useGetSubTasksQuery = taskApiSlice.useGetSubTasksQuery,
   useLazyGetSubTasksQuery = taskApiSlice.useLazyGetSubTasksQuery,
   useGetAllSubtaskQuery = taskApiSlice.useGetAllSubtaskQuery,
-  useLazyGetAllSubtaskQuery = taskApiSlice.useLazyGetAllSubtaskQuery;
+  useLazyGetAllSubtaskQuery = taskApiSlice.useLazyGetAllSubtaskQuery,
+  useGetTasksReportsQuery = taskApiSlice.useGetTasksReportsQuery,
+  useLazyGetTasksReportsQuery = taskApiSlice.useLazyGetTasksReportsQuery,
+  useResolveReportMutation = taskApiSlice.useResolveReportMutation;
 
 
 /***/ }),
@@ -23015,8 +23178,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "addSubtaskToParenttask": () => (/* binding */ addSubtaskToParenttask),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "storeReport": () => (/* binding */ storeReport),
 /* harmony export */   "storeSubTasks": () => (/* binding */ storeSubTasks),
-/* harmony export */   "storeTasks": () => (/* binding */ storeTasks)
+/* harmony export */   "storeTasks": () => (/* binding */ storeTasks),
+/* harmony export */   "updateReportStatus": () => (/* binding */ updateReportStatus)
 /* harmony export */ });
 /* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @reduxjs/toolkit */ "./node_modules/@reduxjs/toolkit/dist/redux-toolkit.esm.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
@@ -23026,7 +23191,8 @@ __webpack_require__.r(__webpack_exports__);
 var initialState = {
   tasks: [],
   subtasks: [],
-  filter: null
+  filter: null,
+  reports: []
 };
 var tasksSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
   name: 'tasks',
@@ -23043,13 +23209,30 @@ var tasksSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_1__.createSlice)({
     },
     storeSubTasks: function storeSubTasks(state, action) {
       state.subtasks = action.payload.subtasks;
+    },
+    storeReport: function storeReport(state, action) {
+      state.reports = action.payload.reports;
+    },
+    updateReportStatus: function updateReportStatus(state, action) {
+      var _action$payload3 = action.payload,
+        id = _action$payload3.id,
+        status = _action$payload3.status;
+      var reportIndex = state.reports.findIndex(function (r) {
+        return r.id === id;
+      });
+      if (reportIndex !== -1) {
+        // Update the status of the report at the found index
+        state.reports[reportIndex].status = status;
+      }
     }
   }
 });
 var _tasksSlice$actions = tasksSlice.actions,
   storeTasks = _tasksSlice$actions.storeTasks,
   addSubtaskToParenttask = _tasksSlice$actions.addSubtaskToParenttask,
-  storeSubTasks = _tasksSlice$actions.storeSubTasks;
+  storeSubTasks = _tasksSlice$actions.storeSubTasks,
+  storeReport = _tasksSlice$actions.storeReport,
+  updateReportStatus = _tasksSlice$actions.updateReportStatus;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tasksSlice.reducer);
 
@@ -23628,22 +23811,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Dropdown */ "./resources/js/react/tasks/components/Dropdown.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
-/* harmony import */ var _Searchbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Searchbox */ "./resources/js/react/tasks/components/Searchbox.jsx");
-/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Loader */ "./resources/js/react/tasks/components/Loader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Searchbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Searchbox */ "./resources/js/react/tasks/components/Searchbox.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
 
 
 
@@ -23658,31 +23835,31 @@ var DateTypeFilter = function DateTypeFilter(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     query = _useState2[0],
     setQuery = _useState2[1];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
     className: "sp1_task_filter_item",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
         className: "mr-2 f-13",
-        children: "Status :"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Toggle, {
+        children: "Date Filter By :"
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Toggle, {
           className: "sp1_filter_toggle",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
             children: state
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Menu, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Searchbox__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Menu, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Searchbox__WEBPACK_IMPORTED_MODULE_3__["default"], {
               autoFocus: true,
               value: query,
               onChange: setQuery
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "sp1_filter--users",
-            children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(lodash__WEBPACK_IMPORTED_MODULE_3___default().filter(dateType, function (i) {
-              return lodash__WEBPACK_IMPORTED_MODULE_3___default().includes(lodash__WEBPACK_IMPORTED_MODULE_3___default().lowerCase(i), lodash__WEBPACK_IMPORTED_MODULE_3___default().lowerCase(query));
+            children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(lodash__WEBPACK_IMPORTED_MODULE_2___default().filter(dateType, function (i) {
+              return lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(lodash__WEBPACK_IMPORTED_MODULE_2___default().lowerCase(i), lodash__WEBPACK_IMPORTED_MODULE_2___default().lowerCase(query));
             }), function (item) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
                 onClick: function onClick() {
                   return setState(item);
                 },
@@ -23768,7 +23945,8 @@ var FilterSidebar = function FilterSidebar(_ref) {
     setSearch = _ref.setSearch,
     dateType = _ref.dateType,
     setDateType = _ref.setDateType,
-    close = _ref.close;
+    close = _ref.close,
+    isDev = _ref.isDev;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     className: "sp1_filter_sidebar",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -23790,21 +23968,21 @@ var FilterSidebar = function FilterSidebar(_ref) {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_DateTypeFilter__WEBPACK_IMPORTED_MODULE_4__["default"], {
         state: dateType,
         setState: setDateType
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Assignee To",
+      }), !isDev && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "Developer",
         state: developer,
         setState: setDeveloper,
-        roleIds: [4, 6, 9, 10]
+        roleIds: [5, 9, 10]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Client",
         state: client,
         setState: setClient,
         roleIds: null
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        title: "Assignee By",
+        title: "Lead Developer",
         state: leadDeveloper,
         setState: setLeadDeveloper,
-        roleIds: [1, 4]
+        roleIds: [6]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Project Manager",
         state: pm,
@@ -23835,15 +24013,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./JqueryDateRangePicker */ "./resources/js/react/tasks/components/Filter-bar/JqueryDateRangePicker.jsx");
-/* harmony import */ var _LiveSearch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LiveSearch */ "./resources/js/react/tasks/components/Filter-bar/LiveSearch.jsx");
-/* harmony import */ var _UserFilter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./UserFilter */ "./resources/js/react/tasks/components/Filter-bar/UserFilter.jsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _StatusFilter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./StatusFilter */ "./resources/js/react/tasks/components/Filter-bar/StatusFilter.jsx");
-/* harmony import */ var _FilterSidebar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./FilterSidebar */ "./resources/js/react/tasks/components/Filter-bar/FilterSidebar.jsx");
-/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
-/* harmony import */ var _DateTypeFilter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./DateTypeFilter */ "./resources/js/react/tasks/components/Filter-bar/DateTypeFilter.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _UserFilter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserFilter */ "./resources/js/react/tasks/components/Filter-bar/UserFilter.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _StatusFilter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./StatusFilter */ "./resources/js/react/tasks/components/Filter-bar/StatusFilter.jsx");
+/* harmony import */ var _FilterSidebar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./FilterSidebar */ "./resources/js/react/tasks/components/Filter-bar/FilterSidebar.jsx");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
+/* harmony import */ var _DateTypeFilter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./DateTypeFilter */ "./resources/js/react/tasks/components/Filter-bar/DateTypeFilter.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -23860,9 +24037,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var Filterbar = function Filterbar(_ref) {
-  var onFilter = _ref.onFilter;
+  var _window, _window$Laravel, _window$Laravel$user;
+  var onFilter = _ref.onFilter,
+    _ref$page = _ref.page,
+    page = _ref$page === void 0 ? "tasks" : _ref$page;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     isOpen = _React$useState2[0],
@@ -23899,7 +24078,10 @@ var Filterbar = function Filterbar(_ref) {
     _React$useState18 = _slicedToArray(_React$useState17, 2),
     pm = _React$useState18[0],
     setPm = _React$useState18[1];
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState('Hide completed task'),
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState({
+      id: 101,
+      column_name: 'Hide completed task'
+    }),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
     status = _React$useState20[0],
     setStatus = _React$useState20[1];
@@ -23907,8 +24089,9 @@ var Filterbar = function Filterbar(_ref) {
     _React$useState22 = _slicedToArray(_React$useState21, 2),
     dateType = _React$useState22[0],
     setDateType = _React$useState22[1];
-  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_9__["default"])(),
+  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_8__["default"])(),
     width = _useWindowSize.width;
+  var isDev = lodash__WEBPACK_IMPORTED_MODULE_3___default().includes([5], (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.role_id);
 
   // MEMORIZE VALUES
   var start_date = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
@@ -23942,19 +24125,18 @@ var Filterbar = function Filterbar(_ref) {
     var filter = {
       start_date: start_date,
       end_date: end_date,
-      search: _search,
       assignee_to: _developer === null || _developer === void 0 ? void 0 : _developer.id,
       client_id: _client === null || _client === void 0 ? void 0 : _client.id,
       assignee_by: _leadDeveloper === null || _leadDeveloper === void 0 ? void 0 : _leadDeveloper.id,
       pm_id: _pm === null || _pm === void 0 ? void 0 : _pm.id,
-      status: _status,
+      status: _status === null || _status === void 0 ? void 0 : _status.id,
       date_filter_by: date_filter_by
     };
     onFilter(filter);
-  }, [start_date, end_date, _search, _developer, _client, _leadDeveloper, _pm, _status, date_filter_by]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  }, [start_date, end_date, _developer, _client, _leadDeveloper, _pm, _status, date_filter_by]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_filter_bar",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"], {
       startDate: startDate,
       setStartDate: setStartDate,
       endDate: endDate,
@@ -23962,39 +24144,44 @@ var Filterbar = function Filterbar(_ref) {
       onApply: function onApply() {
         return null;
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {}), width > 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), width > 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: [page === 'subtasks' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        title: "Assignee To",
+        state: developer,
+        setState: setDeveloper,
+        roleIds: [5]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Assignee To",
         state: developer,
         setState: setDeveloper,
         roleIds: [4, 6, 9, 10]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Client",
         state: client,
         setState: setClient,
         roleIds: null
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Assignee By",
         state: leadDeveloper,
         setState: setLeadDeveloper,
         roleIds: [1, 4]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Project Manager",
         state: pm,
         setState: setPm,
         roleIds: [4]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_StatusFilter__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_StatusFilter__WEBPACK_IMPORTED_MODULE_4__["default"], {
         state: status,
         setState: setStatus
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_DateTypeFilter__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_DateTypeFilter__WEBPACK_IMPORTED_MODULE_6__["default"], {
         state: dateType,
         setState: setDateType
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {})]
-    }), width < 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(HDivider, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {})]
+    }), width < 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {
         className: "ml-auto"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
           className: "sp1_filter_button",
           onClick: function onClick() {
             return setIsOpen(true);
@@ -24002,12 +24189,12 @@ var Filterbar = function Filterbar(_ref) {
           style: {
             gap: '10px'
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
             className: "fa-solid fa-filter"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
             children: "Filter"
           })]
-        }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_FilterSidebar__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_FilterSidebar__WEBPACK_IMPORTED_MODULE_5__["default"], {
           developer: developer,
           setDeveloper: setDeveloper,
           client: client,
@@ -24024,7 +24211,8 @@ var Filterbar = function Filterbar(_ref) {
           setDateType: setDateType,
           close: function close() {
             return setIsOpen(false);
-          }
+          },
+          isDev: isDev
         })]
       })]
     })]
@@ -24034,7 +24222,7 @@ var Filterbar = function Filterbar(_ref) {
 var HDivider = function HDivider(_ref2) {
   var _ref2$className = _ref2.className,
     className = _ref2$className === void 0 ? '' : _ref2$className;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
     className: "filter_divider ".concat(className)
   });
 };
@@ -24143,65 +24331,6 @@ var JqueryDateRangePicker = function JqueryDateRangePicker(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/tasks/components/Filter-bar/LiveSearch.jsx":
-/*!***********************************************************************!*\
-  !*** ./resources/js/react/tasks/components/Filter-bar/LiveSearch.jsx ***!
-  \***********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-
-var LiveSearch = function LiveSearch(_ref) {
-  var handleSearch = _ref.handleSearch,
-    searchTerm = _ref.searchTerm,
-    setSearchTerm = _ref.setSearchTerm;
-  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    var delayDebounceFn = setTimeout(function () {
-      handleSearch(searchTerm);
-    }, 500);
-    return function () {
-      return clearTimeout(delayDebounceFn);
-    };
-  }, [searchTerm]);
-  var handleChange = function handleChange(event) {
-    setSearchTerm(event.target.value);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
-    className: "input-group",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "input-group-prepend",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-        className: "input-group-text",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("i", {
-          className: "fa-solid fa-search"
-        })
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", {
-      type: "text",
-      className: "form-control",
-      style: {
-        padding: '3px 10px'
-      },
-      id: "inlineFormInputGroup",
-      placeholder: "Search here...",
-      value: searchTerm,
-      onChange: handleChange
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LiveSearch);
-
-/***/ }),
-
 /***/ "./resources/js/react/tasks/components/Filter-bar/StatusFilter.jsx":
 /*!*************************************************************************!*\
   !*** ./resources/js/react/tasks/components/Filter-bar/StatusFilter.jsx ***!
@@ -24216,13 +24345,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Dropdown */ "./resources/js/react/tasks/components/Dropdown.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
-/* harmony import */ var _Searchbox__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Searchbox */ "./resources/js/react/tasks/components/Searchbox.jsx");
-/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Loader */ "./resources/js/react/tasks/components/Loader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Searchbox__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Searchbox */ "./resources/js/react/tasks/components/Searchbox.jsx");
+/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Loader */ "./resources/js/react/tasks/components/Loader.jsx");
+/* harmony import */ var _services_api_boardColumnsApliSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/api/boardColumnsApliSlice */ "./resources/js/react/services/api/boardColumnsApliSlice.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -24237,8 +24369,6 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-var status = ["Hide completed task", "All", "Incomplete", "To Do", "Doing", "Completed", "Under Review", "Overdue"];
 var StatusFilter = function StatusFilter(_ref) {
   var state = _ref.state,
     setState = _ref.setState;
@@ -24246,38 +24376,53 @@ var StatusFilter = function StatusFilter(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     query = _useState2[0],
     setQuery = _useState2[1];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+  var _useGetBoardColoumnLi = (0,_services_api_boardColumnsApliSlice__WEBPACK_IMPORTED_MODULE_5__.useGetBoardColoumnListQuery)(),
+    data = _useGetBoardColoumnLi.data,
+    isFetching = _useGetBoardColoumnLi.isFetching;
+  var status = data ? [{
+    id: 11,
+    column_name: 'All'
+  }].concat(_toConsumableArray(data), [{
+    id: 10,
+    column_name: 'Hide Completed Task'
+  }]) : [];
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     className: "sp1_task_filter_item",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
         className: "mr-2 f-13",
         children: "Status :"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Toggle, {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Toggle, {
           className: "sp1_filter_toggle",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
-            children: state
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
+            children: state === null || state === void 0 ? void 0 : state.column_name
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Menu, {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Searchbox__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Menu, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Searchbox__WEBPACK_IMPORTED_MODULE_3__["default"], {
               autoFocus: true,
               value: query,
               onChange: setQuery
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "sp1_filter--users",
-            children: lodash__WEBPACK_IMPORTED_MODULE_3___default().map(lodash__WEBPACK_IMPORTED_MODULE_3___default().filter(status, function (i) {
-              return lodash__WEBPACK_IMPORTED_MODULE_3___default().includes(lodash__WEBPACK_IMPORTED_MODULE_3___default().lowerCase(i), lodash__WEBPACK_IMPORTED_MODULE_3___default().lowerCase(query));
+            children: [!isFetching && lodash__WEBPACK_IMPORTED_MODULE_2___default().size(status) > 0 && lodash__WEBPACK_IMPORTED_MODULE_2___default().map(lodash__WEBPACK_IMPORTED_MODULE_2___default().filter(status, function (i) {
+              return lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(lodash__WEBPACK_IMPORTED_MODULE_2___default().lowerCase(i.column_name), lodash__WEBPACK_IMPORTED_MODULE_2___default().lowerCase(query));
             }), function (item) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
                 onClick: function onClick() {
                   return setState(item);
                 },
-                className: state === item ? 'sp1_filter--user active' : 'sp1_filter--user',
-                children: item
+                className: state.id === item.id ? 'sp1_filter--user active' : 'sp1_filter--user',
+                children: item === null || item === void 0 ? void 0 : item.column_name
               }, item);
-            })
+            }), isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+              className: "py-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                title: "Loading..."
+              }), " "]
+            })]
           })]
         })]
       })]
@@ -24493,6 +24638,316 @@ var Loading = function Loading(_ref) {
 
 /***/ }),
 
+/***/ "./resources/js/react/tasks/components/Modal.jsx":
+/*!*******************************************************!*\
+  !*** ./resources/js/react/tasks/components/Modal.jsx ***!
+  \*******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+var Modal = function Modal(_ref) {
+  var children = _ref.children,
+    isOpen = _ref.isOpen,
+    className = _ref.className;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    isBrowser = _React$useState2[0],
+    setIsBrowser = _React$useState2[1];
+  // generate random id for dropdown menu
+  var id = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
+    return Math.random().toString(36).substr(2, 9);
+  }, []);
+  var DOM = document.getElementById(id);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    setIsBrowser(true);
+    var el = document.createElement('div');
+    el.id = id;
+    document.body.appendChild(el);
+    return function () {
+      document.body.removeChild(el);
+    };
+  }, []);
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    if (isOpen) {
+      document.body.classList.add('cnx_body-overflow-hidden');
+    } else {
+      document.body.classList.remove('cnx_body-overflow-hidden');
+    }
+  }, [isOpen]);
+  if (!DOM) return;
+  var modalContent = isOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+    className: "cnx_modal ".concat(className),
+    children: children
+  }) : null;
+  if (isBrowser) {
+    return /*#__PURE__*/react_dom__WEBPACK_IMPORTED_MODULE_1__.createPortal(modalContent, DOM);
+  } else {
+    return null;
+  }
+};
+Modal.propTypes = {
+  children: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().node.isRequired),
+  isOpen: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().bool.isRequired),
+  className: (prop_types__WEBPACK_IMPORTED_MODULE_3___default().string)
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Modal);
+
+/***/ }),
+
+/***/ "./resources/js/react/tasks/components/Person.jsx":
+/*!********************************************************!*\
+  !*** ./resources/js/react/tasks/components/Person.jsx ***!
+  \********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+var Person = function Person(_ref) {
+  var avatar = _ref.avatar,
+    url = _ref.url,
+    name = _ref.name;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+    className: "d-flex align-items-center",
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+      className: "",
+      style: {
+        width: '28px'
+      },
+      children: avatar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        style: {
+          width: '32px',
+          height: '28px'
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
+          src: "/user-uploads/avatar/".concat(avatar),
+          alt: name,
+          width: 24,
+          height: 24,
+          style: {
+            width: '28px',
+            height: '28px'
+          },
+          className: "rounded-circle"
+        })
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+        className: "sp1-item-center border rounded-circle",
+        style: {
+          width: "28px",
+          height: "28px"
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          style: {
+            fontSize: "1rem",
+            fontWeight: "bold"
+          },
+          children: name === null || name === void 0 ? void 0 : name.slice(0, 1).toUpperCase()
+        })
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("a", {
+      href: url,
+      className: "pl-2 ",
+      children: name
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Person);
+
+/***/ }),
+
+/***/ "./resources/js/react/tasks/components/ReportButton.jsx":
+/*!**************************************************************!*\
+  !*** ./resources/js/react/tasks/components/ReportButton.jsx ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Modal */ "./resources/js/react/tasks/components/Modal.jsx");
+/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Button */ "./resources/js/react/tasks/components/Button.jsx");
+/* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Loader */ "./resources/js/react/tasks/components/Loader.jsx");
+/* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+var ReportTable = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().lazy(function () {
+  return Promise.all(/*! import() */[__webpack_require__.e("/js/vendor"), __webpack_require__.e("resources_js_react_tasks_components_ReportTableModal_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./ReportTableModal */ "./resources/js/react/tasks/components/ReportTableModal.jsx"));
+});
+var ReportButton = function ReportButton(_ref) {
+  var _row$subtasks_reports;
+  var row = _ref.row;
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_5__.useSelector)(function (s) {
+      return s.tasks;
+    }),
+    reports = _useSelector.reports;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    isOpen = _React$useState2[0],
+    setIsOpen = _React$useState2[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    search = _React$useState4[0],
+    setSearch = _React$useState4[1];
+  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_5__.useDispatch)();
+  var _useLazyGetTasksRepor = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_4__.useLazyGetTasksReportsQuery)(),
+    _useLazyGetTasksRepor2 = _slicedToArray(_useLazyGetTasksRepor, 2),
+    getTasksReports = _useLazyGetTasksRepor2[0],
+    isFetching = _useLazyGetTasksRepor2[1].isFetching;
+  var handleModal = function handleModal(e) {
+    e.preventDefault();
+    var type = row !== null && row !== void 0 && row.subtask_id ? 'subtask' : 'parent';
+    getTasksReports({
+      taskId: row === null || row === void 0 ? void 0 : row.id,
+      type: type
+    }).unwrap().then(function (res) {
+      if (res.status === 200) {
+        dispatch((0,_services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_6__.storeReport)({
+          reports: _toConsumableArray(res === null || res === void 0 ? void 0 : res.tasks)
+        }));
+      }
+    })["catch"](function (err) {
+      return console.log(err);
+    });
+    setIsOpen(true);
+  };
+  var close = function close() {
+    return setIsOpen(false);
+  };
+  var reportCount = row === null || row === void 0 ? void 0 : row.subtasks_reports_count;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+    children: [Number(reportCount) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
+      onClick: handleModal,
+      className: "sp1_tasks_tbl_report_btn",
+      children: [(_row$subtasks_reports = row === null || row === void 0 ? void 0 : row.subtasks_reports_count) !== null && _row$subtasks_reports !== void 0 ? _row$subtasks_reports : 0, " Reports"]
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+      style: {
+        color: '#9EA6B0'
+      },
+      children: "No Report"
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        isOpen: isOpen,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          className: "sp1_modal-content-wrapper",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            className: "sp1_modal-panel sp1_task_report_modal",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "sp1_modal-head",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                className: "sp1_modal-title pl-2",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                  children: "Report Details"
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                onClick: close,
+                "aria-label": "ModalClose",
+                variant: "tertiary",
+                className: "sp1_modal-close",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
+                  className: "fa-solid fa-xmark"
+                })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              className: "sp1_modal-body py-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                className: "d-flex align-items-center justify-content-between flex-column",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Task Name:"
+                  }), " Single Product Page"]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Project:"
+                  }), " Single Product Ecommerce Website Design"]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Project Manager:"
+                  }), " Farhan Rahman"]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                    children: "Client:"
+                  }), " Joana Mathew"]
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Suspense), {
+                  fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                    className: "py-3 d-flex align-items-center justify-content-center",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                      title: "Loader..."
+                    }), " "]
+                  }),
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(ReportTable, {
+                    reports: _toConsumableArray(reports),
+                    search: search,
+                    task: row,
+                    isLoading: isFetching,
+                    tableName: "TaskReportModalTable"
+                  })
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {})]
+            })]
+          })
+        })
+      })
+    })]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ReportButton);
+
+/***/ }),
+
 /***/ "./resources/js/react/tasks/components/Searchbox.jsx":
 /*!***********************************************************!*\
   !*** ./resources/js/react/tasks/components/Searchbox.jsx ***!
@@ -24587,28 +25042,52 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
 
 
 
 var Tabbar = function Tabbar() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
+  var _window, _window$Laravel, _window$Laravel$user;
+  var isDev = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5], (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.role_id);
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useNavigate)();
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    if (isDev) {
+      navigate('/my-tasks', {
+        replace: true
+      });
+    }
+  }, []);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "d-flex flex-wrap align-items-center px-3 mb-2",
     style: {
       gap: '10px'
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
+    children: [!isDev && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.NavLink, {
       to: "/",
       className: function className(_ref) {
         var isActive = _ref.isActive;
         return isActive ? "sp1_tlr_tab active" : "sp1_tlr_tab";
       },
       children: "Tasks"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_1__.NavLink, {
-      to: "/subtasks",
+    }), isDev ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.NavLink, {
+      to: "/my-tasks",
       className: function className(_ref2) {
         var isActive = _ref2.isActive;
+        return isActive ? "sp1_tlr_tab active" : "sp1_tlr_tab";
+      },
+      children: "My Tasks"
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_4__.NavLink, {
+      to: "/subtasks",
+      className: function className(_ref3) {
+        var isActive = _ref3.isActive;
         return isActive ? "sp1_tlr_tab active" : "sp1_tlr_tab";
       },
       children: "Subtasks"
@@ -24633,44 +25112,43 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/getEmptyImage.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrop/useDrop.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrag/useDrag.js");
 /* harmony import */ var _Loader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Loader */ "./resources/js/react/tasks/components/Loader.jsx");
 /* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
 /* harmony import */ var _utils_dateController__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/dateController */ "./resources/js/react/utils/dateController.js");
-/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/react-table/build/lib/index.mjs");
-/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/table-core/build/lib/index.mjs");
-/* harmony import */ var _table_IndeterminateCheckbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./table/IndeterminateCheckbox */ "./resources/js/react/tasks/components/table/IndeterminateCheckbox.jsx");
-/* harmony import */ var _demo_json__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./demo.json */ "./resources/js/react/tasks/components/demo.json");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _TasksTablePagination__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./TasksTablePagination */ "./resources/js/react/tasks/components/TasksTablePagination.jsx");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _loader_TaskTableLoader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./loader/TaskTableLoader */ "./resources/js/react/tasks/components/loader/TaskTableLoader.jsx");
-/* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
-/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Dropdown */ "./resources/js/react/tasks/components/Dropdown.jsx");
-/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Button */ "./resources/js/react/tasks/components/Button.jsx");
-/* harmony import */ var _Timer__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Timer */ "./resources/js/react/tasks/components/Timer.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/react-table/build/lib/index.mjs");
+/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/table-core/build/lib/index.mjs");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _TasksTablePagination__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TasksTablePagination */ "./resources/js/react/tasks/components/TasksTablePagination.jsx");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _loader_TaskTableLoader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./loader/TaskTableLoader */ "./resources/js/react/tasks/components/loader/TaskTableLoader.jsx");
+/* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
+/* harmony import */ var _Dropdown__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./Dropdown */ "./resources/js/react/tasks/components/Dropdown.jsx");
+/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./Button */ "./resources/js/react/tasks/components/Button.jsx");
+/* harmony import */ var _Timer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Timer */ "./resources/js/react/tasks/components/Timer.jsx");
+/* harmony import */ var _global_EmptyTable__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../global/EmptyTable */ "./resources/js/react/global/EmptyTable.jsx");
+/* harmony import */ var _ReportButton__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./ReportButton */ "./resources/js/react/tasks/components/ReportButton.jsx");
+/* harmony import */ var _Person__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Person */ "./resources/js/react/tasks/components/Person.jsx");
+/* harmony import */ var _table_DragableColumnHeader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./table/DragableColumnHeader */ "./resources/js/react/tasks/components/table/DragableColumnHeader.jsx");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useLocalStorage.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -24691,152 +25169,18 @@ var compareDate = new _utils_dateController__WEBPACK_IMPORTED_MODULE_3__.Compare
 
 
 
-// reorder column
 
 
 
-var reorderColumn = function reorderColumn(draggedColumnId, targetColumnId, columnOrder) {
-  columnOrder.splice(columnOrder.indexOf(targetColumnId), 0, columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0]);
-  return _toConsumableArray(columnOrder);
-};
 
-// dragable columns
-var DragableColumnHeader = function DragableColumnHeader(_ref) {
-  var _asc$desc$header$colu;
-  var header = _ref.header,
-    table = _ref.table;
-  var getState = table.getState,
-    setColumnOrder = table.setColumnOrder;
-  var _getState = getState(),
-    columnOrder = _getState.columnOrder;
-  var column = header.column;
-  var dropRef = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
-  var _useDrop = (0,react_dnd__WEBPACK_IMPORTED_MODULE_17__.useDrop)({
-      accept: 'column',
-      drop: function drop(draggedColumn) {
-        if (column.id === "expend" || column.id === 'action') return;
-        var newColumnOrder = reorderColumn(draggedColumn.id, column.id, columnOrder);
-        setColumnOrder(newColumnOrder);
-      },
-      collect: function collect(monitor) {
-        return {
-          isOver: monitor.isOver()
-        };
-      }
-    }),
-    _useDrop2 = _slicedToArray(_useDrop, 2),
-    isOver = _useDrop2[0].isOver,
-    drop = _useDrop2[1];
-  var _useDrag = (0,react_dnd__WEBPACK_IMPORTED_MODULE_18__.useDrag)({
-      collect: function collect(monitor) {
-        return {
-          isDragging: monitor.isDragging()
-        };
-      },
-      item: function item() {
-        return column.id === "expend" || column.id === 'action' ? null : column;
-      },
-      type: 'column'
-    }),
-    _useDrag2 = _slicedToArray(_useDrag, 3),
-    isDragging = _useDrag2[0].isDragging,
-    drag = _useDrag2[1],
-    preview = _useDrag2[2];
 
-  //   
-  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    preview((0,react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_19__.getEmptyImage)(), {
-      captureDraggingState: true
-    });
-  }, []);
-  drag(drop(dropRef));
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("th", {
-      ref: dropRef,
-      colSpan: header.colSpan,
-      style: {
-        opacity: isDragging ? 0.5 : 1,
-        background: isOver && (column.id !== "expend" || column.id === 'action') ? '#f3f3f3' : ''
-      },
-      className: "sp1_tasks_th sp1_tasks_th--".concat(column.id),
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
-        className: "d-flex align-items-start",
-        children: [column.id !== 'expend' && column.id !== 'action' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("button", {
-          onClick: header.column.getToggleSortingHandler(),
-          className: 'sp1_tasks_column_sort_btn',
-          children: header.column.getIsSorted() ? (_asc$desc$header$colu = {
-            asc: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
-              className: "table_asc_dec asc"
-            }),
-            desc: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
-              className: "table_asc_dec dec"
-            })
-          }[header.column.getIsSorted()]) !== null && _asc$desc$header$colu !== void 0 ? _asc$desc$header$colu : null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
-            className: "table_asc_dec"
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-            children: header.isPlaceholder ? null : (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_20__.flexRender)(header.column.columnDef.header, header.getContext())
-          })
-        })]
-      })
-    })
-  });
-};
-var Person = function Person(_ref2) {
-  var avatar = _ref2.avatar,
-    url = _ref2.url,
-    name = _ref2.name;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
-    className: "d-flex align-items-center",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-      className: "",
-      style: {
-        width: '28px'
-      },
-      children: avatar ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-        style: {
-          width: '32px',
-          height: '28px'
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("img", {
-          src: "/user-uploads/avatar/".concat(avatar),
-          alt: name,
-          width: 24,
-          height: 24,
-          style: {
-            width: '28px',
-            height: '28px'
-          },
-          className: "rounded-circle"
-        })
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-        className: "sp1-item-center border rounded-circle",
-        style: {
-          width: "28px",
-          height: "28px"
-        },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-          style: {
-            fontSize: "1rem",
-            fontWeight: "bold"
-          },
-          children: name === null || name === void 0 ? void 0 : name.slice(0, 1).toUpperCase()
-        })
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("a", {
-      href: url,
-      className: "pl-2 ",
-      children: name
-    })]
-  });
-};
-function TasksTable(_ref3) {
-  var isLoading = _ref3.isLoading,
-    filter = _ref3.filter,
-    tableName = _ref3.tableName,
-    search = _ref3.search;
-  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
+function TasksTable(_ref) {
+  var isLoading = _ref.isLoading,
+    filter = _ref.filter,
+    tableName = _ref.tableName,
+    search = _ref.search,
+    reportPermission = _ref.reportPermission;
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_9__.useSelector)(function (s) {
       return s.tasks;
     }),
     tasks = _useSelector.tasks;
@@ -24869,11 +25213,15 @@ function TasksTable(_ref3) {
     _React$useState12 = _slicedToArray(_React$useState11, 2),
     globalFilter = _React$useState12[0],
     setGlobalFilter = _React$useState12[1];
+  var _useLocalStorage = (0,react_use__WEBPACK_IMPORTED_MODULE_20__["default"])(tableName !== null && tableName !== void 0 ? tableName : ''),
+    _useLocalStorage2 = _slicedToArray(_useLocalStorage, 2),
+    value = _useLocalStorage2[0],
+    setValue = _useLocalStorage2[1];
   var _tasks = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
     return tasks;
   }, [tasks]);
   react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    if (lodash__WEBPACK_IMPORTED_MODULE_6___default().size(_tasks) === lodash__WEBPACK_IMPORTED_MODULE_6___default().size(data)) {
+    if (lodash__WEBPACK_IMPORTED_MODULE_4___default().size(_tasks) === lodash__WEBPACK_IMPORTED_MODULE_4___default().size(data)) {
       setSkipPageReset(true);
       _tasks && setData(_tasks);
     } else {
@@ -24892,10 +25240,11 @@ function TasksTable(_ref3) {
   var defaultColumns = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
     return [{
       id: 'expend',
-      cell: function cell(_ref4) {
-        var row = _ref4.row,
-          table = _ref4.table;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(ExpandTask, {
+      header: '',
+      cell: function cell(_ref2) {
+        var row = _ref2.row,
+          table = _ref2.table;
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(ExpandTask, {
           row: row,
           table: table,
           pageIndex: pageIndex
@@ -24904,21 +25253,23 @@ function TasksTable(_ref3) {
     }, {
       id: 'task',
       header: 'Task',
-      accessorKey: 'id',
-      cell: function cell(_ref5) {
-        var row = _ref5.row;
+      accessorFn: function accessorFn(row) {
+        return "".concat(row.id).concat(row.heading);
+      },
+      cell: function cell(_ref3) {
+        var row = _ref3.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("abbr", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("abbr", {
           title: data === null || data === void 0 ? void 0 : data.heading,
           style: {
             textDecoration: 'none'
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
             className: "d-flex align-items-center",
             style: {
               gap: '10px'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("a", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("a", {
               href: "/account/tasks/".concat(data === null || data === void 0 ? void 0 : data.id),
               className: "hover-underline multine-ellipsis",
               children: [" ", data === null || data === void 0 ? void 0 : data.heading, " "]
@@ -24930,40 +25281,40 @@ function TasksTable(_ref3) {
       id: 'timer_status',
       header: 'Timer Status',
       accessorKey: 'subtasks_timer_active',
-      cell: function cell(_ref6) {
-        var row = _ref6.row;
+      cell: function cell(_ref4) {
+        var row = _ref4.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
         var count = data === null || data === void 0 ? void 0 : data.subtasks_timer_active;
-        var subtaskCount = lodash__WEBPACK_IMPORTED_MODULE_6___default().size(data === null || data === void 0 ? void 0 : data.subtasks_count);
+        var subtaskCount = lodash__WEBPACK_IMPORTED_MODULE_4___default().size(data === null || data === void 0 ? void 0 : data.subtasks_count);
         var isActive = count > 0;
         var serverTime = 0;
         var localTime = 0;
         var timer = 0;
-        if (data !== null && data !== void 0 && data.start_time && lodash__WEBPACK_IMPORTED_MODULE_6___default().isNull(data === null || data === void 0 ? void 0 : data.end_time)) {
+        if (data !== null && data !== void 0 && data.start_time && lodash__WEBPACK_IMPORTED_MODULE_4___default().isNull(data === null || data === void 0 ? void 0 : data.end_time)) {
           serverTime = compareDate.dayjs(data === null || data === void 0 ? void 0 : data.start_time).unix();
           localTime = compareDate.dayjs().unix();
           timer = localTime - serverTime;
         }
-        var clockIsRunning = (data === null || data === void 0 ? void 0 : data.start_time) && lodash__WEBPACK_IMPORTED_MODULE_6___default().isNull(data === null || data === void 0 ? void 0 : data.end_time);
+        var clockIsRunning = (data === null || data === void 0 ? void 0 : data.start_time) && lodash__WEBPACK_IMPORTED_MODULE_4___default().isNull(data === null || data === void 0 ? void 0 : data.end_time);
         var color = isActive || clockIsRunning ? '#54B688' : '#DCDEE1';
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
           style: {
             color: color
           },
           className: "d-flex align-items-center",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
             className: "fa-solid fa-stopwatch f-18"
-          }), row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          }), row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             className: "ml-2",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
               children: count
             })
-          }), clockIsRunning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          }), clockIsRunning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             className: "ml-1 badge badge-primary text-white",
             style: {
               fontSize: '11px'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_Timer__WEBPACK_IMPORTED_MODULE_15__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Timer__WEBPACK_IMPORTED_MODULE_13__["default"], {
               time: timer,
               run: clockIsRunning
             })
@@ -24974,15 +25325,15 @@ function TasksTable(_ref3) {
       id: 'milestone',
       header: 'Milestone',
       accessorKey: 'milestone_title',
-      cell: function cell(_ref7) {
-        var row = _ref7.row;
+      cell: function cell(_ref5) {
+        var row = _ref5.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("abbr", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("abbr", {
           title: data === null || data === void 0 ? void 0 : data.milestone_title,
           style: {
             textDecoration: 'none'
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             className: "multine-ellipsis word-break",
             children: data === null || data === void 0 ? void 0 : data.milestone_title
           })
@@ -24992,16 +25343,16 @@ function TasksTable(_ref3) {
       id: 'deliverable',
       header: 'Deliverable',
       accessorKey: 'deliverable_title',
-      cell: function cell(_ref8) {
+      cell: function cell(_ref6) {
         var _data$deliverable_tit;
-        var row = _ref8.row;
+        var row = _ref6.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("abbr", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("abbr", {
           title: data === null || data === void 0 ? void 0 : data.deliverable_title,
           style: {
             textDecoration: 'none'
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             className: "multine-ellipsis word-break",
             children: (_data$deliverable_tit = data === null || data === void 0 ? void 0 : data.deliverable_title) !== null && _data$deliverable_tit !== void 0 ? _data$deliverable_tit : '--'
           })
@@ -25010,16 +25361,18 @@ function TasksTable(_ref3) {
     }, {
       id: 'project',
       header: 'Project',
-      accessorKey: 'project_name',
-      cell: function cell(_ref9) {
-        var row = _ref9.row;
+      accessorFn: function accessorFn(row) {
+        return "".concat(row.project_id).concat(row.project_name);
+      },
+      cell: function cell(_ref7) {
+        var row = _ref7.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("abbr", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("abbr", {
           title: data === null || data === void 0 ? void 0 : data.project_name,
           style: {
             textDecoration: 'none'
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("a", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("a", {
             href: "/account/projects/".concat(data === null || data === void 0 ? void 0 : data.project_id),
             className: "multine-ellipsis",
             children: data === null || data === void 0 ? void 0 : data.project_name
@@ -25030,11 +25383,11 @@ function TasksTable(_ref3) {
       id: 'client',
       header: 'Client',
       accessorKey: 'client_name',
-      cell: function cell(_ref10) {
-        var row = _ref10.row;
+      cell: function cell(_ref8) {
+        var row = _ref8.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(Person, {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_16__["default"], {
             url: "/account/clients/".concat(data === null || data === void 0 ? void 0 : data.client_id),
             avatar: data === null || data === void 0 ? void 0 : data.client_avatar,
             name: data === null || data === void 0 ? void 0 : data.client_name
@@ -25045,10 +25398,10 @@ function TasksTable(_ref3) {
       id: 'project_manager',
       header: 'Project Manager',
       accessorKey: 'pm_id_name',
-      cell: function cell(_ref11) {
-        var row = _ref11.row;
+      cell: function cell(_ref9) {
+        var row = _ref9.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(Person, {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_16__["default"], {
           url: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.project_manager_id),
           name: data === null || data === void 0 ? void 0 : data.pm_id_name,
           avatar: data === null || data === void 0 ? void 0 : data.pm_id_avatar
@@ -25058,10 +25411,10 @@ function TasksTable(_ref3) {
       id: 'creation_date',
       header: 'Creation Date',
       accessorKey: 'creation_date',
-      cell: function cell(_ref12) {
-        var row = _ref12.row;
+      cell: function cell(_ref10) {
+        var row = _ref10.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
           children: data === null || data === void 0 ? void 0 : data.creation_date
         });
       }
@@ -25069,9 +25422,9 @@ function TasksTable(_ref3) {
       id: 'due_date',
       header: 'Due Date',
       accessorKey: "due_date",
-      cell: function cell(_ref13) {
+      cell: function cell(_ref11) {
         var _date;
-        var row = _ref13.row;
+        var row = _ref11.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
         var date = data === null || data === void 0 ? void 0 : data.due_date;
         var currentDate = compareDate.dayjs();
@@ -25082,12 +25435,13 @@ function TasksTable(_ref3) {
         } else if (compareDate.isAfter(currentDate, date)) {
           color = 'red';
         }
-        date = date === 'Today' ? date : dayjs__WEBPACK_IMPORTED_MODULE_8___default()(date).format('DD-MM-YYYY');
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        if (Number(data === null || data === void 0 ? void 0 : data.board_column_id) === 4) color = '#0F9D58';
+        date = date === 'Today' ? date : dayjs__WEBPACK_IMPORTED_MODULE_6___default()(date).format('DD-MM-YYYY');
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
           style: {
             color: color
           },
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
             children: (_date = date) !== null && _date !== void 0 ? _date : '--'
           })
         });
@@ -25096,12 +25450,12 @@ function TasksTable(_ref3) {
       id: 'start_date',
       header: 'Started Date',
       accessorKey: 'start_date',
-      cell: function cell(_ref14) {
-        var row = _ref14.row;
+      cell: function cell(_ref12) {
+        var row = _ref12.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
-          children: data !== null && data !== void 0 && data.start_date ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
-            children: [dayjs__WEBPACK_IMPORTED_MODULE_8___default()(data === null || data === void 0 ? void 0 : data.start_date).format('DD-MM-YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("br", {})]
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
+          children: data !== null && data !== void 0 && data.start_date ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+            children: [dayjs__WEBPACK_IMPORTED_MODULE_6___default()(data === null || data === void 0 ? void 0 : data.start_date).format('DD-MM-YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("br", {})]
           }) : '--'
         });
       }
@@ -25109,25 +25463,26 @@ function TasksTable(_ref3) {
       id: 'completion_date',
       header: 'Completion Date',
       accessorKey: 'completion_date',
-      cell: function cell(_ref15) {
-        var row = _ref15.row;
+      cell: function cell(_ref13) {
+        var row = _ref13.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
-          children: Number(data === null || data === void 0 ? void 0 : data.board_column_id) === 4 ? (data === null || data === void 0 ? void 0 : data.completion_date) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
-            children: [dayjs__WEBPACK_IMPORTED_MODULE_8___default()(data === null || data === void 0 ? void 0 : data.completion_date).format('DD-MM-YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("br", {})]
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
+          children: Number(data === null || data === void 0 ? void 0 : data.board_column_id) === 4 ? (data === null || data === void 0 ? void 0 : data.completion_date) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+            children: [dayjs__WEBPACK_IMPORTED_MODULE_6___default()(data === null || data === void 0 ? void 0 : data.completion_date).format('DD-MM-YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("br", {})]
           }) : '--'
         });
       }
     }, {
       id: 'approved_on',
       header: 'Approved On',
-      cell: function cell(_ref16) {
-        var row = _ref16.row;
+      accessorKey: 'task_approval_date',
+      cell: function cell(_ref14) {
+        var row = _ref14.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
-          children: data !== null && data !== void 0 && data.task_approval_date ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
-            children: dayjs__WEBPACK_IMPORTED_MODULE_8___default()(data === null || data === void 0 ? void 0 : data.task_approval_date).format('DD-MM-YYYY')
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("strong", {
+          children: data !== null && data !== void 0 && data.task_approval_date ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.Fragment, {
+            children: dayjs__WEBPACK_IMPORTED_MODULE_6___default()(data === null || data === void 0 ? void 0 : data.task_approval_date).format('DD-MM-YYYY')
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             className: "badge text-white word-break",
             style: {
               background: '#f5c308'
@@ -25139,31 +25494,34 @@ function TasksTable(_ref3) {
     }, {
       id: 'estimated_time',
       header: 'Estimated Time',
-      cell: function cell(_ref17) {
+      accessorKey: 'estimate_hours',
+      cell: function cell(_ref15) {
         var _data$estimate_hours, _data$estimate_minute;
-        var row = _ref17.row;
+        var row = _ref15.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
-          children: [(_data$estimate_hours = data === null || data === void 0 ? void 0 : data.estimate_hours) !== null && _data$estimate_hours !== void 0 ? _data$estimate_hours : 0, " hrs ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("br", {}), (_data$estimate_minute = data === null || data === void 0 ? void 0 : data.estimate_minutes) !== null && _data$estimate_minute !== void 0 ? _data$estimate_minute : 0, " mins"]
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+          children: [(_data$estimate_hours = data === null || data === void 0 ? void 0 : data.estimate_hours) !== null && _data$estimate_hours !== void 0 ? _data$estimate_hours : 0, " hrs ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("br", {}), (_data$estimate_minute = data === null || data === void 0 ? void 0 : data.estimate_minutes) !== null && _data$estimate_minute !== void 0 ? _data$estimate_minute : 0, " mins"]
         });
       }
     }, {
       id: 'hours_logged',
       header: 'Hours Logged',
-      cell: function cell(_ref18) {
-        var row = _ref18.row;
+      accessorKey: 'subtasks_hours_logged',
+      cell: function cell(_ref16) {
+        var row = _ref16.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
           children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_2__.convertTime)(data === null || data === void 0 ? void 0 : data.subtasks_hours_logged)
         });
       }
     }, {
       id: 'assigned_by',
       header: 'Assigned By',
-      cell: function cell(_ref19) {
-        var row = _ref19.row;
+      accessorKey: 'added_by_name',
+      cell: function cell(_ref17) {
+        var row = _ref17.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(Person, {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_16__["default"], {
           url: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.added_by),
           avatar: data === null || data === void 0 ? void 0 : data.added_by_avatar,
           name: data === null || data === void 0 ? void 0 : data.added_by_name
@@ -25172,10 +25530,11 @@ function TasksTable(_ref3) {
     }, {
       id: 'assigned_to',
       header: 'Assigned To',
-      cell: function cell(_ref20) {
-        var row = _ref20.row;
+      accessorKey: 'assigned_to_name',
+      cell: function cell(_ref18) {
+        var row = _ref18.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(Person, {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_16__["default"], {
           url: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.assigned_to_id),
           avatar: data === null || data === void 0 ? void 0 : data.assigned_to_avatar,
           name: data === null || data === void 0 ? void 0 : data.assigned_to_name
@@ -25184,10 +25543,11 @@ function TasksTable(_ref3) {
     }, {
       id: 'status',
       header: 'Task Status',
-      cell: function cell(_ref21) {
-        var row = _ref21.row;
+      accessorKey: 'column_name',
+      cell: function cell(_ref19) {
+        var row = _ref19.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
           className: "badge text-white",
           style: {
             background: data === null || data === void 0 ? void 0 : data.label_color
@@ -25198,8 +25558,9 @@ function TasksTable(_ref3) {
     }, {
       id: 'progress',
       header: 'Progress',
-      cell: function cell(_ref22) {
-        var row = _ref22.row;
+      accessorKey: 'subtasks_count',
+      cell: function cell(_ref20) {
+        var row = _ref20.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
         var count = Number(data === null || data === void 0 ? void 0 : data.subtasks_count);
         var completed = Number(data === null || data === void 0 ? void 0 : data.subtasks_completed_count);
@@ -25217,21 +25578,22 @@ function TasksTable(_ref3) {
         } else if (percent < 75 && percent >= 25) {
           bg = 'bg-warning';
         } else bg = 'bg-danger';
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
             className: "progress",
             style: {
               height: '16px'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-              className: "progress-bar progress-bar-striped ".concat(bg),
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
+              className: "progress-bar progress-bar-striped progress-bar-animated ".concat(bg),
               role: "progressbar",
               style: {
                 width: "".concat(percent, "%")
               },
               "aria-valuenow": "10",
               "aria-valuemin": "0",
-              "aria-valuemax": "100"
+              "aria-valuemax": "100",
+              children: [Math.floor(percent), "%"]
             })
           })
         });
@@ -25239,66 +25601,70 @@ function TasksTable(_ref3) {
     }, {
       id: 'report',
       header: 'Report',
-      cell: function cell(_ref23) {
-        var row = _ref23.row;
+      cell: function cell(_ref21) {
+        var row = _ref21.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
-            className: "badge badge-danger",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("strong", {
-              children: "3"
-            }), " Reports"]
-          })
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_ReportButton__WEBPACK_IMPORTED_MODULE_15__["default"], {
+          row: data
         });
       }
-    }, {
-      id: 'action',
-      header: 'Action',
-      cell: function cell(_ref24) {
-        var row = _ref24.row;
-        var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_13__["default"], {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_Dropdown__WEBPACK_IMPORTED_MODULE_13__["default"].Toggle, {
-              icon: false,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_14__["default"], {
-                variant: "tertiary",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
-                  className: "fa-solid fa-ellipsis-vertical"
-                })
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_13__["default"].Menu, {
-              className: "p-1",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_13__["default"].Item, {
-                className: "sp1_tasks_tbl_action",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
-                  className: "fa-regular fa-pen-to-square mr-2"
-                }), "Edit"]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(_Dropdown__WEBPACK_IMPORTED_MODULE_13__["default"].Item, {
-                className: "sp1_tasks_tbl_del",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
-                  className: "fa-solid fa-trash-can mr-2"
-                }), "Delete"]
-              })]
-            })]
-          })
-        });
-      }
-    }];
+    }
+
+    // {
+    //   id: 'action',
+    //   header: 'Action',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <div>
+    //         <Dropdown>
+    //           <Dropdown.Toggle icon={false}>
+    //             <Button variant='tertiary'>
+    //               <i className="fa-solid fa-ellipsis-vertical"></i>
+    //             </Button>
+    //           </Dropdown.Toggle>
+    //           <Dropdown.Menu className="p-1">
+    //             <Dropdown.Item className="sp1_tasks_tbl_action">
+    //               <i className="fa-regular fa-pen-to-square mr-2"></i>
+    //               Edit
+    //             </Dropdown.Item>
+    //             <Dropdown.Item className="sp1_tasks_tbl_del">
+    //               <i className="fa-solid fa-trash-can mr-2"></i>
+    //               Delete
+    //             </Dropdown.Item>
+    //           </Dropdown.Menu>
+    //         </Dropdown>
+    //       </div>
+    //     )
+    //   }
+    // },   
+    ];
   });
 
   // columns
   var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_0__.useState(_toConsumableArray(defaultColumns)),
-    _React$useState14 = _slicedToArray(_React$useState13, 1),
-    columns = _React$useState14[0];
-  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_0__.useState(lodash__WEBPACK_IMPORTED_MODULE_6___default().map(columns, 'id')),
+    _React$useState14 = _slicedToArray(_React$useState13, 2),
+    columns = _React$useState14[0],
+    setColumns = _React$useState14[1];
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    var _window, _window$Laravel;
+    var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_18__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
+    var _cols = _toConsumableArray(defaultColumns);
+    if (!lodash__WEBPACK_IMPORTED_MODULE_4___default().includes(reportPermission, auth === null || auth === void 0 ? void 0 : auth.getRoleId())) {
+      var cols = _cols === null || _cols === void 0 ? void 0 : _cols.filter(function (col) {
+        return col.id !== 'report';
+      });
+      setColumns(_toConsumableArray(cols));
+    }
+  }, []);
+  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_0__.useState(lodash__WEBPACK_IMPORTED_MODULE_4___default().map(columns, 'id')),
     _React$useState16 = _slicedToArray(_React$useState15, 2),
     columnOrder = _React$useState16[0],
     setColumnOrder = _React$useState16[1];
 
   // reset columns
   var resetColumnsOrder = function resetColumnsOrder() {
-    return setColumnOrder(lodash__WEBPACK_IMPORTED_MODULE_6___default().map(columns, 'id'));
+    return setColumnOrder(lodash__WEBPACK_IMPORTED_MODULE_4___default().map(columns, 'id'));
   };
   var pagination = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
     return {
@@ -25307,8 +25673,15 @@ function TasksTable(_ref3) {
     };
   }, [pageIndex, pageSize]);
 
+  // columns orders
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    if (value !== null && value !== void 0 && value.columnOrders) {
+      setColumnOrder(value.columnOrders);
+    }
+  }, []);
+
   // table instance...
-  var table = (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_20__.useReactTable)({
+  var table = (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.useReactTable)({
     data: data,
     columns: columns,
     state: {
@@ -25329,50 +25702,47 @@ function TasksTable(_ref3) {
       return row.subtasks;
     },
     onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.getCoreRowModel)(),
-    getPaginationRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.getPaginationRowModel)(),
-    getFilteredRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.getFilteredRowModel)(),
-    getExpandedRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.getExpandedRowModel)(),
-    getSortedRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.getSortedRowModel)(),
-    paginateExpandedRows: false,
-    debugTable: true,
-    debugColumns: true,
-    debugHeaders: true
+    getCoreRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_22__.getCoreRowModel)(),
+    getPaginationRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_22__.getPaginationRowModel)(),
+    getFilteredRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_22__.getFilteredRowModel)(),
+    getExpandedRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_22__.getExpandedRowModel)(),
+    getSortedRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_22__.getSortedRowModel)(),
+    paginateExpandedRows: false
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("div", {
       className: "sp1_tasks_table_wrapper",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("table", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("table", {
         className: "sp1_tasks_table",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("thead", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("thead", {
           className: "sp1_tasks_thead",
           children: table.getHeaderGroups().map(function (headerGroup) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("tr", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("tr", {
               className: "sp1_tasks_tr",
               children: headerGroup.headers.map(function (header) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(DragableColumnHeader, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_table_DragableColumnHeader__WEBPACK_IMPORTED_MODULE_17__.DragableColumnHeader, {
                   header: header,
                   table: table
                 }, header.id);
               })
             }, headerGroup.id);
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("tbody", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("tbody", {
           className: "sp1_tasks_tbody",
           children: [!isLoading && table.getRowModel().rows.map(function (row) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("tr", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("tr", {
               className: "sp1_tasks_tr ".concat(row.parentId !== undefined ? 'expended_row' : '', " ").concat(row.getIsExpanded() ? 'expended_parent_row' : ''),
               children: row.getVisibleCells().map(function (cell) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("td", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("td", {
                   className: "px-2 sp1_tasks_td",
-                  children: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_20__.flexRender)(cell.column.columnDef.cell, cell.getContext())
+                  children: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_21__.flexRender)(cell.column.columnDef.cell, cell.getContext())
                 }, cell.id);
               })
             }, row.id);
-          }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_loader_TaskTableLoader__WEBPACK_IMPORTED_MODULE_9__["default"], {})]
+          }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_loader_TaskTableLoader__WEBPACK_IMPORTED_MODULE_7__["default"], {})]
         })]
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_TasksTablePagination__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      }), !isLoading && lodash__WEBPACK_IMPORTED_MODULE_4___default().size(table.getRowModel().rows) === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_global_EmptyTable__WEBPACK_IMPORTED_MODULE_14__["default"], {})]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_TasksTablePagination__WEBPACK_IMPORTED_MODULE_5__["default"], {
       currentPage: pageIndex + 1,
       perpageRow: pageSize,
       onPageSize: function onPageSize(size) {
@@ -25396,10 +25766,10 @@ function TasksTable(_ref3) {
 }
 
 // expend sub task
-var ExpandTask = function ExpandTask(_ref25) {
-  var row = _ref25.row,
-    table = _ref25.table,
-    pageIndex = _ref25.pageIndex;
+var ExpandTask = function ExpandTask(_ref22) {
+  var row = _ref22.row,
+    table = _ref22.table,
+    pageIndex = _ref22.pageIndex;
   var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState18 = _slicedToArray(_React$useState17, 2),
     loading = _React$useState18[0],
@@ -25407,8 +25777,8 @@ var ExpandTask = function ExpandTask(_ref25) {
   var data = row === null || row === void 0 ? void 0 : row.original;
   var subtasks = data === null || data === void 0 ? void 0 : data.subtasks_count;
   var pageIdx = pageIndex;
-  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useDispatch)();
-  var _useLazyGetSubTasksQu = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_10__.useLazyGetSubTasksQuery)(),
+  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_9__.useDispatch)();
+  var _useLazyGetSubTasksQu = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_8__.useLazyGetSubTasksQuery)(),
     _useLazyGetSubTasksQu2 = _slicedToArray(_useLazyGetSubTasksQu, 2),
     getSubTasks = _useLazyGetSubTasksQu2[0],
     isFetching = _useLazyGetSubTasksQu2[1].isFetching;
@@ -25416,7 +25786,7 @@ var ExpandTask = function ExpandTask(_ref25) {
     filter = _table$getState.filter;
   var handleExpanding = function handleExpanding(e) {
     setLoading(true);
-    if (lodash__WEBPACK_IMPORTED_MODULE_6___default().size(data === null || data === void 0 ? void 0 : data.subtasks) > 0) {
+    if (lodash__WEBPACK_IMPORTED_MODULE_4___default().size(data === null || data === void 0 ? void 0 : data.subtasks) > 0) {
       setLoading(false);
       if (!row.getCanExpand()) return;
       row.toggleExpanded();
@@ -25431,7 +25801,7 @@ var ExpandTask = function ExpandTask(_ref25) {
         var _data = _objectSpread(_objectSpread({}, data), {}, {
           subtasks: res === null || res === void 0 ? void 0 : res.tasks
         });
-        dispatch((0,_services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_12__.addSubtaskToParenttask)({
+        dispatch((0,_services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_10__.addSubtaskToParenttask)({
           id: data === null || data === void 0 ? void 0 : data.id,
           task: _data
         }));
@@ -25442,11 +25812,11 @@ var ExpandTask = function ExpandTask(_ref25) {
       });
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("div", {
     style: {
       paddingLeft: "".concat(row.depth * 2, "rem")
     },
-    children: row.parentId === undefined ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("button", {
+    children: row.parentId === undefined ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("button", {
       style: {
         cursor: 'pointer'
       },
@@ -25454,26 +25824,26 @@ var ExpandTask = function ExpandTask(_ref25) {
         return Number(subtasks) > 0 ? handleExpanding() : null;
       },
       className: row.getIsExpanded() ? 'row_expending_btn active' : 'row_expending_btn',
-      children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"], {
         title: ""
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [row.getIsExpanded() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [row.getIsExpanded() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
           className: "fa-solid fa-chevron-down f-12"
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
           className: "fa-solid fa-chevron-right f-12"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("span", {
           className: "d-flex align-items-center ml-2",
           style: {
             gap: '4px'
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
             className: "fa-solid fa-eye f-16"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             children: subtasks
           })]
         })]
       })
-    }) : row.getCanExpand() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("button", {
+    }) : row.getCanExpand() && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("button", {
       style: {
         cursor: 'pointer'
       },
@@ -25481,23 +25851,23 @@ var ExpandTask = function ExpandTask(_ref25) {
         return Number(subtasks) > 0 ? handleExpanding() : null;
       },
       className: row.getIsExpanded() ? 'row_expending_btn active' : 'row_expending_btn',
-      children: [!loading && !isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [row.getIsExpanded() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+      children: [!loading && !isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+        children: [row.getIsExpanded() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
           className: "fa-solid fa-chevron-down f-12"
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
           className: "fa-solid fa-chevron-right f-12"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsxs)("span", {
           className: "d-flex align-items-center ml-2",
           style: {
             gap: '4px'
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("i", {
             className: "fa-solid fa-eye f-16"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)("span", {
             children: subtasks
           })]
         })]
-      }), loading && isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }), loading && isFetching && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_19__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_1__["default"], {
         title: ""
       })]
     })
@@ -25969,45 +26339,152 @@ function TaskTableLoader() {
 
 /***/ }),
 
-/***/ "./resources/js/react/tasks/components/table/IndeterminateCheckbox.jsx":
-/*!*****************************************************************************!*\
-  !*** ./resources/js/react/tasks/components/table/IndeterminateCheckbox.jsx ***!
-  \*****************************************************************************/
+/***/ "./resources/js/react/tasks/components/table/DragableColumnHeader.jsx":
+/*!****************************************************************************!*\
+  !*** ./resources/js/react/tasks/components/table/DragableColumnHeader.jsx ***!
+  \****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ IndeterminateCheckbox)
+/* harmony export */   "DragableColumnHeader": () => (/* binding */ DragableColumnHeader)
 /* harmony export */ });
+/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/react-table/build/lib/index.mjs");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrop/useDrop.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDrag/useDrag.js");
+/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/getEmptyImage.js");
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useLocalStorage.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-var _excluded = ["indeterminate", "className"];
+var _excluded = ["header", "table", "className"];
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 
-function IndeterminateCheckbox(_ref) {
-  var indeterminate = _ref.indeterminate,
+
+
+
+
+// reorder column
+
+
+
+var reorderColumn = function reorderColumn(draggedColumnId, targetColumnId, columnOrder) {
+  columnOrder.splice(columnOrder.indexOf(targetColumnId), 0, columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0]);
+  return _toConsumableArray(columnOrder);
+};
+
+// dragable columns
+var DragableColumnHeader = function DragableColumnHeader(_ref) {
+  var _asc$desc$header$colu;
+  var header = _ref.header,
+    table = _ref.table,
     _ref$className = _ref.className,
     className = _ref$className === void 0 ? '' : _ref$className,
-    rest = _objectWithoutProperties(_ref, _excluded);
-  var ref = react__WEBPACK_IMPORTED_MODULE_0__.useRef();
-  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    if (typeof indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate;
-    }
-  }, [ref, indeterminate]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("input", _objectSpread({
-    type: "checkbox",
-    ref: ref,
-    className: className + ' cursor-pointer'
-  }, rest));
-}
+    props = _objectWithoutProperties(_ref, _excluded);
+  var getState = table.getState,
+    setColumnOrder = table.setColumnOrder;
+  var _getState = getState(),
+    columnOrder = _getState.columnOrder;
+  var column = header.column;
+  var _table$getState = table.getState(),
+    tableName = _table$getState.tableName;
+  var _useLocalStorage = (0,react_use__WEBPACK_IMPORTED_MODULE_2__["default"])(tableName !== null && tableName !== void 0 ? tableName : ''),
+    _useLocalStorage2 = _slicedToArray(_useLocalStorage, 2),
+    value = _useLocalStorage2[0],
+    setValue = _useLocalStorage2[1];
+  var dropRef = react__WEBPACK_IMPORTED_MODULE_0___default().useRef(null);
+  var _useDrop = (0,react_dnd__WEBPACK_IMPORTED_MODULE_3__.useDrop)({
+      accept: 'column',
+      drop: function drop(draggedColumn) {
+        if (column.id === "expend" || column.id === 'action') return;
+        var newColumnOrder = reorderColumn(draggedColumn.id, column.id, columnOrder);
+        setValue(_objectSpread(_objectSpread({}, value), {}, {
+          columnOrders: newColumnOrder
+        }));
+        setColumnOrder(newColumnOrder);
+      },
+      collect: function collect(monitor) {
+        return {
+          isOver: monitor.isOver()
+        };
+      }
+    }),
+    _useDrop2 = _slicedToArray(_useDrop, 2),
+    isOver = _useDrop2[0].isOver,
+    drop = _useDrop2[1];
+  var _useDrag = (0,react_dnd__WEBPACK_IMPORTED_MODULE_4__.useDrag)({
+      collect: function collect(monitor) {
+        return {
+          isDragging: monitor.isDragging()
+        };
+      },
+      item: function item() {
+        return column.id === "expend" || column.id === 'action' ? null : column;
+      },
+      type: 'column'
+    }),
+    _useDrag2 = _slicedToArray(_useDrag, 3),
+    isDragging = _useDrag2[0].isDragging,
+    drag = _useDrag2[1],
+    preview = _useDrag2[2];
+
+  //   
+  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    preview((0,react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_5__.getEmptyImage)(), {
+      captureDraggingState: true
+    });
+  }, []);
+  drag(drop(dropRef));
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.Fragment, {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("th", _objectSpread(_objectSpread({
+      ref: dropRef,
+      colSpan: header.colSpan,
+      style: {
+        opacity: isDragging ? 0.5 : 1,
+        background: isOver && (column.id !== "expend" || column.id !== 'action') ? '#f3f3f3' : ''
+      },
+      className: "sp1_tasks_th sp1_tasks_th--".concat(column.id, " ").concat(className)
+    }, props), {}, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsxs)("div", {
+        className: "d-flex align-items-start",
+        children: [column.id !== 'expend' && column.id !== 'action' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("button", {
+          onClick: header.column.getToggleSortingHandler(),
+          className: 'sp1_tasks_column_sort_btn',
+          children: header.column.getIsSorted() ? (_asc$desc$header$colu = {
+            asc: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              className: "table_asc_dec asc"
+            }),
+            desc: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+              className: "table_asc_dec dec"
+            })
+          }[header.column.getIsSorted()]) !== null && _asc$desc$header$colu !== void 0 ? _asc$desc$header$colu : null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("span", {
+            className: "table_asc_dec"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
+            children: header.isPlaceholder ? null : (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_6__.flexRender)(header.column.columnDef.header, header.getContext())
+          })
+        })]
+      })
+    }))
+  });
+};
 
 /***/ }),
 
@@ -26073,7 +26550,7 @@ var DragLayer = function DragLayer() {
     style: {
       position: 'fixed',
       pointerEvents: 'none',
-      zIndex: 100,
+      zIndex: 999999,
       left: currentOffset.x,
       top: currentOffset.y
     },
@@ -26129,9 +26606,7 @@ if (container) {
                 element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(SubtasksContainer, {})
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.Route, {
                 path: "/my-tasks",
-                element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h1", {
-                  children: "My Tasks"
-                })
+                element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(SubtasksContainer, {})
               })]
             })
           })
@@ -26242,7 +26717,8 @@ var Tasks = function Tasks() {
           isLoading: isFetching,
           filter: filter,
           tableName: "tasksTable",
-          search: search
+          search: search,
+          reportPermission: [5, 1, 8]
         })]
       })
     })]
@@ -27303,17 +27779,6 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 /***/ (() => {
 
 /* (ignored) */
-
-/***/ }),
-
-/***/ "./resources/js/react/tasks/components/demo.json":
-/*!*******************************************************!*\
-  !*** ./resources/js/react/tasks/components/demo.json ***!
-  \*******************************************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = JSON.parse('[{"id":2263,"task_short_code":"PSEOP1CJYKUY-2263","added_by":"62","project_name":"<a href=\\"https://seopage1erp.website/account/projects/615\\" class=\\"text-darkest-grey\\">UI/UX designer for EdTech website</a>","project_admin":"210","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center \\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2263/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">1</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2263\\" class=\\"\\">ABCD</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Rishabh G.","created_by":"Rajat Chakraborty","board_column_id":"2","due_date":"<span style=\\"color:#d50000;\\"><strong>30-07-2023</strong></span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"30-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2556","task_id":"2263","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2263\\"  name=\\"datatable_ids[]\\" value=\\"2263\\" onclick=\\"dataTableRowCheck(2263)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2263\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2263\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2263\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2263/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2263\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2263\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1CJYKUY-2263","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"28-07-2023 (04:07:42 PM)","name":"Moniruzzaman","timer":null,"task":"ABCD","timeLogged":"0 hrs ","status":"To Do","client_name":"Rishabh G.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"8 hrs 0 mins","DT_RowId":"row-2263","subtasks":[{"id":2250,"task_short_code":"PSEOP1KPX8EB-2250","added_by":"210","project_name":"<a href=\\"https://seopage1erp.website/account/projects/514\\" class=\\"text-darkest-grey\\">BMGF Website Design</a>","project_admin":"210","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center \\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2250/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">1</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2250\\" class=\\"\\">Catering Services Page</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Ferrermarie07","created_by":"Farhan Rahman","board_column_id":"2","due_date":"<span style=\\"color:#d50000;\\"><strong>28-07-2023</strong></span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"28-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2542","task_id":"2250","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2250\\"  name=\\"datatable_ids[]\\" value=\\"2250\\" onclick=\\"dataTableRowCheck(2250)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2250\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2250\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2250\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2250/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2250\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2250\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1KPX8EB-2250","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"27-07-2023 (06:18:39 AM)","name":"Moniruzzaman","timer":null,"task":"Catering Services Page","timeLogged":"0 hrs 44 mins","status":"To Do","client_name":"ferrermarie07","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"1 hrs 0 mins","DT_RowId":"row-2250"},{"id":2247,"task_short_code":"PSEOP1WO7ZJ8-2247","added_by":"210","project_name":"<a href=\\"https://seopage1erp.website/account/projects/596\\" class=\\"text-darkest-grey\\">Hotel presentation website</a>","project_admin":"210","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center \\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2247/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">1</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2247\\" class=\\"\\">Bar & Gallery and Gallery Inner</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Michail M.","created_by":"Farhan Rahman","board_column_id":"2","due_date":"<span style=\\"color:#d50000;\\"><strong>27-07-2023</strong></span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"27-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2538","task_id":"2247","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2247\\"  name=\\"datatable_ids[]\\" value=\\"2247\\" onclick=\\"dataTableRowCheck(2247)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2247\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2247\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2247\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2247/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2247\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2247\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1WO7ZJ8-2247","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"27-07-2023 (05:19:06 AM)","name":"Moniruzzaman","timer":null,"task":"Bar &amp; Gallery and Gallery Inner","timeLogged":"14 hrs 11 mins","status":"To Do","client_name":"Michail M.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"3 hrs 0 mins","DT_RowId":"row-2247"}]},{"id":2259,"task_short_code":"PSEOP1M3XEJV-2259","added_by":"209","project_name":"<a href=\\"https://seopage1erp.website/account/projects/577\\" class=\\"text-darkest-grey\\">Looking for a Shopify progamming and design expertopify themes and can provide deisgn assistance</a>","project_admin":"209","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center disabled\\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2259/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">0</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2259\\" class=\\"\\">Shop page</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Chase C.","created_by":"Dinar M Islam","board_column_id":"2","due_date":"<span >02-08-2023</span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"02-08-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2552","task_id":"2259","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2259\\"  name=\\"datatable_ids[]\\" value=\\"2259\\" onclick=\\"dataTableRowCheck(2259)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2259\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2259\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2259\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2259/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2259\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2259\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1M3XEJV-2259","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"28-07-2023 (05:13:47 AM)","name":"Moniruzzaman","timer":null,"task":"Shop page","timeLogged":"0 hrs ","status":"To Do","client_name":"Chase C.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"6 hrs 0 mins","DT_RowId":"row-2259","subtasks":[{"id":2258,"task_short_code":"PSEOP1M3XEJV-2258","added_by":"209","project_name":"<a href=\\"https://seopage1erp.website/account/projects/577\\" class=\\"text-darkest-grey\\">Looking for a Shopify progamming and design expertopify themes and can provide deisgn assistance</a>","project_admin":"209","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center disabled\\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2258/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">0</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2258\\" class=\\"\\">Other pages</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Chase C.","created_by":"Dinar M Islam","board_column_id":"2","due_date":"<span style=\\"color:#ef5350;\\">Today</span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"31-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2551","task_id":"2258","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2258\\"  name=\\"datatable_ids[]\\" value=\\"2258\\" onclick=\\"dataTableRowCheck(2258)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2258\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2258\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2258\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2258/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2258\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2258\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1M3XEJV-2258","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"28-07-2023 (05:11:40 AM)","name":"Moniruzzaman","timer":null,"task":"Other pages","timeLogged":"0 hrs ","status":"To Do","client_name":"Chase C.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"12 hrs 0 mins","DT_RowId":"row-2258"}]},{"id":2262,"task_short_code":"PSEOP1CJVBMU-2262","added_by":"245","project_name":"<a href=\\"https://seopage1erp.website/account/projects/549\\" class=\\"text-darkest-grey\\">5-6 page wordpress informative website</a>","project_admin":"245","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center \\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2262/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">1</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2262\\" class=\\"\\">Products Page</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Mazen A.","created_by":"Mohammad Fazle Rabbi","board_column_id":"2","due_date":"<span style=\\"color:#d50000;\\"><strong>28-07-2023</strong></span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"28-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2555","task_id":"2262","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2262\\"  name=\\"datatable_ids[]\\" value=\\"2262\\" onclick=\\"dataTableRowCheck(2262)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2262\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2262\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2262\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2262/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2262\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2262\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1CJVBMU-2262","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"28-07-2023 (05:32:45 AM)","name":"Moniruzzaman","timer":null,"task":"Products Page","timeLogged":"0 hrs ","status":"To Do","client_name":"Mazen A.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"3 hrs 0 mins","DT_RowId":"row-2262"},{"id":2256,"task_short_code":"PSEOP1IQPYSG-2256","added_by":"210","project_name":"<a href=\\"https://seopage1erp.website/account/projects/614\\" class=\\"text-darkest-grey\\">2nd Project</a>","project_admin":"210","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center \\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2256/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">1</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2256\\" class=\\"\\">Revision</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Aaron A.","created_by":"Farhan Rahman","board_column_id":"2","due_date":"<span style=\\"color:#d50000;\\"><strong>28-07-2023</strong></span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"28-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2549","task_id":"2256","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2256\\"  name=\\"datatable_ids[]\\" value=\\"2256\\" onclick=\\"dataTableRowCheck(2256)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2256\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2256\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2256\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2256/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2256\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2256\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1IQPYSG-2256","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"28-07-2023 (04:30:26 AM)","name":"Moniruzzaman","timer":null,"task":"Revision","timeLogged":"0 hrs ","status":"To Do","client_name":"Aaron A.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"1 hrs 0 mins","DT_RowId":"row-2256","subtasks":[{"id":2252,"task_short_code":"PSEOP1IZFLHC-2252","added_by":"210","project_name":"<a href=\\"https://seopage1erp.website/account/projects/581\\" class=\\"text-darkest-grey\\">Wordpress - Show business locations by zip code and radius</a>","project_admin":"210","heading":"<div class=\\"media align-items-center\\">\\n                    <div class=\\"media-body\\">\\n                        <div class=\\"row\\">\\n                            <div class=\\"mx-auto mx-sm-0 pb-2 pb-sm-0 align-self-center\\"><a class=\\"openRightModal showSubTask d-flex align-items-center disabled\\" href=\\"https://seopage1erp.website/account/tasks/show-subtask/2252/tableView\\" ><i style=\\"color:#31D2F2;\\" class=\\"fa fa-eye ml-3\\"></i><span class=\\"ml-1\\">0</span></a></div>\\n                            <div class=\\"col-9\\">\\n                                <h5 class=\\"mb-0 f-13 text-darkest-grey\\"><a href=\\"https://seopage1erp.website/account/tasks/2252\\" class=\\"\\">Revision</a></h5>\\n                                <p class=\\"mb-0\\">   </p>\\n                            </div>\\n                        </div>\\n                    </div>\\n                </div>","clientName":"Joe B.","created_by":"Farhan Rahman","board_column_id":"2","due_date":"<span style=\\"color:#d50000;\\"><strong>27-07-2023</strong></span>","board_column":"<i class=\\"fa fa-circle mr-1 text-yellow\\"\\n                    style=\\"color: #f5c308\\"></i>To Do","is_private":"0","pinned_task":"0","active_timer_all_count":"0","due_on":"27-07-2023","create_on":"","users":"<div class=\\"position-relative\\"><div class=\\"taskEmployeeImg rounded-circle \\" style=\\"left:  0px\\"><a href=\\"https://seopage1erp.website/account/employees/358\\"><img data-toggle=\\"tooltip\\" data-original-title=\\"Moniruzzaman\\" src=\\"https://www.gravatar.com/avatar/d4f613728b21b0da04359fd10e196e45.png?s=200&d=mp\\"></a></div> </div>","active_timer_all":[],"active_timer":null,"time_logged":[],"user_active_timer":null,"labels":[],"task_users":[{"id":"2544","task_id":"2252","user_id":"358","created_at":null,"updated_at":null}],"check":"<input type=\\"checkbox\\" class=\\"select-table-row\\" id=\\"datatable-row-2252\\"  name=\\"datatable_ids[]\\" value=\\"2252\\" onclick=\\"dataTableRowCheck(2252)\\">","action":"<div class=\\"task_view\\">\\n                <div class=\\"dropdown\\">\\n                    <a class=\\"task_view_more d-flex align-items-center justify-content-center dropdown-toggle\\" type=\\"link\\"\\n                        id=\\"dropdownMenuLink-2252\\" data-toggle=\\"dropdown\\" aria-haspopup=\\"true\\" aria-expanded=\\"false\\">\\n                        <i class=\\"icon-options-vertical icons\\"></i>\\n                    </a>\\n                    <div class=\\"dropdown-menu dropdown-menu-right\\" aria-labelledby=\\"dropdownMenuLink-2252\\" tabindex=\\"0\\"><a href=\\"https://seopage1erp.website/account/tasks/2252\\" class=\\"dropdown-item openRightModal\\"><i class=\\"fa fa-eye mr-2\\"></i>View</a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/2252/edit\\">\\n                            <i class=\\"fa fa-edit mr-2\\"></i>\\n                            Edit\\n                        </a><a class=\\"dropdown-item delete-table-row\\" href=\\"javascript:;\\" data-user-id=\\"2252\\">\\n                            <i class=\\"fa fa-trash mr-2\\"></i>\\n                            Delete\\n                        </a><a class=\\"dropdown-item openRightModal\\" href=\\"https://seopage1erp.website/account/tasks/create?duplicate_task=2252\\">\\n                            <i class=\\"fa fa-clone\\"></i>\\n                            Duplicate\\n                        </a></div>\\n                </div>\\n            </div>","short_code":"PSEOP1IZFLHC-2252","timer_action":"<i class=\\"fa-solid fa-circle-stop\\" style=\\"color:red;\\"></i> No active tasks","created_at":"27-07-2023 (07:30:53 AM)","name":"Moniruzzaman","timer":null,"task":"Revision","timeLogged":"0 hrs ","status":"To Do","client_name":"Joe B.","progress":"<div class=\\"progress\\" style=\\"height: 15px;\\">\\n                    <div class=\\"progress-bar f-12 bg-danger\\" role=\\"progressbar\\" style=\\"width: 0%;\\" aria-valuenow=\\"0\\" aria-valuemin=\\"0\\" aria-valuemax=\\"100\\">0%</div>\\n                </div>","estimate_time":"3 hrs 0 mins","DT_RowId":"row-2252"}]}]');
 
 /***/ })
 

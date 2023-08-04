@@ -73,7 +73,7 @@ const TaskWiseLogReport = () => {
                 <TaskWiseLogTable
                     data={renderData}
                     columns={TaskWiseTableColumn}
-                    tableName="employee_timelog_report"
+                    tableName="task_timelog_report"
                     onSort={handleSorting}
                     height="calc(100vh - 370px)"
                     onPaginate={handlePagination}

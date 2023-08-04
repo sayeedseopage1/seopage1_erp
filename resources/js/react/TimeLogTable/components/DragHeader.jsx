@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, {useRef} from 'react'
 import { useDrag, useDrop } from 'react-dnd'
+import { getEmptyImage } from 'react-dnd-html5-backend';
 
 
 const TableDragAbleHeader = ({
@@ -10,7 +11,8 @@ const TableDragAbleHeader = ({
     order,
     onDrop,
     tableName,
-    className
+    className,
+    storeOnLocalStore,
 }) =>{
     const ref = useRef(null);
         const reOrder = (curr, target) => {
@@ -19,7 +21,7 @@ const TableDragAbleHeader = ({
         };
          
     
-        const [{ isDragging }, drag] = useDrag({
+        const [{ isDragging }, drag, preview] = useDrag({
             type: "column",
             item: { column },
             collect: (monitor) => ({
@@ -39,10 +41,7 @@ const TableDragAbleHeader = ({
                 if (item.column !== column) {
                     const reOrderColumn = reOrder(item.column, column);
                     onDrop(reOrderColumn);
-                    localStorage.setItem(
-                        "projectWiseTableorder",
-                        JSON.stringify(reOrderColumn)
-                    );
+                    storeOnLocalStore(reOrderColumn);
                 }
             },
 
@@ -52,6 +51,10 @@ const TableDragAbleHeader = ({
         });
     
         drag(drop(ref));
+
+        React.useEffect(() => {
+            preview(getEmptyImage(), { captureDraggingState: true })
+          }, [])
 
     return (
         <th ref={ref} className={`${className} sp1_drag_th sp1_drag_col_${column?.id} ${isDragging ? '__dragging': ''} ${isOver ? '__drop-area': ''}`}>

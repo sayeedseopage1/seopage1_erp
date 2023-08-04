@@ -3,8 +3,9 @@ import _ from 'lodash';
 
 const initialState = {
     tasks: [],
-    subtasks: [],
+    subtasks: [], 
     filter: null,
+    reports: [],
 }
 
 
@@ -22,11 +23,25 @@ const tasksSlice = createSlice({
 
        storeSubTasks: (state, action) => {
         state.subtasks = action.payload.subtasks;
-       }
+       },
+       
+       storeReport: (state, action) => {
+        state.reports = action.payload.reports;
+       },
+
+       updateReportStatus: (state, action) => {
+        const { id, status } = action.payload;
+        const reportIndex = state.reports.findIndex((r) => r.id === id);
+      
+        if (reportIndex !== -1) {
+          // Update the status of the report at the found index
+          state.reports[reportIndex].status = status;
+        }
+      }
     }
 })
 
 
 
-export const { storeTasks, addSubtaskToParenttask, storeSubTasks } = tasksSlice.actions;
+export const { storeTasks, addSubtaskToParenttask, storeSubTasks,storeReport, updateReportStatus} = tasksSlice.actions;
 export default tasksSlice.reducer;

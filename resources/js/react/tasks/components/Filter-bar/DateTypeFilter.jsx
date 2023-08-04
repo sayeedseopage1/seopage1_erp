@@ -1,10 +1,7 @@
 import React, {useState} from 'react'
 import Dropdown from '../Dropdown';
-import {User} from '../../../utils/user-details';
 import _ from 'lodash';
-import { useUsers } from '../../../hooks/useUsers';
 import Search from '../Searchbox';
-import Loader from '../Loader';
 
 const dateType = [
     "Due Date",
@@ -17,7 +14,7 @@ const DateTypeFilter = ({state, setState}) => {
   return (
     <div className='sp1_task_filter_item'>
         <div>
-            <span className='mr-2 f-13'>Status :</span>
+            <span className='mr-2 f-13'>Date Filter By :</span>
             <Dropdown>
                 <Dropdown.Toggle className="sp1_filter_toggle">
                     <strong>{state}</strong>

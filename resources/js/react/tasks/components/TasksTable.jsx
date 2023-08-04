@@ -1,179 +1,37 @@
-import * as React from 'react'; 
-import { getEmptyImage } from 'react-dnd-html5-backend';
-import { useDrop, useDrag } from 'react-dnd';
-import Loader from './Loader'
+import * as React from 'react';
+import Loader from './Loader';
 import { convertTime } from '../../utils/converTime';
-import {CompareDate} from '../../utils/dateController';
+import { CompareDate } from '../../utils/dateController';
 const compareDate = new CompareDate(); 
 
 import {
-  Column,
-  Table,
-  ExpandedState,
-  useReactTable,
-  ColumnResizeMode,
-  getCoreRowModel,
+  useReactTable, getCoreRowModel,
   getPaginationRowModel,
   getFilteredRowModel,
   getExpandedRowModel,
   getSortedRowModel,
   flexRender
 } from '@tanstack/react-table';
-import IndeterminateCheckbox from './table/IndeterminateCheckbox';
 
-import demoData from './demo.json';
-import _, { head, size, transform } from 'lodash';
+import _ from 'lodash';
 import TasksTablePagination from './TasksTablePagination';
 import dayjs from 'dayjs';
 import TaskTableLoader from './loader/TaskTableLoader';
 import { useLazyGetSubTasksQuery } from '../../services/api/tasksApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSubtaskToParenttask } from '../../services/features/tasksSlice';
-import { useLocalStorage } from 'react-use';
 import Dropdown from './Dropdown';
 import Button from './Button';
 import StopWatch from './Timer';
+import EmptyTable from '../../global/EmptyTable';
+import ReportButton from './ReportButton';
+import Person from './Person';
+import { DragableColumnHeader } from './table/DragableColumnHeader';
+import { useLocalStorage } from 'react-use';
+import { User } from '../../utils/user-details';
 
 
-// reorder column
-const reorderColumn = (
-  draggedColumnId,
-  targetColumnId,
-  columnOrder
-) => {
-  columnOrder.splice(
-    columnOrder.indexOf(targetColumnId),
-    0,
-    columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0]
-  )
-  return [...columnOrder]
-}
- 
-// dragable columns
-const DragableColumnHeader = ({header, table}) => {
-  const {getState, setColumnOrder} = table;
-  const { columnOrder } = getState();
-  const {column} = header;
-
-  const dropRef = React.useRef(null);
-
-  const [{isOver}, drop] = useDrop({
-    accept: 'column',
-    drop: (draggedColumn) => {
-      if(column.id === "expend" || column.id === 'action') return; 
-      const newColumnOrder = reorderColumn(
-        draggedColumn.id,
-        column.id,
-        columnOrder
-      )
-      setColumnOrder(newColumnOrder)
-    },
-    collect: monitor => ({
-      isOver: monitor.isOver()
-    })
-  })
-
-  const [{ isDragging }, drag, preview] = useDrag({
-    collect: monitor => ({
-      isDragging: monitor.isDragging(),
-    }), 
-    item: () => column.id === "expend" || column.id === 'action' ? null : column,
-    type: 'column',
-  })
-
-  
-//   
-  React.useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: true })
-  }, [])
-
-  drag(drop(dropRef));
-
-  return (
-    <> 
-      <th
-        ref={dropRef}
-        colSpan={header.colSpan}
-        style={{ 
-          opacity: isDragging ? 0.5 : 1, 
-          background: isOver && (column.id !== "expend" || column.id === 'action') ? '#f3f3f3' : '', 
-        }}
-        className={`sp1_tasks_th sp1_tasks_th--${column.id}`}
-      >
-        <div className="d-flex align-items-start">
-          {column.id !== 'expend' && column.id !== 'action' &&
-              <button 
-              {...{
-                onClick: header.column.getToggleSortingHandler(),
-                className: 'sp1_tasks_column_sort_btn'
-              }}>
-  
-              {header.column.getIsSorted() ? 
-                  {
-                    asc: <span className="table_asc_dec asc"></span>,
-                    desc: <span className="table_asc_dec dec"></span>,
-                  }[header.column.getIsSorted()] ?? null
-              : <span className="table_asc_dec"></span>
-              }
-
-            </button>
-          } 
-          <div> 
-            <div>
-              {header.isPlaceholder
-                ? null
-                : flexRender(header.column.columnDef.header, header.getContext())}
-            </div> 
-          </div>
-        </div>
-      </th>
-    </>
-  ) 
-}
-
-
-
-const Person = ({avatar, url, name}) => {
-  return(
-    <div className='d-flex align-items-center'>
-      <div className='' style={{width: '28px'}}>
-        {avatar ? 
-            <div style={{width: '32px', height: '28px'}}>
-              <img 
-                src={`/user-uploads/avatar/${avatar}`}
-                alt={name}
-                width={24}
-                height={24}
-                style={{width: '28px', height: '28px'}}
-                className='rounded-circle'
-              />
-            </div>
-          : <div
-                className="sp1-item-center border rounded-circle"
-                style={{
-                    width: "28px",
-                    height: "28px",
-                }}
-            >
-                <div
-                    style={{
-                        fontSize: "1rem",
-                        fontWeight: "bold",
-                    }}
-                >
-                    {name?.slice(0, 1).toUpperCase()}
-                </div>
-            </div>
-        }
-      </div>
-
-      <a href={url} className='pl-2 '>{name}</a>
-    </div>
-  )
-}
-
-
-export default function TasksTable({isLoading, filter, tableName,search}){
+export default function TasksTable({isLoading, filter, tableName,search, reportPermission}){
   const { tasks } = useSelector(s => s.tasks);
   const [data, setData] = React.useState([])
   const [expanded, setExpanded] = React.useState({}); 
@@ -181,6 +39,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
   const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10}); 
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [ globalFilter, setGlobalFilter ] = React.useState('');
+  const [value, setValue] = useLocalStorage(tableName ??'')
 
   const _tasks = React.useMemo(()=> tasks, [tasks]);
 
@@ -205,6 +64,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
   const defaultColumns = React.useMemo(() => [
     {
       id:'expend',
+      header: '',
       cell: ({row, table}) => { 
         return(
           <ExpandTask 
@@ -218,7 +78,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'task',
       header: 'Task',
-      accessorKey: 'id',
+      accessorFn: row => `${row.id}${row.heading}`,
       cell: ({row}) => {
         const data = row?.original;  
         return (
@@ -299,7 +159,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'project',
       header: 'Project',
-      accessorKey: 'project_name',
+      accessorFn: row => `${row.project_id}${row.project_name}`,
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -373,6 +233,9 @@ export default function TasksTable({isLoading, filter, tableName,search}){
         }else if(compareDate.isAfter(currentDate, date)){
           color= 'red'
         }
+
+        if(Number(data?.board_column_id) === 4) color = '#0F9D58'
+        
         
         date = date === 'Today' ? date : dayjs(date).format('DD-MM-YYYY');
         return(
@@ -422,6 +285,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'approved_on',
       header: 'Approved On',
+      accessorKey: 'task_approval_date',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -438,6 +302,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'estimated_time',
       header: 'Estimated Time',
+      accessorKey: 'estimate_hours',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -451,6 +316,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'hours_logged',
       header: 'Hours Logged',
+      accessorKey: 'subtasks_hours_logged',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -463,7 +329,8 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     
     {
       id: 'assigned_by',
-      header: 'Assigned By',
+      header: 'Assigned By', 
+      accessorKey: 'added_by_name',
       cell: ({row}) => {
         const data = row?.original;
         
@@ -479,6 +346,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'assigned_to',
       header: 'Assigned To',
+      accessorKey: 'assigned_to_name',
       cell: ({row}) => {
         const data = row?.original;
         return( 
@@ -493,6 +361,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'status',
       header: 'Task Status',
+      accessorKey: 'column_name',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -508,6 +377,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     {
       id: 'progress',
       header: 'Progress',
+      accessorKey: 'subtasks_count',
       cell: ({row}) => {
         const data = row?.original;
         const count = Number(data?.subtasks_count);
@@ -532,13 +402,13 @@ export default function TasksTable({isLoading, filter, tableName,search}){
           <div>
             <div className="progress" style={{height: '16px'}}>
                 <div 
-                  className={`progress-bar progress-bar-striped ${bg}`} 
+                  className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`} 
                   role="progressbar" 
                   style={{width: `${percent}%`}} 
                   aria-valuenow="10" 
                   aria-valuemin="0" 
                   aria-valuemax="100"
-                />
+                >{Math.floor(percent)}%</div>
             </div>
           </div>
         )
@@ -549,54 +419,66 @@ export default function TasksTable({isLoading, filter, tableName,search}){
       header: 'Report',
       cell: ({row}) => {
         const data = row?.original;
-        return(
-          <div>
-            <div className='badge badge-danger'>
-              <strong>3</strong> Reports
-            </div>
-          </div>
-        )
+        return <ReportButton row={data} />
       }
     },
      
-    {
-      id: 'action',
-      header: 'Action',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <div>
-            <Dropdown>
-              <Dropdown.Toggle icon={false}>
-                <Button variant='tertiary'>
-                  <i className="fa-solid fa-ellipsis-vertical"></i>
-                </Button>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="p-1">
-                <Dropdown.Item className="sp1_tasks_tbl_action">
-                  <i className="fa-regular fa-pen-to-square mr-2"></i>
-                  Edit
-                </Dropdown.Item>
-                <Dropdown.Item className="sp1_tasks_tbl_del">
-                  <i className="fa-solid fa-trash-can mr-2"></i>
-                  Delete
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        )
-      }
-    },   
+    // {
+    //   id: 'action',
+    //   header: 'Action',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <div>
+    //         <Dropdown>
+    //           <Dropdown.Toggle icon={false}>
+    //             <Button variant='tertiary'>
+    //               <i className="fa-solid fa-ellipsis-vertical"></i>
+    //             </Button>
+    //           </Dropdown.Toggle>
+    //           <Dropdown.Menu className="p-1">
+    //             <Dropdown.Item className="sp1_tasks_tbl_action">
+    //               <i className="fa-regular fa-pen-to-square mr-2"></i>
+    //               Edit
+    //             </Dropdown.Item>
+    //             <Dropdown.Item className="sp1_tasks_tbl_del">
+    //               <i className="fa-solid fa-trash-can mr-2"></i>
+    //               Delete
+    //             </Dropdown.Item>
+    //           </Dropdown.Menu>
+    //         </Dropdown>
+    //       </div>
+    //     )
+    //   }
+    // },   
   ])
 
 
   // columns
-  const [columns] = React.useState([...defaultColumns]);
+  const [columns, setColumns] = React.useState([...defaultColumns]);
+
+  React.useEffect(() => {
+    let auth = new User(window?.Laravel?.user);
+    let _cols = [...defaultColumns];
+
+    if(!_.includes(reportPermission, auth?.getRoleId())){
+      let cols = _cols?.filter(col => col.id !== 'report')
+      setColumns([...cols]);
+    }
+  }, [])
+  
   const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id')); 
   
   // reset columns
   const resetColumnsOrder = () => setColumnOrder(_.map(columns, 'id'))
   const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
+
+  // columns orders
+  React.useEffect(() => {
+    if(value?.columnOrders){
+      setColumnOrder(value.columnOrders);
+    }
+  }, [])
  
 
   // table instance...
@@ -625,9 +507,6 @@ export default function TasksTable({isLoading, filter, tableName,search}){
     getExpandedRowModel: getExpandedRowModel(),
     getSortedRowModel: getSortedRowModel(),
     paginateExpandedRows: false,
-    debugTable: true,
-    debugColumns: true,
-    debugHeaders: true,
   })
 
 
@@ -645,7 +524,7 @@ export default function TasksTable({isLoading, filter, tableName,search}){
             ))}
           </thead>
           <tbody className='sp1_tasks_tbody'> 
-            {!isLoading && table.getRowModel().rows.map(row => {
+            {!isLoading &&table.getRowModel().rows.map(row => {
               return (
                 <tr
                   className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
@@ -667,6 +546,8 @@ export default function TasksTable({isLoading, filter, tableName,search}){
             {isLoading && <TaskTableLoader />}
           </tbody>
       </table>
+      
+      {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
     </div>
     
 

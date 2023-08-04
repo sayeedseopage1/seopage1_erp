@@ -4,6 +4,7 @@ import TableFooter from "./TableFooter";
 import TimeLogHistoryLoader from "./TimeLogHistoryLoader";
 import TableDragAbleHeader from "./DragHeader";
 import EmptyTable from "./EmptyTable";
+import { useLocalStorage } from "react-use";
 
 const TimeLogHistoryTable = ({
     data,
@@ -19,11 +20,15 @@ const TimeLogHistoryTable = ({
     isLoading
 }) => {
     const [columnOrder, setColumnOrder] = useState([]);
-
+    const [value, setValue] = useLocalStorage(tableName);
     // get columns keys
     useEffect(() => {
-        const column_ids = _.map(columns, "id");
-        setColumnOrder([...column_ids]);
+        if(value?.columnOrders){
+            setColumnOrder(value?.columnOrders);
+        }else{
+            const column_ids = _.map(columns, "id");
+            setColumnOrder([...column_ids]);
+        }
     }, []);
 
     const _columns = _.sortBy(columns, (item) =>
@@ -35,7 +40,7 @@ const TimeLogHistoryTable = ({
             <div className="p-3">
                 <div
                     className="position-relative sp1_tlr_tbl_wrapper"
-                    style={{ height }}
+                    style={{ height: (!isLoading && _.size(data) === 0) ? 'fit-content' : height }}
                 >
                     <table className="sp1_tlr_table">
                         <thead className="sp1_tlr_thead">
@@ -51,6 +56,7 @@ const TimeLogHistoryTable = ({
                                             onDrop={setColumnOrder}
                                             order={columnOrder}
                                             tableName="time_log_history_modal"
+                                            storeOnLocalStore={(columns) => setValue({...value, columnOrders: columns})}
                                         />
                                         
                                     );

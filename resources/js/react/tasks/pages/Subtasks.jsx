@@ -39,7 +39,7 @@ const Subtasks = () => {
     return (
         <React.Fragment>
             <FilterContainer>
-                <Filterbar onFilter={onFilter}/> 
+                <Filterbar onFilter={onFilter} page="subtasks"/> 
             </FilterContainer>
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container">
@@ -55,6 +55,7 @@ const Subtasks = () => {
                         filter={filter} 
                         tableName="tasksTable"
                         search={search}
+                        reportPermission = {[1,8,5]}
                     />
                 </div>
             </div>

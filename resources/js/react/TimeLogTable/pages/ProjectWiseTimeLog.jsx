@@ -82,7 +82,7 @@ const ProjectWiseTimeLog = () => {
                 <ProjectWiseTable
                     data={renderData}
                     columns={ProjectWiseTableColumn}
-                    tableName="employee_timelog_report"
+                    tableName="ProjectWiseTimeLogTable"
                     onSort={handleSorting}
                     height="calc(100vh - 370px)"
                     onPaginate={handlePagination}

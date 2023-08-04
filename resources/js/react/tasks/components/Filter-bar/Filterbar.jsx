@@ -1,6 +1,5 @@
 import React from 'react'
 import JqueryDateRangePicker from './JqueryDateRangePicker'
-import LiveSearch from './LiveSearch';
 import UserFilter from './UserFilter'; 
 import _ from 'lodash';
 import StatusFilter from './StatusFilter';
@@ -8,7 +7,7 @@ import FilterSidebar from './FilterSidebar';
 import { useWindowSize } from 'react-use';
 import DateTypeFilter from './DateTypeFilter';
 
-const Filterbar = ({onFilter}) => {
+const Filterbar = ({onFilter, page="tasks"}) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
@@ -18,12 +17,14 @@ const Filterbar = ({onFilter}) => {
     const [client, setClient] = React.useState(null);
     const [leadDeveloper, setLeadDeveloper] = React.useState(null);
     const [pm, setPm] = React.useState(null);
-    const [status, setStatus] = React.useState('Hide completed task');
+    const [status, setStatus] = React.useState({id: 101, column_name: 'Hide completed task'});
     const [dateType, setDateType] = React.useState('Due Date');
 
     const {width} = useWindowSize();
 
-
+    
+    const isDev = _.includes([5], window?.Laravel?.user?.role_id);
+ 
 
 
     // MEMORIZE VALUES
@@ -42,19 +43,18 @@ const Filterbar = ({onFilter}) => {
         const filter = {
             start_date,
             end_date,
-            search: _search,
             assignee_to: _developer?.id,
             client_id: _client?.id,
             assignee_by: _leadDeveloper?.id,
             pm_id: _pm?.id,
-            status: _status,
+            status: _status?.id,
             date_filter_by
         }
 
 
         onFilter(filter);
 
-    }, [start_date, end_date, _search, _developer, _client, _leadDeveloper, _pm, _status, date_filter_by])
+    }, [start_date, end_date, _developer, _client, _leadDeveloper, _pm, _status, date_filter_by])
 
 
 
@@ -71,12 +71,24 @@ const Filterbar = ({onFilter}) => {
 
         {width > 1400 && 
             <React.Fragment>
-            <UserFilter 
-                title="Assignee To" 
-                state={developer}
-                setState={setDeveloper}
-                roleIds={[4, 6, 9, 10]}
-            />
+            
+            {
+                page === 'subtasks' ?
+                <UserFilter 
+                    title="Assignee To" 
+                    state={developer}
+                    setState={setDeveloper}
+                    roleIds={[5]}
+                />: 
+                <UserFilter 
+                    title="Assignee To" 
+                    state={developer}
+                    setState={setDeveloper}
+                    roleIds={[4, 6, 9, 10]}
+                />
+
+            }
+
             
             <HDivider />
 
@@ -115,14 +127,6 @@ const Filterbar = ({onFilter}) => {
             </React.Fragment> 
         }
 
-        {/* <div className='search_container'>
-            <LiveSearch 
-                handleSearch={data => setSearch(data)}  
-                searchTerm={searchQuery}
-                setSearchTerm={setSearchQuery}
-            />
-        </div> */}
-        
         {width < 1400 && 
             <React.Fragment>
                 <HDivider className='ml-auto'/>
@@ -149,6 +153,7 @@ const Filterbar = ({onFilter}) => {
                             dateType={dateType}
                             setDateType={setDateType}
                             close={() => setIsOpen(false)}
+                            isDev={isDev}
                         />
                     )}
                 </div>

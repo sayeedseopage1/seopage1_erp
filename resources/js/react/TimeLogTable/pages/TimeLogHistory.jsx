@@ -72,7 +72,7 @@ const TimeLogHistory = () => {
                 <TimeLogHistoryTable
                     data={renderData}
                     columns={TimeLogHistoryColumn}
-                    tableName="employee_timelog_report"
+                    tableName="timeLogHistory"
                     onSort={handleSorting}
                     height="calc(100vh - 325px)"
                     onPaginate={handlePagination}

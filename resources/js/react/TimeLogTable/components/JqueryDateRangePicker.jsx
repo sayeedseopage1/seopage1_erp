@@ -38,7 +38,7 @@ const JqueryDateRangePicker = ({
                     setEndDate(end.format('YYYY-MM-DD'));
                     onApply && onApply(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
                     $('#jqueryDatePicker div.sp1__jquery_date_text')
-                    .html(start.format('MMMM D, YYYY') + ' to ' + end.format('MMMM D, YYYY'));
+                    .html(start.format('MMM DD, YYYY') + ' to ' + end.format('MMM DD, YYYY'));
                 }
 
                 $('#jqueryDatePicker').daterangepicker({
