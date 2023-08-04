@@ -386,7 +386,7 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
         let percent = 0;
 
         if(count > 0){percent = (completed / count) * 100;}
-        else{percent = data?.board_column_id === 4 ? 100 : 0;}
+        else{percent = Number(data?.board_column_id) === 4 ? 100 : 0;}
 
 
         if(percent === 100){
@@ -584,7 +584,6 @@ export const ExpandTask = ({row, table, pageIndex}) => {
             if (!row.getCanExpand()) return;
             row.toggleExpanded();
           }else{
-            console.log({filter})
             getSubTasks({
               taskId: data?.id,
               query: new URLSearchParams(filter).toString()

@@ -358,7 +358,7 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
         let percent = 0;
 
         if(count > 0){percent = (completed / count) * 100;}
-        else{percent = data?.board_column_id === 4 ? 100 : 0;}
+        else{percent = Number(data?.board_column_id)=== 4 ? 100 : 0;}
 
 
         if(percent === 100){
