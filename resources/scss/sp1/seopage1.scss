@@ -85,9 +85,13 @@
 .sp1_modal-panel{
   width: fit-content;
   max-width: 90vw;
+  min-width: 300px;
+  height: fit-content;
+  min-height: 300px;
   margin-inline: auto;
   margin-top: 40px;
   background: #fff;
+  border-radius: 10px;
 }
 
 .sp1_modal-head{
@@ -95,10 +99,24 @@
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgb(0 0 0 / 10%);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
-.sp1_modal-body{
-  min-height: 300px;
+.sp1_modal-close{
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sp1_modal-body{ 
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 
@@ -109,6 +127,15 @@
   -webkit-box-orient: vertical;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.singleline-ellipsis{
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;

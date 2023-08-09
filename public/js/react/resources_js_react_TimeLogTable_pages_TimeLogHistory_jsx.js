@@ -1389,7 +1389,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var TimeLogHIstoryModalTable = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().lazy(function () {
-  return Promise.all(/*! import() */[__webpack_require__.e("/js/vendor"), __webpack_require__.e("resources_js_react_TimeLogTable_components_TimeLogHIstoryModalTable_jsx")]).then(__webpack_require__.bind(__webpack_require__, /*! ./TimeLogHIstoryModalTable */ "./resources/js/react/TimeLogTable/components/TimeLogHIstoryModalTable.jsx"));
+  return __webpack_require__.e(/*! import() */ "resources_js_react_TimeLogTable_components_TimeLogHIstoryModalTable_jsx").then(__webpack_require__.bind(__webpack_require__, /*! ./TimeLogHIstoryModalTable */ "./resources/js/react/TimeLogTable/components/TimeLogHIstoryModalTable.jsx"));
 });
 var TimeLogHistoryModal = function TimeLogHistoryModal(_ref) {
   var row = _ref.row,
@@ -1878,42 +1878,6 @@ var useGetEmployeeWiseDataMutation = timeLogTableApiSlice.useGetEmployeeWiseData
   useGetTimeLogHistoryMutation = timeLogTableApiSlice.useGetTimeLogHistoryMutation,
   useLazyGetTimeLogHistoryDetailsQuery = timeLogTableApiSlice.useLazyGetTimeLogHistoryDetailsQuery;
 
-
-/***/ }),
-
-/***/ "./resources/js/react/single-task/components/Loader.jsx":
-/*!**************************************************************!*\
-  !*** ./resources/js/react/single-task/components/Loader.jsx ***!
-  \**************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-var Loader = function Loader(_ref) {
-  var _ref$title = _ref.title,
-    title = _ref$title === void 0 ? "Loading..." : _ref$title;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-    className: "d-flex align-items-center",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("div", {
-      className: "spinner-border text-dark mr-2",
-      role: "status",
-      style: {
-        width: "16px",
-        height: "16px",
-        border: "0.14em solid rgba(0, 0, 0, .25)",
-        borderRightColor: "transparent"
-      }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
-      children: title
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Loader);
 
 /***/ }),
 

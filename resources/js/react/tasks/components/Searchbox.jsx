@@ -23,7 +23,7 @@ const SearchBox = ({value, onChange, placeholder="Search", autoFocus=false, clas
                 />
 
                 {/* search icons */}
-                    <div className='cnx__ins__ui_search_icon'>
+                    <div className='cnx__ins__ui_search_icon' style={{marginTop: '-3px'}}>
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
                             className='cnx__ins__ui_search_icon_svg'

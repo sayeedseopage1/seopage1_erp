@@ -30,6 +30,7 @@ class SubTaskFileController extends AccountBaseController
      */
     public function store(Request $request)
     {
+        dd($request);
         $this->addPermission = user()->permission('add_sub_tasks');
         abort_403(!in_array($this->addPermission, ['all', 'added']));
 

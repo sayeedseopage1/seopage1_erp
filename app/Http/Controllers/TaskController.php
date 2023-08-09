@@ -11,6 +11,7 @@ use App\Models\BaseModel;
 use App\Models\EmployeeDetails;
 use App\Models\Pinned;
 use App\Models\PmTaskGuideline;
+use App\Models\PMTaskGuidelineAuthorization;
 use App\Models\Project;
 use App\Models\ProjectMember;
 use App\Models\ProjectMilestone;
@@ -28,6 +29,7 @@ use App\Models\TaskRevision;
 use App\Models\TaskUser;
 use App\Models\User;
 use App\Models\WorkingEnvironment;
+use App\Notifications\PmTaskGuidelineNotification;
 use App\Traits\ProjectProgress;
 use Carbon\Carbon;
 use GrahamCampbell\GitLab\Facades\GitLab;
@@ -53,6 +55,7 @@ use App\Notifications\TaskSubmitNotification;
 use App\Notifications\TaskRevisionNotification;
 use App\Notifications\TaskApproveNotification;
 use Notification;
+use Str;
 use Toastr;
 use Auth;
 use App\Models\ProjectDeliverable;
@@ -105,6 +108,7 @@ class TaskController extends AccountBaseController
        
         $pmId = $request->input('pm_id', null);
         $clientId = $request->input('client_id', null);
+        $projectId = $request->input('project_id', null);
         $status = $request->input('status', null);
         $date_filter_by = $request->input('date_filter_by', null);
 
@@ -158,6 +162,9 @@ class TaskController extends AccountBaseController
                     $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                 }
 
+            }
+            if (!is_null($projectId)) {
+                $tasks = $tasks->where('tasks.project_id', $projectId);
             }
             if (!is_null($assignee_to)) {
                 $tasks = $tasks->where('task_users.user_id', $assignee_to);
@@ -288,7 +295,7 @@ class TaskController extends AccountBaseController
                 ->where('sub_tasks.task_id', $task->id)
                     ->join('tasks', 'tasks.subtask_id', 'sub_tasks.id')
                   
-                    ->whereIn('tasks.board_column_id',['4','8'])
+                    ->whereIn('tasks.board_column_id',['4','8','7'])
                     ->count();
                     $subtasks_timer_active = Subtask::select('tasks.*')
             
@@ -386,6 +393,7 @@ class TaskController extends AccountBaseController
         $clientId = $request->input('client_id', null);
         $status = $request->input('status', null);
         $date_filter_by = $request->input('date_filter_by', null);
+        $projectId = $request->input('project_id', null);
 
         
 
@@ -443,6 +451,9 @@ class TaskController extends AccountBaseController
                     $tasks = $tasks->whereDate('tasks.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
                 }
 
+            }
+            if (!is_null($projectId)) {
+                $tasks = $tasks->where('tasks.project_id', $projectId);
             }
             if (!is_null($assignee_to)) {
                 $tasks = $tasks->where('task_users.user_id', $assignee_to);
@@ -884,6 +895,27 @@ class TaskController extends AccountBaseController
             'status' => 200,
             'task_status'=> $board_column,
         ]);
+    }
+    public function CheckPmTaskGuideline($id)
+    {
+        $task_guideline= PmTaskGuideline::where('project_id',$id)->first();
+        $task_count= Task::where('project_id',$id)->count();
+        if($task_guideline == null && $task_count < 1)
+        {
+            return response()->json([
+                'status' => 400,
+                'message'=> 'Need to add pm task guidelines',
+            ]);
+
+        }else 
+        {
+            return response()->json([
+                'status' => 200,
+                'message'=> 'Pm can add tasks',
+            ]);
+
+
+        }
     }
 
     public function TaskRevision(Request $request)
@@ -1333,83 +1365,100 @@ class TaskController extends AccountBaseController
 
         $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
         $task->saveQuietly();
+        if ($request->hasFile('file')) {
+
+            foreach ($request->file as $fileData) {
+                $file = new TaskFile();
+                $file->task_id = $task->id;
+
+                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
 
         // save labels
-        $task->labels()->sync($request->task_labels);
+        // $task->labels()->sync($request->task_labels);
         // dd($request->taskId);
-        if (!is_null($request->taskId)) {
+        // if (!is_null($request->taskId)) {
 
-            $taskExists = TaskFile::where('task_id', $request->taskId)->get();
+        //     $taskExists = TaskFile::where('task_id', $request->taskId)->get();
 
-            if ($taskExists) {
-                foreach ($taskExists as $taskExist) {
-                    $file = new TaskFile();
-                    $file->user_id = $taskExist->user_id;
-                    $file->task_id = $task->id;
+        //     if ($taskExists) {
+        //         foreach ($taskExists as $taskExist) {
+        //             $file = new TaskFile();
+        //             $file->user_id = $taskExist->user_id;
+        //             $file->task_id = $task->id;
 
-                    if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id))) {
-                        File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id), 0775, true);
-                    }
+        //             if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id))) {
+        //                 File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id), 0775, true);
+        //             }
 
-                    $fileName = Files::generateNewFileName($taskExist->filename);
-                    copy(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $taskExist->task_id . '/' . $taskExist->hashname), public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id . '/' . $fileName));
+        //             $fileName = Files::generateNewFileName($taskExist->filename);
+        //             copy(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $taskExist->task_id . '/' . $taskExist->hashname), public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id . '/' . $fileName));
 
-                    $file->filename = $taskExist->filename;
-                    $file->hashname = $fileName;
-                    $file->size = $taskExist->size;
-                    $file->save();
+        //             $file->filename = $taskExist->filename;
+        //             $file->hashname = $fileName;
+        //             $file->size = $taskExist->size;
+        //             $file->save();
 
-                    $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
-                }
-            }
+        //             $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+        //         }
+        //     }
 
-            $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
+        //     $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
 
-            if ($subTask) {
-                foreach ($subTask as $subTasks) {
-                    $subTaskData = new SubTask();
-                    $subTaskData->title = $subTasks->title;
-                    $subTaskData->task_id = $task->id;
-                    $subTaskData->description = str_replace('<p><br></p>', '', trim($subTasks->description));
+        //     if ($subTask) {
+        //         foreach ($subTask as $subTasks) {
+        //             $subTaskData = new SubTask();
+        //             $subTaskData->title = $subTasks->title;
+        //             $subTaskData->task_id = $task->id;
+        //             $subTaskData->description = str_replace('<p><br></p>', '', trim($subTasks->description));
 
-                    if ($subTasks->start_date != '' && $subTasks->due_date != '') {
-                        $subTaskData->start_date = $subTasks->start_date;
-                        $subTaskData->due_date = $subTasks->due_date;
-                    }
+        //             if ($subTasks->start_date != '' && $subTasks->due_date != '') {
+        //                 $subTaskData->start_date = $subTasks->start_date;
+        //                 $subTaskData->due_date = $subTasks->due_date;
+        //             }
 
 
-                    $subTaskData->assigned_to = $subTasks->assigned_to;
+        //             $subTaskData->assigned_to = $subTasks->assigned_to;
 
-                    $subTaskData->save();
+        //             $subTaskData->save();
 
-                    if ($subTasks->files) {
-                        foreach ($subTasks->files as $fileData) {
-                            $file = new SubTaskFile();
-                            $file->user_id = $fileData->user_id;
-                            $file->sub_task_id = $subTaskData->id;
+        //             if ($subTasks->files) {
+        //                 foreach ($subTasks->files as $fileData) {
+        //                     $file = new SubTaskFile();
+        //                     $file->user_id = $fileData->user_id;
+        //                     $file->sub_task_id = $subTaskData->id;
 
-                            $fileName = Files::generateNewFileName($fileData->filename);
+        //                     $fileName = Files::generateNewFileName($fileData->filename);
 
-                            if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id))) {
-                                File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id), 0775, true);
-                            }
+        //                     if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id))) {
+        //                         File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id), 0775, true);
+        //                     }
 
-                            copy(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $fileData->sub_task_id . '/' . $fileData->hashname), public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id . '/' . $fileName));
+        //                     copy(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $fileData->sub_task_id . '/' . $fileData->hashname), public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id . '/' . $fileName));
 
-                            $file->filename = $fileData->filename;
-                            $file->hashname = $fileName;
-                            $file->size = $fileData->size;
-                            $file->save();
-                        }
-                    }
-                }
-            }
-        }
+        //                     $file->filename = $fileData->filename;
+        //                     $file->hashname = $fileName;
+        //                     $file->size = $fileData->size;
+        //                     $file->save();
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
 
         // To add custom fields data
-        if ($request->get('custom_fields_data')) {
-            $task->updateCustomFieldData($request->get('custom_fields_data'));
-        }
+        // if ($request->get('custom_fields_data')) {
+        //     $task->updateCustomFieldData($request->get('custom_fields_data'));
+        // }
 
         // For gantt chart
         if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
@@ -1524,6 +1573,517 @@ class TaskController extends AccountBaseController
         }
 
         return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
+    }
+    public function StoreNewTask(Request $request)
+    {
+       // DB::beginTransaction();
+        $setting = global_setting();
+        $rules = [
+            'heading' => 'required',
+            'estimate_hours' => 'required',
+            'estimate_minutes' => 'required',
+            'description' => 'required',
+            'user_id' => 'required',
+            'milestone_id'=>'required',
+
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        
+
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 422);
+        }
+        $project_id = Project::where('id', $request->project_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        if (is_null($project) || ($project->project_admin != user()->id)) {
+            $this->addPermission = user()->permission('add_tasks');
+            abort_403(!in_array($this->addPermission, ['all', 'added']));
+        }
+
+        DB::beginTransaction();
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+        $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        $task = new Task();
+        $task->heading = $request->heading;
+
+        $task->description = str_replace('<p><br></p>', '', trim($request->description));
+
+        $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+        $task->due_date = $dueDate;
+        $task->project_id = $request->project_id;
+        $task->task_category_id = $request->category_id;
+        $task->priority = $request->priority;
+        $task->board_column_id = $taskBoardColumn->id;
+
+        // if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
+        //     $dependentTask = Task::findOrFail($request->dependent_task_id);
+
+        //     // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
+        //     //     /* @phpstan-ignore-line */
+        //     //     return Reply::error(__('messages.taskDependentDate'));
+        //     // }
+
+        //     $task->dependent_task_id = $request->dependent_task_id;
+        // }
+
+        $task->is_private = $request->has('is_private') ? 1 : 0;
+        $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
+        $task->estimate_hours = $request->estimate_hours;
+        $task->estimate_minutes = $request->estimate_minutes;
+        $task->deliverable_id = $request->deliverable_id;
+
+        if ($request->board_column_id) {
+            $task->board_column_id = $request->board_column_id;
+        }
+
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
+
+        // Add repeated task
+        $task->repeat = $request->repeat ? 1 : 0;
+
+        if ($request->has('repeat')) {
+            $task->repeat_count = $request->repeat_count;
+            $task->repeat_type = $request->repeat_type;
+            $task->repeat_cycles = $request->repeat_cycles;
+        }
+        $task->task_status = "pending";
+        $total_hours = $request->estimate_hours * 60;
+        $total_minutes = $request->estimate_minutes;
+        $total_in_minutes = $total_hours + $total_minutes;
+        $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+        $task->save();
+
+        $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+        $task->saveQuietly();
+        if ($request->hasFile('file')) {
+
+            foreach ($request->file as $fileData) {
+                $file = new TaskFile();
+                $file->task_id = $task->id;
+
+                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
+       
+
+        // save labels
+        // $task->labels()->sync($request->task_labels);
+        // dd($request->taskId);
+        // if (!is_null($request->taskId)) {
+
+        //     $taskExists = TaskFile::where('task_id', $request->taskId)->get();
+
+        //     if ($taskExists) {
+        //         foreach ($taskExists as $taskExist) {
+        //             $file = new TaskFile();
+        //             $file->user_id = $taskExist->user_id;
+        //             $file->task_id = $task->id;
+
+        //             if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id))) {
+        //                 File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id), 0775, true);
+        //             }
+
+        //             $fileName = Files::generateNewFileName($taskExist->filename);
+        //             copy(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $taskExist->task_id . '/' . $taskExist->hashname), public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id . '/' . $fileName));
+
+        //             $file->filename = $taskExist->filename;
+        //             $file->hashname = $fileName;
+        //             $file->size = $taskExist->size;
+        //             $file->save();
+
+        //             $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+        //         }
+        //     }
+
+        //     $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
+
+        //     if ($subTask) {
+        //         foreach ($subTask as $subTasks) {
+        //             $subTaskData = new SubTask();
+        //             $subTaskData->title = $subTasks->title;
+        //             $subTaskData->task_id = $task->id;
+        //             $subTaskData->description = str_replace('<p><br></p>', '', trim($subTasks->description));
+
+        //             if ($subTasks->start_date != '' && $subTasks->due_date != '') {
+        //                 $subTaskData->start_date = $subTasks->start_date;
+        //                 $subTaskData->due_date = $subTasks->due_date;
+        //             }
+
+
+        //             $subTaskData->assigned_to = $subTasks->assigned_to;
+
+        //             $subTaskData->save();
+
+        //             if ($subTasks->files) {
+        //                 foreach ($subTasks->files as $fileData) {
+        //                     $file = new SubTaskFile();
+        //                     $file->user_id = $fileData->user_id;
+        //                     $file->sub_task_id = $subTaskData->id;
+
+        //                     $fileName = Files::generateNewFileName($fileData->filename);
+
+        //                     if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id))) {
+        //                         File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id), 0775, true);
+        //                     }
+
+        //                     copy(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $fileData->sub_task_id . '/' . $fileData->hashname), public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id . '/' . $fileName));
+
+        //                     $file->filename = $fileData->filename;
+        //                     $file->hashname = $fileName;
+        //                     $file->size = $fileData->size;
+        //                     $file->save();
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // To add custom fields data
+        // if ($request->get('custom_fields_data')) {
+        //     $task->updateCustomFieldData($request->get('custom_fields_data'));
+        // }
+
+        // For gantt chart
+        if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
+            $parentGanttId = $request->parent_gantt_id;
+
+            /* @phpstan-ignore-next-line */
+            $taskDuration = $task->due_date->diffInDays($task->start_date);
+            /* @phpstan-ignore-line */
+            $taskDuration = $taskDuration + 1;
+
+            $ganttTaskArray[] = [
+                'id' => $task->id,
+                'text' => $task->heading,
+                'start_date' => $task->start_date->format('Y-m-d'), /* @phpstan-ignore-line */
+                'duration' => $taskDuration,
+                'parent' => $parentGanttId,
+                'taskid' => $task->id
+            ];
+
+            $gantTaskLinkArray[] = [
+                'id' => 'link_' . $task->id,
+                'source' => $task->dependent_task_id != '' ? $task->dependent_task_id : $parentGanttId,
+                'target' => $task->id,
+                'type' => $task->dependent_task_id != '' ? 0 : 1
+            ];
+        }
+
+
+        DB::commit();
+
+        if (request()->add_more == 'true') {
+            unset($request->project_id);
+            $html = $this->create();
+            return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['html' => $html, 'add_more' => true, 'taskID' => $task->id]);
+        }
+
+        if ($request->page_name && $request->page_name == 'ganttChart') {
+
+            return Reply::successWithData(
+                'messages.taskCreatedSuccessfully',
+                [
+                    'tasks' => $ganttTaskArray,
+                    'links' => $gantTaskLinkArray
+                ]
+            );
+        }
+
+        if (is_array($request->user_id)) {
+            $assigned_to = User::find($request->user_id[0]);
+
+            if ($assigned_to->role_id == 6) {
+                //authorization action start
+
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->model_name = $task->getMorphClass();
+                $authorization_action->model_id = $task->id;
+                $authorization_action->type = 'task_assigned_on_lead_developer';
+                $authorization_action->deal_id = $task->project->deal_id;
+                $authorization_action->project_id = $task->project_id;
+                $authorization_action->link = route('projects.show', $task->project->id) . '?tab=tasks';
+                $authorization_action->title = Auth::user()->name . ' assigned task on you';
+                $authorization_action->authorization_for = $assigned_to->id;
+                $authorization_action->save();
+                //authorization action end
+            }
+            $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet assigned new task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        } else {
+            $assigned_to = User::find($request->user_id);
+            if ($assigned_to->role_id == 6) {
+                //authorization action start
+
+                $authorization_action = new AuthorizationAction();
+                $authorization_action->model_name = $task->getMorphClass();
+                $authorization_action->model_id = $task->id;
+                $authorization_action->type = 'task_assigned_on_lead_developer';
+                $authorization_action->deal_id = $task->project->deal_id;
+                $authorization_action->project_id = $task->project_id;
+                $authorization_action->link = route('projects.show', $task->project_id) . '?tab=tasks';
+                $authorization_action->title = Auth::user()->name . ' assigned task on you';
+                $authorization_action->authorization_for = $assigned_to->id;
+                $authorization_action->save();
+                //authorization action end
+            }
+            $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'You have new task',
+                'body' => 'Project managet assigned new task on you',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        }
+        return response()->json([
+            'status' => 200,
+            'message'=> 'Task added successfully',
+           
+        ]);
+
+        // $redirectUrl = urldecode($request->redirect_url);
+
+        // if ($redirectUrl == '') {
+        //     //$redirectUrl = url('/account/projects/418?tab=tasks');
+        //     $redirectUrl = route('projects.show', $request->project_id) . '?tab=tasks';
+        // }
+
+        // return Reply::successWithData(__('messages.taskCreatedSuccessfully'), ['redirectUrl' => $redirectUrl, 'taskID' => $task->id]);
+    }
+    public function EditTask(Request $request)
+    {
+       // DB::beginTransaction();
+        $setting = global_setting();
+        $rules = [
+            'heading' => 'required',
+            'estimate_hours' => 'required',
+            'estimate_minutes' => 'required',
+            'description' => 'required',
+            'user_id' => 'required',
+            'milestone_id'=>'required',
+
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        
+
+
+        if ($validator->fails()) {
+            return response($validator->errors(), 422);
+        }
+        $project_id = Project::where('id', $request->project_id)->first();
+        $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+        $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+        $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+
+        $left_in_hours = round($left_minutes / 60, 0);
+        $left_in_minutes = $left_minutes % 60;
+
+        if ($left_minutes < 1) {
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "estimate_hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
+        }
+
+        // dd($request);
+        $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+        if (is_null($project) || ($project->project_admin != user()->id)) {
+            $this->addPermission = user()->permission('edit_tasks');
+            abort_403(!in_array($this->addPermission, ['all', 'added']));
+        }
+
+        DB::beginTransaction();
+        $ganttTaskArray = [];
+        $gantTaskLinkArray = [];
+       
+        $task = Task::find($request->task_id);
+        $task->heading = $request->heading;
+
+        $task->description = str_replace('<p><br></p>', '', trim($request->description));
+
+        $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+        $task->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+        $task->due_date = $dueDate;
+        $task->project_id = $request->project_id;
+        $task->task_category_id = $request->category_id;
+        $task->priority = $request->priority;
+        $task->board_column_id = $task->board_column_id;
+
+       
+        $task->is_private = $request->has('is_private') ? 1 : 0;
+        $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
+        $task->estimate_hours = $request->estimate_hours;
+        $task->estimate_minutes = $request->estimate_minutes;
+        $task->deliverable_id = $request->deliverable_id;
+
+      
+
+        if ($request->milestone_id != '') {
+            $task->milestone_id = $request->milestone_id;
+        }
+
+        // Add repeated task
+        $task->repeat = $request->repeat ? 1 : 0;
+
+        if ($request->has('repeat')) {
+            $task->repeat_count = $request->repeat_count;
+            $task->repeat_type = $request->repeat_type;
+            $task->repeat_cycles = $request->repeat_cycles;
+        }
+        $task->task_status = "pending";
+        $total_hours = $request->estimate_hours * 60;
+        $total_minutes = $request->estimate_minutes;
+        $total_in_minutes = $total_hours + $total_minutes;
+        $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+        $task->save();
+
+      
+        if ($request->hasFile('file')) {
+
+            foreach ($request->file as $fileData) {
+                $file = new TaskFile();
+                $file->task_id = $task->id;
+
+                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                $file->user_id = $this->user->id;
+                $file->filename = $fileData->getClientOriginalName();
+                $file->hashname = $filename;
+                $file->size = $fileData->getSize();
+                $file->save();
+
+                $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+            }
+        }
+       
+
+
+        // For gantt chart
+        if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
+            $parentGanttId = $request->parent_gantt_id;
+
+            /* @phpstan-ignore-next-line */
+            $taskDuration = $task->due_date->diffInDays($task->start_date);
+            /* @phpstan-ignore-line */
+            $taskDuration = $taskDuration + 1;
+
+            $ganttTaskArray[] = [
+                'id' => $task->id,
+                'text' => $task->heading,
+                'start_date' => $task->start_date->format('Y-m-d'), /* @phpstan-ignore-line */
+                'duration' => $taskDuration,
+                'parent' => $parentGanttId,
+                'taskid' => $task->id
+            ];
+
+            $gantTaskLinkArray[] = [
+                'id' => 'link_' . $task->id,
+                'source' => $task->dependent_task_id != '' ? $task->dependent_task_id : $parentGanttId,
+                'target' => $task->id,
+                'type' => $task->dependent_task_id != '' ? 0 : 1
+            ];
+        }
+
+
+        DB::commit();
+
+        
+
+        if (is_array($request->user_id)) {
+            $assigned_to = User::find($request->user_id[0]);
+
+           
+            $text = Auth::user()->name . ' assigned task updated by ' . $assigned_to->name;
+            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'Task Updated',
+                'body' => 'Task Assignee updated the tasks',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        } else {
+            $assigned_to = User::find($request->user_id);
+            
+            $text = Auth::user()->name . ' assigned task updated by' . $assigned_to->name;
+            $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+            $this->logProjectActivity($project->id, $link);
+
+            $this->triggerPusher('notification-channel', 'notification', [
+                'user_id' => $assigned_to->id,
+                'role_id' => $assigned_to->role_id,
+                'title' => 'Task Updated',
+                'body' => 'Task Assignee updated the tasks',
+                'redirectUrl' => route('tasks.show', $task->id)
+            ]);
+        }
+        return response()->json([
+            'status' => 200,
+            'message'=> 'Task updated successfully',
+           
+        ]);
+
+    
     }
 
     /**
@@ -2289,7 +2849,7 @@ class TaskController extends AccountBaseController
 //        $tasks_accept->comment = implode(",", $request->comment);
             $tasks_accept->approval_status = 'accepted';
             $tasks_accept->save();
-            dd($tasks_accept);
+          //  dd($tasks_accept);
         }else{
             $subTaskArray = $request->subTask;
             $subTaskString = '';
@@ -2386,11 +2946,13 @@ class TaskController extends AccountBaseController
     {
         $request->validate([
             'theme_details' => 'required',
-            'design' => 'required',
+            'design_details' => 'required',
+            'color_schema' => 'required',
             'plugin_research' => 'required',
         ], [
             'theme_details.required' => 'This field is required!',
-            'design.required' => 'This field is required!',
+            'design_details.required' => 'This field is required!',
+            'color_schema.required' => 'This field is required!',
             'plugin_research.required' => 'This field is required!',
         ]);
         $data = $request->all();
@@ -2403,6 +2965,10 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->theme_details = $data['theme_details'];
         $pm_task_guideline->theme_name = $data['theme_name'];
         $pm_task_guideline->theme_url = $data['theme_url'];
+        $pm_task_guideline->color_schema = $data['color_schema'];
+        $pm_task_guideline->design_details = $data['design_details'];
+        $pm_task_guideline->primary_color = $data['primary_color'];
+        $pm_task_guideline->primary_color_description = $data['primary_color_description'];
         $pm_task_guideline->design = $data['design'];
         $pm_task_guideline->xd_url = $data['xd_url'];
         $pm_task_guideline->drive_url = $data['drive_url'];
@@ -2417,6 +2983,72 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->instruction_plugin = $data['instruction_plugin'];
         $pm_task_guideline->save();
 
+        $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
+
+        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+            $pm_task_update->status = 0;
+
+        } else {
+            $pm_task_update->status = 1;
+        }
+        $pm_task_update->save();
+
+
+        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
+            $name1 = 'Theme Details';
+            $name2 = 'Design Details';
+            $name3 = 'Color Schema';
+            $name4 = 'Plugin Research';
+
+            $slug1 = 'Theme Details';
+            $slug2 = 'Design Details';
+            $slug3 = 'Color Schema';
+            $slug4 = 'Plugin Research';
+
+            if($data['theme_details']==0){
+                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                $pm_task_guideline_authorization->project_id = $data['project_id'];
+                $pm_task_guideline_authorization->name = $name1;
+                $pm_task_guideline_authorization->slug = Str::slug($slug1);
+                $pm_task_guideline_authorization->status = 0;
+                $pm_task_guideline_authorization->save();
+            }
+            if($data['design_details']==0){
+                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                $pm_task_guideline_authorization->project_id = $data['project_id'];
+                $pm_task_guideline_authorization->name = $name2;
+                $pm_task_guideline_authorization->slug = Str::slug($slug2);
+                $pm_task_guideline_authorization->status = 0;
+                $pm_task_guideline_authorization->save();
+            }
+            if($data['color_schema']==0){
+                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                $pm_task_guideline_authorization->project_id = $data['project_id'];
+                $pm_task_guideline_authorization->name = $name3;
+                $pm_task_guideline_authorization->slug = Str::slug($slug3);
+                $pm_task_guideline_authorization->status = 0;
+                $pm_task_guideline_authorization->save();
+            }
+            if($data['plugin_research']==0){
+                $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+                $pm_task_guideline_authorization->project_id = $data['project_id'];
+                $pm_task_guideline_authorization->name = $name4;
+                $pm_task_guideline_authorization->slug = Str::slug($slug4);
+                $pm_task_guideline_authorization->status = 0;
+                $pm_task_guideline_authorization->save();
+            }
+
+        }
+        if ($pm_task_update->status == 0) {
+            $users = User::where('role_id',1)->get();
+            foreach($users as $user){
+                Notification::send($user, new PmTaskGuidelineNotification($pm_task_guideline_authorization));
+            }
+           }
         return response()->json(['status' => 200]);
     }
     public function viewWorkingEnvironment($project_id)

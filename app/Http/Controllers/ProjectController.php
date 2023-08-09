@@ -3584,10 +3584,15 @@ class ProjectController extends AccountBaseController
 
 //        $plugin_names = json_encode($data['plugin_name']);
 //        $plugin_urls = json_encode($data['plugin_url']);
-
+        $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
+       
         $project_portfolio = new ProjectPortfolio();
         $project_portfolio->project_id = $project->project_id;
-        $project_portfolio->cms_category = $data['cms_category'];
+        if ($project_cms) {
+            $project_portfolio->cms_category = $project_cms->id;
+        }else{
+            $project_portfolio->cms_category = $data['cms_id'];
+        }
         $project_portfolio->website_type = $data['website_type'];
         $project_portfolio->niche = $data['niche'];
         $project_portfolio->sub_niche = $data['sub_niche'];
@@ -4464,5 +4469,44 @@ class ProjectController extends AccountBaseController
         }
 
         return response()->json($data);
+    }
+
+    public function get_project_details($id)
+    { 
+        
+        $milestones= ProjectMilestone::select('project_milestones.*','project_milestones.milestone_title',
+        'project_deliverables.deliverable_type','project_deliverables.title as deliverable_title','projects.project_name'
+        
+        )
+        ->join('projects','projects.id','project_milestones.project_id')
+        
+        ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
+        ->groupBy('project_milestones.id')
+
+        ->where('project_milestones.project_id',$id)->get();
+        $project = Project::where('id',$id)->first();
+        $estimate_minutes_project= $project->hours_allocated *60;
+       
+        if($estimate_minutes_project == 0)
+        {
+            $estimated_minutes_left = 0;
+        }else 
+        {
+            $estimated_hours_tasks = Task::where('project_id',$project->id)->sum('estimate_hours');
+        $estimated_minutes_tasks = Task::where('project_id',$project->id)->sum('estimate_minutes');
+
+        $total_minutes = $estimated_hours_tasks *60 + $estimated_minutes_tasks;
+
+
+        $estimated_minutes_left = $estimate_minutes_project - $total_minutes;
+    //    / dd($estimated_hours_tasks);
+        }
+        
+        
+
+        return response()->json([
+            'milestones' => $milestones,
+            'minutes_left' => $estimated_minutes_left
+        ]);
     }
 }

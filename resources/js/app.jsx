@@ -8,7 +8,7 @@ import "./react/QualifiedSales/main";
 
 import "./react/single-task/index";
 import './react/tasks/index';
-
+import './react/projects/index';
 
 
 

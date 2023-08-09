@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import SearchBox from "../components/Searchbox";
 import { useLazyGetAllSubtaskQuery } from "../../services/api/tasksApiSlice";
 import { storeSubTasks } from "../../services/features/tasksSlice";
+import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 
 const Subtasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -56,6 +57,7 @@ const Subtasks = () => {
                         tableName="tasksTable"
                         search={search}
                         reportPermission = {[1,8,5]}
+                        tableColumns={SubTasksTableColumns}
                     />
                 </div>
             </div>

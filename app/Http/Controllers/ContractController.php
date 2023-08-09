@@ -246,7 +246,7 @@ class ContractController extends AccountBaseController
             ], 422);
         }
 
-
+        DB::beginTransaction();
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
@@ -255,6 +255,7 @@ class ContractController extends AccountBaseController
         $deal->project_name = $request->project_name;
         $deal->currency_id = 1;
         $deal->actual_amount =  $request->amount;
+      
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
         $deal->award_time = $aw_dt;
@@ -316,8 +317,32 @@ class ContractController extends AccountBaseController
 
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
+        $deal->submission_status= 'Submitted';
+
+        $client_details= ClientForm::where('client_username',$user->user_name)->first();
+       // dd($client_details);
+        if ($client_details != null) {
+            $deal_client->submission_status = 'Submitted';
+
+            $new_client_form= ClientForm::new();
+            $new_client_form->deal_id = $deal->id;
+            $new_client_form->client_username= $client_details->client_username;
+            $new_client_form->client_email= $client_details->client_email;
+            $new_client_form->client_phone =$client_details->client_phone;
+            $new_client_form->client_whatsapp= $client_details->client_whatsapp;
+            $new_client_form->client_skypr= $client_details->client_skype;
+            $new_client_form->client_telegram= $client_details->client_telegram;
+            $new_client_form->client_messenger =$client_details->client_messenger;
+            $new_client_form->client_imo= $client_details->client_imo;
+            $new_client_form->message= $client_details->message;
+            $new_client_form->timezone= $client_details->timezone;
+            $new_client_form->day= $client_details->day;
+            $new_client_form->checklist= $client_details->checklist;
+            $new_client_form->save();
+        }
         $deal_client->save();
 
+       // dd("skdnaskdnkas");
         $contract = new Contract();
         $contract->id = $deal->id;
         $contract->deal_id = $deal->id;
@@ -590,6 +615,30 @@ class ContractController extends AccountBaseController
 
         $deal_client = Deal::find($deal->id);
         $deal_client->client_id = $user->id;
+        $deal->submission_status= 'Submitted';
+
+        $client_details= ClientForm::where('client_username',$user->user_name)->first();
+        // /dd($client_details);
+        if ($client_details != null) {
+            $deal_client->submission_status = 'Submitted';
+
+            $new_client_form= new ClientForm();
+            $new_client_form->deal_id = $deal->id;
+            $new_client_form->client_username= $client_details->client_username;
+            $new_client_form->client_email= $client_details->client_email;
+            $new_client_form->client_phone =$client_details->client_phone;
+            $new_client_form->client_whatsapp= $client_details->client_whatsapp;
+            $new_client_form->client_skype= $client_details->client_skype;
+            $new_client_form->client_telegram= $client_details->client_telegram;
+            $new_client_form->client_messenger =$client_details->client_messenger;
+            $new_client_form->client_imo= $client_details->client_imo;
+            $new_client_form->message= $client_details->message;
+            $new_client_form->timezone= $client_details->timezone;
+            $new_client_form->day= $client_details->day;
+            $new_client_form->checklist= $client_details->checklist;
+            $new_client_form->save();
+        }
+       // dd($new_client_form);
         $deal_client->save();
 
         $contract = new Contract();
@@ -919,6 +968,8 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
+                'cms_id' => 'required',
+
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
@@ -931,6 +982,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'cms_id.required' => 'This field is required!',
             ]);
         } else {
             $validated = $request->validate([
@@ -951,16 +1003,17 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
+                'cms_id' => 'required',
             ], [
                 'project_name.required' => 'Please enter the project name!',
-                'estimated_hour_task.required' => 'This filed is required!',
-                'hourly_rate.required' => 'This filed is required!',
-                'hubstaff_tracking.required' => 'This filed is required!',
-                'tracked_hours.required' => 'This filed is required!',
-                'second_day_tracked_hours.required' => 'This filed is required!',
-                'expect_amount.required' => 'This filed is required!',
-                'certain_amount_hour.required' => 'This filed is required!',
-                'long_project.required' => 'This filed is required!',
+                'estimated_hour_task.required' => 'This field is required!',
+                'hourly_rate.required' => 'This field is required!',
+                'hubstaff_tracking.required' => 'This field is required!',
+                'tracked_hours.required' => 'This field is required!',
+                'second_day_tracked_hours.required' => 'This field is required!',
+                'expect_amount.required' => 'This field is required!',
+                'certain_amount_hour.required' => 'This field is required!',
+                'long_project.required' => 'This field is required!',
                 'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
                 'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
                 'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
@@ -969,6 +1022,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'cms_id.required' => 'This field is required!',
             ]);
         }
         //dd("hello");
@@ -999,6 +1053,7 @@ class ContractController extends AccountBaseController
         DB::beginTransaction();
 
         try {
+            $item = explode("-", $request->input('cms_id'));
             $deal = Deal::find($request->id);
             $deal->project_name = $request->project_name;
             $deal->currency_id = 1;
@@ -1020,6 +1075,9 @@ class ContractController extends AccountBaseController
                     $value = $value  . $link . ' <br> ';
                 }
             }
+          
+            $deal->cms_id = $item[0];
+            $deal->cms_name = $item[1];
             $deal->deadline = $request->deadline;
             $deal->estimated_hour_task = $request->estimated_hour_task;
             $deal->hourly_rate = $request->hourly_rate;
@@ -1040,6 +1098,7 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
+            
             $deal->save();
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
@@ -1390,6 +1449,7 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
+                'cms_id' => 'required',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
@@ -1402,6 +1462,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'cms_id.required' => 'This field is required!',
             ]);
         } else {
             $validated = $request->validate([
@@ -1422,16 +1483,17 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
+                'cms_id' => 'required',
             ], [
                 'project_name.required' => 'Please enter the project name!',
-                'estimated_hour_task.required' => 'This filed is required!',
-                'hourly_rate.required' => 'This filed is required!',
-                'hubstaff_tracking.required' => 'This filed is required!',
-                'tracked_hours.required' => 'This filed is required!',
-                'second_day_tracked_hours.required' => 'This filed is required!',
-                'expect_amount.required' => 'This filed is required!',
-                'certain_amount_hour.required' => 'This filed is required!',
-                'long_project.required' => 'This filed is required!',
+                'estimated_hour_task.required' => 'This field is required!',
+                'hourly_rate.required' => 'This field is required!',
+                'hubstaff_tracking.required' => 'This field is required!',
+                'tracked_hours.required' => 'This field is required!',
+                'second_day_tracked_hours.required' => 'This field is required!',
+                'expect_amount.required' => 'This field is required!',
+                'certain_amount_hour.required' => 'This field is required!',
+                'long_project.required' => 'This field is required!',
                 'description2.required' => 'What in 2-8 words are missing, please write the what in 2-8 words here!',
                 'description3.required' => 'What in 3-4 lines are missing, please elaborate the "WHAT" 3-4 lines here!',
                 'description4.required' => 'This field is required. Please provide reference websites and what the references are for here!',
@@ -1440,6 +1502,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'cms_id.required' => 'This field is required!',
             ]);
         }
         //      dd("hello");
@@ -1468,6 +1531,7 @@ class ContractController extends AccountBaseController
         DB::beginTransaction();
 
         try {
+            $item = explode("-", $request->input('cms_id'));
             // /dd($request);
             $deal = Deal::find($request->id);
             $deal->project_name = $request->project_name;
@@ -1509,6 +1573,8 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
+            $deal->cms_id = $item[0];
+            $deal->cms_name = $item[1];
             $deal->updated_by = Auth::id();
             //                dd($deal);
             $deal->save();

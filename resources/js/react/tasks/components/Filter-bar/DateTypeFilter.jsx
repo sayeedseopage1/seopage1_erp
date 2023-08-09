@@ -9,14 +9,14 @@ const dateType = [
     "Actual Completion Date"
 ]
 
-const DateTypeFilter = ({state, setState}) => {
+const DateTypeFilter = ({state, setState, selectionBoxClassName}) => {
   const [query, setQuery] = useState('');  
   return (
     <div className='sp1_task_filter_item'>
         <div>
             <span className='mr-2 f-13'>Date Filter By :</span>
             <Dropdown>
-                <Dropdown.Toggle className="sp1_filter_toggle">
+                <Dropdown.Toggle className={`sp1_filter_toggle ${selectionBoxClassName ?? ''}`}>
                     <strong>{state}</strong>
                 </Dropdown.Toggle>
                 <Dropdown.Menu >

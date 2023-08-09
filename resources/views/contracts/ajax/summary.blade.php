@@ -195,38 +195,39 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
                   @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                   @if($contract->deal->status == 'pending')
-      <div class="wrapper-timezone d-flex justify-content-center">
+                            <div class="wrapper-timezone d-flex justify-content-center">
 
 
-       <p>You have </p>
+                            <p>You have </p>
 
-       <div class="clock">
+                            <div class="clock">
 
 
-           <div class="column">
-               <div class="timer" id="hours"></div>
-               <div class="timer_text">HOURS</div>
-           </div>
+                                <div class="column">
+                                    <div class="timer" id="hours"></div>
+                                    <div class="timer_text">HOURS</div>
+                                </div>
 
-           <!-- <div class="timer">:</div> -->
-           <div class="column">
-               <div class="timer" id="minutes"></div>
-               <div class="timer_text">MINUTES</div>
-           </div>
+                                <!-- <div class="timer">:</div> -->
+                                <div class="column">
+                                    <div class="timer" id="minutes"></div>
+                                    <div class="timer_text">MINUTES</div>
+                                </div>
 
-           <!-- <div class="timer">:</div> -->
-           <div class="column">
-               <div class="timer" id="seconds"></div>
-               <div class="timer_text">SECONDS</div>
-           </div>
-       </div>
+                                <!-- <div class="timer">:</div> -->
+                                <div class="column">
+                                    <div class="timer" id="seconds"></div>
+                                    <div class="timer_text">SECONDS</div>
+                                </div>
+                            </div>
 
-       <p>remaining for accepting the project</p>
-   </div>
-   @endif
-   @endif
+                            <p>remaining for accepting the project</p>
+                        </div>
+                    @endif
+                    @endif
+                    </div>
 
-   <div class="">
+   <div class="wrapper-timezone d-flex justify-content-center">
 
      @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
      @if($contract->deal->status == 'pending')
@@ -315,6 +316,12 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                             <td class="border-left-0"><a href="{{route('projects.show',$project->id)}}">{{ $project->project_name }}</a>
                             </td>
                         </tr>
+                        @if($contract->deal->cms_name != null)
+                            <tr>
+                                <td class="bg-light-grey border-right-0 f-w-500">Project CMS</td>
+                                <td class="border-left-0">{{ $contract->deal->cms_name }}</td>
+                            </tr>
+                          @endif
                           @if ($contract->actual_amount != 0)
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">

@@ -6,7 +6,7 @@ import Loader from '../Loader';
 import { useGetBoardColoumnListQuery } from '../../../services/api/boardColumnsApliSlice';
 
  
-const StatusFilter = ({state, setState}) => {
+const StatusFilter = ({state, setState, selectionBoxClassName}) => {
   const [query, setQuery] = useState('');  
   const {data, isFetching} = useGetBoardColoumnListQuery();
 
@@ -21,7 +21,7 @@ const StatusFilter = ({state, setState}) => {
         <div>
             <span className='mr-2 f-13'>Status :</span>
             <Dropdown>
-                <Dropdown.Toggle className="sp1_filter_toggle">
+                <Dropdown.Toggle className={`sp1_filter_toggle ${selectionBoxClassName ?? ''}`}>
                     <strong>{state?.column_name}</strong>
                 </Dropdown.Toggle>
                 <Dropdown.Menu >

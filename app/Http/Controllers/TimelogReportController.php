@@ -75,7 +75,7 @@ class TimelogReportController extends AccountBaseController
         $pmId = $request->input('pm_id', null);
         $clientId = $request->input('client_id', null);
         $status = $request->input('status', null);
-        //$project_id = $request->input('project_id', null);
+        $project_id = $request->input('project_id', null);
 
 
         $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();

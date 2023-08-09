@@ -185,6 +185,7 @@ use App\Http\Controllers\MonthlyIncentiveController;
 use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
 use App\Http\Controllers\NonCashPointSettingsController;
+use App\Http\Controllers\ClientReviewController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -643,11 +644,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::resource('project-template-sub-task', ProjectTemplateSubTaskController::class);
         }
     );
-
+    Route::get('get-project-information/tasks/{id}', [ProjectController::class, 'get_project_details']);
     Route::get('project-notes/ask-for-password/{id}', [ProjectNoteController::class, 'askForPassword'])->name('project_notes.ask_for_password');
     Route::post('project-notes/check-password', [ProjectNoteController::class, 'checkPassword'])->name('project_notes.check_password');
     Route::post('project-notes/apply-quick-action', [ProjectNoteController::class, 'applyQuickAction'])->name('project_notes.apply_quick_action');
     Route::resource('project-notes', ProjectNoteController::class);
+
+    Route::get('projects/{project_id}/tasks/{any}', [ProjectController::class, 'tasks'])
+    ->where('any', '^(?!api\/)[\/\w\.-]*')
+    ->where('any', '^(?:(?!\d+).)*');
     Route::resource('projects', ProjectController::class);
 
     Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
@@ -776,6 +781,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     //Route::resource('tasks', TaskController::class)->only([ 'show', 'create', 'store', 'edit', 'update', 'destroy']);
+    //pm task guidelines 
+    Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
+    Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
+    Route::get('tasks/check-pm-taskguideline/{id}', [TaskController::class, 'CheckPmTaskGuideline']);
+    Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
     Route::post('tasks/report-issues/resolve', [TaskController::class, 'resolve_report']);
     Route::get('tasks/get-parent-tasks/report-issues/{id}', [TaskController::class, 'get_parent_tasks_report_issues']);
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
@@ -1210,8 +1220,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
     Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
     Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
+    
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
-   
+    Route::resource('client-review', ClientReviewController::class);
     
    
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');

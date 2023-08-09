@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Http\Request;
 use App\Models\TaskUser;
 use App\Helper\Files;
@@ -49,7 +50,7 @@ class SubTaskController extends AccountBaseController
     public function store(Request $request)
     {
        // dd($request);
-        
+    //    / DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
        
@@ -233,7 +234,7 @@ class SubTaskController extends AccountBaseController
                 $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
             }
         }
-        //dd($parent_task, $subTask);
+        // /dd($parent_task, $subTask,$file);
         $task = $subTask->task;
         $this->logTaskActivity($task->id, $this->user->id, 'subTaskCreateActivity', $task->board_column_id, $subTask->id);
         return Reply::successWithData(__('messages.subTaskAdded'), [

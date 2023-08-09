@@ -21,15 +21,20 @@ $project->members->pluck('user_id')->toArray(); @endphp
     <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
         @php
             $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
+            $client_review = \App\Models\ClientReview::where('project_id',$project->id)->count();
         @endphp
-        {{-- @if($q_c)
-            <div style="margin-bottom: -40px;">
-                <button type="button" class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
-                    Client Review
-                </button>
-                @include('projects.modals.client_review')
-            </div>
-        @endif --}}
+        @if ($project->status == 'finished' || $project->status == 'partially finished' || $project->status == 'canceled')
+            @if ($client_review ==0)
+                @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
+                    <div style="margin-bottom: -40px;">
+                        <button type="button" class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
+                            Client Review
+                        </button>
+                        @include('projects.modals.client_review')
+                    </div>
+                @endif
+            @endif
+        @endif
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
@@ -531,7 +536,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
         <!-- PROJECT PROGRESS AND CLIENT END -->
 
         <!--CLIENT REVIEW-->
-        {{-- @php
+        @php
             $client_review = \App\Models\ClientReview::where('project_id',$project->id)->orderBy('id','desc')->first();
         @endphp
         @if($client_review)
@@ -664,7 +669,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
             </div>
-        @endif --}}
+        @endif
         <!--END CLIENT REVIEW-->
         <!-- TASK STATUS AND BUDGET START -->
         <div class="row mb-4"  >

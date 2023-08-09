@@ -97,6 +97,10 @@
 
 <link rel="stylesheet" href="{{ asset('vendor/css/dropzone.min.css') }}">
 <link href=" https://cdn.jsdelivr.net/npm/toastr@2.1.4/build/toastr.min.css " rel="stylesheet">
+@php
+    $project = App\Models\Project::where('id',$milestone->project_id)->first();
+    $deal = App\Models\Deal::where('id',$project->deal_id)->first();
+@endphp
 <div class="row">
     <div class="col-sm-12">
         <form action="{{route('project-completion')}}" method="POST" id="projectCompletionForm">
@@ -338,6 +342,19 @@
                     </div>
                     <div class="col-lg-12 col-md-12">
                         <div class="row mt-5">
+                            @if ($deal->cms_name !=null)
+                            <div class="col-md-6">
+                                <label class="" for="">Select CMS Category
+                                    <sup class="f-14 mr-1">*</sup>
+                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Select CMC Category" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                    </svg>
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" name="cms_category" id="cms_category" class="form-control height-35 f-14" value="{{ $deal->cms_name }}" readonly>
+                                </div>
+                            </div>
+                            @else
                             <div class="col-md-6">
                                 @php
                                     $all_cms = \App\Models\ProjectCms::all();
@@ -349,7 +366,7 @@
                                     </svg>
                                 </label>
                                 <div class="input-group">
-                                    <select class="form-control height-35 f-14" name="cms_category" id="cms_category" data-live-search="true" data-size="8">
+                                    <select class="form-control height-35 f-14" name="cms_id" id="cms_id" data-live-search="true" data-size="8">
                                         <option value="">--</option>
                                         @foreach($all_cms as $cms)
                                             <option value="{{$cms->id}}">{{$cms->cms_name}}</option>
@@ -358,6 +375,7 @@
                                 </div>
                                 <span id="cms_categoryError" class="text-danger"></span>
                             </div>
+                            @endif
                             <div class="col-md-6">
                                 @php
                                     $website_types = \App\Models\ProjectWebsiteType::all();
@@ -740,7 +758,7 @@
                 'comments': document.getElementById("comments").value,
                 'comments2': document.getElementById("comments2").value,
                 'comments3': document.getElementById("comments3").value,
-                'cms_category': document.getElementById("cms_category").value,
+                
                 'website_type': document.getElementById("website_type").value,
                 'niche': document.getElementById("niche").value,
                 'sub_niche': document.getElementById("sub_niche").value,
@@ -764,6 +782,12 @@
                 'milestone_id': {{$milestone->id}},
                 'added_by': {{Auth::user()->id}},
             }
+            if ("{{$deal->cms_name}}" !== "") {
+                data['cms_category'] = document.getElementById("cms_category").value;
+            }else{
+                data['cms_id'] = document.getElementById("cms_id").value;
+            }
+
             // console.log(data);
             $.ajaxSetup({
                 headers: {

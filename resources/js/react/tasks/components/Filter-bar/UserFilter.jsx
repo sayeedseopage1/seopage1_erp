@@ -6,7 +6,7 @@ import { useUsers } from '../../../hooks/useUsers';
 import Search from '../Searchbox';
 import Loader from '../Loader';
 
-const UserFilter = ({state, setState, title, roleIds=[5, 9, 10]}) => {
+const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10]}) => {
     const [query, setQuery] = useState(''); 
     const { users, usersIsFetching } = useUsers();
     let _users;
@@ -26,7 +26,7 @@ const UserFilter = ({state, setState, title, roleIds=[5, 9, 10]}) => {
     <div className='sp1_task_filter_item'>
             <span className='mr-2 f-13 d-flex flex-nowrap'>{title} :</span>
             <Dropdown>
-                <Dropdown.Toggle className="sp1_filter_toggle">
+                <Dropdown.Toggle className={`sp1_filter_toggle ${selectionBoxClassName ?? ''}`}>
                     <span
                         data-toggle={name ? 'tooltip' : ''}
                         title={state?.name ?? ''}

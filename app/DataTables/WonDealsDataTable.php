@@ -58,6 +58,13 @@ class WonDealsDataTable extends BaseDataTable
                     return '<p title="' . $row->project_name . '">' . $title . '</p>';
                 }
             })
+            ->addColumn('cms_name', function ($row) {
+                if(!is_null($row->cms_name)){
+                    return $row->cms_name;
+                }else{
+                    return '---';
+                }
+            })
             ->addColumn('amount', function ($row) {
                 return $row->actual_amount . ' ' . $row->original_currency->currency_symbol;
             })
@@ -150,7 +157,7 @@ class WonDealsDataTable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check', 'short_code', 'project_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
+            ->rawColumns(['check', 'short_code', 'project_name','cms_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
     }
 
     /**
@@ -279,6 +286,11 @@ class WonDealsDataTable extends BaseDataTable
                 'data' => 'project_name',
                 'name' => 'project_name',
                 'title' => 'Project Name',
+            ],
+            'cms_name' => [
+                'data' => 'cms_name',
+                'name' => 'cms_name',
+                'title' => 'CMS Name',
             ],
             'amount' => [
                 'data' => 'amount',

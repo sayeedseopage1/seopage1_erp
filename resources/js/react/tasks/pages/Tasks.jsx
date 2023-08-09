@@ -8,6 +8,7 @@ import { useLazyGetTasksQuery } from "../../services/api/tasksApiSlice";
 import { storeTasks } from "../../services/features/tasksSlice";
 import _ from "lodash";
 import SearchBox from "../components/Searchbox";
+import { TaskTableColumns } from "../components/TaskTableColumns";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -55,6 +56,7 @@ const Tasks = () => {
                         tableName="tasksTable"
                         search={search}
                         reportPermission={[5, 1, 8]}
+                        tableColumns={TaskTableColumns}
                     />
                 </div>
             </div>
