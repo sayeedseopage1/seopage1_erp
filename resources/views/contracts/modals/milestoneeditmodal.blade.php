@@ -44,14 +44,14 @@
                         </div>
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="exampleFormControlInput1">Currency <span style="color:red;">*</span></label>
                             <input type="text"  readonly value="{{$deal->original_currency->currency_code}}({{ $deal->original_currency->currency_symbol}})"  class="form-control cost height-35 f-14" id="exampleFormControlInput1"  placeholder="Milestone Cost">
                         </div>
 
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
 
                             <label for="exampleFormControlTextarea1">Milestone Type <span style="color:red;">*</span></label>
@@ -63,6 +63,30 @@
 
                             </select>
                         </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
+                            <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type2" onchange="urlGenerate()">
+                                <option value="">--</option>
+                                <option value="web-content">Webcontent</option>
+                                <option value="blogs-articles">Blogs/articles</option>
+                                <option value="product-description">Product descriptions</option>
+                                <option value="product-category">Product category/collection pages</option>
+                                <option value="basic-seo">Basic SEO</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-8 mt-2" id="inputUrl2" style="display: none;">
+                        <div class="input-group">
+                            <input type="text" class="form-control height-35 f-14" id="generatedLinkContainer2" aria-label="Recipient's username" aria-describedby="copyButton2" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="copyButton2" data-id="{{$deal->id}}"><i class="fa fa-clone"></i></button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2" value="submitted" id="linkSubmitBtn" disabled>Did You Submit?</button>
                     </div>
 
                     <div class="col-md-12">
@@ -94,10 +118,102 @@
             <div class="modal-footer">
 
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary update_milestone" >Update Milestone</button>
+                <button type="button" class="btn btn-primary update_milestone" disabled>Update Milestone</button>
 
             </div>
 
         </div>
     </div>
 </div>
+@push('scripts')
+    <script>
+        $('#linkSubmitBtn').click(function(e){
+            e.preventDefault();
+            // console.log(formData);
+            $('#linkSubmitBtn').attr("disabled", true);
+            $('#linkSubmitBtn').html("Processing...");
+            var buttonValue = $(this).val();
+            var data= {
+                '_token': "{{ csrf_token() }}",
+                'value': buttonValue,
+                'deal_id': {{$deal->id}},
+                'service_type': document.getElementById("service_type").value,
+            }
+            // console.log(data);
+            $.ajaxSetup({
+
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "{{route('store-link')}}",
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    $('#inputUrl').hide();
+                    $('.update_milestone').attr("disabled", false);
+                    toastr.success('Link Submit Successfully');
+                    $('#linkSubmitBtn').attr("disabled", false);
+                    $('#linkSubmitBtn').html("Did You Submit?");
+                },
+                error: function(error) {
+                    $('#linkSubmitBtn').attr("disabled", false);
+                    $('#linkSubmitBtn').html("Did You Submit?");
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function generateRandomID(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let randomID = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                randomID += characters.charAt(randomIndex);
+            }
+            return randomID;
+        }
+
+        function urlGenerate() {
+            var select = document.querySelector('#service_type2');
+            var selectedValue = select.value;
+
+            var randomID = generateRandomID(5);
+
+            var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-')) + '/'  + <?php echo $deal->id; ?> + '/' + randomID;
+
+            var generatedLinkContainer = document.getElementById('generatedLinkContainer2');
+            generatedLinkContainer.value = url;
+        }
+
+        const selectElement2 = document.getElementById("service_type2");
+        const inputUrl2 = document.getElementById("inputUrl2");
+
+        selectElement2.addEventListener("change", function() {
+            if (selectElement2.value === "web-content" ||
+                selectElement2.value === "blogs-articles" ||
+                selectElement2.value === "product-description" ||
+                selectElement2.value === "product-category" ||
+                selectElement2.value === "basic-seo") {
+                inputUrl2.style.display = "block";
+            } else {
+                inputUrl2.style.display = "none";
+            }
+        });
+
+        document.getElementById("copyButton2").addEventListener("click", function() {
+            var generatedLink = document.getElementById("generatedLinkContainer2").value;
+
+            navigator.clipboard.writeText(generatedLink)
+                .then(function() {
+                    alert("Copied: " + generatedLink);
+                    document.getElementById("linkSubmit").removeAttribute("disabled");
+                })
+                .catch(function(error) {
+                    alert("Unable to copy: " + error);
+                });
+        });
+    </script>
+@endpush
