@@ -38,10 +38,8 @@
 @section('content')
 <?php
   $project_id= App\Models\Project::where('deal_id',$deal->id)->first();
-  //dd($project_id->id);
 
  ?>
-
     <div class="content-wrapper border-top-0 client-detail-wrapper">
       <div class="card border-0 invoice">
 
@@ -226,6 +224,7 @@
                               <option selected value="{{$deal->original_currency->id}}">{{$deal->original_currency->currency_code}} ({{$deal->original_currency->currency_symbol}})</option>
                             </select>
                             </div>
+
                                   @if($deal->project_type !='hourly')
                                       <div class="col-md-6">
                                           <?php
@@ -383,32 +382,30 @@
                               <input type="text" name="client_email" class="form-control height-35 f-14" id="client_email" placeholder="name@example.com" >
                               </div>
                             </div>
-
                           </div>
                           @php
-                              $project_cms = App\Models\ProjectCms::all();
-                          @endphp
-                          <div class="row">
-                            <div class="col-md-6">
-                                <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_cms">Project CMS
-                                    <sup class="f-14 mr-1">*</sup>
-                                    <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the project cms name." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
-                                        <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
-                                    </svg>
-                                </label>
-                                <div class="dropdown bootstrap-select form-control select-picker">
-                                    <select name="cms_id" id="cms_id" data-live-search="true" class="form-control select-picker error" data-size="8">
-                                        <option value="">--</option>
-                                        @foreach ($project_cms as $item)
-                                            <option value="{{ $item->id .'-'. $item->cms_name }}">{{ $item->cms_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <span id="cms_id_error" class="text-danger"></span>
-                                </div>
-                            </div>
+                          $project_cms = App\models\ProjectCms::all();
+                      @endphp
+                      <div class="row">
+                      <div class="col-md-6">
+                              <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_cms">Project CMS
+                                  <sup class="f-14 mr-1">*</sup>
+                                  <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the project cms name." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                      <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                  </svg>
+                              </label>
+                              <div class="dropdown bootstrap-select form-control select-picker">
+                                  <select name="cms_id" id="cms_id" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                      <option value="">--</option>
+                                      @foreach ($project_cms as $item)
+                                          <option value="{{ $item->id .'-'. $item->cms_name }}">{{ $item->cms_name }}</option>
+                                      @endforeach
+                                  </select>
+                                  <span id="cms_id_error" class="text-danger"></span>
+                              </div>
                           </div>
+                      </div>
                           <br>
-                          
                           <div class="row">
                             @if($deal->profile_link != null)
                             <div class="col-md-12">
@@ -718,7 +715,10 @@
                      // console.log(response.milestones);
                     let spans= '';
                     response.milestones.forEach((item)=> {
-                        spans += `<span class="badge badge-light mr-2"><a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500" title="${item.milestone_title}">${item.milestone_title.substr(0, 20)} (${item.actual_cost}) </a><button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button> <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
+                        spans += `<span class="badge badge-light mr-2">
+                            <a href="javascript:;" data-milestone-id="${item.id}" class="taskView milestone-detail text-darkest-grey f-w-500" title="${item.milestone_title}">${item.milestone_title.substr(0, 20)} (${item.actual_cost}) </a>
+                            <button type="button" value="${item.id}" style="color:blue;" class="fa-solid fa-pen-to-square edit_milestone"></button>
+                             <button value="${item.id}" type="button" style="color:red;" class="fa-solid fa-trash delete_milestone"></button></span>`
                     });
 
                     document.querySelector('#milestone_value').innerHTML= spans;
@@ -745,6 +745,7 @@
                         $('#cost').val(response.milestone.actual_cost);
                         CKEDITOR.instances['summary2'].setData(response.milestone.summary);
                         $('#milestone_type').val(response.milestone.milestone_type);
+                        $('#service_type2').val(response.milestone.service_type);
                         $('#milestone_id').val(milestone_id);
                     }
                 }
@@ -759,6 +760,7 @@
                 'cost' : $('#cost').val(),
                 'milestone_type': $('#milestone_type').val(),
                 'original_currency_id': $('#original_currency_id').val(),
+                'service_type': $('#service_type2').val(),
                 'summary' : summary,
             }
             $.ajaxSetup({
@@ -839,16 +841,16 @@
 
             e.preventDefault();
             var summary = CKEDITOR.instances.summary1.getData();
-            // console.log(summary);
+            var unique_id = $('#generatedLinkContainer').data('linkId');
             var data= {
                 'title': $('.title').val(),
                 'cost': $('.cost').val(),
                 'milestone_type': $('.milestone_type').val(),
-
                 'summary': summary,
-                //'project_id': document.querySelector('.project_id').value,
+                'random_id': unique_id,
                 'project_id': document.getElementById("project_id").value,
                 'original_currency_id': document.getElementById("original_currency_id").value,
+                'service_type': document.getElementById("service_type").value,
             }
             //console.log(data);
             $.ajaxSetup({
@@ -876,8 +878,9 @@
                         $('#milestoneaddmodal').modal('hide');
                         $('#milestoneaddmodal').find('input').val("");
                         $('.milestone_type').val('');
-                       
                         CKEDITOR.instances.summary1.setData('');
+                        $('#service_type').val('');
+                        $('#inputUrl').hide();
                         fetchmilestone();
 
                     }
@@ -910,7 +913,6 @@
             var description7 = CKEDITOR.instances.description7Text.getData();
             var description8 = CKEDITOR.instances.description8Text.getData();
             var description9 = CKEDITOR.instances.description9Text.getData();
-            // console.log(description3);
             var message_links = document.getElementsByName("message_link[]");
             var message_links_values = [];
             for (var i = 0; i < message_links.length; i++) {
@@ -926,6 +928,7 @@
                 'organization': document.getElementById("organization").value,
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
+                'cms_id': document.getElementById("cms_id").value,
                 'message_link': message_links_values,
                 'description2': description2,
                 'description3': description3,
@@ -935,7 +938,6 @@
                 'description7': description7,
                 'description8': description8,
                 'description9': description9,
-                'cms_id': document.getElementById("cms_id").value,
                 'id': '{{$deal->id}}',
             }
             // console.log(data);
@@ -1037,15 +1039,15 @@
                     }else{
                         $('#description9Error').text('');
                     }
-                    if (error.responseJSON.errors.milestone_value) {
-                        toastr.error('Please add a milestone!');
-                        $('#createDeal').attr("disabled", false);
-                        $('#createDeal').html("Complete Deal Creation");
-                    }
                     if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
                         $('#cms_id_error').text(error.responseJSON.errors.cms_id);
                     } else {
                         $('#cms_id_error').text('');
+                    }
+                    if (error.responseJSON.errors.milestone_value) {
+                        toastr.error('Please add a milestone!');
+                        $('#createDeal').attr("disabled", false);
+                        $('#createDeal').html("Complete Deal Creation");
                     }
                     $('#createDeal').attr("disabled", false);
                     $('#createDeal').html("Complete Deal Creation");
@@ -1092,6 +1094,7 @@
                 'client_email': document.getElementById("client_email").value,
                 'profile_link': document.getElementById("profile_link").value,
                 'long_project': document.getElementById("long_project").value,
+                'cms_id': document.getElementById("cms_id").value,
                 'hubstaff_tracking': hubstaff_tracking,
                 'message_link': message_links_values,
                 'description2': description2,
@@ -1102,7 +1105,6 @@
                 'description7': description7,
                 'description8': description8,
                 'description9': description9,
-                'cms_id': document.getElementById("cms_id").value,
                 'id': '{{$deal->id}}',
             }
             // console.log(data);
@@ -1244,15 +1246,15 @@
                     }else{
                         $('#description9Error').text('');
                     }
-                    if (error.responseJSON.errors.milestone_value) {
-                        toastr.error('Please add a milestone!');
-                        $('#createDeal').attr("disabled", false);
-                        $('#createDeal').html("Complete Deal Creation");
-                    }
                     if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
                         $('#cms_id_error').text(error.responseJSON.errors.cms_id);
                     } else {
                         $('#cms_id_error').text('');
+                    }
+                    if (error.responseJSON.errors.milestone_value) {
+                        toastr.error('Please add a milestone!');
+                        $('#createDeal').attr("disabled", false);
+                        $('#createDeal').html("Complete Deal Creation");
                     }
                     $('#createDeal').attr("disabled", false);
                     $('#createDeal').html("Complete Deal Creation");

@@ -65,7 +65,8 @@
 
                 <form class="row g-3" action="" method="post" id="storeProductCategory">
                 @csrf
-
+                    <input type="hidden" name="deal_id" id="deal_id" value="{{$id}}">
+                    <input type="hidden" name="random_id" id="random_id" value="{{$random_id}}">
                 <!-- Website Link & Niche Starts Here -->
                     <div class="row mt-3">
                         <div class="col-md-3">
@@ -73,9 +74,11 @@
                         </div>
                         <div class="col-md-6">
                             <input type="url" name="website_link" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                            <span id="website_link_error" class="text-danger"></span>
                         </div>
                         <div class="col-md-3">
                             <input type="text" name="website_niche" id="website_niche" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                            <span id="website_niche_error" class="text-danger"></span>
                         </div>
                     </div>
                     <!-- Website Link & Niche Ends Here -->
@@ -86,6 +89,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="website_name" id="website_name" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                            <span id="website_name_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -96,6 +100,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here"></textarea>
+                                    <span id="business_information_error" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -114,6 +119,7 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <span id="share_file_info_error" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row mt-3" id="folderLinkForm" style="display: none;">
@@ -163,6 +169,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="product_no" id="product_no" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of product category/collection pages here!">
+                            <span id="product_no_error" class="text-danger"></span>
                         </div>
                     </div>
                     <!--Product list-->
@@ -194,10 +201,11 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="word_count" id="word_count" class="form-control placeholderText height-35 f-14" placeholder="Input word count here">
+                            <span id="word_count_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn3">Submit</button>
+                        <button type="submit" data-name="submitted" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn3">Submit</button>
                     </div>
                 </form>
             </div>
@@ -209,7 +217,11 @@
 <script>
     $(document).ready(function() {
         $('#yesBtn').click(function() {
-            $('#folderLinkForm').toggle();
+            $('#folderLinkForm').show();
+        });
+
+        $('#noBtn').click(function() {
+            $('#folderLinkForm').hide();
         });
     });
     $('#submitBtn3').click(function(e){
@@ -217,6 +229,7 @@
         // console.log(formData);
         $('#submitBtn3').attr("disabled", true);
         $('#submitBtn3').html("Processing...");
+        var dataName = this.getAttribute("data-name");
         var share_file_info = $('input[name="share_file_info"]:checked').val();
         var folder_link = document.getElementsByName("folder_link[]");
         var folder_link_values = [];
@@ -245,6 +258,9 @@
             'folder_link': folder_link_values,
             'category_url': category_url_values,
             'category_list': category_list_values,
+            'deal_id': {{$id}},
+            'status': dataName,
+            'random_id': document.getElementById("random_id").value,
         }
         // console.log(data);
         $.ajaxSetup({
@@ -267,6 +283,41 @@
             },
             error: function(error) {
                 // console.log(response);
+                if(error.responseJSON.errors.website_link){
+                    $('#website_link_error').text(error.responseJSON.errors.website_link);
+                }else{
+                    $('#website_link_error').text('');
+                }
+                if(error.responseJSON.errors.website_niche){
+                    $('#website_niche_error').text(error.responseJSON.errors.website_niche);
+                }else{
+                    $('#website_niche_error').text('');
+                }
+                if(error.responseJSON.errors.website_name){
+                    $('#website_name_error').text(error.responseJSON.errors.website_name);
+                }else{
+                    $('#website_name_error').text('');
+                }
+                if(error.responseJSON.errors.business_information){
+                    $('#business_information_error').text(error.responseJSON.errors.business_information);
+                }else{
+                    $('#business_information_error').text('');
+                }
+                if(error.responseJSON.errors.business_information){
+                    $('#share_file_info_error').text(error.responseJSON.errors.business_information);
+                }else{
+                    $('#share_file_info_error').text('');
+                }
+                if(error.responseJSON.errors.product_no){
+                    $('#product_no_error').text(error.responseJSON.errors.product_no);
+                }else{
+                    $('#product_no_error').text('');
+                }
+                if(error.responseJSON.errors.word_count){
+                    $('#word_count_error').text(error.responseJSON.errors.word_count);
+                }else{
+                    $('#word_count_error').text('');
+                }
                 $('#submitBtn3').attr("disabled", false);
                 $('#submitBtn3').html("Submit");
             }

@@ -14,11 +14,18 @@
 
 
             <x-tab :href="route('contracts.show', $contract->id)" :text="__('modules.contracts.summery')" class="profile" />
-              
+
 
 
             <x-tab :href="route('contracts.show', $contract->id).'?tab=files'" :text="__('Deal Files')"
                 class="files" />
+
+            <x-tab :href="route('contracts.show', $contract->id).'?tab=milestone'" :text="__('Milestone')"
+                class="milestone" />
+
+            <x-tab :href="route('contracts.show', $contract->id).'?tab=cross_departmental_work'" :text="__('Cross Departmental Work')"
+                class="cross_departmental_work" />
+
           {{-- <x-tab :href="route('contracts.show', $contract->id).'?tab=renew'"
                 :text="__('Deal Renewal History')" class="renew" /> --}}
 

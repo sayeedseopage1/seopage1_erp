@@ -1,0 +1,42 @@
+.sp1_tlr_tbl_container{ 
+    overflow-x: hidden;
+    overflow-y: hidden; 
+    background: #fff;
+    padding: 16px;
+    padding-bottom: 0;
+    margin: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+}
+
+.sp1_tlr_tab{ 
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: #777;
+    border: 1px solid rgba(151, 151, 151, 0.219);
+}
+
+.sp1_tlr_tab:hover{
+    color: #fff;
+    background-color: rgba(21, 88, 245, 0.063);
+}
+
+.sp1_tlr_tab.active{
+    color: #fff !important;
+    background-color: #1558f5 !important;
+}
+
+
+/* modal panel */
+.sp1_tlr--modal-panel{
+    width: 100%;
+    max-width: 80vw;
+}
+
+.sp1_tlr_loader{
+    width: 100%;
+    height: calc(100vh - 250px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -9,7 +9,7 @@
        @php
            $project_milestone= App\Models\ProjectMilestone::where('project_id',$project->id)->first();
            $currency= App\Models\Currency::where('id',$project_milestone->original_currency_id)->first();
-           //dd($currency);
+        //    dd($web_content);
        @endphp
         <div class="row">
             <div class="col-md-6">
@@ -55,6 +55,7 @@
                     <option value="complete">@lang('app.complete')</option>
                 </x-forms.select>
             </div> --}}
+
             <div class="col-md-6">
                 <x-forms.select fieldId="milestone_type" fieldRequired="true" :fieldLabel="__('Milestone Type')"
                     fieldName="milestone_type">
@@ -64,11 +65,37 @@
                 </x-forms.select>
             </div>
             <div class="col-md-12">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
+                    <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
+                        <option value="">--</option>
+                        <option value="web-content">Webcontent</option>
+                        <option value="blogs-articles">Blogs/articles</option>
+                        <option value="product-description">Product descriptions</option>
+                        <option value="product-category">Product category/collection pages</option>
+                        <option value="basic-seo">Basic SEO</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-12 mt-2" id="inputUrl" style="display: none;">
+                <div class="input-group">
+                    <input type="text" class="form-control height-35 f-14" id="generatedLinkContainer" aria-label="Recipient's username" aria-describedby="copyButton" readonly>
+
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="copyButton" data-id="{{$project->deal_id}}"><i class="fa fa-clone"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2" value="submitted" id="linkBtn" disabled>Did You Submit?</button>
+            </div>
+
+
+            <div class="col-md-12">
                 <x-forms.textarea class="ckeditor mr-0 mr-lg-2 mr-md-2" :fieldLabel="__('modules.projects.milestoneSummary')"
                     fieldName="summary" fieldId="summary"
                     :fieldPlaceholder="__('placeholders.milestoneSummary')">
                 </x-forms.textarea>
             </div>
+
 {{--            <div class="col-md-12">--}}
 {{--                <div class="form-group">--}}
 {{--                    <label class="text-dark-grey" data-label="true" for="descriptionText">Milestone Summary--}}
@@ -104,12 +131,56 @@
     </div>
     <div class="modal-footer">
         <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.close')</x-forms.button-cancel>
-        <x-forms.button-primary id="save-project-milestone" icon="check">@lang('app.save')</x-forms.button-primary>
+        <button type="button" class="btn-primary rounded f-14 p-2" id="save-project-milestone" disabled>
+            <i class="fa fa-check mr-1"></i>Save
+        </button>
     </div>
 
 </x-form>
+
+
 <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
 <script>
+    $('#linkBtn').click(function(e){
+        e.preventDefault();
+        $('#linkBtn').attr("disabled", true);
+        $('#linkBtn').html("Processing...");
+        var buttonValue = $(this).val();
+
+        var linkId = $('#generatedLinkContainer').attr('data-link-id');
+
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'value': buttonValue,
+            'deal_id': {{$project->deal_id}},
+            'random_id': linkId,
+            'service_type': document.getElementById("service_type").value,
+        }
+        $.ajaxSetup({
+
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: "POST",
+            url: "{{route('store-link')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                $('#inputUrl').hide();
+                $('#save-project-milestone').attr("disabled", false);
+                toastr.success('Link Submit Successfully');
+                $('#linkBtn').attr("disabled", false);
+                $('#linkBtn').html("Did You Submit?");
+            },
+            error: function(error) {
+                $('#linkBtn').attr("disabled", false);
+                $('#linkBtn').html("Did You Submit?");
+            }
+        });
+    });
+
 
 $(document).ready(function() {
     $("#addProjectMilestoneForm .select-picker").selectpicker();
@@ -139,6 +210,8 @@ $(document).ready(function() {
     });
     $('#save-project-milestone').click(function() {
         var url = "{{ route('milestones.store') }}";
+        var randomId = $('#generatedLinkContainer').attr('data-link-id');
+        var requestData = $('#addProjectMilestoneForm').serialize() + '&randomId=' + randomId;
         $.easyAjax({
             url: url,
             container: '#addProjectMilestoneForm',
@@ -146,12 +219,64 @@ $(document).ready(function() {
             blockUI: true,
             disableButton: true,
             buttonSelector: '#save-project-milestone',
-            data: $('#addProjectMilestoneForm').serialize(),
+            data: requestData,
             success: function(response) {
                 if (response.status == 'success') {
                     window.location.reload();
                 }
             }
         })
+    });
+</script>
+<script type="text/javascript">
+    function generateRandomID(length) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let randomID = '';
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            randomID += characters.charAt(randomIndex);
+        }
+        return randomID;
+    }
+
+    function generateURL() {
+        var select = document.querySelector('#service_type');
+        var selectedValue = select.value;
+
+        var randomID = generateRandomID(5);
+
+        var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-')) + '/'  + <?php echo $project->deal_id; ?> + '/' + randomID;
+
+        var generatedLinkContainer = document.getElementById('generatedLinkContainer');
+        generatedLinkContainer.value = url;
+        generatedLinkContainer.setAttribute('data-link-id', randomID);
+    }
+
+    const selectElement = document.getElementById("service_type");
+    const inputUrl = document.getElementById("inputUrl");
+
+    selectElement.addEventListener("change", function() {
+        if (selectElement.value === "web-content" ||
+            selectElement.value === "blogs-articles" ||
+            selectElement.value === "product-description" ||
+            selectElement.value === "product-category" ||
+            selectElement.value === "basic-seo") {
+            inputUrl.style.display = "block";
+        } else {
+            inputUrl.style.display = "none";
+        }
+    });
+
+    document.getElementById("copyButton").addEventListener("click", function() {
+        var generatedLink = document.getElementById("generatedLinkContainer").value;
+
+        navigator.clipboard.writeText(generatedLink)
+            .then(function() {
+                alert("Copied: " + generatedLink);
+                document.getElementById("linkBtn").removeAttribute("disabled");
+            })
+            .catch(function(error) {
+                alert("Unable to copy: " + error);
+            });
     });
 </script>

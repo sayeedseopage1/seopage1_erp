@@ -71,6 +71,11 @@ use Notification;
 use App\Models\TaskUser;
 use App\Models\AuthorizationAction;
 use Auth;
+use App\Notifications\ClientBasicSeoSubmitNotification;
+use App\Notifications\ClientBlogArticleSubmitNotification;
+use App\Notifications\ClientFormSubmitNotification;
+use App\Notifications\ClientProductCategoryCollectionSubmitNotification;
+use App\Notifications\ClientProductDescriptionSubmitNotification;
 
 class HomeController extends Controller
 {
@@ -1324,11 +1329,57 @@ class HomeController extends Controller
         // }
         // dd($groupedData);
     }
-    public function webContent(){
-        return view('service-type.web_content');
+
+    //    STORE MILESTONE LINK FUNCTION
+    public function storeLink(Request $request){
+        if ($request->service_type=='web-content'){
+        $web_content = new WebContent();
+        $web_content->deal_id = $request->deal_id;
+        $web_content->random_id = $request->random_id;
+        $web_content->client_link = $request->value;
+        $web_content->service_type = $request->service_type;
+        $web_content->save();
+        }
+        if ($request->service_type=='blogs-articles'){
+            $blog_article = new BlogArticle();
+            $blog_article->deal_id = $request->deal_id;
+            $blog_article->random_id = $request->random_id;
+            $blog_article->client_link = $request->value;
+            $blog_article->service_type = $request->service_type;
+            $blog_article->save();
+        }
+        if ($request->service_type=='product-description'){
+            $product_description = new ProductDescription();
+            $product_description->deal_id = $request->deal_id;
+            $product_description->random_id = $request->random_id;
+            $product_description->client_link = $request->value;
+            $product_description->service_type = $request->service_type;
+            $product_description->save();
+        }
+        if ($request->service_type=='product-category'){
+            $product_category = new ProductCategoryCollection();
+            $product_category->deal_id = $request->deal_id;
+            $product_category->random_id = $request->random_id;
+            $product_category->client_link = $request->value;
+            $product_category->service_type = $request->service_type;
+            $product_category->save();
+        }
+        if ($request->service_type=='basic-seo'){
+            $basic_seo = new BasicSeo();
+            $basic_seo->deal_id = $request->deal_id;
+            $basic_seo->random_id = $request->random_id;
+            $basic_seo->client_link = $request->value;
+            $basic_seo->service_type = $request->service_type;
+            $basic_seo->save();
+        }
+        return response()->json(['status'=>200]);
     }
+    // ==================== VIEW WEB CONTENT START ==================
+    public function webContent($id, $random_id){
+        return view('service-type.web_content',compact('id','random_id'));
+    }
+    // ==================== STORE WEB CONTENT START ==================
     public function storeWebContent(Request $request){
-//        dd($request->all());
         $data = $request->all();
         $folder_links = json_encode($data['folder_link']);
         $reference_websites = json_encode($data['reference_website']);
@@ -1339,15 +1390,15 @@ class HomeController extends Controller
         $quantitys = json_encode($data['quantity']);
         $approximate_words = json_encode($data['approximate_word']);
 
-        $web_content = new WebContent();
+        $web_content = WebContent::where('random_id',$request->random_id)->first();
         $web_content->website_link = $data['website_link'];
         $web_content->website_niche = $data['website_niche'];
         $web_content->website_name = $data['website_name'];
         $web_content->business_information = $data['business_information'];
-        $web_content->share_file_info = $data['share_file_info'];
+        $web_content->share_file_info = $request->share_file_info;
         $web_content->folder_link = $folder_links;
         $web_content->reference_website = $reference_websites;
-        $web_content->competitor_content = $data['competitor_content'];
+        $web_content->competitor_content = $request->competitor_content;
         $web_content->description1 = $description1;
         $web_content->description2 = $description2;
         $web_content->description3 = $description3;
@@ -1367,15 +1418,24 @@ class HomeController extends Controller
         $web_content->buying_habit2 = $data['buying_habit2'];
         $web_content->buying_habit3 = $data['buying_habit3'];
         $web_content->language = $data['language'];
+        $web_content->status = $data['status'];
         $web_content->save();
+
+        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+        foreach($users as $user){
+
+            Notification::send($user, new ClientFormSubmitNotification($web_content));
+        }
 
         return response()->json(['status'=>200]);
     }
-    public function blogArticle(){
-        return view('service-type.blog_article');
+    // ==================== STORE WEB CONTENT END ==================
+    // ==================== STORE BLOG ARTICLE START ==================
+    public function blogArticle($id, $random_id){
+        return view('service-type.blog_article',compact('id','random_id'));
     }
     public function storeBlogArticle(Request $request){
-//dd($request->all());
+
         $data = $request->all();
 
         $folderLinks = json_encode($data['folder_link']);
@@ -1383,31 +1443,36 @@ class HomeController extends Controller
         $topicLinks = json_encode($data['topic_link']);
         $keywordLinks = json_encode($data['keyword_link']);
 
-        $blog_article= new BlogArticle();
+        $blog_article = BlogArticle::where('random_id',$request->random_id)->first();
         $blog_article->website_link = $data['website_link'];
         $blog_article->website_niche = $data['website_niche'];
         $blog_article->website_name = $data['website_name'];
         $blog_article->business_information = $data['business_information'];
-        $blog_article->share_file_info = $data['share_file_info'];
-        $blog_article->topic_info = $data['topic_info'];
-        $blog_article->keyword_info = $data['keyword_info'];
+        $blog_article->share_file_info = $request->share_file_info;
+        $blog_article->topic_info = $request->topic_info;
+        $blog_article->keyword_info = $request->keyword_info;
+        $blog_article->product_no = $data['product_no'];
+        $blog_article->status = $data['status'];
         $blog_article->folder_link = $folderLinks;
         $blog_article->blog_url = $blogUrls;
         $blog_article->topic_link = $topicLinks;
         $blog_article->keyword_link = $keywordLinks;
         $blog_article->save();
 
+        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+        foreach($users as $user){
+
+            Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+        }
 
         return response()->json(['status'=>200]);
-
-
     }
+    // ==================== STORE BLOG ARTICLE END ==================
 
-
-    public function productDescription(){
-        return view('service-type.product_description');
+    public function productDescription($id, $random_id){
+        return view('service-type.product_description',compact('id','random_id'));
     }
-
+ // ==================== STORE PRODUCT DESCRIPTION START==================
     public function storeProductDescription(Request $request){
         $data = $request->all();
 
@@ -1415,59 +1480,69 @@ class HomeController extends Controller
         $blogUrls = json_encode($data['blog_url']);
         $product_lists = json_encode($data['product_list']);
 
-        $product_description = new ProductDescription();
+        $product_description = ProductDescription::where('random_id',$request->random_id)->first();
         $product_description->website_link = $data['website_link'];
         $product_description->website_niche = $data['website_niche'];
         $product_description->website_name = $data['website_name'];
         $product_description->business_information = $data['business_information'];
-        $product_description->share_file_info = $data['share_file_info'];
+        $product_description->share_file_info = $request->share_file_info;
         $product_description->folder_link = $folder_links;
         $product_description->blog_url = $blogUrls;
         $product_description->product_no = $data['product_no'];
         $product_description->product_list = $product_lists;
         $product_description->word_count = $data['word_count'];
+        $product_description->status = $data['status'];
         $product_description->save();
+
+        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+        foreach($users as $user){
+
+            Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
+        }
 
         return response()->json(['status'=>200]);
 
     }
+    // ==================== STORE PRODUCT DESCRIPTION END==================
 
-    public function productCategory(){
-        return view('service-type.product_category');
+    public function productCategory($id, $random_id){
+        return view('service-type.product_category',compact('id','random_id'));
     }
     public function storeProductCategory(Request $request){
+
         $data = $request->all();
 
         $folder_links = json_encode($data['folder_link']);
         $categoryUrls = json_encode($data['category_url']);
         $category_lists = json_encode($data['category_list']);
 
-        $product_category_collection = new ProductCategoryCollection();
+        $product_category_collection = ProductCategoryCollection::where('random_id',$request->random_id)->first();
         $product_category_collection->website_link = $data['website_link'];
         $product_category_collection->website_niche = $data['website_niche'];
         $product_category_collection->website_name = $data['website_name'];
         $product_category_collection->business_information = $data['business_information'];
-        $product_category_collection->share_file_info = $data['share_file_info'];
+        $product_category_collection->share_file_info = $request->share_file_info;
         $product_category_collection->folder_link = $folder_links;
         $product_category_collection->category_url = $categoryUrls;
         $product_category_collection->product_no = $data['product_no'];
         $product_category_collection->category_list = $category_lists;
         $product_category_collection->word_count = $data['word_count'];
+        $product_category_collection->status = $data['status'];
         $product_category_collection->save();
 
+        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+        foreach($users as $user){
+
+            Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
+        }
         return response()->json(['status'=>200]);
     }
-    public function productBasicSeo(){
-        return view('service-type.basic_seo');
+    public function productBasicSeo($id, $random_id){
+        return view('service-type.basic_seo',compact('id','random_id'));
     }
     public function storeProductBasicSeo(Request $request){
 
-
-
-
-    // ck editor image upload
-
-        $basic_seo = new BasicSeo();
+        $basic_seo = BasicSeo::where('random_id',$request->random_id)->first();
         $basic_seo->owner_name = $request->owner_name;
         $basic_seo->business_name = $request->business_name;
         $basic_seo->business_address = $request->business_address;
@@ -1490,7 +1565,15 @@ class HomeController extends Controller
         $basic_seo->user_name = $request->user_name;
         $basic_seo->password4 = $request->password4;
         $basic_seo->confirm_adding = $request->confirm_adding;
+        $basic_seo->status = $request->status;
         $basic_seo->save();
+
+        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+        foreach($users as $user){
+
+            Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
+        }
+
         return response()->json(['status'=>200]);
     }
 

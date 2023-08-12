@@ -15,28 +15,34 @@ return new class extends Migration
     {
         Schema::create('basic_seos', function (Blueprint $table) {
             $table->id();
-            $table->string('owner_name');
-            $table->string('business_name');
-            $table->string('business_address');
-            $table->string('phone_number');
-            $table->string('zip_code');
-            $table->string('google_search_info');
+            $table->integer('deal_id');
+            $table->string('random_id');
+            $table->integer('milestone_id');
+            $table->string('client_link')->nullable();
+            $table->string('service_type')->nullable();
+            $table->string('owner_name')->nullable();
+            $table->string('business_name')->nullable();
+            $table->string('business_address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->string('google_search_info')->nullable();
             $table->integer('done1')->nullable();
             $table->string('email1')->nullable();
             $table->string('password1')->nullable();
-            $table->string('google_analytic_info');
+            $table->string('google_analytic_info')->nullable();
             $table->integer('done2')->nullable();
             $table->string('email2')->nullable();
             $table->string('password2')->nullable();
-            $table->string('google_business_account_info');
+            $table->string('google_business_account_info')->nullable();
             $table->integer('done3')->nullable();
             $table->string('email3')->nullable();
             $table->string('password3')->nullable();
-            $table->string('share_cms_access_info');
+            $table->string('share_cms_access_info')->nullable();
             $table->string('url')->nullable();
             $table->string('user_name')->nullable();
             $table->string('password4')->nullable();
             $table->integer('confirm_adding')->nullable();
+            $table->enum('status',['pending','submitted'])->default('pending');
             $table->timestamps();
         });
     }

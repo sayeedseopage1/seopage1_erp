@@ -66,17 +66,19 @@
 
                 <form class="row g-3" action="{{route('store_web_content')}}" method="post" id="storeServiceType">
                     @csrf
-
                     <!-- Website Link & Niche Starts Here -->
+                    <input type="hidden" name="random_id" id="random_id" value="{{$random_id}}">
                     <div class="row mt-3">
                         <div class="col-md-3">
                             <h6>Website Link & Niche:</h6>
                         </div>
                         <div class="col-md-6">
                             <input type="url" name="website_link" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                            <span id="website_link_error" class="text-danger"></span>
                         </div>
                         <div class="col-md-3">
                             <input type="text" name="website_niche" id="website_niche" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                            <span id="website_niche_error" class="text-danger"></span>
                         </div>
                     </div>
                         <!-- Website Link & Niche Ends Here -->
@@ -87,6 +89,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="website_name" id="website_name" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                            <span id="website_name_error" class="text-danger"></span>
                         </div>
                     </div>
                         <div class="row mt-3">
@@ -97,6 +100,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!"></textarea>
+                                        <span id="business_information_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -115,6 +119,7 @@
                                                     </label>
                                                 </div>
                                             </div>
+                                            <span id="share_file_info_error" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="row mt-3" id="folderLinkForm" style="display: none;">
@@ -122,6 +127,7 @@
                                             <div class="row mb-3">
                                                 <div class="col-md-12">
                                                     <input type="text" name="folder_link[]" id="folder_link" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                    <span id="folder_link_error" class="text-danger"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -146,6 +152,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group" style="margin-left: 50px;">
                                         <input type="text" id="reference_website" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website[]"/>
+                                        <span id="reference_website_error" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-5">
@@ -153,8 +160,8 @@
                                         <label for="">Does your competitor's content match exactly to what you do?</label>
                                         <div class="mt-2 d-flex">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="competitor_content" value="1" id="flexRadioDefault1">
-                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                <input class="form-check-input" type="radio" name="competitor_content" value="1" id="yesBtn1">
+                                                <label class="form-check-label" for="yesBtn1">
                                                     Yes
                                                 </label>
                                             </div>
@@ -165,6 +172,7 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <span id="competitor_content_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -186,13 +194,16 @@
                                     <div class="row">
                                         <div class="col-4">
                                             <textarea name="description1[]" id="description1" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                            <span id="description1_error" class="text-danger"></span>
                                         </div>
 
                                         <div class="col-4">
                                             <textarea name="description2[]" id="description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                            <span id="description2_error" class="text-danger"></span>
                                         </div>
                                         <div class="col-4">
                                             <textarea name="description3[]" id="description3" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                            <span id="description3_error" class="text-danger"></span>
                                         </div>
                                     </div>
                                 </div>
@@ -214,6 +225,7 @@
                         <div class="col-md-9">
                             <div class="form-group">
                                 <input type="text" id="product_list" class="form-control placeholderText height-35 f-14" placeholder="Type your page or product name" name="product_list"/>
+                                <span id="product_list_error" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -229,15 +241,18 @@
                                         <div class="form-group" style="margin-left: 50px;">
                                             <label for="">Type Page name</label>
                                             <input type="text" name="page_name[]" id="page_name" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                            <span id="page_name_error" class="text-danger"></span>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="">Quantity</label>
                                         <input type="number" name="quantity[]" id="quantity" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                        <span id="quantity_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-3">
                                         <label for="">Approximate word count per page</label>
                                         <input type="text" name="approximate_word[]" id="approximate_word" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                        <span id="approximate_word_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -266,19 +281,23 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <input type="number" name="age1" id="age1" class="form-control placeholderText height-35 f-14" placeholder="18">
+                                    <span id="age1_error" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <input type="number" name="age2" id="age2" class="form-control placeholderText height-35 f-14" placeholder="25 ">
+                                    <span id="age2_error" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <label for="">Monthly Income (in USD)</label>
                             <input type="text" name="monthly_income" id="monthly_income" class="form-control placeholderText height-35 f-14" placeholder="$">
+                            <span id="monthly_income_error" class="text-danger"></span>
                         </div>
                         <div class="col-md-2">
                             <label for="">Education Level</label>
                             <input type="text" name="education_level" id="education_level" class="form-control placeholderText height-35 f-14" placeholder="Education Level">
+                            <span id="education_level_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -287,10 +306,12 @@
                         <div class="col-md-4">
                             <label for="">Country</label>
                             <input type="text" name="country" id="country" class="form-control placeholderText height-35 f-14" placeholder="Type your country">
+                            <span id="country_error" class="text-danger"></span>
                         </div>
                         <div class="col-md-5">
                             <label for="">City</label>
                             <input type="text" name="city" id="city" class="form-control placeholderText height-35 f-14" placeholder="Type your city">
+                            <span id="city_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -299,6 +320,7 @@
                         <div class="col-md-9">
                             <label for="">Write 1-2 lines about the interests and pain points of your target audience</label>
                             <textarea name="interest" id="interest" rows="5" class="form-control placeholderText"></textarea>
+                            <span id="interest_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -309,14 +331,17 @@
                                 <div class="col-md-4">
                                     <label for="">How does your client's target audience make purchasing decisions?</label>
                                     <textarea name="buying_habit1" id="buying_habit1" rows="5" class="form-control"></textarea>
+                                    <span id="buying_habit1_error" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 20px;">
                                     <label for="">Do they shop online or in-store?</label>
                                     <textarea name="buying_habit2" id="buying_habit2" rows="5" class="form-control"></textarea>
+                                    <span id="buying_habit2_error" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-4" style="margin-top: 20px;">
                                     <label for="">What are their favorite brands?</label>
                                     <textarea name="buying_habit3" id="buying_habit3" rows="5" class="form-control"></textarea>
+                                    <span id="buying_habit3_error" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -327,10 +352,11 @@
                         <div class="col-md-9">
                             <label for="">What is their native language?</label>
                             <input type="text" name="language" id="language" class="form-control placeholderText height-35 f-14" placeholder="Type your language">
+                            <span id="language_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-12 text-center" style="margin-top: 50px;">
-                        <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn1">Submit</button>
+                        <button type="submit" data-name="submitted" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn1">Submit</button>
                     </div>
                 </form>
             </div>
@@ -342,12 +368,20 @@
 <script>
     $(document).ready(function() {
         $('#yesBtn').click(function() {
-            $('#folderLinkForm').toggle();
+            $('#folderLinkForm').show();
+        });
+
+        $('#noBtn').click(function() {
+            $('#folderLinkForm').hide();
         });
     });
     $(document).ready(function() {
         $('#noBtn1').click(function() {
-            $('#noForm').toggle();
+            $('#noForm').show();
+        });
+
+        $('#yesBtn1').click(function() {
+            $('#noForm').hide();
         });
     });
     $('#submitBtn1').click(function(e){
@@ -355,6 +389,7 @@
         // console.log(formData);
         $('#submitBtn1').attr("disabled", true);
         $('#submitBtn1').html("Processing...");
+        var dataName = this.getAttribute("data-name");
         var folder_link = document.getElementsByName("folder_link[]");
         var folder_link_values = [];
         for (var i = 0; i < folder_link.length; i++) {
@@ -435,6 +470,9 @@
             'buying_habit2': document.getElementById("buying_habit2").value,
             'buying_habit3': document.getElementById("buying_habit3").value,
             'language': document.getElementById("language").value,
+            'random_id': document.getElementById("random_id").value,
+            'status': dataName,
+            'deal_id': {{$id}},
         }
         $.ajaxSetup({
             headers: {
@@ -455,7 +493,91 @@
                 }
             },
             error: function(error) {
-                // console.log(response);
+                if(error.responseJSON.errors.website_link){
+                    $('#website_link_error').text(error.responseJSON.errors.website_link);
+                }else{
+                    $('#website_link_error').text('');
+                }
+                if(error.responseJSON.errors.website_niche){
+                    $('#website_niche_error').text(error.responseJSON.errors.website_niche);
+                }else{
+                    $('#website_niche_error').text('');
+                }
+                if(error.responseJSON.errors.website_name){
+                    $('#website_name_error').text(error.responseJSON.errors.website_name);
+                }else{
+                    $('#website_name_error').text('');
+                }
+                if(error.responseJSON.errors.business_information){
+                    $('#business_information_error').text(error.responseJSON.errors.business_information);
+                }else{
+                    $('#business_information_error').text('');
+                }
+                if(error.responseJSON.errors.share_file_info){
+                    $('#share_file_info_error').text(error.responseJSON.errors.share_file_info);
+                }else{
+                    $('#share_file_info_error').text('');
+                }
+                if(error.responseJSON.errors.product_list){
+                    $('#product_list_error').text(error.responseJSON.errors.product_list);
+                }else{
+                    $('#product_list_error').text('');
+                }
+                if(error.responseJSON.errors.age1){
+                    $('#age1_error').text(error.responseJSON.errors.age1);
+                }else{
+                    $('#age1_error').text('');
+                }
+                if(error.responseJSON.errors.age2){
+                    $('#age2_error').text(error.responseJSON.errors.age2);
+                }else{
+                    $('#age2_error').text('');
+                }
+                if(error.responseJSON.errors.monthly_income){
+                    $('#monthly_income_error').text(error.responseJSON.errors.monthly_income);
+                }else{
+                    $('#monthly_income_error').text('');
+                }
+                if(error.responseJSON.errors.education_level){
+                    $('#education_level_error').text(error.responseJSON.errors.education_level);
+                }else{
+                    $('#education_level_error').text('');
+                }
+                if(error.responseJSON.errors.country){
+                    $('#country_error').text(error.responseJSON.errors.country);
+                }else{
+                    $('#country_error').text('');
+                }
+                if(error.responseJSON.errors.city){
+                    $('#city_error').text(error.responseJSON.errors.city);
+                }else{
+                    $('#city_error').text('');
+                }
+                if(error.responseJSON.errors.interest){
+                    $('#interest_error').text(error.responseJSON.errors.interest);
+                }else{
+                    $('#interest_error').text('');
+                }
+                if(error.responseJSON.errors.buying_habit1){
+                    $('#buying_habit1_error').text(error.responseJSON.errors.buying_habit1);
+                }else{
+                    $('#buying_habit1_error').text('');
+                }
+                if(error.responseJSON.errors.buying_habit2){
+                    $('#buying_habit2_error').text(error.responseJSON.errors.buying_habit2);
+                }else{
+                    $('#buying_habit2_error').text('');
+                }
+                if(error.responseJSON.errors.buying_habit3){
+                    $('#buying_habit3_error').text(error.responseJSON.errors.buying_habit3);
+                }else{
+                    $('#buying_habit3_error').text('');
+                }
+                if(error.responseJSON.errors.language){
+                    $('#language_error').text(error.responseJSON.errors.language);
+                }else{
+                    $('#language_error').text('');
+                }
                 $('#submitBtn1').attr("disabled", false);
                 $('#submitBtn1').html("Submit");
             }

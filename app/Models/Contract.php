@@ -139,6 +139,14 @@ class Contract extends BaseModel
     {
         return $this->hasMany(ContractFile::class, 'contract_id')->orderBy('id', 'desc');
     }
+    public function milestone(): HasMany
+    {
+        return $this->hasMany(ContractFile::class, 'contract_id')->orderBy('id', 'desc');
+    }
+    public function cross_departmental_work(): HasMany
+    {
+        return $this->hasMany(ContractFile::class, 'contract_id')->orderBy('id', 'desc');
+    }
     public function deal()
     {
         return $this->belongsTo(Deal::class, 'deal_id');

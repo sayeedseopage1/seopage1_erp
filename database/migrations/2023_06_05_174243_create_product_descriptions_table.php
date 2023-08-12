@@ -15,16 +15,22 @@ return new class extends Migration
     {
         Schema::create('product_descriptions', function (Blueprint $table) {
             $table->id();
-            $table->string('website_link');
-            $table->string('website_niche');
-            $table->string('website_name');
-            $table->string('business_information');
+            $table->integer('deal_id');
+            $table->string('random_id');
+            $table->integer('milestone_id');
+            $table->string('client_link')->nullable();
+            $table->string('service_type')->nullable();
+            $table->string('website_link')->nullable();
+            $table->string('website_niche')->nullable();
+            $table->string('website_name')->nullable();
+            $table->string('business_information')->nullable();
             $table->integer('share_file_info')->default(0);
             $table->string('folder_link')->nullable();
-            $table->string('blog_url');
-            $table->string('product_no');
-            $table->string('product_list');
-            $table->string('word_count');
+            $table->string('blog_url')->nullable();
+            $table->string('product_no')->nullable();
+            $table->string('product_list')->nullable();
+            $table->string('word_count')->nullable();
+            $table->enum('status',['pending','submitted'])->default('pending');
             $table->timestamps();
         });
     }

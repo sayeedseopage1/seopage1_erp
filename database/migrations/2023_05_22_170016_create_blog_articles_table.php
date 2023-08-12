@@ -15,17 +15,24 @@ return new class extends Migration
     {
         Schema::create('blog_articles', function (Blueprint $table) {
             $table->id();
-            $table->string('website_link');
-            $table->string('website_niche');
-            $table->string('website_name');
-            $table->string('business_information');
+            $table->integer('deal_id');
+            $table->string('random_id');
+            $table->integer('milestone_id');
+            $table->string('client_link')->nullable();
+            $table->string('service_type')->nullable();
+            $table->string('website_link')->nullable();
+            $table->string('website_niche')->nullable();
+            $table->string('website_name')->nullable();
+            $table->string('business_information')->nullable();
             $table->integer('share_file_info')->default(0);
-            $table->string('folder_link');
-            $table->string('blog_url');
+            $table->string('folder_link')->nullable();
+            $table->string('blog_url')->nullable();
+            $table->string('product_no')->nullable();
             $table->string('topic_info')->default(1);
-            $table->string('topic_link');
+            $table->string('topic_link')->nullable();
             $table->string('keyword_info')->default(1);
-            $table->string('keyword_link');
+            $table->string('keyword_link')->nullable();
+            $table->enum('status',['pending','submitted'])->default('pending');
             $table->timestamps();
         });
     }

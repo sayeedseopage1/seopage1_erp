@@ -195,37 +195,36 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
 
                   @if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
                   @if($contract->deal->status == 'pending')
-                            <div class="wrapper-timezone d-flex justify-content-center">
+      <div class="wrapper-timezone d-flex justify-content-center">
 
 
-                            <p>You have </p>
+       <p>You have </p>
 
-                            <div class="clock">
+       <div class="clock">
 
 
-                                <div class="column">
-                                    <div class="timer" id="hours"></div>
-                                    <div class="timer_text">HOURS</div>
-                                </div>
+           <div class="column">
+               <div class="timer" id="hours"></div>
+               <div class="timer_text">HOURS</div>
+           </div>
 
-                                <!-- <div class="timer">:</div> -->
-                                <div class="column">
-                                    <div class="timer" id="minutes"></div>
-                                    <div class="timer_text">MINUTES</div>
-                                </div>
+           <!-- <div class="timer">:</div> -->
+           <div class="column">
+               <div class="timer" id="minutes"></div>
+               <div class="timer_text">MINUTES</div>
+           </div>
 
-                                <!-- <div class="timer">:</div> -->
-                                <div class="column">
-                                    <div class="timer" id="seconds"></div>
-                                    <div class="timer_text">SECONDS</div>
-                                </div>
-                            </div>
+           <!-- <div class="timer">:</div> -->
+           <div class="column">
+               <div class="timer" id="seconds"></div>
+               <div class="timer_text">SECONDS</div>
+           </div>
+       </div>
 
-                            <p>remaining for accepting the project</p>
-                        </div>
-                    @endif
-                    @endif
-                    </div>
+       <p>remaining for accepting the project</p>
+   </div>
+   @endif
+   @endif
 
    <div class="wrapper-timezone d-flex justify-content-center">
 
@@ -293,7 +292,7 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                         <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                               Lead Name</td>
-                            <td class="border-left-0"><a href="{{route('leads.show',$contract->deal->lead_id)}}">{{ $contract->deal->project_name }}</a>
+                            <td class="border-left-0"><a href="{{route('leads.show',$deal_id->lead_id)}}">{{ $contract->deal->project_name }}</a>
                             </td>
                         </tr>
                         @endif
@@ -301,22 +300,24 @@ $currency_id= App\Models\Currency::where('id',$contract->original_currency_id)->
                               <td class="bg-light-grey border-right-0 f-w-500">
                                 Deal Name</td>
                                 @php
-                                    $deal= App\Models\DealStage::where('short_code',$contract->deal->deal_id)->first();
+                                    $deal= App\Models\DealStage::where('short_code',$deal_id->deal_id)->first();
                                 @endphp
-                              <td class="border-left-0"><a href="{{route('deals.show',$contract->deal->id)}}">{{ $contract->deal->project_name }}</a>
+                              <td class="border-left-0"><a href="{{route('deals.show',$deal->id)}}">{{ $contract->deal->project_name }}</a>
                               </td>
                           </tr>
                           @php
                               $project= App\Models\Project::where('deal_id',$contract->deal->id)->first();
                           @endphp
+                        @if($deal_id->pm_id != null)
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                               Project Name</td>
-
+							
                             <td class="border-left-0"><a href="{{route('projects.show',$project->id)}}">{{ $project->project_name }}</a>
                             </td>
                         </tr>
-                        @if($contract->deal->cms_name != null)
+                        @endif
+                         @if($contract->deal->cms_name != null)
                             <tr>
                                 <td class="bg-light-grey border-right-0 f-w-500">Project CMS</td>
                                 <td class="border-left-0">{{ $contract->deal->cms_name }}</td>

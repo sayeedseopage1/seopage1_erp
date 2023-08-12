@@ -29,7 +29,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var ReportResolvePreviewModal = function ReportResolvePreviewModal() {
+var ReportResolvePreviewModal = function ReportResolvePreviewModal(_ref) {
+  var row = _ref.row;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     isOpen = _React$useState2[0],
@@ -58,9 +59,9 @@ var ReportResolvePreviewModal = function ReportResolvePreviewModal() {
             className: "sp1_single_task--modal-panel resolve--modal-panel",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                 className: "font-weight-bold f-14",
-                children: "Report # MDCRPTP452T136-0001"
+                children: ["Report # ", row === null || row === void 0 ? void 0 : row.id]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
                 variant: "tertiary",
                 onClick: close,
@@ -81,7 +82,7 @@ var ReportResolvePreviewModal = function ReportResolvePreviewModal() {
                         children: "Reason"
                       }), ": "]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
-                      children: "I Didn't Have Enough Work to Do"
+                      children: row === null || row === void 0 ? void 0 : row.reason_for_less_tracked_hours_a_day_task
                     })]
                   })
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -154,12 +155,16 @@ var ReportResolvePreviewModal = function ReportResolvePreviewModal() {
                     className: "d-block mt-2",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
                       children: "Specific Reason:"
-                    }), " I Had Half Day of Leave Today"]
+                    }), " ", row === null || row === void 0 ? void 0 : row.child_reason]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                     className: "sp1_ck_content py-1",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("strong", {
                       children: "Comment:"
-                    }), "  I don't have any pending tasks and lead developer did not assigned any task to do today."]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+                      dangerouslySetInnerHTML: {
+                        __html: row === null || row === void 0 ? void 0 : row.comment
+                      }
+                    })]
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
                   className: "mt-3",
@@ -408,6 +413,15 @@ var columns = [{
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_ReportResolvePreviewModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       row: row
     });
+  }
+}, {
+  id: 'managements_comment',
+  header: "Top Management Comment",
+  sorted: false,
+  cell: function cell() {
+    reutrn( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("quote", {
+      children: "No commnet yet!"
+    }));
   }
 }];
 var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {

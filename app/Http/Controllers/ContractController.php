@@ -58,6 +58,11 @@ use App\Models\QualifiedSale;
 use App\Models\AuthorizationAction;
 use App\Models\AwardTimeIncress;
 use DataTables;
+use App\Models\BasicSeo;
+use App\Models\BlogArticle;
+use App\Models\ProductCategoryCollection;
+use App\Models\ProductDescription;
+use App\Models\WebContent;
 
 class ContractController extends AccountBaseController
 {
@@ -866,6 +871,36 @@ class ContractController extends AccountBaseController
 
 
             $milestone->save();
+
+
+            if($request->service_type == 'web-content'){
+                $web_content = WebContent::where('random_id', $request->random_id)->first();
+                $web_content->milestone_id = $milestone->id;
+                $web_content->save();
+            }
+            if($request->service_type == 'blogs-articles'){
+                $blog_article = BlogArticle::where('random_id', $request->random_id)->first();
+                dd($blog_article);
+                $blog_article->milestone_id = $milestone->id;
+                $blog_article->save();
+            }
+            if($request->service_type == 'product-description'){
+                $product_description = ProductDescription::where('random_id', $request->random_id)->first();
+                $product_description->milestone_id = $milestone->id;
+                $product_description->save();
+            }
+            if($request->service_type == 'product-category'){
+                $product_category = ProductCategoryController::where('random_id', $request->random_id)->first();
+                $product_category->milestone_id = $milestone->id;
+                $product_category->save();
+            }
+            if($request->service_type == 'basic-seo'){
+                $basic_seo = BasicSeo::where('random_id', $request->random_id)->first();
+                $basic_seo->milestone_id = $milestone->id;
+                $basic_seo->save();
+            }
+
+
             return response()->json([
                 'status' => 200,
                 'message' => 'Milestone Added Successfully',
@@ -2053,6 +2088,8 @@ class ContractController extends AccountBaseController
         $viewPermission = user()->permission('view_contract');
         $this->viewDiscussionPermission = $viewDiscussionPermission = user()->permission('view_contract_discussion');
         $this->viewContractFilesPermission = $viewContractFilesPermission = user()->permission('view_contract_files');
+        $this->viewContractMilestonePermission = $viewContractMilestonePermission = user()->permission('view_contract_milestone');
+        $this->viewContractCrossDepartmentalWorkPermission = $viewContractCrossDepartmentalWorkPermission = user()->permission('view_contract_cross_departmental_work');
 
         $this->contract = Contract::with([
 
@@ -2060,6 +2097,16 @@ class ContractController extends AccountBaseController
             'client.clientDetails',
             'files' => function ($q) use ($viewContractFilesPermission) {
                 if ($viewContractFilesPermission == 'added') {
+                    $q->where('added_by', user()->id);
+                }
+            },
+            'milestone' => function ($q) use ($viewContractMilestonePermission) {
+                if ($viewContractMilestonePermission == 'added') {
+                    $q->where('added_by', user()->id);
+                }
+            },
+            'cross_departmental_work' => function ($q) use ($viewContractCrossDepartmentalWorkPermission) {
+                if ($viewContractCrossDepartmentalWorkPermission == 'added') {
                     $q->where('added_by', user()->id);
                 }
             },
@@ -2093,6 +2140,12 @@ class ContractController extends AccountBaseController
                 break;
             case 'files':
                 $this->view = 'contracts.ajax.files';
+                break;
+            case 'milestone':
+                $this->view = 'contracts.ajax.milestone';
+                break;
+            case 'cross_departmental_work':
+                $this->view = 'contracts.ajax.cross_departmental_work';
                 break;
             case 'renew':
                 $this->view = 'contracts.ajax.renew';

@@ -1238,16 +1238,18 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
+
 //Service type section
-Route::get('/deals/service-type/web-content', [HomeController::class, 'webContent']);
+Route::get('/deals/service-type/web-content/{id}/{random_id}', [HomeController::class, 'webContent']);
+Route::post('/deals/link-store', [HomeController::class, 'storeLink'])->name('store-link');
 Route::post('/deals/store/web-content', [HomeController::class, 'storeWebContent'])->name('store_web_content');
-Route::get('/deals/service-type/blogs-articles', [HomeController::class, 'blogArticle']);
+Route::get('/deals/service-type/blogs-articles/{id}/{random_id}', [HomeController::class, 'blogArticle']);
 Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
-Route::get('/deals/service-type/product-description', [HomeController::class, 'productDescription']);
+Route::get('/deals/service-type/product-description/{id}/{random_id}', [HomeController::class, 'productDescription']);
 Route::post('/deals/store/product-description', [HomeController::class, 'storeProductDescription'])->name('store_product_description');
-Route::get('/deals/service-type/product-category', [HomeController::class, 'productCategory']);
+Route::get('/deals/service-type/product-category/{id}/{random_id}', [HomeController::class, 'productCategory']);
 Route::post('/deals/store/product-category', [HomeController::class, 'storeProductCategory'])->name('store_product_category');
-Route::get('/deals/service-type/basic-seo', [HomeController::class, 'productBasicSeo']);
+Route::get('/deals/service-type/basic-seo/{id}/{random_id}', [HomeController::class, 'productBasicSeo']);
 Route::post('/deals/store/basic-seo', [HomeController::class, 'storeProductBasicSeo'])->name('store_product_basic_seo');
 /* Account prefix routes end here */
 //store custom lead route for seaopage1
@@ -1353,6 +1355,58 @@ Route::put('/projects/update-website-theme/{id}', [ProjectController::class, 'up
 Route::get('/projects/view-website-plugin', [ProjectController::class, 'viewWebsitePlugin'])->name('project-view-website-plugin');
 Route::post('/projects/add-website-plugin', [ProjectController::class, 'storeWebsitePlugin'])->name('add-website-plugin');
 Route::put('/projects/update-website-plugin/{id}', [ProjectController::class, 'updateWebsitePlugin']);
+
+
+//Cross Departmental Work
+Route::get('/projects/web-content-view/{id}', [ProjectController::class, 'viewWebContent'])->name('viewWebContent');
+Route::get('/projects/blog-article-view/{id}', [ProjectController::class, 'viewBlogArticle'])->name('viewBlogArticle');
+Route::get('/projects/product-description-view/{id}', [ProjectController::class, 'viewProductDescription'])->name('viewProductDescription');
+Route::get('/projects/product-category-collection-view/{id}', [ProjectController::class, 'viewProductCategoryCollection'])->name('viewProductCategoryCollection');
+Route::get('/projects/basic-seo-view/{id}', [ProjectController::class, 'viewBasicSEO'])->name('viewBasicSEO');
+
+// Service type Edit
+Route::get('/projects/web-content-edit/{id}', [ProjectController::class, 'EditWebContent'])->name('EditWebContent');
+Route::get('/projects/blog-article-edit/{id}', [ProjectController::class, 'EditBlogArticle'])->name('EditBlogArticle');
+Route::get('/projects/product-description-edit/{id}', [ProjectController::class, 'EditProductDescription'])->name('EditProductDescription');
+Route::get('/projects/product-category-edit/{id}', [ProjectController::class, 'EditProductCategory'])->name('EditProductCategory');
+Route::get('/projects/basic-seo-edit/{id}', [ProjectController::class, 'EditBasicSEO'])->name('EditBasicSEO');
+
+// Service type Update
+Route::put('/projects/update-sales-web-content/{id}', [ProjectController::class, 'updateSalesWebContent']);
+Route::put('/projects/update-sales-page-list/{id}', [ProjectController::class, 'updateSalesWebContentPageList']);
+Route::put('/projects/update-sales-reference-website/{id}', [ProjectController::class, 'updateSalesWebContentReferenceWebsite']);
+Route::put('/projects/update-sales-business-information/{id}', [ProjectController::class, 'updateSalesWebContentBusinessInfo']);
+Route::put('/projects/update-sales-demographic-information/{id}', [ProjectController::class, 'updateSalesWebContentDemographicInfo']);
+
+Route::put('/projects/update-sales-blog-article/{id}', [ProjectController::class, 'updateSalesBlogArticle']);
+Route::put('/projects/update-sales-blog-article-business-info/{id}', [ProjectController::class, 'updateSalesBlogArticleBusinessInfo']);
+Route::put('/projects/update-sales-blog-article-reference-blog/{id}', [ProjectController::class, 'updateSalesBlogArticleReferenceblog']);
+Route::put('/projects/update-sales-blog-article-topics-info/{id}', [ProjectController::class, 'updateSalesBlogArticleTopiceInfo']);
+Route::put('/projects/update-sales-blog-article-keywords-info/{id}', [ProjectController::class, 'updateSalesBlogArticleKeywordsInfo']);
+
+Route::post('/projects/update-pm-web-content', [ProjectController::class, 'updatePmWebContent'])->name('pm_web_content_update');
+Route::post('/projects/update-pm-blog-article', [ProjectController::class, 'updatePmBlogArticle'])->name('pm_blog_article_update');
+Route::post('/projects/update-pm-product_description', [ProjectController::class, 'updatePmProductDescription'])->name('pm_product_description_update');
+Route::post('/projects/update-pm-product_category', [ProjectController::class, 'updatePmProductCategory'])->name('pm_product_category_update');
+Route::post('/projects/update-pm-basic-seo', [ProjectController::class, 'updatePmBasicSEO'])->name('pm_basic_seo_update');
+
+Route::put('/projects/update-product-description/{id}', [ProjectController::class, 'updateProductDescription']);
+Route::put('/projects/update-sales-product-description-business-info/{id}', [ProjectController::class, 'updateSalesProductDescriptionBusinessInfo']);
+Route::put('/projects/update-sales-product-description-reference-blog/{id}', [ProjectController::class, 'updateSalesProductDescriptionReferenceblog']);
+Route::put('/projects/update-sales-product-description-product-list/{id}', [ProjectController::class, 'updateSalesProductDescriptionProductList']);
+
+Route::put('/projects/update-product-category/{id}', [ProjectController::class, 'updateProductCategory']);
+Route::put('/projects/update-sales-product-category-business-info/{id}', [ProjectController::class, 'updateSalesProductCategoryBusinessInfo']);
+Route::put('/projects/update-sales-product-category-reference-blog/{id}', [ProjectController::class, 'updateSalesProductCategoryReferenceblog']);
+Route::put('/projects/update-sales-product-category-product-list/{id}', [ProjectController::class, 'updateSalesProductCategoryProductList']);
+
+Route::put('/projects/update-basic-seo/{id}', [ProjectController::class, 'updateBasicSEO']);
+Route::put('/projects/update-sales-basic-seo-google-search/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleSearch']);
+Route::put('/projects/update-sales-basic-seo-google-analytic/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleAnalytic']);
+Route::put('/projects/update-sales-basic-seo-google-account-info/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleAccountInfo']);
+Route::put('/projects/update-sales-basic-seo-cms/{id}', [ProjectController::class, 'updateSalesBasicSeoShareCms']);
+
+
 
 
 //add project niche

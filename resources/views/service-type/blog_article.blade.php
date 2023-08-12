@@ -65,7 +65,8 @@
 
                 <form class="row g-3" action="" method="post" id="storeBlogArticle">
                 @csrf
-
+                    <input type="hidden" name="deal_id" id="deal_id" value="{{$id}}">
+                    <input type="hidden" name="random_id" id="random_id" value="{{$random_id}}">
                 <!-- Website Link & Niche Starts Here -->
                     <div class="row mt-3">
                         <div class="col-md-3">
@@ -73,9 +74,11 @@
                         </div>
                         <div class="col-md-6">
                             <input type="url" name="website_link" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                            <span id="website_link_error" class="text-danger"></span>
                         </div>
                         <div class="col-md-3">
                             <input type="text" name="website_niche" id="website_niche" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                            <span id="website_niche_error" class="text-danger"></span>
                         </div>
                     </div>
                     <!-- Website Link & Niche Ends Here -->
@@ -86,6 +89,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="website_name" id="website_name" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                            <span id="website_name_error" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -95,7 +99,10 @@
                         <div class="col-md-9">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!"></textarea>
+                                    <div class="form-group">
+                                        <textarea name="business_information" id="business_information" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!"></textarea>
+                                    </div>
+                                    <span id="business_information_error" class="text-danger"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -115,6 +122,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <span id="share_file_info_error" class="text-danger"></span>
                                 </div>
                                 <div class="row mt-3" id="folderLinkForm" style="display: none;">
                                     <div class="col-md-10 dynamic-folder-link" id="dynamic-folder-link-list-1">
@@ -163,6 +171,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="product_no" id="product_no" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
+                            <span id="product_no_error" class="text-danger"></span>
                         </div>
                     </div>
                     <!--Topics-->
@@ -189,6 +198,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <span id="topic_info_error" class="text-danger"></span>
                                 </div>
                                 <div class="row mt-3" id="topicForm" style="display: none;">
                                     <div class="col-md-10 dynamic-topic-link" id="dynamic-topic-link-list-1">
@@ -233,6 +243,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <span id="keyword_info_error" class="text-danger"></span>
                                 </div>
                                 <div class="row mt-3" id="keywordForm" style="display: none;">
                                     <div class="col-md-10 dynamic-keyword-link" id="dynamic-keyword-link-list-1">
@@ -253,7 +264,7 @@
                         </div>
                     </div>
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn2">Submit</button>
+                        <button type="submit" data-name="submitted" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn2">Submit</button>
                     </div>
                 </form>
             </div>
@@ -265,17 +276,29 @@
 <script>
     $(document).ready(function() {
         $('#yesBtn').click(function() {
-            $('#folderLinkForm').toggle();
+            $('#folderLinkForm').show();
+        });
+
+        $('#noBtn').click(function() {
+            $('#folderLinkForm').hide();
         });
     });
     $(document).ready(function() {
         $('#topicBtn2').click(function() {
-            $('#topicForm').toggle();
+            $('#topicForm').show();
+        });
+
+        $('#topicBtn1').click(function() {
+            $('#topicForm').hide();
         });
     });
     $(document).ready(function() {
         $('#keywordBtn2').click(function() {
-            $('#keywordForm').toggle();
+            $('#keywordForm').show();
+        });
+
+        $('#keywordBtn1').click(function() {
+            $('#keywordForm').hide();
         });
     });
     $('#submitBtn2').click(function(e){
@@ -283,6 +306,7 @@
         // console.log(formData);
         $('#submitBtn2').attr("disabled", true);
         $('#submitBtn2').html("Processing...");
+        var dataName = this.getAttribute("data-name");
         var share_file_info = $('input[name="share_file_info"]:checked').val();
         var topic_info = $('input[name="topic_info"]:checked').val();
         var keyword_info = $('input[name="keyword_info"]:checked').val();
@@ -312,6 +336,8 @@
             'website_niche': document.getElementById("website_niche").value,
             'website_name': document.getElementById("website_name").value,
             'business_information': document.getElementById("business_information").value,
+            'product_no': document.getElementById("product_no").value,
+            'random_id': document.getElementById("random_id").value,
             'share_file_info': share_file_info,
             'folder_link': folder_link_values,
             'blog_url': blog_url_values,
@@ -319,6 +345,8 @@
             'topic_link': topic_link_values,
             'keyword_info': keyword_info,
             'keyword_link': keyword_link_values,
+            'status': dataName,
+            'deal_id': {{$id}},
         }
         // console.log(data);
         $.ajaxSetup({
@@ -342,6 +370,46 @@
             },
             error: function(error) {
                 // console.log(response);
+                if(error.responseJSON.errors.website_link){
+                    $('#website_link_error').text(error.responseJSON.errors.website_link);
+                }else{
+                    $('#website_link_error').text('');
+                }
+                if(error.responseJSON.errors.website_niche){
+                    $('#website_niche_error').text(error.responseJSON.errors.website_niche);
+                }else{
+                    $('#website_niche_error').text('');
+                }
+                if(error.responseJSON.errors.website_name){
+                    $('#website_name_error').text(error.responseJSON.errors.website_name);
+                }else{
+                    $('#website_name_error').text('');
+                }
+                if(error.responseJSON.errors.business_information){
+                    $('#business_information_error').text(error.responseJSON.errors.business_information);
+                }else{
+                    $('#business_information_error').text('');
+                }
+                if(error.responseJSON.errors.share_file_info){
+                    $('#share_file_info_error').text(error.responseJSON.errors.share_file_info);
+                }else{
+                    $('#share_file_info_error').text('');
+                }
+                if(error.responseJSON.errors.product_no){
+                    $('#product_no_error').text(error.responseJSON.errors.product_no);
+                }else{
+                    $('#product_no_error').text('');
+                }
+                if(error.responseJSON.errors.topic_info){
+                    $('#topic_info_error').text(error.responseJSON.errors.topic_info);
+                }else{
+                    $('#topic_info_error').text('');
+                }
+                if(error.responseJSON.errors.keyword_info){
+                    $('#keyword_info_error').text(error.responseJSON.errors.keyword_info);
+                }else{
+                    $('#keyword_info_error').text('');
+                }
                 $('#submitBtn2').attr("disabled", false);
                 $('#submitBtn2').html("Submit");
             }

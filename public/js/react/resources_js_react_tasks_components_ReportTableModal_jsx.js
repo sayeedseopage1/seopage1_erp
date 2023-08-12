@@ -80,6 +80,8 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
             id: row === null || row === void 0 ? void 0 : row.id,
             status: type
           }));
+          var body = document.getElementById('body');
+          body.style.cursor = 'default';
           close();
         }
       });

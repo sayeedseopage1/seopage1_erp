@@ -15,6 +15,11 @@ use App\Models\ProjectTimeLogBreak;
 use App\Models\Task;
 use Carbon\Carbon;
 use DB;
+use App\Models\BasicSeo;
+use App\Models\BlogArticle;
+use App\Models\ProductCategoryCollection;
+use App\Models\ProductDescription;
+use App\Models\WebContent;
 use Illuminate\Http\Request;
 use Auth;
 use Notification;
@@ -192,6 +197,32 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->original_currency_id = $currency->id;
 
         $milestone->save();
+
+        if($request->service_type == 'web-content'){
+            $web_content = WebContent::where('random_id', $request->randomId)->first();
+            $web_content->milestone_id = $milestone->id;
+            $web_content->save();
+        }
+        if($request->service_type == 'blogs-articles'){
+            $blog_article = BlogArticle::where('random_id', $request->randomId)->first();
+            $blog_article->milestone_id = $milestone->id;
+            $blog_article->save();
+        }
+        if($request->service_type == 'product-description'){
+            $product_description = ProductDescription::where('random_id', $request->randomId)->first();
+            $product_description->milestone_id = $milestone->id;
+            $product_description->save();
+        }
+        if($request->service_type == 'product-category'){
+            $product_category = ProductCategoryCollection::where('random_id', $request->randomId)->first();
+            $product_category->milestone_id = $milestone->id;
+            $product_category->save();
+        }
+        if($request->service_type == 'basic-seo'){
+            $basic_seo = BasicSeo::where('random_id', $request->randomId)->first();
+            $basic_seo->milestone_id = $milestone->id;
+            $basic_seo->save();
+        }
 
         $project = Project::where('id',$request->project_id)->first();
 

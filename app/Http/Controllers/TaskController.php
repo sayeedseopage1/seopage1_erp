@@ -126,6 +126,7 @@ class TaskController extends AccountBaseController
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
             'project_time_logs.start_time','project_time_logs.end_time',
+            'task_category.category_name',
         
             DB::raw('(SELECT COUNT(sub_tasks.id) FROM sub_tasks WHERE sub_tasks.task_id = tasks.id AND DATE(sub_tasks.created_at) >= "'.$startDate.'" AND DATE(sub_tasks.created_at) <= "'.$endDate.'") as subtasks_count')
             
@@ -139,6 +140,7 @@ class TaskController extends AccountBaseController
             ->join('users as pm_id', 'pm_id.id', 'projects.pm_id')
             ->join('project_milestones','project_milestones.id','tasks.milestone_id')
             ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+            ->leftJoin('task_category','task_category.id','tasks.task_category_id')
             ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')        
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
@@ -284,6 +286,7 @@ class TaskController extends AccountBaseController
             
         
            foreach ($tasks as $task) {
+            $task->files= TaskFile::where('task_id',$task->id)->get();
             $subtasks_hours_logged = Subtask::select('tasks.*')
             
             ->where('sub_tasks.task_id', $task->id) 
@@ -408,6 +411,8 @@ class TaskController extends AccountBaseController
             'project_deliverables.title as deliverable_title','task_approves.created_at as task_approval_date',
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
+            'task_category.category_name',
+            'task_files.filename',
             
         
             DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
@@ -426,9 +431,11 @@ class TaskController extends AccountBaseController
           
             ->join('project_milestones','project_milestones.id','tasks.milestone_id')
             ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+            ->leftJoin('task_category','task_category.id','tasks.task_category_id')
             ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')        
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+            ->leftJoin('task_files','task_files.task_id','tasks.id')
            
            
             ->groupBy('tasks.id')
@@ -603,7 +610,7 @@ class TaskController extends AccountBaseController
           
            
             
-            ->groupBy('tasks.id')
+          //  ->groupBy('tasks.id')
             ->orderBy('id', 'desc')
             ->get();
        
@@ -633,7 +640,7 @@ class TaskController extends AccountBaseController
            
            
             
-            ->groupBy('tasks.id')
+         //   ->groupBy('tasks.id')
             ->orderBy('id', 'desc')
             ->get();
        
@@ -1319,7 +1326,7 @@ class TaskController extends AccountBaseController
         $task->project_id = $request->project_id;
         $task->task_category_id = $request->category_id;
         $task->priority = $request->priority;
-        $task->board_column_id = $taskBoardColumn->id;
+        $task->board_column_id = 2;
 
         if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
             $dependentTask = Task::findOrFail($request->dependent_task_id);
@@ -1963,7 +1970,7 @@ class TaskController extends AccountBaseController
         $task->project_id = $request->project_id;
         $task->task_category_id = $request->category_id;
         $task->priority = $request->priority;
-        $task->board_column_id = $task->board_column_id;
+        $task->board_column_id = $request->board_column_id;
 
        
         $task->is_private = $request->has('is_private') ? 1 : 0;
@@ -2079,6 +2086,7 @@ class TaskController extends AccountBaseController
         }
         return response()->json([
             'status' => 200,
+            'task'=> $task,
             'message'=> 'Task updated successfully',
            
         ]);

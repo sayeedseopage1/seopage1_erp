@@ -65,6 +65,8 @@
 
                 <form class="row g-3" action="" method="post" id="storeBasicSEO">
                     @csrf
+                    <input type="hidden" name="deal_id" id="deal_id" value="{{$id}}">
+                    <input type="hidden" name="random_id" id="random_id" value="{{$random_id}}">
                     <!-- Site Owner's Name -->
                     <div class="row mt-3">
                         <div class="col-md-3">
@@ -72,6 +74,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="owner_name" id="owner_name" class="form-control placeholderText height-35 f-14" placeholder="Write site owner's name here">
+                            <span id="owner_name_error" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -82,6 +85,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="business_name" id="business_name" class="form-control placeholderText height-35 f-14" placeholder="Type your exact business name">
+                            <span id="business_name_error" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -92,6 +96,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="business_address" id="business_address" class="form-control placeholderText height-35 f-14" placeholder="Type full address of your business">
+                            <span id="business_address_error" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -102,6 +107,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="phone_number" id="phone_number" class="form-control placeholderText height-35 f-14" placeholder="Type phone number">
+                            <span id="phone_number_error" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -112,6 +118,7 @@
                         </div>
                         <div class="col-md-9">
                             <input type="text" name="zip_code" id="zip_code" class="form-control placeholderText height-35 f-14" placeholder="Type zip code">
+                            <span id="zip_code_error" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -135,6 +142,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="google_search_info_error" class="text-danger"></span>
                             <div class="mt-3" id="googleSearchYes" style="display:none;">
                                 <div class="d-flex">
                                     <label for="">add info@seopage1.net as an admin there</label>
@@ -145,15 +153,18 @@
                                         </label>
                                     </div>
                                 </div>
+                                <span id="done1_error" class="text-danger"></span>
                             </div>
                             <div class="mt-3" id="googleSearchNo" style="display:none;">
                                 <div class="row">
                                     <label for="">Please open and share a gmail login and password so we can use it to create an account for you</label>
                                     <div class="col-md-6">
                                         <input type="email" name="email1" id="email1" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
+                                        <span id="email1_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="password" name="password1" id="password1" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="text" name="password1" id="password1" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <span id="password1_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -180,6 +191,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="google_analytic_info_error" class="text-danger"></span>
                             <div class="mt-3" id="googleAnalyticYes" style="display:none;">
                                 <div class="d-flex">
                                     <label for="">add info@seopage1.net as an admin there</label>
@@ -190,15 +202,18 @@
                                         </label>
                                     </div>
                                 </div>
+                                <span id="done2_error" class="text-danger"></span>
                             </div>
                             <div class="mt-3" id="googleAnalyticNo" style="display:none;">
                                 <div class="row">
                                     <label for="">Please open and share a gmail login and password so we can use it to create an account for you</label>
                                     <div class="col-md-6">
                                         <input type="email" name="email2" id="email2" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
+                                        <span id="email2_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="password" name="password2" id="password2" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="text" name="password2" id="password2" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <span id="password2_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -225,6 +240,7 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="google_business_account_info_error" class="text-danger"></span>
                             <div class="mt-3" id="googleBusinessAccountYes" style="display:none;">
                                 <div class="d-flex">
                                     <label for="">add info@seopage1.net as an admin there</label>
@@ -235,15 +251,18 @@
                                         </label>
                                     </div>
                                 </div>
+                                <span id="done3_error" class="text-danger"></span>
                             </div>
                             <div class="mt-3" id="googleBusinessAccountNo" style="display:none;">
                                 <div class="row">
                                     <label for="">Please open and share a gmail login and password so we can use it to create an account for you</label>
                                     <div class="col-md-6">
                                         <input type="email" name="email3" id="email3" class="form-control placeholderText height-35 f-14" placeholder="Type email here">
+                                        <span id="email3_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-6">
                                         <input type="password" name="password3" id="password3" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <span id="password3_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -258,7 +277,7 @@
                         <div class="col-md-9">
                             <div class="form-group d-flex">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="share_cms_access_info" value="1" id="yesBtn4">
+                                    <input class="form-check-input" type="radio" name="share_cms_access_info" value="1" id="yesBtn4" >
                                     <label class="form-check-label" for="yesBtn4">
                                         Share Direct Access
                                     </label>
@@ -270,19 +289,23 @@
                                     </label>
                                 </div>
                             </div>
+                            <span id="share_cms_access_info_error" class="text-danger"></span>
                             <div class="mt-3" id="shareCMSYes" style="display:none;">
                                 <div class="row">
                                     <div class="col-md-4">
                                         <label for="">Login URl</label>
                                         <input type="url" name="url" id="url" class="form-control placeholderText height-35 f-14" placeholder="https://admin.com">
+                                        <span id="url_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="">Email/Username</label>
                                         <input type="text" name="user_name" id="user_name" class="form-control placeholderText height-35 f-14" placeholder="Type email/username here">
+                                        <span id="user_name_error" class="text-danger"></span>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="">Password</label>
-                                        <input type="password" name="password4" id="password4" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <input type="text" name="password4" id="password4" class="form-control placeholderText height-35 f-14" placeholder="Type password here">
+                                        <span id="password4_error" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -296,16 +319,12 @@
                                         </label>
                                     </div>
                                 </div>
+                                <span id="confirmAdding_error" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
-
-
-
-
-
                     <div class="col-12 text-center">
-                        <button type="submit" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn4">Submit</button>
+                        <button type="submit" data-name="submitted" class="btn btn-primary rounded-pill py-0 px-5" id="submitBtn4">Submit</button>
                     </div>
                 </form>
             </div>
@@ -354,6 +373,7 @@
         // console.log(formData);
         $('#submitBtn4').attr("disabled", true);
         $('#submitBtn4').html("Processing...");
+        var dataName = this.getAttribute("data-name");
         var google_search_info = $('input[name="google_search_info"]:checked').val();
         var google_analytic_info = $('input[name="google_analytic_info"]:checked').val();
         var google_business_account_info = $('input[name="google_business_account_info"]:checked').val();
@@ -387,6 +407,9 @@
             'user_name': document.getElementById("user_name").value,
             'password4': document.getElementById("password4").value,
             'confirmAdding': confirmAdding,
+            'status': dataName,
+            'deal_id': {{$id}},
+            'random_id': document.getElementById("random_id").value,
         }
         // console.log(data);
         $.ajaxSetup({
@@ -409,6 +432,116 @@
             },
             error: function(error) {
                 // console.log(response);
+                if(error.responseJSON.errors.owner_name){
+                    $('#owner_name_error').text(error.responseJSON.errors.owner_name);
+                }else{
+                    $('#owner_name_error').text('');
+                }
+                if(error.responseJSON.errors.business_name){
+                    $('#business_name_error').text(error.responseJSON.errors.business_name);
+                }else{
+                    $('#business_name_error').text('');
+                }
+                if(error.responseJSON.errors.business_address){
+                    $('#business_address_error').text(error.responseJSON.errors.business_address);
+                }else{
+                    $('#business_address_error').text('');
+                }
+                if(error.responseJSON.errors.phone_number){
+                    $('#phone_number_error').text(error.responseJSON.errors.phone_number);
+                }else{
+                    $('#phone_number_error').text('');
+                }
+                if(error.responseJSON.errors.zip_code){
+                    $('#zip_code_error').text(error.responseJSON.errors.zip_code);
+                }else{
+                    $('#zip_code_error').text('');
+                }
+                if(error.responseJSON.errors.google_search_info){
+                    $('#google_search_info_error').text(error.responseJSON.errors.google_search_info);
+                }else{
+                    $('#google_search_info_error').text('');
+                }
+                if(error.responseJSON.errors.done1){
+                    $('#done1_error').text(error.responseJSON.errors.done1);
+                }else{
+                    $('#done1_error').text('');
+                }
+                if(error.responseJSON.errors.email1){
+                    $('#email1_error').text(error.responseJSON.errors.email1);
+                }else{
+                    $('#email1_error').text('');
+                }
+                if(error.responseJSON.errors.password1){
+                    $('#password1_error').text(error.responseJSON.errors.password1);
+                }else{
+                    $('#password1_error').text('');
+                }
+                if(error.responseJSON.errors.google_analytic_info){
+                    $('#google_analytic_info_error').text(error.responseJSON.errors.google_analytic_info);
+                }else{
+                    $('#google_analytic_info_error').text('');
+                }
+                if(error.responseJSON.errors.done2){
+                    $('#done2_error').text(error.responseJSON.errors.done2);
+                }else{
+                    $('#done2_error').text('');
+                }
+                if(error.responseJSON.errors.email2){
+                    $('#email2_error').text(error.responseJSON.errors.email2);
+                }else{
+                    $('#email2_error').text('');
+                }
+                if(error.responseJSON.errors.password2){
+                    $('#password2_error').text(error.responseJSON.errors.password2);
+                }else{
+                    $('#password2_error').text('');
+                }
+                if(error.responseJSON.errors.google_business_account_info){
+                    $('#google_business_account_info_error').text(error.responseJSON.errors.google_business_account_info);
+                }else{
+                    $('#google_business_account_info_error').text('');
+                }
+                if(error.responseJSON.errors.done3){
+                    $('#done3_error').text(error.responseJSON.errors.done3);
+                }else{
+                    $('#done3_error').text('');
+                }
+                if(error.responseJSON.errors.email3){
+                    $('#email3_error').text(error.responseJSON.errors.email3);
+                }else{
+                    $('#email3_error').text('');
+                }
+                if(error.responseJSON.errors.password3){
+                    $('#password3_error').text(error.responseJSON.errors.password3);
+                }else{
+                    $('#password3_error').text('');
+                }
+                if(error.responseJSON.errors.share_cms_access_info){
+                    $('#share_cms_access_info_error').text(error.responseJSON.errors.share_cms_access_info);
+                }else{
+                    $('#share_cms_access_info_error').text('');
+                }
+                if(error.responseJSON.errors.url){
+                    $('#url_error').text(error.responseJSON.errors.url);
+                }else{
+                    $('#url_error').text('');
+                }
+                if(error.responseJSON.errors.user_name){
+                    $('#user_name_error').text(error.responseJSON.errors.user_name);
+                }else{
+                    $('#user_name_error').text('');
+                }
+                if(error.responseJSON.errors.password4){
+                    $('#password4_error').text(error.responseJSON.errors.password4);
+                }else{
+                    $('#password4_error').text('');
+                }
+                if(error.responseJSON.errors.confirmAdding){
+                    $('#confirmAdding_error').text(error.responseJSON.errors.confirmAdding);
+                }else{
+                    $('#confirmAdding_error').text('');
+                }
                 $('#submitBtn4').attr("disabled", false);
                 $('#submitBtn4').html("Submit");
             }
