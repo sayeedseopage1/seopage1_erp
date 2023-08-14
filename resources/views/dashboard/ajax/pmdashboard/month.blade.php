@@ -554,8 +554,8 @@
                                     echo '('.$totalPaymentComplete.' / '.$value->milestones->count().')';
                                 @endphp
                             </td>
-                            <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                            <td class="pl-20 text-capitalize">{{$value->deadline->format('Y-m-d')}}</td>
+                            <td class="pl-20 text-capitalize">{{$value->start_date}}</td>
+                            <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
                            
                             <td>
                                 @php
@@ -727,8 +727,8 @@
                                     <td class="pl-20 text-capitalize ">
                                         <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->client->name ?? 'N/A'}}" href="{{route('clients.show', $task->project->client_id ?? 0)}}" target="_blank">{{\Str::limit($task->project->client->name ?? 'N/A', 20, ' ...')}}</a>
                                     </td>
-                                    <td class="pl-20 text-capitalize">{{$task->start_date->format('Y-m-d') ?? '---'}}</td>
-                                    <td class="pl-20 text-capitalize">{{$task->due_date->format('Y-m-d') ?? '---'}}</td>
+                                    <td class="pl-20 text-capitalize">{{$task->start_date ?? '---'}}</td>
+                                    <td class="pl-20 text-capitalize">{{$task->due_date ?? '---'}}</td>
                                     <td class="pl-20 text-capitalize">
                                         @php
                                             $row = $task;

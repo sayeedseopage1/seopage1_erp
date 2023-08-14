@@ -27313,7 +27313,7 @@ var ProjectTasks = function ProjectTasks() {
                   children: "Subtasks"
                 })]
               })]
-            }), !isFetching && tableType.toLowerCase() === 'tasks' && lodash__WEBPACK_IMPORTED_MODULE_0___default().include([1, 4], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
+            }), !isFetching && tableType.toLowerCase() === 'tasks' && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 4], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
               onClick: handleTaskAddForm,
               isLoading: projectDeliverableStatusIsLoading,
               children: " + Add Task "

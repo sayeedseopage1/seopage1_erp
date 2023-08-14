@@ -151,7 +151,7 @@ const ProjectTasks = () => {
                            {
                            !isFetching && 
                             tableType.toLowerCase() === 'tasks' && 
-                            _.include([1,4], auth?.getRoleId() ) &&
+                            _.includes([1,4], auth?.getRoleId() ) &&
                                 <SubmitButton 
                                     onClick={handleTaskAddForm} 
                                     isLoading={projectDeliverableStatusIsLoading}
