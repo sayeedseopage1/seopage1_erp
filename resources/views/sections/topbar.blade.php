@@ -1,5 +1,9 @@
 <!-- HEADER START -->
-
+@php
+    $user = \Illuminate\Support\Facades\Auth::user();
+    $employ_details = \App\Models\EmployeeDetails::where('user_id',$user->id)->first();
+    $designation = \App\Models\Designation::where('id',$employ_details->designation_id)->first();
+@endphp
 <header class="main-header clearfix bg-white" id="header">
     <!-- NAVBAR LEFT(MOBILE MENU COLLAPSE) START-->
     <div class="navbar-left float-left d-flex align-items-center">
@@ -31,7 +35,19 @@
     <!-- NAVBAR RIGHT(SEARCH, ADD, NOTIFICATION, LOGOUT) START-->
 
     <div class="page-header-right float-right d-flex align-items-center">
-
+        <div class="d-flex align-items-center pr-2 mr-4 border-right">
+            <div class="user_image mr-2">
+                @if ($user->image)
+                    <img src="{{ asset('user-uploads/avatar/'.$user->image) }}" alt="" class="rounded-circle" width="36" height="36">
+                @else
+                    <img src="{{ asset('img/avatar.png') }}" alt="" class="rounded-circle" width="36" height="36">
+                @endif
+            </div>
+            <div class="user_name mr-3">
+                <span class="f-16 d-block">{{ $user->name }}</span>
+                <span class="f-12 d-block" style="margin-top:-0.2rem; color:#777;">{{ $designation->name }}</span>
+            </div>
+        </div>
     <!-- @if (!is_null($selfActiveTimer))
 
         <span class="border rounded f-14 py-2 px-2 d-none d-sm-block mr-3">

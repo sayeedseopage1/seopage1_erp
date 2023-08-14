@@ -10,6 +10,7 @@ use App\Http\Requests\Tasks\UpdateTask;
 use App\Models\BaseModel;
 use App\Models\EmployeeDetails;
 use App\Models\Pinned;
+use App\Models\PMProject;
 use App\Models\PmTaskGuideline;
 use App\Models\PMTaskGuidelineAuthorization;
 use App\Models\Project;
@@ -3904,18 +3905,35 @@ class TaskController extends AccountBaseController
         if($deliverables < 1)
         {
             return response()->json([
-                'message' => 'You cannot add task as didnot create any project deliverable',
+                'message' => 'You cannot add task as project manager did not create any project deliverable yet',
                 'status'=> 400,
                
             ]);
 
         }else 
         {
-            return response()->json([
-                'message' => 'You can create tasks',
-                'status'=> 200,
-               
-            ]);
+            $project_assign_date = PMProject::where('project_id', $id)->value('created_at');
+            $project= Project::where('id',$id)->first();
+            
+           // dd($hoursDifference);
+            if($project->deliverable_authorizaton == '0')
+            {
+                return response()->json([
+                    'message' => 'You cannot create task as top management did not authorized the deliverable yet',
+                    'status'=> 400,
+                   
+                ]);
+
+            }else 
+            {
+                return response()->json([
+                    'message' => 'You can create tasks',
+                    'status'=> 200,
+                   
+                ]);
+
+            }
+           
 
         }
 
