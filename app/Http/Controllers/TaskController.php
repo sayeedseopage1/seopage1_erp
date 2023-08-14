@@ -3658,8 +3658,10 @@ class TaskController extends AccountBaseController
             'tasks.*',
             'tasks.id as task_id',
             'tasks.heading as task_name',
+            'client.id as client_id','client.name as client_name'
 
         ])->join('projects', 'projects.id', '=', 'tasks.project_id',)
+            ->join('users as client','client.id','projects.client_id')
 
             ->join('task_users as task_assign_on', 'task_assign_on.task_id', '=', 'tasks.id')->where('task_assign_on.user_id', $id)->where('projects.status', '=', 'in progress')->get();
         return response()->json($data);
@@ -3894,6 +3896,28 @@ class TaskController extends AccountBaseController
        // $subtask_count = 0;
         
       
+
+    }
+    public function get_tasks_project_deliverable($id)
+    {
+        $deliverables = ProjectDeliverable::where('project_id',$id)->count();
+        if($deliverables < 1)
+        {
+            return response()->json([
+                'message' => 'You cannot add task as didnot create any project deliverable',
+                'status'=> 400,
+               
+            ]);
+
+        }else 
+        {
+            return response()->json([
+                'message' => 'You can create tasks',
+                'status'=> 200,
+               
+            ]);
+
+        }
 
     }
 }

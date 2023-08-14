@@ -52,7 +52,7 @@
                 <div class="form-group">
                     <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
                     <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
-                        <option value="">--</option>
+                        <option value="web-development">Web Development</option>
                         <option value="web-content">Webcontent</option>
                         <option value="blogs-articles">Blogs/articles</option>
                         <option value="product-description">Product descriptions</option>
@@ -231,4 +231,23 @@ $(document).ready(function() {
                 alert("Unable to copy: " + error);
             });
     });
+
+    $(document).ready(function() {
+    function toggleCreateButton() {
+        var selectedServiceType = $('#service_type').val();
+        var createButton = $('#save-project-milestone');
+
+        if (selectedServiceType === 'web-development') {
+            createButton.prop('disabled', false);
+        } else {
+            createButton.prop('disabled', true);
+        }
+    }
+
+    toggleCreateButton();
+
+    $('#service_type').change(function() {
+        toggleCreateButton();
+    });
+});
 </script>

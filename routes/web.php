@@ -782,6 +782,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     //Route::resource('tasks', TaskController::class)->only([ 'show', 'create', 'store', 'edit', 'update', 'destroy']);
     //pm task guidelines 
+    Route::get('tasks/add-tasks/project-deliverables/{id}', [TaskController::class, 'get_tasks_project_deliverable']);
     Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
     Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
     Route::get('tasks/check-pm-taskguideline/{id}', [TaskController::class, 'CheckPmTaskGuideline']);
@@ -1448,7 +1449,7 @@ Route::post('/create-auto-milestone', [ProjectMilestoneController::class, 'creat
 Route::post('get-timelogs/time_log_history', [TimelogReportController::class, 'timelog_history'])->name('get-timelogs-report');
 Route::any('get-timelogs/{type}', [TimelogReportController::class, 'getTimeLog'])->whereIn('type', ['tasks', 'projects', 'employees'])->name('get-timelogs');
 
-Route::get('get-projects/{type?}', [ProjectController::class, 'get_project_json']);
+
 
 
 
