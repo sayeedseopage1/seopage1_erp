@@ -170,7 +170,7 @@ export const SubTasksTableColumns = [
     {
       id: 'due_date',
       header: 'Due Date',
-      accessorKey: "due_date",
+      accessorFn: row =>row?.due_date ? dayjs(row?.due_date).format('DD-MM-YYYY') : '--' ,
       cell: ({row}) => {
         const data = row?.original;
         let date = data?.due_date;
@@ -195,7 +195,7 @@ export const SubTasksTableColumns = [
     {
       id: 'start_date',
       header: 'Started Date',
-      accessorKey: 'start_date',
+      accessorFn: row =>`${row?.start_date ? dayjs(row?.start_date).format('DD-MM-YYYY') : '--'}` ,
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -212,7 +212,7 @@ export const SubTasksTableColumns = [
     {
       id: 'completion_date',
       header: 'Completion Date',
-      accessorKey: 'completion_date',
+      accessorFn: row =>`${row?.completion_date ? dayjs(row?.completion_date).format('DD-MM-YYYY') : '--'}` ,
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -232,6 +232,7 @@ export const SubTasksTableColumns = [
     {
       id: 'approved_on',
       header: 'Approved On',
+      accessorFn: row => `${row?.task_approval_date ? dayjs(row?.task_approval_date).format('DD-MM-YYYY') : 'Not Completed Yet!'}`,
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -274,9 +275,9 @@ export const SubTasksTableColumns = [
     {
       id: 'assigned_by',
       header: 'Assigned By',
+      accessorKey: 'added_by_name',
       cell: ({row}) => {
         const data = row?.original;
-        
         return(
           <Person
             url={`/account/employees/${data?.added_by}` }
@@ -289,6 +290,7 @@ export const SubTasksTableColumns = [
     {
       id: 'assigned_to',
       header: 'Assigned To',
+      accessorKey: 'assigned_to_name',
       cell: ({row}) => {
         const data = row?.original;
         return( 
@@ -303,6 +305,7 @@ export const SubTasksTableColumns = [
     {
       id: 'status',
       header: 'Task Status',
+      accessorKey: 'column_name',
       cell: ({row}) => {
         const data = row?.original;
         return(

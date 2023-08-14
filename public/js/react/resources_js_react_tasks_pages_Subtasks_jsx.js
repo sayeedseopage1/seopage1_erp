@@ -255,7 +255,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'due_date',
   header: 'Due Date',
-  accessorKey: "due_date",
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.due_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.due_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref10) {
     var _date;
     var row = _ref10.row;
@@ -282,7 +284,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'start_date',
   header: 'Started Date',
-  accessorKey: 'start_date',
+  accessorFn: function accessorFn(row) {
+    return "".concat(row !== null && row !== void 0 && row.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.start_date).format('DD-MM-YYYY') : '--');
+  },
   cell: function cell(_ref11) {
     var row = _ref11.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -295,7 +299,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'completion_date',
   header: 'Completion Date',
-  accessorKey: 'completion_date',
+  accessorFn: function accessorFn(row) {
+    return "".concat(row !== null && row !== void 0 && row.completion_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.completion_date).format('DD-MM-YYYY') : '--');
+  },
   cell: function cell(_ref12) {
     var row = _ref12.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -308,6 +314,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'approved_on',
   header: 'Approved On',
+  accessorFn: function accessorFn(row) {
+    return "".concat(row !== null && row !== void 0 && row.task_approval_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.task_approval_date).format('DD-MM-YYYY') : 'Not Completed Yet!');
+  },
   cell: function cell(_ref13) {
     var row = _ref13.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -347,6 +356,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'assigned_by',
   header: 'Assigned By',
+  accessorKey: 'added_by_name',
   cell: function cell(_ref16) {
     var row = _ref16.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -359,6 +369,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'assigned_to',
   header: 'Assigned To',
+  accessorKey: 'assigned_to_name',
   cell: function cell(_ref17) {
     var row = _ref17.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -371,6 +382,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'status',
   header: 'Task Status',
+  accessorKey: 'column_name',
   cell: function cell(_ref18) {
     var row = _ref18.row;
     var data = row === null || row === void 0 ? void 0 : row.original;

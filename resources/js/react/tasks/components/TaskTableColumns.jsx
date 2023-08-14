@@ -178,7 +178,7 @@ export const TaskTableColumns = [
     {
       id: 'due_date',
       header: 'Due Date',
-      accessorKey: "due_date",
+      accessorFn: row => row?.due_date ? dayjs(row?.due_date).format('DD-MM-YYYY') : '--',
       cell: ({row}) => {
         const data = row?.original;
         let date = data?.due_date;
@@ -206,7 +206,7 @@ export const TaskTableColumns = [
     {
       id: 'start_date',
       header: 'Started Date',
-      accessorKey: 'start_date',
+      accessorFn: row => row?.start_date ? dayjs(row?.start_date).format('DD-MM-YYYY') : '--',
       cell: ({row}) => {
         const data = row?.original;
         return(
@@ -223,7 +223,7 @@ export const TaskTableColumns = [
     {
       id: 'completion_date',
       header: 'Completion Date',
-      accessorKey: 'completion_date',
+      accessorFn: row => row?.completion_date ? dayjs(row?.completion_date).format('DD-MM-YYYY') : '--',
       cell: ({row}) => {
         const data = row?.original;
         return(

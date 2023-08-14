@@ -101,7 +101,7 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
       pagination,
       tableName,
       filter,
-      globalFilter:search
+      globalFilter: _.trim(search)
     },
     onGlobalFilterChange: setGlobalFilter,
     autoResetPageIndex: !skipPageReset,

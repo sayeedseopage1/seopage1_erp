@@ -22935,6 +22935,167 @@ var Placeholder = function Placeholder(_ref) {
 
 /***/ }),
 
+/***/ "./resources/js/react/hooks/useProject.jsx":
+/*!*************************************************!*\
+  !*** ./resources/js/react/hooks/useProject.jsx ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useProject": () => (/* binding */ useProject)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/api/projectApiSlice */ "./resources/js/react/services/api/projectApiSlice.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+var useProject = function useProject() {
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (s) {
+      return s.tasks;
+    }),
+    tasks = _useSelector.tasks,
+    subtasks = _useSelector.subtasks;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    deliverableStatus = _React$useState2[0],
+    setDeliverableStatus = _React$useState2[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    projectGuidelineStatus = _React$useState4[0],
+    setProjectGuidelineStatus = _React$useState4[1];
+
+  // get project guideline status
+  // query call
+  var _useLazyCheckPMTaskGu = (0,_services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_2__.useLazyCheckPMTaskGuidelineQuery)(),
+    _useLazyCheckPMTaskGu2 = _slicedToArray(_useLazyCheckPMTaskGu, 2),
+    checkPMTaskGuideline = _useLazyCheckPMTaskGu2[0],
+    projectGuidelineStatusIsLoading = _useLazyCheckPMTaskGu2[1].isFetching;
+
+  // project guideline status function
+  var getProjectGuidelineStaus = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(projectId) {
+      var res;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              if (!(projectGuidelineStatus === true)) {
+                _context.next = 3;
+                break;
+              }
+              return _context.abrupt("return", true);
+            case 3:
+              _context.next = 5;
+              return checkPMTaskGuideline(projectId).unwrap();
+            case 5:
+              res = _context.sent;
+              if (!((res === null || res === void 0 ? void 0 : res.status) === 200)) {
+                _context.next = 9;
+                break;
+              }
+              setProjectGuidelineStatus(true);
+              return _context.abrupt("return", true);
+            case 9:
+              return _context.abrupt("return", false);
+            case 12:
+              _context.prev = 12;
+              _context.t0 = _context["catch"](0);
+              console.error(_context.t0);
+              return _context.abrupt("return", false);
+            case 16:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 12]]);
+    }));
+    return function getProjectGuidelineStaus(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+
+  // deliverable status
+  var _useLazyGetProjectDel = (0,_services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_2__.useLazyGetProjectDeliverableStatusQuery)(),
+    _useLazyGetProjectDel2 = _slicedToArray(_useLazyGetProjectDel, 2),
+    getProjectDeliverableStatus = _useLazyGetProjectDel2[0],
+    projectDeliverableStatusIsLoading = _useLazyGetProjectDel2[1].isFetching;
+
+  // get deliverable status function
+  var isDeliverable = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(projectId) {
+      var res;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return getProjectDeliverableStatus(projectId).unwrap();
+            case 3:
+              res = _context2.sent;
+              if (!((res === null || res === void 0 ? void 0 : res.status) === 400)) {
+                _context2.next = 7;
+                break;
+              }
+              Swal.fire({
+                position: "center",
+                icon: "error",
+                title: res.message,
+                showConfirmButton: true
+              });
+              return _context2.abrupt("return", false);
+            case 7:
+              if (!((res === null || res === void 0 ? void 0 : res.status) === 200)) {
+                _context2.next = 10;
+                break;
+              }
+              setDeliverableStatus(true);
+              return _context2.abrupt("return", true);
+            case 10:
+              return _context2.abrupt("return", false);
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](0);
+              console.log(_context2.t0);
+              return _context2.abrupt("return", false);
+            case 17:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 13]]);
+    }));
+    return function isDeliverable(_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+  return {
+    tasks: tasks,
+    subtasks: subtasks,
+    isDeliverable: isDeliverable,
+    getProjectGuidelineStaus: getProjectGuidelineStaus,
+    projectGuidelineStatusIsLoading: projectGuidelineStatusIsLoading,
+    projectDeliverableStatusIsLoading: projectDeliverableStatusIsLoading
+  };
+};
+
+/***/ }),
+
 /***/ "./resources/js/react/hooks/useUsers.jsx":
 /*!***********************************************!*\
   !*** ./resources/js/react/hooks/useUsers.jsx ***!
@@ -24522,7 +24683,9 @@ var ProjectTableColumns = [{
 }, {
   id: 'due_date',
   header: 'Due Date',
-  accessorKey: "due_date",
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.due_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.due_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref10) {
     var _date;
     var row = _ref10.row;
@@ -24550,7 +24713,9 @@ var ProjectTableColumns = [{
 }, {
   id: 'start_date',
   header: 'Started Date',
-  accessorKey: 'start_date',
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.start_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref11) {
     var row = _ref11.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -24563,7 +24728,9 @@ var ProjectTableColumns = [{
 }, {
   id: 'completion_date',
   header: 'Completion Date',
-  accessorKey: 'completion_date',
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.completion_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.completion_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref12) {
     var row = _ref12.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -25150,7 +25317,7 @@ var SubTasksTableColumns = [{
   id: 'project',
   header: 'Project',
   accessorFn: function accessorFn(row) {
-    return "".concat(row === null || row === void 0 ? void 0 : row.project_id).concat(project_name);
+    return "".concat(row === null || row === void 0 ? void 0 : row.project_id).concat(row === null || row === void 0 ? void 0 : row.project_name);
   },
   cell: function cell(_ref6) {
     var row = _ref6.row;
@@ -25209,7 +25376,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'due_date',
   header: 'Due Date',
-  accessorKey: "due_date",
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.due_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.due_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref10) {
     var _date;
     var row = _ref10.row;
@@ -25236,7 +25405,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'start_date',
   header: 'Started Date',
-  accessorKey: 'start_date',
+  accessorFn: function accessorFn(row) {
+    return "".concat(row !== null && row !== void 0 && row.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.start_date).format('DD-MM-YYYY') : '--');
+  },
   cell: function cell(_ref11) {
     var row = _ref11.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -25249,7 +25420,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'completion_date',
   header: 'Completion Date',
-  accessorKey: 'completion_date',
+  accessorFn: function accessorFn(row) {
+    return "".concat(row !== null && row !== void 0 && row.completion_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.completion_date).format('DD-MM-YYYY') : '--');
+  },
   cell: function cell(_ref12) {
     var row = _ref12.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -25262,6 +25435,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'approved_on',
   header: 'Approved On',
+  accessorFn: function accessorFn(row) {
+    return "".concat(row !== null && row !== void 0 && row.task_approval_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.task_approval_date).format('DD-MM-YYYY') : 'Not Completed Yet!');
+  },
   cell: function cell(_ref13) {
     var row = _ref13.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -25301,6 +25477,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'assigned_by',
   header: 'Assigned By',
+  accessorKey: 'added_by_name',
   cell: function cell(_ref16) {
     var row = _ref16.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -25313,6 +25490,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'assigned_to',
   header: 'Assigned To',
+  accessorKey: 'assigned_to_name',
   cell: function cell(_ref17) {
     var row = _ref17.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -25325,6 +25503,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'status',
   header: 'Task Status',
+  accessorKey: 'column_name',
   cell: function cell(_ref18) {
     var row = _ref18.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -26877,7 +27056,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _tasks_components_TasksTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../tasks/components/TasksTable */ "./resources/js/react/tasks/components/TasksTable.jsx");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/api/projectApiSlice */ "./resources/js/react/services/api/projectApiSlice.js");
 /* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
 /* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
@@ -26891,7 +27070,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_TaskCreationForm__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../components/TaskCreationForm */ "./resources/js/react/projects/components/TaskCreationForm.jsx");
 /* harmony import */ var _components_ProjectTaskTableColumns__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/ProjectTaskTableColumns */ "./resources/js/react/projects/components/ProjectTaskTableColumns.jsx");
 /* harmony import */ var _components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../components/SubtaskTableColumns */ "./resources/js/react/projects/components/SubtaskTableColumns.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../tasks/components/SubmitButton */ "./resources/js/react/tasks/components/SubmitButton.jsx");
+/* harmony import */ var _hooks_useProject__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../hooks/useProject */ "./resources/js/react/hooks/useProject.jsx");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -26921,7 +27107,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
 var ProjectTasks = function ProjectTasks() {
+  var _window, _window$Laravel;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (s) {
       return s.tasks;
     }),
@@ -26967,17 +27157,13 @@ var ProjectTasks = function ProjectTasks() {
     _useLazyGetAllSubtask2 = _slicedToArray(_useLazyGetAllSubtask, 2),
     getAllSubtask = _useLazyGetAllSubtask2[0],
     subtaskFetching = _useLazyGetAllSubtask2[1].isFetching;
-  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_18__.useParams)();
-  var _useCheckPMTaskGuidel = (0,_services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_4__.useCheckPMTaskGuidelineQuery)(params === null || params === void 0 ? void 0 : params.projectId),
-    pmGuidelineStaus = _useCheckPMTaskGuidel.data,
-    pmGuidelineStatusIsFetching = _useCheckPMTaskGuidel.isFetching;
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
-    if ((pmGuidelineStaus === null || pmGuidelineStaus === void 0 ? void 0 : pmGuidelineStaus.status) === 200) {
-      setHasPMGuideline(true);
-    } else {
-      setHasPMGuideline(false);
-    }
-  }, [pmGuidelineStaus, pmGuidelineStatusIsFetching]);
+  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_21__.useParams)();
+  var _useProject = (0,_hooks_useProject__WEBPACK_IMPORTED_MODULE_18__.useProject)(),
+    isDeliverable = _useProject.isDeliverable,
+    getProjectGuidelineStaus = _useProject.getProjectGuidelineStaus,
+    projectDeliverableStatusIsLoading = _useProject.projectDeliverableStatusIsLoading;
+  var projectId = params === null || params === void 0 ? void 0 : params.projectId;
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_19__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
 
   // handle table filter
   var onFilter = function onFilter(query) {
@@ -27032,17 +27218,45 @@ var ProjectTasks = function ProjectTasks() {
     }
   }, [start_date, end_date, tableType]);
 
-  // table filter end
-
   // hanlde task add form
-  var handleTaskAddForm = function handleTaskAddForm(e) {
-    e.preventDefault();
-    hasPMGuideline ? setShowTaskCreationForm(true) : setShowProjectGuidelineForm(true);
-  };
+  var handleTaskAddForm = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
+      var deliverable, guideline;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              e.preventDefault();
+              _context.next = 3;
+              return isDeliverable(projectId);
+            case 3:
+              deliverable = _context.sent;
+              if (!deliverable) {
+                _context.next = 9;
+                break;
+              }
+              _context.next = 7;
+              return getProjectGuidelineStaus(projectId);
+            case 7:
+              guideline = _context.sent;
+              if (guideline) {
+                setShowTaskCreationForm(true);
+              } else setShowProjectGuidelineForm(true);
+            case 9:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+    return function handleTaskAddForm(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
   var isFetching = subtaskFetching || taskFetching;
   var singleTask = lodash__WEBPACK_IMPORTED_MODULE_0___default().head(tasks);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_TaskCreationForm__WEBPACK_IMPORTED_MODULE_14__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_TaskCreationForm__WEBPACK_IMPORTED_MODULE_14__["default"], {
       isOpen: showTaskCreationForm,
       close: function close() {
         return setShowTaskCreationForm(false);
@@ -27051,7 +27265,7 @@ var ProjectTasks = function ProjectTasks() {
       onSuccess: function onSuccess() {
         return onFilter({});
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_ProjectManagerGuideline__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_ProjectManagerGuideline__WEBPACK_IMPORTED_MODULE_12__["default"], {
       projectId: params.projectId,
       isOpen: showProjectGuidelineForm,
       openTaskForm: function openTaskForm() {
@@ -27060,38 +27274,38 @@ var ProjectTasks = function ProjectTasks() {
       close: function close() {
         return setShowProjectGuidelineForm(false);
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
       className: "sp1_tlr_container",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
         className: "sp1_tlr_tbl_container pt-1",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
           className: "sp1_table-navbar",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
             className: "d-flex align-items-center flex-wrap",
             style: {
               gap: '10px'
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"], {
               className: "",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Toggle, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Toggle, {
                 icon: false,
                 className: "sp1_table_tab--dd-toggle",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("i", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("i", {
                   className: "fa-solid fa-table"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
-                  children: tableType
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("i", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("span", {
+                  children: [" ", tableType, " "]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("i", {
                   className: "fa-solid fa-chevron-down f-12"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Menu, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Menu, {
                 className: "sp1_table_tab--dd-menu",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Item, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Item, {
                   onClick: function onClick() {
                     return setTableType('Tasks');
                   },
                   className: "sp1_table_tab--dd-item ".concat(tableType === 'Tasks' && 'active'),
                   children: "Tasks"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Item, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_8__["default"].Item, {
                   onClick: function onClick() {
                     return setTableType('Subtasks');
                   },
@@ -27099,68 +27313,69 @@ var ProjectTasks = function ProjectTasks() {
                   children: "Subtasks"
                 })]
               })]
-            }), !isFetching && tableType.toLowerCase() === 'tasks' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            }), !isFetching && tableType.toLowerCase() === 'tasks' && lodash__WEBPACK_IMPORTED_MODULE_0___default().include([1, 4], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_17__["default"], {
               onClick: handleTaskAddForm,
+              isLoading: projectDeliverableStatusIsLoading,
               children: " + Add Task "
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
             className: "sp1_table_tab",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_ProjectTasksFilterBar__WEBPACK_IMPORTED_MODULE_13__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_ProjectTasksFilterBar__WEBPACK_IMPORTED_MODULE_13__["default"], {
               onFilter: onFilter,
               page: tableType.toLowerCase()
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_11__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_11__["default"], {
               startDate: startDate,
               endDate: endDate,
               setEndDate: setEndDate,
               setStartDate: setStartDate
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
               className: "",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_tasks_components_Searchbox__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_Searchbox__WEBPACK_IMPORTED_MODULE_9__["default"], {
                 value: search,
                 onChange: setSearch,
                 className: "mb-1"
               })
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "d-flex w-100 align-items-center justify-content-center flex-wrap",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
             className: "d-flex align-items-center justify-content-center border p-2",
             style: {
               gap: '10px',
               width: 'fit-content'
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("span", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
                 style: {
                   color: "#5c5e60"
                 },
                 children: "Project Manager:"
-              }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("a", {
+              }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
                 href: "/account/employee/".concat(singleTask === null || singleTask === void 0 ? void 0 : singleTask.project_manager_id),
                 className: "text-success hover-underline",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("strong", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("strong", {
                   children: singleTask === null || singleTask === void 0 ? void 0 : singleTask.pm_id_name
                 })
               }), ","]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)("span", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
                 style: {
                   color: "#5c5e60"
                 },
                 children: " Client:"
-              }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("a", {
+              }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
                 href: "/account/clients/".concat(singleTask === null || singleTask === void 0 ? void 0 : singleTask.client_id),
                 className: "text-success hover-underline",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("strong", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("strong", {
                   children: singleTask === null || singleTask === void 0 ? void 0 : singleTask.client_name
                 })
               })]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "mt-3",
-          children: tableType.toLowerCase() === 'tasks' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_tasks_components_TasksTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: tableType.toLowerCase() === 'tasks' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_TasksTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
             isLoading: isFetching,
             filter: filter,
             tableName: "projectTasksTable",
@@ -27168,7 +27383,7 @@ var ProjectTasks = function ProjectTasks() {
             reportPermission: [5, 1, 8],
             hideColumns: ["project", "client", "project_manager"],
             tableColumns: _components_ProjectTaskTableColumns__WEBPACK_IMPORTED_MODULE_15__.ProjectTableColumns
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_tasks_components_SubtaskTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_SubtaskTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
             isLoading: isFetching,
             filter: filter,
             tableName: "projectSubTasksTable",
@@ -27885,6 +28100,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useGetMilestoneDetailsQuery": () => (/* binding */ useGetMilestoneDetailsQuery),
 /* harmony export */   "useLazyCheckPMTaskGuidelineQuery": () => (/* binding */ useLazyCheckPMTaskGuidelineQuery),
 /* harmony export */   "useLazyGetMilestoneDetailsQuery": () => (/* binding */ useLazyGetMilestoneDetailsQuery),
+/* harmony export */   "useLazyGetProjectDeliverableStatusQuery": () => (/* binding */ useLazyGetProjectDeliverableStatusQuery),
 /* harmony export */   "useStoreProjectGuidelineMutation": () => (/* binding */ useStoreProjectGuidelineMutation)
 /* harmony export */ });
 /* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
@@ -27918,6 +28134,12 @@ var projectApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndp
         query: function query(projectId) {
           return "/account/get-project-information/tasks/".concat(projectId);
         }
+      }),
+      // deliverable
+      getProjectDeliverableStatus: build.query({
+        query: function query(projectId) {
+          return "/account/tasks/add-tasks/project-deliverables/".concat(projectId);
+        }
       })
     };
   }
@@ -27926,7 +28148,8 @@ var useStoreProjectGuidelineMutation = projectApiSlice.useStoreProjectGuidelineM
   useLazyCheckPMTaskGuidelineQuery = projectApiSlice.useLazyCheckPMTaskGuidelineQuery,
   useCheckPMTaskGuidelineQuery = projectApiSlice.useCheckPMTaskGuidelineQuery,
   useGetMilestoneDetailsQuery = projectApiSlice.useGetMilestoneDetailsQuery,
-  useLazyGetMilestoneDetailsQuery = projectApiSlice.useLazyGetMilestoneDetailsQuery;
+  useLazyGetMilestoneDetailsQuery = projectApiSlice.useLazyGetMilestoneDetailsQuery,
+  useLazyGetProjectDeliverableStatusQuery = projectApiSlice.useLazyGetProjectDeliverableStatusQuery;
 
 
 /***/ }),
@@ -31443,379 +31666,6 @@ function SubTasksTable(_ref) {
       setSkipPageReset(false);
     }
   }, [data]);
-
-  // column
-  // const defaultColumns = React.useMemo(() => [
-  //   {
-  //     id: 'expend',
-  //     header: <span className='mx-2'><strong>#</strong></span>,
-  //     cell: ({row}) => <span className='mx-2'><strong>{row.index + 1}</strong></span>
-  //   },
-  //   {
-  //     id: 'task',
-  //     header: 'Task',
-  //     accessorFn: (row) => `${row.id}${row.heading}`,
-  //     cell: ({row}) => {
-  //       const data = row?.original;  
-  //       return (
-  //         <abbr title={data?.heading} style={{textDecoration: 'none'}}>
-  //           <div className='d-flex align-items-center' style={{gap: '10px'}}>
-  //               <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
-  //           </div>
-  //         </abbr>
-  //       )
-  //     }
-  //   },
-  //   {
-  //     id: 'timer_status',
-  //     header: 'Timer Status',
-  //     accessorKey: 'subtasks_timer_active',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       const count = data?.subtasks_timer_active;
-  //       const subtaskCount = _.size(data?.subtasks_count)
-  //       const isActive = count > 0;
-  //       let serverTime = 0;
-  //       let localTime = 0;
-  //       let timer = 0;
-
-  //        if(data?.start_time && _.isNull(data?.end_time)){
-  //           serverTime =compareDate.dayjs(data?.start_time).unix();
-  //           localTime = compareDate.dayjs().unix();
-  //           timer = localTime - serverTime;
-  //        }
-
-  //        const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
-
-  //       const color = (isActive || clockIsRunning) ? '#54B688' : '#DCDEE1'
-  //       return(
-  //         <div style={{color}} className='d-flex align-items-center'>
-  //           <i className="fa-solid fa-stopwatch f-18"/>
-  //           {row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && <span className='ml-2'><strong>{count}</strong></span>}
-  //           {clockIsRunning && 
-  //             <span className='ml-1 badge badge-primary text-white' style={{fontSize: '11px'}}>
-  //               {<StopWatch time={timer} run={clockIsRunning} />}
-  //             </span>
-  //           }
-  //         </div>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'milestone',
-  //     header: 'Milestone',
-  //     accessorKey: 'milestone_title',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <abbr title={data?.milestone_title} style={{textDecoration: 'none'}}>
-  //           <span className='multine-ellipsis word-break'>
-  //             {data?.milestone_title}
-  //           </span>
-  //         </abbr>
-  //       )
-  //     }
-  //   },
-  //   {
-  //     id: 'deliverable',
-  //     header: 'Deliverable',
-  //     accessorKey: 'deliverable_title',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <abbr title={data?.deliverable_title} style={{textDecoration: 'none'}}>
-  //           <span className='multine-ellipsis word-break'>
-  //             {data?.deliverable_title ?? '--'}
-  //           </span>
-  //         </abbr>
-
-  //       )
-  //     }
-  //   },
-  //   {
-  //     id: 'project',
-  //     header: 'Project',
-  //     accessorFn: row => `${row?.project_id}${project_name}`,
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <abbr title={data?.project_name} style={{textDecoration: 'none'}}>
-  //           <a href={`/account/projects/${data?.project_id}`} className='multine-ellipsis'>
-  //             {data?.project_name}
-  //           </a>
-  //         </abbr>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'client',
-  //     header: 'Client',
-  //     accessorKey: 'client_name',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <div>
-  //           <Person
-  //             url={`/account/clients/${data?.client_id}`}
-  //             avatar={data?.client_avatar}
-  //             name={data?.client_name}
-  //           /> 
-  //         </div>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'project_manager',
-  //     header: 'Project Manager',
-  //     accessorKey: 'pm_id_name',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <Person
-  //           url={`/account/employees/${data?.project_manager_id}`}
-  //           name={data?.pm_id_name}
-  //           avatar={data?.pm_id_avatar}
-  //         /> 
-  //       )
-  //     }
-  //   },
-
-  //   {
-  //     id: 'creation_date',
-  //     header: 'Creation Date',
-  //     accessorKey: 'creation_date',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <span>
-  //           { data?.creation_date}
-  //         </span>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'due_date',
-  //     header: 'Due Date',
-  //     accessorKey: "due_date",
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       let date = data?.due_date;
-  //       const currentDate = compareDate.dayjs();
-  //       let color = ''
-
-  //       if(compareDate.isSame(currentDate, date)){
-  //         date = 'Today';
-  //         color= 'red';
-  //       }else if(compareDate.isAfter(currentDate, date)){
-  //         color= 'red'
-  //       }
-
-  //       date = date === 'Today' ? date : dayjs(date).format('DD-MM-YYYY');
-  //       return(
-  //         <span style={{color: color}}>
-  //          <strong>{date ?? '--'}</strong> 
-  //         </span>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'start_date',
-  //     header: 'Started Date',
-  //     accessorKey: 'start_date',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <strong>
-  //           {data?.start_date ? (
-  //             <>
-  //               {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
-  //             </>
-  //           ): '--'}
-  //         </strong>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'completion_date',
-  //     header: 'Completion Date',
-  //     accessorKey: 'completion_date',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <strong>
-  //           {Number(data?.board_column_id) === 4 ? 
-  //             data?.completion_date && (
-  //               <>
-  //                 {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
-  //               </>
-  //             ): '--'
-  //           } 
-  //         </strong>
-  //       )
-  //     }
-  //   }, 
-
-  //   {
-  //     id: 'approved_on',
-  //     header: 'Approved On',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <strong> 
-  //           {data?.task_approval_date ? (
-  //             <>
-  //               {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
-  //             </>
-  //           ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
-  //         </strong>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'estimated_time',
-  //     header: 'Estimated Time',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <div>
-  //           {data?.estimate_hours ?? 0} hrs <br/>
-  //           {data?.estimate_minutes ?? 0} mins
-  //         </div>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'hours_logged',
-  //     header: 'Hours Logged',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <div>
-  //           {convertTime(data?.subtasks_hours_logged)}
-  //         </div>
-  //       )
-  //     }
-  //   }, 
-
-  //   {
-  //     id: 'assigned_by',
-  //     header: 'Assigned By',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-
-  //       return(
-  //         <Person
-  //           url={`/account/employees/${data?.added_by}` }
-  //           avatar={data?.added_by_avatar}
-  //           name={data?.added_by_name}
-  //         /> 
-  //       )
-  //     }
-  //   },
-  //   {
-  //     id: 'assigned_to',
-  //     header: 'Assigned To',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return( 
-  //         <Person
-  //           url={`/account/employees/${data?.assigned_to_id}` }
-  //           avatar={data?.assigned_to_avatar}
-  //           name={data?.assigned_to_name}
-  //         /> 
-  //       )
-  //     }
-  //   },
-  //   {
-  //     id: 'status',
-  //     header: 'Task Status',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return(
-  //         <span
-  //           className='badge text-white' 
-  //           style={{background: data?.label_color}}
-  //         >
-  //           {data?.column_name}
-  //         </span>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'progress',
-  //     header: 'Progress',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       const count = Number(data?.subtasks_count);
-  //       const completed = Number(data?.subtasks_completed_count);
-  //       let bg = 'bg-transparent';
-  //       let percent = 0;
-
-  //       if(count > 0){percent = (completed / count) * 100;}
-  //       else{percent = Number(data?.board_column_id)=== 4 ? 100 : 0;}
-
-  //       if(percent === 100){
-  //         bg = 'bg-success'
-  //       }else if(percent < 100 && percent >= 75){
-  //         bg = 'bg-info';
-  //       }else if( percent < 75 && percent >= 25){
-  //         bg = 'bg-warning'
-  //       }else bg='bg-danger'
-
-  //       return(
-  //         <div>
-  //           <div className="progress" style={{height: '16px'}}>
-  //               <div 
-  //                 className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`} 
-  //                 role="progressbar" 
-  //                 style={{width: `${percent}%`}} 
-  //                 aria-valuenow="10" 
-  //                 aria-valuemin="0" 
-  //                 aria-valuemax="100"
-  //               >{Math.floor(percent)}%</div>
-  //           </div>
-  //         </div>
-  //       )
-  //     }
-  //   }, 
-  //   {
-  //     id: 'report',
-  //     header: 'Report',
-  //     cell: ({row}) => {
-  //       const data = row?.original;
-  //       return <ReportButton row={data} />
-  //     }
-  //   },
-  //   // {
-  //   //   id: 'action',
-  //   //   header: 'Action',
-  //   //   cell: ({row}) => {
-  //   //     const data = row?.original;
-  //   //     return(
-  //   //       <div>
-  //   //         <Dropdown>
-  //   //           <Dropdown.Toggle icon={false}>
-  //   //             <Button variant='tertiary'>
-  //   //               <i className="fa-solid fa-ellipsis-vertical"></i>
-  //   //             </Button>
-  //   //           </Dropdown.Toggle>
-  //   //           <Dropdown.Menu className="p-1">
-  //   //             <Dropdown.Item className="sp1_tasks_tbl_action">
-  //   //               <i className="fa-regular fa-pen-to-square mr-2"></i>
-  //   //               Edit
-  //   //             </Dropdown.Item>
-  //   //             <Dropdown.Item className="sp1_tasks_tbl_del">
-  //   //               <i className="fa-solid fa-trash-can mr-2"></i>
-  //   //               Delete
-  //   //             </Dropdown.Item>
-  //   //           </Dropdown.Menu>
-  //   //         </Dropdown>
-  //   //       </div>
-  //   //     )
-  //   //   }
-  //   // },   
-  // ])
-
   var defaultColumns = react__WEBPACK_IMPORTED_MODULE_0__.useMemo(function () {
     return _toConsumableArray(tableColumns);
   });
@@ -31876,7 +31726,7 @@ function SubTasksTable(_ref) {
       pagination: pagination,
       tableName: tableName,
       filter: filter,
-      globalFilter: search
+      globalFilter: lodash__WEBPACK_IMPORTED_MODULE_3___default().trim(search)
     },
     autoResetPageIndex: !skipPageReset,
     onPaginationChange: setPagination,
@@ -32259,7 +32109,9 @@ var TaskTableColumns = [{
 }, {
   id: 'due_date',
   header: 'Due Date',
-  accessorKey: "due_date",
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.due_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.due_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref10) {
     var _date;
     var row = _ref10.row;
@@ -32287,7 +32139,9 @@ var TaskTableColumns = [{
 }, {
   id: 'start_date',
   header: 'Started Date',
-  accessorKey: 'start_date',
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.start_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.start_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref11) {
     var row = _ref11.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -32300,7 +32154,9 @@ var TaskTableColumns = [{
 }, {
   id: 'completion_date',
   header: 'Completion Date',
-  accessorKey: 'completion_date',
+  accessorFn: function accessorFn(row) {
+    return row !== null && row !== void 0 && row.completion_date ? dayjs__WEBPACK_IMPORTED_MODULE_0___default()(row === null || row === void 0 ? void 0 : row.completion_date).format('DD-MM-YYYY') : '--';
+  },
   cell: function cell(_ref12) {
     var row = _ref12.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
@@ -32720,7 +32576,7 @@ function TasksTable(_ref) {
       pagination: pagination,
       tableName: tableName,
       filter: filter,
-      globalFilter: search
+      globalFilter: lodash__WEBPACK_IMPORTED_MODULE_4___default().trim(search)
     },
     onGlobalFilterChange: setGlobalFilter,
     autoResetPageIndex: !skipPageReset,

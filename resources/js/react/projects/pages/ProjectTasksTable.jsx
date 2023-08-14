@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import TasksTable from "../../tasks/components/TasksTable";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { useCheckPMTaskGuidelineQuery } from "../../services/api/projectApiSlice";
+import { useCheckPMTaskGuidelineQuery, useLazyGetProjectDeliverableStatusQuery } from "../../services/api/projectApiSlice";
 import { useLazyGetAllSubtaskQuery, useLazyGetTasksQuery } from "../../services/api/tasksApiSlice";
 import { setFilterOption, storeSubTasks, storeTasks } from "../../services/features/tasksSlice";
 import Button from "../../tasks/components/Button";
@@ -16,6 +16,9 @@ import ProjectTasksFilterBar from "../components/ProjectTasksFilterBar";
 import TaskCreationForm from "../components/TaskCreationForm";
 import { ProjectTableColumns } from "../components/ProjectTaskTableColumns";
 import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
+import SubmitButton from "../../tasks/components/SubmitButton";
+import { useProject } from "../../hooks/useProject";
+import { User } from "../../utils/user-details";
 
 const ProjectTasks = () => {
     const {tasks } = useSelector(s => s.tasks);
@@ -31,18 +34,16 @@ const ProjectTasks = () => {
     const [hasPMGuideline, setHasPMGuideline] = React.useState(false);
     const [getAllSubtask, {isFetching: subtaskFetching}] = useLazyGetAllSubtaskQuery();
     const params = useParams();
+    const {
+        isDeliverable,
+        getProjectGuidelineStaus,
+        projectDeliverableStatusIsLoading
+    } = useProject();
+
+    const projectId = params?.projectId;
+    const auth = new User(window?.Laravel?.user);
 
     
-    const {data: pmGuidelineStaus, isFetching: pmGuidelineStatusIsFetching} = useCheckPMTaskGuidelineQuery(params?.projectId); 
-    
-    useEffect(() => {
-        if(pmGuidelineStaus?.status === 200){
-            setHasPMGuideline(true);
-        }else{
-            setHasPMGuideline(false);
-        }
-    }, [pmGuidelineStaus, pmGuidelineStatusIsFetching])
- 
 
     // handle table filter
     const onFilter = (query) => {
@@ -91,15 +92,22 @@ const ProjectTasks = () => {
         } 
     }, [start_date, end_date, tableType])
 
-    // table filter end
-
+  
     // hanlde task add form
-    const handleTaskAddForm = (e) => {
-        e.preventDefault();
-        hasPMGuideline ? setShowTaskCreationForm(true) : setShowProjectGuidelineForm(true);
+    const handleTaskAddForm = async (e) => {
+        e.preventDefault();   
+        const deliverable = await isDeliverable(projectId); 
+        if(deliverable){
+            const guideline = await getProjectGuidelineStaus(projectId);
+
+            if(guideline){
+                setShowTaskCreationForm(true);
+            }else setShowProjectGuidelineForm(true);
+        }
     }
     
     const isFetching = subtaskFetching || taskFetching;
+
     const singleTask = _.head(tasks);
 
     return (
@@ -130,9 +138,7 @@ const ProjectTasks = () => {
                         <Dropdown className="">
                                 <Dropdown.Toggle icon={false} className="sp1_table_tab--dd-toggle">
                                     <i className="fa-solid fa-table"></i>
-                                    <span>
-                                        {tableType}
-                                    </span>
+                                    <span> {tableType} </span>
                                     <i className="fa-solid fa-chevron-down f-12"></i>
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="sp1_table_tab--dd-menu">
@@ -142,7 +148,14 @@ const ProjectTasks = () => {
                            </Dropdown> 
                            {/* end Table selection */}
                            
-                           {!isFetching && tableType.toLowerCase() === 'tasks' && <Button onClick={handleTaskAddForm}> + Add Task </Button> }
+                           {
+                           !isFetching && 
+                            tableType.toLowerCase() === 'tasks' && 
+                            _.include([1,4], auth?.getRoleId() ) &&
+                                <SubmitButton 
+                                    onClick={handleTaskAddForm} 
+                                    isLoading={projectDeliverableStatusIsLoading}
+                                > + Add Task </SubmitButton> }
                         </div>
 
                         <div className="sp1_table_tab">
