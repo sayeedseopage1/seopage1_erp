@@ -419,9 +419,9 @@ var columns = [{
   header: "Top Management Comment",
   sorted: false,
   cell: function cell() {
-    reutrn( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("quote", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("quote", {
       children: "No commnet yet!"
-    }));
+    });
   }
 }];
 var TimeLogHIstoryModalTable = function TimeLogHIstoryModalTable(_ref) {

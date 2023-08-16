@@ -146,7 +146,7 @@ const columns = [
         header: "Top Management Comment",
         sorted: false,
         cell: () => {
-            reutrn (
+            return (
                 <quote>No commnet yet!</quote>
             )
         }

@@ -4492,8 +4492,8 @@ class ProjectController extends AccountBaseController
             $estimated_minutes_left = 0;
         }else 
         {
-            $estimated_hours_tasks = Task::where('project_id',$project->id)->sum('estimate_hours');
-        $estimated_minutes_tasks = Task::where('project_id',$project->id)->sum('estimate_minutes');
+        $estimated_hours_tasks = Task::where('project_id',$project->id)->where('subtask_id','=',null)->sum('estimate_hours');
+        $estimated_minutes_tasks = Task::where('project_id',$project->id)->where('subtask_id','=',null)->sum('estimate_minutes');
 
         $total_minutes = $estimated_hours_tasks *60 + $estimated_minutes_tasks;
 
