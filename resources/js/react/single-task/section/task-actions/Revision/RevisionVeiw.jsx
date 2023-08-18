@@ -2,10 +2,14 @@ import React from 'react'
 import Button from '../../../components/Button'
 import { AcceptAndContinueButton } from './RevisionAcceptAndContinue'
 import { Placeholder } from '../../../../global/Placeholder'
+import { User } from '../../../../utils/user-details'
 
-const RevisionVeiw = ({revision, isLoading, onAccept, onDeny}) => {
+const RevisionVeiw = ({revision, isLoading, onAccept, onDeny}) => { 
+    const auth = new User(window?.Laravel?.user); 
+    const comment = auth?.getRoleId() === 6 ? revision?.pm_comment: revision?.lead_comment; 
+   
   return (
-    <React.Fragment>
+    <React.Fragment> 
         <div>
             {!isLoading ? (
                 <p>
@@ -19,7 +23,7 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny}) => {
         </div>
 
         <div className='st_revision_comment'>
-            {!isLoading && <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html:revision?.comment}} />}
+            {!isLoading && <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: comment}} />}
             
             {isLoading &&
                 <div>

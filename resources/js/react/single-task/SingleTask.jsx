@@ -264,8 +264,7 @@ const SingleTaskPage = () => {
                                             background: "rgba(227,62,79,1)",
                                             color: "#fff",
                                         }}
-                                    >
-
+                                    > 
                                         {
                                         _.map(task?.revisions, (revision, index) => (
                                                 <RevisionText
@@ -274,6 +273,7 @@ const SingleTaskPage = () => {
                                                     date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
                                                     time={dayjs(revision.createdAt).format('hh:mm a')}
                                                     text={revision?.comment}
+                                                    revision={revision}
                                                 />
                                             ))
                                         }

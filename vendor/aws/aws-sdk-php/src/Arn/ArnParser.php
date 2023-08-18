@@ -23,7 +23,7 @@ class ArnParser
      */
     public static function isArn($string)
     {
-        return $string !== null && strpos($string, 'arn:') === 0;
+        return strpos($string, 'arn:') === 0;
     }
 
     /**

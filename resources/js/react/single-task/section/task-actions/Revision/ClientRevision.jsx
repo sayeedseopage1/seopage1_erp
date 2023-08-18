@@ -8,8 +8,9 @@ import { useStoreClientRevisionTaskMutation } from '../../../../services/api/Sin
 
 const ClientRevision = ({task, auth}) => {
     const [revisionModal, setRevisionModal] = useState(false);
-    const [show,setShow] = useState('CLIENT_REVISION');
-    const singleTask = new SingleTask(task)
+    const [show,setShow] = useState('ASSINEE_TO_DEV');
+    
+    const singleTask = task;
 
     // client revision data
     const [clientComment, setClientComment] = useState('');
@@ -31,10 +32,10 @@ const ClientRevision = ({task, auth}) => {
     const handleSubmitToStore = (data) =>{
         const fData = {
             ...data,
-            client_comment: clientComment,
-            client_revision_acknowledgement: clientAcknowledgement
+            project_id: task?.projectId
         }
-
+  
+        // show toster notification
         const showToster= () =>{
             const Toast = Swal.mixin({
                 toast: true,
@@ -48,14 +49,14 @@ const ClientRevision = ({task, auth}) => {
                 title: 'Task submitted for Revision successfully'
             })
         }
-
-        console.log({fData})
-
+    
         storeClientRevisionTask(fData)
         .unwrap()
         .then(res => showToster())
         .catch(err => console.log(err))
     }
+
+    
   return (
     <React.Fragment>
         <Button
@@ -82,14 +83,14 @@ const ClientRevision = ({task, auth}) => {
                         </Button>
                     </div>
 
-                    {show === 'CLIENT_REVISION' && 
+                    {/* {show === 'CLIENT_REVISION' && 
                         <ClientRevisionForm 
                             task={singleTask}
                             close={() => setRevisionModal(false)} 
                             onSubmitForm={(data) => handleSubmit(data)}
                         />
-                    } 
-                    {show === "ASSINEE_TO_DEV" &&
+                    }  */}
+                    {/* {show === "ASSINEE_TO_DEV" && */}
                         <AssigneeToLeadFromClientRevision 
                             task={task}
                             auth={auth}
@@ -98,7 +99,7 @@ const ClientRevision = ({task, auth}) => {
                             close={() => setRevisionModal(false)}
                             onBack={() => setShow('CLIENT_REVISION')}
                         />
-                    } 
+                    {/* }  */}
                 </div>
             </div>
         </Modal> 

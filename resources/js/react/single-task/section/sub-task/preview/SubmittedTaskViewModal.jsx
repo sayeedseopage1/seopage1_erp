@@ -3,6 +3,7 @@ import Modal from "../../../components/Modal";
 import Button from "../../../components/Button";
 import FileUploader from '../../../../file-upload/FileUploader';
 import _ from 'lodash';
+import Avatar from "../../../../global/Avatar";
 
 const SubmittedTaskViewModal = ({
     isOpen,
@@ -11,7 +12,7 @@ const SubmittedTaskViewModal = ({
     user,
     isLoading,
 }) => {
-    const sub = submittedTask;
+    const sub = submittedTask; 
 
     return (
         <React.Fragment>
@@ -57,12 +58,11 @@ const SubmittedTaskViewModal = ({
                                     </span>
                                     <div className="d-flex align-items-center">
                                         <div>
-                                            <img
+                                            <Avatar
+                                                type="circle"
                                                 src={user?.avatar}
                                                 alt={user?.name}
-                                                width={32}
-                                                height={32}
-                                                className="rounded-circle"
+                                                name={user?.name}
                                             />
                                         </div>
                                         <div className="d-flex flex-column px-2">

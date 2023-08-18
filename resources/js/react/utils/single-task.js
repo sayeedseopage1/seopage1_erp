@@ -42,7 +42,7 @@ export class SubmittedWork {
         this.user = {
             id: task?.user_id,
             name: task?.user_name || task?.name,
-            avatar: `/user-uploads/avatar/${task?.image}`,
+            avatar: task?.image ? `/user-uploads/avatar/${task?.image}` : null,
             profile: `/account/employees/${task?.user_id}`
         }
     }
@@ -144,13 +144,12 @@ export class ProjectMangerGuideline {
 // task revisions
 export class TaskRevision {
     constructor(data) {
-      this.acceptAndContinue = data?.accept_and_continue;
+      this.acceptAndContinue = data?.accept_statement;
       this.addedBy = data?.added_by;
       this.approvalStatus = data?.approval_status;
       this.clientRevisionAcknowledgement = data?.client_revision_acknowledgement;
-      this.comment = data?.comment;
-      this.createdAt = data?.created_at;
-      this.denyAndContinue = data?.deny_and_continue;
+      this.comment = data?.lead_comment;
+      this.createdAt = data?.created_at; 
       this.devComment = data?.dev_comment;
       this.id = data?.id;
       this.pmComment = data?.pm_comment;
@@ -159,9 +158,11 @@ export class TaskRevision {
       this.revisionNo = data?.revision_no;
       this.revisionReason = data?.revision_reason;
       this.revisionStatus = data?.revision_status;
-      this.subtaskId = data?.subtask_id;
       this.taskId = data?.task_id;
       this.updatedAt = data?.updated_at;
+      this.isDeniable = data?.is_deniable;
+      this.isDeny = data?.is_deny;
+      this.isAccept= data?.is_accept;
     } 
   }
 

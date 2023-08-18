@@ -70,7 +70,6 @@ class MultipartCopy extends AbstractUploadManager
         } else {
             $this->source = $this->getInputSource($source);
         }
-
         parent::__construct(
             $client,
             array_change_key_case($config) + ['source_metadata' => null]
@@ -135,21 +134,18 @@ class MultipartCopy extends AbstractUploadManager
         // if the key contains a '?' character to specify where the query parameters start
         if (is_array($this->source)) {
             $key = str_replace('%2F', '/', rawurlencode($this->source['source_key']));
-            $bucket = $this->source['source_bucket'];
+            $data['CopySource'] = '/' . $this->source['source_bucket'] . '/' . $key;
         } else {
-            list($bucket, $key) = explode('/', ltrim($this->source, '/'), 2);
-            $key = implode(
-                '/',
-                array_map(
-                    'urlencode',
-                    explode('/', rawurldecode($key))
-                )
-            );
-        }
 
-        $uri = ArnParser::isArn($bucket) ? '' : '/';
-        $uri .= $bucket . '/' . $key;
-        $data['CopySource'] = $uri;
+            list($bucket, $key) = explode('/', ltrim($this->source, '/'), 2);
+            $data['CopySource'] = '/' . $bucket . '/' . implode(
+            '/',
+            array_map(
+                'urlencode',
+                explode('/', rawurldecode($key))
+            )
+        );
+        }
         $data['PartNumber'] = $partNumber;
         if (!empty($this->sourceVersionId)) {
             $data['CopySource'] .= "?versionId=" . $this->sourceVersionId;
@@ -234,7 +230,11 @@ class MultipartCopy extends AbstractUploadManager
      */
     private function getInputSource($inputSource)
     {
-        $sourceBuilder = ArnParser::isArn($inputSource) ? '' : '/';
+        if (ArnParser::isArn($inputSource)) {
+            $sourceBuilder = '';
+        } else {
+            $sourceBuilder = "/";
+        }
         $sourceBuilder .= ltrim(rawurldecode($inputSource), '/');
         return $sourceBuilder;
     }

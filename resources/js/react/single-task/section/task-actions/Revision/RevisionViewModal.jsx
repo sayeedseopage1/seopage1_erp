@@ -12,6 +12,7 @@ const RevisionViewModal = ({task, close}) => {
   const [show, setShow] = useState("REVISION");
   const [accept, setAccept] = useState(false);
   const [comment, setComment] = useState('');
+  const [denyReason, setDenyReason] = useState('');
   const dispatch = useDispatch();
   const { data: revision, isFetching: isFetchingRevision } = useGetRevisionDetailsQuery(task?.id);
 //   const [revisionAcceptOrDeny, {isLoading: isLoadingRevisionReview}] = useRevisionAcceptOrDenyMutation();
@@ -28,19 +29,30 @@ const RevisionViewModal = ({task, close}) => {
     setShow(type); 
   }
 
+   // handle Accept and continue submition
+   const hanldeDenyAndContinueSubmition = (data, type) => {
+    setComment(data);
+    setDenyReason(data?.denyReason);
+    setShow(type); 
+  }
+
+
   const handleOnSubmit = (data, type) =>{
     let fdata ={
-        text3: comment,
+        comment: comment?.comment,
         task_id: data?.task_id,
-        subTask: data?.comments,
+        project_id: task?.projectId,
+        user_id: auth?.id,
+        subTask: _.map(data?.comments, comment => ({...comment, is_deniable: data?.is_deniable})),
         revision_acknowledgement: data?.reason,
         revision_id: revision?.id,
-        mode: accept ? 'accept': 'deny'
+        mode: accept ? 'accept': 'deny',
+        deny_reason: denyReason,
+        is_deniable: data?.is_deniable,
     }
-    
-    const params = accept ? 'accept-continue' : 'deny-continue';
 
-
+  
+    const params = accept ? 'accept-continue' : 'deny-continue'; 
     revisionAcceptOrDeny({fdata, params})
     .unwrap()
     .then(res => {
@@ -50,7 +62,7 @@ const RevisionViewModal = ({task, close}) => {
   } 
 
   return (
-    <React.Fragment>
+    <React.Fragment> 
         <div
             className="sp1_single_task--modal-panel"
             style={{ maxWidth: "550px" }}
@@ -111,7 +123,7 @@ const RevisionViewModal = ({task, close}) => {
                 {show === "DENY_AND_CONTINUE" && 
                     <DenyAndContinue
                         task={task} 
-                        onSubmit={data => hanldeAcceptAndContinueSubmition(data, "DENY_ASSINEE_TO_DEV")}
+                        onSubmit={data => hanldeDenyAndContinueSubmition(data, "DENY_ASSINEE_TO_DEV")}
                         isSubmitting = {isLoadingRevisionReview}
                         onBack={() => setShow("REVISION")}
                     />

@@ -86,7 +86,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                 </div>
             )}
 
-            { lessTrackModalFor=="START_TIMER" || (lessTrackModalFor==="STOP_TIMER" && closingToday) ? (
+            { lessTrackModalFor=="START_TIMER" || (lessTrackModalFor==="STOP_TIMER" && closingToday) ? ( 
                 <div className="sp1_single_task--modal-body p-3">
                     {/* show track time */}
                     <div className="alert alert-warning">

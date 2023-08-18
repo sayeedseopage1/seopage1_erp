@@ -34,7 +34,7 @@ const Accordion = ({expendable=true, children, title, headingClass, headingStyle
             {expendable ? expend && (
                 <motion.div
                     initial={{ height: init }}
-                    animate={{height: 300}}
+                    animate={{height: 800}}
                     exit={{height: 0}}
                     className='sp1_task_card--body'
                 >

@@ -1,19 +1,22 @@
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
 import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import PreviewSubtask from "./PreviewSubtask";
+import ApproveTask from "../task-actions/approve-task/ApproveTask";
 
 const SubTask = ({ subTask, task, status, toggleEditForm }) => {
     const [isOpen, setIsOpen] = useState(false); 
     const auth = new User(window?.Laravel?.user);
+    const [subtaskStaus, setSubtaskStaus] = useState(null);
+
     const _task = new SingleTask(task); 
 
     const [checkSubTaskTimer, {isFetching}] = useLazyCheckSubTaskTimerQuery()
-    
+ 
 
     const toggle = (e) => {
       e.preventDefault();
@@ -123,11 +126,11 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                 </span>
                             </div>
                             <div className="d-flex align-items-center ml-auto">
-                                <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2">
-                                    Approve
-                                </Button>
+                                <ApproveTask
+                                    task={subTask}
+                                    auth={auth}
+                                />      
 
-                                
                                 <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2 bg-danger">
                                     Revision
                                 </Button>

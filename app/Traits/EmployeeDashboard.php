@@ -460,7 +460,7 @@ public function employeeDashboard()
     ->sum('milestone_paid');
 
 
-
+   // dd("jnslknflkasf");
     $this->total_projects= Project::where('pm_id',Auth::id())->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
     $this->total_completed_project=Project::where('pm_id',Auth::id())->where('status','finished')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();
     $this->total_canceled_project=Project::where('pm_id',Auth::id())->where('status','canceled')->whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])->count();

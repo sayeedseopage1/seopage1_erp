@@ -75,7 +75,5 @@ use Aws\AwsClient;
  * @method \GuzzleHttp\Promise\Promise updateMonitoringAsync(array $args = [])
  * @method \Aws\Result updateSecurity(array $args = [])
  * @method \GuzzleHttp\Promise\Promise updateSecurityAsync(array $args = [])
- * @method \Aws\Result updateStorage(array $args = [])
- * @method \GuzzleHttp\Promise\Promise updateStorageAsync(array $args = [])
  */
 class KafkaClient extends AwsClient {}

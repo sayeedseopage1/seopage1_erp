@@ -384,7 +384,7 @@
                             </div>
                           </div>
                           @php
-                          $project_cms = App\models\ProjectCms::all();
+                          $project_cms = App\Models\ProjectCms::all();
                       @endphp
                       <div class="row">
                       <div class="col-md-6">

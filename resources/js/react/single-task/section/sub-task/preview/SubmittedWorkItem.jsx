@@ -7,7 +7,7 @@ const SubmittedWorkItem = ({ data, isLoading }) => {
     const [showModal, setShowModal] = useState(false);
     const sub = new SubmittedWork(data);
     const user = sub?.user;
-
+ 
     // toggle modal
     const toggleModal = (e) => {
         e.preventDefault();

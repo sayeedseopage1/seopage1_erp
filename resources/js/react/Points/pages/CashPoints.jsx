@@ -90,7 +90,7 @@ const CashPoints = () => {
                                 cell: (row) => {
                                     return <span>{Number(row['total_points_earn']).toFixed(2)}</span>
                                 }
-                            }
+                            },
                         ]}
                     />
                 </div>

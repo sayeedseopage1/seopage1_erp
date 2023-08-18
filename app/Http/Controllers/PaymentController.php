@@ -475,7 +475,7 @@ class PaymentController extends AccountBaseController
     
                     $team_lead= user::where('role_id',8)->first();
                     $earned_point= ($project_budget*$kpi_setting_hourly_project->authorized_by_leader)/100;
-                    $cash_points_team_lead= Cashpoint::where('user_id',$team_lead->id)->sum('points');
+                    $cash_points_team_lead= Cashpoint::where('user_id',$team_lead->id)->orderBy('id','desc')->first();
 
                   //  dd($cash_points_team_lead);
                     $point= new CashPoint();
@@ -491,7 +491,7 @@ class PaymentController extends AccountBaseController
                     $point->type = 'Authorization Bonus';
             
                     if ($cash_points_team_lead != null) {
-                        $point->total_points_earn=$cash_points_team_lead+ $earned_point/100;
+                        $point->total_points_earn=$cash_points_team_lead->total_points_earn+ $earned_point/100;
                     } else {
                         $point->total_points_earn= $earned_point/100;
                     }

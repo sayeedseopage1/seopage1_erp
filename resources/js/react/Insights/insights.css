@@ -208,6 +208,24 @@
     color: #383838;
 }
 
+
+/* danger */
+
+.cnx__btn_danger {
+    background-color: #ff3838;
+    border-color: #ff3838;
+    color: #fff;
+}
+
+.cnx__btn_danger:hover {
+    background-color: #e63232;
+    border-color: #e63232;
+}
+
+.cnx__btn_danger > .cnx__btn_icon {
+    color: #fff;
+}
+
 /* button sizes */
 
 .cnx__btn_lg {

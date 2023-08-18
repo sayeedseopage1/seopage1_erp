@@ -6,11 +6,24 @@ import CKEditorComponent from "../../../../ckeditor";
 import SubmitButton from "../../../components/SubmitButton";
 import _ from "lodash";
 
+const options = [
+    {
+        id: 'revision1',
+        revision: "I overlooked a few things while checking",
+        isDeniable: true,
+    },
+    {
+        id: 'revision2',
+        revision: "I couldn't understand a few things in the instruction",
+        isDeniable: false
+    }
+]
+
 const AssigneeRevisionToDev = ({
     task,
     onBack,
     onSubmit,
-    isSubmitting = false,
+    isSubmitting = false, 
 }) => {
     const [reason, setReason] = useState("");
     const [reasonError, setReasonError] = useState("");
@@ -18,10 +31,12 @@ const AssigneeRevisionToDev = ({
     const [commentError, setCommentError] = useState(false);
     const [subtasks, setSubtasks] = useState([]);
     const [subtaskError, setSubtaskError] = useState("");
+    const [isDeniable, setIsDeniable] = useState(true);
 
     // radio button change
-    const handleChange = (e) => {
+    const handleChange = (e,isDeniable) => {
         setReason(e.target.value);
+        setIsDeniable(isDeniable);
     };
 
     // editor change text
@@ -82,6 +97,7 @@ const AssigneeRevisionToDev = ({
             task_id: task?.id,
             reason,
             comments,
+            is_deniable: isDeniable
         }; 
         if(validate()){  
             onSubmit(data)
@@ -102,83 +118,33 @@ const AssigneeRevisionToDev = ({
                         Revision Acknowledgement<sup className="f-16">*</sup> :
                     </label>
                     <div className="px-3">
-                        <div className="form-check d-flex align-items-start mb-2">
-                            <input
-                                className="form-check-input mr-2"
-                                type="radio"
-                                name="exampleRadios"
-                                id="exampleRadios1"
-                                required={true}
-                                onChange={handleChange}
-                                value="Task Has Revision Because Requirements Are Not Fulfilled According to My Instractions"
-                                style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    marginTop: "3px",
-                                }}
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="exampleRadios1"
-                                style={{ marginBottom: "3px" }}
-                            >
-                                Task Has Revision Because Requirements Are Not
-                                Fulfilled According to My Instractions
-                            </label>
-                        </div>
-
-                        <div className="form-check d-flex align-items-start mb-2">
-                            <input
-                                className="form-check-input mr-2"
-                                type="radio"
-                                name="exampleRadios"
-                                id="exampleRadios2"
-                                required={true}
-                                onChange={handleChange}
-                                value="Task Has Revision Because I Have Customized
-                                Previous Instructions"
-                                style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    marginTop: "3px",
-                                }}
-                            />
-                            <label
-                                className="form-check-label"
-                                htmlFor="exampleRadios2"
-                                style={{ marginBottom: "3px" }}
-                            >
-                                Task Has Revision Because I Have Customized
-                                Previous Instructions
-                            </label>
-                        </div>
-
-                        <div className="form-check d-flex align-items-start mb-2">
-                            <input
-                                className="form-check-input mr-2"
-                                type="radio"
-                                name="exampleRadios"
-                                id="exampleRadios3"
-                                required={true}
-                                onChange={handleChange}
-                                value="Task Has Revision Because I Have Added
-                                Additional Instructions To Previous
-                                Instructions"
-                                style={{
-                                    width: "16px",
-                                    height: "16px",
-                                    marginTop: "3px",
-                                }}
-                            />
-                            <label
-                                className="form-check-label mb-1"
-                                htmlFor="exampleRadios3"
-                                style={{ marginBottom: "3px" }}
-                            >
-                                Task Has Revision Because I Have Added
-                                Additional Instructions To Previous Instructions
-                            </label>
-                        </div>
+                        {
+                            _.map(options, revision =>(
+                                <div key={revision.id} className="form-check d-flex align-items-start mb-2">
+                                    <input
+                                        className="form-check-input mr-2"
+                                        type="radio"
+                                        name="exampleRadios"
+                                        id={revision.id}
+                                        required={true}
+                                        onChange={e => handleChange(e, revision.isDeniable)}
+                                        value={revision.revision}
+                                        style={{
+                                            width: "16px",
+                                            height: "16px",
+                                            marginTop: "3px",
+                                        }}
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor={revision.id}
+                                        style={{ marginBottom: "3px" }}
+                                    >
+                                        {revision.revision}
+                                    </label>
+                                </div> 
+                            ))
+                        }
                     </div>
                     {reasonError && (
                         <small id="emailHelp" className="form-text text-danger">
@@ -276,7 +242,7 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                     <span className="w-100 mr-auto text-left d-flex flex-wrap align-items-center" style={{gap:'6px'}}>
                         {subTasks?.length > 0
                             ?  subTasks.map((s) =>(
-                                <span key={s.id} className="badge badge-light" style={{fontSize: '13px'}}> {s?.title} </span>
+                                <span key={s.subtask_id} className="badge badge-light" style={{fontSize: '13px'}}> {s?.title} </span>
                             ))
                             : "Select Subtasks"}
                     </span>
@@ -294,13 +260,13 @@ const SubtaskSelectionMenu = ({ task, subTasks, setSubtasks }) => {
                         task?.taskSubTask?.map((s) => (
                             <Listbox.Option
                                 value={s}
-                                key={s.id}
+                                key={s.subtask_id}
                                 tabIndex={-1}
                                 className={({ active }) => active
                                         ? "task-selection-list-option active"
                                         : "task-selection-list-option"
                                 }
-                            >
+                            > 
                                 {
                                     ({selected}) => (
                                         <React.Fragment>

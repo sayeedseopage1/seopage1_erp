@@ -66,7 +66,7 @@ class Composer
         $listedServices,
         $vendorPath
     ) {
-        $unsafeForDeletion = ['Kms', 'S3', 'SSO', 'SSOOIDC', 'Sts'];
+        $unsafeForDeletion = ['Kms', 'S3', 'SSO', 'Sts'];
         if (in_array('DynamoDbStreams', $listedServices)) {
             $unsafeForDeletion[] = 'DynamoDb';
         }

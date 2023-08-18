@@ -12,9 +12,6 @@ abstract class AbstractModel implements \ArrayAccess
     /** @var ShapeMap */
     protected $shapeMap;
 
-    /** @var array */
-    protected $contextParam;
-
     /**
      * @param array    $definition Service description
      * @param ShapeMap $shapeMap   Shapemap used for creating shapes
@@ -23,9 +20,6 @@ abstract class AbstractModel implements \ArrayAccess
     {
         $this->definition = $definition;
         $this->shapeMap = $shapeMap;
-        if (isset($definition['contextParam'])) {
-            $this->contextParam = $definition['contextParam'];
-        }
     }
 
     public function toArray()

@@ -13,8 +13,10 @@ import TaskReview from "./preview/TaskReview";
 import History from "./preview/History";
 import Comments from "./preview/Comments";
 import _ from "lodash";
+import { useSingleTask } from "../../../hooks/useSingleTask";
 
 const PreviewSubtask = ({ parentTask, subTask }) => {
+    const [task, setTask] = React.useState(null)
     const taskID = subTask?.id;
     const [submittedWork, setSubmittedWork] = React.useState([]);
     const [timeLog, setTimeLog] = React.useState([]);
@@ -22,29 +24,29 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
     const [histories, setHistories] = React.useState([]);
     const [comments, setComments] = React.useState([]);
 
-    const navigate = useNavigate();
-
-    //   fetch data
-    const { data, isFetching } = useGetTaskDetailsQuery(`/${taskID}/json?mode=basic`);
+    const { 
+        getTaskById, 
+        getSubmittionInfo, 
+        taskDetailsIsFetching, 
+        submittionInfoIsFetching
+     } = useSingleTask();
 
 
     const [getTaskDetails, { isFetching: detailFetchingStateLoading }] =
         useLazyGetTaskDetailsQuery();
 
-    // task instance
-    const task = new SingleTask({
-        ...data?.task,
-        parent_task_action: data?.parent_task_action,
-        parent_task_title: data?.parent_task_heading?.heading || null,
-        working_environment: data?.working_environment,
-        working_environment_data: data?.working_environment_data,
-        pm_task_guideline: data?.task_guideline,
-        task_revisions: data?.revisions,
-        taskSubTask: data?.Sub_Tasks,
-    });
 
- 
-    const [getSubmittedTask, {isFetching: submittedTaskIsFetching} ] = useLazyGetSubmittedTaskQuery();
+    // fetch task details
+    React.useEffect(() => {
+        (
+            async () => {
+               let task = await getTaskById(taskID)
+               task = new SingleTask(task)
+               setTask(task);
+            }
+        )()
+    }, [])
+   
 
     //   fetch submitted rtk api
     const fetchData = (url, cb) => {
@@ -58,16 +60,12 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
     };
 
     // fetch submitted works when submitted tab clieked
-    const fetchSubmittedWork = (e) => {
+    const fetchSubmittedWork = async (e) => {
         e.preventDefault();
         if (submittedWork.length === 0) {
-            getSubmittedTask(task?.id)
-            .unwrap()
-            .then((res) =>{
-                let d = _.orderBy(res, ['task_id', 'submission_no'], ['desc', 'desc']);
-                setSubmittedWork([...d]);
-            })
-            .catch((err) => console.error(err));
+            const data = await getSubmittionInfo(taskID);
+            console.log({data})
+            setSubmittedWork([...data]);
         }
     };
 
@@ -198,7 +196,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     aria-labelledby="v-pills-general-tab"
                 >
                     <div className="mr-3">
-                        <Genarel isFetching={isFetching} taskID={taskID} task={task} />
+                        <Genarel isFetching={taskDetailsIsFetching} taskID={taskID} task={task} />
                     </div>
                 </div>
                 <div
@@ -211,7 +209,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                         <SubmittedWork
                             task={task}
                             submittedWork={submittedWork}
-                            loading={submittedTaskIsFetching}
+                            loading={submittionInfoIsFetching}
                         />
                     </div>
                 </div>

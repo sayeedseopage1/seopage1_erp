@@ -22,18 +22,20 @@
             }
         }
 
-        .fc-list-event-graphic{
+        .fc-list-event-graphic {
             display: none;
         }
 
-        .fc .fc-list-event:hover td{
+        .fc .fc-list-event:hover td {
             background-color: #fff !important;
-            color:#000 !important;
+            color: #000 !important;
         }
-        .left-3{
+
+        .left-3 {
             margin-right: -22px;
         }
-        .clockin-right{
+
+        .clockin-right {
             margin-right: -10px;
         }
 
@@ -41,6 +43,7 @@
             margin-right: 5px;
             z-index: 1;
         }
+
         .week-pagination li a {
             border-radius: 50%;
             padding: 2px 6px !important;
@@ -56,26 +59,30 @@
             border-top-right-radius: 50%;
             border-bottom-right-radius: 50%;
         }
+
         .hide-calender .table-condensed thead tr:nth-child(2),
         .hide-calender .table-condensed tbody {
             /*            display: none*/
         }
+
         .hide-calender.daterangepicker {
             width: 320px;
         }
+
         .hide-calender.monthselect {
             width: 100% !important;
         }
+
         .line-height-30 {
             line-height: 30px;
         }
     </style>
 @endpush
 @section('content')
-@php
-    $project = \App\Models\Project::orderBy('id', 'DESC')->first();
-    // dd($project);
-@endphp
+    @php
+        $project = \App\Models\Project::orderBy('id', 'DESC')->first();
+        // dd($project);
+    @endphp
     <div class="px-4 py-2 border-top-0">
         <!-- WELOCOME START -->
         @if (!is_null($checkTodayLeave))
@@ -92,7 +99,8 @@
             <div class="row pt-4">
                 <div class="col-md-12">
                     <x-alert type="info" icon="info-circle">
-                        <a href="{{ route('holidays.show', $checkTodayHoliday->id) }}" class="openRightModal text-dark-grey">
+                        <a href="{{ route('holidays.show', $checkTodayHoliday->id) }}"
+                            class="openRightModal text-dark-grey">
                             <u>@lang('messages.holidayToday')</u>
                         </a>
                     </x-alert>
@@ -108,2559 +116,731 @@
             </div>
             <!-- WELOCOME NAME END -->
         </div>
-        <div class="emp-dash-detail">
-            @if(count(array_intersect(['profile', 'shift_schedule', 'birthday', 'notices'], $activeWidgets)) > 0)
-                <div class="row">
-                @if (in_array('profile', $activeWidgets))
-                    <!-- EMP DASHBOARD INFO START -->
-                        <div class="col-md-12">
-                            <div class="card border-0 b-shadow-4 mb-3 e-d-info">
-                                <div class="card-horizontal align-items-center">
-                                    <div class="card-img">
-                                        <img class="" src=" {{ $user->image_url }}" alt="Card image">
-                                    </div>
-                                    <div class="card-body border-0 pl-0">
-                                        <h4 class="card-title f-18 f-w-500 mb-0">{{ mb_ucwords($user->name) }}</h4>
-                                        <p class="f-14 font-weight-normal text-dark-grey mb-2">{{ $user->employeeDetails->designation->name ?? '--' }}</p>
-                                        <p class="card-text f-12 text-lightest"> @lang('app.employeeId') : {{ mb_strtoupper($user->employeeDetails->employee_id) }}</p>
-                                    </div>
-                                </div>
-                            </div>
+
+        <div class="row my-2 text-center mx-auto">
+            <div class="col-sm-12 pb-3">
+                <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
+                    <div class="fc-toolbar-chunk">
+                        <div class="fc-button-group">
+                            <button date-mode="month" class="fc-prev-button fc-button fc-button-primary" type="button"
+                                aria-label="prev">
+                                <span class="fc-icon fc-icon-chevron-left"></span>
+                            </button>
+                            <h2 class="fc-toolbar-title mx-3 monthDate"></h2>
+                            <button date-mode="month" class="fc-next-button fc-button fc-button-primary" type="button"
+                                aria-label="next">
+                                <span class="fc-icon fc-icon-chevron-right"></span>
+                            </button>
                         </div>
-                        <!-- EMP DASHBOARD INFO END -->
-                    @endif
+                    </div>
                 </div>
-            @endif
+            </div>
         </div>
-        <div id="accordion">
-            <div class="card">
-                {{-- <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            Project Manager (Today's Update)
-                        </button>
-                    </h5>
-                </div> --}}
+        <div id="monthHtml">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#projectModal{{ count($no_of_projects) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ count($no_of_projects) }}<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total assigned projects number') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.no_of_project.total_assign_project_number')
 
-                {{-- <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body bg-amt-grey">
-                        <div class="row my-2 text-center mx-auto">
-                            <div class="col-sm-12 pb-3">
-                                <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
-                                    <div class="fc-toolbar-chunk">
-                                        <div class="fc-button-group">
-                                            <button date-mode="today" class="fc-prev-button fc-button fc-button-primary" type="button" aria-label="prev">
-                                                <span class="fc-icon fc-icon-chevron-left"></span>
-                                            </button>
-                                            <h2 class="fc-toolbar-title mx-3 todayDate"></h2>
-                                            <button class="fc-today-button fc-button fc-button-primary" type="button" disabled="">today</button>
-                                            <button date-mode="today" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
-                                                <span class="fc-icon fc-icon-chevron-right"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <a href="#" data-toggle="modal" data-target="#projectAcceptModal{{ count($no_of_accepted_projects) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ count($no_of_accepted_projects) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Accepted projects') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.no_of_project.accept_project_modal')
+
+
+                                <a href="#" data-toggle="modal" data-target="#rejectedProjectModal{{ count($no_of_rejected_projects) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid">
+                                        {{ count($no_of_rejected_projects) }}<span
+                                            class="f-12 font-weight-normal text-lightest">@lang('Rejected projects')</span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.no_of_project.rejected_project_modal')
                             </div>
                         </div>
-                        <div id="todayHtml">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Projects Deadline Today</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_project_deadline->count()}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Waiting To be Completed</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_milestoe_to_be_completed}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Tasks Under Review (Assigned By Me)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_tasks_under_review}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Today (Assigned By Me)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_tasks_deadline}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Today</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_completed_milestone}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled Today</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_canceled_milestone}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Today</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_invoice_created}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Today</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_payment_release}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form (Required Submission)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_qc_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form (Required Submission)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$today_completion_form_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$completion_form_pending}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$qc_form_pending}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Projects</h4>
-                                            <table class="table w-100">
-                                                <thead name="thead">
-                                                    <th class="pl-20 text-capitalize"> SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Project Value</th>
-                                                    <th class="pl-20 text-capitalize">Tasks</th>
-                                                    <th class="pl-20 text-capitalize">Milestones (Task)</th>
-                                                    <th class="pl-20 text-capitalize">Milestones (Payment)</th>
-                                                    <th class="pl-20 text-capitalize">Start Date</th>
-                                                    <th class="pl-20 text-capitalize">Deadline</th>
-                                                    <th class="pl-20 text-capitalize">Progress</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($today_project_status as $value)
-                                                    <tr>
-                                                        <td>{{$loop->index+1}}</td>
-                                                        <td class="pl-20 text-capitalize ">
-                                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize ">
-                                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name}}" href="{{route('clients.show', $value->client_id)}}" target="_blank">{{\Str::limit($value->client->name, 20, ' ...')}}</a>
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">{{$value->project_budget}} $</td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                                $completed_task = $value->tasks->where('status', 'completed')->count();
-                                                                $total = $value->tasks->count();
-                                                                echo '('.$completed_task.' / '.$total.')';
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                            $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
-                                                            $completed_milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->where('status','complete')->count();
-
-                                                            echo '('.$completed_milestones.' / '.$milestones.')'
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                                $totalPaymentComplete = 0;
-                                                                foreach($value->milestones as $mil) {
-                                                                    $invoice = \App\Models\Invoice::find($mil->invoice_id);
-                                                                    if (!is_null($invoice) && $invoice->status == 'paid') {
-                                                                        $totalPaymentComplete++;
-                                                                    }
-                                                                }
-
-                                                                echo '('.$totalPaymentComplete.' / '.$value->milestones->count().')';
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                                                        <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
-                                                        <td>
-                                                            @php
-                                                                $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
-                                                                $completed_milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->where('status','complete')->count();
-                                                                if ($milestones < 1 ) {
-                                                                   $completion= 0;
-                                                                   $statusColor = 'danger';
-                                                                } elseif ($milestones >= 1) {
-                                                                    $percentage = round(($completed_milestones/$milestones)*100,2);
-                                                                    if($percentage < 50) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'danger';
-                                                                    } elseif ($percentage >= 50 && $percentage < 75) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'warning';
-                                                                    } elseif($percentage >= 75 && $percentage < 99) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'info';
-                                                                    } else {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'success';
-                                                                    }
-                                                                }
-
-                                                                echo '<div class="progress" style="height: 15px;">
-                                                                    <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $completion . '%;" aria-valuenow="' . $completion . '" aria-valuemin="0" aria-valuemax="100">' . $completion . '%</div>
-                                                                </div>'
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                            //dd($value);
-                                                            $projectStatus = \App\Models\ProjectStatusSetting::all();
-
-                                                            foreach($projectStatus as $status)
-                                                            {
-                                                                if ($value->status == $status->status_name) {
-                                                                    $color = $status->color;
-                                                                    echo ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' .'<span class="text-capitalize">'. ucfirst($status->status_name).'</span>';
-                                                                }
-                                                            }
-                                                            @endphp
-                                                        </td>
-                                                    </tr>
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Milestones</h4>
-                                            <table class="table w-100">
-                                                <thead>
-                                                    <th class="pl-20 text-capitalize">SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Milestone</th>
-                                                    <th class="pl-20 text-capitalize">Deliverable</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Milestone Cost</th>
-                                                    <th class="pl-20 text-capitalize">Status (Tasks)</th>
-                                                    <th class="pl-20 text-capitalize">Invoice Generated</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($today_project_status as $value)
-                                                        @foreach($value->milestones as $milestone)
-                                                            <tr>
-                                                                <td>{{$loop->index+1}}</td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$milestone->milestone_title}}" href="{{route('milestones.show', $milestone->id)}}" target="_blank">{{\Str::limit($milestone->milestone_title, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->project_name)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name}}" href="{{route('clients.show', $value->client_id)}}" target="_blank">{{\Str::limit($value->client->name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">{{$milestone->cost}} $</td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    ({{$milestone->tasks->where('status', 'tasks')->count()}} / {{$milestone->tasks->count()}})
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @if($milestone->invoice_created == 1)
-                                                                        <span class="badge badge-success">Yes</span>
-                                                                    @else
-                                                                        <span class="badge badge-danger">No</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @if($milestone->invoice)
-                                                                        @if($milestone->invoice->status == 'paid')
-                                                                            <span class="badge badge-success">Paid</span>
-                                                                        @else
-                                                                            <span class="badge badge-danger">Unpaid</span>
-                                                                        @endif
-                                                                    @else
-                                                                        <span class="badge badge-warning">N/A</span>
-                                                                    @endif
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Tasks</h4>
-                                            <table class="table w-100">
-                                                <thead>
-                                                    <th class="pl-20 text-capitalize">SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Task</th>
-                                                    <th class="pl-20 text-capitalize">Milestone</th>
-                                                    <th class="pl-20 text-capitalize">Deliverable</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Start Date</th>
-                                                    <th class="pl-20 text-capitalize">Deadline</th>
-                                                    <th class="pl-20 text-capitalize">Assign To</th>
-                                                    <th class="pl-20 text-capitalize">Estimated Time</th>
-                                                    <th class="pl-20 text-capitalize">Hours Logged</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($today_project_status as $value)
-                                                        @foreach($value->tasks as $task)
-                                                            <tr>
-                                                                <td>{{$loop->index+1}}</td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->heading}}" href="{{route('tasks.show', $task->id)}}" target="_blank">{{\Str::limit($task->heading, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->milestone_title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=milestone" target="_blank">{{\Str::limit($task->milestone->milestone_title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name ?? 'N/A'}}" href="{{route('clients.show', $value->client_id ?? 0)}}" target="_blank">{{\Str::limit($value->client->name ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">{{$task->start_date->format('Y-m-d') ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">{{$task->due_date->format('Y-m-d') ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $row = $task;
-                                                                        if (count($row->users) == 0) {
-                                                                            return '--';
-                                                                        }
-
-                                                                        $members = '<div class="position-relative">';
-
-                                                                        foreach ($row->users as $key => $member) {
-                                                                            if ($key < 4) {
-                                                                                $img = '<img data-toggle="tooltip" data-original-title="' . mb_ucwords($member->name) . '" src="' . $member->image_url . '">';
-                                                                                $position = $key > 0 ? 'position-absolute' : '';
-
-                                                                                $members .= '<div class="taskEmployeeImg rounded-circle '.$position.'" style="left:  '. ($key * 13) . 'px"><a href="' . route('employees.show', $member->id) . '">' . $img . '</a></div> ';
-                                                                            }
-                                                                        }
-
-                                                                        if (count($row->users) > 4) {
-                                                                            $members .= '<div class="taskEmployeeImg more-user-count text-center rounded-circle border bg-amt-grey position-absolute" style="left:  '. (($key - 1) * 13) . 'px"><a href="' .  route('tasks.show', [$row->id]). '" class="text-dark f-10">+' . (count($row->users) - 4) . '</a></div> ';
-                                                                        }
-
-                                                                        $members .= '</div>';
-
-                                                                        echo $members;
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $totalHours = $task->estimate_hours;
-                                                                        $totalMinutes = $task->estimate_minutes;
-
-                                                                        $tasks = $task->subtasks;
-
-                                                                        foreach($tasks as $value) {
-                                                                            $countTask = \App\Models\Task::where('subtask_id', $value->id)->first();
-                                                                            $totalHours = $totalHours + $countTask->estimate_hours;
-                                                                            $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
-                                                                        }
-
-                                                                        if ($totalMinutes >= 60) {
-                                                                            $hours = intval(floor($totalMinutes / 60));
-                                                                            $minutes = $totalMinutes % 60;
-                                                                            $totalHours = $totalHours + $hours;
-                                                                            $totalMinutes = $minutes;
-                                                                        }
-
-                                                                        if ($totalHours == 0 && $totalMinutes == 0) {
-                                                                            echo '---';
-                                                                        } else {
-                                                                            echo $totalHours.' hrs '.$totalMinutes.' mins';
-                                                                        }
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $row = $task;
-                                                                        $timeLog = '--';
-
-                                                                        if($row->timeLogged) {
-                                                                            $totalMinutes = $row->timeLogged->sum('total_minutes');
-
-                                                                            foreach($row->timeLogged as $value) {
-                                                                                if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
-                                                                                    $totalMinutes = $totalMinutes + $workingTime;
-                                                                                }
-                                                                            }
-
-                                                                            $breakMinutes = $row->breakMinutes();
-                                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                                            if ($totalMinutes % 60 > 0) {
-                                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                                            }
-                                                                        }
-
-                                                                        $tas_id = \App\Models\Task::where('id',$row->id)->first();
-                                                                        $subtasks = \App\Models\Subtask::where('task_id', $tas_id->id)->get();
-
-                                                                        //$time = 0;
-
-                                                                        foreach ($subtasks as $subtask) {
-                                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                                            $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
-
-                                                                            foreach($task->timeLogged as $value) {
-                                                                                if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
-                                                                                    $totalMinutes = $totalMinutes + $workingTime;
-                                                                                }
-                                                                            }
-                                                                        }
-
-                                                                        if($subtasks == null) {
-                                                                            echo $timeLog;
-                                                                        } else {
-                                                                            $timeL = intdiv(($totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                                            if ($totalMinutes % 60 > 0) {
-                                                                                $timeL .= ($totalMinutes) % 60 . ' ' . __('app.mins');
-                                                                            }
-                                                                            echo $timeL;
-                                                                        }
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
                         </div>
                     </div>
-                </div> --}}
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h2 class="mb-0">
-                        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Project Manager Monthly Cycle Update (16th - 15th)
-                        </button>
-                    </h2>
                 </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body bg-amt-grey">
-                        <div class="row my-2 text-center mx-auto">
-                            <div class="col-sm-12 pb-3">
-                                <div class="fc fc-media-screen fc-direction-ltr fc-theme-standard fc-liquid-hack text-center">
-                                    <div class="fc-toolbar-chunk">
-                                        <div class="fc-button-group">
-                                            <button date-mode="month" class="fc-prev-button fc-button fc-button-primary" type="button" aria-label="prev">
-                                                <span class="fc-icon fc-icon-chevron-left"></span>
-                                            </button>
-                                            <h2 class="fc-toolbar-title mx-3 monthDate"></h2>
-                                            <button date-mode="month" class="fc-next-button fc-button fc-button-primary" type="button" aria-label="next">
-                                                <span class="fc-icon fc-icon-chevron-right"></span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#totalAssignProjectValue{{ count($no_of_projects) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($total_project_value,2) }} ($)<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total assigned projects value') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.total_project_value.total_assign_project_value')
+
+                                <a href="#" data-toggle="modal" data-target="#projectAcceptValueModal{{ count($no_of_accepted_projects) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($accepted_project_value, 2) }} ($)<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Accepted projects value') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.total_project_value.accept_project_modal')
+
+                                <a href="#" data-toggle="modal" data-target="#rejectedProjectValueModal{{ count($no_of_rejected_projects) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                                        {{ round($rejected_project_value, 2) }} ($)<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Rejected projects value') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.total_project_value.rejected_project_modal')
                             </div>
                         </div>
-                        <div id="monthHtml">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#" data-toggle="modal" data-target="#projectModal" id="total_project">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ $month_no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Total assigned projects number') </span>
-                                                    </p>
-                                                </a>
-
-
-                                                <!--Number Of Project Modal -->
-                                                    <div class="modal fade" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog modal-xl" role="document">
-                                                            <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLabel">Total Assigned Project</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="modal-body" id="numberOfProjectModalBody">
-                                                                <!-- render modal body data here... -->
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                <a href="#" id="accept_project">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ $month_no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Accepted projects') </span>
-                                                    </p>
-                                                </a>
-
-                                                <a href="#" id="reject_project">
-                                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid">{{$month_no_of_canceled}}<span
-                                                        class="f-12 font-weight-normal text-lightest">@lang('Rejected projects')</span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Total assigned projects value') </span>
-                                                    </p>
-                                                </a>
-
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Accepted projects value') </span>
-                                                    </p>
-                                                </a>
-
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
-                                                        {{ round($month_total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Rejected projects value') </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Released amount for Cycle') </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Total released amount') </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of fully completed/Finished projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_percentage_of_complete_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Completed/Finished projects for cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_percentage_of_complete_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Total completed/Finished projects in this cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0" style="height: 100%;">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of 100% in progress projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_percentage_of_canceled_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('100% in progress projects for this cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_avg_project_completion_time,2) }} <span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Completed/Finished projects for cycle (Value)')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_avg_project_completion_time,2) }} <span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Completed/Finished projects for cycle (Count)')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_avg_project_completion_time,2) }} <span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Total completed/Finished projects in this cycle (Value)')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_avg_project_completion_time,2) }} <span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Total completed/Finished projects in this cycle (Count)')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                {{-- <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div> --}}
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        0<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('100% in progress projects for cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        0<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Completed/Finished projects for cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0" style="height: 100%;">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of First time clients</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Milestone completion rate')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Complete milestones for cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-
-
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task completion rate</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Task completion rate for cycle')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average project completion time</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        0 days<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Average Project Completion Time')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of upsale/cross sales</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($month_percentage_of_onhold_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Number of New deals added')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_percentage_of_onhold_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Number of new milestones added on old projects')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{ round($month_percentage_of_onhold_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Number of old projects where there is upsales/cross sales')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0" style="height: 100%;">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of upsale/crosssale</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_project_deadline->count()}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Canceled projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
-                                                        {{$month_project_deadline->count()}}<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Total Cancelled Project')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_milestoe_to_be_completed}}<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Total Delayed Project')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects percentage</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_tasks_under_review}}<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Current')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_tasks_under_review}}<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Current plus old ones')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed completed</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        {{$month_tasks_deadline}}<span class="f-12 font-weight-normal text-lightest">
-                                                            @lang('Total Completed Delayed Project')
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_completed_milestone}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_invoice_created}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{round($month_payment_release, 2)}}$<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form (Required Submission)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_qc_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form (Required Submission)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_completion_form_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Partially Finished Projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_partially_finished_project->count()}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Milestone</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_total_milestone_count}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Released</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_project_milestone_total}} $<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_project_milestone->sum('milestone_cancel_amount')}} $<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_qc_pending_count}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-6">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$month_completion_pending_count}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
-
-
-
-                            {{-- <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Projects</h4>
-                                            <table class="table w-100">
-                                                <thead name="thead">
-                                                    <th class="pl-20 text-capitalize"> SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Project Value</th>
-                                                    <th class="pl-20 text-capitalize">Tasks</th>
-                                                    <th class="pl-20 text-capitalize">Milestones (Task)</th>
-                                                    <th class="pl-20 text-capitalize">Milestones (Payment)</th>
-                                                    <th class="pl-20 text-capitalize">Start Date</th>
-                                                    <th class="pl-20 text-capitalize">Deadline</th>
-
-                                                    <th class="pl-20 text-capitalize">Progress</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($month_project_status as $value)
-                                                    <tr>
-                                                        <td>{{$loop->index+1}}</td>
-                                                        <td class="pl-20 text-capitalize ">
-                                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize ">
-                                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name}}" href="{{route('clients.show', $value->client_id)}}" target="_blank">{{\Str::limit($value->client->name, 20, ' ...')}}</a>
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">{{$value->project_budget}} $</td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                                $completed_task = $value->tasks->where('status', 'completed')->count();
-                                                                $total = $value->tasks->count();
-                                                                echo '('.$completed_task.' / '.$total.')';
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                            $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
-                                                            $completed_milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->where('status','complete')->count();
-
-                                                            echo '('.$completed_milestones.' / '.$milestones.')'
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                                $totalPaymentComplete = 0;
-                                                                foreach($value->milestones as $mil) {
-                                                                    $invoice = \App\Models\Invoice::find($mil->invoice_id);
-                                                                    if (!is_null($invoice) && $invoice->status == 'paid') {
-                                                                        $totalPaymentComplete++;
-                                                                    }
-                                                                }
-
-                                                                echo '('.$totalPaymentComplete.' / '.$value->milestones->count().')';
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                                                        <td class="pl-20 text-capitalize">{{$value->deadline}}</td>
-
-                                                        <td>
-                                                            @php
-                                                                $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
-                                                                $completed_milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->where('status','complete')->count();
-                                                                if ($milestones < 1 ) {
-                                                                   $completion= 0;
-                                                                   $statusColor = 'danger';
-                                                                } elseif ($milestones >= 1) {
-                                                                    $percentage = round(($completed_milestones/$milestones)*100,2);
-                                                                    if($percentage < 50) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'danger';
-                                                                    } elseif ($percentage >= 50 && $percentage < 75) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'warning';
-                                                                    } elseif($percentage >= 75 && $percentage < 99) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'info';
-                                                                    } else {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'success';
-                                                                    }
-                                                                }
-
-                                                                echo '<div class="progress" style="height: 15px;">
-                                                                    <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $completion . '%;" aria-valuenow="' . $completion . '" aria-valuemin="0" aria-valuemax="100">' . $completion . '%</div>
-                                                                </div>'
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                            //dd($value);
-                                                            $projectStatus = \App\Models\ProjectStatusSetting::all();
-
-                                                            foreach($projectStatus as $status)
-                                                            {
-                                                                if ($value->status == $status->status_name) {
-                                                                    $color = $status->color;
-                                                                    echo ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' .'<span class="text-capitalize">'. ucfirst($status->status_name).'</span>';
-                                                                }
-                                                            }
-                                                            @endphp
-                                                        </td>
-                                                    </tr>
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Milestones</h4>
-                                            <table class="table w-100">
-                                                <thead>
-                                                    <th class="pl-20 text-capitalize">SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Milestone</th>
-                                                    <th class="pl-20 text-capitalize">Deliverable</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Milestone Cost</th>
-                                                    <th class="pl-20 text-capitalize">Status (Tasks)</th>
-                                                    <th class="pl-20 text-capitalize">Invoice Generated</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($month_project_status as $value)
-                                                        @foreach($value->milestones as $milestone)
-                                                            <tr>
-                                                                <td>{{$loop->index+1}}</td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$milestone->milestone_title}}" href="{{route('milestones.show', $milestone->id)}}" target="_blank">{{\Str::limit($milestone->milestone_title, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->project_name)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name}}" href="{{route('clients.show', $value->client_id)}}" target="_blank">{{\Str::limit($value->client->name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">{{$milestone->cost}} $</td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    ({{$milestone->tasks->where('status', 'completed')->count()}} / {{$milestone->tasks->count()}})
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @if($milestone->invoice_created == 1)
-                                                                        <span class="badge badge-success">Yes</span>
-                                                                    @else
-                                                                        <span class="badge badge-danger">No</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @if($milestone->invoice)
-                                                                        @if($milestone->invoice->status == 'paid')
-                                                                            <span class="badge badge-success">Paid</span>
-                                                                        @else
-                                                                            <span class="badge badge-danger">Unpaid</span>
-                                                                        @endif
-                                                                    @else
-                                                                        <span class="badge badge-warning">N/A</span>
-                                                                    @endif
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Tasks</h4>
-                                            <table class="table w-100">
-                                                <thead>
-                                                    <th class="pl-20 text-capitalize">SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Task</th>
-                                                    <th class="pl-20 text-capitalize">Milestone</th>
-                                                    <th class="pl-20 text-capitalize">Deliverable</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Start Date</th>
-                                                    <th class="pl-20 text-capitalize">Deadline</th>
-                                                    <th class="pl-20 text-capitalize">Assign To</th>
-                                                    <th class="pl-20 text-capitalize">Estimated Time</th>
-                                                    <th class="pl-20 text-capitalize">Hours Logged</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($month_task_status as $task)
-
-                                                            <tr>
-                                                                <td>{{$loop->index+1}}</td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->heading}}" href="{{route('tasks.show', $task->id)}}" target="_blank">{{\Str::limit($task->heading, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->milestone_title ?? 'N/A'}}" href="{{route('projects.show', $task->project_id)}}?tab=milestone" target="_blank">{{\Str::limit($task->milestone->milestone_title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $task->project_id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->project_name}}" href="{{route('projects.show', $task->project_id)}}" target="_blank">{{\Str::limit($task->project->project_name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->client->name ?? 'N/A'}}" href="{{route('clients.show', $task->project->client_id ?? 0)}}" target="_blank">{{\Str::limit($task->project->client->name ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">{{$task->start_date ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">{{$task->due_date ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $row = $task;
-                                                                        if (count($row->users) == 0) {
-                                                                            return '--';
-                                                                        }
-
-                                                                        $members = '<div class="position-relative">';
-
-                                                                        foreach ($row->users as $key => $member) {
-                                                                            if ($key < 4) {
-                                                                                $img = '<img data-toggle="tooltip" data-original-title="' . mb_ucwords($member->name) . '" src="' . $member->image_url . '">';
-                                                                                $position = $key > 0 ? 'position-absolute' : '';
-
-                                                                                $members .= '<div class="taskEmployeeImg rounded-circle '.$position.'" style="left:  '. ($key * 13) . 'px"><a href="' . route('employees.show', $member->id) . '">' . $img . '</a></div> ';
-                                                                            }
-                                                                        }
-
-                                                                        if (count($row->users) > 4) {
-                                                                            $members .= '<div class="taskEmployeeImg more-user-count text-center rounded-circle border bg-amt-grey position-absolute" style="left:  '. (($key - 1) * 13) . 'px"><a href="' .  route('tasks.show', [$row->id]). '" class="text-dark f-10">+' . (count($row->users) - 4) . '</a></div> ';
-                                                                        }
-
-                                                                        $members .= '</div>';
-
-                                                                        echo $members;
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $totalHours = $task->estimate_hours;
-                                                                        $totalMinutes = $task->estimate_minutes;
-
-                                                                        $tasks = $task->subtasks;
-
-                                                                        foreach($tasks as $value) {
-                                                                            $countTask = \App\Models\Task::where('subtask_id', $value->id)->first();
-                                                                            $totalHours = $totalHours + $countTask->estimate_hours;
-                                                                            $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
-                                                                        }
-
-                                                                        if ($totalMinutes >= 60) {
-                                                                            $hours = intval(floor($totalMinutes / 60));
-                                                                            $minutes = $totalMinutes % 60;
-                                                                            $totalHours = $totalHours + $hours;
-                                                                            $totalMinutes = $minutes;
-                                                                        }
-
-                                                                        if ($totalHours == 0 && $totalMinutes == 0) {
-                                                                            echo '---';
-                                                                        } else {
-                                                                            echo $totalHours.' hrs '.$totalMinutes.' mins';
-                                                                        }
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $row = $task;
-                                                                        $timeLog = '--';
-
-                                                                        if($row->timeLogged) {
-                                                                            $totalMinutes = $row->timeLogged->sum('total_minutes');
-
-                                                                            foreach($row->timeLogged as $value) {
-                                                                                if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
-                                                                                    $totalMinutes = $totalMinutes + $workingTime;
-                                                                                }
-                                                                            }
-
-                                                                            $breakMinutes = $row->breakMinutes();
-                                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                                            if ($totalMinutes % 60 > 0) {
-                                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                                            }
-                                                                        }
-
-                                                                        $tas_id = \App\Models\Task::where('id',$row->id)->first();
-                                                                        $subtasks = \App\Models\Subtask::where('task_id', $tas_id->id)->get();
-
-                                                                        //$time = 0;
-
-                                                                        foreach ($subtasks as $subtask) {
-                                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                                            $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
-
-                                                                            foreach($task->timeLogged as $value) {
-                                                                                if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
-                                                                                    $totalMinutes = $totalMinutes + $workingTime;
-                                                                                }
-                                                                            }
-                                                                        }
-
-                                                                        if($subtasks == null) {
-                                                                            echo $timeLog;
-                                                                        } else {
-                                                                            $timeL = intdiv(($totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                                            if ($totalMinutes % 60 > 0) {
-                                                                                $timeL .= ($totalMinutes) % 60 . ' ' . __('app.mins');
-                                                                            }
-                                                                            echo $timeL;
-                                                                        }
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
-                                                                </td>
-                                                            </tr>
-
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Project Manager (General View)
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body bg-amt-grey">
-                        <div class="row">
-                            <div class="align-items-center mx-auto h-100 pl-4 ml-5">
-                                <div class="col-auto">
-                                    <label class="sr-only" for="inlineFormInputGroup"></label>
-                                    <div class="input-group mb-2">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text"><i class="fa fa-calendar-alt mr-2 f-14 text-dark-grey"></i></div>
-                                        </div>
-                                        <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500" id="datatableRange2" placeholder="Start Date And End Date">
-                                   </div>
-                                </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#releasedAmountCycle{{ count($total_released_amount_this_cycle_get) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($total_released_amount_this_cycle, 2) }} ($)<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Released amount in this Cycle') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.total_released_amount.released_amount_cycle')
+                                <a href="#" data-toggle="modal" data-target="#totalReleasedAmount{{ count($total_released_amount_previous_cycle_get) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($total_released_amount_previous_cycle, 2) }} ($)<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total released amount') </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.total_released_amount.total_released_amount')
                             </div>
                         </div>
-                        <div id="generalHtml">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of Projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ $general_no_of_inprogress }}<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('In Progress') </span>
-                                                    </p>
-                                                </a>
-
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-red d-grid">{{$general_no_of_canceled}}<span
-                                                        class="f-12 font-weight-normal text-lightest">@lang('Canceled')</span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Project Value</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_total_project_value,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Amount (USD)') </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_total_released_amount,2) }} ($)<span class="f-12 font-weight-normal text-lightest">
-                                                        @lang('Amount (USD)') </span>
-                                                    </p>
-                                                </a>
-
-
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Completed/Money Released</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_percentage_of_complete_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of 100% in progress projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ count($no_of_100_finished_project_this_cycle) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('100% in progress projects in this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ count($no_of_100_finished_project_previous_cycle) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('100% in progress projects for this cycle')
+                                        </span>
+                                    </p>
+                                </a>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% Projects Got Canceled</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_percentage_of_canceled_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average Project Completion Time</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Cross/Upsell Projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        0<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of fully completed/Finished projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#completeProjectCycle{{ count($no_of_finished_projects_this_cycle) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ count($no_of_finished_projects_this_cycle) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Completed/Finished projects for cycle')
+                                        </span>
+                                    </p>
+                                </a>
 
+                                @include('dashboard.employee.number_of_fully_completed_project.complete_project_cycle')
 
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                                <a href="#" data-toggle="modal" data-target="#totalCompleteProjectCycle{{ count($no_of_finished_projects_previous_cycle) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ count($no_of_finished_projects_previous_cycle) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total completed/Finished projects in this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.number_of_fully_completed_project.total_complete_project_cycle')
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Release Time</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_avg_project_completion_time,2) }} Days<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Count)</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0%<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('100% in progress projects for cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        0<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Completed/Finished projects for cycle')
+                                        </span>
+                                    </p>
+                                </a>
 
-
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Negative Feedbacks After Submission</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Projects Completed on Time</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        0%<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">% of Project on Hold</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{ round($general_percentage_of_onhold_project_count,2) }}%<span class="f-12 font-weight-normal text-lightest">
-                                                        </span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Projects Deadline Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_project_deadline->count()}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Waiting To be Completed</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_milestoe_to_be_completed}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Tasks Under Review (Assigned By Me)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_tasks_under_review}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task Deadline Of this Month (Assigned By Me)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_tasks_deadline}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="col-md-3">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
+                            <div class="d-flex">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
+                                        </span>
+                                    </p>
+                                </a>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completed Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_completed_milestone}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Invoice Created Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_invoice_created}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Payment Released Of this Month</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{round($general_payment_release, 2)}}$<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form (Required Submission)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_qc_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div> --}}
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of fully completed/Finished projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($value_of_finished_projects_this_cycle, 2) }} <span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Completed/Finished projects for cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($value_of_finished_projects_previous_cycle, 2) }} <span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total completed/Finished projects in this cycle')
+                                        </span>
+                                    </p>
+                                </a>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form (Required Submission)</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_completion_form_required_submission}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Partially Finished Projects</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_partially_finished_project->count()}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Milestone</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_total_milestone_count}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Released</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_project_milestone_total}} $<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Value)</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0%<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('100% in progress projects for cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        0<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Completed/Finished projects for cycle')
+                                        </span>
+                                    </p>
+                                </a>
+
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Canceled</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_project_milestone->sum('milestone_cancel_amount')}} $<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">QC Form Pending Approval</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_qc_pending_count}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize">
-                                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Completion Form Pending Approval</h5>
-                                            <div class="d-flex">
-                                                <a href="#">
-                                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        {{$general_completion_pending_count}}<span class="f-12 font-weight-normal text-lightest"></span>
-                                                    </p>
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div class="d-block">
-                                            <i class="fa fa-list text-lightest f-27"></i>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of First time clients</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($month_avg_project_completion_time, 2) }} Days<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestone completion rate')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($month_avg_project_completion_time, 2) }} Days<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Complete milestones for cycle')
+                                        </span>
+                                    </p>
+                                </a>
+
+
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Projects</h4>
-                                            <table class="table w-100">
-                                                <thead name="thead">
-                                                    <th class="pl-20 text-capitalize"> SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Project Value</th>
-                                                    <th class="pl-20 text-capitalize">Tasks</th>
-                                                    <th class="pl-20 text-capitalize">Milestones (Task)</th>
-                                                    <th class="pl-20 text-capitalize">Milestones (Payment)</th>
-                                                    <th class="pl-20 text-capitalize">Start Date</th>
-                                                    <th class="pl-20 text-capitalize">Deadline</th>
-
-                                                    <th class="pl-20 text-capitalize">Progress</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($general_project_status as $value)
-                                                    <tr>
-                                                        <td>{{$loop->index+1}}</td>
-                                                        <td class="pl-20 text-capitalize ">
-                                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->id)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize ">
-                                                            <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name}}" href="{{route('clients.show', $value->client_id)}}" target="_blank">{{\Str::limit($value->client->name, 20, ' ...')}}</a>
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">{{$value->project_budget}} $</td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                                $completed_task = $value->tasks->where('status', 'completed')->count();
-                                                                $total = $value->tasks->count();
-                                                                echo '('.$completed_task.' / '.$total.')';
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                            $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
-                                                            $completed_milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->where('status','complete')->count();
-
-                                                            echo '('.$completed_milestones.' / '.$milestones.')'
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                                $totalPaymentComplete = 0;
-                                                                foreach($value->milestones as $mil) {
-                                                                    $invoice = \App\Models\Invoice::find($mil->invoice_id);
-                                                                    if (!is_null($invoice) && $invoice->status == 'paid') {
-                                                                        $totalPaymentComplete++;
-                                                                    }
-                                                                }
-
-                                                                echo '('.$totalPaymentComplete.' / '.$value->milestones->count().')';
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">{{$value->start_date->format('Y-m-d')}}</td>
-                                                        <td>
-                                                            @php
-                                                                $milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->count();
-                                                                $completed_milestones= \App\Models\ProjectMilestone::where('project_id',$value->id)->where('status','complete')->count();
-                                                                if ($milestones < 1 ) {
-                                                                   $completion= 0;
-                                                                   $statusColor = 'danger';
-                                                                } elseif ($milestones >= 1) {
-                                                                    $percentage = round(($completed_milestones/$milestones)*100,2);
-                                                                    if($percentage < 50) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'danger';
-                                                                    } elseif ($percentage >= 50 && $percentage < 75) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'warning';
-                                                                    } elseif($percentage >= 75 && $percentage < 99) {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'info';
-                                                                    } else {
-                                                                        $completion= $percentage;
-                                                                        $statusColor = 'success';
-                                                                    }
-                                                                }
-
-                                                                echo '<div class="progress" style="height: 15px;">
-                                                                    <div class="progress-bar f-12 bg-' . $statusColor . '" role="progressbar" style="width: ' . $completion . '%;" aria-valuenow="' . $completion . '" aria-valuemin="0" aria-valuemax="100">' . $completion . '%</div>
-                                                                </div>'
-                                                            @endphp
-                                                        </td>
-                                                        <td class="pl-20 text-capitalize">
-                                                            @php
-                                                            //dd($value);
-                                                            $projectStatus = \App\Models\ProjectStatusSetting::all();
-
-                                                            foreach($projectStatus as $status)
-                                                            {
-                                                                if ($value->status == $status->status_name) {
-                                                                    $color = $status->color;
-                                                                    echo ' <i class="fa fa-circle mr-1 f-10" style="color:'.$color.'"></i>' .'<span class="text-capitalize">'. ucfirst($status->status_name).'</span>';
-                                                                }
-                                                            }
-                                                            @endphp
-                                                        </td>
-                                                    </tr>
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone completion rate</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestone assigned')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestones ccompleted')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestone assigned')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestones ccompleted')
+                                        </span>
+                                    </p>
+                                </a>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Milestones</h4>
-                                            <table class="table w-100">
-                                                <thead>
-                                                    <th class="pl-20 text-capitalize">SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Milestone</th>
-                                                    <th class="pl-20 text-capitalize">Deliverable</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Milestone Cost</th>
-                                                    <th class="pl-20 text-capitalize">Status (Tasks)</th>
-                                                    <th class="pl-20 text-capitalize">Invoice Generated</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($general_project_status as $value)
-                                                        @foreach($value->milestones as $milestone)
-                                                            <tr>
-                                                                <td>{{$loop->index+1}}</td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$milestone->milestone_title}}" href="{{route('milestones.show', $milestone->id)}}" target="_blank">{{\Str::limit($milestone->milestone_title, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->project_name}}" href="{{route('projects.show', $value->project_name)}}" target="_blank">{{\Str::limit($value->project_name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$value->client->name}}" href="{{route('clients.show', $value->client_id)}}" target="_blank">{{\Str::limit($value->client->name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">{{$milestone->cost}} $</td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    ({{$milestone->tasks->where('status', 'completed')->count()}} / {{$milestone->tasks->count()}})
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @if($milestone->invoice_created == 1)
-                                                                        <span class="badge badge-success">Yes</span>
-                                                                    @else
-                                                                        <span class="badge badge-danger">No</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @if($milestone->invoice)
-                                                                        @if($milestone->invoice->status == 'paid')
-                                                                            <span class="badge badge-success">Paid</span>
-                                                                        @else
-                                                                            <span class="badge badge-danger">Unpaid</span>
-                                                                        @endif
-                                                                    @else
-                                                                        <span class="badge badge-warning">N/A</span>
-                                                                    @endif
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Complete milestones for cycle</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestone assigned')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestones ccompleted')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestone assigned')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Milestones ccompleted')
+                                        </span>
+                                    </p>
+                                </a>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                                        <div class="d-block text-capitalize w-100 h-200">
-                                            <h4 class="f-18 f-w-500 mb-2">Total Tasks</h4>
-                                            <table class="table w-100">
-                                                <thead>
-                                                    <th class="pl-20 text-capitalize">SL. No</th>
-                                                    <th class="pl-20 text-capitalize">Task</th>
-                                                    <th class="pl-20 text-capitalize">Milestone</th>
-                                                    <th class="pl-20 text-capitalize">Deliverable</th>
-                                                    <th class="pl-20 text-capitalize">Project</th>
-                                                    <th class="pl-20 text-capitalize">Client</th>
-                                                    <th class="pl-20 text-capitalize">Start Date</th>
-                                                    <th class="pl-20 text-capitalize">Deadline</th>
-                                                    <th class="pl-20 text-capitalize">Assign To</th>
-                                                    <th class="pl-20 text-capitalize">Estimated Time</th>
-                                                    <th class="pl-20 text-capitalize">Hours Logged</th>
-                                                    <th class="pl-20 text-capitalize">Status</th>
-                                                </thead>
-                                                <tbody>
-                                                    @forelse($general_task_status as $task)
-
-                                                            <tr>
-                                                                <td>{{$loop->index+1}}</td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->heading}}" href="{{route('tasks.show', $task->id)}}" target="_blank">{{\Str::limit($task->heading, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->milestone_title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=milestone" target="_blank">{{\Str::limit($task->milestone->milestone_title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->milestone->deliverables->title ?? 'N/A'}}" href="{{route('projects.show', $value->id)}}?tab=deliverables" target="_blank">{{\Str::limit($task->milestone->deliverables->title ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->project_name}}" href="{{route('projects.show', $task->project->id)}}" target="_blank">{{\Str::limit($task->project->project_name, 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize ">
-                                                                    <a class="text-darkest-grey openRightModal RightModal" id="RightModal" title="{{$task->project->client->name ?? 'N/A'}}" href="{{route('clients.show', $task->project->client_id ?? 0)}}" target="_blank">{{\Str::limit($task->project->client->name ?? 'N/A', 20, ' ...')}}</a>
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">{{$task->start_date ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">{{$task->due_date ?? '---'}}</td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $row = $task;
-                                                                        if (count($row->users) == 0) {
-                                                                            return '--';
-                                                                        }
-
-                                                                        $members = '<div class="position-relative">';
-
-                                                                        foreach ($row->users as $key => $member) {
-                                                                            if ($key < 4) {
-                                                                                $img = '<img data-toggle="tooltip" data-original-title="' . mb_ucwords($member->name) . '" src="' . $member->image_url . '">';
-                                                                                $position = $key > 0 ? 'position-absolute' : '';
-
-                                                                                $members .= '<div class="taskEmployeeImg rounded-circle '.$position.'" style="left:  '. ($key * 13) . 'px"><a href="' . route('employees.show', $member->id) . '">' . $img . '</a></div> ';
-                                                                            }
-                                                                        }
-
-                                                                        if (count($row->users) > 4) {
-                                                                            $members .= '<div class="taskEmployeeImg more-user-count text-center rounded-circle border bg-amt-grey position-absolute" style="left:  '. (($key - 1) * 13) . 'px"><a href="' .  route('tasks.show', [$row->id]). '" class="text-dark f-10">+' . (count($row->users) - 4) . '</a></div> ';
-                                                                        }
-
-                                                                        $members .= '</div>';
-
-                                                                        echo $members;
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $totalHours = $task->estimate_hours;
-                                                                        $totalMinutes = $task->estimate_minutes;
-
-                                                                        $tasks = $task->subtasks;
-
-                                                                        foreach($tasks as $value) {
-                                                                            $countTask = \App\Models\Task::where('subtask_id', $value->id)->first();
-                                                                            $totalHours = $totalHours + $countTask->estimate_hours;
-                                                                            $totalMinutes = $totalMinutes + $countTask->estimate_minutes;
-                                                                        }
-
-                                                                        if ($totalMinutes >= 60) {
-                                                                            $hours = intval(floor($totalMinutes / 60));
-                                                                            $minutes = $totalMinutes % 60;
-                                                                            $totalHours = $totalHours + $hours;
-                                                                            $totalMinutes = $minutes;
-                                                                        }
-
-                                                                        if ($totalHours == 0 && $totalMinutes == 0) {
-                                                                            echo '---';
-                                                                        } else {
-                                                                            echo $totalHours.' hrs '.$totalMinutes.' mins';
-                                                                        }
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    @php
-                                                                        $row = $task;
-                                                                        $timeLog = '--';
-
-                                                                        if($row->timeLogged) {
-                                                                            $totalMinutes = $row->timeLogged->sum('total_minutes');
-
-                                                                            foreach($row->timeLogged as $value) {
-                                                                                if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
-                                                                                    $totalMinutes = $totalMinutes + $workingTime;
-                                                                                }
-                                                                            }
-
-                                                                            $breakMinutes = $row->breakMinutes();
-                                                                            $totalMinutes = $totalMinutes - $breakMinutes;
-
-                                                                            $timeLog = intdiv($totalMinutes, 60) . ' ' . __('app.hrs') . ' ';
-
-                                                                            if ($totalMinutes % 60 > 0) {
-                                                                                $timeLog .= $totalMinutes % 60 . ' ' . __('app.mins');
-                                                                            }
-                                                                        }
-
-                                                                        $tas_id = \App\Models\Task::where('id',$row->id)->first();
-                                                                        $subtasks = \App\Models\Subtask::where('task_id', $tas_id->id)->get();
-
-                                                                        //$time = 0;
-
-                                                                        foreach ($subtasks as $subtask) {
-                                                                            $task = \App\Models\Task::where('subtask_id', $subtask->id)->first();
-                                                                            $totalMinutes = $totalMinutes + $task->timeLogged->sum('total_minutes');
-
-                                                                            foreach($task->timeLogged as $value) {
-                                                                                if (is_null($value->end_time)) {
-                                                                                    $workingTime = $value->start_time->diffInMinutes(\Carbon\Carbon::now());
-                                                                                    $totalMinutes = $totalMinutes + $workingTime;
-                                                                                }
-                                                                            }
-                                                                        }
-
-                                                                        if($subtasks == null) {
-                                                                            echo $timeLog;
-                                                                        } else {
-                                                                            $timeL = intdiv(($totalMinutes), 60) . ' ' . __('app.hrs') . ' ';
-
-                                                                            if ($totalMinutes % 60 > 0) {
-                                                                                $timeL .= ($totalMinutes) % 60 . ' ' . __('app.mins');
-                                                                            }
-                                                                            echo $timeL;
-                                                                        }
-                                                                    @endphp
-                                                                </td>
-                                                                <td class="pl-20 text-capitalize">
-                                                                    <i class="fa fa-circle mr-1 text-yellow" style="color: {{$row->boardColumn->label_color}};"></i>{{$row->boardColumn->column_name}}
-                                                                </td>
-                                                            </tr>
-
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="12" class="shadow-none">
-                                                                <x-cards.no-record icon="list" :message="__('messages.noRecordFound')" />
-                                                            </td>
-                                                        </tr>
-                                                    @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task completion rate</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($month_total_canceled_project, 2) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Task completion rate for cycle')
+                                        </span>
+                                    </p>
+                                </a>
                             </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average project completion time</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0 days<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Average Project Completion Time')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of upsale/cross sales</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($month_percentage_of_onhold_project_count, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Number of New deals added')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($month_percentage_of_onhold_project_count, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Number of new milestones added on old projects')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 mt-3">
+                                        {{ round($month_percentage_of_onhold_project_count, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Number of old projects where there is upsales/cross sales')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of upsale/crosssale</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ $month_project_deadline->count() }}<span
+                                            class="f-12 font-weight-normal text-lightest"></span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Canceled projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                                        {{ $month_project_deadline->count() }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total Cancelled Project')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ $month_milestoe_to_be_completed }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total Delayed Project')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects percentage</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ $month_tasks_under_review }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Current')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ $month_tasks_under_review }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Current plus old ones')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed completed</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ $month_tasks_deadline }}<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total Completed Delayed Project')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions for cycle</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Caused by me')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Caused By others')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Disputed')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions in cycle</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Caused by me')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Caused By others')
+                                        </span>
+                                    </p>
+                                </a>
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                                        0<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Disputed')
+                                        </span>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Cancelation rate</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div
+                        class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Rel. Count per day</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        0
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
                         </div>
                     </div>
                 </div>
@@ -2673,8 +853,13 @@
     <script src="{{ asset('vendor/jquery/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
         @php
-            $startDate = \Carbon\Carbon::now()->startOfMonth()->subMonths(1)->addDays(15);
-            $endDate = \Carbon\Carbon::now()->startOfMonth()->addDays(15);
+            $startDate = \Carbon\Carbon::now()
+                ->startOfMonth()
+                ->subMonths(1)
+                ->addDays(15);
+            $endDate = \Carbon\Carbon::now()
+                ->startOfMonth()
+                ->addDays(15);
         @endphp
         $(function() {
             var format = '{{ global_setting()->moment_format }}';
@@ -2686,7 +871,7 @@
 
             function cb(start, end) {
                 $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
-                    ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+                    ' @lang('app.to') ' + end.format('{{ global_setting()->moment_date_format }}'));
                 $('#reset-filters').removeClass('d-none');
             }
 
@@ -2819,7 +1004,6 @@
         <script src="{{ asset('vendor/full-calendar/main.min.js') }}"></script>
         <script src="{{ asset('vendor/full-calendar/locales-all.min.js') }}"></script>
         <script>
-
             var initialLocaleCode = '{{ user()->locale }}';
             var calendarEl = document.getElementById('calendar');
 
@@ -2840,7 +1024,7 @@
                     calendar.unselect()
                 },
                 eventClick: function(arg) {
-                    getEventDetail(arg.event.id,arg.event.extendedProps.event_type);
+                    getEventDetail(arg.event.id, arg.event.extendedProps.event_type);
                 },
                 editable: false,
                 dayMaxEvents: true, // allow "more" link when too many events
@@ -2850,15 +1034,20 @@
                 eventDidMount: function(info) {
                     $(info.el).css('background-color', info.event.extendedProps.bg_color);
                     $(info.el).css('color', info.event.extendedProps.color);
-                    $(info.el).find('td.fc-list-event-title').prepend('<i class="fa '+info.event.extendedProps.icon+'"></i>&nbsp;&nbsp;');
+                    $(info.el).find('td.fc-list-event-title').prepend('<i class="fa ' + info.event.extendedProps
+                        .icon + '"></i>&nbsp;&nbsp;');
                     // tooltip for leaves
-                    if(info.event.extendedProps.event_type == 'leave'){
-                        $(info.el).find('td.fc-list-event-title > a').css('cursor','default'); // list view cursor for leave
-                        $(info.el).css('cursor','default')
+                    if (info.event.extendedProps.event_type == 'leave') {
+                        $(info.el).find('td.fc-list-event-title > a').css('cursor',
+                        'default'); // list view cursor for leave
+                        $(info.el).css('cursor', 'default')
                         $(info.el).tooltip({
                             title: info.event.extendedProps.name,
                             container: 'body',
-                            delay: { "show": 50, "hide": 50 }
+                            delay: {
+                                "show": 50,
+                                "hide": 50
+                            }
                         });
                     }
                 },
@@ -2872,17 +1061,15 @@
             calendar.render();
 
             // Task Detail show in sidebar
-            var getEventDetail = function(id,type) {
-                if(type == 'ticket')
-                {
+            var getEventDetail = function(id, type) {
+                if (type == 'ticket') {
                     var url = "{{ route('tickets.show', ':id') }}";
                     url = url.replace(':id', id);
                     window.location = url;
                     return true;
                 }
 
-                if(type == 'leave')
-                {
+                if (type == 'leave') {
                     return true;
                 }
 
@@ -2941,14 +1128,11 @@
             // calendar filter
             var hideDropdown = false;
 
-            $('#event-btn').click(function(){
-                if(hideDropdown == true)
-                {
+            $('#event-btn').click(function() {
+                if (hideDropdown == true) {
                     $('#cal-drop').hide();
                     hideDropdown = false;
-                }
-                else
-                {
+                } else {
                     $('#cal-drop').toggle();
                     hideDropdown = true;
                 }
@@ -2959,8 +1143,7 @@
 
                 const $menu = $('.calendar-action');
 
-                if (!$menu.is(e.target) && $menu.has(e.target).length === 0)
-                {
+                if (!$menu.is(e.target) && $menu.has(e.target).length === 0) {
                     hideDropdown = false;
                     $('#cal-drop').hide();
                 }
@@ -2975,7 +1158,7 @@
                     filter.push($(this).val());
                 });
 
-                if(filter.length < 1){
+                if (filter.length < 1) {
                     filter.push('None');
                 }
 
@@ -3030,7 +1213,7 @@
 
         /** clock timer start here */
         function currentTime() {
-            let date = new Date();
+            let date = new Date(); // today
             date = moment.tz(date, "{{ global_setting()->timezone }}");
 
             let hour = date.hour();
@@ -3041,7 +1224,7 @@
             @if (global_setting()->time_format == 'h:i A')
                 hour = (hour == 0) ? 12 : ((hour > 12) ? (hour - 12) : hour); /* assigning hour in 12-hour format */
             @endif
-                hour = updateTime(hour);
+            hour = updateTime(hour);
             min = updateTime(min);
             document.getElementById("clock").innerText = `${hour} : ${min} ${midday}`
             const time = setTimeout(function() {
@@ -3059,28 +1242,28 @@
         }
 
         @if (!is_null($currentClockIn))
-        $('#clock-out').click(function() {
+            $('#clock-out').click(function() {
 
-            var token = "{{ csrf_token() }}";
-            var currentLatitude = document.getElementById("current-latitude").value;
-            var currentLongitude = document.getElementById("current-longitude").value;
+                var token = "{{ csrf_token() }}";
+                var currentLatitude = document.getElementById("current-latitude").value;
+                var currentLongitude = document.getElementById("current-longitude").value;
 
-            $.easyAjax({
-                url: "{{ route('attendances.update_clock_in') }}",
-                type: "GET",
-                data: {
-                    currentLatitude: currentLatitude,
-                    currentLongitude: currentLongitude,
-                    _token: token,
-                    id: '{{ $currentClockIn->id }}'
-                },
-                success: function(response) {
-                    if (response.status == 'success') {
-                        window.location.reload();
+                $.easyAjax({
+                    url: "{{ route('attendances.update_clock_in') }}",
+                    type: "GET",
+                    data: {
+                        currentLatitude: currentLatitude,
+                        currentLongitude: currentLongitude,
+                        _token: token,
+                        id: '{{ $currentClockIn->id }}'
+                    },
+                    success: function(response) {
+                        if (response.status == 'success') {
+                            window.location.reload();
+                        }
                     }
-                }
+                });
             });
-        });
         @endif
 
         $('.keep-open .dropdown-menu').on({
@@ -3107,31 +1290,35 @@
                 }
             })
         });
-
     </script>
-        <script>
+    <script>
         $(document).ready(function() {
             var todayDate = moment();
             var monthDate = moment();
-
             $('.todayDate').text(todayDate.format('dddd LL'));
 
+
+
             var todayOnlyDate = moment(todayDate).format('DD');
-            if (todayOnlyDate > 16) {
-                $('.monthDate').text('16th ' + moment(monthDate).format('MMMM, YYYY')+' to 15th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+
+            if (todayOnlyDate > 15) {
+                $('.monthDate').text('16th ' + moment(monthDate).format('MMMM, YYYY') + ' to 15th ' + moment(
+                    monthDate).add(1, 'month').format('MMMM, YYYY'));
             } else {
-                $('.monthDate').text('16th ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY')+' to 15th '+moment(monthDate).startOf('month').add(15, 'day').format('MMMM, YYYY'));
+                $('.monthDate').text('16th ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
+                    ' to 15th ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
             }
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
-                    if(todayOnlyDate > 16) {
+                    if (todayOnlyDate > 15) {
                         monthDate = moment(monthDate).subtract(1, 'month');
                     } else {
                         monthDate = moment(monthDate).subtract(2, 'month');
                     }
-                    $(this).next().text('16th ' + moment(monthDate).format('MMMM, YYYY')+ ' to 15th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+                    $(this).next().text('16th ' + moment(monthDate).format('MMMM, YYYY') + ' to 15th ' +
+                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).subtract(1, 'days');
@@ -3144,9 +1331,11 @@
 
             $('.fc-next-button').click(function() {
                 var mode = $(this).attr('date-mode');
+                var date;
                 if (mode == 'month') {
                     monthDate = moment(monthDate).add(1, 'month');
-                    $(this).prev().text('16th ' + moment(monthDate).format('MMMM, YYYY')+' to 15th '+moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+                    $(this).prev().text('16th ' + moment(monthDate).format('MMMM, YYYY') + ' to 15th ' +
+                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).add(1, 'days');
@@ -3173,7 +1362,7 @@
                     startDate: date.format('YYYY-MM-DD'),
                 },
                 success: function(resp) {
-                    $('#'+mode+'Html').html(resp.html);
+                    $('#' + mode + 'Html').html(resp.html);
                 }
             })
         }
@@ -3192,7 +1381,7 @@
 
             function cb(start, end) {
                 $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
-                    ' @lang("app.to") ' + end.format( '{{ global_setting()->moment_date_format }}'));
+                    ' @lang('app.to') ' + end.format('{{ global_setting()->moment_date_format }}'));
                 $('#reset-filters').removeClass('d-none');
             }
 
@@ -3262,127 +1451,6 @@
                 currentLongitude.value = position.coords.longitude;
             }
             getLocation();
-
         </script>
     @endif
-    <script>
-        // Function to open the projectModal
-        function openProjectModal(status) {
-
-            console.log(status)
-
-            // test
-                const html = `
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Sl No</th>
-                                        <th scope="col">Client Name</th>
-                                        <th scope="col">Project Name</th>
-                                        <th scope="col">Peroject Budget</th>
-                                        <th scope="col">Peroject Status</th>
-                                        <th scope="col">Start Time</th>
-                                        <th scope="col">Last Update Time</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Mark</td>
-                                        <td>Otto</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                        <td>@mdo</td>
-                                    </tr>
-                                    </tbody>`
-
-                $('#numberOfProjectModalBody').html(html);
-                $('#projectModal').modal('show');
-                return;
-            // test end
-
-            // ajax code here...
-                    // console.log(formData);
-                    var data= {
-                        'status': status,
-                        '_token': "{{ csrf_token() }}",
-                    }
-                    // console.log(data);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-
-                    $.ajax({
-                        type: "POST",
-                        url: "",
-                        data: data,
-                        dataType: "json",
-                        success: function (response) {
-                            const html = `
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                `
-
-                                $('#numberOfProjectModalBody').html(html);
-                                $('#projectModal').modal('show');
-                        },
-
-                        error: function(error) {
-                            console.log(response.error);
-                        }
-                    });
-        }
-
-        // Event handler for total_project link
-        $('#total_project').click(function (e) {
-            e.preventDefault();
-            openProjectModal("total project");
-        });
-
-        // Event handler for accept_project link
-        $('#accept_project').click(function (e) {
-            e.preventDefault();
-            openProjectModal('accepted project');
-        });
-
-        // Event handler for accept_project link
-        $('#reject_project').click(function (e) {
-            e.preventDefault();
-            openProjectModal('reject project');
-        });
-    </script>
 @endpush
-
-
-

@@ -2,7 +2,6 @@
 namespace Aws\Signature;
 
 use Aws\Exception\UnresolvedSignatureException;
-use Aws\Token\BearerTokenAuthorization;
 
 /**
  * Signature providers.
@@ -61,9 +60,7 @@ class SignatureProvider
     public static function resolve(callable $provider, $version, $service, $region)
     {
         $result = $provider($version, $service, $region);
-        if ($result instanceof SignatureInterface
-            || $result instanceof BearerTokenAuthorization
-        ) {
+        if ($result instanceof SignatureInterface) {
             return $result;
         }
 
@@ -124,15 +121,11 @@ class SignatureProvider
                         ? new S3SignatureV4($service, $region)
                         : new SignatureV4($service, $region);
                 case 'v4a':
-                    return !empty(self::$s3v4SignedServices[$service])
-                        ? new S3SignatureV4($service, $region)
-                        : new SignatureV4($service, $region, ['use_v4a' => true]);
+                    return new SignatureV4($service, $region, ['use_v4a' => true]);
                 case 'v4-unsigned-body':
                     return !empty(self::$s3v4SignedServices[$service])
                     ? new S3SignatureV4($service, $region, ['unsigned-body' => 'true'])
                     : new SignatureV4($service, $region, ['unsigned-body' => 'true']);
-                case 'bearer':
-                    return new BearerTokenAuthorization();
                 case 'anonymous':
                     return new AnonymousSignature();
                 default:

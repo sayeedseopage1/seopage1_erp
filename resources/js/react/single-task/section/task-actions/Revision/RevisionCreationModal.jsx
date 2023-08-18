@@ -5,40 +5,32 @@ import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPa
 import { useDispatch } from "react-redux";
 import { setTaskStatus } from "../../../../services/features/subTaskSlice";
 import SubmitButton from "../../../components/SubmitButton";
+import { useRevision } from '../../../../hooks/useRevision';
 
-
-const revisionOptions = [
-    {
-        id: 'revision1',
-        revision: "The concerned developer’s delivered work doesn’t match my shared requirement (the developer will accept/deny)"
-    },
-    {
-        id: 'revision2',
-        revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right."
-    },
-    {
-        id: 'revision3',
-        revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction."
-    },
-    {
-        id: 'revision3',
-        revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes."
-    },
-]
+ 
 
 const RevisionCreationModal = ({ close, task, auth }) => {
     const [reason, setReason] = useState("");
     const [reasonError, setReasonError] = useState("");
     const [comment, setComment] = useState("");
     const [commentError, setCommentError] = useState("");
+    const [isDeniable, setIsDeniable] = useState(false);
     const dispatch = useDispatch();
+    const { 
+        getLeadDeveloperAcknowladgementOptions, 
+        getProjectManagerAcknowladgementOptions
+    } = useRevision();
 
+    const role = auth.getRoleId();
 
-    const [createRevision, {isLoading}] = useCreateRevisionMutation();
+    const revisionOptions = role === 4 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
+
+    const [createRevision, {isLoading}] =  useCreateRevisionMutation();
 
     // radio button change
-    const handleChange = (e) => {
+    const handleChange = (e, isDeniable) => {
         setReason(e.target.value);
+        setIsDeniable(isDeniable);
     };
 
     // editor change text 
@@ -73,7 +65,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             task_id: task?.id,
             user_id: auth?.id,
             revision_acknowledgement: reason,
-            comments2: comment 
+            comment,
+            is_deniable: isDeniable
         }
  
         if(validate()){            
@@ -123,86 +116,32 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                             Select Reason for Revision<sup className="f-16">*</sup> :
                         </label>
                         <div className="px-3">
-                            <div className="form-check d-flex align-items-start mb-2">
-                                <input
-                                    className="form-check-input mr-2"
-                                    type="radio"
-                                    name="exampleRadios"
-                                    id="exampleRadios1"
-                                    required= {true}
-                                    onChange={handleChange}
-                                    value="Task Has Revision Because Requirements Are
-                                    Not Fullfilled Accordiong To My Instructions"
-                                    style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        marginTop: "3px",
-                                    }}
-                                    
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="exampleRadios1"
-                                    style={{ marginBottom: "3px" }}
-                                >
-                                    Task Has Revision Because Requirements Are
-                                    Not Fullfilled Accordiong To My Instructions
-                                </label>
-                            </div>
-
-                            <div className="form-check d-flex align-items-start mb-2">
-                                <input
-                                    className="form-check-input mr-2"
-                                    type="radio"
-                                    name="exampleRadios"
-                                    id="exampleRadios2"
-                                    required= {true}
-                                    onChange={handleChange}
-                                    value="Task Has Revision Because I Have Customized
-                                    Previous Instructions"
-                                    style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        marginTop: "3px",
-                                    }}
-                                />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor="exampleRadios2"
-                                    style={{ marginBottom: "3px" }}
-                                >
-                                    Task Has Revision Because I Have Customized
-                                    Previous Instructions
-                                </label>
-                            </div>
-
-                            <div className="form-check d-flex align-items-start mb-2">
-                                <input
-                                    className="form-check-input mr-2"
-                                    type="radio"
-                                    name="exampleRadios"
-                                    id="exampleRadios3"
-                                    required= {true}
-                                    onChange={handleChange}
-                                    value="Task Has Revision Because I Have Added
-                                    Additional Instructions To Previous
-                                    Instructions"
-                                    style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        marginTop: "3px",
-                                    }}
-                                />
-                                <label
-                                    className="form-check-label mb-1"
-                                    htmlFor="exampleRadios3"
-                                    style={{ marginBottom: "3px" }}
-                                >
-                                    Task Has Revision Because I Have Added
-                                    Additional Instructions To Previous
-                                    Instructions
-                                </label>
-                            </div> 
+                            {revisionOptions.map(option => (
+                                <div key={option.id} className="form-check d-flex align-items-start mb-2">
+                                    <input
+                                        className="form-check-input mr-2"
+                                        type="radio"
+                                        name="exampleRadios"
+                                        id={option.id}
+                                        required= {true}
+                                        onChange={e => handleChange(e, option.isDeniable)}
+                                        value={option.revision}
+                                        style={{
+                                            width: "16px",
+                                            height: "16px",
+                                            marginTop: "3px",
+                                        }}
+                                        
+                                    />
+                                    <label
+                                        className="form-check-label"
+                                        htmlFor={option.id}
+                                        style={{ marginBottom: "3px" }}
+                                    >
+                                        {option.revision}
+                                    </label>
+                                </div>
+                            ))}
                         </div>
                         {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
                     </div>

@@ -1,5 +1,5 @@
 import _ from "lodash"
-import { convertTime } from "../../TimeLogTable-backup/utils/converTime";
+import { convertTime } from "../../utils/converTime";
 import dayjs from "dayjs";
 
 export const EmployeeSessionTableColumn = [

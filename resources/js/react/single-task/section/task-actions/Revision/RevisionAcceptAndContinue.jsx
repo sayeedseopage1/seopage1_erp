@@ -45,7 +45,7 @@ export const RevisionAcceptAndContinue = ({
     const handleOnSubmit = e => {
         e.preventDefault();
         if(comment !== ''){
-            onSubmit(comment);
+            onSubmit({comment});
         }else{
             setErr("You have to Explain Why & How Did This Happen!")
         }

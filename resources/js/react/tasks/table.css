@@ -9,24 +9,23 @@
 }
   
 .sp1_tasks_table_wrapper::-webkit-scrollbar{ 
-    width: 5px;
-    height: 5px;
+    width: 10px;
+    height: 10px;
     background-color: transparent !important;
-}
-
-.sp1_tasks_table_wrapper::-webkit-scrollbar:hover{
-    width: 10px !important;
-    height: 10px !important;
-    cursor: all-scroll !important;
 } 
 
 .sp1_tasks_table_wrapper::-webkit-scrollbar-thumb{
     background-color: rgb(219, 219, 219) !important;
-    border: 0;
+    border: 2px solid rgb(255, 255, 255) !important;
+}
+ 
+.sp1_tasks_table_wrapper::-webkit-scrollbar-thumb:hover{
+    border: 0 !important;
+    background-color: rgb(197, 197, 197) !important;
 }
 
 .sp1_tasks_table_wrapper::-webkit-scrollbar-track{
-    background-color: rgba(219, 219, 219, 0.2) !important;
+    background-color: rgba(219, 219, 219, 0.1) !important;
 }
 
 

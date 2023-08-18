@@ -928,13 +928,9 @@ class TaskController extends AccountBaseController
 
     public function TaskRevision(Request $request)
     {
-    //    dd($request);
-       // DB::beginTransaction();
-        $request->validate([
-            'comments2' => 'required',
-        ], [
-            'comments2.required' => 'This field is required!',
-        ]);
+        // /dd($request);
+    //   /  DB::beginTransaction();
+      
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
         $task_status->task_status = "revision";
@@ -955,52 +951,46 @@ class TaskController extends AccountBaseController
         }
        }
       if (Auth::user()->role_id == 4) {
-     $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
-    
-    if($pm_authorization != null && $pm_authorization->status == '1')
-    {
-        $pm_authorization_update= AuthorizationAction::find($pm_authorization->id);
-        $pm_authorization_update->status= '1';
-        $pm_authorization->authorization_by = Auth::id();
-        $pm_authorization->save();
+            $pm_authorization = AuthorizationAction::where('task_id',$task_status->id)->where('type','task_submission_by_lead_developer')->where('authorization_for',Auth::id())->first();
+            
+            if($pm_authorization != null && $pm_authorization->status == '1')
+            {
+                $pm_authorization_update= AuthorizationAction::find($pm_authorization->id);
+                $pm_authorization_update->status= '1';
+                $pm_authorization->authorization_by = Auth::id();
+                $pm_authorization->save();
 
-    }
-
+            } 
       }
     
 
         $task_revision = new TaskRevision();
         $task_revision->task_id = $request->task_id;
-        if ($task_status->subtask_id != null) {
-            $task_revision->subtask_id = $task_status->subtask_id;
-        }
-        $task_revision->comment = $request->comments2;
-        $task_revision->revision_status = $request->revision_status;
-        $task_revision->project_id = $task_status->project_id;
-        $task_revision->added_by = Auth::id();
         if (Auth::user()->role_id == 6) {
             $task_revision->revision_status = 'Lead Developer Revision';
-        } elseif (Auth::user()->role_id == 4) {
+            $task_revision->lead_comment = $request->comment;
+        }
+
+        if(Auth::user()->role_id == 4){
             $task_revision->revision_status = 'Project Manager Revision';
+            $task_revision->pm_comment = $request->comment;
         }
-      //  $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
+        $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
+
+        $task_revision->project_id = $task_status->project_id;
+        $task_revision->added_by = Auth::id();
         $taskRevisionCount = TaskRevision::where('task_id', $task_status->id)->count();
-        // foreach ($taskRevisionFind as $taskRevision) {
-        //     $taskRevision->revision_no = $taskRevisionCount + 1;
-        //     $taskRevision->save();
-        // }
-        $task_revision->revision_no = $taskRevisionCount + 1;
-        if (isset($request->revision_acknowledgement)) {
-            $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
-        }
+        $task_revision->revision_no = $taskRevisionCount + 1 ;
+        $task_revision->is_deniable = $request->is_deniable;
         $task_revision->save();
+       
+        //dd($type);
+        //authorizatoin action start here
         if (Auth::user()->role_id == 6) {
             $type = 'task_revision_by_lead_developer';
         } else {
             $type = 'task_revision_by_project_manager';
         }
-        //dd($type);
-        //authorizatoin action start here
         
         $task_user= TaskUser::where('task_id',$task_status->id)->first();
         $authorization_action = new AuthorizationAction();
@@ -1044,6 +1034,9 @@ class TaskController extends AccountBaseController
         'task_status'=> $board_column,
     ]);
     }
+
+
+
     public function TaskExtension(Request $request)
     {
         $date = date('Y-m-d', strtotime($request->due_date));
@@ -2679,7 +2672,9 @@ class TaskController extends AccountBaseController
     //    CLIENT HAS REVISION
     public function clientHasRevision(Request $request)
     {
-   //  dd($request->all());
+     // dd($request->all());
+
+        DB::beginTransaction();
         
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
@@ -2687,14 +2682,14 @@ class TaskController extends AccountBaseController
         $task_status->save();
 
         $task_revision = new TaskRevision();
-        $task_revision->pm_comment= $request->project_manager_comment;
+        $task_revision->pm_comment= $request->comment;
         $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
         $task_revision->task_id = $request->task_id;
-        $task_revision->client_revision_acknowledgement = $request->client_revision_acknowledgement;
+        $task_revision->is_deniable = $request->is_deniable;
+        
         if ($task_status->subtask_id != null) {
             $task_revision->subtask_id = $task_status->subtask_id;
         }
-        $task_revision->comment = $request->client_comment;
         $task_revision->revision_status = "Client has Revision";
 
         $task_revision->project_id = $task_status->project_id;
@@ -2721,14 +2716,7 @@ class TaskController extends AccountBaseController
     }
     //    ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
-    {
-    //   /  dd($request->all());
-        $request->validate([
-            'text3' => 'required',
-        ], [
-            'text3.required' => 'This field is required!',
-        ]);
-       // DB::beginTransaction();
+    { 
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
@@ -2740,7 +2728,7 @@ class TaskController extends AccountBaseController
            $selected_subtasks  = $request->subTask;
            // dd($selected_subtasks);
             foreach ($selected_subtasks as $key => $selected_subtask) {
-               // dd($selected_subtask);
+               
                 $find_task_id = Task::where('id', $selected_subtask['subtask_id'])->first();
                 $sub_task_status = Task::find($find_task_id->id);
                 $sub_task_status->task_status = "incomplete";
@@ -2749,26 +2737,28 @@ class TaskController extends AccountBaseController
               
 
                 $tasks_accept = new TaskRevision();
-                $tasks_accept->accept_and_continue = $request->text3;
-                $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
+                // $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
                 $tasks_accept->task_id = $selected_subtask['subtask_id'];
-                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->added_by = $request->user_id;
+                $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
                 $tasks_accept->revision_status = 'Lead Developer Revision';
-                $tasks_accept->comment = $selected_subtask['comment'];
-                $tasks_accept->save();
+                $tasks_accept->lead_comment = $selected_subtask['comment'];
+                $tasks_accept->project_id = $request->project_id;
+                $tasks_accept->is_deniable = $selected_subtask['is_deniable'];
+                $tasks_accept->save(); 
+ 
               //  dd($tasks_accept,$sub_task_status);
             }
         }
 
         if ($request->subTask== null) {
             $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->accept_and_continue = $request->text2;
 //        $tasks_accept->subtask_id = implode(",", $request->subTask);
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            // $tasks_accept->revision_reason = $request->revision_acknowledgement;
 //        $tasks_accept->comment = implode(",", $request->comment);
             $tasks_accept->approval_status = 'accepted';
-            $tasks_accept->save();
-            dd($tasks_accept);
+            $tasks_accept->is_accept = true;
+            $tasks_accept->save();  
         }else{
             $subTaskArray = $request->subTask;
             $subTaskString = '';
@@ -2783,12 +2773,11 @@ class TaskController extends AccountBaseController
             $subTaskCommentString = rtrim($subTaskCommentString, ',');
         //  /   dd($subTaskString);
             $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->accept_and_continue = $request->text3;
-            $tasks_accept->subtask_id = $tasks_accept->subtask_id;
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
-            $tasks_accept->approval_status = 'accepted';
-            $tasks_accept->dev_comment = $request->text3;
-            $tasks_accept->save();
+            // $tasks_accept->subtask_id = $tasks_accept->subtask_id;
+            // $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            $tasks_accept->approval_status = 'accepted';  
+            $tasks_accept->is_accept = true;
+            $tasks_accept->save();  
             
         }
 
@@ -2812,13 +2801,8 @@ class TaskController extends AccountBaseController
 
     //        DENY AND CONTINUE BUTTON SECTION
     public function denyContinue(Request $request)
-    {
-        $request->validate([
-            'text3' => 'required',
-        ], [
-            'text3.required' => 'This field is required!',
-        ]);
-       // DB::beginTransaction();
+    { 
+    //    DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
@@ -2837,28 +2821,31 @@ class TaskController extends AccountBaseController
                 $sub_task_status->board_column_id = 1;
                 $sub_task_status->save();
               
-
                 $tasks_accept = new TaskRevision();
-                $tasks_accept->accept_and_continue = $request->text3;
-                $tasks_accept->subtask_id = $selected_subtask['subtask_id'];
                 $tasks_accept->task_id = $selected_subtask['subtask_id'];
-                $tasks_accept->revision_reason = $request->revision_acknowledgement;
+                $tasks_accept->added_by = $request->user_id;
+                $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
                 $tasks_accept->revision_status = 'Lead Developer Revision';
-                $tasks_accept->comment = $selected_subtask['comment'];
-                $tasks_accept->save();
+                $tasks_accept->lead_comment = $selected_subtask['comment'];
+                $tasks_accept->project_id = $request->project_id;
+                $tasks_accept->is_deniable = $selected_subtask['is_deniable'];
+                $tasks_accept->save(); 
               //  dd($tasks_accept,$sub_task_status);
             }
         }
 
         if ($request->subTask== null) {
             $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->lead_comment = $request->comment;
 //        $tasks_accept->subtask_id = implode(",", $request->subTask);
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
+            // $tasks_accept->revision_reason = $request->revision_acknowledgement;
 //        $tasks_accept->comment = implode(",", $request->comment);
-            $tasks_accept->approval_status = 'accepted';
-            $tasks_accept->save();
-          //  dd($tasks_accept);
+
+            $tasks_accept->deny_reason = $request ->deny_reason;
+            $tasks_accept->is_deny = true; 
+            $tasks_accept->dispute_created = true;
+            $tasks_accept->approval_status = 'accepted'; 
+            $tasks_accept->save(); 
         }else{
             $subTaskArray = $request->subTask;
             $subTaskString = '';
@@ -2873,13 +2860,11 @@ class TaskController extends AccountBaseController
             $subTaskCommentString = rtrim($subTaskCommentString, ',');
         //  /   dd($subTaskString);
             $tasks_accept = TaskRevision::find($request->revision_id);
-            $tasks_accept->deny_and_continue = $request->text3;
-            $tasks_accept->subtask_id = $tasks_accept->subtask_id;
-            $tasks_accept->revision_reason = $request->revision_acknowledgement;
             $tasks_accept->approval_status = 'accepted';
-            $tasks_accept->dev_comment = $request->text3;
-            $tasks_accept->save();
-            
+            $tasks_accept->is_deny = true;
+            $tasks_accept->lead_comment = $request->comment;
+            $tasks_accept->deny_reason = $request->deny_reason;
+            $tasks_accept->save(); 
         }
 
         foreach ($subtasks as $subtask) {
@@ -2914,7 +2899,8 @@ class TaskController extends AccountBaseController
 
     public function accept_or_revision_by_developer(Request $request)
     {
-        // DB::beginTransaction();
+        // dd($request);
+        //  DB::beginTransaction();
          
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
@@ -2923,14 +2909,16 @@ class TaskController extends AccountBaseController
 
         $tasks_accept = TaskRevision::find($request->revision_id);
         if ($request->mode == 'deny') {
-            $tasks_accept->deny_and_continue = $request->text2;
+            $tasks_accept->is_deny=true; 
+            $tasks_accept->dispute_created = true;
+            $tasks_accept->deny_reason = $request ->deny_reason;
         } elseif($request->mode == 'accept') {
-            $tasks_accept->accept_and_continue = $request->text2;
+            $tasks_accept->is_accept=true;
         }
         $tasks_accept->task_id = $task_status->id;
-        $tasks_accept->subtask_id = $task_status->subtask_id;
+      //  $tasks_accept->subtask_id = $task_status->subtask_id;
      //   $tasks_accept->revision_acknowledgement = $request->revision_acknowledgement;
-        $tasks_accept->dev_comment =  $request->text2;
+        $tasks_accept->dev_comment = $request->comment;
         
         $tasks_accept->approval_status ='accepted';
         $tasks_accept->save();
@@ -3792,8 +3780,8 @@ class TaskController extends AccountBaseController
 
     public function GetRevision($id)
     {
-        $task_revision= TaskRevision::where('task_id',$id)->where('approval_status','pending')->first();
-        // /dd($task_revision);
+        $task_revision= TaskRevision::where('task_id',$id)->orderBy('id','desc')->where('approval_status','pending')->first();
+       // dd($task_revision);
         return response()->json($task_revision);
     }
     public function GetTaskStatus($id)
@@ -3918,14 +3906,16 @@ class TaskController extends AccountBaseController
            // dd($hoursDifference);
             if($project->deliverable_authorizaton == '0')
             {
+              //  dd("true");
                 return response()->json([
-                    'message' => 'You cannot create task as top management did not authorized the deliverable yet',
+                    'message' => 'You can not create task as top management did not authorized the deliverable yet',
                     'status'=> 400,
                    
                 ]);
 
             }else 
             {
+              //  dd("false");
                 return response()->json([
                     'message' => 'You can create tasks',
                     'status'=> 200,

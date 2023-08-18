@@ -1,8 +1,9 @@
 import * as React from 'react'
 import Modal from '../../Insights/ui/Modal';
 import { useClickAway } from 'react-use';
+import Button from './Button';
 
-const RevisionText = ({text, index, date, time}) => {
+const RevisionText = ({text, index, date, time, revision}) => {
     const [expend, setExpend] = React.useState(false);
     const ref = React.useRef();
 
@@ -14,12 +15,12 @@ const RevisionText = ({text, index, date, time}) => {
         e.preventDefault();
         setExpend(!expend)
     }
-
+ 
 
     useClickAway(ref, () => {
         setExpend(false)
     })
-  
+   
 
   return (
     <div className="sp1_task_card--sub-card" style={{minHeight: '110px'}}>
@@ -28,8 +29,18 @@ const RevisionText = ({text, index, date, time}) => {
             <span className="d-block"><strong>Date</strong> {date} </span>
             <span className="d-block"><strong>Time</strong>: {time}</span>
         </div>
-        <div className="">
-            <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: showText}} />
+        <div className=""> 
+            <span className='d-block mb-2'> 
+                <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span> 
+                    {revision?.revisionAcknowledgement} {" "}
+                    {revision?.isDeny ? <span className='badge badge-danger'>Rejected By Developer</span> : null} 
+                    {revision?.isAccept ? <span className='badge badge-success'>Accepted By Developer</span> : null}
+                </span> 
+            <div>
+                <span className='font-weight-bold text-success'>Statement:</span>
+                <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: showText}} />
+            </div> 
+
             {isLong ? <a href="#" className='ml-2' onClick={toggleModal}>Read full guideline</a> : ''}
 
             <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
@@ -45,7 +56,11 @@ const RevisionText = ({text, index, date, time}) => {
                             <span className="d-block"><strong>Date</strong> {date} </span>
                             <span className="d-block"><strong>Time</strong>: {time}</span>
                         </div>
-                        <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: text}} />
+                        <div>
+                        <span className='d-block mb-2'> <span className='font-weight-bold text-danger'><strong>Reason: </strong></span> {revision?.revisionAcknowledgement}</span>
+                            <span className='font-weight-bold text-success'>Commitment:</span>
+                            <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: text}} />
+                        </div>
                     </div>
 
                     <div className=' __footer'>

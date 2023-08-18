@@ -216,7 +216,6 @@ class Validator
             return;
         }
 
-        $value = isset($value) ? $value : '';
         $this->validateRange($shape, strlen($value), "string length");
 
         if ($this->constraints['pattern']) {

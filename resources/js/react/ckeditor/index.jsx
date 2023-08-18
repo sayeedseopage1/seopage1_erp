@@ -41,7 +41,7 @@ export default function CKEditorComponent ({data="", onChange, placeholder="Type
                         {
                             label: 'More basic styles', 
                             icon: 'text', 
-                            items: ["underline","strikethrough", "blockQuote", 'alignment', "fontColor","fontBackgroundColor,"]
+                            items: ["underline","strikethrough", "blockQuote", 'alignment', "fontColor"]
                         },
                         '|', 
                         {

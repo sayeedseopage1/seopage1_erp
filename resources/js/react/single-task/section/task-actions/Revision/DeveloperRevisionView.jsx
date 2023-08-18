@@ -20,7 +20,8 @@ const DeveloperRevisionView = ({task, close}) => {
   const hanldeAcceptAndContinueSubmition = (data, type) => {
 
     revisionAcceptOrDeny({
-        text2: data,
+        comment: data.comment,
+        deny_reason: data?.denyReason,
         task_id: task?.id,
         user_id: auth?.id,
         revision_id: revision?.id,
@@ -55,7 +56,7 @@ const DeveloperRevisionView = ({task, close}) => {
                         <React.Fragment>
                             {show === "ASSINEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager"}
                         </React.Fragment>
-                    ): "Revision By Lead Developer Manager"}
+                    ): "Revision By Lead Developer"}
                 </div>
                 <Button onClick={close} className="">
                     <i className="fa-solid fa-xmark" />

@@ -85,7 +85,7 @@
                         </tr>
                         <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
-                             Hourly Rate</td>
+                            Estimated Hourly Rate</td>
                             <td class="border-left-0">
                                 @if($project->hours_allocated >  0 )
                               {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
@@ -94,6 +94,48 @@
                               @endif
                             </td>
                         </tr>
+                        @php
+                        function calculateTotalLoggedTime($project_id) {
+                            $total_minutes = DB::table('project_time_logs')
+                                ->where('project_id', $project_id)
+                                ->sum('total_minutes');
+
+                            $total_hours = intval($total_minutes / 60);
+                            $remaining_minutes = $total_minutes % 60;
+
+                            return $total_hours . ' hrs ' . $remaining_minutes . ' mins';
+                        }
+
+                        $total_project_logged_time = calculateTotalLoggedTime($project->id);
+                        preg_match('/(\d+)\s*hrs\s*(\d+)\s*mins/', $total_project_logged_time, $matches);
+                        $total_hours = intval($matches[1]);
+                        $remaining_minutes = intval($matches[2]);
+                    @endphp
+
+                <tr>
+                    <td class="bg-light-grey border-right-0 f-w-500">
+                        Total Logged Hours
+                    </td>
+                    <td class="border-left-0">
+                        @if (!empty($total_project_logged_time))
+                            {{ $total_project_logged_time }}
+                        @else
+                            00
+                        @endif
+                    </td>
+                </tr>
+                <tr>
+                    <td class="bg-light-grey border-right-0 f-w-500">
+                        Final Hourly Rate
+                    </td>
+                    <td class="border-left-0">
+                        @if ($total_hours > 0 || $remaining_minutes > 0)
+                            {{ round($project->project_budget / ($total_hours + $remaining_minutes / 60), 2) }}$/hour
+                        @else
+                            --
+                        @endif
+                    </td>
+                </tr>
 
                       </table>
 

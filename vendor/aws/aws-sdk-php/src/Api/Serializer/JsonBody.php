@@ -28,17 +28,8 @@ class JsonBody
      */
     public static function getContentType(Service $service)
     {
-        if ($service->getMetadata('protocol') === 'rest-json') {
-            return 'application/json';
-        }
-
-        $jsonVersion = $service->getMetadata('jsonVersion');
-        if (empty($jsonVersion)) {
-            throw new \InvalidArgumentException('invalid json');
-        } else {
-            return 'application/x-amz-json-'
-                . @number_format($service->getMetadata('jsonVersion'), 1);
-        }
+        return 'application/x-amz-json-'
+            . number_format($service->getMetadata('jsonVersion'), 1);
     }
 
     /**

@@ -99,12 +99,6 @@ class Credentials implements CredentialsInterface, \Serializable
         $this->expires = $data['expires'];
     }
 
-    /**
-     * Internal-only. Used when IMDS is unreachable
-     * or returns expires credentials.
-     *
-     * @internal
-     */
     public function extendExpiration() {
         $extension = mt_rand(5, 10);
         $this->expires = time() + $extension * 60;
@@ -114,6 +108,6 @@ Attempting credential expiration extension due to a credential service
 availability issue. A refresh of these credentials will be attempted again 
 after {$extension} minutes.\n
 EOT;
-        trigger_error($message, E_USER_WARNING);
+        error_log($message);
     }
 }

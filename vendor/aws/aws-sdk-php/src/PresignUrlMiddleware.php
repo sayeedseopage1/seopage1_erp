@@ -27,7 +27,7 @@ class PresignUrlMiddleware
 
     public function __construct(
         array $options,
-        $endpointProvider,
+        callable $endpointProvider,
         AwsClientInterface $client,
         callable $nextHandler
     ) {
@@ -47,7 +47,7 @@ class PresignUrlMiddleware
 
     public static function wrap(
         AwsClientInterface $client,
-        $endpointProvider,
+        callable $endpointProvider,
         array $options = []
     ) {
         return function (callable $handler) use ($endpointProvider, $client, $options) {
@@ -89,23 +89,14 @@ class PresignUrlMiddleware
         // Serialize a request for the operation.
         $request = \Aws\serialize($newCmd);
         // Create the new endpoint for the target endpoint.
-        if ($this->endpointProvider instanceof \Aws\EndpointV2\EndpointProviderV2) {
-            $providerArgs = array_merge(
-                $this->client->getEndpointProviderArgs(),
-                ['Region' => $cmd['SourceRegion']]
-            );
-            $endpoint = $this->endpointProvider->resolveEndpoint($providerArgs)->getUrl();
-        } else {
-            $endpoint = EndpointProvider::resolve($this->endpointProvider, [
-                'region'  => $cmd['SourceRegion'],
-                'service' => $this->serviceName,
-            ])['endpoint'];
-        }
+        $endpoint = EndpointProvider::resolve($this->endpointProvider, [
+            'region'  => $cmd['SourceRegion'],
+            'service' => $this->serviceName,
+        ])['endpoint'];
 
         // Set the request to hit the target endpoint.
         $uri = $request->getUri()->withHost((new Uri($endpoint))->getHost());
         $request = $request->withUri($uri);
-
         // Create a presigned URL for our generated request.
         $signer = new SignatureV4($this->serviceName, $cmd['SourceRegion']);
 

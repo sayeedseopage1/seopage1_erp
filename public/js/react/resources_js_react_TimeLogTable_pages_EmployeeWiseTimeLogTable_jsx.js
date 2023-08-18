@@ -1,28 +1,6 @@
 "use strict";
 (self["webpackChunk"] = self["webpackChunk"] || []).push([["resources_js_react_TimeLogTable_pages_EmployeeWiseTimeLogTable_jsx"],{
 
-/***/ "./resources/js/react/TimeLogTable-backup/utils/converTime.js":
-/*!********************************************************************!*\
-  !*** ./resources/js/react/TimeLogTable-backup/utils/converTime.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "convertTime": () => (/* binding */ convertTime)
-/* harmony export */ });
-var convertTime = function convertTime(time) {
-  if (time) {
-    var hours = Math.floor(time / 60) || 0;
-    var min = Math.floor(time % 60) || 0;
-    var h = hours ? "".concat(hours < 10 ? "0".concat(hours) : hours, " hours") : "";
-    return "".concat(h, " ").concat(min < 10 ? "0".concat(min) : min, " min");
-  }
-  return "0 min";
-};
-
-/***/ }),
-
 /***/ "./resources/js/react/TimeLogTable/components/Button.jsx":
 /*!***************************************************************!*\
   !*** ./resources/js/react/TimeLogTable/components/Button.jsx ***!
@@ -198,7 +176,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../TimeLogTable-backup/utils/converTime */ "./resources/js/react/TimeLogTable-backup/utils/converTime.js");
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -244,7 +222,7 @@ var EmployeeSessionTableColumn = [{
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
       className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
-      children: ["Total Session: ", totalSession, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), "Total Session Duration: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), " ", (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(totalLogTime)]
+      children: ["Total Session: ", totalSession, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), "Total Session Duration: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), " ", (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(totalLogTime)]
     });
   }
 }, {
@@ -258,7 +236,7 @@ var EmployeeSessionTableColumn = [{
       className = _ref3.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: className,
-      children: (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.total_minutes)
+      children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.total_minutes)
     });
   }
 }, {
@@ -274,7 +252,7 @@ var EmployeeSessionTableColumn = [{
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
       className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
-      children: [(0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.totalLogTime), "/ ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.project_total_time_log)]
+      children: [(0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.totalLogTime), "/ ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.project_total_time_log)]
     });
   }
 }, {
@@ -293,7 +271,7 @@ var EmployeeSessionTableColumn = [{
     });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: className,
-      children: (0,_TimeLogTable_backup_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(sum)
+      children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(sum)
     });
   }
 }, {

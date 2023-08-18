@@ -37,7 +37,8 @@ const ProjectTasks = () => {
     const {
         isDeliverable,
         getProjectGuidelineStaus,
-        projectDeliverableStatusIsLoading
+        projectDeliverableStatusIsLoading,
+        projectGuidelineStatusIsLoading
     } = useProject();
 
     const projectId = params?.projectId;
@@ -154,7 +155,7 @@ const ProjectTasks = () => {
                             _.includes([1,4], auth?.getRoleId() ) &&
                                 <SubmitButton 
                                     onClick={handleTaskAddForm} 
-                                    isLoading={projectDeliverableStatusIsLoading}
+                                    isLoading={projectDeliverableStatusIsLoading || projectGuidelineStatusIsLoading}
                                 > + Add Task </SubmitButton> }
                         </div>
 

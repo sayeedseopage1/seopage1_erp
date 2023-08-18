@@ -111,8 +111,12 @@ const FilePreview = ({
             <div className="sp1_file_upload--input-preview" {...props}>  
                 {/* delete button */}
                 {deleteAble  && (
-                    <Button  
-                        onClick={(e) => onRemove(e, id)} 
+                    <Button 
+                        type="button" 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onRemove(e, id)
+                        }} 
                         className='__remove--btn'
                     > 
                         <i className="fa-regular fa-trash-can"></i> 

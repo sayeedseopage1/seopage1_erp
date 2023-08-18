@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import dayjs from 'dayjs';
 import FileUploader from '../../../../file-upload/FileUploader';
 import { Placeholder } from '../../../../global/Placeholder';
+import {useSingleTask} from '../../../../hooks/useSingleTask';
 
 const ApproveTask = ({task, status, auth}) => {
   const dispatch = useDispatch();
@@ -27,6 +28,8 @@ const ApproveTask = ({task, status, auth}) => {
 
   const [approveSubmittedTask, {isLoading}] = useApproveSubmittedTaskMutation();
   const { data: getSubmittedTask, isFetching  } = useGetSubmittedTaskQuery(task?.id);
+
+  const { approveTask,  approveTaskLoadingStatus } = useSingleTask();
  
  useEffect(() => {
     if(getSubmittedTask){
@@ -50,7 +53,7 @@ const ApproveTask = ({task, status, auth}) => {
   }
 
   // submit 
-  const handleOnSubmit = (e) =>{
+  const handleOnSubmit = async (e) =>{
     e.preventDefault();
     const data = {
         rating: completedWithInDeadline,
@@ -61,27 +64,8 @@ const ApproveTask = ({task, status, auth}) => {
         user_id: auth?.getId()
     }
 
-
-    approveSubmittedTask(data)
-    .unwrap()
-    .then(res => {
-        
-        setShowApproveForm(false);
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-        })
-        
-        Toast.fire({
-            icon: 'success',
-            title: 'Task Approved Successfully'
-        }) 
-    })
-    .catch(err => console.log(err))
-
+    const cb = () => setShowApproveForm(false);
+    await approveTask(data, cb );  
   }
 
   return (
@@ -216,7 +200,7 @@ const ApproveTask = ({task, status, auth}) => {
                                         </Button>
                                     </React.Fragment>
                                 )} */}
-                                <SubmitButton onClick={handleOnSubmit} title="Approve" isLoading={isLoading} />
+                                <SubmitButton onClick={handleOnSubmit} title="Approve" isLoading={approveTaskLoadingStatus} />
                             </div>
                         </form>
                     </div>
