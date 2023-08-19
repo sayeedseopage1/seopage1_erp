@@ -33,9 +33,13 @@
                                 @endphp
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $client->name }}</td>
+                                <td>
+                                    <a href="{{ route('clients.show',$user->id) }}">{{ $user->name }}</a>
+                                </td>
+                                <td>
+                                    <a href="{{ route('projects.show',$item->id) }}">{{ $item->project_name }}</a>
+                                </td>
                                 <td>{{ $item->milestone_title }}</td>
-                                <td>{{ $item->project_name }}</td>
                                 <td>{{ $item->project_budget }} $</td>
                                 <td>{{ $item->milestone_cost }}</td>
                                 <td>{{ $item->milestone_creation_date }}</td>

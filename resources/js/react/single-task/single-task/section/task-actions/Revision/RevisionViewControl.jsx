@@ -8,8 +8,8 @@ import DeveloperRevisionView from './DeveloperRevisionView';
 import { revisionButtonPermission } from '../../../permissions';
 
 const RevisionViewControl = ({task, auth, status}) => {
-    const [revisionModal, setRevisionModal] = useState(false);
-    const singleTask = new SingleTask(task)
+    const [revisionModal, setRevisionModal] = useState(false); 
+    const singleTask = task;
 
   return (
     <React.Fragment>

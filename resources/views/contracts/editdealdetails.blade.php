@@ -342,10 +342,31 @@
                               <input type="text" value="{{$deal->client_email}}" name="client_email" class="form-control height-35 f-14" id="client_email" placeholder="client@email.com" >
                               </div>
                             </div>
-                            @php
+                          </div>
+                          @php
                                 $project_cms = App\Models\ProjectCms::all();
                             @endphp
                             <div class="row">
+                                <div class="col-md-6">
+                                    <label class="f-14 text-dark-grey mb-12" data-label="true" for="deal_category">Deal Category
+                                        <sup class="f-14 mr-1">*</sup>
+                                        <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Enter the deal category." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                        </svg>
+                                    </label>
+                                    <div class="dropdown bootstrap-select form-control select-picker">
+                                        <select name="deal_category" id="deal_category" data-live-search="true" class="form-control select-picker error" data-size="8">
+                                            <option value="Web Development" {{ $deal->deal_category=='Web Development'? 'selected':'' }}>Web Development</option>
+                                            <option value="Website Maintainance" {{ $deal->deal_category=='Website Maintainance'? 'selected':'' }}>Website Maintainance</option>
+                                            <option value="Graphic Design" {{ $deal->deal_category=='Graphic Design'? 'selected':'' }}>Graphic Design</option>
+                                            <option value="Ui Design" {{ $deal->deal_category=='Ui Design'? 'selected':'' }}>Ui Design</option>
+                                            <option value="Content" {{ $deal->deal_category=='Content'? 'selected':'' }}>Content</option>
+                                            <option value="SEO" {{ $deal->deal_category=='SEO'? 'selected':'' }}>SEO</option>
+                                            <option value="Google Ads" {{ $deal->deal_category=='Google Ads'? 'selected':'' }}>Google Ads</option>
+                                        </select>
+                                        <span id="deal_category_error" class="text-danger"></span>
+                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <label class="f-14 text-dark-grey mb-12" data-label="true" for="project_cms">Project CMS
                                         <sup class="f-14 mr-1">*</sup>
@@ -363,8 +384,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                          </div>
                           <br>
                           <div class="row">
                             <div class="col-md-12">
@@ -818,6 +837,7 @@
                     'organization': document.getElementById("organization").value,
                     'client_email': document.getElementById("client_email").value,
                     'profile_link': document.getElementById("profile_link").value,
+                    'deal_category': document.getElementById("deal_category").value,
                     'cms_id': document.getElementById("cms_id").value,
                     'message_link': message_links_values,
                     'description2': description2,
@@ -929,15 +949,20 @@
                         }else{
                             $('#description9Error').text('');
                         }
+                        if (error.responseJSON.errors && error.responseJSON.errors.deal_category) {
+                        $('#deal_category_error').text(error.responseJSON.errors.deal_category);
+                        } else {
+                            $('#deal_category_error').text('');
+                        }
+                        if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
+                            $('#cms_id_error').text(error.responseJSON.errors.cms_id);
+                        } else {
+                            $('#cms_id_error').text('');
+                        }
                         if (error.responseJSON.errors.milestone_value) {
                             toastr.error('Please add a milestone!');
                             $('#updateBtn').attr("disabled", false);
                             $('#updateBtn').html("Complete Deal Creation");
-                        }
-                        if (error.responseJSON.errors.cms_id) {
-                            toastr.error('Please add a project cms name!');
-                            $('#createDeal').attr("disabled", false);
-                            $('#createDeal').html("Complete Deal Creation");
                         }
                         $('#updateBtn').attr("disabled", false);
                         $('#updateBtn').html("Complete Deal Creation");
@@ -984,6 +1009,7 @@
                     'client_email': document.getElementById("client_email").value,
                     'profile_link': document.getElementById("profile_link").value,
                     'long_project': document.getElementById("long_project").value,
+                    'deal_category': document.getElementById("deal_category").value,
                     'cms_id': document.getElementById("cms_id").value,
                     'hubstaff_tracking': hubstaff_tracking,
                     'message_link': message_links_values,
@@ -1136,15 +1162,20 @@
                         }else{
                             $('#description9Error').text('');
                         }
+                        if (error.responseJSON.errors && error.responseJSON.errors.deal_category) {
+                        $('#deal_category_error').text(error.responseJSON.errors.deal_category);
+                        } else {
+                            $('#deal_category_error').text('');
+                        }
+                        if (error.responseJSON.errors && error.responseJSON.errors.cms_id) {
+                            $('#cms_id_error').text(error.responseJSON.errors.cms_id);
+                        } else {
+                            $('#cms_id_error').text('');
+                        }
                         if (error.responseJSON.errors.milestone_value) {
                             toastr.error('Please add a milestone!');
                             $('#updateBtn').attr("disabled", false);
                             $('#updateBtn').html("Update Deal Creation");
-                        }
-                        if (error.responseJSON.errors.cms_id) {
-                            toastr.error('Please add a project cms name!');
-                            $('#createDeal').attr("disabled", false);
-                            $('#createDeal').html("Complete Deal Creation");
                         }
                         $('#updateBtn').attr("disabled", false);
                         $('#updateBtn').html("Update Deal Creation");

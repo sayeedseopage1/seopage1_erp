@@ -1003,7 +1003,8 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
-                'cms_id' => 'required',
+                'deal_category' => 'required',
+                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
 
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1017,6 +1018,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'deal_category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
             ]);
         } else {
@@ -1038,7 +1040,8 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
-                'cms_id' => 'required',
+                'deal_category' => 'required',
+                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'estimated_hour_task.required' => 'This field is required!',
@@ -1057,6 +1060,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'deal_Category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
             ]);
         }
@@ -1113,6 +1117,7 @@ class ContractController extends AccountBaseController
           
             $deal->cms_id = $item[0];
             $deal->cms_name = $item[1];
+            $deal->deal_category = $request->deal_category;
             $deal->deadline = $request->deadline;
             $deal->estimated_hour_task = $request->estimated_hour_task;
             $deal->hourly_rate = $request->hourly_rate;
@@ -1484,7 +1489,8 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
-                'cms_id' => 'required',
+                'deal_category' => 'required',
+                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
@@ -1497,6 +1503,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'deal_category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
             ]);
         } else {
@@ -1518,7 +1525,8 @@ class ContractController extends AccountBaseController
                 'description7' => 'required',
                 'description8' => 'required',
                 'description9' => 'required',
-                'cms_id' => 'required',
+                'deal_category' => 'required',
+                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'estimated_hour_task.required' => 'This field is required!',
@@ -1537,6 +1545,7 @@ class ContractController extends AccountBaseController
                 'description7.required' => 'Logo files or Google drive link for logo files are required. Please provide all the access details of the project!',
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
+                'deal_category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
             ]);
         }
@@ -1570,6 +1579,7 @@ class ContractController extends AccountBaseController
             // /dd($request);
             $deal = Deal::find($request->id);
             $deal->project_name = $request->project_name;
+            $deal->deal_category = $request->deal_category;
             $deal->currency_id = 1;
             $deal->actual_amount =  $request->amount;
             $currency = Currency::where('id', $request->original_currency_id)->first();

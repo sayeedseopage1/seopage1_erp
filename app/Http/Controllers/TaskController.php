@@ -2671,17 +2671,16 @@ class TaskController extends AccountBaseController
 
     //    CLIENT HAS REVISION
     public function clientHasRevision(Request $request)
-    {
-     // dd($request->all());
-
-        DB::beginTransaction();
-        
+    {  
+        // chagne board column status
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
         $task_status->board_column_id = 1;
         $task_status->save();
 
-        $task_revision = new TaskRevision();
+        // store revision on revision table
+        $task_revision = new TaskRevision(); // instance of TaskRevision
+
         $task_revision->pm_comment= $request->comment;
         $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
         $task_revision->task_id = $request->task_id;
@@ -2690,9 +2689,14 @@ class TaskController extends AccountBaseController
         if ($task_status->subtask_id != null) {
             $task_revision->subtask_id = $task_status->subtask_id;
         }
-        $task_revision->revision_status = "Client has Revision";
+        $task_revision->revision_status = "Client Has Revision";
 
         $task_revision->project_id = $task_status->project_id;
+        $task_revision->acknowledgement_id = $request->acknowledgement_id;
+        $task_revision->additional_amount= $request->additional_amount;
+        $task_revision->additional_status= $request->additional_status;
+        $task_revision->additional_deny_comment=$request->additional_comment;
+        $task_revision->client_pm_dispute = $request->dispute_create;
         $task_revision->added_by = Auth::id();
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
@@ -2755,7 +2759,8 @@ class TaskController extends AccountBaseController
             $tasks_accept = TaskRevision::find($request->revision_id);
 //        $tasks_accept->subtask_id = implode(",", $request->subTask);
             // $tasks_accept->revision_reason = $request->revision_acknowledgement;
-//        $tasks_accept->comment = implode(",", $request->comment);
+//        $tasks_accept->comment = implode(",", $request->comment); 
+            $tasks_accept->lead_comment = $request->comment;
             $tasks_accept->approval_status = 'accepted';
             $tasks_accept->is_accept = true;
             $tasks_accept->save();  
@@ -2772,7 +2777,8 @@ class TaskController extends AccountBaseController
             $subTaskString = rtrim($subTaskString, ',');
             $subTaskCommentString = rtrim($subTaskCommentString, ',');
         //  /   dd($subTaskString);
-            $tasks_accept = TaskRevision::find($request->revision_id);
+            $tasks_accept = TaskRevision::find($request->revision_id); 
+            $tasks_accept->lead_comment = $request->comment;
             // $tasks_accept->subtask_id = $tasks_accept->subtask_id;
             // $tasks_accept->revision_reason = $request->revision_acknowledgement;
             $tasks_accept->approval_status = 'accepted';  
@@ -2913,6 +2919,8 @@ class TaskController extends AccountBaseController
             $tasks_accept->dispute_created = true;
             $tasks_accept->deny_reason = $request ->deny_reason;
         } elseif($request->mode == 'accept') {
+            $tasks_accept->is_accept=true;
+        }elseif($request->mode=='continue'){
             $tasks_accept->is_accept=true;
         }
         $tasks_accept->task_id = $task_status->id;

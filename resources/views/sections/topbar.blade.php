@@ -44,7 +44,7 @@
                 @endif
             </div>
             <div class="user_name mr-3">
-                <span class="f-16 d-block">{{ $user->name }}</span>
+            <a href="{{ route('employees.show', $user->id) }}" style="color: black"><span class="f-16 d-block">{{ $user->name }}</span></a>
                 <span class="f-12 d-block" style="margin-top:-0.2rem; color:#777;">{{ $designation->name }}</span>
             </div>
         </div>
