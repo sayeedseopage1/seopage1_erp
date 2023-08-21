@@ -330,7 +330,7 @@
                     </a>
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                            {{round($total_milestone_assigned_this_cycle_value,2)}}$<span
+                            {{round($total_milestone_assigned_this_cycle_value,2)}}<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Milestone assigned for this cycle (Value)')
                             </span>
@@ -351,7 +351,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{count($total_milestone_completed_this_cycle)}}<span
+                        {{count($total_milestone_completed_this_cycle)}}<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Milestone completed for this cycle (Count)')
                             </span>
@@ -454,13 +454,80 @@
         <div
             class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total tasks assigned</h5>
+                <div class="d-flex flex-wrap">
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{ $total_tasks_assigned_this_cycle }}<span
+                                class="f-12 font-weight-normal text-lightest">
+                                @lang('Task assigned for this cycle')
+                            </span>
+                        </p>
+                    </a>
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{ $total_tasks_assigned_this_cycle + $total_tasks_completed_previous_cycle - $total_tasks_completed_this_cycle}}<span
+                                class="f-12 font-weight-normal text-lightest">
+                                @lang('Task assigned in this cycle')
+                            </span>
+                        </p>
+                    </a>
+                    
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div
+            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total tasks completed</h5>
+                <div class="d-flex flex-wrap">
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{$total_tasks_completed_this_cycle}}<span class="f-12 font-weight-normal text-lightest">
+                                @lang('Tasks completed for this cycle')
+                            </span>
+                        </p>
+                    </a>
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{$total_tasks_completed_previous_cycle}}<span class="f-12 font-weight-normal text-lightest">
+                                @lang('Tasks completed in this cycle')
+                            </span>
+                        </p>
+                    </a>
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div
+            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task completion rate</h5>
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ round($month_total_canceled_project, 2) }}<span
+                            {{ round($tasks_completion_rate_this_cycle, 2) }}%<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Task completion rate for cycle')
+                            </span>
+                        </p>
+                    </a>
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{ round($tasks_completion_rate_previous_cycle, 2) }}%<span
+                                class="f-12 font-weight-normal text-lightest">
+                                @lang('Task completion rate in this cycle')
                             </span>
                         </p>
                     </a>
@@ -479,7 +546,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            0 days<span class="f-12 font-weight-normal text-lightest">
+                            {{round($average_completion_days,2)}} days<span class="f-12 font-weight-normal text-lightest">
                                 @lang('Average Project Completion Time')
                             </span>
                         </p>
@@ -559,9 +626,17 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
-                            {{ $month_project_deadline->count() }}<span
+                            {{ count($cancelled_projects_this_cycle) }}<span
                                 class="f-12 font-weight-normal text-lightest">
-                                @lang('Total Cancelled Project')
+                                @lang('Total Cancelled Project for this cycle')
+                            </span>
+                        </p>
+                    </a>
+                    <a href="#">
+                        <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                            {{ count($cancelled_projects_previous_cycle) }}<span
+                                class="f-12 font-weight-normal text-lightest">
+                                @lang('Total Cancelled Project in this cycle')
                             </span>
                         </p>
                     </a>

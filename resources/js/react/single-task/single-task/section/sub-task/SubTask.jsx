@@ -123,14 +123,17 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                 </span>
                             </div>
                             <div className="d-flex align-items-center ml-auto">
-                                <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2">
-                                    Approve
-                                </Button>
+                            {/*
+                                    <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2">
+                                        Approve
+                                    </Button>
 
-                                
-                                <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2 bg-danger">
-                                    Revision
-                                </Button>
+                                    
+                                    <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2 bg-danger">
+                                        Revision
+                                    </Button>
+                            */}
+                            
 
                                 {hasEditPermission() && <a href="#" onClick={onModalEditButtonClick} className="border text-dark mr-2 py-1 px-2">
                                     {isFetching ?  <div

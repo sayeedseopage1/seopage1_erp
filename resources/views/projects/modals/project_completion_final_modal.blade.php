@@ -7,14 +7,15 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <?php
-            $project_submission = App\Models\ProjectSubmission::where('project_id', $project->id)
-                ->orderBy('id', 'desc')
-                ->first();
+           $project_submission= App\Models\ProjectSubmission::select('project_submissions.*','project_niches.category_name')
+       ->leftJoin('project_niches','project_niches.id','project_submissions.niche')
+      
+      ->where('project_id',$project->id)->orderBy('id','desc')->first();
             $project_portfolio = DB::table('project_portfolios')
-                ->join('project_cms', 'project_portfolios.cms_category', '=', 'project_cms.id')
-                ->join('project_website_types', 'project_portfolios.website_type', '=', 'project_website_types.id')
-                ->join('project_niches', 'project_portfolios.niche', '=', 'project_niches.id')
-                ->join('projects','project_portfolios.project_id','=','projects.id')
+                ->leftJoin('project_cms', 'project_portfolios.cms_category', '=', 'project_cms.id')
+                ->leftJoin('project_website_types', 'project_portfolios.website_type', '=', 'project_website_types.id')
+                ->leftJoin('project_niches', 'project_portfolios.niche', '=', 'project_niches.id')
+                ->leftJoin('projects','project_portfolios.project_id','=','projects.id')
                 ->select('project_portfolios.*', 'project_cms.cms_name', 'project_website_types.website_type', 'project_niches.category_name')
                 ->where('project_portfolios.project_id',$project->id)
                  ->orderBy('project_portfolios.id', 'desc')
@@ -432,14 +433,18 @@
 
                                             </div>
                                         </td>
-                                        <td>
-                                            @if ($project_portfolio != null)
-                                                <p class="fw-normal mb-1">{{ $project_portfolio->category_name }}</p>
-                                            @else
-                                                <p class="fw-normal mb-1">--</p>
-                                            @endif
-                                        </td>
-
+                                       <td>
+                                       
+                                        @if($project_submission->niche != null)
+                                      <p class="fw-normal mb-1">{{$project_submission->category_name}}</p>
+                                       @elseif ($project_portfolio != null)
+                                            <p class="fw-normal mb-1">{{ $project_portfolio->category_name }}</p>
+                                      
+                                      
+                                      @else 
+                                            <p class="fw-normal mb-1">--</p>
+                                        @endif
+                                    </td>
 
                                     </tr>
                                     <tr>
