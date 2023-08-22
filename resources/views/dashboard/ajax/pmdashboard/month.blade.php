@@ -200,24 +200,7 @@
             </div>
         </div>
     </div>
-    {{-- <div class="col-md-3">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
-                <div class="d-flex">
-                    <a href="#">
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
-                            </span>
-                        </p>
-                    </a>
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div> --}}
+    
 </div>
 <div class="row mt-3">
     <div class="col-md-6">
@@ -257,16 +240,16 @@
                 <div class="d-flex flex-wrap">
                     <a href="#" data-toggle="modal" data-target="#monthlyprojectProgressForCycle{{ count($no_of_finished_projects_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{round($project_completion_rate_count_this_cycle_value,2)}}%<span class="f-12 font-weight-normal text-lightest">
-                                @lang('Project Completion rate for this cycle')
+                            0%<span class="f-12 font-weight-normal text-lightest">
+                                @lang('100% in progress projects for cycle')
                             </span>
                         </p>
                     </a>
                     @include('dashboard.employee.project_completion_rate_value.monthly_project_progress_for_cycle')
                     <a href="#" data-toggle="modal" data-target="#monthlyProjectCompletedForCycle{{ count($no_of_finished_projects_previous_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                            {{round($project_completion_rate_count_previous_cycle_value,2)}}%<span class="f-12 font-weight-normal text-lightest">
-                                @lang('Project completion rate in this cycle')
+                            0<span class="f-12 font-weight-normal text-lightest">
+                                @lang('Completed/Finished projects for cycle')
                             </span>
                         </p>
                     </a>
@@ -320,7 +303,7 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Milestone Assigned</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneAssignForThisClient{{ count($total_milestone_assigned_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{count($total_milestone_assigned_this_cycle)}}<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -328,14 +311,16 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.total_milestone_assign.monthly_milestone_assign_for_this_client')
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneAssignInThisClient{{ count($total_milestone_assigned_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                            {{round($total_milestone_assigned_this_cycle_value,2)}}<span
+                            {{round($total_milestone_assigned_this_cycle_value,2)}}$<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Milestone assigned for this cycle (Value)')
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.total_milestone_assign.monthly_milestone_assign_in_this_client')
                 </div>
             </div>
             <div class="d-block">
@@ -349,15 +334,16 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Milestone Completed</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneCompletedForThisCycle{{ count($total_milestone_completed_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        {{count($total_milestone_completed_this_cycle)}}<span
+                            {{count($total_milestone_completed_this_cycle)}}<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Milestone completed for this cycle (Count)')
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.total_milestone_complete.monthly_milestone_complete_for_this_cycle')
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneCompletedInThisCycle{{ count($total_milestone_completed_previous_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                             {{count($total_milestone_completed_previous_cycle)}}<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -365,7 +351,8 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#" class="mt-3">
+                    @include('dashboard.employee.total_milestone_complete.monthly_milestone_complete_in_this_cycle')
+                    <a href="#" class="mt-3" data-toggle="modal" data-target="#monthlyMilestoneReleasedForThisCycle{{ count($total_milestone_completed_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{round($total_released_amount_this_cycle,2)}}$<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -373,7 +360,8 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#" class="mt-3">
+                    @include('dashboard.employee.total_milestone_complete.monthly_milestone_released_for_this_cycle')
+                    <a href="#" class="mt-3" data-toggle="modal" data-target="#monthlyMilestoneReleasedInThisCycle{{ count($total_milestone_completed_previous_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                             {{round($total_released_amount_previous_cycle,2)}}$<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -381,6 +369,7 @@
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.total_milestone_complete.monthly_milestone_released_in_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -396,7 +385,7 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completion Rate (Count)</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneComplectionPercentageForThisCycle{{ count($total_milestone_completed_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{round($milestone_completion_rate_count_this_cycle,2)}}%<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -404,7 +393,8 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.milestone_complete_rate_count.monthly_milestone_completion_percentage_for_this_cycle')
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneComplectionPercentageCount{{ count($total_milestone_completed_previous_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                             {{round($milestone_completion_rate_count_previous_cycle,2)}}%<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -412,6 +402,7 @@
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.milestone_complete_rate_count.monthly_milestone_completion_percentage_in_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -425,7 +416,7 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Milestone Completion Rate (Value)</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneComplectionPercentageforValue{{ count($total_milestone_completed_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{round($milestone_completion_rate_value_this_cycle,2)}}%<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -433,7 +424,8 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.milestone_complete_rate_value.monthly_milestone_completion_percentage_for_this_cycle_value')
+                    <a href="#" data-toggle="modal" data-target="#monthlyMilestoneComplectionPercentageInValue{{ count($total_milestone_completed_previous_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                             {{round($milestone_completion_rate_value_previous_cycle,2)}}%<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -441,6 +433,7 @@
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.milestone_complete_rate_value.monthly_milestone_completion_percentage_in_this_cycle_value')
                 </div>
             </div>
             <div class="d-block">
@@ -456,7 +449,7 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total tasks assigned</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-toggle="modal" data-target="#monthlytaskAssignedForThisCycle{{ count($total_tasks_assigned_this_cycle_get) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{ $total_tasks_assigned_this_cycle }}<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -464,15 +457,7 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#">
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ $total_tasks_assigned_this_cycle + $total_tasks_completed_previous_cycle - $total_tasks_completed_this_cycle}}<span
-                                class="f-12 font-weight-normal text-lightest">
-                                @lang('Task assigned in this cycle')
-                            </span>
-                        </p>
-                    </a>
-                    
+                    @include('dashboard.employee.total_task_assigned.monthly_task_assigned_for_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -486,20 +471,22 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total tasks completed</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-toggle="modal" data-target="#monthlyTaskCompletedForThisCycle{{ count($total_tasks_completed_this_cycle_get) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{$total_tasks_completed_this_cycle}}<span class="f-12 font-weight-normal text-lightest">
                                 @lang('Tasks completed for this cycle')
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.total_task_completed.monthly_task_completed_for_this_cycle')
+                    <a href="#" data-toggle="modal" data-toggle="modal" data-target="#monthlyTaskCompletedInThisCycle{{ count($total_tasks_completed_previous_cycle_get) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{$total_tasks_completed_previous_cycle}}<span class="f-12 font-weight-normal text-lightest">
                                 @lang('Tasks completed in this cycle')
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.total_task_completed.monthly_task_completed_in_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -515,7 +502,7 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Task completion rate</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlyTaskComplection{{ count($total_tasks_completed_this_cycle_get) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{ round($tasks_completion_rate_this_cycle, 2) }}%<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -523,7 +510,8 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.task_complection_rate.monthly_task_complection_rate_for_this_cycle')
+                    <a href="#" data-toggle="modal" data-target="#monthlyTaskComplectionRateInCycle{{ count($total_tasks_completed_previous_cycle_get) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{ round($tasks_completion_rate_previous_cycle, 2) }}%<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -531,6 +519,7 @@
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.task_complection_rate.monthly_task_complection_rate_in_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -539,18 +528,26 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average project completion time</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionDays{{ count($average_project_completion_rate) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{round($average_completion_days,2)}} days<span class="f-12 font-weight-normal text-lightest">
-                                @lang('Average Project Completion Time')
+                                @lang('Average project compeltion time for this cycle')
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.average_project.monthly_average_project_completion_time')
+                    <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionInThisDays{{ count($average_project_completion_rate_previous_cycle) }}">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{round($average_completion_days_previous_cycle,2)}} days<span class="f-12 font-weight-normal text-lightest">
+                                @lang('Average project compeltion time in this cycle')
+                            </span>
+                        </p>
+                    </a>
+                    @include('dashboard.employee.average_project.monthly_average_project_completion_time_in_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -568,7 +565,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ round($month_percentage_of_onhold_project_count, 2) }}%<span
+                          0<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Number of New deals added')
                             </span>
@@ -576,7 +573,7 @@
                     </a>
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                            {{ round($month_percentage_of_onhold_project_count, 2) }}%<span
+                            0<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Number of new milestones added on old projects')
                             </span>
@@ -584,7 +581,7 @@
                     </a>
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 mt-3">
-                            {{ round($month_percentage_of_onhold_project_count, 2) }}%<span
+                            0<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Number of old projects where there is upsales/cross sales')
                             </span>
@@ -605,7 +602,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ $month_project_deadline->count() }}<span
+                            0<span
                                 class="f-12 font-weight-normal text-lightest"></span>
                         </p>
                     </a>
@@ -624,7 +621,7 @@
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Canceled projects</h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#">
+                    <a href="#" data-toggle="modal" data-target="#monthlytotalCanceledProjectForThisCycle{{ count($cancelled_projects_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
                             {{ count($cancelled_projects_this_cycle) }}<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -632,7 +629,8 @@
                             </span>
                         </p>
                     </a>
-                    <a href="#">
+                    @include('dashboard.employee.canceled_project.monthly_total_canceled_project_for_this_cycle')
+                    <a href="#" data-toggle="modal" data-target="#monthlytotalCanceledProjectInThisCycle{{ count($cancelled_projects_previous_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
                             {{ count($cancelled_projects_previous_cycle) }}<span
                                 class="f-12 font-weight-normal text-lightest">
@@ -640,6 +638,7 @@
                             </span>
                         </p>
                     </a>
+                    @include('dashboard.employee.canceled_project.monthly_total_canceled_project_in_this_cycle')
                 </div>
             </div>
             <div class="d-block">
@@ -655,7 +654,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ $month_milestoe_to_be_completed }}<span
+                           0<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Total Delayed Project')
                             </span>
@@ -678,7 +677,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ $month_tasks_under_review }}<span
+                           0<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Current')
                             </span>
@@ -686,7 +685,7 @@
                     </a>
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{ $month_tasks_under_review }}<span
+                           0<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Current plus old ones')
                             </span>
@@ -707,7 +706,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#">
                         <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                            {{ $month_tasks_deadline }}<span class="f-12 font-weight-normal text-lightest">
+                           0<span class="f-12 font-weight-normal text-lightest">
                                 @lang('Total Completed Delayed Project')
                             </span>
                         </p>

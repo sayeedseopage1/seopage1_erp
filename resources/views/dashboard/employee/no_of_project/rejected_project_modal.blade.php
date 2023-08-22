@@ -22,7 +22,6 @@
                                 <th scope="col">Project Type</th>
                                 <th scope="col">Project Budget</th>
                                 <th scope="col">Project Status</th>
-                                <th scope="col">Status</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -42,20 +41,6 @@
                                     <td>{{ $deal->project_type }}</td>
                                     <td>{{ $item->project_budget }} $</td>
                                     <td>{{ $item->project_status }}</td>
-                                    <td>
-                                        @if ($item->status == 'in progress')
-                                            <span class="badge badge-primary">{{ $item->status }}</span>
-                                        @endif
-                                        @if ($item->status == 'finished')
-                                            <span class="badge badge-success">{{ $item->status }}</span>
-                                        @endif
-                                        @if ($item->status == 'partially finished')
-                                            <span class="badge badge-info">{{ $item->status }}</span>
-                                        @endif
-                                        @if ($item->status == 'canceled')
-                                            <span class="badge badge-danger">{{ $item->status }}</span>
-                                        @endif
-                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>

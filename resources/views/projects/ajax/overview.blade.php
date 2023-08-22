@@ -26,15 +26,25 @@ $project->members->pluck('user_id')->toArray(); @endphp
         @if ($project->status == 'finished' || $project->status == 'partially finished' || $project->status == 'canceled')
             @if ($client_review ==0)
                   @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
-                    <div style="margin-bottom: -40px;">
-                        <button type="button" class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
+                    <div style="margin-bottom: -40px; margin-left:18%;">
+                        <a href="#"  class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
                             Client Review
-                        </button>
+                        </a>
                         @include('projects.modals.client_review')
                     </div>
                 @endif
             @endif
         @endif
+        @php
+            $deal = \App\Models\Deal::where('id',$project->deal_id)->first();
+        @endphp
+        <div style="margin-bottom: -40px;">
+            @if ($deal->lead_id !=null)
+                <a href="{{ route('leads.show',$deal->lead_id) }}" target="_blank" class="btn btn-primary">Lead</a>
+            @endif
+            <a href="{{ route('deals.show',$project->deal_id) }}" target="_blank" class="btn btn-primary ml-3">Deal</a>
+            <a href="{{ route('contracts.show',$project->deal_id) }}" target="_blank" class="btn btn-primary ml-3">Won Deal</a>
+        </div>
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
@@ -778,7 +788,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     @endif
                     @endif
                 @endif
-                    <div class="col-12 mt-3">
+                <div class="col-12 mt-3">
                         <x-cards.widget :title="__('Project Type')" :value="$project->deal->project_type" icon="clock" badge="true"/>
                     </div>
                 </div>

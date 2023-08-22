@@ -274,12 +274,22 @@ class TaskController extends AccountBaseController
                 }
 
             }
-            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
+            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10 || Auth::user()->role_id == 5)
             {
                 $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
 
-            }else {
+            }
+
+            elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
+            {
                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
+
+            } 
+            
+            elseif(Auth::user()->role_id == 4)
+            {
+                $tasks = $tasks->where('tasks.added_by',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
+
             }
           
 
