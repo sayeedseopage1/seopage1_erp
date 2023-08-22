@@ -17,12 +17,14 @@
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
                     <th scope="col">Project Status</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_finished_projects_previous_cycle as $item)
+                    @foreach ($no_of_finished_projects_this_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $deal = \App\Models\Deal::where('id',$item->deal_id)->first();
@@ -37,6 +39,8 @@
                         </td>
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
+                        <td>{{ $item->project_start_date }}</td>
+                        <td>{{ $item->project_completion_date }}</td>
                         <td>{{ $item->project_status }}</td>
                         <td>
                             @if ($item->status == 'in progress')

@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="totalFinishedProjectCycle{{ count($no_of_finished_projects_this_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="totalFinishedProjectCycle{{ count($no_of_finished_projects_previous_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -17,12 +17,14 @@
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
                     <th scope="col">Project Status</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_finished_projects_this_cycle as $item)
+                    @foreach ($no_of_finished_projects_previous_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $deal = \App\Models\Deal::where('id',$item->deal_id)->first();
@@ -37,6 +39,8 @@
                         </td>
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
+                        <td>{{ $item->project_start_date }}</td>
+                        <td>{{ $item->project_completion_date }}</td>
                         <td>{{ $item->project_status }}</td>
                         <td>
                             @if ($item->status == 'in progress')
@@ -59,7 +63,6 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
         </div>
       </div>
     </div>

@@ -145,3 +145,14 @@ abbr{
   text-decoration: none;
   cursor:default !important;
 }
+ 
+
+.whitespace-nowrap{
+  white-space: nowrap !important;
+}
+
+.cnx_dropdown__item{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}

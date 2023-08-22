@@ -35,7 +35,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 @endif
             @endif
         @endif
-        @php
+        <!-- @php
             $deal = \App\Models\Deal::where('id',$project->deal_id)->first();
         @endphp
         <div style="margin-bottom: -40px;">
@@ -44,7 +44,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             @endif
             <a href="{{ route('deals.show',$project->deal_id) }}" target="_blank" class="btn btn-primary ml-3">Deal</a>
             <a href="{{ route('contracts.show',$project->deal_id) }}" target="_blank" class="btn btn-primary ml-3">Won Deal</a>
-        </div>
+        </div> -->
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)

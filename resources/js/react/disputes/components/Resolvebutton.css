@@ -1,0 +1,80 @@
+.resolve-btn{
+    padding: 0px 4px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    color: #333333; 
+} 
+
+.resolve-btn:hover{
+    background: #e7e7e7;
+    border: 1px solid #c4c4c4;
+}
+
+.resolve-btn.solved{
+    color: #fff; 
+    background-color: rgb(0, 163, 54);
+    border: 1px solid rgb(0, 163, 54);
+} 
+
+a.badge.badge-info:hover{
+    color: #fff !important;
+}
+
+a.nav-link.badge{ 
+    font-size: 12px;
+    letter-spacing: 0.12px;
+}
+
+a.nav-link.badge:hover{
+    color: #fff !important;
+}
+
+span.divider-text{ 
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+/* 
+table.dispute-preview-table{ 
+   border: 1px solid #d3d3d3;
+   border-collapse: collapse;
+} */
+
+table.dispute-preview-table tr td{
+   vertical-align: top;
+   text-align: justify;
+   /* border: 1px solid #d3d3d3;
+   border-collapse: collapse;
+   padding: 10px; */
+}
+
+table.dispute-preview-table tr td:first-child{
+    width: 120px;
+    min-width: 120px;
+    vertical-align: top;
+    text-align: right; 
+    color: #7a808f;
+}
+
+table.dispute-preview-table tr td.vertical-center{
+    vertical-align: middle;
+}
+
+
+.toggle-light{
+    background-color: #E9ECEF;
+}
+
+.dispute-QA li{
+    list-style: decimal;
+}
+
+
+.question-by{
+    color: #818181;
+}

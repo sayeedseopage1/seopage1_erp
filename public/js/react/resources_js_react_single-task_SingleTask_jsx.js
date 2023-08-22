@@ -238,67 +238,6 @@ FileUploader.SelectedFiles = SelectedFilePreveiw;
 
 /***/ }),
 
-/***/ "./resources/js/react/global/Avatar.jsx":
-/*!**********************************************!*\
-  !*** ./resources/js/react/global/Avatar.jsx ***!
-  \**********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-var Avatar = function Avatar(_ref) {
-  var _ref$type = _ref.type,
-    type = _ref$type === void 0 ? "square" : _ref$type,
-    _ref$width = _ref.width,
-    width = _ref$width === void 0 ? 32 : _ref$width,
-    _ref$height = _ref.height,
-    height = _ref$height === void 0 ? 32 : _ref$height,
-    className = _ref.className,
-    src = _ref.src,
-    alt = _ref.alt,
-    name = _ref.name;
-  console.log({
-    src: src
-  });
-  var modifiedName = name ? name.charAt(0).toUpperCase() + name.slice(1) : null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-    className: "border sp1_item_center",
-    style: {
-      width: width,
-      height: height,
-      overflow: 'hidden',
-      borderRadius: type === 'circle' ? '100%' : '6px'
-    },
-    children: src ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("img", {
-      src: src,
-      alt: alt,
-      style: {
-        width: width,
-        height: height,
-        overflow: 'hidden',
-        borderRadius: type === 'circle' ? '100%' : '6px'
-      }
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("div", {
-      className: "font-weight-bold",
-      style: {
-        fontSize: '1.2rem'
-      },
-      children: modifiedName
-    })
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Avatar);
-
-/***/ }),
-
 /***/ "./resources/js/react/global/Rating.jsx":
 /*!**********************************************!*\
   !*** ./resources/js/react/global/Rating.jsx ***!
