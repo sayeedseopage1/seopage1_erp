@@ -86,9 +86,7 @@ const ResolveButton = () => {
   const askQuestionTo = (user, question_id) => {
         dispatch({type: 'UPDATE_USER', user, id: question_id})
   }
-
-
-  console.log({questions})
+ 
 
   return (
    <React.Fragment>
@@ -96,7 +94,7 @@ const ResolveButton = () => {
             Resolved
         </button>
 
-        <Modal isOpen={true}>
+        <Modal isOpen={showModal}>
             <div className="sp1_modal-content-wrapper" >
                 <div className="sp1_modal-panel sp1_task_create_modal_panel w-100">
                     {/* header */}

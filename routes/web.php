@@ -186,6 +186,8 @@ use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
 use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
+use App\Http\Controllers\DisputeController;
+use App\Http\Controllers\RevisionCalculatorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1042,6 +1044,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('timelogs/user_time_logs', [TimelogController::class, 'userTimelogs'])->name('timelogs.user_time_logs');
     Route::post('timelogs/approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
     Route::resource('timelogs', TimelogController::class);
+
+    Route::resource('disputes', DisputeController::class);
+    Route::resource('revision-calculator', RevisionCalculatorController::class);
 
 
     // Contracts

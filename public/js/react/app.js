@@ -23635,9 +23635,6 @@ var ResolveButton = function ResolveButton() {
       id: question_id
     });
   };
-  console.log({
-    questions: questions
-  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
       onClick: function onClick() {
@@ -23646,7 +23643,7 @@ var ResolveButton = function ResolveButton() {
       className: "resolve-btn solved",
       children: "Resolved"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      isOpen: true,
+      isOpen: showModal,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "sp1_modal-content-wrapper",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
