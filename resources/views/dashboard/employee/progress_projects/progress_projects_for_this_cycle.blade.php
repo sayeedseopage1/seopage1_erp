@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="modal-title" id="exampleModalLabel"><h4> 100% in progress projects for this cycle: ({{count($no_of_100_finished_project_this_cycle)}})</h4>
+          <div class="modal-title" id="exampleModalLabel">
+            <h4>{{count($no_of_accepted_projects)}} projects assigned</h4>
+            <h4>{{count($no_of_100_finished_project_this_cycle)}} projects completed</h4>
+            <h4>Percentage: {{round($project_completion_rate_count_this_cycle_100_in_progress,2)}}%</h4>
            
           </div>
          

@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Project Complection Rate In This Cycle</h5>
+          <div class="modal-title" id="exampleModalLabel"><h4>{{(count($no_of_accepted_projects))+(count($no_of_finished_projects_previous_cycle ))- (count($no_of_finished_projects_this_cycle ))}} projects assigned</h4>
+            <h4>{{count($no_of_finished_projects_previous_cycle)}} projects completed</h4>
+            <h4>Percentage : {{round($project_completion_rate_count_previous_cycle,2)}}%</h4>
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
