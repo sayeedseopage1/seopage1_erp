@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Released amount for cycle</h5>
+            <div class="modal-title" id="exampleModalLabel">
+                <h4>Released amount for cycle: {{round($total_released_amount_this_cycle,2)}}$</h4>
+              </div>
+         
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -21,9 +24,9 @@
                                   <th scope="col">Milestone Title</th>
                                   <th scope="col">Project Budget</th>
                                   <th scope="col">Milestone Cost</th>
-                                  <th scope="col">Milestone Start</th>
-                                  <th scope="col">Milestone Complete</th>
-                                  <th scope="col">Status</th>
+                                  <th scope="col">Milestone Start Time</th>
+                                  <th scope="col">Milestone Released Time</th>
+                                  <th scope="col">Project Status</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -74,5 +77,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#released_amount_cycle');
+      new DataTable('#released_amount_cycle',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

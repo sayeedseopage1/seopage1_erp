@@ -152,5 +152,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#taskComplectionRateInThisCycle');
+      new DataTable('#taskComplectionRateInThisCycle',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

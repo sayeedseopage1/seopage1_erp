@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Total completed/Finished projects in this cycle</h5>
+          <div class="modal-title" id="exampleModalLabel"><h4>{{(count($no_of_accepted_projects))+(count($no_of_finished_projects_previous_cycle ))- (count($no_of_finished_projects_this_cycle ))}} projects assigned</h4>
+            <h4>{{count($no_of_finished_projects_previous_cycle)}} projects completed</h4>
+            <h4>Percentage : {{round($project_completion_rate_count_previous_cycle,2)}}%</h4>
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -18,7 +21,7 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
+                    <th scope="col">Completion Date</th>
                     <th scope="col">Project Status</th>
                     <th scope="col">Status</th>
                   </tr>
@@ -69,5 +72,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthly_total_complete_project');
+      new DataTable('#monthly_total_complete_project',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

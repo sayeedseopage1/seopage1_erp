@@ -1,9 +1,11 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="monthlyProgressProjectForThisCycle{{ count($no_of_100_finished_project_previous_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="monthlyProgressProjectForThisCycle{{ count($no_of_100_finished_project_this_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Project Progress In This Cycle</h5>
+          <div class="modal-title" id="exampleModalLabel"><h4> 100% in progress projects for this cycle: ({{count($no_of_100_finished_project_this_cycle)}})</h4>
+           
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -17,12 +19,13 @@
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
+                    <th scope="col">Project Start Time</th>
                     <th scope="col">Project Status</th>
-                    <th scope="col">Status</th>
+                  
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_100_finished_project_previous_cycle as $item)
+                    @foreach ($no_of_100_finished_project_this_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $deal = \App\Models\Deal::where('id',$item->deal_id)->first();
@@ -37,7 +40,8 @@
                         </td>
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
-                        <td>{{ $item->project_status }}</td>
+                        <td>{{ $item->project_start_date }}</td>
+                        
                         <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>
@@ -65,5 +69,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthly_project_progress_for_this_cycle');
+      new DataTable('#monthly_project_progress_for_this_cycle',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

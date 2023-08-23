@@ -13,7 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Modal */ "./resources/js/react/tasks/components/Modal.jsx");
+/* harmony import */ var _global_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../global/Modal */ "./resources/js/react/global/Modal.jsx");
 /* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Button */ "./resources/js/react/tasks/components/Button.jsx");
 /* harmony import */ var _ckeditor_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../ckeditor/index */ "./resources/js/react/ckeditor/index.jsx");
 /* harmony import */ var _SubmitButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./SubmitButton */ "./resources/js/react/tasks/components/SubmitButton.jsx");
@@ -107,7 +107,7 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
         className: (row === null || row === void 0 ? void 0 : row.status) === 'denied' ? 'sp1_tasks_tbl_report_btn' : '',
         children: title
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
           isOpen: isOpen,
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
             className: "sp1_modal-content-wrapper",

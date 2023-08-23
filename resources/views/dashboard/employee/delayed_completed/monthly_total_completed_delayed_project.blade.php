@@ -68,5 +68,7 @@
     </div>
   </div>
   <script>
-    new DataTable('#monthlyTotalCompleteDelayProjectTable');
+    new DataTable('#monthlyTotalCompleteDelayProjectTable',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
 </script>

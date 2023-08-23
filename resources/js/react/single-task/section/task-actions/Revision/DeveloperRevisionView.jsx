@@ -10,7 +10,7 @@ import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 
 const DeveloperRevisionView = ({task, close}) => {
   const [show, setShow] = useState("REVISION");
-  const [accept, setAccept] = useState();
+  const [accept, setAccept] = useState('');
   const dispatch = useDispatch();
   const { data: revision, isFetching: isFetchingRevision } = useGetRevisionDetailsQuery(task?.id);
   const [revisionAcceptOrDeny, {isLoading: isLoadingRevisionReview}] = useRevisionAcceptOrDenyMutation();
@@ -19,14 +19,17 @@ const DeveloperRevisionView = ({task, close}) => {
   // handle Accept and continue submition
   const hanldeAcceptAndContinueSubmition = (data, type) => {
 
-    revisionAcceptOrDeny({
-        comment: data.comment,
-        deny_reason: data?.denyReason,
+    const _data = {
+        comment: data?.comment ?? '',
+        deny_reason: data?.denyReason ?? '',
         task_id: task?.id,
         user_id: auth?.id,
         revision_id: revision?.id,
-        mode: accept ? 'accept': 'deny'
-    })
+        mode: data?.continue ? 'continue' : accept
+    }
+
+  
+    revisionAcceptOrDeny(_data)
     .unwrap()
     .then(res => {
         if(_.includes([4, 6], Number(auth?.role_id))){
@@ -68,14 +71,21 @@ const DeveloperRevisionView = ({task, close}) => {
                     <RevisionVeiw 
                         revision={revision}
                         isLoading= {isFetchingRevision}
+                        isContinue={isLoadingRevisionReview}
                         onAccept={() => {
-                            setAccept(true);
+                            setAccept('accept');
                             setShow('ACCEPT_AND_CONTINUE'); 
                         }} 
                         onDeny={() => {
-                            setAccept(false);
+                            setAccept("deny");
                             setShow('DENY_AND_CONTINUE')
                         }}
+
+                        onContinue={() => {
+                            setAccept('continue')
+                            hanldeAcceptAndContinueSubmition({continue: true}, '')
+                        }}
+
                     />
                 } 
 

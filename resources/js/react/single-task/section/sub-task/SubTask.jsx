@@ -126,14 +126,14 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                 </span>
                             </div>
                             <div className="d-flex align-items-center ml-auto">
-                                <ApproveTask
+                                {/* <ApproveTask
                                     task={subTask}
                                     auth={auth}
                                 />      
 
                                 <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2 bg-danger">
                                     Revision
-                                </Button>
+                                </Button> */}
 
                                 {hasEditPermission() && <a href="#" onClick={onModalEditButtonClick} className="border text-dark mr-2 py-1 px-2">
                                     {isFetching ?  <div

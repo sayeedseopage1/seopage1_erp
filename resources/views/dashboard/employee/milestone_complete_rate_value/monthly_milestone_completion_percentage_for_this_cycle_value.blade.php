@@ -72,5 +72,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthly_M_C_P_F_This_value_Table');
+      new DataTable('#monthly_M_C_P_F_This_value_Table',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

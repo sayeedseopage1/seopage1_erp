@@ -1,5 +1,5 @@
 import React from 'react'
-import Modal from './Modal';
+import Modal from '../../global/Modal';
 import Button from './Button';
 import CKEditorComponent from '../../ckeditor/index'
 import SubmitButton from './SubmitButton';

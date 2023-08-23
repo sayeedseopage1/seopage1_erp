@@ -23,7 +23,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_delayed_projects as $item)
+                    @foreach ($no_of_delayed_projects_this_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $deal = \App\Models\Deal::where('id',$item->deal_id)->first();
@@ -66,5 +66,7 @@
     </div>
   </div>
   <script>
-    new DataTable('#delaedProjectTable');
+    new DataTable('#delaedProjectTable',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
 </script>

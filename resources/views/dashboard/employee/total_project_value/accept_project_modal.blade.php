@@ -1,9 +1,13 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="projectAcceptModal{{ count($no_of_accepted_projects) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="projectAcceptValueModal{{ count($no_of_accepted_projects) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Accept Projects</h5>
+          <div class="modal-title" id="exampleModalLabel">
+            <h4>Total accepted project value: {{round($accepted_project_value,2)}}$</h4>
+            <h4>Total rejected project value: {{round($rejected_project_value,2)}}$</h4>
+
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -20,6 +24,7 @@
                                 <th scope="col">Project Name</th>
                                 <th scope="col">Project Type</th>
                                 <th scope="col">Project Budget</th>
+                                <th scope="col">Project Start Time</th>
                                 <th scope="col">Project Status</th>
                                 <th scope="col">Status</th>
                               </tr>
@@ -40,6 +45,7 @@
                                     </td>
                                     <td>{{ $deal->project_type }}</td>
                                     <td>{{ $item->project_budget }} $</td>
+                                    <td>{{ $item->project_start_date }} </td>
                                     <td>{{ $item->project_status }}</td>
                                     <td>
                                         @if ($item->status == 'in progress')
@@ -71,5 +77,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#accept_project');
+      new DataTable('#accept_project',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

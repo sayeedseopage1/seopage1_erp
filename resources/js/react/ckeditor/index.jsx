@@ -6,19 +6,17 @@ import ImageUploadAdapterPlugin from './custom/ImageUploadAdapter';
 
 
 export default function CKEditorComponent ({data="", onChange, placeholder="Type the content here!"}){
-    const [editor, setEditor] = React.useState(null);
+    const [isExist, setIsExist] = React.useState(false);
 
     return (
         <>
             <CKEditor
-                onReady={editor => {
-                    // Insert the toolbar before the editable area.
-                    editor.ui.getEditableElement()?.parentElement.insertBefore(
-                        editor.ui.view.toolbar.element,
-                        editor.ui.getEditableElement()
-                    );
-
-                    setEditor(editor);
+                onReady={editor => { 
+                        editor.ui.getEditableElement()?.parentElement.insertBefore(
+                            editor.ui.view.toolbar.element,
+                            editor.ui.getEditableElement()
+                        );
+                      setIsExist(true); 
                 }}
 
                 onError={ ( error, { willEditorRestart } ) => {

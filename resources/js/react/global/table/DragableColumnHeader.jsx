@@ -30,8 +30,8 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
 
   const [{isOver}, drop] = useDrop({
     accept: 'column',
-    drop: (draggedColumn) => {
-      if(column.id === "expend" || column.id === 'action') return; 
+    drop: (draggedColumn) => { 
+      if(!column.columnDef?.draggable) return; 
       const newColumnOrder = reorderColumn(
         draggedColumn.id,
         column.id,
@@ -52,7 +52,7 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
     collect: monitor => ({
       isDragging: monitor.isDragging(),
     }), 
-    item: () => column.id === "expend" || column.id === 'action' ? null : column,
+    item: () => column.columnDef?.draggable ? column : null,
     type: 'column',
   })
 
@@ -71,13 +71,13 @@ export const DragableColumnHeader = ({header, table, className='', ...props}) =>
         colSpan={header.colSpan}
         style={{ 
           opacity: isDragging ? 0.5 : 1, 
-          background: isOver && (column.id !== "expend" || column.id !== 'action') ? '#f3f3f3' : '', 
+          background: isOver && (column.columnDef?.draggable) ? '#f3f3f3' : '', 
         }}
         className={`sp1-data-table-th sp1-data-table-th--${column.id} ${className}`}
         {...props}
       >
         <div className="d-flex align-items-start">
-          {column.id !== 'expend' && column.id !== 'action' &&
+          {column.columnDef?.draggable &&
               <button 
               {...{
                 onClick: header.column.getToggleSortingHandler(),

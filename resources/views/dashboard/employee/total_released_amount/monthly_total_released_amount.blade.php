@@ -3,7 +3,9 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Total Released Amount</h5>
+          <div class="modal-title" id="exampleModalLabel">
+            <h4>Released amount in cycle: {{round($total_released_amount_previous_cycle,2)}}$</h4>
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -21,9 +23,9 @@
                               <th scope="col">Milestone Title</th>
                               <th scope="col">Project Budget</th>
                               <th scope="col">Milestone Cost</th>
-                              <th scope="col">Milestone Start</th>
-                              <th scope="col">Milestone Complete</th>
-                              <th scope="col">Status</th>
+                              <th scope="col">Milestone Start Time</th>
+                              <th scope="col">Milestone Released Time</th>
+                              <th scope="col">Project Status</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -45,19 +47,19 @@
                                   <td>{{ $item->milestone_creation_date }}</td>
                                   <td>{{ $item->milestone_released_date }}</td>
                                   <td>
-                                      @if ($item->status == 'in progress')
-                                          <span class="badge badge-primary">{{ $item->status }}</span>
-                                      @endif
-                                      @if ($item->status == 'finished')
-                                          <span class="badge badge-success">{{ $item->status }}</span>
-                                      @endif
-                                      @if ($item->status == 'partially finished')
-                                          <span class="badge badge-info">{{ $item->status }}</span>
-                                      @endif
-                                      @if ($item->status == 'canceled')
-                                          <span class="badge badge-danger">{{ $item->status }}</span>
-                                      @endif
-                                  </td>
+                                    @if ($item->status == 'in progress')
+                                        <span class="badge badge-primary">{{ $item->status }}</span>
+                                    @endif
+                                    @if ($item->status == 'finished')
+                                        <span class="badge badge-success">{{ $item->status }}</span>
+                                    @endif
+                                    @if ($item->status == 'partially finished')
+                                        <span class="badge badge-info">{{ $item->status }}</span>
+                                    @endif
+                                    @if ($item->status == 'canceled')
+                                        <span class="badge badge-danger">{{ $item->status }}</span>
+                                    @endif
+                                </td>
                               </tr>
                               @endforeach
                           </tbody>
@@ -74,5 +76,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthly_total_released_amount');
+      new DataTable('#monthly_total_released_amount',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

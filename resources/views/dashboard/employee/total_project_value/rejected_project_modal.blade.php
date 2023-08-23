@@ -3,7 +3,11 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Rejected Projects</h5>
+          <div class="modal-title" id="exampleModalLabel">
+            <h4>Total accepted project value: {{round($accepted_project_value,2)}}$</h4>
+            <h4>Total rejected project value: {{round($rejected_project_value,2)}}$</h4>
+
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -20,6 +24,7 @@
                                 <th scope="col">Project Name</th>
                                 <th scope="col">Project Type</th>
                                 <th scope="col">Project Budget</th>
+                                <th scope="col">Project Start Time</th>
                                 <th scope="col">Project Status</th>
                               </tr>
                             </thead>
@@ -39,6 +44,7 @@
                                     </td>
                                     <td>{{ $deal->project_type }}</td>
                                     <td>{{ $item->project_budget }} $</td>
+                                    <td>{{ $item->project_start_date }}</td>
                                     <td>{{ $item->project_status }}</td>
                                 </tr>
                                 @endforeach
@@ -56,5 +62,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#reject_project');
+      new DataTable('#reject_project',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

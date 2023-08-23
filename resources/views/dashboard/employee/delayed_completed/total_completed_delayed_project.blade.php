@@ -40,7 +40,7 @@
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_creation_date }}</td>
-                        <td>{{ $item->project_creation_date }}</td>
+                        <td>{{ $item->project_completion_date }}</td>
                         <td>{{ $item->project_status }}</td>
                         <td>
                             @if ($item->status == 'in progress')
@@ -68,5 +68,7 @@
     </div>
   </div>
   <script>
-    new DataTable('#totalCompleteDelayProjectTable');
+    new DataTable('#totalCompleteDelayProjectTable',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
 </script>

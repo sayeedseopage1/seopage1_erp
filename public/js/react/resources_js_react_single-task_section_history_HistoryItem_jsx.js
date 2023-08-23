@@ -13,14 +13,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../../utils/user-details'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
 var HistoryItem = function HistoryItem(_ref) {
   var history = _ref.history;
-  var user = history ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User(history.user) : null;
+  var user = history ? new Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../../utils/user-details'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(history.user) : null;
   var details = history === null || history === void 0 ? void 0 : history.lang;
   var _lang = details;
 

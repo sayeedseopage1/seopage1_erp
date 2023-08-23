@@ -73,7 +73,7 @@ const DevloperTaskSelectionMenu = ({ task, setTask }) => {
                                         : "task-selection-list-option"
                                 }
                             >
-                                {task?.heading}
+                                <span>{task?.heading} <span className="badge badge-success">{task?.client_name}</span></span>
                             </Combobox.Option>
                         ))
                     ) : (

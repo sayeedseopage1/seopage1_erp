@@ -30,6 +30,7 @@ const SingleTaskPage = () => {
     const { data, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`, { refetchOnMountOrArgChange: true});
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
  
+ 
     useEffect(() => {
         if (data) {
             let task = {
@@ -265,14 +266,13 @@ const SingleTaskPage = () => {
                                             color: "#fff",
                                         }}
                                     > 
-                                        {
-                                        _.map(task?.revisions, (revision, index) => (
-                                                <RevisionText
-                                                    key={revision.id}
+                                        { _.map(task?.revisions, (revision, index) => (
+                                             <RevisionText
+                                                    key={revision?.id}
                                                     index={index + 1}
                                                     date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
                                                     time={dayjs(revision.createdAt).format('hh:mm a')}
-                                                    text={revision?.comment}
+                                                    text={revision?.comment || revision?.devComment || revision?.pmComment}
                                                     revision={revision}
                                                 />
                                             ))

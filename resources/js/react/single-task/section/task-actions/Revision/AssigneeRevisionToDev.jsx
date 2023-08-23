@@ -23,6 +23,7 @@ const AssigneeRevisionToDev = ({
     task,
     onBack,
     onSubmit,
+    revision,
     isSubmitting = false, 
 }) => {
     const [reason, setReason] = useState("");
@@ -31,7 +32,7 @@ const AssigneeRevisionToDev = ({
     const [commentError, setCommentError] = useState(false);
     const [subtasks, setSubtasks] = useState([]);
     const [subtaskError, setSubtaskError] = useState("");
-    const [isDeniable, setIsDeniable] = useState(true);
+    const [isDeniable, setIsDeniable] = useState(false);
 
     // radio button change
     const handleChange = (e,isDeniable) => {
@@ -62,7 +63,7 @@ const AssigneeRevisionToDev = ({
     // validation
     const validate = () => {
         let errorCount = 0;
-        if (reason === "") {
+        if (reason === "" && revision?.isDeniable && revision?.isAccept) {
             errorCount++;
             setReasonError("You have to select a reason from below options");
         }
@@ -113,45 +114,50 @@ const AssigneeRevisionToDev = ({
     return (
         <React.Fragment>
             <form action="">
-                <div className="form-group">
-                    <label htmlFor="" className="font-weight-bold">
-                        Revision Acknowledgement<sup className="f-16">*</sup> :
-                    </label>
-                    <div className="px-3">
-                        {
-                            _.map(options, revision =>(
-                                <div key={revision.id} className="form-check d-flex align-items-start mb-2">
-                                    <input
-                                        className="form-check-input mr-2"
-                                        type="radio"
-                                        name="exampleRadios"
-                                        id={revision.id}
-                                        required={true}
-                                        onChange={e => handleChange(e, revision.isDeniable)}
-                                        value={revision.revision}
-                                        style={{
-                                            width: "16px",
-                                            height: "16px",
-                                            marginTop: "3px",
-                                        }}
-                                    />
-                                    <label
-                                        className="form-check-label"
-                                        htmlFor={revision.id}
-                                        style={{ marginBottom: "3px" }}
-                                    >
-                                        {revision.revision}
-                                    </label>
-                                </div> 
-                            ))
-                        }
-                    </div>
-                    {reasonError && (
-                        <small id="emailHelp" className="form-text text-danger">
-                            {reasonError}
-                        </small>
-                    )}
-                </div>
+                {
+                    revision?.isDeniable && revision?.isAccept && (
+                        <div className="form-group">
+                            <label htmlFor="" className="font-weight-bold">
+                                Revision Acknowledgement<sup className="f-16">*</sup> :
+                            </label>
+                            <div className="px-3">
+                                {
+                                    _.map(options, revision =>(
+                                        <div key={revision.id} className="form-check d-flex align-items-start mb-2">
+                                            <input
+                                                className="form-check-input mr-2"
+                                                type="radio"
+                                                name="exampleRadios"
+                                                id={revision.id}
+                                                required={true}
+                                                onChange={e => handleChange(e, revision.isDeniable)}
+                                                value={revision.revision}
+                                                style={{
+                                                    width: "16px",
+                                                    height: "16px",
+                                                    marginTop: "3px",
+                                                }}
+                                            />
+                                            <label
+                                                className="form-check-label"
+                                                htmlFor={revision.id}
+                                                style={{ marginBottom: "3px" }}
+                                            >
+                                                {revision.revision}
+                                            </label>
+                                        </div> 
+                                    ))
+                                }
+                            </div>
+                            {reasonError && (
+                                <small id="emailHelp" className="form-text text-danger">
+                                    {reasonError}
+                                </small>
+                            )}
+                        </div>
+                    )
+                }
+                
 
                 {task?.taskSubTask?.length > 0 && (
                     <div className="form-group">

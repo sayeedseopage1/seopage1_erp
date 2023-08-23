@@ -22,7 +22,7 @@ const reducer = (state, action) => {
                 ...state,
                 {
                     question: action.question,
-                    Answer: '',
+                    answer: '',
                     user: action.user ?? '',
                     id: getRandomId()
                 }
@@ -85,8 +85,7 @@ const ResolveButton = () => {
   // ask question
   const askQuestionTo = (user, question_id) => {
         dispatch({type: 'UPDATE_USER', user, id: question_id})
-  }
- 
+  } 
 
   return (
    <React.Fragment>
@@ -285,78 +284,6 @@ const ResolveButton = () => {
                                 </tbody>
                             </table> 
 
-                            
-
-                            {/* devider */}
-                            {/* <div className='mt-3 pb-2 py-2 position-relative'>
-                                <hr/>
-                                <span className='badge badge-secondary divider-text'>Question / Answer</span>
-                            </div>
-
-                            <table className='dispute-preview-table'>
-                                <tbody>
-                                    <tr>
-                                        <td className='py-2' rowSpan={3*5 + 1}>Submitted Answer:</td> 
-                                         
-                                    </tr>
-                                        {_.times(3, index => (
-                                            <React.Fragment key={index}> 
-                                                        <tr>
-                                                            <td>Query Initiated by</td>
-                                                            <td>Mohammad Sayeed Ullah on 14 August 2023 03:43:43 PM</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Question</td>
-                                                            <td><span className='px-2'>Convallis cursus tellus felis quis aliquet odio tempor quam ornare?</span> </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>Answer:</td>
-                                                            <td> <span className='px-2'> Hac dapibus congue sociosqu tincidunt cum tempus tristique eget, sociis curae viverra ac nulla lobortis justo a ultrices, tempor iaculis et massa risus sed sagittis. Ultricies maecenas diam suspendisse suscipit nullam integer rhoncus cursus.</span> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Answered By</td>
-                                                            <td>Farhan Rahman on 14th August 2023 02:43:08 PM</td>
-                                                        </tr>   
-                                                        <tr>
-                                                            <td colSpan={2} style={{height: '3px', maxHeight: '3px !important', padding: 0}}>&nbsp;</td>
-                                                        </tr>
-                                            </React.Fragment> 
-                                        ))} 
-                                </tbody>
-                            </table>
-                            
-                            <table className='dispute-preview-table mt-4'>
-                                <tbody>
-                                    <tr>
-                                        <td className='py-2' rowSpan={3*5 + 1}>Submitted Answer:</td> 
-                                         
-                                    </tr>
-                                        {_.times(3, index => (
-                                            <React.Fragment key={index}> 
-                                                        <tr>
-                                                            <td>Query Initiated by</td>
-                                                            <td>Mohammad Sayeed Ullah on 14 August 2023 03:43:43 PM</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Question</td>
-                                                            <td><span className='px-2'>Convallis cursus tellus felis quis aliquet odio tempor quam ornare?</span> </td>
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td>Answer:</td>
-                                                            <td> <span className='px-2'> Hac dapibus congue sociosqu tincidunt cum tempus tristique eget, sociis curae viverra ac nulla lobortis justo a ultrices, tempor iaculis et massa risus sed sagittis. Ultricies maecenas diam suspendisse suscipit nullam integer rhoncus cursus.</span> </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>Answered By</td>
-                                                            <td>Moniruzzaman on 14th August 2023 02:43:08 PM</td>
-                                                        </tr>   
-                                            </React.Fragment> 
-                                        ))} 
-                                </tbody>
-                            </table> */}
-
-
                             {/* devider */}
                             <div className='mt-3 pb-2 py-2 position-relative'>
                                 <hr/>
@@ -432,21 +359,31 @@ const ResolveButton = () => {
                                                             </div> 
     
                                                             <div className="form-group w-100 py-2"> 
-                                                                <label htmlFor="">
+                                                                <label htmlFor="" className='d-flex align-items-center justify-content-between'>
                                                                     <span>Q{index + 1}: Write your question here </span>
-                                                                </label>
-                                                                <DebounceInput 
-                                                                    defaultValue={question.question}
-                                                                    className="form-control py-2 px-3 w-100" 
-                                                                    placeholder="Write your question"
-                                                                    onChange={(v) => {
-                                                                        updateQuestion({
-                                                                            id: question.id, 
-                                                                            data: {...question, question: v}
-                                                                        });
-                                                                        console.log({questions})
-                                                                    }} 
-                                                                /> 
+                                                                    {
+                                                                        _.size(questions) > 1 && 
+                                                                        <button 
+                                                                            aria-label='removeQuestion'
+                                                                            onClick={() => removeQuestion(question.id)}
+                                                                            className='remove-question-btn'
+                                                                        >
+                                                                            <i className='fa-solid fa-trash'/>
+                                                                        </button>
+                                                                    }
+                                                                </label> 
+                                                                    <DebounceInput 
+                                                                        defaultValue={question.question}
+                                                                        className="form-control py-2 px-3 w-100" 
+                                                                        placeholder="Write your question"
+                                                                        onChange={(v) => {
+                                                                            updateQuestion({
+                                                                                id: question.id, 
+                                                                                data: {...question, question: v}
+                                                                            });
+                                                                            console.log({questions})
+                                                                        }} 
+                                                                    /> 
                                                             </div>
                                                         </div>
                                                     ))} 

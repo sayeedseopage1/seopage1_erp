@@ -60,7 +60,7 @@ trait PmDashboard
             
 
            // dd($this->startMonth,$this->endMonth, $this->release_date);
-           $this->no_of_projects = Project::select('projects.*')
+           $this->no_of_projects = Project::select('projects.*','pm_projects.created_at as project_start_date')
            ->join('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
            ->where('projects.pm_id', Auth::id())
            
@@ -68,7 +68,7 @@ trait PmDashboard
            ->get();
            //dd($this->no_of_projects );
          //dd(count($this->no_of_projects));
-           $this->no_of_accepted_projects= Project::select('projects.*')
+           $this->no_of_accepted_projects= Project::select('projects.*','pm_projects.created_at as project_start_date')
            ->join('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
            ->where('projects.pm_id', Auth::id())
            
@@ -77,7 +77,7 @@ trait PmDashboard
           // ->orWhere('project_status','pending')
            ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
            ->get();
-           $this->no_of_rejected_projects= Project::select('projects.*')
+           $this->no_of_rejected_projects= Project::select('projects.*','pm_projects.created_at as project_start_date')
            ->join('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
            ->where('projects.pm_id', Auth::id())
            ->where('projects.project_status','Not Accepted')
@@ -85,14 +85,14 @@ trait PmDashboard
            
            ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
            ->get();
-           $this->total_project_value = Project::select('projects.*')
+           $this->total_project_value = Project::select('projects.*','pm_projects.created_at as project_start_date')
            ->join('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
            ->where('projects.pm_id', Auth::id())
            
           
            ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
            ->sum('projects.project_budget');
-           $this->accepted_project_value= Project::select('projects.*')
+           $this->accepted_project_value= Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status','Accepted')
@@ -100,7 +100,7 @@ trait PmDashboard
            
             ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
             ->sum('projects.project_budget');
-            $this->rejected_project_value= Project::select('projects.*')
+            $this->rejected_project_value= Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status','Not Accepted')
@@ -108,7 +108,7 @@ trait PmDashboard
             
             ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
             ->sum('projects.project_budget');
-            $this->total_released_amount_this_cycle = Project::select('projects.*')
+            $this->total_released_amount_this_cycle = Project::select('projects.*','project_milestones.status as milestone_status','payments.paid_on as milestone_completion_date')
           
             ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
@@ -118,7 +118,13 @@ trait PmDashboard
             ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
            // ->groupBy('project_milestones.project_id')
             ->sum('project_milestones.cost');
-            $this->total_released_amount_this_cycle_get = Project::select('projects.*','project_milestones.milestone_title as milestone_title', 'project_milestones.created_at as milestone_creation_date','payments.paid_on as milestone_released_date','project_milestones.cost as milestone_cost')
+            $this->total_released_amount_this_cycle_get = Project::select('projects.*',
+            'project_milestones.milestone_title as milestone_title', 
+            'project_milestones.created_at as milestone_creation_date',
+            'payments.paid_on as milestone_released_date',
+            'project_milestones.cost as milestone_cost',
+            'project_milestones.status as milestone_status'
+            )
            
             ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
@@ -130,7 +136,13 @@ trait PmDashboard
            
            // ->take(2)
             ->get();
-            $this->total_released_amount_previous_cycle = Project::select('projects.*')
+            $this->total_released_amount_previous_cycle = Project::select('projects.*',
+            'project_milestones.milestone_title as milestone_title', 
+            'project_milestones.created_at as milestone_creation_date',
+            'payments.paid_on as milestone_released_date',
+            'project_milestones.cost as milestone_cost',
+            'project_milestones.status as milestone_status'
+            )
            
             ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
@@ -142,7 +154,13 @@ trait PmDashboard
             ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
             
             ->sum('project_milestones.cost');
-            $this->total_released_amount_previous_cycle_get = Project::select('projects.*','project_milestones.id as milestone_id','project_milestones.milestone_title as milestone_title', 'project_milestones.created_at as milestone_creation_date','payments.paid_on as milestone_released_date','project_milestones.cost as milestone_cost')
+            $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
+            'project_milestones.milestone_title as milestone_title', 
+            'project_milestones.created_at as milestone_creation_date',
+            'payments.paid_on as milestone_released_date',
+            'project_milestones.cost as milestone_cost',
+            'project_milestones.status as milestone_status'
+            )
           
             ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
@@ -202,7 +220,7 @@ trait PmDashboard
             ->where('projects.status', 'in progress')
             ->whereNull('project_milestones.id')
             
-            ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
+            ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
             ->get();
             $this->no_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -487,35 +505,43 @@ trait PmDashboard
             ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
             ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
             ->get();
-            $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-            ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-          
-            ->where('projects.pm_id', Auth::id())
-            ->where('projects.project_status', 'Accepted')
-            ->where('projects.status', 'finished')
-            ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-            ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-            ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
-            ->get();
-           
-            $this->no_of_delayed_projects_this_cycle = Project::select('projects.*', 'p_m_projects.created_at as project_creation_date')
-            ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-            ->where('projects.pm_id', Auth::id())
-            ->where('projects.project_status', 'Accepted')
-            ->where('projects.status', 'in progress')
-            ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-            ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
-            ->get();
-            $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-            ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-          
-            ->where('projects.pm_id', Auth::id())
-            ->where('projects.project_status', 'Accepted')
-            ->where('projects.status', 'finished')
-            ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-            ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-            ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
-            ->get();
+            $delay_date = Carbon::parse($this->startMonth)->subDays(15);
+           // dd($delay_date);
+
+                $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+              
+                ->where('projects.pm_id', Auth::id())
+                ->where('projects.project_status', 'Accepted')
+                ->where('projects.status', 'finished')
+                ->where('p_m_projects.created_at', '<=', $delay_date)
+                ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+                ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+               
+                ->get();
+              
+        
+              
+                $this->no_of_delayed_projects_this_cycle = Project::select('projects.*', 'p_m_projects.created_at as project_creation_date')
+                    ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                    ->where('projects.pm_id', Auth::id())
+                    ->where('projects.project_status', 'Accepted')
+                    ->where('projects.status', 'in progress')
+                    ->where('p_m_projects.created_at', '<=', $delay_date)
+                    ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                    // Compare against the calculated deadline date
+                    ->get();
+                $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+              
+                ->where('projects.pm_id', Auth::id())
+                ->where('projects.project_status', 'Accepted')
+                ->where('projects.status', 'finished')
+                ->where('p_m_projects.created_at', '<=', $delay_date)
+                ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+                
+                ->get();
 
           
            
@@ -599,34 +625,34 @@ trait PmDashboard
                 $release_date = Carbon::now()->endOfMonth()->toDateString(); 
             }
             //dd($startMonth, $endMonth,$release_date);
-            $this->no_of_projects = Project::select('projects.*')
+            $this->no_of_projects = Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             
             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
             ->get();
           //dd(count($this->no_of_projects));
-            $this->no_of_accepted_projects= Project::select('projects.*')
+            $this->no_of_accepted_projects= Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status','Accepted')
             
             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
             ->get();
-            $this->no_of_rejected_projects= Project::select('projects.*')
+            $this->no_of_rejected_projects= Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status','Not Accepted')
             
             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
             ->get();
-            $this->total_project_value = Project::select('projects.*')
+            $this->total_project_value = Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->join('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
            
             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
             ->sum('projects.project_budget');
-            $this->accepted_project_value= Project::select('projects.*')
+            $this->accepted_project_value= Project::select('projects.*','pm_projects.created_at as project_start_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status','Accepted')
@@ -654,8 +680,12 @@ trait PmDashboard
         //    / ->groupBy('project_milestones.project_id')
             ->sum('project_milestones.cost');
             $this->total_released_amount_this_cycle_get = Project::select('projects.*',
-            'project_milestones.milestone_title as milestone_title', 'project_milestones.created_at as milestone_creation_date',
-            'payments.paid_on as milestone_released_date','project_milestones.cost as milestone_cost')
+            'project_milestones.milestone_title as milestone_title', 
+            'project_milestones.created_at as milestone_creation_date',
+            'payments.paid_on as milestone_released_date',
+            'project_milestones.cost as milestone_cost',
+            'project_milestones.status as milestone_status'
+            )
            
             ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
@@ -677,7 +707,13 @@ trait PmDashboard
             ->whereBetween('payments.paid_on', [$startMonth, $release_date])
         //    / ->groupBy('project_milestones.project_id')
             ->sum('project_milestones.cost');
-            $this->total_released_amount_previous_cycle_get = Project::select('projects.*','project_milestones.milestone_title as milestone_title', 'project_milestones.created_at as milestone_creation_date','payments.paid_on as milestone_released_date','project_milestones.cost as milestone_cost')
+            $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
+            'project_milestones.milestone_title as milestone_title', 
+            'project_milestones.created_at as milestone_creation_date',
+            'payments.paid_on as milestone_released_date',
+            'project_milestones.cost as milestone_cost',
+            'project_milestones.status as milestone_status'
+            )
            
             ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
@@ -1036,35 +1072,41 @@ trait PmDashboard
                 ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
                 ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
                 ->get();
+                $delay_date = Carbon::now()->subDays(15);
+
                 $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
               
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status', 'Accepted')
                 ->where('projects.status', 'finished')
+                ->where('p_m_projects.created_at', '<=', $delay_date)
                 ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
                 ->whereBetween('projects.updated_at', [$startMonth, $release_date])
-                ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
+               
                 ->get();
               
         
+              
                 $this->no_of_delayed_projects_this_cycle = Project::select('projects.*', 'p_m_projects.created_at as project_creation_date')
-                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-                ->where('projects.pm_id', Auth::id())
-                ->where('projects.project_status', 'Accepted')
-                ->where('projects.status', 'in progress')
-                ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
-                ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
-                ->get();
+                    ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                    ->where('projects.pm_id', Auth::id())
+                    ->where('projects.project_status', 'Accepted')
+                    ->where('projects.status', 'in progress')
+                    ->where('p_m_projects.created_at', '<=', $delay_date)
+                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                    // Compare against the calculated deadline date
+                    ->get();
                 $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
               
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status', 'Accepted')
                 ->where('projects.status', 'finished')
+                ->where('p_m_projects.created_at', '<=', $delay_date)
                 ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
                 ->whereBetween('projects.updated_at', [$startMonth, $release_date])
-                ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
+                
                 ->get();
                 if(count($this->no_of_accepted_projects) > 0 )
                 {

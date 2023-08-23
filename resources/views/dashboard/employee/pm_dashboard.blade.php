@@ -204,7 +204,7 @@
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{ round($total_released_amount_this_cycle, 2) }} ($)<span
                                             class="f-12 font-weight-normal text-lightest">
-                                            @lang('Released amount in this Cycle') </span>
+                                            @lang('Released amount for this Cycle') </span>
                                     </p>
                                 </a>
                                 @include('dashboard.employee.total_released_amount.released_amount_cycle')
@@ -227,9 +227,45 @@
                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
                         style="height: 100%;">
                         <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of clients</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#newClient{{ count($no_of_new_clients_this_cycle) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ count($no_of_new_clients_this_cycle) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('New client for this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.number_of_first_client.new_client')
+                                <a href="#" data-toggle="modal" data-target="#existingClient{{ count($no_of_existing_clients_this_cycle) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ count($no_of_existing_clients_this_cycle) }}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Existing client for this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.number_of_first_client.existing_client')
+                                
+
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of 100% in progress projects</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#" data-toggle="modal" data-target="#progressProjectInThisCycle{{ count($no_of_100_finished_project_this_cycle) }}">
+                                <a href="#" data-toggle="modal" data-target="#progressProjectForThisCycle{{ count($no_of_100_finished_project_this_cycle) }}">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{ count($no_of_100_finished_project_this_cycle) }}<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -237,8 +273,8 @@
                                         </span>
                                     </p>
                                 </a>
-                                @include('dashboard.employee.progress_projects.progress_projects_in_this_cycle')
-                                <a href="#" data-toggle="modal" data-target="#progressProjectForThisCycle{{ count($no_of_100_finished_project_previous_cycle) }}">
+                                @include('dashboard.employee.progress_projects.progress_projects_for_this_cycle')
+                                <a href="#" data-toggle="modal" data-target="#progressProjectInThisCycle{{ count($no_of_100_finished_project_previous_cycle) }}">
                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                                         {{ count($no_of_100_finished_project_previous_cycle) }}<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -246,7 +282,99 @@
                                         </span>
                                     </p>
                                 </a>
-                                @include('dashboard.employee.progress_projects.progress_projects_for_this_cycle')
+                                @include('dashboard.employee.progress_projects.progress_projects_in_this_cycle')
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+                        style="height: 100%;">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of 100% in progress projects</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ count($no_of_100_finished_project_this_cycle) }}$<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('100% in progress projects for this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                              
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ count($no_of_100_finished_project_previous_cycle) }}$<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('100% in progress projects in this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                              
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-3">
+                
+               
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Count)</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($total_released_amount_this_cycle, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Project completion rate for this Cycle') </span>
+                                    </p>
+                                </a>
+                             
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($total_released_amount_previous_cycle, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Project completion rate in this Cycle') </span>
+                                    </p>
+                                </a>
+                               
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Value)</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{ round($total_released_amount_this_cycle, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Project completion rate for this Cycle') </span>
+                                    </p>
+                                </a>
+                             
+                                <a href="#" data-toggle="modal" data-target="#">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{ round($total_released_amount_previous_cycle, 2) }}%<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Project completion rate in this Cycle') </span>
+                                    </p>
+                                </a>
+                             
                             </div>
                         </div>
                         <div class="d-block">
@@ -265,7 +393,7 @@
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{ count($no_of_finished_projects_this_cycle) }}<span
                                             class="f-12 font-weight-normal text-lightest">
-                                            @lang('Completed/Finished projects for cycle')
+                                            @lang('Completed/Finished projects for this cycle')
                                         </span>
                                     </p>
                                 </a>
@@ -288,54 +416,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                        <div class="d-block text-capitalize">
-                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Count)</h5>
-                            <div class="d-flex flex-wrap">
-                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisCycle{{ count($no_of_finished_projects_this_cycle) }}">
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        {{round($project_completion_rate_count_this_cycle,2)}}%<span class="f-12 font-weight-normal text-lightest">
-                                            @lang('Project Completion rate for this cycle')
-                                        </span>
-                                    </p>
-                                </a>
-                                @include('dashboard.employee.project_completion_rate_count.project_completion_rate_for_this_cycle')
-                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisCycle{{ count($no_of_finished_projects_previous_cycle) }}">
-                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                        {{round($project_completion_rate_count_previous_cycle,2)}}%<span class="f-12 font-weight-normal text-lightest">
-                                            @lang('Project Completion rate in this cycle')
-                                        </span>
-                                    </p>
-                                </a>
-                                @include('dashboard.employee.project_completion_rate_count.project_completion_rate_in_this_cycle')
-                            </div>
-                        </div>
-                        <div class="d-block">
-                            <i class="fa fa-list text-lightest f-27"></i>
-                        </div>
-                    </div>
-                </div>
-                {{-- <div class="col-md-3">
-                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-                        <div class="d-block text-capitalize">
-                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
-                            <div class="d-flex">
-                                <a href="#">
-                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
-                                        </span>
-                                    </p>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="d-block">
-                            <i class="fa fa-list text-lightest f-27"></i>
-                        </div>
-                    </div>
-                </div> --}}
-            </div>
-            <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                         <div class="d-block text-capitalize">
@@ -366,6 +446,40 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+                <div class="row mt-3">
+                    
+                    
+                
+                <div class="col-md-6">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+                        <div class="d-block text-capitalize">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Count)</h5>
+                            <div class="d-flex flex-wrap">
+                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisCycle{{ count($no_of_finished_projects_this_cycle) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{round($project_completion_rate_count_this_cycle,2)}}%<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Project Completion rate for this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.project_completion_rate_count.project_completion_rate_for_this_cycle')
+                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisCycle{{ count($no_of_finished_projects_previous_cycle) }}">
+                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                                        {{round($project_completion_rate_count_previous_cycle,2)}}%<span class="f-12 font-weight-normal text-lightest">
+                                            @lang('Project Completion rate in this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.project_completion_rate_count.project_completion_rate_in_this_cycle')
+                            </div>
+                        </div>
+                        <div class="d-block">
+                            <i class="fa fa-list text-lightest f-27"></i>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-md-6">
                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                         <div class="d-block text-capitalize">
@@ -382,7 +496,7 @@
                                 <a href="#" data-toggle="modal" data-target="#completedProjectForCycle{{ count($no_of_finished_projects_previous_cycle) }}">
                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                                         {{round($project_completion_rate_count_previous_cycle_value,2)}}%<span class="f-12 font-weight-normal text-lightest">
-                                            @lang('Completed/Finished projects for cycle')
+                                            @lang('Completed/Finished projects In cycle')
                                         </span>
                                     </p>
                                 </a>
@@ -395,40 +509,27 @@
                     </div>
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col-md-12">
-                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
-                        style="height: 100%;">
+                {{-- <div class="col-md-3">
+                    <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
                         <div class="d-block text-capitalize">
-                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of First time clients</h5>
-                            <div class="d-flex flex-wrap">
-                                <a href="#" data-toggle="modal" data-target="#newClient{{ count($no_of_new_clients_this_cycle) }}">
+                            <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No. Of Projects Got Canceled</h5>
+                            <div class="d-flex">
+                                <a href="#">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        {{ count($no_of_new_clients_this_cycle) }}<span
-                                            class="f-12 font-weight-normal text-lightest">
-                                            @lang('New client for this cycle')
+                                        {{ round($month_total_canceled_project,2) }}<span class="f-12 font-weight-normal text-lightest">
                                         </span>
                                     </p>
                                 </a>
-                                @include('dashboard.employee.number_of_first_client.new_client')
-                                <a href="#" data-toggle="modal" data-target="#existingClient{{ count($no_of_existing_clients_this_cycle) }}">
-                                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                        {{ count($no_of_existing_clients_this_cycle) }}<span
-                                            class="f-12 font-weight-normal text-lightest">
-                                            @lang('Existing client for this cycle')
-                                        </span>
-                                    </p>
-                                </a>
-                                @include('dashboard.employee.number_of_first_client.existing_client')
-
                             </div>
                         </div>
                         <div class="d-block">
                             <i class="fa fa-list text-lightest f-27"></i>
                         </div>
                     </div>
-                </div>
-            </div>
+                </div> --}}
+           
+           
+            
             <div class="row mt-3">
                 <div class="col-md-6">
                     <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
@@ -791,7 +892,7 @@
                             <div class="d-flex flex-wrap">
                                 <a href="#" data-toggle="modal" data-target="#totalDelayProject{{count($no_of_delayed_projects)}}">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                        {{count($no_of_delayed_projects)}}<span
+                                        {{count($no_of_delayed_projects_this_cycle)}}<span
                                             class="f-12 font-weight-normal text-lightest">
                                             @lang('Total Delayed Project')
                                         </span>
@@ -1406,11 +1507,11 @@
             var todayOnlyDate = moment(todayDate).format('DD');
 
             if (todayOnlyDate > 15) {
-                $('.monthDate').text('16th ' + moment(monthDate).format('MMMM, YYYY') + ' to 15th ' + moment(
+                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
                     monthDate).add(1, 'month').format('MMMM, YYYY'));
             } else {
-                $('.monthDate').text('16th ' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
-                    ' to 15th ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
+                $('.monthDate').text('' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
+                    ' - ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
             }
 
             $('.fc-prev-button').click(function() {
@@ -1421,7 +1522,7 @@
                     } else {
                         monthDate = moment(monthDate).subtract(2, 'month');
                     }
-                    $(this).next().text('16th ' + moment(monthDate).format('MMMM, YYYY') + ' to 15th ' +
+                    $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                         moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
@@ -1438,7 +1539,7 @@
                 var date;
                 if (mode == 'month') {
                     monthDate = moment(monthDate).add(1, 'month');
-                    $(this).prev().text('16th ' + moment(monthDate).format('MMMM, YYYY') + ' to 15th ' +
+                    $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                         moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
                 } else {

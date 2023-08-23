@@ -1587,7 +1587,7 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
-       // DB::beginTransaction();
+        //DB::beginTransaction();
         $setting = global_setting();
         $rules = [
             'heading' => 'required',
@@ -1634,7 +1634,7 @@ class TaskController extends AccountBaseController
             abort_403(!in_array($this->addPermission, ['all', 'added']));
         }
 
-        DB::beginTransaction();
+       // DB::beginTransaction();
         $ganttTaskArray = [];
         $gantTaskLinkArray = [];
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
@@ -1651,16 +1651,7 @@ class TaskController extends AccountBaseController
         $task->priority = $request->priority;
         $task->board_column_id = $taskBoardColumn->id;
 
-        // if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
-        //     $dependentTask = Task::findOrFail($request->dependent_task_id);
-
-        //     // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
-        //     //     /* @phpstan-ignore-line */
-        //     //     return Reply::error(__('messages.taskDependentDate'));
-        //     // }
-
-        //     $task->dependent_task_id = $request->dependent_task_id;
-        // }
+        
 
         $task->is_private = $request->has('is_private') ? 1 : 0;
         $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
@@ -1695,6 +1686,7 @@ class TaskController extends AccountBaseController
 
         $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
         $task->saveQuietly();
+       
         if ($request->hasFile('file')) {
 
             foreach ($request->file as $fileData) {
@@ -1714,84 +1706,7 @@ class TaskController extends AccountBaseController
         }
        
 
-        // save labels
-        // $task->labels()->sync($request->task_labels);
-        // dd($request->taskId);
-        // if (!is_null($request->taskId)) {
-
-        //     $taskExists = TaskFile::where('task_id', $request->taskId)->get();
-
-        //     if ($taskExists) {
-        //         foreach ($taskExists as $taskExist) {
-        //             $file = new TaskFile();
-        //             $file->user_id = $taskExist->user_id;
-        //             $file->task_id = $task->id;
-
-        //             if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id))) {
-        //                 File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id), 0775, true);
-        //             }
-
-        //             $fileName = Files::generateNewFileName($taskExist->filename);
-        //             copy(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $taskExist->task_id . '/' . $taskExist->hashname), public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id . '/' . $fileName));
-
-        //             $file->filename = $taskExist->filename;
-        //             $file->hashname = $fileName;
-        //             $file->size = $taskExist->size;
-        //             $file->save();
-
-        //             $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
-        //         }
-        //     }
-
-        //     $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
-
-        //     if ($subTask) {
-        //         foreach ($subTask as $subTasks) {
-        //             $subTaskData = new SubTask();
-        //             $subTaskData->title = $subTasks->title;
-        //             $subTaskData->task_id = $task->id;
-        //             $subTaskData->description = str_replace('<p><br></p>', '', trim($subTasks->description));
-
-        //             if ($subTasks->start_date != '' && $subTasks->due_date != '') {
-        //                 $subTaskData->start_date = $subTasks->start_date;
-        //                 $subTaskData->due_date = $subTasks->due_date;
-        //             }
-
-
-        //             $subTaskData->assigned_to = $subTasks->assigned_to;
-
-        //             $subTaskData->save();
-
-        //             if ($subTasks->files) {
-        //                 foreach ($subTasks->files as $fileData) {
-        //                     $file = new SubTaskFile();
-        //                     $file->user_id = $fileData->user_id;
-        //                     $file->sub_task_id = $subTaskData->id;
-
-        //                     $fileName = Files::generateNewFileName($fileData->filename);
-
-        //                     if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id))) {
-        //                         File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id), 0775, true);
-        //                     }
-
-        //                     copy(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $fileData->sub_task_id . '/' . $fileData->hashname), public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id . '/' . $fileName));
-
-        //                     $file->filename = $fileData->filename;
-        //                     $file->hashname = $fileName;
-        //                     $file->size = $fileData->size;
-        //                     $file->save();
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // To add custom fields data
-        // if ($request->get('custom_fields_data')) {
-        //     $task->updateCustomFieldData($request->get('custom_fields_data'));
-        // }
-
-        // For gantt chart
+        
         if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
             $parentGanttId = $request->parent_gantt_id;
 
@@ -1818,7 +1733,7 @@ class TaskController extends AccountBaseController
         }
 
 
-        DB::commit();
+       
 
         if (request()->add_more == 'true') {
             unset($request->project_id);
@@ -1895,6 +1810,7 @@ class TaskController extends AccountBaseController
                 'redirectUrl' => route('tasks.show', $task->id)
             ]);
         }
+      //  dd($task,$this->logProjectActivity($project->id, $link));
         return response()->json([
             'status' => 200,
             'message'=> 'Task added successfully',

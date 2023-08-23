@@ -78,3 +78,62 @@ table.dispute-preview-table tr td.vertical-center{
 .question-by{
     color: #818181;
 }
+
+button.remove-question-btn{
+    padding: 4px 10px;
+    color: #c6c6c6;
+    background-color: transparent;
+    transition: all 0.2s ease-in-out;
+    border-radius: 6px;
+}
+
+button.remove-question-btn:hover{
+    color: #ff0000;
+    background-color: #ffe6e6;
+}
+
+/* new update tooltip message */
+.dispute-status-tooltip{
+    position: relative;
+}
+
+.dispute-tooltip{  
+    background-color: #1d82f5;
+    z-index: 999;
+    border-radius: 6px;
+    /* border: 1px solid #41c7e2; */
+    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
+    
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+.dispute-notif-arrow{
+    overflow: hidden;  
+    width: 12px;
+    height: 10px;
+}
+
+.dispute-notif-arrow::before{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(29, 130, 245);
+    content: '';
+    /* border: 1px solid #41c7e2; */
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    transform-origin: center; 
+    top: -7px;
+    left: 1px;
+}
+
+
+.dispute-tooltip-content{
+    font-size: 10px;
+    padding: 1px 6px;
+    color: white;
+}

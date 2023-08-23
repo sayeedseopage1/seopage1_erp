@@ -93,7 +93,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     <HDivider />
 
                     <UserFilter
-                        title="Assignee By"
+                        title="Assigned By"
                         state={leadDeveloper}
                         setState={setLeadDeveloper}
                         roleIds={[1, 4]}
@@ -104,14 +104,14 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     {page === "subtasks" ? (
                         <UserFilter
-                            title="Assignee To"
+                            title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
                             roleIds={[5]}
                         />
                     ) : (
                         <UserFilter
-                            title="Assignee To"
+                            title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
                             roleIds={[4, 6, 9, 10]}

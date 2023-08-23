@@ -1,5 +1,6 @@
 import React from "react";
-import DisputeTable from "./components/DisputeTable";
+
+
 import { disputeTableColumn } from "./components/diputeTableColumn";
 import DataTable from "../global/table/DataTable";
 import FilterContainer from './components/Filter-bar/FilterContainer';

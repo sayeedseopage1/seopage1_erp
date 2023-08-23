@@ -7,8 +7,8 @@ const RevisionText = ({text, index, date, time, revision}) => {
     const [expend, setExpend] = React.useState(false);
     const ref = React.useRef();
 
-    let isLong = text.length > 800;
-    const showText = isLong ? text.slice(0, 800) + '...' : text;
+    let isLong = text?.length > 800;
+    const showText = isLong ? text?.slice(0, 800) + '...' : text;
 
 
     const toggleModal = (e) => {

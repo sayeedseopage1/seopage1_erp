@@ -11,32 +11,32 @@ import SubmitButton from "../../../components/SubmitButton";
 
 const projectManagerAcknowladgement = [
     {
-        id: 'revision1',
+        id: "CRx01",
         title: 'Client added some additional requirements which was not part of the actual job scope',
         isDeniable: false,
     },
     {
-        id: 'revision2',
+        id: 'CRx02',
         title: 'I submitted the work without proper checking and overlooked the issues',
         isDeniable: true,
     },
     {
-        id: 'revision3',
+        id: 'CRx03',
         title: 'I couldnt understand clients expectation properly earlier',
         isDeniable: false
     },
     {
-        id: 'revision4',
+        id: 'CRx04',
         title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
         isDeniable: false,
     }, 
     {
-        id: 'revision5',
+        id: 'CRx05',
         title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
         isDeniable: true,
     }, 
     {
-        id: 'revision6',
+        id: 'CRx06',
         title: "The client is asking for some minor changes which he couldn’t specify until he saw the completed work and we can’t charge him for these",
         isDeniable: true,
     }
@@ -44,17 +44,41 @@ const projectManagerAcknowladgement = [
 
 
 const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth, isSubmitting }) => {
-    const [reason, setReason] = useState("");
+    const [reason, setReason] = useState(null);
     const [reasonError, setReasonError] = useState("");
     const [comment, setComment] = useState("");
-    const [commentError, setCommentError] = useState("");
-    const [isDeniable, setIsDeniable] = useState(false);
+    const [commentError, setCommentError] = useState(""); 
+    const [additionalPaid, setAdditionalPaid] = useState('');
+    const [additionalInfo, setAdditionalInfo] = useState(null);
+    const [additionalAmount, setAdditionalAmount] = useState(0);
+    const [additionalError, setAdditionalError] = useState('');
 
     // radio button change
-    const handleChange = (e, deniable) => {
-        setReason(e.target.value);
-        setIsDeniable(deniable);
+    const handleChange = (e, reason) => {
+        setReason(reason);
+        setAdditionalAmount(0);
+        setAdditionalPaid('');
+        setAdditionalInfo(null);
     };
+ 
+
+    // additional payment 
+    const hasAdditionalPayment = (isPay) =>{
+        setAdditionalPaid(() => isPay ? 'yes': 'no'); 
+        if(isPay){
+            Swal.fire({
+                title: 'Are you want to create milestone?',
+                showDenyButton: true, 
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+              }).then(res => {
+                if(res.isConfirmed){
+                    window.open(`/account/projects/${task?.projectId}?tab=milestones`, '_blank');
+                }
+              })
+              
+        }
+    }
 
     // editor change text 
     const hanldeEditorTextChange= (e, editor) => {
@@ -68,12 +92,25 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
        
        if(comment === ""){
             errorCount++;
-            setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
+            setCommentError('You have to explain the revision in details, so that lead developer can understand where they need to work.')     
        }
 
-       if(reason === ''){
+       if(!reason){
             errorCount++;
             setReasonError('You have to select a reason from above options')
+       }
+
+       console.log(additionalPaid)
+       if(reason && reason?.id === 'CRx01'){ 
+            if(additionalPaid === 'yes' && additionalAmount === 0){
+                errorCount++;
+                setAdditionalError('You have to provide amount')
+            }
+            
+            if(additionalPaid === 'no' && !additionalInfo){
+                errorCount++;
+                setAdditionalError('You have to select an option')
+            } 
        }
 
        return errorCount === 0; 
@@ -83,22 +120,28 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     // handle submiton
     const handleSubmition=(e)=>{
         e.preventDefault();
-
-        console.log({task})
+ 
         const data = {
+            acknowledgement_id: reason?.id ,
             task_id: task?.id,
             user_id: auth?.id,
-            is_deniable: isDeniable, 
-            revision_acknowledgement: reason,
+            is_deniable: reason?.isDeniable, 
+            revision_acknowledgement: reason?.title,
             comment: comment,
+            additional_amount: Number(additionalAmount),
+            additional_status: additionalPaid,
+            additional_comment: additionalInfo?.info ?? '',
+            dispute_create: additionalInfo?.disputeCreate ?? false
         }
  
-        if(validate()){   
+        if(validate()){  
             onSubmit(data);
         }else{
             console.log('Your forgot to fillup some requried fields')
         } 
     }
+
+
 
     return (
         <React.Fragment> 
@@ -117,7 +160,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                             name="exampleRadios"
                                             id={option.id}
                                             required= {true}
-                                            onChange={e => handleChange(e, option.isDeniable)}
+                                            onChange={e => handleChange(e, option)}
                                             value={option.title}
                                             style={{
                                                 width: "16px",
@@ -140,6 +183,120 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                         {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
                     </div>
 
+                    {reason?.id === 'CRx01' && 
+                        <div className="form-group">
+                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label> 
+                            <div className="d-block"> 
+                                    <div className="form-check form-check-inline">
+                                        <input 
+                                            className="form-check-input" 
+                                            name="milestone" 
+                                            type="radio" 
+                                            id="createMilestoneYes" 
+                                            value="1" 
+                                            onChange={(e)=>hasAdditionalPayment(true)}
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                marginTop: "3px",
+                                            }}
+                                        />
+                                        <label htmlFor="createMilestoneYes" className="form-check-label">Yes</label> 
+                                    </div>
+                                    <div className="form-check form-check-inline">
+                                        <input 
+                                            className="form-check-input" 
+                                            name="milestone" 
+                                            type="radio" 
+                                            id="createMilestoneNo" 
+                                            value="0" 
+                                            onChange={(e) => hasAdditionalPayment(false)} 
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                marginTop: "3px",
+                                            }}
+                                        />
+                                        <label htmlFor="createMilestoneNo" className="form-check-label">No</label> 
+                                    </div>
+                            </div>
+                        </div> 
+                    }
+
+                    {additionalPaid === 'yes' && 
+                        <div className="form-group">
+                            <label htmlFor="" className="d-block font-weight-bold">Amount? <sup>*</sup></label> 
+                            <div className="input-group">
+                                <div className="input-group-prepend">
+                                    <div className="input-group-text">$</div>
+                                </div>
+                                <input 
+                                    type="number" 
+                                    onChange={e => setAdditionalAmount(e.target.value)} 
+                                    className="form-control" 
+                                    id="inlineFormInputGroup" 
+                                    placeholder="300" 
+                                />
+                            </div>
+                        </div> 
+                    }
+
+                    {
+                        additionalPaid === 'no' && 
+                        <div className="form-group">
+                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label> 
+                            <div className="d-block"> 
+                                    <div className="form-check mb-3">
+                                        <input 
+                                            name="additionalInformation"
+                                            className="form-check-input" 
+                                            type="radio" 
+                                            id="additionalInformation1" 
+                                            onChange={e => setAdditionalInfo({
+                                                info: e.target.value,
+                                                disputeCreate: false,
+                                            })}
+                                            value="Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction"  
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                marginTop: "3px",
+                                            }}
+                                        />
+                                        <label htmlFor="additionalInformation1" className="form-check-label">
+                                            Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction
+                                        </label> 
+                                    </div>
+                                    <div className="form-check">
+                                        <input 
+                                            className="form-check-input" 
+                                            name="additionalInformation" 
+                                            type="radio" 
+                                            id="additionalInformation2" 
+                                            value="The client is interpreting his original instruction in a very unusual way!" 
+                                            onChange={(e) => setAdditionalInfo({
+                                                info: e.target.value,
+                                                disputeCreate: true,
+                                            })} 
+                                            style={{
+                                                width: "16px",
+                                                height: "16px",
+                                                marginTop: "3px",
+                                            }}
+                                        />
+                                        <label htmlFor="additionalInformation2" className="form-check-label">
+                                        The client is interpreting his original instruction in a very unusual way!
+                                        </label> 
+                                    </div>
+                            </div>
+                        </div> 
+                    }
+
+                    { additionalError && <div className="mb-3">
+                        <small id="emailHelp" className="form-text text-danger">{additionalError}</small> 
+                    </div>}
+
+                    {/* Editor  */}
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold"> 
                             Explain or Comment<sup className="f-16">*</sup> :
@@ -149,6 +306,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                         </div> 
                         {commentError && <small id="emailHelp" className="form-text text-danger">{commentError}</small>}
                     </div>
+
 
                     <div>
                         <div className="mt-3 d-flex align-items-center">

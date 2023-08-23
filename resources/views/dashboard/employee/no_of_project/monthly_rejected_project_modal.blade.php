@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Rejected Projects</h5>
+          <div class="modal-title" id="exampleModalLabel"><h4>Total Assigned Project Number: {{count($no_of_projects)}}</h4>
+            <h4>Accepted Projects: {{count($no_of_accepted_projects)}}</h4> 
+           <h4>Rejected Projects:  {{count($no_of_rejected_projects)}}</h4>  
+             </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -20,6 +23,7 @@
                                 <th scope="col">Project Name</th>
                                 <th scope="col">Project Type</th>
                                 <th scope="col">Project Budget</th>
+                                <th scope="col">Project Start Time</th>
                                 <th scope="col">Project Status</th>
                               </tr>
                             </thead>
@@ -39,6 +43,7 @@
                                     </td>
                                     <td>{{ $deal->project_type }}</td>
                                     <td>{{ $item->project_budget }} $</td>
+                                    <td>{{ $item->project_start_date }}</td>
                                     <td>{{ $item->project_status }}</td>
                                 </tr>
                                 @endforeach
@@ -56,5 +61,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#table4');
+      new DataTable('#table4',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
   </script>

@@ -27,12 +27,12 @@
 }
 
 
-// table
+
 .sp1-data-table{
     width: 100%;
 }
 
-// head
+
 .sp1-data-table-thead{
     position: -webkit-sticky;
     position: sticky;

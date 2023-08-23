@@ -72,5 +72,7 @@
     </div>
   </div>
   <script>
-    new DataTable('#monthlyMilestoneComplectionPercentageInCountTable');
+    new DataTable('#monthlyMilestoneComplectionPercentageInCountTable',{
+        "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
+      });
 </script>
