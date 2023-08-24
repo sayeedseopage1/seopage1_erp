@@ -3,7 +3,9 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Molestone Assignd For This Cycle</h5>
+          <div class="modal-title" id="exampleModalLabel">
+            <h4>Total milestone assign: {{round($total_milestone_assigned_this_cycle_value,2)}}$</h4>
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

@@ -3,7 +3,10 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Existing Client For This Cycle</h5>
+          <div class="modal-title" id="exampleModalLabel"><h4>Existing clients for this cycle: {{count($no_of_existing_clients_this_cycle)}}</h4>
+                
+               
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

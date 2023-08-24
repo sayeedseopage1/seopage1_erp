@@ -548,7 +548,7 @@
                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                                         {{round($total_milestone_assigned_this_cycle_value,2)}}$<span
                                             class="f-12 font-weight-normal text-lightest">
-                                            @lang('Milestone assigned for this cycle (Value)')
+                                            @lang('Milestone assigned in this cycle (Value)')
                                         </span>
                                     </p>
                                 </a>

@@ -15,7 +15,10 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Task Complection Rate In This Cycle</h5>
+            <div class="modal-title" id="exampleModalLabel"><h4>{{(count($total_tasks_assigned_this_cycle_get))+(count($total_tasks_completed_previous_cycle_get ))- (count($total_tasks_completed_this_cycle_get ))}} tasks assigned</h4>
+                <h4>{{count($total_tasks_completed_previous_cycle_get)}} tasks completed</h4>
+                <h4>Percentage : {{round($tasks_completion_rate_previous_cycle,2)}}%</h4>
+              </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

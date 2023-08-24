@@ -2,11 +2,9 @@
 <div class="modal fade" id="milestoneReleasedInThisCyclet{{ count($total_milestone_completed_previous_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Molestone Released In This Cycle</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+        <div class="modal-title" id="exampleModalLabel"><h4>{{($total_milestone_assigned_this_cycle_value)+($total_released_amount_previous_cycle )- ($total_released_amount_this_cycle )}}$ milestones assigned</h4>
+          <h4>{{round($total_released_amount_previous_cycle,2)}}$ milestones released</h4>
+          <h4>Percentage : {{round($milestone_completion_rate_value_previous_cycle,2)}}%</h4>
         </div>
         <div class="modal-body">
             <div class="container-fluid">

@@ -3,7 +3,12 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Molestone Released For This Cycle</h5>
+          <div class="modal-title" id="exampleModalLabel"><h4>{{round($total_milestone_assigned_this_cycle_value)}}$ milestones assigned</h4>
+            <h4>{{round($total_released_amount_this_cycle,2)}}$ milestones completed</h4>
+            <h4>Percentage : {{round($milestone_completion_rate_value_this_cycle,2)}}%</h4>
+           
+          </div>
+         
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

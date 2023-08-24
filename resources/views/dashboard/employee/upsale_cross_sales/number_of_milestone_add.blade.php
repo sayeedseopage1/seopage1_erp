@@ -3,7 +3,9 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Number Of Milestone Add On Old Project</h5>
+          <div class="modal-title" id="exampleModalLabel">
+            <h4>No of new milestone added : {{count($no_of_new_milestones_added_on_old_projects)}}</h4>
+          </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

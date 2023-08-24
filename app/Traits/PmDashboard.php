@@ -315,7 +315,9 @@ trait PmDashboard
                
     
             }
-            $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge')
+            $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge','projects.project_budget','projects.project_name',
+            'projects.status as project_status','clients.created_at as client_creation_date'
+            )
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->join('deals', 'deals.client_id', 'projects.client_id')
             ->join('users as clients','clients.id','projects.client_id')
@@ -474,7 +476,7 @@ trait PmDashboard
            
             ->where('board_column_id',4)
             ->where('tasks.added_by',Auth::id())
-            ->whereNotBetween('tasks.updated_at', [$this->endMonth, $this->release_date])
+            ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
             ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
            // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
             ->get();
@@ -921,7 +923,9 @@ trait PmDashboard
                 
     
             }
-        $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge')
+        $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge','projects.project_budget','projects.project_name',
+        'projects.status as project_status','clients.created_at as client_creation_date'
+        )
         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
         ->join('deals', 'deals.client_id', 'projects.client_id')
         ->join('users as clients','clients.id','projects.client_id')
