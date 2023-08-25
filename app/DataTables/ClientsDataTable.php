@@ -150,12 +150,29 @@ class ClientsDataTable extends BaseDataTable
     public function query(User $model)
     {
         $request = $this->request();
-        $users = $model->withoutGlobalScope('active')->with('session', 'clientDetails', 'clientDetails.addedBy')
+        if(Auth::user()->role_id == 4)
+        {
+            $users = $model->withoutGlobalScope('active')->with('session', 'clientDetails', 'clientDetails.addedBy')
             ->join('role_user', 'role_user.user_id', '=', 'users.id')
+
             ->leftJoin('client_details', 'users.id', '=', 'client_details.user_id')
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->select('users.id', 'users.name', 'client_details.company_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
+            ->join('projects','projects.client_id','users.id')
+            ->where('projects.pm_id',Auth::user()->id)
             ->where('roles.name', 'client');
+
+        }else {
+            $users = $model->withoutGlobalScope('active')->with('session', 'clientDetails', 'clientDetails.addedBy')
+            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+
+            ->leftJoin('client_details', 'users.id', '=', 'client_details.user_id')
+            ->join('roles', 'roles.id', '=', 'role_user.role_id')
+            ->select('users.id', 'users.name', 'client_details.company_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
+
+            ->where('roles.name', 'client');
+
+        }
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
             $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();

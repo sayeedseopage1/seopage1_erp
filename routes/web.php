@@ -1336,6 +1336,11 @@ Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController:
 Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
 Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
+//Project request extension
+
+Route::get('/projects/request-extension/{id}', [ProjectController::class, 'requestExtension'])->name('request-extension');
+Route::post('/projects/store-request-extension', [ProjectController::class, 'storeRequestExtension'])->name('store-request-extension');
+Route::post('/projects/approved-request-extension', [ProjectController::class, 'approvedRequestExtension'])->name('approved-request-extension');
 
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');

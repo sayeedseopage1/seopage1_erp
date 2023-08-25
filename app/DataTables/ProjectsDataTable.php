@@ -73,6 +73,11 @@ class ProjectsDataTable extends BaseDataTable
                         <i class="icon-options-vertical icons"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
+                    if(Auth::user()->role_id == 4 && $row->delayed_status == 1)
+                    {
+                        $action .= '<a href="' . route('request-extension', [$row->id]) . '" class="dropdown-item"><i class="fa fa-plus mr-2"></i>' . __('Request extension') . '</a>';
+
+                    }
 
             $action .= '<a href="' . route('projects.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
             if ($row->status == 'under review' && Auth::user()->role_id == 1) {
@@ -356,11 +361,22 @@ class ProjectsDataTable extends BaseDataTable
                 ]);
             });
         $datatables->editColumn('status', function ($row) {
+           
+           // dd($row);
 
             $projectStatus = ProjectStatusSetting::all();
 
             foreach ($projectStatus as $status) {
                 $var = Project::where('id', $row->id)->first();
+                if ($var->delayed_status == 1) {
+                    $delayed_status = '';
+                    $delayed_status .= '<br><span class="badge badge-danger">Delayed</span>' ;
+                    # code...
+                }else 
+                {
+                    $delayed_status = '';
+                }
+                
 
                 if ($row->status == $status->status_name) {
                     $color = $status->color;
@@ -371,7 +387,7 @@ class ProjectsDataTable extends BaseDataTable
                     } else {
                         $text = '';
                     }
-                    return ' <i class="fa fa-circle mr-1 f-10" style="color:' . $color . '"></i>' . '<span class="text-capitalize" title="' . $text . '">' . ucfirst($status->status_name) . '</span>';
+                    return ' <i class="fa fa-circle mr-1 f-10" style="color:' . $color . '"></i>' . '<span class="text-capitalize" title="' . $text . '">' . ucfirst($status->status_name) . '</span>'.$delayed_status;
                 }
             }
         });
@@ -487,7 +503,7 @@ class ProjectsDataTable extends BaseDataTable
 
             return '(' . $completed . ' / ' . $data->count() . ')';
         });
-        $datatables->rawColumns(['project_name', 'pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check', 'short_code', 'project_manager', 'deliverable_sign', 'deadline', 'hours_allocated','project_value']);
+        $datatables->rawColumns(['project_name','pm_id', 'action', 'completion_percent', 'members', 'status', 'client_id', 'check', 'short_code', 'project_manager', 'deliverable_sign', 'deadline', 'hours_allocated','project_value']);
         $datatables->removeColumn('project_summary');
         $datatables->removeColumn('notes');
         $datatables->removeColumn('category_id');
@@ -509,7 +525,7 @@ class ProjectsDataTable extends BaseDataTable
             ->leftJoin('project_members', 'project_members.project_id', 'projects.id')
             ->leftJoin('users', 'project_members.user_id', 'users.id')
             ->leftJoin('users as client', 'projects.client_id', 'users.id')
-            ->selectRaw('projects.id, projects.deal_id, projects.pm_id, projects.project_short_code, projects.hash, projects.added_by, projects.project_name, projects.start_date, projects.deadline, projects.client_id,
+            ->selectRaw('projects.id,projects.delayed_status, projects.deal_id, projects.pm_id, projects.project_short_code, projects.hash, projects.added_by, projects.project_name, projects.start_date, projects.deadline, projects.client_id,
               projects.completion_percent, projects.project_budget, projects.currency_id,
             projects.status, users.name, client.name as client_name, client.email as client_email, projects.public,
            ( select count("id") from pinned where pinned.project_id = projects.id and pinned.user_id = ' . user()->id . ') as pinned_project');

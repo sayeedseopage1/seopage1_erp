@@ -564,10 +564,11 @@ trait PmDashboard
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status', 'Accepted')
             ->where('projects.status', 'in progress')
+            ->where('projects.delayed_status', 1)
             ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-            ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
+           
             ->get();
-            $delay_date = Carbon::parse($this->startMonth)->subDays(15);
+           
            // dd($delay_date);
 
                 $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
@@ -576,7 +577,7 @@ trait PmDashboard
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status', 'Accepted')
                 ->where('projects.status', 'finished')
-                ->where('p_m_projects.created_at', '<=', $delay_date)
+                ->where('projects.delayed_status', 1)
                 ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
                 ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
                
@@ -589,8 +590,10 @@ trait PmDashboard
                     ->where('projects.pm_id', Auth::id())
                     ->where('projects.project_status', 'Accepted')
                     ->where('projects.status', 'in progress')
-                    ->where('p_m_projects.created_at', '<=', $delay_date)
+                    ->where('projects.delayed_status', 1)
                     ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                  
+                  
                     // Compare against the calculated deadline date
                     ->get();
                 $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
@@ -599,7 +602,7 @@ trait PmDashboard
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status', 'Accepted')
                 ->where('projects.status', 'finished')
-                ->where('p_m_projects.created_at', '<=', $delay_date)
+                ->where('projects.delayed_status', 1)
                 ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
                 ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
                 
@@ -609,8 +612,8 @@ trait PmDashboard
            
             if(count($this->no_of_accepted_projects) > 0 )
             {
-                $this->delayed_projects_percentage_this_cycle = ((count($this->no_of_delayed_projects_this_cycle)+ count($this->no_of_delayed_projects_finished_this_cycle)) /count($this->no_of_accepted_projects))*100;
-                $this->delayed_projects_percentage_previous_cycle = ((count($this->no_of_delayed_projects)+ count($this->no_of_delayed_projects_finished)) /count($this->no_of_accepted_projects))*100;
+                $this->delayed_projects_percentage_this_cycle = (count($this->no_of_delayed_projects_this_cycle)/(count($this->no_of_accepted_projects)))*100;
+                $this->delayed_projects_percentage_previous_cycle = (count($this->no_of_delayed_projects) /((count($this->no_of_accepted_projects))+(count($this->no_of_delayed_projects))))*100;
                 $this->project_cancelation_rate =  (count($this->cancelled_projects_this_cycle)/count($this->no_of_accepted_projects)) * 100;
             }else 
             {
@@ -1184,49 +1187,54 @@ trait PmDashboard
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status', 'Accepted')
                 ->where('projects.status', 'in progress')
+                ->where('projects.delayed_status', 1)
                 ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-                ->whereRaw('DATE_ADD(p_m_projects.created_at, INTERVAL 15 DAY) > projects.updated_at')
-                ->get();
-                $delay_date = Carbon::now()->subDays(15);
-
-                $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-              
-                ->where('projects.pm_id', Auth::id())
-                ->where('projects.project_status', 'Accepted')
-                ->where('projects.status', 'finished')
-                ->where('p_m_projects.created_at', '<=', $delay_date)
-                ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-                ->whereBetween('projects.updated_at', [$startMonth, $release_date])
-               
-                ->get();
-              
-        
-              
-                $this->no_of_delayed_projects_this_cycle = Project::select('projects.*', 'p_m_projects.created_at as project_creation_date')
-                    ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-                    ->where('projects.pm_id', Auth::id())
-                    ->where('projects.project_status', 'Accepted')
-                    ->where('projects.status', 'in progress')
-                    ->where('p_m_projects.created_at', '<=', $delay_date)
-                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
-                    // Compare against the calculated deadline date
-                    ->get();
-                $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-              
-                ->where('projects.pm_id', Auth::id())
-                ->where('projects.project_status', 'Accepted')
-                ->where('projects.status', 'finished')
-                ->where('p_m_projects.created_at', '<=', $delay_date)
-                ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
-                ->whereBetween('projects.updated_at', [$startMonth, $release_date])
                 
                 ->get();
+              
+               // dd($delay_date);
+    
+                    $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+                    ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                  
+                    ->where('projects.pm_id', Auth::id())
+                    ->where('projects.project_status', 'Accepted')
+                    ->where('projects.status', 'finished')
+                    ->where('projects.delayed_status', 1)
+                    ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+                    ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                   
+                    ->get();
+                  
+            
+                  
+                    $this->no_of_delayed_projects_this_cycle = Project::select('projects.*', 'p_m_projects.created_at as project_creation_date')
+                        ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                        ->where('projects.pm_id', Auth::id())
+                        ->where('projects.project_status', 'Accepted')
+                        ->where('projects.status', 'in progress')
+                        ->where('projects.delayed_status', 1)
+                        ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                       
+                      
+                        // Compare against the calculated deadline date
+                        ->get();
+                    $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+                    ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                  
+                    ->where('projects.pm_id', Auth::id())
+                    ->where('projects.project_status', 'Accepted')
+                    ->where('projects.status', 'finished')
+                    ->where('projects.delayed_status', 1)
+                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                    ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                    
+                    ->get();
+    
                 if(count($this->no_of_accepted_projects) > 0 )
                 {
-                    $this->delayed_projects_percentage_this_cycle = ((count($this->no_of_delayed_projects_this_cycle)+ count($this->no_of_delayed_projects_finished_this_cycle)) /count($this->no_of_accepted_projects))*100;
-                    $this->delayed_projects_percentage_previous_cycle = ((count($this->no_of_delayed_projects)+ count($this->no_of_delayed_projects_finished)) /count($this->no_of_accepted_projects))*100;
+                    $this->delayed_projects_percentage_this_cycle = (count($this->no_of_delayed_projects_this_cycle)/(count($this->no_of_accepted_projects)))*100;
+                    $this->delayed_projects_percentage_previous_cycle = (count($this->no_of_delayed_projects) /((count($this->no_of_accepted_projects))+(count($this->no_of_delayed_projects))))*100;
                     $this->project_cancelation_rate =  (count($this->cancelled_projects_this_cycle)/count($this->no_of_accepted_projects)) * 100;
                 }else 
                 {

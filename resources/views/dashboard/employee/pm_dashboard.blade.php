@@ -888,16 +888,26 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#" data-toggle="modal" data-target="#totalDelayProject{{count($no_of_delayed_projects)}}">
+                                <a href="#" data-toggle="modal" data-target="#totalDelayProjectForthisCycle{{count($no_of_delayed_projects_this_cycle)}}">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{count($no_of_delayed_projects_this_cycle)}}<span
                                             class="f-12 font-weight-normal text-lightest">
-                                            @lang('Total Delayed Project')
+                                            @lang('Total Delayed Project for this cycle')
                                         </span>
                                     </p>
                                 </a>
                                 @include('dashboard.employee.delayed_project.total_delayed_project')
+                                <a href="#" data-toggle="modal" data-target="#totalDelayProjectInthisCycle{{count($no_of_delayed_projects)}}">
+                                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                                        {{count($no_of_delayed_projects)}}<span
+                                            class="f-12 font-weight-normal text-lightest">
+                                            @lang('Total Delayed Project in this cycle')
+                                        </span>
+                                    </p>
+                                </a>
+                                @include('dashboard.employee.delayed_project.total_delayed_project_in_this_cycle')
                             </div>
+
                         </div>
                         <div class="d-block">
                             <i class="fa fa-list text-lightest f-27"></i>
@@ -912,7 +922,7 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects percentage</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#">
+                                <a href="#" data-toggle="modal" data-target="#totalDelayProjectForthisCycle{{count($no_of_delayed_projects_this_cycle)}}">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{round($delayed_projects_percentage_this_cycle,2)}}%<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -920,7 +930,7 @@
                                         </span>
                                     </p>
                                 </a>
-                                <a href="#">
+                                <a href="#" data-toggle="modal" data-target="#totalDelayProjectInthisCycle{{count($no_of_delayed_projects)}}">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{round($delayed_projects_percentage_previous_cycle,2)}}%<span
                                             class="f-12 font-weight-normal text-lightest">

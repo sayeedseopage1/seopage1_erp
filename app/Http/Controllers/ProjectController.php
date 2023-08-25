@@ -104,6 +104,7 @@ use App\Models\kpiSetting;
 use App\Models\CashPoint;
 use App\Models\Seopage1Team;
 use App\Models\AuthorizationAction;
+use App\Models\ProjectRequestTimeExtension;
 
 class ProjectController extends AccountBaseController
 {
@@ -4508,5 +4509,59 @@ class ProjectController extends AccountBaseController
             'milestones' => $milestones,
             'minutes_left' => $estimated_minutes_left
         ]);
+    }
+
+    // projects request extension section
+    public function requestExtension($id){
+        $this->pageTitle = 'Delayed projects time extension';
+        $this->project_id = $id;
+        return view('projects.ajax.request_extension',$this->data);
+    }
+
+    public function storeRequestExtension(Request $request){
+        $validator = $request->validate([
+            'day' => 'required',
+            'file' => 'required',
+            'comment' => 'required',
+        ], [
+            'day.required' => 'This filed is required!',
+            'file.required' => 'This filed is required!',
+            'comment.required' => 'This filed is required!',
+        ]);
+
+        $project_request_time_extension = new ProjectRequestTimeExtension();
+        $project_request_time_extension->day = $request->day;
+        $project_request_time_extension->comment = $request->comment;
+        $project_request_time_extension->project_id = $request->project_id;
+
+        $image_files = array();
+        $files = $request->file('file');
+        if (!empty($files)){
+            foreach ($files as $file){
+                $imageName = md5(rand(1000, 10000));
+                $ext = strtolower($file->getClientOriginalExtension());
+                $imageFullName = $imageName.'.'.$ext;
+                $dir = 'project-request-extension/';
+                $imageUrl=$dir.$imageFullName;
+                $file->move($dir,$imageFullName);
+                $image_files[]=$imageUrl;
+            }
+            $project_request_time_extension['file']=implode("|",$image_files);
+        }
+        $project_request_time_extension->save();
+
+        return response()->json(['status'=>200]);
+    }
+
+    public function approvedRequestExtension(Request $request){
+        $project = Project::find($request->projectId);
+        $project->delayed_status = 0;
+        $project->save();
+
+        $delayed_project = ProjectRequestTimeExtension::find($request->id);
+        $delayed_project->status= 'Approved';
+        $delayed_project->save();
+
+        return response()->json(['status'=>200]);
     }
 }

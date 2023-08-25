@@ -1,15 +1,20 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="totalDelayProject{{count($no_of_delayed_projects)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="totalDelayProjectForthisCycle{{count($no_of_delayed_projects_this_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Total Delayed Project : {{count($no_of_delayed_projects_this_cycle)}}</h5>
+         
+          <div class="modal-title"><h4>Total Assigned Project Number: {{count($no_of_projects)}}</h4>
+            <h4>Total Delayed Project : {{count($no_of_delayed_projects_this_cycle)}}</h4> 
+           <h4>Percentage:  {{round($delayed_projects_percentage_this_cycle,2)}}%</h4>  
+             </div>
+
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="delaedProjectTable" class="display" style="width:100%">
+            <table id="delaedProjectTableCycle" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -66,7 +71,7 @@
     </div>
   </div>
   <script>
-    new DataTable('#delaedProjectTable',{
+    new DataTable('#delaedProjectTableCycle',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
 </script>

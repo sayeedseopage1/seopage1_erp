@@ -827,6 +827,28 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                     @endif
                 </div>
+
+                <!--Autonraization FOR PROJECT REQUEST EXTENSION -->
+                @php
+                $project_request_time_extension = App\Models\ProjectRequestTimeExtension::where('project_id',$project->id)->first();
+                //  dd($project_request_time_extension);
+                @endphp
+                @if ($project_request_time_extension != null && $project_request_time_extension->status =='pending')
+                <div class="card my-3" style="border:none">
+                    <div class="py-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#delayed_project_auth_form_modal{{ $project_request_time_extension->id }}">Delayed Project Time Extension Needs to be Authorized by Admin</button>
+                                @include('projects.modals.delayed_project_auth_form_modal')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+            <!--End Autonraization FOR PROJECT REQUEST EXTENSION -->
+
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
