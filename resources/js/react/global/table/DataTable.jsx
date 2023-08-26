@@ -1,4 +1,5 @@
 import * as React from 'react';
+import EmptyTable from '../../global/EmptyTable';
 import { useLocalStorage } from 'react-use';
 import _ from 'lodash';
 import './data-table.css';
@@ -134,6 +135,11 @@ const DataTable = ({
                     {isLoading && loader} 
                 </tbody>
             </table> 
+
+            {(!isLoading && _.size(tableData)) === 0  ?
+             <div>
+                <EmptyTable />
+            </div> : null}
         </div>
         
         <TablePagination

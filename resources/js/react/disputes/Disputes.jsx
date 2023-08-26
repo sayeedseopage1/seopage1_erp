@@ -1,16 +1,84 @@
 import React from "react";
-
-
-import { disputeTableColumn } from "./components/diputeTableColumn";
+import { disputeTableColumn } from "./components/DisputeTableColumn";
 import DataTable from "../global/table/DataTable";
 import FilterContainer from './components/Filter-bar/FilterContainer';
 import Filterbar from "./components/Filter-bar/Filterbar";
+import { useLazyGetDisputesQuery } from "../services/api/SingleTaskPageApi";
+import _ from "lodash";
+import DisputeTableLoader from "./components/DisputeTableLoader";
+
+
+const reducer = (state=[], action) => {
+    switch(action.type){
+        case 'INIT_DISPUTE':
+            return state = _.orderBy(action.disputes, 'id', 'desc');
+        case 'UPDATE_DISPUTE_CONVERSATION':
+            return _.map(state, d => {
+                if(d.id === action.disputeId){
+                    return {
+                        ...d,
+                        conversations: action.conversations
+                    }
+                }
+                return d;
+            });
+        case 'UPDATE_DISPUTE':
+            return _.map(state, d => {
+                if(d.id === action.disputeId){
+                    return {
+                        ...action.data
+                    }
+                }
+                return d;
+            })
+        default:
+            return state;
+    }
+}
+
 
 const Disputes = () => {
+    const [disputes, dispatch] = React.useReducer(reducer, []);
+    const [filters, setFilters] = React.useState(null);
+    const [search, setSearch] = React.useState('');
+    const [getDisputes, {isFetching}] = useLazyGetDisputesQuery();
 
-    const onFilter = (filter) => {
-        console.log(filter)
+
+    const onFilter = async (filter) => {
+        const queryObject = _.pickBy(filter, Boolean);
+        const queryString = new URLSearchParams(queryObject).toString();
+        setFilters(queryObject);
+
+        try{
+            if(filter?.start_date && filter?.end_date){
+                const res = await getDisputes(`?${queryString}`).unwrap();  
+                if(res){
+                    const data = _.orderBy(res, 'id', 'desc');
+                    dispatch({type: 'INIT_DISPUTE', disputes: data});
+                }
+            }
+        }catch(err){
+            console.log(err)
+        } 
     }
+
+    // update dispute state
+    const updateDisputeConversation = ({disputeId, conversations}) => {
+        dispatch({
+            type: 'UPDATE_DISPUTE_CONVERSATION',
+            disputeId,
+            conversations
+        })
+    }
+    // Update Single Dispute
+    const updateDisputeById = ({disputeId, data})=>{
+        dispatch({
+            type: 'UPDATE_DISPUTE',
+            disputeId,
+            data
+        })
+    }
+
 
     return (
         <React.Fragment>
@@ -76,14 +144,18 @@ const Disputes = () => {
                 {/* disputes table */}
                 <div className="mt-3 p-3 bg-white">
                     <DataTable
-                        tableData={[{ id: 1 }, { id: 2 }]}
+                        tableData={disputes}
                         tableColumns={disputeTableColumn}
                         hideColumns={[]}
-                        search={""}
-                        filter={""}
+                        search={search}
+                        filter={filters}
                         tableName="dispute-table"
-                        isLoading={false}
-                        state={null}
+                        isLoading={isFetching}
+                        state={{
+                            updateDisputeConversation,
+                            updateDisputeById
+                        }}
+                        loader={<DisputeTableLoader />}
                     />
                 </div>
             </div>

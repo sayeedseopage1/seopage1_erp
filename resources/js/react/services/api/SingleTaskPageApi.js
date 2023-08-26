@@ -367,7 +367,72 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // check sub task state
         checkSubTaskState: build.query({
             query: (taskId) => `/account/tasks/parent-task-subtasks/${taskId}`
-        })
+        }),
+
+
+
+
+        // TASK DISPUTE
+        getDisputes:build.query({
+            query: (query) => `/account/task-disputes${query}`
+        }),
+        
+        // ASK DISPUTE QUESTION
+        askDisputeQuestion: build.mutation({
+            query: (data) => ({
+                url: `/account/task-dispute-question`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),
+
+        // ANSWER DISPUTE QUESTION
+        answerDisputeQuestion: build.mutation({
+            query: (data) => ({
+                url: `/account/task-dispute-question-answer`,
+                method: "PUT",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),  
+
+        // ANSWER DISPUTE QUESTION
+        disputeSubmitToAuthorization: build.mutation({
+            query: (data) => ({
+                url: `/account/task-dispute-submit-to-auth`,
+                method: "PUT",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),  
+        // ANSWER DISPUTE QUESTION
+        disputeAnswerMakeAsRead: build.mutation({
+            query: (data) => ({
+                url: `/account/task-dispute-read-status`,
+                method: "PUT",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            })
+        }),  
+
+       
         
     }),
 });
@@ -404,5 +469,11 @@ export const {
     useCreateReportMutation,
     useCheckSubTaskTimerQuery,
     useLazyCheckSubTaskTimerQuery,
-    useLazyCheckSubTaskStateQuery
+    useLazyCheckSubTaskStateQuery,
+    useGetDisputesQuery,
+    useLazyGetDisputesQuery,
+    useAskDisputeQuestionMutation,
+    useAnswerDisputeQuestionMutation,
+    useDisputeSubmitToAuthorizationMutation,
+    useDisputeAnswerMakeAsReadMutation
 } = singleTaskPageApiSlice;

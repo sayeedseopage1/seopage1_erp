@@ -37,12 +37,14 @@ use Maatwebsite\Excel\HeadingRowImport;
 use App\DataTables\ClientNotesDataTable;
 use App\DataTables\CreditNotesDataTable;
 use App\DataTables\ClientContactsDataTable;
+use App\DataTables\ClientDealDataTable;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use App\Http\Requests\Admin\Employee\ImportRequest;
 use App\Http\Requests\Admin\Client\StoreClientRequest;
 use App\Http\Requests\Gdpr\SaveConsentUserDataRequest;
 use App\Http\Requests\Admin\Client\UpdateClientRequest;
 use App\Http\Requests\Admin\Employee\ImportProcessRequest;
+use App\Models\ClientDeal;
 use App\Models\LanguageSetting;
 use App\Models\Payment;
 use Google\Service\Dfareporting\Resource\Languages;
@@ -456,6 +458,9 @@ class ClientController extends AccountBaseController
             break;
         case 'projects':
             return $this->projects();
+        case 'deals':
+            return $this->deals();
+            break;
         case 'invoices':
             return $this->invoices();
         case 'payments':
@@ -605,6 +610,19 @@ class ClientController extends AccountBaseController
         ($tab == '') ? $this->activeTab = 'profile' : $this->activeTab = $tab;
         $this->view = 'clients.ajax.projects';
         return $dataTable->render('clients.show', $this->data);
+
+    }
+    public function deals()
+    {
+        $dataTable = new ClientDealDataTable();
+        $viewPermission = user()->permission('view_projects');
+
+        abort_403 (!($viewPermission == 'all' || $viewPermission == 'added'));
+        $tab = request('tab');
+        ($tab == '') ? $this->activeTab = 'profile' : $this->activeTab = $tab;
+        $this->view = 'clients.ajax.deals';
+        return $dataTable->render('clients.show', $this->data);
+
 
     }
 

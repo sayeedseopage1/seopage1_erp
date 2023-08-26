@@ -159,6 +159,7 @@ class ClientsDataTable extends BaseDataTable
             ->join('roles', 'roles.id', '=', 'role_user.role_id')
             ->select('users.id', 'users.name', 'client_details.company_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
             ->join('projects','projects.client_id','users.id')
+            ->groupBy('users.id')
             ->where('projects.pm_id',Auth::user()->id)
             ->where('roles.name', 'client');
 

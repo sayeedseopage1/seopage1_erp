@@ -71,6 +71,8 @@ use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
 use App\Models\DeveloperStopTimer;
+use App\Models\TaskDisputeComment;
+use App\Models\TaskRevisionDispute;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -274,22 +276,12 @@ class TaskController extends AccountBaseController
                 }
 
             }
-            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10 || Auth::user()->role_id == 5)
+            if(Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
             {
                 $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
 
-            }
-
-            elseif(Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6)
-            {
+            }else {
                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
-
-            } 
-            
-            elseif(Auth::user()->role_id == 4)
-            {
-                $tasks = $tasks->where('tasks.added_by',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
-
             }
           
 
@@ -1587,7 +1579,7 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
-        //DB::beginTransaction();
+       // DB::beginTransaction();
         $setting = global_setting();
         $rules = [
             'heading' => 'required',
@@ -1634,7 +1626,7 @@ class TaskController extends AccountBaseController
             abort_403(!in_array($this->addPermission, ['all', 'added']));
         }
 
-       // DB::beginTransaction();
+        DB::beginTransaction();
         $ganttTaskArray = [];
         $gantTaskLinkArray = [];
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
@@ -1651,7 +1643,16 @@ class TaskController extends AccountBaseController
         $task->priority = $request->priority;
         $task->board_column_id = $taskBoardColumn->id;
 
-        
+        // if ($request->has('dependent') && $request->has('dependent_task_id') && $request->dependent_task_id != '') {
+        //     $dependentTask = Task::findOrFail($request->dependent_task_id);
+
+        //     // if (!is_null($dependentTask->due_date) && !is_null($dueDate) && $dependentTask->due_date->greaterThan($dueDate)) {
+        //     //     /* @phpstan-ignore-line */
+        //     //     return Reply::error(__('messages.taskDependentDate'));
+        //     // }
+
+        //     $task->dependent_task_id = $request->dependent_task_id;
+        // }
 
         $task->is_private = $request->has('is_private') ? 1 : 0;
         $task->billable = $request->has('billable') && $request->billable ? 1 : 0;
@@ -1686,7 +1687,6 @@ class TaskController extends AccountBaseController
 
         $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
         $task->saveQuietly();
-       
         if ($request->hasFile('file')) {
 
             foreach ($request->file as $fileData) {
@@ -1706,7 +1706,84 @@ class TaskController extends AccountBaseController
         }
        
 
-        
+        // save labels
+        // $task->labels()->sync($request->task_labels);
+        // dd($request->taskId);
+        // if (!is_null($request->taskId)) {
+
+        //     $taskExists = TaskFile::where('task_id', $request->taskId)->get();
+
+        //     if ($taskExists) {
+        //         foreach ($taskExists as $taskExist) {
+        //             $file = new TaskFile();
+        //             $file->user_id = $taskExist->user_id;
+        //             $file->task_id = $task->id;
+
+        //             if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id))) {
+        //                 File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id), 0775, true);
+        //             }
+
+        //             $fileName = Files::generateNewFileName($taskExist->filename);
+        //             copy(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $taskExist->task_id . '/' . $taskExist->hashname), public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id . '/' . $fileName));
+
+        //             $file->filename = $taskExist->filename;
+        //             $file->hashname = $fileName;
+        //             $file->size = $taskExist->size;
+        //             $file->save();
+
+        //             $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
+        //         }
+        //     }
+
+        //     $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
+
+        //     if ($subTask) {
+        //         foreach ($subTask as $subTasks) {
+        //             $subTaskData = new SubTask();
+        //             $subTaskData->title = $subTasks->title;
+        //             $subTaskData->task_id = $task->id;
+        //             $subTaskData->description = str_replace('<p><br></p>', '', trim($subTasks->description));
+
+        //             if ($subTasks->start_date != '' && $subTasks->due_date != '') {
+        //                 $subTaskData->start_date = $subTasks->start_date;
+        //                 $subTaskData->due_date = $subTasks->due_date;
+        //             }
+
+
+        //             $subTaskData->assigned_to = $subTasks->assigned_to;
+
+        //             $subTaskData->save();
+
+        //             if ($subTasks->files) {
+        //                 foreach ($subTasks->files as $fileData) {
+        //                     $file = new SubTaskFile();
+        //                     $file->user_id = $fileData->user_id;
+        //                     $file->sub_task_id = $subTaskData->id;
+
+        //                     $fileName = Files::generateNewFileName($fileData->filename);
+
+        //                     if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id))) {
+        //                         File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id), 0775, true);
+        //                     }
+
+        //                     copy(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $fileData->sub_task_id . '/' . $fileData->hashname), public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id . '/' . $fileName));
+
+        //                     $file->filename = $fileData->filename;
+        //                     $file->hashname = $fileName;
+        //                     $file->size = $fileData->size;
+        //                     $file->save();
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // To add custom fields data
+        // if ($request->get('custom_fields_data')) {
+        //     $task->updateCustomFieldData($request->get('custom_fields_data'));
+        // }
+
+        // For gantt chart
         if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
             $parentGanttId = $request->parent_gantt_id;
 
@@ -1733,7 +1810,7 @@ class TaskController extends AccountBaseController
         }
 
 
-       
+        DB::commit();
 
         if (request()->add_more == 'true') {
             unset($request->project_id);
@@ -1810,7 +1887,6 @@ class TaskController extends AccountBaseController
                 'redirectUrl' => route('tasks.show', $task->id)
             ]);
         }
-      //  dd($task,$this->logProjectActivity($project->id, $link));
         return response()->json([
             'status' => 200,
             'message'=> 'Task added successfully',
@@ -2595,9 +2671,13 @@ class TaskController extends AccountBaseController
         ]);
     }
 
-    //    CLIENT HAS REVISION
+    
+
+     
+     /************* CLIENT HAS REVISION *************** */ 
     public function clientHasRevision(Request $request)
     {  
+        // DB::beginTransaction();
         // chagne board column status
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
@@ -2640,6 +2720,14 @@ class TaskController extends AccountBaseController
         //     $updateTask->save();
         // }
         $task_revision->save();
+ 
+
+        // CREATE DISPUTE
+        if($request->dispute_create){
+            $this->create_dispute($task_revision, $request);
+        }
+
+
         return response()->json([
             'status' => 200,
         ]);
@@ -2811,6 +2899,11 @@ class TaskController extends AccountBaseController
             }
         }
 
+
+        // CREATE DISPUTE
+        $this->create_dispute($tasks_accept);
+
+
        // dd($tasks_accept,$sub_task_status);
         return response()->json([
             'status' => 200,
@@ -2858,6 +2951,11 @@ class TaskController extends AccountBaseController
         $tasks_accept->save();
        // dd($tasks_accept);
        $board_column = TaskBoardColumn::where('id',$task_status->board_column_id)->first();
+
+
+       if($tasks_accept-> dispute_created){
+            $this->create_dispute($tasks_accept);
+       }
 
         return response()->json([
             'status' => 200,
@@ -3828,8 +3926,7 @@ class TaskController extends AccountBaseController
         {
             return response()->json([
                 'message' => 'You cannot add task as project manager did not create any project deliverable yet',
-                'status'=> 400,
-               
+                'status'=> 400, 
             ]);
 
         }else 
@@ -3862,4 +3959,306 @@ class TaskController extends AccountBaseController
         }
 
     }
+
+
+    /************* TASK DISPUTE *************** */
+    
+    // RE USEABLE MATHOD
+    public function create_dispute($revision){ 
+
+        // get user by task id
+        $task_user = TaskUser::where('task_id', $revision->task_id)->get()->first();
+ 
+        // added 5 day from created time 
+         $due_date = Carbon::now();
+         $due_date->addDays(5);
+ 
+        // create dispute
+        $dispute = new TaskRevisionDispute();
+        $dispute->task_id = $revision->task_id;
+        $dispute->project_id= $revision->project_id;
+        $dispute->revision_id = $revision->id;
+        $dispute->raised_against= $revision->added_by;
+        $dispute->raised_by = $task_user->user_id;
+        $dispute->due_date = $due_date; 
+        $dispute->save(); 
+    } 
+ 
+ 
+    // ADD DISPUTE QUESTION
+
+    // 
+
+    // GET DISPUTE DATA
+
+    public function get_dispute_data($filter){
+
+        
+        // filter data
+        $start_date = $filter["start_date"] ?? NULL;
+        $end_date = $filter["end_date"] ?? NULL;
+        $task_id = $filter["task_id"] ?? NULL;
+        $project_id = $filter["project_id"] ?? NULL;
+        $dispute_id = $filter["dispute_id"] ?? NULL;
+        $raised_by = $filter["raised_by"] ?? NULL;
+        $raised_against = $filter["raised_against"] ?? NULL;
+
+
+        //get user 
+        function get_user($user_id, $is_client){ 
+            $user = User::where( 'id', $user_id)->get()->first();
+            $user_response = [
+                "id" => $user->id,
+                "name" => $user->name,
+                "image" => $user->image,
+                "role_id" => $user->role_id,
+           ];
+
+            if(!$is_client){
+                $employee_details = [
+                    "designation" => $user->employeeDetail->designation->name,
+                    "emplyee_id" => $user->employeeDetail->employee_id,
+                ];
+                $user_response = array_merge($user_response, $employee_details);
+            }
+
+           return $user_response; 
+        }
+
+        // get task details
+        function get_task($task_id){
+            $task = DB::table('tasks')
+                ->where('tasks.id',$task_id)
+                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
+                ->select('tasks.id as id', 'heading as title', 'subtask_id', 'project_members.lead_developer_id as lead_developer')
+                ->first();
+
+            if($task->lead_developer){
+                $task->lead_developer =get_user($task->lead_developer, false);
+            }
+            
+            if($task->subtask_id){
+                $subtask = DB::table('sub_tasks')
+                    ->select('task_id', 'assigned_to', 'added_by')
+                    ->where('id', $task->subtask_id)
+                    ->first();
+
+                if($subtask->assigned_to){
+                    $task->developer = get_user($subtask->assigned_to, false);
+                }
+ 
+                $task->parent_task = get_task($subtask->task_id);
+            } 
+            return $task;
+        }
+  
+        $disputes = DB::table('task_revision_disputes as disputes') 
+                  ->leftJoin('task_revisions as revision', 'disputes.revision_id', 'revision.id')
+                  ->leftJoin('projects', 'disputes.project_id', 'projects.id')
+                  ->leftJoin('deals', 'projects.deal_id', 'deals.id')
+                  ->select(
+                   'disputes.*',
+                    'revision.*',
+                    'disputes.id as id',
+                    'disputes.created_at as dispute_created_at',
+                    'disputes.updated_at as dispute_updated_at',
+                    'revision.id as revision_id',
+                    'revision.created_at as revision_created_at',
+                    'revision.updated_at as revision_updated_at',
+                    'projects.id as project_id',
+                    'projects.project_name as project_name',
+                    'projects.client_id as client_id', 
+                    'projects.pm_id as pm_id',
+                    'projects.deal_id as project_deal_id',
+                    'deals.added_by as deal_added_by'
+                  )
+                  ->where(function($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $start_date, $end_date){
+                        if($task_id) {
+                            $query->where('disputes.task_id', $task_id);
+                        }
+
+                        if($raised_by){
+                            $query->where('disputes.raised_by', $raised_by);
+                        }
+
+                        if($raised_against){
+                            $query->where('disputes.raised_against', $raised_against);
+                        }
+
+                        if($project_id){
+                            $query->where('disputes.project_id', $project_id);
+                        }
+
+                        if($dispute_id){
+                            $query->where('disputes.id', $dispute_id);
+                        }
+
+                        if($start_date){
+                            $query->whereDate('disputes.created_at','>=', Carbon::create($start_date)->format('Y-m-d'));
+                        }
+
+                        if($end_date){
+                            $query->whereDate('disputes.created_at','<=', Carbon::create($end_date)->format('Y-m-d')); 
+                        }  
+                  })   
+                 ->get();
+
+                
+                 $disputes->each(function ($dispute){
+                    $dispute->raised_against = get_user($dispute->raised_against, false);
+                    $dispute->raised_by = get_user($dispute->raised_by, false);
+                    $conversation = DB::table('task_dispute_comments')->where('dispute_id', $dispute->id)->get();
+                    $dispute->conversations = $conversation ?? []; 
+                    $dispute->task = get_task($dispute->task_id);
+                    $dispute->client = get_user($dispute->client_id, true);
+                    $dispute->project_manager = get_user($dispute->pm_id, false);
+                    $dispute->sales_person = get_user($dispute->deal_added_by, false);
+                    if($dispute->resolved_by){
+                        $dispute->resolved_by = get_user($dispute->resolved_by, false);
+                    }
+                    if($dispute->winner){
+                        $dispute->winner = get_user($dispute->winner, false);
+                    }
+                });
+
+             return response()->json($disputes, 200); 
+    }
+
+    public function get_disputes(Request $request){ 
+        $filter = [
+            "start_date" => $request->start_date ?? NULL,
+            "end_date" => $request->end_date ?? NULL,
+            "task_id" => $request->task_id ?? NULL,
+            "project_id" => $request->project_id ?? NULL,
+            "dispute_id" => $request->dispute_id ?? NULL,
+            "raised_by" => $request->raised_by ?? NULL,
+            "raised_against" => $request->raised_against ?? NULL,
+        ];
+
+        return $this->get_dispute_data($filter);
+        
+    }
+
+
+    // ADD QUESTION FOR DISPUTE
+    // * @params id is dispute id;
+    public function store_dispute_question(Request $request){
+        $questions = $request->questions;  
+        
+        foreach ($questions as $question) { 
+            $query = new TaskDisputeComment();
+            $query->dispute_id = $question['dispute_id'];
+            $query->raised_by = $question['raised_by'];
+            $query->question = $question['question'];
+            $query->question_for = $question['question_for'];
+            $query->save(); 
+       }
+
+       $response_data = TaskDisputeComment::where('dispute_id', $request->dispute_id)->get();
+ 
+        return response()->json([
+            'data' => $response_data,
+            "message"=>"Question added succesfully"
+        ], 200);
+    }
+
+    // ADD ANSWER Of QUESTION FOR DISPUTE
+    // * @params id is dispute id;
+    public function update_dispute_question_with_answer(Request $request){
+        $questions = $request->questions;
+        $dispute_id = $questions['0']['dispute_id'];
+         
+        // UPDATE ALL QUESTION WITH ANSWER
+        foreach ($questions as $question) {
+            $id = $question['id']; 
+            $query = TaskDisputeComment::find($id);
+            $query->dispute_id = $question['dispute_id'];
+            $query->raised_by = $question['raised_by'];
+            $query->question = $question['question'];
+            $query->question_for = $question['question_for'];
+            $query->replies = $question['replies'];
+            $query->replied_by = $question['replied_by'];
+            $query->replied_date = Carbon::now();
+            $query->save();
+       }
+
+       
+       $response_data = TaskDisputeComment::where('dispute_id', $dispute_id)->get();
+
+       // REUTRN UPDATED QUESTION DATA
+       return response()->json([
+        'data' => $response_data,
+        'message' => 'Answer successfully submitted!' 
+       ], 200);
+     }
+
+    // MAKE DISPUTE SUBMITTED ANSWERE SEEN
+    public function update_dispute_answer_read_status(Request $request){
+         
+        $questions = $request->questions;
+        $dispute_id = $questions['0']['dispute_id'];
+
+        foreach ($questions as $question) {
+            $id = $question['id']; 
+            $query = TaskDisputeComment::find($id);
+            $query->replied_seen = true;
+            $query->replied_date = Carbon::now();
+            $query->save();
+       }
+
+       $response_data = TaskDisputeComment::where('dispute_id', $dispute_id)->get();
+
+        // REUTRN UPDATED QUESTION DATA
+        return response()->json([ 
+            'data' => $response_data,
+            'message' => 'successful!' 
+           ], 200);
+    }
+
+    //  SEND FOR AUTHORIZATION
+    public function dispute_send_for_authorization(Request $request){
+        $id = $request->dispute_id; 
+
+        if($request->authorized){
+            $query = TaskRevisionDispute::find($id);
+            $query->need_authrization = $request->need_authrization;
+            $query->resolve_comment = $request->resolve_comment;
+            $query->raised_against_percent = $request->raised_against_percent;
+            $query->raised_by_percent = $request->raised_by_percent;
+            $query->resolved_by = $request->resolve_by;
+            $query->winner = $request->winner;
+            $query->authorize_comment = $request->authorize_comment;
+            $query->authorized_by = $request->authorized_by;
+            $query->resolved_on = $query->resolved_on ?? Carbon::now();
+            $query->authorize_on = Carbon::now();
+            $query->status = true;
+            $query->save();
+
+            $filter = [ 
+                "dispute_id" => $request->dispute_id ?? NULL,
+            ];
+
+            return  $this->get_dispute_data($filter); 
+        }else{
+            $query = TaskRevisionDispute::find($id);
+            $query->need_authrization = $request->need_authrization;
+            $query->resolve_comment = $request->resolve_comment;
+            $query->raised_against_percent = $request->raised_against_percent;
+            $query->raised_by_percent = $request->raised_by_percent;
+            $query->resolved_by = $request->resolve_by; 
+            $query->resolved_on = Carbon::now();
+            $query->save();
+            
+            $filter = [ 
+                "dispute_id" => $request->dispute_id ?? NULL,
+            ];
+
+            return  $this->get_dispute_data($filter); 
+        }
+    }
+    
+ 
+    /************* END TASK DISPUTE *************** */
+
+   
 }

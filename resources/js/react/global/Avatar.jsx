@@ -5,24 +5,31 @@ const Avatar = ({type="square", width= 32, height=32, className, src, alt, name,
     let modifiedName = name?.slice(0, 1).toUpperCase();
 
     return(
-        <div className='border sp1-item-center' style={{width, height, overflow: 'hidden', borderRadius: type === 'circle' ? '100%' : '6px'}}>
-            {
-                src ? 
-                    <img 
-                        src={src} 
-                        alt={alt} 
-                        style={{
-                            width, 
-                            height, 
-                            overflow: 'hidden', 
-                            borderRadius: type === 'circle' ? '100%' : '6px'
-                        }} 
-                    /> : 
-                    <span className='font-weight-bold' style={{fontSize}}>
-                        { modifiedName } 
-                    </span> 
-            }
-        </div>
+        <>
+            <div 
+                className='border sp1-item-center' 
+                style={{width: `${width}px`, height: `${height}px`, 
+                overflow: 'hidden', 
+                borderRadius: type === 'circle' ? '100%' : '6px'
+            }}>
+                {
+                    src ? 
+                        <img 
+                            src={src} 
+                            alt={alt} 
+                            style={{
+                                width, 
+                                height, 
+                                overflow: 'hidden', 
+                                borderRadius: type === 'circle' ? '100%' : '6px'
+                            }} 
+                        /> : 
+                        <span className='font-weight-bold' style={{fontSize}}>
+                            { modifiedName } 
+                        </span> 
+                }
+            </div>
+        </>
     )
 }
 

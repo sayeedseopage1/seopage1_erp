@@ -689,4 +689,181 @@ class DealController extends AccountBaseController
 
         return response()->json($data);
     }
+
+    // CLIENT DEAL SECTION
+    public function createClientDeal($id){
+        $this->pageTitle = 'Deals';
+        $this->client_id = $id;
+        return view('clients.deal.create',$this->data);
+    }
+
+    public function storeClientDeal(Request $request){
+        // dd($request->all());
+            // DB::beginTransaction();
+        $request->validate([
+            'client_name' => 'required',
+            'client_username' => 'required',
+            'project_name' => 'required',
+            'project_link' => 'required|url',
+            'project_type' => 'required',
+            'amount' => 'required',
+            'description' => 'required',
+            'comments' => 'required',
+        ]);
+        $existing_client= User::where('user_name',$request->user_name)->first();
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        $suffle = substr(str_shuffle($chars), 0, 6);
+        $deal = new DealStage();
+        $deal->client_name= $request->client_name;
+        $deal->short_code = 'DSEOP1' . $suffle;
+
+        $deal->client_username= $request->client_username;
+        $deal->deal_stage= 0;
+        $deal->project_name = $request->project_name;
+        $deal->project_link = $request->project_link;
+        $deal->actual_amount=  $request->amount;
+        $deal->currency_id= 1;
+        $deal->original_currency_id= $request->original_currency_id;
+        $deal->project_type= $request->project_type;
+        $currency= Currency::where('id',$request->original_currency_id)->first();
+        //dd($currency);
+        $deal->amount = ($request->amount)/$currency->exchange_rate;
+        $deal->description= $request->description;
+        $deal->added_by= Auth::id();
+        $deal->converted_by= Auth::id();
+        $deal->client_badge = 'existing client';
+        $deal->save();
+        $goals = GoalSetting::where([
+            'goal_status' =>  0,
+        ])->get();
+
+        if($goals != null) {
+
+
+        foreach ($goals as $goal) {
+            $start = Carbon::parse($goal->startDate);
+            $end = Carbon::parse($goal->endDate);
+            $dateToCheck = Carbon::parse($deal->created_at);
+
+            if ($dateToCheck->between($start, $end)) {
+
+                if($goal->team_id != null) {
+                    $team = Seopage1Team::find($goal->team_id);
+
+                    $users = explode(',', $team->members);
+                    $user_data = [];
+                    foreach ($users as $key => $value) {
+                        if ($value != '') {
+                             //$user = User::find($value);
+                            array_push($user_data,$value);
+                        }
+                    }
+                } else {
+                    $user_data[]= $goal->user_id;
+                }
+            }
+            // Always use an array of user IDs, even if $goal->user_id is set
+            if (isset($goal->user_id) || isset($user_data)) {
+
+                $goal2 = $goal->user_id ? [$goal->user_id] : $user_data;
+
+
+                if ($goal->entryType == 'Added') {
+
+                        $dealStage = DealStage::select([
+                            'deal_stages.*',
+                            'deal_stages.id as id',
+                            'deal_stages.id as deal_id',
+                            'deal_stages.client_username as client_username',
+                            'deal_stages.project_name as deal_project_name',
+                            'deal_stages.project_link as deal_project_link',
+                            'deal_stages.amount as deal_amount',
+                            'deal_stages.deal_stage as deal_stage',
+                            'deal_stages.deal_status as deal_status',
+                            'deal_stages.actual_amount as deal_original_amount',
+                            'deal_stages.created_at as deal_created_at',
+                            'leads.added_by as lead_converted_by',
+                            'leads.id as lead_id',
+                        ])
+                        ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
+                        ->whereIn('deal_stages.added_by', $goal2)
+                        ->whereDate('deal_stages.created_at', '>=', $goal->startDate);
+                        if (!is_null($goal->endDate)) {
+                            $dealStage = $dealStage->whereDate('deal_stages.created_at', '<=', $goal->endDate);
+                        }
+
+                        $dealStage_amount = $dealStage->sum('deal_stages.amount');
+                        $dealStage_count = $dealStage->count();
+                        if ($goal->trackingType == 'value') {
+                            $deal_amount = $dealStage_amount;
+                        } else {
+                            $deal_amount = $dealStage_count;
+                        }
+                        if ($deal_amount >= (int) $goal->trackingValue) {
+                            $goal_update= GoalSetting::find($goal->id);
+                            $goal_update->goal_status = 1;
+                            $goal_update->save();
+                            if ($goal->achievablePoints > 0) {
+
+                                $distribute_amount = $goal->achievablePoints / count($user_data);
+
+                                foreach ($user_data as $value) {
+
+                                    $user_name = User::find($value);
+                                    $user_last_point = CashPoint::where('user_id',$user_name->id)->orderBy('id','desc')->first();
+
+                                    $point= new CashPoint();
+                                    $point->user_id= $value;
+                                    //$point->project_id= $find_project_id->id;
+                                    $point->activity= $user_name->name . ' For achieving '.$goal->frequency.' Goal '.$goal->title;
+                                    $point->gained_as = "Individual";
+                                    $point->points= $distribute_amount;
+
+                                    if ($user_last_point != null) {
+                                        $point->total_points_earn= $user_last_point->total_points_earn + $distribute_amount;
+                                    } else {
+                                        $point->total_points_earn=  $distribute_amount;
+                                    }
+
+                                    $point->save();
+                                }
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+
+
+
+        //goal achieve check end here
+
+        $find_user= User::where('user_name', $request->client_username)->first();
+        if($find_user == null )
+        {
+            $user = new User();
+            $user->name = $request->client_name;
+            $user->user_name = $request->client_username;
+            $user->login= 'disable';
+            $user->email_notifications = 0;
+            $user->save();
+        }
+
+        $deal_stage= new DealStageChange();
+
+        $deal_stage->deal_id= $deal->short_code;
+        $deal_stage->comments= $request->comments;
+        $deal_stage->deal_stage_id=$deal->deal_stage;
+        $deal_stage->updated_by= Auth::id();
+        $deal_stage->save();
+
+        // dd('ok');
+
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('deals.show',$deal->id)
+        ]);
+
+    }
 }

@@ -34,6 +34,7 @@ const projectManagerAcknowladgement = [
         id: 'CRx05',
         title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
         isDeniable: true,
+        createDispute: true,
     }, 
     {
         id: 'CRx06',
@@ -120,6 +121,8 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     // handle submiton
     const handleSubmition=(e)=>{
         e.preventDefault();
+
+        console.log(additionalInfo)
  
         const data = {
             acknowledgement_id: reason?.id ,
@@ -131,7 +134,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
             additional_amount: Number(additionalAmount),
             additional_status: additionalPaid,
             additional_comment: additionalInfo?.info ?? '',
-            dispute_create: additionalInfo?.disputeCreate ?? false
+            dispute_create: reason?.createDispute || additionalInfo?.disputeCreate || false
         }
  
         if(validate()){  

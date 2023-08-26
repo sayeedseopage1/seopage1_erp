@@ -30,6 +30,9 @@ $viewClientContact = user()->permission('view_client_contacts');
                     class="projects" />
             @endif
 
+            <x-tab :href="route('clients.show', $client->id).'?tab=deals'" ajax="false" :text="__('deals')"
+                class="deals" />
+
             @if (in_array('invoices', user_modules()))
                 <x-tab :href="route('clients.show', $client->id).'?tab=invoices'" ajax="false" :text="__('app.menu.invoices')"
                     class="invoices" />

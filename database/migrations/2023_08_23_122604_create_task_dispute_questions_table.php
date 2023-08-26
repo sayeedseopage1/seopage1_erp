@@ -15,14 +15,17 @@ return new class extends Migration
     {
         Schema::create('task_dispute_questions', function (Blueprint $table) {
             $table->id();
+           
             $table->integer('dispute_id');
             $table->integer('raised_by');
             $table->integer('question_for');
             $table->integer('replied_by')->nullable();
             $table->longText('question');
             $table->longText('replies')->nullable();
-            $table->date('replied_date');
+            $table->dateTime('replied_date')->nullable();
+            $table->boolean('replied_seen')->default(false);
             $table->timestamps();
+           
         });
     }
 

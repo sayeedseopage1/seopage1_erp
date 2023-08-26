@@ -142,8 +142,8 @@
 }
 
 abbr{
-  text-decoration: none;
-  cursor:default !important;
+  text-decoration: none !important;
+  cursor: default !important;
 }
  
 
@@ -155,4 +155,8 @@ abbr{
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+}
+
+.font-medium{
+  font-weight: 500;
 }

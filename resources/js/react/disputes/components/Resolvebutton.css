@@ -79,6 +79,17 @@ table.dispute-preview-table tr td.vertical-center{
     color: #818181;
 }
 
+.question-by a{
+    font-weight: 500;
+    color: #818181;
+}
+
+.question-by a:hover{
+    text-decoration: underline;
+}
+
+
+
 button.remove-question-btn{
     padding: 4px 10px;
     color: #c6c6c6;
@@ -99,7 +110,7 @@ button.remove-question-btn:hover{
 
 .dispute-tooltip{  
     background-color: #1d82f5;
-    z-index: 999;
+    z-index: 1;
     border-radius: 6px;
     /* border: 1px solid #41c7e2; */
     box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
@@ -136,4 +147,23 @@ button.remove-question-btn:hover{
     font-size: 10px;
     padding: 1px 6px;
     color: white;
+}
+
+.person_rander{
+    width: 120px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dispute-edit-btn{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    padding: 8px;
+    background-color: transparent;
+}
+
+.dispute-edit-btn:hover{
+    color: var(--header_color);
 }

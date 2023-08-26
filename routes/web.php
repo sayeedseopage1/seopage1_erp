@@ -1075,6 +1075,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
     Route::resource('dealboards', DealBoardController::class);
 
+    Route::get('client-deal-create/{id}',[DealController::class,'createClientDeal'])->name('create-client-deal');
+    Route::post('client-deal-store',[DealController::class,'storeClientDeal'])->name('store-client-deal');
+
     // Contract template
 
     Route::post('contract-template/apply-quick-action', [ContractTemplateController::class, 'applyQuickAction'])->name('contract_template.apply_quick_action');
@@ -1276,7 +1279,8 @@ Route::put('/deals/update-milestone/{id}', [ContractController::class, 'updateMi
 Route::delete('/deals/delete-milestone/{id}', [ContractController::class, 'deleteMilestone']);
 Route::get('/deals/milestone-get/{id}', [ContractController::class, 'Milestone']);
 //task review
-
+// cliend won the dele store
+Route::post('/leads/client/deals/store', [ContractController::class, 'storeClientDeal'])->name('client-store-deals-stage');
 
 //milestone route
 Route::post('/milestone/complete', [ProjectMilestoneController::class, 'CompleteMilestone'])->name('milestone-complete');

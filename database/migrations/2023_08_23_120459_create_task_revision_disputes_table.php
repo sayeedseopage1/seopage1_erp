@@ -22,15 +22,16 @@ return new class extends Migration
             $table->integer('raised_against');
             $table->boolean('status')->default(0);
             $table->integer('winner')->nullable();
-            $table->date('resolved_on')->nullable();
+            $table->dateTime('resolved_on')->nullable();
             $table->integer('resolved_by')->nullable();
             $table->longText('resolve_comment')->nullable();
+            $table->boolean('need_authrization')->default(0);
             $table->integer('authorized_by')->nullable();
             $table->longText('authorize_comment')->nullable();
+            $table->dateTime('authorize_on')->nullable();
             $table->integer('raised_by_percent')->nullable();
             $table->integer('raised_against_percent')->nullable();
-            $table->date('due_date');
-
+            $table->dateTime('due_date');
             $table->timestamps();
         });
     }

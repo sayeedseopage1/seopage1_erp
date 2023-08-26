@@ -833,7 +833,7 @@ class ContractController extends AccountBaseController
         $project = Project::where('id', $request->project_id)->first();
         $deal = Deal::where('id', $project->deal_id)->first();
         $milestone_amount = ProjectMilestone::where('project_id', $project->id)->sum('actual_cost');
-        $check = ($deal->actual_amount) - ($milestone_amount);
+        $check = ($deal->actual_amount + $deal->upsell_actual_amount) - ($milestone_amount);
         // /dd($check);
 
         // $request->validate([
@@ -1459,7 +1459,15 @@ class ContractController extends AccountBaseController
             $authorization_action->authorization_for = $project_id->pm_id;
             $authorization_action->save();
             //end authorization action
+            if(Auth::user()->role_id==4){
+                $project_member = new ProjectMember();
+                $project_member->user_id = Auth::id();
+                $project_member->added_by = Auth::id();
+                $project_member->project_id = $project->id;
+                $project_member->save();
+            } 
 
+            
             DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -1930,7 +1938,13 @@ class ContractController extends AccountBaseController
             //                 'redirectUrl' => route('deals.show',$deal->id)
             //             ]);
             //         }
-
+            if(Auth::user()->role_id==4){
+                $project_member = new ProjectMember();
+                $project_member->user_id = Auth::id();
+                $project_member->added_by = Auth::id();
+                $project_member->project_id = $project->id;
+                $project_member->save();
+            }
 
             DB::commit();
             // all good
@@ -2507,4 +2521,278 @@ class ContractController extends AccountBaseController
             }
         }
     }
+// client dela store
+public function storeClientDeal(Request $request){
+    // dd($request->all());
+    \DB::beginTransaction();
+
+    $validated = $request->validate([
+        'user_name' => 'required',
+        'client_name' => 'required',
+        'project_name' => 'required',
+        'amount' => 'required|min:1',
+    ]);
+
+    $deal_stage = DealStage::where('id', $request->id)->first();
+
+    $deal = DealStage::find($request->id);
+
+    if ($deal_stage->deal_stage == 0) {
+        $deal->deal_stage = $deal_stage->deal_stage + 1;
+        $deal->comments = $deal_stage->comments;
+        $deal->won_lost = 'Yes';
+        $deal->save();
+    } elseif ($deal_stage->deal_stage == 1) {
+        $deal->deal_stage = $deal_stage->deal_stage + 1;
+        $deal->comments = $deal_stage->comments;
+        $deal->won_lost = 'Yes';
+        $deal->save();
+    } elseif ($deal_stage->deal_stage == 2) {
+        $deal->deal_stage = $deal_stage->deal_stage + 1;
+        $deal->comments = $deal_stage->comments;
+        $deal->won_lost = 'Yes';
+        $deal->save();
+    } else {
+        $deal->deal_stage = $deal_stage->deal_stage;
+        $deal->comments = $deal_stage->comments;
+        $deal->won_lost = 'Yes';
+        $deal->save();
+
+        //$lead_id = Lead::where('id', $request->lead_id)->first();
+        if (Auth::id() != null) {
+            $agent = SalesCount::where('user_id', Auth::id())->first();
+            if ($agent != null) {
+                $lead_ag = SalesCount::find($agent->id);
+
+                $lead_ag->negotiation_started = $lead_ag->negotiation_started + 1;
+                $lead_ag->save();
+            }
+        }
+    }
+
+    $message_links = $request->message_link;
+    // /dd($message_links);
+    $value = '';
+
+    if (is_array($message_links) || is_object($message_links)) {
+        foreach ($message_links as $link) {
+            //dd($d['day']);
+            $value = $value  . $link . ' <br> ';
+        }
+    }
+    $existing_client = User::where('user_name', $request->user_name)->first();
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $suffle = substr(str_shuffle($chars), 0, 6);
+    $deal = new Deal();
+    $deal->deal_id = $request->deal_id;
+    $deal->project_name = $request->project_name;
+    $deal->profile_link = $request->profile_link;
+    $deal->message_link = $value;
+    $deal->original_currency_id = $request->original_currency_id;
+    $deal->currency_id = 1;
+    $deal->project_type = $request->project_type;
+    $deal->amount =  0;
+    $deal->actual_amount =  0;
+    $deal->upsell_actual_amount =  $request->amount;
+    $currency = Currency::where('id', $request->original_currency_id)->first();
+    //  dd($currency);
+    $deal->upsell_amount = ($request->amount) / $currency->exchange_rate;
+    $deal->client_name = $request->client_name;
+    $deal->client_username = $request->user_name;
+    $deal->lead_id = $request->lead_id;
+    $deal->added_by = Auth::id();
+    $deal->status = 'Accepted';
+    //$date= Carbon::now();
+
+    $date = date('Y-m-d H:i:s');
+
+    $newDate = Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('Y-m-d');
+
+    //dd($newDate);
+
+    $deal->deal_creation_date = $newDate;
+
+    $deal->start_date = $newDate;
+    $deal->client_badge = 'existing client';
+    $deal->save();
+    //$lead_con_id = Lead::where('id', $request->lead_id)->first();
+    if (Auth::id() != null) {
+        $agent_id = SalesCount::where('user_id', Auth::id())->first();
+        if ($agent_id != null) {
+            $lead_ag_id = SalesCount::find($agent_id->id);
+
+            $lead_ag_id->won_deals = $lead_ag_id->won_deals + 1;
+            $lead_ag_id->deal_value = $lead_ag_id->deal_value + $deal->amount;
+            $lead_ag_id->save();
+        }
+    }
+
+
+    $lead = Lead::find($request->lead_id);
+    if ($lead != null) {
+        $lead->status_id = 3;
+        $lead->save();
+    }
+
+    $user_name = User::where('user_name', $request->user_name)->first();
+        $user = $existing_client;
+
+
+
+
+    $deal_client = Deal::find($deal->id);
+    $deal_client->client_id = $user->id;
+    $deal->submission_status= 'Submitted';
+
+    $client_details= ClientForm::where('client_username',$user->user_name)->first();
+    // /dd($client_details);
+    if ($client_details != null) {
+        $deal_client->submission_status = 'Submitted';
+
+        $new_client_form= new ClientForm();
+        $new_client_form->deal_id = $deal->id;
+        $new_client_form->client_username= $client_details->client_username;
+        $new_client_form->client_email= $client_details->client_email;
+        $new_client_form->client_phone =$client_details->client_phone;
+        $new_client_form->client_whatsapp= $client_details->client_whatsapp;
+        $new_client_form->client_skype= $client_details->client_skype;
+        $new_client_form->client_telegram= $client_details->client_telegram;
+        $new_client_form->client_messenger =$client_details->client_messenger;
+        $new_client_form->client_imo= $client_details->client_imo;
+        $new_client_form->message= $client_details->message;
+        $new_client_form->timezone= $client_details->timezone;
+        $new_client_form->day= $client_details->day;
+        $new_client_form->checklist= $client_details->checklist;
+        $new_client_form->save();
+    }
+   // dd($new_client_form);
+    $deal_client->save();
+
+    $contract = new Contract();
+    $contract->id = $deal->id;
+    $contract->deal_id = $deal->id;
+    $contract->subject = $request->project_name;
+    $contract->original_amount = 0;
+    $contract->actual_amount=  0;
+    $contract->amount=  0;
+    $currency = Currency::where('id', $request->original_currency_id)->first();
+    $contract->upsell_actual_amount = $request->amount;
+    $contract->upsell_amount = ($request->amount) / $currency->exchange_rate;
+
+    $contract->start_date = $newDate;
+    $contract->original_start_date = $newDate;
+    $contract->client_id = $user->id;
+    $contract->currency_id = 1;
+
+    $contract->save();
+    $deal_hash = $deal->id;
+    //$key= Crypt::encrypt($deal_hash);
+    $key = encrypt($deal_hash);
+
+    $deal_hash_store = Deal::find($deal_hash);
+    $deal_hash_store->hash = $key;
+    $deal_hash_store->save();
+    ///have to find project id
+    $project = new Project();
+    $project->client_id = $user->id;
+    $project->project_name = $request->project_name;
+    $project->project_short_code = 'PSEOP1' . $suffle;
+    $project->start_date = $newDate;
+    $project->deliverable_authorization = 0;
+    $currency = Currency::where('id', $request->original_currency_id)->first();
+    //dd($currency);
+    $project->project_budget = ($request->amount) / $currency->exchange_rate;
+    $project->due = $deal->amount;
+
+    $project->completion_percent = 0;
+    $project->deal_id = $deal->id;
+    $project->added_by = Auth::id();
+    $project->status = 'in progress';
+    $project->project_status = 'Accepted';
+    $project->pm_id = Auth::id();
+    $project->public = 0;
+    $project->save();
+    // dd($project);
+
+    // dd($existing_client);
+    if ($existing_client != null) {
+
+        //  dd("true");
+
+        $find_pm_id = Project::where('client_id', $existing_client->id)->orderBy('id', 'desc')->where('id', '!=', $project->id)->where('pm_id', '!=', null)->first();
+        if ($find_pm_id != null) {
+
+            $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
+
+
+            $from = Carbon::createFromFormat('Y-m-d H:s:i', $find_pm_id->created_at);
+            $diff_in_days = $from->diffInDays($to);
+
+            // dd($diff_in_days, $find_pm_id);
+            if ($diff_in_days < 90) {
+                $deal_pm_id = Deal::find($deal->id);
+                $deal_pm_id->pm_id = $find_pm_id->pm_id;
+                $deal_pm_id->save();
+                $project_pm_id = Project::find($project->id);
+                $project_pm_id->pm_id = $find_pm_id->pm_id;
+                $project_pm_id->save();
+                // dd($project_pm_id);
+
+                $pmassign = new PMProject();
+                $pmassign->project_id = $project->id;
+                $pmassign->status = 'pending';
+                $pmassign->pm_id = $find_pm_id->pm_id;
+                $pmassign->deal_id = $deal->id;
+                $pmassign->client_id = $existing_client->id;
+                $pmassign->save();
+                $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
+                $pm_project_update = PMAssign::find($pm_project_find->id);
+                $pm_project_update->project_count = $pm_project_update->project_count + 1;
+                $pm_project_update->amount = $pm_project_update->amount + ($deal->amount / 2);
+                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
+                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount / 2);
+                $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                $pm_project_update->save();
+            }
+        }
+    }
+
+
+    // activity log
+    $user = Auth::user();
+    $text = $user->getRole->name . ' ' . $user->name . ' - Closed Deal (' . $deal->project_name . ') for ' . $deal->actual_amount . '$ (Client: ' . $deal->client_name . ')';
+    $link = '<a href="' . route('deals.show', $deal->id) . '">' . $text . '</a>';
+    $activityLog = new LeadsDealsActivityLog();
+    if ($lead != null) {
+        $activityLog->lead_id = $lead->id;
+    }
+    $activityLog->deal_id = $deal_stage->id;
+    $activityLog->won_deal_id = $contract->id;
+    $activityLog->project_id = $project->id;
+    $activityLog->message = $link;
+    $activityLog->created_by = Auth::id();
+    $activityLog->save();
+
+    \DB::commit();
+    if ($project) {
+        $users = user::whereIn('role_id', [1, 4])->get();
+        foreach ($users as $user) {
+            $pusher_options = [
+                'user_id' => $user->id,
+                'role_id' => $user->role_id,
+                'title' => 'New project on the way',
+                'body' => 'Please check new project',
+                'redirectUrl' => route('projects.show', $project->id)
+            ];
+
+            $this->triggerPusher('lead-updated-channel', 'lead-updated', $pusher_options);
+        }
+    }
+        return response()->json([
+            'status' => 'success',
+            'redirectUrl' => route('dealDetails', $deal->id)
+        ]);
+}
+
 }

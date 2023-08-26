@@ -8,7 +8,7 @@
 @php
     $addContractPermission = user()->permission('add_contract');
     $manageContractTemplatePermission = user()->permission('manage_contract_template');
-    
+
 @endphp
 
 @section('content')
@@ -675,7 +675,7 @@
 
             .sp1_deal-stage-wrapper > h3:hover{cursor: default}
 
-            .sp1_deal-stage-content { 
+            .sp1_deal-stage-content {
                 width: 450px;
                 display: none;
                 background: #fff;
@@ -705,7 +705,7 @@
 
 
     <?php
-    
+
     $currency = App\Models\Currency::where('id', $deal->original_currency_id)->first();
     $lead_converted_date = $deal->created_at->diffForHumans();
     //$value= $deal->actual_amount. $currency->currency_symbol;
@@ -760,7 +760,16 @@
                             <button  disabled  data-bs-whatever="@mdo" class="btn btn-warning wons w-40 disabled">Awaiting for approval</button>
 
                             @else --}}
-                                    
+
+                                    @if (Auth::user()->role_id==1 || Auth::user()->role_id==4)
+                                        <div class="sp1_deal-stage-wrapper">
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#clientDealaddStageModal"
+                                        data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
+                                            <div class="sp1_deal-stage-content text-left">
+                                                <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
+                                            </div>
+                                        </div>
+                                        @else
                                         <div class="sp1_deal-stage-wrapper">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal"
                                         data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
@@ -770,10 +779,12 @@
                                         </div>
                                     <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal"
                                         data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                                        @endif
                                     {{-- @endif --}}
 
                                 </div>
 
+                                @include('contracts.modals.client_dealaddstagemodal')
                                 @include('contracts.modals.dealaddstagemodal')
                                 @include('contracts.modals.deallostmodal')
                             @else
@@ -833,12 +844,12 @@
                                     <p>{!! $contact->comments !!} </p>
                                     <?php
                                     $contactstr = $contact->attach;
-                                    
+
                                     // Create Array Out of the String, The comma ',' is the delimiter
                                     // This would output
                                     //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
                                     $contactexplodedStr = explode(',', $contactstr);
-                                    
+
                                     // Filter Array And Remove The empty element which in this case
                                     //    3 => ''
                                     $contactfilteredArray = $contactexplodedStr;
@@ -947,12 +958,12 @@
                                 $deal->deal_stage == 4 ||
                                 $deal->deal_stage == 5)
                             <?php
-                            
+
                             $lead_converted_to_qualified = App\Models\DealStageChange::where('deal_id', $deal->short_code)
                                 ->where('deal_stage_id', 1)
                                 ->first();
                             $lead_converted_to_qual = $lead_converted_to_qualified->created_at->diffForHumans();
-                            
+
                             ?>
                             <div class="deal custom-active" data-bs-whatever="@mdo">
                                 <i class="fa-solid fa-clock"></i> <span> {{ $lead_converted_to_qual }}</span>
@@ -997,12 +1008,12 @@
                             @foreach ($qualified as $qual)
                                 <?php
                                 $qualstr = $qual->attach;
-                                
+
                                 // Create Array Out of the String, The comma ',' is the delimiter
                                 // This would output
                                 //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
                                 $qualexplodedStr = explode(',', $qualstr);
-                                
+
                                 // Filter Array And Remove The empty element which in this case
                                 //    3 => ''
                                 $qualfilteredArray = $qualexplodedStr;
@@ -1105,12 +1116,12 @@
                             @include('contracts.modals.dealqualifymodal2')
                         @elseif($deal->deal_stage == 2 || $deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
                             <?php
-                            
+
                             $lead_converted_to_req_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
                                 ->where('deal_stage_id', 2)
                                 ->first();
                             $lead_converted_to_req = $lead_converted_to_req_def->created_at->diffForHumans();
-                            
+
                             ?>
                             <div class="deal custom-active" data-bs-whatever="@mdo">
                                 <i class="fa-solid fa-clock"></i> <span> {{ $lead_converted_to_req }}</span>
@@ -1140,12 +1151,12 @@
                             @foreach ($req_defined as $req_def)
                                 <?php
                                 $reqstr = $req_def->attach;
-                                
+
                                 // Create Array Out of the String, The comma ',' is the delimiter
                                 // This would output
                                 //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
                                 $reqexplodedStr = explode(',', $reqstr);
-                                
+
                                 // Filter Array And Remove The empty element which in this case
                                 //    3 => ''
                                 $reqfilteredArray = $reqexplodedStr;
@@ -1245,12 +1256,12 @@
                             @include('contracts.modals.dealqualifymodal2')
                         @elseif($deal->deal_stage == 3 || $deal->deal_stage == 4 || $deal->deal_stage == 5)
                             <?php
-                            
+
                             $lead_converted_to_prop_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
                                 ->where('deal_stage_id', 3)
                                 ->first();
                             $lead_converted_to_prop = $lead_converted_to_prop_def->created_at->diffForHumans();
-                            
+
                             ?>
 
 
@@ -1287,12 +1298,12 @@
                                     <p>{!! $prop->comments !!} </p>
                                     <?php
                                     $propstr = $prop->attach;
-                                    
+
                                     // Create Array Out of the String, The comma ',' is the delimiter
                                     // This would output
                                     //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
                                     $propexplodedStr = explode(',', $propstr);
-                                    
+
                                     // Filter Array And Remove The empty element which in this case
                                     //    3 => ''
                                     $propfilteredArray = $propexplodedStr;
@@ -1396,12 +1407,12 @@
                             @include('contracts.modals.dealqualifymodal2')
                         @elseif($deal->deal_stage == 4 || $deal->deal_stage == 5)
                             <?php
-                            
+
                             $lead_converted_to_neg_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
                                 ->where('deal_stage_id', 4)
                                 ->first();
                             $lead_converted_to_neg = $lead_converted_to_neg_def->created_at->diffForHumans();
-                            
+
                             ?>
 
 
@@ -1437,12 +1448,12 @@
                                     <p>{!! $neg->comments !!}</p>
                                     <?php
                                     $negstr = $neg->attach;
-                                    
+
                                     // Create Array Out of the String, The comma ',' is the delimiter
                                     // This would output
                                     //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
                                     $negexplodedStr = explode(',', $negstr);
-                                    
+
                                     // Filter Array And Remove The empty element which in this case
                                     //    3 => ''
                                     $negfilteredArray = $negexplodedStr;
@@ -1542,12 +1553,12 @@
                             @include('contracts.modals.dealqualifymodal2')
                         @elseif($deal->deal_stage == 5)
                             <?php
-                            
+
                             $lead_converted_to_mile_def = App\Models\DealStageChange::where('deal_id', $deal->short_code)
                                 ->where('deal_stage_id', 5)
                                 ->first();
                             $lead_converted_to_mile = $lead_converted_to_mile_def->created_at->diffForHumans();
-                            
+
                             ?>
 
 
@@ -1582,12 +1593,12 @@
                                     <p>{!! $mile->comments !!}</p>
                                     <?php
                                     $milestr = $mile->attach;
-                                    
+
                                     // Create Array Out of the String, The comma ',' is the delimiter
                                     // This would output
                                     //       [ 1 => 1, 2 => 2, 3 => '', 4 => 4, 5 => 5, 6 => 6 ]
                                     $mileexplodedStr = explode(',', $milestr);
-                                    
+
                                     // Filter Array And Remove The empty element which in this case
                                     //    3 => ''
                                     $milefilteredArray = $mileexplodedStr;
@@ -1842,5 +1853,5 @@
             // });
         })()
     </script>
- 
+
 @endpush
