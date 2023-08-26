@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ProjectRequestTimeExtension;
 use Illuminate\Console\Command;
 use App\Models\User;
 use App\Models\Project;
@@ -32,7 +33,11 @@ class DelayedProject extends Command
      */
     public function handle()
     {
-        $projects= Project::where('status','in progress')->where('delayed_status',0)->get();
+        $projects= Project::select('projects.*')
+        ->join('deals','deals.id','projects.deal_id')
+        
+        ->where('deals.project_type','fixed')
+        ->where('projects.status','in progress')->where('delayed_status',0)->get();
   
           //$daily_bonus= User::where('id',Auth::id())->first();
           //dd($daily_bonus->packages->price);
@@ -40,8 +45,17 @@ class DelayedProject extends Command
   
           foreach ($projects as $project) {
   
+            $find_request= ProjectRequestTimeExtension::where('project_id',$project->id)->where('status','Approved')->orderBy('id','desc')->first();
                  
             $to = new DateTime($project['created_at']);
+            if($find_request != null)
+            {
+              $to = new DateTime($project['created_at']->addDay($find_request->day));
+              
+            }else 
+            {
+              $to = new DateTime($project['created_at']);
+            }
             $from = new DateTime(); // Using Carbon::now() is unnecessary, DateTime already represents the current time
             
             $interval = $from->diff($to);

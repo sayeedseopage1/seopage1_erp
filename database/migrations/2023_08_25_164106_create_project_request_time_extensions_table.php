@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('day');
             $table->text('file');
             $table->longText('comment');
+            $table->longText('admin_comment');
             $table->string('status')->default('pending');
             $table->timestamps();
         });

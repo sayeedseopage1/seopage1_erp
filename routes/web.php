@@ -1341,6 +1341,7 @@ Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow
 Route::get('/projects/request-extension/{id}', [ProjectController::class, 'requestExtension'])->name('request-extension');
 Route::post('/projects/store-request-extension', [ProjectController::class, 'storeRequestExtension'])->name('store-request-extension');
 Route::post('/projects/approved-request-extension', [ProjectController::class, 'approvedRequestExtension'])->name('approved-request-extension');
+Route::post('/projects/deny-request-extension', [ProjectController::class, 'denyRequestExtension'])->name('deny-request-extension');
 
 //add project niche
 Route::get('/projects/view-category', [ProjectController::class, 'viewCategory'])->name('project-view-category');

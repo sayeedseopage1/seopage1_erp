@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\PMProject;
 use Carbon\Carbon;
 use App\Models\Project;
 use App\Models\CustomField;
@@ -73,7 +74,7 @@ class ProjectsDataTable extends BaseDataTable
                         <i class="icon-options-vertical icons"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-                    if(Auth::user()->role_id == 4 && $row->delayed_status == 1)
+                    if(Auth::user()->role_id == 4 && $row->delayed_status == 0)
                     {
                         $action .= '<a href="' . route('request-extension', [$row->id]) . '" class="dropdown-item"><i class="fa fa-plus mr-2"></i>' . __('Request extension') . '</a>';
 
@@ -260,6 +261,11 @@ class ProjectsDataTable extends BaseDataTable
         });
         $datatables->editColumn('start_date', function ($row) {
             return $row->start_date->format($this->global->date_format);
+        });
+        $datatables->editColumn('project_award_time', function ($row) {
+
+            $proejct_awart_time= PMProject::where('project_id',$row->id)->first();
+            return $proejct_awart_time->created_at;
         });
         $datatables->editColumn('deadline', function ($row) {
 
@@ -678,7 +684,9 @@ class ProjectsDataTable extends BaseDataTable
             __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
             __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
             __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
+            
             __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => true, 'title' => __('modules.projects.startDate')],
+            __('modules.project_award_time')  => ['data' => 'project_award_time', 'name' => 'project_award_time', 'visible' => true, 'title' => __('Project Award Time')],
             __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],
             __('app.hours_allocated') => ['data' => 'hours_allocated', 'name' => 'hours_allocated',  'title' => __('Estimated Hours')],
             __('app.hours_logged') => ['data' => 'hours_logged', 'name' => 'hours_logged',  'title' => __('Total Hours Logged')],

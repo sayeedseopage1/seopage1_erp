@@ -4554,12 +4554,19 @@ class ProjectController extends AccountBaseController
     }
 
     public function approvedRequestExtension(Request $request){
-        $project = Project::find($request->projectId);
-        $project->delayed_status = 0;
-        $project->save();
-
         $delayed_project = ProjectRequestTimeExtension::find($request->id);
+        $delayed_project->day = $request->day;
+        $delayed_project->admin_comment = $request->admin_comment;
         $delayed_project->status= 'Approved';
+        $delayed_project->save();
+
+        return response()->json(['status'=>200]);
+    }
+    public function denyRequestExtension(Request $request){
+        $delayed_project = ProjectRequestTimeExtension::find($request->id);
+        $delayed_project->day = $request->day;
+        $delayed_project->admin_comment = $request->admin_comment;
+        $delayed_project->status= 'Deny';
         $delayed_project->save();
 
         return response()->json(['status'=>200]);
