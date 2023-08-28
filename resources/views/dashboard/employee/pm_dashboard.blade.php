@@ -796,7 +796,7 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of upsale/cross sales</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -974,7 +974,7 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions for cycle</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -982,7 +982,7 @@
                                         </span>
                                     </p>
                                 </a>
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -990,7 +990,7 @@
                                         </span>
                                     </p>
                                 </a>
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -1011,7 +1011,7 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions in cycle</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -1019,7 +1019,7 @@
                                         </span>
                                     </p>
                                 </a>
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -1027,7 +1027,7 @@
                                         </span>
                                     </p>
                                 </a>
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
                                         0<span
                                             class="f-12 font-weight-normal text-lightest">
@@ -1068,7 +1068,7 @@
                         <div class="d-block text-capitalize">
                             <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Rel. Count per day</h5>
                             <div class="d-flex flex-wrap">
-                                <a href="#">
+                                <a href="#" onclick="event.preventDefault()">
                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                         {{round($avg_payment_release_per_day,2)}} per day
                                     </p>

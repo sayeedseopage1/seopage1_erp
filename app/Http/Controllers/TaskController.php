@@ -23,6 +23,7 @@ use App\Models\SubTaskFile;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\TaskCategory;
+use App\Models\TaskDisputeQuestion;
 use App\Models\TaskLabel;
 use App\Models\TaskLabelList;
 use App\Models\TaskReply;
@@ -71,7 +72,7 @@ use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
 use App\Models\DeveloperStopTimer;
-use App\Models\TaskDisputeComment;
+
 use App\Models\TaskRevisionDispute;
 
 use function Symfony\Component\Cache\Traits\role;
@@ -4107,7 +4108,7 @@ class TaskController extends AccountBaseController
                  $disputes->each(function ($dispute){
                     $dispute->raised_against = get_user($dispute->raised_against, false);
                     $dispute->raised_by = get_user($dispute->raised_by, false);
-                    $conversation = DB::table('task_dispute_comments')->where('dispute_id', $dispute->id)->get();
+                    $conversation = DB::table('task_dispute_questions')->where('dispute_id', $dispute->id)->get();
                     $dispute->conversations = $conversation ?? []; 
                     $dispute->task = get_task($dispute->task_id);
                     $dispute->client = get_user($dispute->client_id, true);
@@ -4146,7 +4147,7 @@ class TaskController extends AccountBaseController
         $questions = $request->questions;  
         
         foreach ($questions as $question) { 
-            $query = new TaskDisputeComment();
+            $query = new TaskDisputeQuestion();
             $query->dispute_id = $question['dispute_id'];
             $query->raised_by = $question['raised_by'];
             $query->question = $question['question'];
@@ -4154,7 +4155,7 @@ class TaskController extends AccountBaseController
             $query->save(); 
        }
 
-       $response_data = TaskDisputeComment::where('dispute_id', $request->dispute_id)->get();
+       $response_data = TaskDisputeQuestion::where('dispute_id', $request->dispute_id)->get();
  
         return response()->json([
             'data' => $response_data,
@@ -4171,7 +4172,7 @@ class TaskController extends AccountBaseController
         // UPDATE ALL QUESTION WITH ANSWER
         foreach ($questions as $question) {
             $id = $question['id']; 
-            $query = TaskDisputeComment::find($id);
+            $query = TaskDisputeQuestion::find($id);
             $query->dispute_id = $question['dispute_id'];
             $query->raised_by = $question['raised_by'];
             $query->question = $question['question'];
@@ -4183,7 +4184,7 @@ class TaskController extends AccountBaseController
        }
 
        
-       $response_data = TaskDisputeComment::where('dispute_id', $dispute_id)->get();
+       $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
 
        // REUTRN UPDATED QUESTION DATA
        return response()->json([
@@ -4200,13 +4201,13 @@ class TaskController extends AccountBaseController
 
         foreach ($questions as $question) {
             $id = $question['id']; 
-            $query = TaskDisputeComment::find($id);
+            $query = TaskDisputeQuestion::find($id);
             $query->replied_seen = true;
             $query->replied_date = Carbon::now();
             $query->save();
        }
 
-       $response_data = TaskDisputeComment::where('dispute_id', $dispute_id)->get();
+       $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
 
         // REUTRN UPDATED QUESTION DATA
         return response()->json([ 

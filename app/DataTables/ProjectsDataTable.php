@@ -193,7 +193,7 @@ class ProjectsDataTable extends BaseDataTable
 
             //dd($deal);
             if ($deal->upsell_amount == 0) {
-                $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol ;
+                $project_value = $deal->actual_amount . $currency->currency_symbol ;
             }else 
             {
                 $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol . ('<span class="badge badge-success">Upsold Amount ('.$deal->upsell_actual_amount.$currency->currency_symbol.')</span>');

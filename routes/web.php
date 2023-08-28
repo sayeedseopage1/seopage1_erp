@@ -804,6 +804,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
     Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
+    
+
+    /******* TASK DISPUTE ******** */ 
+    Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
+    Route::post('task-dispute-question', [TaskController::class, 'store_dispute_question'])->name('task-dispute-question');
+    Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
+    Route::put('task-dispute-submit-to-auth', [TaskController::class, 'dispute_send_for_authorization'])->name('task-dispute-submit-to-auth');
+    Route::put('task-dispute-read-status', [TaskController::class, 'update_dispute_answer_read_status'])->name('task-dispute-read-status');
 
     // Holidays
     Route::get('holidays/mark-holiday', [HolidayController::class, 'markHoliday'])->name('holidays.mark_holiday');
