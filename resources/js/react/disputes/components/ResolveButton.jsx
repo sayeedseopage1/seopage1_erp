@@ -514,6 +514,13 @@ const answerStatus = async() => {
                                                 <span className='d-block'>The Winner: </span> 
                                             </td>
 
+                                            {row?.winner ? 
+                                                <div className='d-flex align-items-center'> 
+                                                    <div className='px-2  py-2 '>
+                                                        <span className="d-block font-weight-bold">{row?.winner?.name}</span> 
+                                                    </div>
+                                            </div> :
+
                                             <td className='px-3 w-100  py-2 '>
                                                 <div className='position-relative w-100'>
                                                     <div>{row?.raised_by?.name} : {raisedByPercent}%</div>
@@ -525,6 +532,8 @@ const answerStatus = async() => {
                                                 </button> : null}
                                                 </div>
                                             </td>
+                                            
+                                            }
                                         </tr> 
 
                                         <tr>

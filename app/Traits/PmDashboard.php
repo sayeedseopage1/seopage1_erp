@@ -534,6 +534,10 @@ trait PmDashboard
                     
                     ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
                     ->get();
+            $this->no_of_new_deals_added_previous = Deal::select('deals.*')
+                ->where('deals.added_by', Auth::id())
+                ->whereBetween('deals.created_at', [$this->startMonth, $this->endMonth])
+                ->get();
             $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
             ->join('projects','projects.id','project_milestones.project_id')
             ->join('deals','deals.id','projects.deal_id')
@@ -1154,6 +1158,9 @@ trait PmDashboard
                 ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
                 ->whereBetween('projects.updated_at', [$startMonth, $release_date])
                 ->get();
+                $this->no_of_new_deals_added = Deal::select('deals.*')
+                    ->where('deals.added_by', Auth::id())
+                    ->get();
                 $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
                 ->join('projects','projects.id','project_milestones.project_id')
                 ->join('deals','deals.id','projects.deal_id')

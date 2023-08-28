@@ -23,6 +23,7 @@ import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
 import { SingleTask } from "../../../utils/single-task";
 import { useEffect } from "react";
 import { User } from "../../../utils/user-details";
+import { Listbox } from "@headlessui/react";
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -45,6 +46,15 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
+    
+    const [pageType, setPageType] = React.useState("");
+    const [pageTypeOthers, setPageTypeOthers] = React.useState("");
+    const [pageName, setPageName] = React.useState("");
+    const [pageURL, setPageURL] = React.useState("");
+    const [numberOfPage, setNumberOfPage] = React.useState(0);
+    const [existingDesignLink, setExistingDesignLink] = React.useState("");
+    const [pageTypePriority, setPageTypePriority ] = React.useState("");
+    const [pageTypeName, setPageTypeName] = React.useState("");
 
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
@@ -98,6 +108,14 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         fd.append("image_url", null);
         fd.append("subTaskID", null);
         fd.append("addedFiles", null);
+        fd.append('task_type', pageType ?? null);
+        fd.append('page_type', pageTypePriority);
+        fd.append('page_name', pageName);
+        fd.append('page_url', pageURL);
+        fd.append('task_type_other', pageTypeOthers);
+        fd.append('page_type_name', pageTypeName);
+        fd.append('number_of_pages', numberOfPage);
+        fd.append('existing_design_link', existingDesignLink);
         fd.append(
             "_token",
             document
@@ -337,6 +355,218 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                             {/* <div className="col-12 col-md-6">
                                 <StatusSelection />
                             </div> */}
+
+                            {/* Page Type  */}
+                            <div className="col-12 col-md-6">
+                                <Listbox value={pageType} onChange={setPageType}>
+                                    <div className="form-group position-relative my-3">
+                                        <label htmlFor=""> Task Type <sup>*</sup> </label>
+                                            <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100"> 
+                                            <span className="singleline-ellipsis pr-3">
+                                                {pageType ?? "--"}
+                                            </span>
+                                            
+                                            <div className='__icon'>
+                                                <i className="fa-solid fa-sort"></i>
+                                            </div>
+                                        </Listbox.Button>
+                                        <Listbox.Options  className="sp1-select-options">
+                                            {["New Page Design", "Cloning Existing Desgin", "Others"]?.map((s, i) => (
+                                                <Listbox.Option 
+                                                    key={i}
+                                                    className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                    value={s}
+                                                > 
+                                                    {({selected}) => (
+                                                        <>
+                                                          {s}     
+
+                                                          {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                        </>
+                                                    )}
+                                                </Listbox.Option>
+                                            ))}
+                                        </Listbox.Options>
+                                    </div>
+                                </Listbox>
+                            </div>
+
+                            {
+                                pageType === "New Page Design"? 
+                                <div className="col-12 col-md-6">
+                                    <Listbox value={pageTypePriority} onChange={setPageTypePriority}>
+                                        <div className="form-group position-relative my-3">
+                                            <label htmlFor=""> Page Type <sup>*</sup> </label>
+                                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100"> 
+                                                <span className="singleline-ellipsis pr-3">
+                                                    {pageTypePriority ?? "--"}
+                                                </span>
+                                                
+                                                <div className='__icon'>
+                                                    <i className="fa-solid fa-sort"></i>
+                                                </div>
+                                            </Listbox.Button>
+                                            <Listbox.Options  className="sp1-select-options">
+                                                {[
+                                                    "Primary Page Development",
+                                                    "Secondary Page Development",
+                                                ]?.map((s, i) => (
+                                                    <Listbox.Option 
+                                                        key={i}
+                                                        className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                        value={s}
+                                                    >
+                                                        {({selected}) => (
+                                                            <>
+                                                            {s}     
+
+                                                            {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                            </>
+                                                        )}
+                                                        
+                                                    </Listbox.Option>
+                                                ))}
+                                            </Listbox.Options>
+                                        </div>
+                                    </Listbox>
+                                </div> : null
+                            }
+
+                            {/* Others */}
+                            {
+                                pageType === "Others"? 
+                                <div className="col-12 col-md-6">
+                                    <Listbox value={pageTypeOthers} onChange={setPageTypeOthers}>
+                                        <div className="form-group position-relative my-3">
+                                            <label htmlFor=""> Others <sup>*</sup> </label>
+                                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100"> 
+                                                <span className="singleline-ellipsis pr-3">
+                                                    {pageTypeOthers ?? "--"}
+                                                </span>
+                                                
+                                                <div className='__icon'>
+                                                    <i className="fa-solid fa-sort"></i>
+                                                </div>
+                                            </Listbox.Button>
+                                            <Listbox.Options  className="sp1-select-options">
+                                                {[
+                                                    "Page Design Change",
+                                                    "Speed Optimization",
+                                                    "Fixing Issues/Bugs",
+                                                    "Responsiveness Issue Fixing/Making Something Responsive"
+                                                ]?.map((s, i) => (
+                                                    <Listbox.Option 
+                                                        key={i}
+                                                        className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                        value={s}
+                                                    >
+                                                        {({selected}) => (
+                                                            <>
+                                                            {s}     
+
+                                                            {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                            </>
+                                                        )}
+                                                        
+                                                    </Listbox.Option>
+                                                ))}
+                                            </Listbox.Options>
+                                        </div>
+                                    </Listbox>
+                                </div> : null
+                            }
+
+                           {
+                             pageType ? 
+                                <React.Fragment>
+                                    {
+                                        pageType === "Cloning Existing Desgin" ? 
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="page_type_name"
+                                                    label="Page type name"
+                                                    type="text"
+                                                    placeholder="Enter page type name..."
+                                                    name="pageTypeName"
+                                                    required={true}
+                                                    value={pageTypeName}
+                                                    error={required_error?.title?.[0]}
+                                                    onChange={(e) => handleChange(e, setPageTypeName)}
+                                                />
+                                            </div>: 
+                                            <>
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="page_name"
+                                                        label="Page Name"
+                                                        type="text"
+                                                        placeholder="Enter page name"
+                                                        name="page name"
+                                                        required={true}
+                                                        value={pageName}
+                                                        error={required_error?.title?.[0]}
+                                                        onChange={(e) => handleChange(e, setPageName)}
+                                                    />
+                                                </div>
+
+                                                
+                                                <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="page_url"
+                                                        label="Page URL"
+                                                        type="text"
+                                                        placeholder="Enter page url"
+                                                        name="page url"
+                                                        required={true}
+                                                        value={pageURL}
+                                                        error={required_error?.title?.[0]}
+                                                        onChange={(e) => handleChange(e, setPageURL)}
+                                                    />
+                                                </div>
+                                            </>
+                                    }
+
+                                    
+
+
+                                    {
+                                        pageType=== "Cloning Existing Desgin"?
+                                        <>
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="number_of_pages"
+                                                    label="Number of Pages"
+                                                    type="number"
+                                                    placeholder="--"
+                                                    name="number_of_pages"
+                                                    required={true}
+                                                    value={numberOfPage}
+                                                    error={required_error?.title?.[0]}
+                                                    onChange={(e) => handleChange(e, setNumberOfPage)}
+                                                />
+                                            </div>
+
+                                            <div className="col-12 col-md-6">
+                                                <Input
+                                                    id="exiting_project_url"
+                                                    label="Existing Design Link"
+                                                    type="Link"
+                                                    placeholder="--"
+                                                    name="exiting_project_url"
+                                                    required={true}
+                                                    value={existingDesignLink}
+                                                    error={required_error?.title?.[0]}
+                                                    onChange={(e) => handleChange(e, setExistingDesignLink)}
+                                                />
+                                            </div>
+                                        </> : null
+                                    }
+                                </React.Fragment>
+                             :null
+                           }
+                            {/*  */}
+
+                            
 
                             <div className="col-12 col-md-6">
                                 <PrioritySelection

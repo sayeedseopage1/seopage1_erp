@@ -176,7 +176,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -222,7 +222,7 @@ var EmployeeSessionTableColumn = [{
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
       className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
-      children: ["Total Session: ", totalSession, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), "Total Session Duration: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), " ", Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(totalLogTime)]
+      children: ["Total Session: ", totalSession, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), "Total Session Duration: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), " ", (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(totalLogTime)]
     });
   }
 }, {
@@ -236,7 +236,7 @@ var EmployeeSessionTableColumn = [{
       className = _ref3.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: className,
-      children: Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(row === null || row === void 0 ? void 0 : row.total_minutes)
+      children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.total_minutes)
     });
   }
 }, {
@@ -252,7 +252,7 @@ var EmployeeSessionTableColumn = [{
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
       className: "sp1_tlr_td sp1_tlr_td_border sp1_tlr_td_marged ".concat(rowSpan ? "sp1_tlr_td_hover-disable" : ""),
       rowSpan: rowSpan,
-      children: [Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(row === null || row === void 0 ? void 0 : row.totalLogTime), "/ ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(row === null || row === void 0 ? void 0 : row.project_total_time_log)]
+      children: [(0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.totalLogTime), "/ ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(row === null || row === void 0 ? void 0 : row.project_total_time_log)]
     });
   }
 }, {
@@ -271,7 +271,7 @@ var EmployeeSessionTableColumn = [{
     });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: className,
-      children: Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(sum)
+      children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_1__.convertTime)(sum)
     });
   }
 }, {
@@ -336,7 +336,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "EmployeeTableColumn": () => (/* binding */ EmployeeTableColumn)
 /* harmony export */ });
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
 /* harmony import */ var _EmployeeTrackTimeButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EmployeeTrackTimeButton */ "./resources/js/react/TimeLogTable/components/EmployeeTrackTimeButton.jsx");
 /* harmony import */ var _UserRender__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserRender */ "./resources/js/react/TimeLogTable/components/UserRender.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
@@ -451,7 +451,7 @@ var EmployeeTableColumn = [{
       className = _ref6.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: className,
-      children: row !== null && row !== void 0 && row.total_minutes ? Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(row === null || row === void 0 ? void 0 : row.total_minutes) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+      children: row !== null && row !== void 0 && row.total_minutes ? (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_0__.convertTime)(row === null || row === void 0 ? void 0 : row.total_minutes) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
         className: "text-danger",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
           className: "fa-solid fa-chevron-left mr-1",
@@ -480,7 +480,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _data_table_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./data-table.css */ "./resources/js/react/TimeLogTable/components/data-table.css");
 /* harmony import */ var _UserRender__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserRender */ "./resources/js/react/TimeLogTable/components/UserRender.jsx");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
 /* harmony import */ var _TableFooter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TableFooter */ "./resources/js/react/TimeLogTable/components/TableFooter.jsx");
 /* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
 /* harmony import */ var _TimeLogTableLoader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./TimeLogTableLoader */ "./resources/js/react/TimeLogTable/components/TimeLogTableLoader.jsx");
@@ -669,7 +669,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _EmployeeSessionTableColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EmployeeSessionTableColumn */ "./resources/js/react/TimeLogTable/components/EmployeeSessionTableColumn.jsx");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/paginate'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _utils_paginate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../utils/paginate */ "./resources/js/react/utils/paginate.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -750,7 +750,7 @@ var EmployeeTrackTimeButton = function EmployeeTrackTimeButton(_ref) {
 
   // handle data
   var handleData = function handleData(data, currentPage, perPageData) {
-    var paginated = Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/paginate'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(data, currentPage, perPageData);
+    var paginated = (0,_utils_paginate__WEBPACK_IMPORTED_MODULE_7__.paginate)(data, currentPage, perPageData);
     var grouped = (0,lodash__WEBPACK_IMPORTED_MODULE_6__.groupBy)(paginated, 'task_id');
     var sorted = Object.entries(grouped).sort(function (_ref2, _ref3) {
       var _ref4 = _slicedToArray(_ref2, 1),
@@ -2270,14 +2270,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_EmployeeTableColumn__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/EmployeeTableColumn */ "./resources/js/react/TimeLogTable/components/EmployeeTableColumn.jsx");
 /* harmony import */ var _components_EmployeeTimeLogDataTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/EmployeeTimeLogDataTable */ "./resources/js/react/TimeLogTable/components/EmployeeTimeLogDataTable.jsx");
 /* harmony import */ var _services_api_timeLogTableApiSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/api/timeLogTableApiSlice */ "./resources/js/react/services/api/timeLogTableApiSlice.js");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/paginate'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _utils_paginate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/paginate */ "./resources/js/react/utils/paginate.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _components_Tabbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/Tabbar */ "./resources/js/react/TimeLogTable/components/Tabbar.jsx");
 /* harmony import */ var _context_EmployeeTableContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../context/EmployeeTableContext */ "./resources/js/react/TimeLogTable/context/EmployeeTableContext.jsx");
 /* harmony import */ var _components_TimeLogTableFilterBar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/TimeLogTableFilterBar */ "./resources/js/react/TimeLogTable/components/TimeLogTableFilterBar.jsx");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../utils/converTime */ "./resources/js/react/utils/converTime.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -2338,7 +2338,7 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
 
   // handle data
   var handleData = function handleData(data, currentPage, perPageData) {
-    var paginated = Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/paginate'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(data, currentPage, perPageData);
+    var paginated = (0,_utils_paginate__WEBPACK_IMPORTED_MODULE_4__.paginate)(data, currentPage, perPageData);
     var grouped = (0,lodash__WEBPACK_IMPORTED_MODULE_5__.groupBy)(paginated, 'employee_id');
     var sorted = Object.entries(grouped).sort(function (_ref, _ref2) {
       var _ref3 = _slicedToArray(_ref, 1),
@@ -2386,36 +2386,36 @@ var EmployeeWiseTimeLogTable = function EmployeeWiseTimeLogTable() {
     setParPageData(number);
     handleData(data, currentPage, number);
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "sp1_tlr_container",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_TimeLogTableFilterBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_TimeLogTableFilterBar__WEBPACK_IMPORTED_MODULE_8__["default"], {
       onFilter: handleFetchData
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_tlr_tbl_container",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "mb-3",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_6__["default"], {})
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_6__["default"], {})
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: " w-100 d-flex flex-wrap justify-center align-items-center",
         style: {
           gap: '10px'
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
           className: "mx-auto",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-            children: ["Total No. of Session: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("strong", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+            children: ["Total No. of Session: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("strong", {
               children: [" ", nSession, " "]
             }), " "]
-          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
             className: "mx-2",
             children: "||"
-          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-            children: ["Total Tracked Time: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
-              children: Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../utils/converTime'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(trackedTime)
+          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+            children: ["Total Tracked Time: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
+              children: (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_9__.convertTime)(trackedTime)
             })]
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_EmployeeTimeLogDataTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_EmployeeTimeLogDataTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
         data: renderData,
         columns: _components_EmployeeTableColumn__WEBPACK_IMPORTED_MODULE_1__.EmployeeTableColumn,
         tableName: "employee_timelog_report",
@@ -2552,6 +2552,25 @@ var timeLogTableApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injec
 var useGetSessionDetailsQuery = timeLogTableApiSlice.useGetSessionDetailsQuery,
   useLazyGetSessionDetailsQuery = timeLogTableApiSlice.useLazyGetSessionDetailsQuery;
 
+
+/***/ }),
+
+/***/ "./resources/js/react/utils/paginate.js":
+/*!**********************************************!*\
+  !*** ./resources/js/react/utils/paginate.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "paginate": () => (/* binding */ paginate)
+/* harmony export */ });
+// paginate
+function paginate(data, currentPage, nPaginate) {
+  if (data.length <= nPaginate) return data;
+  var startIndex = (currentPage - 1) * nPaginate;
+  return data.slice(startIndex, startIndex + nPaginate);
+}
 
 /***/ }),
 

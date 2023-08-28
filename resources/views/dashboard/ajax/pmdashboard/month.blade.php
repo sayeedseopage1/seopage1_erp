@@ -660,7 +660,7 @@
                 <div class="d-flex flex-wrap">
                     <a href="#" onclick="event.preventDefault()">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                          0<span
+                        {{ count($no_of_new_deals_added_previous) }}<span
                                 class="f-12 font-weight-normal text-lightest">
                                 @lang('Number of New deals added')
                             </span>

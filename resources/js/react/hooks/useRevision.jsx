@@ -56,15 +56,16 @@ export const useRevision = () => {
                     revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
                     isDeniable: false,
                 },
-                {
-                    id: 'revision3',
-                    revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
-                    isDeniable: true,
-                },
+                
                 {
                     id: 'revision4',
                     revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
                     isDeniable: false
+                },
+                {
+                    id: 'revision3',
+                    revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
+                    isDeniable: true,
                 },
             ]
         }

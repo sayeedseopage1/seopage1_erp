@@ -6,6 +6,7 @@ use App\Helper\Reply;
 use App\Http\Requests\SubTask\StoreSubTask;
 use App\Models\SubTask;
 use App\Models\Task;
+use App\Models\TaskType;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
@@ -177,6 +178,18 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
         $task_s->save();
+        $task_type = new TaskType();
+        $task_type->task_id= $task_s->id;
+        $task_type->page_type= $request->page_type;
+        $task_type->page_name= $request->page_name;
+        $task_type->page_url= $request->page_url;
+        $task_type->task_type_other= $request->task_type_other;
+        $task_type->page_type_name= $request->page_type_name;
+        $task_type->existing_design_link = $request->existing_design_link;
+        $task_type->number_of_pages= $request->number_of_pages;
+        $task_type->save();
+        
+
         $authorization_action = new AuthorizationAction();
         $authorization_action->model_name = $task_s->getMorphClass();
         $authorization_action->model_id = $task_s->id;
@@ -372,6 +385,16 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
         $task_s->save();
+        $task_type = new TaskType();
+        $task_type->task_id= $task_s->id;
+        $task_type->page_type= $request->page_type;
+        $task_type->page_name= $request->page_name;
+        $task_type->page_url= $request->page_url;
+        $task_type->task_type_other= $request->task_type_other;
+        $task_type->page_type_name= $request->page_type_name;
+        $task_type->existing_design_link = $request->existing_design_link;
+        $task_type->number_of_pages= $request->number_of_pages;
+        $task_type->save();
 
         if ($request->hasFile('file')) {
 

@@ -208,7 +208,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../../../utils/single-task'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _utils_single_task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../utils/single-task */ "./resources/js/react/utils/single-task.js");
 /* harmony import */ var _SubmittedTaskViewModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SubmittedTaskViewModal */ "./resources/js/react/single-task/section/sub-task/preview/SubmittedTaskViewModal.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -229,7 +229,7 @@ var SubmittedWorkItem = function SubmittedWorkItem(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     showModal = _useState2[0],
     setShowModal = _useState2[1];
-  var sub = new Object(function webpackMissingModule() { var e = new Error("Cannot find module '../../../../utils/single-task'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())(data);
+  var sub = new _utils_single_task__WEBPACK_IMPORTED_MODULE_1__.SubmittedWork(data);
   var user = sub === null || sub === void 0 ? void 0 : sub.user;
 
   // toggle modal
