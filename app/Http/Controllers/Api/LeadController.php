@@ -15,7 +15,7 @@ class LeadController extends Controller
      */
     public function index()
     {
-        $leads = Lead::all();
+        $leads = Lead::take(500)->get();
        
         return response()->json(['data' => $leads]);
     }
