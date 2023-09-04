@@ -424,4 +424,8 @@ class DashboardController extends AccountBaseController
             'html' => $html
         ]);
     }
+    public function pmDashboardExplanation(){
+        $this->pageTitle = 'PM Cycle Explanation';
+        return view('dashboard.pm_explanation',$this->data);
+    }
 }

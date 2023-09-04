@@ -1,0 +1,162 @@
+.portfolio-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border: 1px solid #f2f2f2;
+    border-radius: 6px;
+    background-color: #fff; 
+}
+
+.portfolio-item:hover{
+    cursor: pointer; 
+    border: 1px solid #e7e7e7;
+}
+
+.portfolio-item-favicon{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.portfolio-item-link{
+    color: #1D82F5;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    flex: 1;
+}
+
+.portfolio-item-icon{
+    color: #999999;
+    background-color: transparent;
+    border: 1px solid rgb(0 0 0 / 10%);
+    padding: 3px 6px;
+    border-radius: 4px;
+    position: relative;
+}
+
+.portfolio-item-icon:hover{
+    color: #777;
+    background-color: rgb(0 0 0 / 5%);
+}
+
+.portfolio-item-icon i.fa-check{
+    color: #33a805;
+}
+
+.portfolio-item-icon .copied-tooltip {
+    display: block;
+    font-size: 12px;
+    padding: 0 10px;
+    background: #272829;
+    color: #fff;
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    border-radius: 10px;
+    transform: translateX(-50%);
+}
+
+/* new update tooltip message */
+.dispute-status-tooltip{
+    position: relative;
+}
+
+.dispute-tooltip{  
+    background-color: rgb(25, 26, 27);
+    z-index: 1;
+    border-radius: 6px;
+    /* border: 1px solid #41c7e2; */
+    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
+    
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+.dispute-notif-arrow{
+    overflow: hidden;  
+    width: 12px;
+    height: 10px;
+}
+
+.dispute-notif-arrow::before{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(25, 26, 27);
+    content: '';
+    /* border: 1px solid #41c7e2; */
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    transform-origin: center; 
+    top: -7px;
+    left: 1px;
+}
+
+
+.dispute-tooltip-content{
+    font-size: 10px;
+    padding: 0px 6px;
+    color: white;
+}
+
+.portfolio-filter-dd-toggle{
+    width: 100%;
+    padding: 10px 10px;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 1px solid rgb(0 0 0 / 10%);
+}
+
+.portfolio-filter-dd-menu{
+    height: 350px;
+    overflow-y: auto;
+    position: relative;
+}
+
+  
+.portfolio-filter-dd-menu::-webkit-scrollbar{ 
+    width: 10px;
+    height: 10px;
+    background-color: transparent !important;
+} 
+
+.portfolio-filter-dd-menu::-webkit-scrollbar-thumb{
+    background-color: rgb(219, 219, 219) !important;
+    border: 2px solid rgb(255, 255, 255) !important;
+}
+ 
+.portfolio-filter-dd-menu::-webkit-scrollbar-thumb:hover{
+    border: 0 !important;
+    background-color: rgb(197, 197, 197) !important;
+}
+
+.portfolio-filter-dd-menu::-webkit-scrollbar-track{
+    background-color: rgba(219, 219, 219, 0.1) !important;
+}
+
+
+.filter-item{
+    padding: 2px 10px;
+    background-color: #ffffff;
+    font-size: 13px;
+    display: flex;
+    align-items: center; 
+    gap: 3px;
+    border-radius: 6px;
+    box-shadow: rgb(0 0 0 / 10%);
+}
+
+.filter-item button{
+    padding-right: 6px;
+    padding-left: 3px;
+    background-color: transparent;
+}
+
+.filter-item button:hover{
+    color: red;
+}

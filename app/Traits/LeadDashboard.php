@@ -90,7 +90,7 @@ trait LeadDashboard
 			$this->average_review_assign_by_me = ($this->total_rating_assign_by_me->avg_rating + $this->total_rating_assign_by_me->avg_rating2 + $this->total_rating_assign_by_me->avg_rating3) / 3;
 			
 			$this->total_deadline_task_assigned_to_me_period=DB::table('task_users')
-			->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+			->leftJoin('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
 			->whereBetween('due_date', [$startMonth, $endMonth])
 			->orderBy('tasks.id','desc')
 			->get();
@@ -242,7 +242,7 @@ trait LeadDashboard
 			$this->average_review_assign_by_me = ($this->total_rating_assign_by_me->avg_rating + $this->total_rating_assign_by_me->avg_rating2 + $this->total_rating_assign_by_me->avg_rating3) / 3;
 			
 			$this->total_deadline_task_assigned_to_me_period=DB::table('task_users')
-			->join('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
+			->leftJoin('tasks', 'task_users.task_id', '=', 'tasks.id')->where('user_id',Auth::id())
 			
 		   
 			->orderBy('tasks.id','desc')->where('tasks.status','!=','completed')->get();

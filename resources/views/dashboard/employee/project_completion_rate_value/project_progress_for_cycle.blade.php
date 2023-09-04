@@ -6,8 +6,8 @@
           <div class="modal-title" id="exampleModalLabel"><h4>{{round($accepted_project_value,2)}}$ projects assigned</h4>
             <h4>{{round($value_of_finished_projects_this_cycle,2)}}$ projects completed</h4>
             <h4>Percentage : {{round($project_completion_rate_count_this_cycle_value,2)}}%</h4>
-           
-          </div>
+
+                     </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -22,8 +22,7 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col">Project Status</th>
+                    <th scope="col">Completion Date</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -45,7 +44,6 @@
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_start_date }}</td>
                         <td>{{ $item->project_completion_date }}</td>
-                        <td>{{ $item->project_status }}</td>
                         <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>

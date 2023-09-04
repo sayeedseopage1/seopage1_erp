@@ -3030,17 +3030,12 @@ class TaskController extends AccountBaseController
             $name3 = 'Color Schema';
             $name4 = 'Plugin Research';
 
-            $slug1 = 'Theme Details';
-            $slug2 = 'Design Details';
-            $slug3 = 'Color Schema';
-            $slug4 = 'Plugin Research';
 
             if($data['theme_details']==0){
                 $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
                 $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                 $pm_task_guideline_authorization->project_id = $data['project_id'];
                 $pm_task_guideline_authorization->name = $name1;
-                $pm_task_guideline_authorization->slug = Str::slug($slug1);
                 $pm_task_guideline_authorization->status = 0;
                 $pm_task_guideline_authorization->save();
             }
@@ -3049,7 +3044,6 @@ class TaskController extends AccountBaseController
                 $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                 $pm_task_guideline_authorization->project_id = $data['project_id'];
                 $pm_task_guideline_authorization->name = $name2;
-                $pm_task_guideline_authorization->slug = Str::slug($slug2);
                 $pm_task_guideline_authorization->status = 0;
                 $pm_task_guideline_authorization->save();
             }
@@ -3058,7 +3052,6 @@ class TaskController extends AccountBaseController
                 $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                 $pm_task_guideline_authorization->project_id = $data['project_id'];
                 $pm_task_guideline_authorization->name = $name3;
-                $pm_task_guideline_authorization->slug = Str::slug($slug3);
                 $pm_task_guideline_authorization->status = 0;
                 $pm_task_guideline_authorization->save();
             }
@@ -3067,7 +3060,6 @@ class TaskController extends AccountBaseController
                 $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                 $pm_task_guideline_authorization->project_id = $data['project_id'];
                 $pm_task_guideline_authorization->name = $name4;
-                $pm_task_guideline_authorization->slug = Str::slug($slug4);
                 $pm_task_guideline_authorization->status = 0;
                 $pm_task_guideline_authorization->save();
             }
@@ -3080,6 +3072,80 @@ class TaskController extends AccountBaseController
             }
            }
         return response()->json(['status' => 200]);
+    }
+    public function updateTaskGuideline(Request $request, $id){
+
+        $reference_links = json_encode($request->reference_link);
+        $colors = json_encode($request->color);
+        $color_descriptions = json_encode($request->color_description);
+
+        $pm_task_guideline_update = PmTaskGuideline::find($id);
+        if($request->theme_details==1){
+            $pm_task_guideline_update->theme_details = $request->theme_details;
+            $pm_task_guideline_update->theme_name = $request->theme_name;
+            $pm_task_guideline_update->theme_url = $request->theme_url;
+        }
+        if($request->design_details==1){
+            $pm_task_guideline_update->design_details = $request->design_details;
+            $pm_task_guideline_update->design = $request->design;
+            $pm_task_guideline_update->xd_url = $request->xd_url;
+            $pm_task_guideline_update->drive_url = $request->drive_url;
+            $pm_task_guideline_update->reference_link = $reference_links;
+            $pm_task_guideline_update->instruction = $request->instruction;
+        }
+        if($request->color_schema==1){
+            $pm_task_guideline_update->color_schema = $request->color_schema;
+            $pm_task_guideline_update->primary_color = $request->primary_color;
+            $pm_task_guideline_update->primary_color_description = $request->primary_color_description;
+            $pm_task_guideline_update->color = $colors;
+            $pm_task_guideline_update->color_description = $color_descriptions;
+        }
+        if($request->plugin_research==1){
+            $pm_task_guideline_update->plugin_research = $request->plugin_research;
+            $pm_task_guideline_update->plugin_name = $request->plugin_name;
+            $pm_task_guideline_update->plugin_url = $request->plugin_url;
+            $pm_task_guideline_update->google_drive_link = $request->google_drive_link;
+            $pm_task_guideline_update->instruction_plugin = $request->instruction_plugin;
+        }
+        $pm_task_guideline_update->status = 1;
+        $pm_task_guideline_update->save();
+        return response()->json(['status'=>200]);
+    }
+    public function taskGuidelineApprovedAuthorization($id){
+        $pm_task_guideline_authorization = PmTaskGuidelineAuthorization::find($id);
+
+        if ($pm_task_guideline_authorization->status == 0) {
+            $pm_task_guideline_authorization->status = 1;
+        }
+        $pm_task_guideline_authorization->save();
+
+        $status_get = PmTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',2)->count();
+        if($status_get == 0){
+            $pm_task_guideline = PmTaskGuideline::where('project_id',$pm_task_guideline_authorization->project_id)->first();
+            $pm_task_guideline->status = 1;
+            $pm_task_guideline->save();
+        }
+
+
+        return response()->json([
+            'success' => 200,
+            'count' => $status_get,
+        ]);
+    }
+    public function taskGuidelineDenyAuthorization($id){
+        $pm_task_guideline_authorization = PmTaskGuidelineAuthorization::find($id);
+        if ($pm_task_guideline_authorization->status == 0) {
+            $pm_task_guideline_authorization->status = 2;
+        }
+        $pm_task_guideline_authorization->save();
+        $pm_task_guideline = PmTaskGuideline::where('project_id',$pm_task_guideline_authorization->project_id)->first();
+        $pm_task_guideline->status = 2;
+        $pm_task_guideline->save();
+        $status_get = PmTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',1)->count();
+        return response()->json([
+            'success' => 200,
+            'count' => $status_get,
+        ]);
     }
     public function viewWorkingEnvironment($project_id)
     {

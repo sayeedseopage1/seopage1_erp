@@ -690,6 +690,27 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </x-cards.data>
                 <br>
 
+                <!--Top Management Pm Task Guideline Autonraization-->
+                @php
+                    $task_guideline_authorization = App\Models\PmTaskGuidelineAuthorization::where('project_id',$project->id)->first();
+                    $status_count = App\Models\PmTaskGuidelineAuthorization::where('project_id', $project->id)->where('status',0)->count();
+                @endphp
+                @if ($task_guideline_authorization !== null && $status_count !=0)
+                <div class="card mb-3" style="border:none">
+                    <div class="py-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
+                                <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#task_auth_form_modal">Task Guideline Needs to be Authorized by Admin</button>
+                                @include('projects.modals.task_auth_form_modal')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                <!--End Top Management Pm Task Guideline Autonraization-->
+
                 <?php
                 $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->first();
                 $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();

@@ -6,9 +6,9 @@
           <div class="modal-title" id="exampleModalLabel"><h4>{{round($total_milestone_assigned_this_cycle_value)}}$ milestones assigned</h4>
             <h4>{{round($total_released_amount_this_cycle,2)}}$ milestones completed</h4>
             <h4>Percentage : {{round($milestone_completion_rate_value_this_cycle,2)}}%</h4>
-           
+
           </div>
-         
+
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -22,8 +22,8 @@
                               <tr>
                                 <th scope="col">Sl No</th>
                                 <th scope="col">Client Name</th>
-                                <th scope="col">Milestone Title</th>
                                 <th scope="col">Project Name</th>
+                                <th scope="col">Milestone Title</th>
                                 <th scope="col">Project Budget</th>
                                 <th scope="col">Milestone Cost</th>
                                 <th scope="col">Milestone Start</th>
@@ -38,7 +38,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        <a href="{{ route('clients.show',$user->id) }}">{{ $user->name }}</a>
+                                        <a href="{{ route('clients.show',$client->id) }}">{{ $client->name }}</a>
                                     </td>
                                     <td>
                                         <a href="{{ route('projects.show',$item->id) }}">{{ $item->project_name }}</a>

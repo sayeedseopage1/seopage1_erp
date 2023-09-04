@@ -21,8 +21,7 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Start Date</th>
-                    <th scope="col">End Date</th>
-                    <th scope="col">Project Status</th>
+                    <th scope="col">Completion Date</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -44,7 +43,6 @@
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_start_date }}</td>
                         <td>{{ $item->project_completion_date }}</td>
-                        <td>{{ $item->project_status }}</td>
                         <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>

@@ -10,6 +10,7 @@ import "./react/single-task/index";
 import './react/tasks/index';
 import './react/projects/index';
 import './react/disputes/index';
+import './react/portfolios/index';
 
 
 

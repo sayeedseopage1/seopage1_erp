@@ -329,6 +329,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('attendances/store-clock-in', [DashboardController::class, 'storeClockIn'])->name('attendances.store_clock_in');
     Route::get('attendances/update-clock-in', [DashboardController::class, 'updateClockIn'])->name('attendances.update_clock_in');
     Route::get('dashboard/private_calendar', [DashboardController::class, 'privateCalendar'])->name('dashboard.private_calendar');
+    Route::get('dashboard/pm-cycle-explanation', [DashboardController::class, 'pmDashboardExplanation'])->name('pm-dashboard-explanation');
     // Route::resource('points/', PointsController::class)->only
 
     Route::get('/menu/filter-options/{mode}/{value?}', [PointsController::class, 'get_filter_options']);
@@ -1241,6 +1242,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
     
+    //Portfolio Section
+    Route::get('/portfolio/filter-menu', [PortfolioController::class, 'get_filter_data'])->name("filter-menu");
+    Route::get('/portfolio/data', [PortfolioController::class, 'get_portfolio_data'])->name("/portfolio/data");
+    Route::get('/portfolio/{portfolio_id}', [PortfolioController::class, 'filterDataShow'])->name("/portfolio/{portfolio_id}");
+    Route::resource('portfolio', PortfolioController::class);
+    Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
+    Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
+    Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
    
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
@@ -1340,13 +1349,6 @@ Route::get('/projects/project-completion/get-sub-niche/{niche_id}', [ProjectCont
 //Route::post('/projects/project-completion/search-niche', [ProjectController::class, 'searchNiche'])->name('search_niche');
 Route::post('/projects/project-completion/filter-subcategories', [ProjectController::class, 'filterSubcategories'])->name('filter_subcategories');
 
-
-
-//Portfolio Section
-Route::resource('portfolio', PortfolioController::class);
-Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
-Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
-Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
 
 //Project request extension
 
@@ -1507,3 +1509,7 @@ Route::post('/authorization/deal-details/', [ContractController::class, 'authori
 Route::get('search-bar-filter', [PointsController::class, 'get_all_search_bar_data']);
 Route::get('get-board-column-list', [TimelogReportController::class, 'board_column_json'])->name('board_column_json');
 Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
+
+Route::get('/task-guideline-approved-authorization/{id}', [TaskController::class, 'taskGuidelineApprovedAuthorization']);
+Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 'taskGuidelineDenyAuthorization']);
+Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);

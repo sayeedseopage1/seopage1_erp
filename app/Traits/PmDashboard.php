@@ -33,6 +33,8 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use DateTime;
 use App\Models\DealStage;
+use App\Models\TaskRevision;
+use App\Models\TaskRevisionDispute;
 use Illuminate\Database\Eloquent\Builder;
 
 
@@ -611,6 +613,43 @@ trait PmDashboard
                 ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
                 
                 ->get();
+
+                $this->caused_by_me_for_previous_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',0)
+                    ->where('task_revisions.client_pm_dispute',0)
+                    ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+                    ->get();
+
+
+                    $this->caused_by_me_dispute_for_previous_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',0)
+                    ->where('task_revisions.client_pm_dispute',1)
+                    ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+                    ->get();
+
+
+                    $this->caused_by_other_for_previous_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',1)
+                    ->where('task_revisions.is_accept',1)
+                    ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+                    ->get();
+
+
+                    $this->caused_by_other_dispute_for_previous_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',1)
+                    ->where('task_revisions.is_accept',0)
+                    ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+                    ->get();
+
+                    $this->dispute_for_previous_cycle = $this->caused_by_me_dispute_for_previous_cycle->concat($this->caused_by_other_dispute_for_previous_cycle);
 
           
            
@@ -1237,6 +1276,109 @@ trait PmDashboard
                     ->whereBetween('projects.updated_at', [$startMonth, $release_date])
                     
                     ->get();
+
+                    // Number of revisions for cycle
+                    $this->caused_by_me_for_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',0)
+                    ->where('task_revisions.client_pm_dispute',0)
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->get();
+
+                    $this->caused_by_me_dispute_for_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',0)
+                    ->where('task_revisions.client_pm_dispute',1)
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->get();
+
+
+                    $this->caused_by_other_for_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',1)
+                    ->where('task_revisions.is_accept',1)
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->get();
+
+
+                    $this->caused_by_other_dispute_for_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',1)
+                    ->where('task_revisions.is_accept',0)
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->get();
+
+                    $this->dispute_for_cycle = $this->caused_by_me_dispute_for_cycle->concat($this->caused_by_other_dispute_for_cycle);
+
+                    // Number of revisions in this cycle
+                    $this->caused_by_me_in_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',0)
+                    ->where('task_revisions.client_pm_dispute',0)
+                    ->where(function ($q1) use ($startMonth, $endMonth, $release_date) {
+                        $q1->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                            ->orWhere(function ($q2) use ($startMonth, $release_date) {
+                                $q2->where('tasks.created_at', '<', $startMonth)
+                                    ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                                    ->where('tasks.board_column_id', '=', '4');
+                            });
+                    })
+                    ->get();
+
+
+                    $this->caused_by_me_dispute_in_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',0)
+                    ->where('task_revisions.client_pm_dispute',1)
+                    ->where(function ($q1) use ($startMonth, $endMonth, $release_date) {
+                        $q1->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                            ->orWhere(function ($q2) use ($startMonth, $release_date) {
+                                $q2->where('tasks.created_at', '<', $startMonth)
+                                    ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                                    ->where('tasks.board_column_id', '=', '4');
+                            });
+                    })
+                    ->get();
+
+
+                    $this->caused_by_other_in_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',1)
+                    ->where('task_revisions.is_accept',1)
+                    ->where(function ($q1) use ($startMonth, $endMonth, $release_date) {
+                        $q1->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                            ->orWhere(function ($q2) use ($startMonth, $release_date) {
+                                $q2->where('tasks.created_at', '<', $startMonth)
+                                    ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                                    ->where('tasks.board_column_id', '=', '4');
+                            });
+                    })
+                    ->get();
+
+                    $this->caused_by_other_dispute_in_cycle = TaskRevision::select('task_revisions.*','tasks.heading')
+                    ->join('tasks','task_revisions.task_id','=','tasks.id')
+                    ->whereNotNull('task_revisions.pm_comment')
+                    ->where('task_revisions.is_deniable',1)
+                    ->where('task_revisions.is_accept',0)
+                    ->where(function ($q1) use ($startMonth, $endMonth, $release_date) {
+                        $q1->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                            ->orWhere(function ($q2) use ($startMonth, $release_date) {
+                                $q2->where('tasks.created_at', '<', $startMonth)
+                                    ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                                    ->where('tasks.board_column_id', '=', '4');
+                            });
+                    })
+                    ->get();
+
+
+                    $this->dispute_in_cycle = $this->caused_by_me_dispute_in_cycle->concat($this->caused_by_other_dispute_in_cycle);
     
                 if(count($this->no_of_accepted_projects) > 0 )
                 {
