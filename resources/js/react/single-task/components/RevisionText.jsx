@@ -21,7 +21,6 @@ const RevisionText = ({text, index, date, time, revision}) => {
         setExpend(false)
     })
    
-
   return (
     <div className="sp1_task_card--sub-card" style={{minHeight: '110px'}}>
         <div className="sp1_tc_sc-inx">
@@ -30,12 +29,14 @@ const RevisionText = ({text, index, date, time, revision}) => {
             <span className="d-block"><strong>Time</strong>: {time}</span>
         </div>
         <div className=""> 
-            <span className='d-block mb-2'> 
-                <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span> 
+            {revision?.revisionAcknowledgement ? 
+                <span className='d-block mb-2'> 
+                    <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span> 
                     {revision?.revisionAcknowledgement} {" "}
                     {revision?.isDeny ? <span className='badge badge-danger'>Rejected By Developer</span> : null} 
                     {revision?.isAccept ? <span className='badge badge-success'>Accepted By Developer</span> : null}
                 </span> 
+            : null}
             <div>
                 <span className='font-weight-bold text-success'>Statement:</span>
                 <div className='sp1_ck_content' style={{textIndent: '2rem'}} dangerouslySetInnerHTML={{__html: showText}} />

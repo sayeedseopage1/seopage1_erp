@@ -10,7 +10,7 @@ import { useRevision } from '../../../../hooks/useRevision';
  
 
 const RevisionCreationModal = ({ close, task, auth }) => {
-    const [reason, setReason] = useState("");
+    const [reason, setReason] = useState(null);
     const [reasonError, setReasonError] = useState("");
     const [comment, setComment] = useState("");
     const [commentError, setCommentError] = useState("");
@@ -28,9 +28,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     const [createRevision, {isLoading}] =  useCreateRevisionMutation();
 
     // radio button change
-    const handleChange = (e, isDeniable) => {
-        setReason(e.target.value);
-        setIsDeniable(isDeniable);
+    const handleChange = (value) => {
+        setReason(value);
     };
 
     // editor change text 
@@ -48,7 +47,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
        }
 
-       if(reason === ''){
+       if(!reason){
             errorCount++;
             setReasonError('You have to select a reason from above options')
        }
@@ -64,9 +63,10 @@ const RevisionCreationModal = ({ close, task, auth }) => {
         const data = {
             task_id: task?.id,
             user_id: auth?.id,
-            revision_acknowledgement: reason,
+            revision_acknowledgement: reason?.revision ?? '',
+            acknowledgement_id: reason?.id ,
             comment,
-            is_deniable: isDeniable
+            is_deniable: reason?.isDeniable ?? false
         }
  
         if(validate()){            
@@ -124,7 +124,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                                         name="exampleRadios"
                                         id={option.id}
                                         required= {true}
-                                        onChange={e => handleChange(e, option.isDeniable)}
+                                        onChange={() => handleChange(option)}
                                         value={option.revision}
                                         style={{
                                             width: "16px",

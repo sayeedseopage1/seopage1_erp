@@ -32,7 +32,11 @@ const DataTable = ({
   const [data, setData] = React.useState([]);
   const [sorting, setSorting] = React.useState([]);
   const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10});
- 
+
+  // initiat data
+  React.useEffect(() => {
+    setData(tableData);
+  }, [tableData])
  
   // use localstore
   const [ value ] = useLocalStorage(tableName);
@@ -69,7 +73,7 @@ const DataTable = ({
 
   // table instance...
   const table = useReactTable({
-    data: tableData,
+    data: data,
     columns,
     state: {
         sorting,

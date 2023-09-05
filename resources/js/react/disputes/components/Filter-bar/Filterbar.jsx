@@ -13,9 +13,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [endDate, setEndDate] = React.useState(null);
     const [search, setSearch] = React.useState("");
     const [searchQuery, setSearchQuery] = React.useState("");
-    const [developer, setDeveloper] = React.useState(null);
+    const [disputeRasiedBy, setDisputeRasiedBy] = React.useState(null);
     const [client, setClient] = React.useState(null);
-    const [leadDeveloper, setLeadDeveloper] = React.useState(null);
+    const [disputeRaisedAgainst, setDisputeRaisedAgainst] = React.useState(null);
     const [pm, setPm] = React.useState(null);
     const [status, setStatus] = React.useState({
         id: 12,
@@ -31,9 +31,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const start_date = React.useMemo(() => startDate, [startDate]);
     const end_date = React.useMemo(() => endDate, [endDate]);
     const _search = React.useMemo(() => search, [search]);
-    const _developer = React.useMemo(() => developer, [developer]);
+    const dispute_rasied_by = React.useMemo(() => disputeRasiedBy, [disputeRasiedBy]);
     const _client = React.useMemo(() => client, [client]);
-    const _leadDeveloper = React.useMemo(() => leadDeveloper, [leadDeveloper]);
+    const _disputeRaisedAgainst = React.useMemo(() => disputeRaisedAgainst, [disputeRaisedAgainst]);
     const _pm = React.useMemo(() => pm, [pm]);
     const _status = React.useMemo(() => status, [status]);
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
@@ -42,9 +42,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         const filter = {
             start_date,
             end_date,
-            assignee_to: _developer?.id,
+            dispute_rasied_by: dispute_rasied_by?.id,
             client_id: _client?.id,
-            assignee_by: _leadDeveloper?.id,
+            dispute_raised_against: _disputeRaisedAgainst?.id,
             pm_id: _pm?.id,
             status: _status?.id,
             date_filter_by,
@@ -54,9 +54,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     }, [
         start_date,
         end_date,
-        _developer,
+        dispute_rasied_by,
         _client,
-        _leadDeveloper,
+        _disputeRaisedAgainst,
         _pm,
         _status,
         date_filter_by,
@@ -77,16 +77,16 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                 <React.Fragment> 
                     <UserFilter
                         title="Dispute Raised By"
-                        state={leadDeveloper}
-                        setState={setLeadDeveloper}
-                        roleIds={[1, 4]}
+                        state={disputeRaisedAgainst}
+                        setState={setDisputeRaisedAgainst}
+                        roleIds={[4,5,6, 7, 9, 10]}
                     />  
                     <HDivider />
                     <UserFilter
                         title="Dispute Raised Against"
-                        state={leadDeveloper}
-                        setState={setLeadDeveloper}
-                        roleIds={[1, 4]}
+                        state={disputeRaisedAgainst}
+                        setState={setDisputeRaisedAgainst}
+                        roleIds={[4,5,6, 7, 9, 10]}
                     />
                      
                     <HDivider />
@@ -128,12 +128,12 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                         {isOpen && (
                             <FilterSidebar
-                                developer={developer}
-                                setDeveloper={setDeveloper}
+                                disputeRasiedBy={disputeRasiedBy}
+                                setDisputeRasiedBy={setDisputeRasiedBy}
                                 client={client}
                                 setClient={setClient}
-                                leadDeveloper={leadDeveloper}
-                                setLeadDeveloper={setLeadDeveloper}
+                                disputeRaisedAgainst={disputeRaisedAgainst}
+                                setDisputeRaisedAgainst={setDisputeRaisedAgainst}
                                 pm={pm}
                                 setPm={setPm}
                                 status={status}

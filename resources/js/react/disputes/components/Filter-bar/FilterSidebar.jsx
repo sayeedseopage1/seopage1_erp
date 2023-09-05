@@ -38,14 +38,14 @@ const FilterSidebar = ({
                 title="Dispute Raised By" 
                 state={developer}
                 setState={setDeveloper}
-                roleIds={[5, 9, 10]}
+                roleIds={[4,5,6, 7, 9, 10]}
             />
             
             <UserFilter 
                 title="Dispute Raised Against" 
                 state={developer}
                 setState={setDeveloper}
-                roleIds={[5, 9, 10]}
+                roleIds={[4,5,6, 7, 9, 10]}
             />
             
 

@@ -65,6 +65,17 @@ const Protfolio = () => {
 
   }, [_cms, _webCategory,_webtype,_webSubCategory, _theme, _plugin, _pageSize, _pageIndex])
  
+
+  const subNiches = () => {
+        let data = _.filter(filterMenuItems?.website_categories, d => d.parent_category_id);
+        data = _.filter(data, d => _.lowerCase(d).includes(_.lowerCase(subCategorySearch)));
+
+        if(websiteCategory && websiteCategory.id){
+            data = _.filter(data, d => d.parent_category_id === websiteCategory.id);
+        }
+
+        return data;
+  }
  
   
     return(
@@ -169,6 +180,7 @@ const Protfolio = () => {
                         </Dropdown.Menu>
                     </Dropdown>
                 </div>
+ 
 
                 {/* Sub Niche Category */}
                 <div className="col-12 col-sm-4 col-md-3 col-xl-2 px-2 mb-2">
@@ -185,13 +197,9 @@ const Protfolio = () => {
                                 <SearchBox value={subCategorySearch} onChange={setSubCategorySearch} autoFocus={true} />
                             </div>
                             <div className='portfolio-filter-dd-menu'>
-                                {_.map(
-                                    _.filter(filterMenuItems?.website_categories, q => 
-                                        q.parent_category_id && 
-                                        _.lowerCase(q.category_name).includes(_.lowerCase(subCategorySearch) 
-                                    )
-                                ), option => (
+                                {_.map(subNiches(), option => (
                                     <abbr title={option.category_name} key={option.id}>
+                                        {console.table(option)}
                                         <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setSubCategory(option)}>
                                         <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.category_name }</span>
                                         {subCategory?.id === option.id && <i className='fa-solid fa-check ml-' />}

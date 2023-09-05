@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ResolveButton from "./ResolveButton"
-import DisputeNotification from './DisputeNotification';
+import DisputeNotificationBadge from './DisputeNotificationBadge';
 import dayjs from 'dayjs';
 import Avatar from '../../global/Avatar';
 import _ from 'lodash';
@@ -15,7 +15,7 @@ export const disputeTableColumn = [
         header: 'Dispute No.',
         draggable: false,
         accessorKey: '',
-        cell: ({row, table}) => <DisputeNotification row={row} table={table} />
+        cell: ({row, table}) => <DisputeNotificationBadge row={row} table={table} />
     },
     {
         id: 'initiated',
@@ -50,7 +50,7 @@ export const disputeTableColumn = [
                             width={24}
                             height={24}
                         />
-                    <div>{client?.name}</div>
+                    <a hrev={`account/clients/${client?.id}`}>{client?.name}</a>
                 </div> 
             )
         }
@@ -111,7 +111,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{salesPerson?.name}</span>
+                    <a href={`/account/employees/${salesPerson?.id}`}>{salesPerson?.name}</a>
                 </div>
             )
         }
@@ -134,7 +134,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{project_manager?.name}</span>
+                    <a href={`/account/clinets/${project_manager?.id}`}>{project_manager?.name}</a>
                 </div>
             )
         }
@@ -147,6 +147,9 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original; 
             const lead_developer = data?.task?.lead_developer;
+
+            if(!lead_developer) return <span> --</span>
+
             return (
                 <div className='person_rander'>
                     <Avatar
@@ -157,7 +160,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{lead_developer?.name}</span>
+                    <a href={`/account/employees/${lead_developer?.id}`}>{lead_developer?.name}</a>
                 </div>
             )
         }
@@ -174,14 +177,14 @@ export const disputeTableColumn = [
                developer ? 
                <div className='person_rander'>
                     <Avatar
-                        src={`/user-uploads/avatar/${developer?.image}`}
+                        src={developer?.image ? `/user-uploads/avatar/${developer?.image}` : null}
                         alt={developer?.name}
                         name={developer?.name}
                         type='circle'
                         width={24}
                         height={24}
                     />
-                    <span>{developer?.name}</span>
+                    <a href={`/account/employees/${developer?.id}`}>{developer?.name}</a>
                 </div>
                 : '--' 
             )
@@ -205,7 +208,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{raised_by?.name}</span>
+                    <a href={`/account/employees/${raised_by?.id}`}>{raised_by?.name}</a>
                 </div>
             )
         }
@@ -228,7 +231,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{raised_against?.name}</span>
+                    <a href={`/account/${data?.dispute_between === 'CRP' ? 'clients' : 'employees'}/${raised_against.id}`}>{raised_against?.name}</a>
                 </div>
             )
         }
@@ -253,8 +256,8 @@ export const disputeTableColumn = [
             const data = row.original; 
             const winner = data?.winner;
 
-            if(data?.status && !winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> No Winner </span>; 
-            if(!winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> Pending </span>;
+            if(data?.status && !winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> Partially Responsible </span>; 
+            if(!winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> No Decision Yet </span>;
             return (
                 <div className='person_rander'>
                     <Avatar
@@ -265,7 +268,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{winner?.name}</span>
+                    <a href={`/account/${data?.dispute_between === 'CRP' ? 'clients' : 'employees'}/${winner.id}`}>{winner?.name}</a>
                 </div>
             )
         }
@@ -277,12 +280,26 @@ export const disputeTableColumn = [
         accessorFn: (row) => `${row.resolved_on ? dayjs(row.resolved_on).format('MMM DD, YYYY') : ''}`,
         cell: ({row}) => {
             const data = row.original;
+            const resolved_by = data?.resolved_by; 
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
+            
+            if(!resolved_by){
+                if( unsolvedQuestion > 0){
+                    return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
+                }else if(data?.need_authrization){
+                    return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
+                }else { 
+                    return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
+                } 
+            }
+
+
             if(data?.resolved_on){
                 return <>
                     <span style={{whiteSpace:'nowrap'}}>{dayjs(data.resolved_on).format('MMM DD, YYYY')}</span> <br/>
                     <span>{dayjs(data.resolved_on).format('hh:mm a')}</span>
                 </>
-            }else return <span className='badge badge-warning font-weight-bold text-white f-12'> Pending </span>;
+            }
         }
     },
     {
@@ -316,7 +333,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <span>{resolved_by?.name}</span>
+                    <a href={`/account/employees/${resolved_by.id}`}>{resolved_by?.name}</a> 
                 </div>
             )
         }
@@ -348,14 +365,7 @@ export const disputeTableColumn = [
              
             return(
                 <div>
-                    {
-                        !_.includes([1, 8], Number(window?.Laravel?.user?.role_id) ) ?
-                            <AnsQuestion row={row.original} table={table} />
-                        : null
-                    }
-                    {_.includes([1, 8], Number(window?.Laravel?.user?.role_id) ) ? 
-                        <ResolveButton row={row.original} table={table} /> 
-                    : null}
+                    <ResolveButton row={row.original} table={table} /> 
                 </div>
             )
         }

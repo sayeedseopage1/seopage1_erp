@@ -46,7 +46,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
-    
+
     const [pageType, setPageType] = React.useState("");
     const [pageTypeOthers, setPageTypeOthers] = React.useState("");
     const [pageName, setPageName] = React.useState("");

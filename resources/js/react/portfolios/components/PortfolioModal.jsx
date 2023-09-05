@@ -125,8 +125,8 @@ const PortfolioModal = ({isOpen, close, data, isLoading}) => {
                                 <div className="col-12 col-md-6 mb-3">
                                     <p className='font-weight-bold f-14 mb-2'>Total number of pages with page numbers:</p>
                                     <div className=''>
-                                    <p>Main page name and number: {data?.main_page_number ?? 0} pages</p>
-                                    <p>Secondary page name and number: {data?.secondary_page_number ?? 0} pages</p>
+                                        <p>Main page name and number: {data?.main_page_number ?? 0} pages</p>
+                                        <p>Secondary page name and number: {data?.secondary_page_number ?? 0} pages</p>
                                     </div>
                                 </div>
 

@@ -358,21 +358,21 @@ var useRevision = function useRevision() {
       return [];
     }
     return [{
-      id: 'revision1',
+      id: 'PLRx01',
       revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
       isDeniable: false
     }, {
-      id: 'revision2',
+      id: 'PLRx02',
       revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
       isDeniable: false
     }, {
-      id: 'revision3',
+      id: 'PLRx3',
       revision: "The team lead/project coordinator’s delivered work doesn’t match my shared requirement",
       isDeniable: true
     }, {
-      id: 'revision4',
+      id: 'PLRx04',
       revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
-      isDeniable: false
+      isDeniable: true
     }];
   };
 
@@ -384,19 +384,19 @@ var useRevision = function useRevision() {
       return [];
     } else {
       return [{
-        id: 'revision1',
+        id: 'LDRx1',
         revision: "The concerned developer’s delivered work doesn’t match my shared requirement",
         isDeniable: true
       }, {
-        id: 'revision2',
+        id: 'LDRx2',
         revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
         isDeniable: false
       }, {
-        id: 'revision4',
+        id: 'LDRx3',
         revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
         isDeniable: false
       }, {
-        id: 'revision3',
+        id: 'LDRx4',
         revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
         isDeniable: true
       }];
@@ -2253,7 +2253,7 @@ var RevisionText = function RevisionText(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
       className: "",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+      children: [revision !== null && revision !== void 0 && revision.revisionAcknowledgement ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
         className: "d-block mb-2",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
           className: "font-weight-bold text-danger",
@@ -2267,7 +2267,7 @@ var RevisionText = function RevisionText(_ref) {
           className: "badge badge-success",
           children: "Accepted By Developer"
         }) : null]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
           className: "font-weight-bold text-success",
           children: "Statement:"
@@ -9891,11 +9891,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var options = [{
-  id: 'revision1',
+  id: 'LDRx10',
   revision: "I overlooked a few things while checking",
   isDeniable: true
 }, {
-  id: 'revision2',
+  id: 'LDRx11',
   revision: "I couldn't understand a few things in the instruction",
   isDeniable: false
 }];
@@ -9905,9 +9905,11 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
     onBack = _ref.onBack,
     onSubmit = _ref.onSubmit,
     revision = _ref.revision,
+    _ref$type = _ref.type,
+    type = _ref$type === void 0 ? false : _ref$type,
     _ref$isSubmitting = _ref.isSubmitting,
     isSubmitting = _ref$isSubmitting === void 0 ? false : _ref$isSubmitting;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     reason = _useState2[0],
     setReason = _useState2[1];
@@ -9937,9 +9939,8 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
     setIsDeniable = _useState14[1];
 
   // radio button change
-  var handleChange = function handleChange(e, isDeniable) {
-    setReason(e.target.value);
-    setIsDeniable(isDeniable);
+  var handleChange = function handleChange(value) {
+    setReason(value);
   };
 
   // editor change text
@@ -9950,16 +9951,20 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
       return d.subtask_id === id;
     });
     if (index === -1) {
+      var _reason$id;
       _comments.push({
         id: id,
         subtask_id: id,
-        comment: data
+        comment: data,
+        acknowledgement_id: (_reason$id = reason === null || reason === void 0 ? void 0 : reason.id) !== null && _reason$id !== void 0 ? _reason$id : ''
       });
     } else {
+      var _reason$id2;
       _comments[index] = {
         id: id,
         subtask_id: id,
-        comment: data
+        comment: data,
+        acknowledgement_id: (_reason$id2 = reason === null || reason === void 0 ? void 0 : reason.id) !== null && _reason$id2 !== void 0 ? _reason$id2 : ''
       };
     }
     setComments(_toConsumableArray(_comments));
@@ -9968,7 +9973,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
   // validation
   var validate = function validate() {
     var errorCount = 0;
-    if (reason === "" && revision !== null && revision !== void 0 && revision.isDeniable && revision !== null && revision !== void 0 && revision.isAccept) {
+    if (reason === null && revision !== null && revision !== void 0 && revision.is_deniable && type) {
       errorCount++;
       setReasonError("You have to select a reason from below options");
     }
@@ -9993,12 +9998,13 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
 
   // handle submiton
   var handleSubmition = function handleSubmition(e) {
+    var _reason$isDeniable;
     e.preventDefault();
     var data = {
       task_id: task === null || task === void 0 ? void 0 : task.id,
-      reason: reason,
+      reason: reason === null || reason === void 0 ? void 0 : reason.revision,
       comments: comments,
-      is_deniable: isDeniable
+      is_deniable: (_reason$isDeniable = reason === null || reason === void 0 ? void 0 : reason.isDeniable) !== null && _reason$isDeniable !== void 0 ? _reason$isDeniable : false
     };
     if (validate()) {
       onSubmit(data);
@@ -10008,10 +10014,14 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
     e.preventDefault();
     onBack();
   };
+  console.log({
+    revision: revision,
+    type: type
+  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("form", {
       action: "",
-      children: [(revision === null || revision === void 0 ? void 0 : revision.isDeniable) && (revision === null || revision === void 0 ? void 0 : revision.isAccept) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      children: [(revision === null || revision === void 0 ? void 0 : revision.is_deniable) !== 0 && type ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
           htmlFor: "",
@@ -10031,8 +10041,8 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
                 name: "exampleRadios",
                 id: revision.id,
                 required: true,
-                onChange: function onChange(e) {
-                  return handleChange(e, revision.isDeniable);
+                onChange: function onChange() {
+                  return handleChange(revision);
                 },
                 value: revision.revision,
                 style: {
@@ -10055,7 +10065,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), (task === null || task === void 0 ? void 0 : (_task$taskSubTask = task.taskSubTask) === null || _task$taskSubTask === void 0 ? void 0 : _task$taskSubTask.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      }) : null, (task === null || task === void 0 ? void 0 : (_task$taskSubTask = task.taskSubTask) === null || _task$taskSubTask === void 0 ? void 0 : _task$taskSubTask.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("label", {
           htmlFor: "",
@@ -10122,7 +10132,7 @@ var NextAndContinueButton = function NextAndContinueButton(_ref2) {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "ml-auto",
       onClick: onClick,
-      children: "Accept & Continue"
+      children: " Continue"
     });
   } else {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -10242,30 +10252,45 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var projectManagerAcknowladgement = [{
-  id: "CRx01",
+  id: "CPRx01",
   title: 'Client added some additional requirements which was not part of the actual job scope',
   isDeniable: false
 }, {
-  id: 'CRx02',
+  id: 'CPRx02',
   title: 'I submitted the work without proper checking and overlooked the issues',
   isDeniable: true
 }, {
-  id: 'CRx03',
+  id: 'CPRx03',
   title: 'I couldnt understand clients expectation properly earlier',
   isDeniable: false
 }, {
-  id: 'CRx04',
+  id: 'CPRx04',
   title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
   isDeniable: false
 }, {
-  id: 'CRx05',
+  id: 'CPRx05',
   title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
-  isDeniable: true,
+  isDeniable: false,
   createDispute: true
 }, {
-  id: 'CRx06',
+  id: 'CPRx06',
   title: "The client is asking for some minor changes which he couldn’t specify until he saw the completed work and we can’t charge him for these",
-  isDeniable: true
+  isDeniable: false
+}, {
+  id: 'SPRx01',
+  title: "Sales person discussed something in a verbal meeting with the client and then forgot to document it when assigning",
+  isDeniable: false,
+  createDispute: true
+}, {
+  id: 'SPRx02',
+  title: "Sales person couldn't define requirement properly and I also failed to define it after I took over",
+  isDeniable: false,
+  createDispute: true
+}, {
+  id: 'SPRx03',
+  title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
+  isDeniable: false,
+  createDispute: true
 }];
 var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision(_ref) {
   var close = _ref.close,
@@ -10315,23 +10340,25 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
     setAdditionalInfo(null);
   };
 
+  // on blur 
+  var handleBlurEvent = function handleBlurEvent() {
+    Swal.fire({
+      title: 'Do you want to create a milestone?',
+      // showDenyButton: true, 
+      confirmButtonText: 'Yes'
+      // denyButtonText: `No`,
+    }).then(function (res) {
+      if (res.isConfirmed) {
+        window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), '_blank');
+      }
+    });
+  };
+
   // additional payment 
   var hasAdditionalPayment = function hasAdditionalPayment(isPay) {
     setAdditionalPaid(function () {
       return isPay ? 'yes' : 'no';
     });
-    if (isPay) {
-      Swal.fire({
-        title: 'Are you want to create milestone?',
-        showDenyButton: true,
-        confirmButtonText: 'Yes',
-        denyButtonText: "No"
-      }).then(function (res) {
-        if (res.isConfirmed) {
-          window.open("/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId, "?tab=milestones"), '_blank');
-        }
-      });
-    }
   };
 
   // editor change text 
@@ -10351,8 +10378,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       errorCount++;
       setReasonError('You have to select a reason from above options');
     }
-    console.log(additionalPaid);
-    if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === 'CRx01') {
+    if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01') {
       if (additionalPaid === 'yes' && additionalAmount === 0) {
         errorCount++;
         setAdditionalError('You have to provide amount');
@@ -10369,7 +10395,6 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
   var handleSubmition = function handleSubmition(e) {
     var _additionalInfo$info;
     e.preventDefault();
-    console.log(additionalInfo);
     var data = {
       acknowledgement_id: reason === null || reason === void 0 ? void 0 : reason.id,
       task_id: task === null || task === void 0 ? void 0 : task.id,
@@ -10435,7 +10460,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), (reason === null || reason === void 0 ? void 0 : reason.id) === 'CRx01' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
         className: "form-group",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
           htmlFor: "",
@@ -10512,7 +10537,8 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
             },
             className: "form-control",
             id: "inlineFormInputGroup",
-            placeholder: "300"
+            placeholder: "300",
+            onBlur: handleBlurEvent
           })]
         })]
       }), additionalPaid === 'no' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
@@ -11076,6 +11102,10 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
     _useState8 = _slicedToArray(_useState7, 2),
     commentError = _useState8[0],
     setCommentError = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState10 = _slicedToArray(_useState9, 2),
+    err = _useState10[0],
+    setErr = _useState10[1];
   var handleEditorDataChange = function handleEditorDataChange(e, editor) {
     var data = editor.getData();
     setComment(data);
@@ -11101,7 +11131,7 @@ var DenyAndContinue = function DenyAndContinue(_ref) {
   };
   var handleOnSubmit = function handleOnSubmit(e) {
     e.preventDefault();
-    if (comment !== '') {
+    if (validate()) {
       onSubmit({
         comment: comment,
         denyReason: reason
@@ -11629,7 +11659,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
   var close = _ref.close,
     task = _ref.task,
     auth = _ref.auth;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     reason = _useState2[0],
     setReason = _useState2[1];
@@ -11661,9 +11691,8 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     isLoading = _useCreateRevisionMut2[1].isLoading;
 
   // radio button change
-  var handleChange = function handleChange(e, isDeniable) {
-    setReason(e.target.value);
-    setIsDeniable(isDeniable);
+  var handleChange = function handleChange(value) {
+    setReason(value);
   };
 
   // editor change text 
@@ -11679,7 +11708,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
       errorCount++;
       setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.');
     }
-    if (reason === '') {
+    if (!reason) {
       errorCount++;
       setReasonError('You have to select a reason from above options');
     }
@@ -11688,13 +11717,15 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
 
   // handle submiton
   var handleSubmition = function handleSubmition(e) {
+    var _reason$revision, _reason$isDeniable;
     e.preventDefault();
     var data = {
       task_id: task === null || task === void 0 ? void 0 : task.id,
       user_id: auth === null || auth === void 0 ? void 0 : auth.id,
-      revision_acknowledgement: reason,
+      revision_acknowledgement: (_reason$revision = reason === null || reason === void 0 ? void 0 : reason.revision) !== null && _reason$revision !== void 0 ? _reason$revision : '',
+      acknowledgement_id: reason === null || reason === void 0 ? void 0 : reason.id,
       comment: comment,
-      is_deniable: isDeniable
+      is_deniable: (_reason$isDeniable = reason === null || reason === void 0 ? void 0 : reason.isDeniable) !== null && _reason$isDeniable !== void 0 ? _reason$isDeniable : false
     };
     if (validate()) {
       createRevision(data).unwrap().then(function (res) {
@@ -11757,8 +11788,8 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                   name: "exampleRadios",
                   id: option.id,
                   required: true,
-                  onChange: function onChange(e) {
-                    return handleChange(e, option.isDeniable);
+                  onChange: function onChange() {
+                    return handleChange(option);
                   },
                   value: option.revision,
                   style: {
@@ -12219,6 +12250,8 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
           }
         }), show === "ASSINEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
           task: task,
+          revision: revision,
+          type: true,
           onSubmit: function onSubmit(data) {
             return handleOnSubmit(data, 'ASSINEE_TO_DEV');
           },
@@ -12238,6 +12271,7 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
         }), lodash__WEBPACK_IMPORTED_MODULE_9___default().size(task === null || task === void 0 ? void 0 : task.taskSubTask) > 0 && show === "DENY_ASSINEE_TO_DEV" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_AssigneeRevisionToDev__WEBPACK_IMPORTED_MODULE_4__["default"], {
           task: task,
           revision: revision,
+          type: false,
           onSubmit: function onSubmit(data) {
             return handleOnSubmit(data, 'DENY_ASSINEE_TO_DEV');
           },

@@ -22474,6 +22474,7 @@ function CKEditorComponent(_ref) {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor_ckeditor5_react__WEBPACK_IMPORTED_MODULE_1__.CKEditor, {
       onReady: function onReady(editor) {
         var _editor$ui$getEditabl;
+        editor.ui.view.toolbar.element.remove();
         (_editor$ui$getEditabl = editor.ui.getEditableElement()) === null || _editor$ui$getEditabl === void 0 ? void 0 : _editor$ui$getEditabl.parentElement.insertBefore(editor.ui.view.toolbar.element, editor.ui.getEditableElement());
         setIsExist(true);
       },
@@ -22565,17 +22566,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_DisputeTableColumn__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/DisputeTableColumn */ "./resources/js/react/disputes/components/DisputeTableColumn.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _global_table_DataTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../global/table/DataTable */ "./resources/js/react/global/table/DataTable.jsx");
-/* harmony import */ var _components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Filter-bar/FilterContainer */ "./resources/js/react/disputes/components/Filter-bar/FilterContainer.jsx");
-/* harmony import */ var _components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Filter-bar/Filterbar */ "./resources/js/react/disputes/components/Filter-bar/Filterbar.jsx");
-/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _components_DisputeTableLoader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/DisputeTableLoader */ "./resources/js/react/disputes/components/DisputeTableLoader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var _components_DisputeTableColumn__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/DisputeTableColumn */ "./resources/js/react/disputes/components/DisputeTableColumn.jsx");
+/* harmony import */ var _components_DisputeTableLoader__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/DisputeTableLoader */ "./resources/js/react/disputes/components/DisputeTableLoader.jsx");
+/* harmony import */ var _components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Filter-bar/FilterContainer */ "./resources/js/react/disputes/components/Filter-bar/FilterContainer.jsx");
+/* harmony import */ var _components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/Filter-bar/Filterbar */ "./resources/js/react/disputes/components/Filter-bar/Filterbar.jsx");
+/* harmony import */ var _components_ResolveModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/ResolveModal */ "./resources/js/react/disputes/components/ResolveModal.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -22599,14 +22602,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
+
 var reducer = function reducer() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   var action = arguments.length > 1 ? arguments[1] : undefined;
   switch (action.type) {
     case 'INIT_DISPUTE':
-      return state = lodash__WEBPACK_IMPORTED_MODULE_6___default().orderBy(action.disputes, 'id', 'desc');
+      return state = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(action.disputes, ['status', 'id'], ['asc', 'desc']);
     case 'UPDATE_DISPUTE_CONVERSATION':
-      return lodash__WEBPACK_IMPORTED_MODULE_6___default().map(state, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(state, function (d) {
         if (d.id === action.disputeId) {
           return _objectSpread(_objectSpread({}, d), {}, {
             conversations: action.conversations
@@ -22615,7 +22620,7 @@ var reducer = function reducer() {
         return d;
       });
     case 'UPDATE_DISPUTE':
-      return lodash__WEBPACK_IMPORTED_MODULE_6___default().map(state, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(state, function (d) {
         if (d.id === action.disputeId) {
           return _objectSpread({}, action.data);
         }
@@ -22626,30 +22631,44 @@ var reducer = function reducer() {
   }
 };
 var Disputes = function Disputes() {
-  var _React$useReducer = react__WEBPACK_IMPORTED_MODULE_0___default().useReducer(reducer, []),
+  var _React$useReducer = react__WEBPACK_IMPORTED_MODULE_1___default().useReducer(reducer, []),
     _React$useReducer2 = _slicedToArray(_React$useReducer, 2),
     disputes = _React$useReducer2[0],
     dispatch = _React$useReducer2[1];
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default().useState({
+      totalDispute: 0,
+      raisedByMe: 0,
+      needMyAttention: 0,
+      resolvedDispute: 0,
+      wonDispute: 0,
+      lostDispute: 0,
+      resolvedByAdmin: 0,
+      resolvedByTeamLead: 0
+    }),
     _React$useState2 = _slicedToArray(_React$useState, 2),
-    filters = _React$useState2[0],
-    setFilters = _React$useState2[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+    widgetDate = _React$useState2[0],
+    setWidgetData = _React$useState2[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
-    search = _React$useState4[0],
-    setSearch = _React$useState4[1];
-  var _useLazyGetDisputesQu = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useLazyGetDisputesQuery)(),
+    filters = _React$useState4[0],
+    setFilters = _React$useState4[1];
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    search = _React$useState6[0],
+    setSearch = _React$useState6[1];
+  var _useLazyGetDisputesQu = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__.useLazyGetDisputesQuery)(),
     _useLazyGetDisputesQu2 = _slicedToArray(_useLazyGetDisputesQu, 2),
     getDisputes = _useLazyGetDisputesQu2[0],
     isFetching = _useLazyGetDisputesQu2[1].isFetching;
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User(window.Laravel.user);
   var onFilter = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(filter) {
-      var queryObject, queryString, res, data;
+      var queryObject, queryString, res;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              queryObject = lodash__WEBPACK_IMPORTED_MODULE_6___default().pickBy(filter, Boolean);
+              queryObject = lodash__WEBPACK_IMPORTED_MODULE_0___default().pickBy(filter, Boolean);
               queryString = new URLSearchParams(queryObject).toString();
               setFilters(queryObject);
               _context.prev = 3;
@@ -22662,10 +22681,9 @@ var Disputes = function Disputes() {
             case 7:
               res = _context.sent;
               if (res) {
-                data = lodash__WEBPACK_IMPORTED_MODULE_6___default().orderBy(res, 'id', 'desc');
                 dispatch({
                   type: 'INIT_DISPUTE',
-                  disputes: data
+                  disputes: res
                 });
               }
             case 9:
@@ -22686,6 +22704,67 @@ var Disputes = function Disputes() {
       return _ref.apply(this, arguments);
     };
   }();
+  var defString = JSON.stringify(disputes);
+  react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(function () {
+    // calculate total dispute
+    var raisedByMe = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (data) {
+      var _data$raised_by;
+      return (data === null || data === void 0 ? void 0 : (_data$raised_by = data.raised_by) === null || _data$raised_by === void 0 ? void 0 : _data$raised_by.id) === (auth === null || auth === void 0 ? void 0 : auth.getId());
+    });
+    var resolveByAdmin = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (data) {
+      var _data$authorized_by;
+      return (data === null || data === void 0 ? void 0 : data.status) && (data === null || data === void 0 ? void 0 : (_data$authorized_by = data.authorized_by) === null || _data$authorized_by === void 0 ? void 0 : _data$authorized_by.id) === (auth === null || auth === void 0 ? void 0 : auth.getId());
+    });
+    var resolveByTeamLead = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (data) {
+      var _data$resolved_by;
+      return data.status && !(data !== null && data !== void 0 && data.need_authrization) && (data === null || data === void 0 ? void 0 : (_data$resolved_by = data.resolved_by) === null || _data$resolved_by === void 0 ? void 0 : _data$resolved_by.id) === (auth === null || auth === void 0 ? void 0 : auth.getId());
+    });
+    var totalDispute = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(disputes);
+    // need attention 
+
+    // calcualte need my attention item 
+    var filterData = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (dispute) {
+      if (dispute && dispute.conversations) {
+        var indexOf = dispute.conversations.findIndex(function (d) {
+          return !d.replies;
+        });
+        if (indexOf !== -1) {
+          return true;
+        } else return false;
+      }
+      return false;
+    });
+    var teamLeadAction = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (d) {
+      return !d.status && !d.need_authrization;
+    }));
+    var needActionForAdmin = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (d) {
+      return !d.status && d.need_authrization;
+    }));
+    var needMyAttention = (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1 ? needActionForAdmin : (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 8 ? teamLeadAction : lodash__WEBPACK_IMPORTED_MODULE_0___default().size(filterData);
+
+    // resolve dispute
+    var resolvedDispute = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (f) {
+      return f.status;
+    }));
+    var won = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (f) {
+      var _f$winner;
+      return f.status && (f === null || f === void 0 ? void 0 : (_f$winner = f.winner) === null || _f$winner === void 0 ? void 0 : _f$winner.id) === auth.getId();
+    }));
+    var lost = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(disputes, function (f) {
+      var _f$winner2;
+      return f.status && (f === null || f === void 0 ? void 0 : (_f$winner2 = f.winner) === null || _f$winner2 === void 0 ? void 0 : _f$winner2.id) !== auth.getId();
+    }));
+    setWidgetData(_objectSpread(_objectSpread({}, widgetDate), {}, {
+      raisedByMe: lodash__WEBPACK_IMPORTED_MODULE_0___default().size(raisedByMe),
+      totalDispute: totalDispute,
+      needMyAttention: needMyAttention,
+      resolvedDispute: resolvedDispute,
+      wonDispute: won,
+      lostDispute: lost,
+      resolvedByAdmin: lodash__WEBPACK_IMPORTED_MODULE_0___default().size(resolveByAdmin),
+      resolvedByTeamLead: lodash__WEBPACK_IMPORTED_MODULE_0___default().size(resolveByTeamLead)
+    }));
+  }, [defString]);
 
   // update dispute state
   var updateDisputeConversation = function updateDisputeConversation(_ref2) {
@@ -22707,81 +22786,134 @@ var Disputes = function Disputes() {
       data: data
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_8__["default"], {
         onFilter: onFilter
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "py-2 py-md-4 px-2 px-md-5 w-full",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            className: "p-3 bg-white rounded-lg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
-              children: "Total Issues"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
-              children: "101"
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Total Disputes"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.totalDispute
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        }), (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            className: "p-3 bg-white rounded-lg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
-              children: "Total Issues"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
-              children: "101"
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Disputes Resolved by Me"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.resolvedByAdmin
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        }) : null, (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 8 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            className: "p-3 bg-white rounded-lg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
-              children: "Total Issues"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
-              children: "101"
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Disputes Resolved by Me"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.resolveByTeamLead
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        }) : null, !lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            className: "p-3 bg-white rounded-lg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
-              children: "Total Issues"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
-              children: "101"
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Disputes Raised by Me"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.raisedByMe
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            className: "p-3 bg-white rounded-lg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
-              children: "Total Issues"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
-              children: "101"
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Disputes Need My Attention"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.needMyAttention
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-            className: "p-3 bg-white rounded-lg",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
-              children: "Total Issues"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
-              children: "101"
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Total Resolved Disputes"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.resolvedDispute
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Won Disputes"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              children: widgetDate.wonDispute
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
+          className: "col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+            className: "p-3 bg-white rounded-lg h-100",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
+              className: "f-14 font-weight-bold",
+              style: {
+                color: '#9D9FA9'
+              },
+              children: "Lost Disputes"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h5", {
+              className: "mt-2",
+              children: widgetDate.lostDispute
             })]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "mt-3 p-3 bg-white",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_global_table_DataTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_global_table_DataTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
           tableData: disputes,
-          tableColumns: _components_DisputeTableColumn__WEBPACK_IMPORTED_MODULE_1__.disputeTableColumn,
+          tableColumns: _components_DisputeTableColumn__WEBPACK_IMPORTED_MODULE_5__.disputeTableColumn,
           hideColumns: [],
           search: search,
           filter: filters,
@@ -22791,10 +22923,15 @@ var Disputes = function Disputes() {
             updateDisputeConversation: updateDisputeConversation,
             updateDisputeById: updateDisputeById
           },
-          loader: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_DisputeTableLoader__WEBPACK_IMPORTED_MODULE_7__["default"], {})
+          loader: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_DisputeTableLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {})
         })
       })]
-    })]
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_ResolveModal__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      state: {
+        updateDisputeConversation: updateDisputeConversation,
+        updateDisputeById: updateDisputeById
+      }
+    }), "  "]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Disputes);
@@ -22822,7 +22959,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global_Avatar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../global/Avatar */ "./resources/js/react/global/Avatar.jsx");
 /* harmony import */ var _global_Dropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../global/Dropdown */ "./resources/js/react/global/Dropdown.jsx");
 /* harmony import */ var _global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../global/SubmitButton */ "./resources/js/react/global/SubmitButton.jsx");
-/* harmony import */ var _global_form_DebounceInput__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../global/form/DebounceInput */ "./resources/js/react/global/form/DebounceInput.jsx");
+/* harmony import */ var _global_form_DebounceTextarea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../global/form/DebounceTextarea */ "./resources/js/react/global/form/DebounceTextarea.jsx");
 /* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var _global_Loader__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../global/Loader */ "./resources/js/react/global/Loader.jsx");
@@ -22886,7 +23023,7 @@ var reducer = function reducer() {
   }
 };
 var AnsQuestion = function AnsQuestion(_ref) {
-  var _window2, _window2$Laravel, _row$task$parent_task, _row$task, _row$task2, _row$task3, _row$raised_against, _row$raised_against2, _row$raised_against3, _row$raised_against4, _row$raised_against5, _row$raised_against6, _row$pm_comment, _row$raised_by, _row$raised_by2, _row$raised_by3, _row$raised_by4, _row$raised_by5, _row$dev_comment;
+  var _window2, _window2$Laravel, _row$task$parent_task, _row$task, _row$raised_by, _row$raised_against, _row$task2, _row$task3, _row$client, _row$client2, _row$client3, _row$client4, _row$client5, _row$sales_person, _row$sales_person2, _row$sales_person3, _row$sales_person4, _row$sales_person5, _row$project_manager, _row$project_manager2, _row$project_manager3, _row$project_manager4, _row$project_manager5, _row$task4, _row$task4$lead_devel, _row$task5, _row$task5$lead_devel, _row$task6, _row$task6$lead_devel, _row$task7, _row$task7$lead_devel, _row$task8, _row$task8$lead_devel, _row$task11, _row$task11$developer, _row$task12, _row$task12$developer, _row$task13, _row$task13$developer, _row$task14, _row$task14$developer, _row$task15, _row$task15$developer;
   var row = _ref.row,
     table = _ref.table;
   var _useUsers = (0,_hooks_useUsers__WEBPACK_IMPORTED_MODULE_9__.useUsers)(),
@@ -23011,18 +23148,20 @@ var AnsQuestion = function AnsQuestion(_ref) {
               className: "px-3",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
                 className: "alert alert-info",
-                children: ["This dispute is between project manager ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                children: ["This dispute is between ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
                   href: "#",
                   className: "badge badge-info",
-                  children: "Farhan Rahman"
-                }), " and lead developer ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                  children: row === null || row === void 0 ? void 0 : (_row$raised_by = row.raised_by) === null || _row$raised_by === void 0 ? void 0 : _row$raised_by.name
+                }), " and ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("a", {
                   href: "#",
                   className: "badge badge-info",
-                  children: " Moniruzzaman "
-                }), " and was initiated on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                  href: "#",
+                  children: [" ", row === null || row === void 0 ? void 0 : (_row$raised_against = row.raised_against) === null || _row$raised_against === void 0 ? void 0 : _row$raised_against.name, " "]
+                }), " and was initiated on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
                   className: "badge badge-info",
-                  children: "18th August 2023 03:55:54 PM"
+                  children: [dayjs__WEBPACK_IMPORTED_MODULE_12___default()(row === null || row === void 0 ? void 0 : row.dispute_created_at).format('MMM DD, YYYY'), " "]
+                }), " at ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                  className: "badge badge-info",
+                  children: dayjs__WEBPACK_IMPORTED_MODULE_12___default()(row === null || row === void 0 ? void 0 : row.dispute_created_at).format('hh:mm a')
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
                 className: "sp1-item-center",
@@ -23068,269 +23207,571 @@ var AnsQuestion = function AnsQuestion(_ref) {
                     })
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                className: "mt-3 pb-2 py-2 position-relative",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                  className: "badge badge-secondary divider-text",
-                  children: "Revision"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
-                className: "dispute-preview-table",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "whitespace-nowrap py-2",
-                      children: "Revision Given By:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2 px-3",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                        className: "d-flex align-items-center",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                          src: row !== null && row !== void 0 && (_row$raised_against = row.raised_against) !== null && _row$raised_against !== void 0 && _row$raised_against.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$raised_against2 = row.raised_against) === null || _row$raised_against2 === void 0 ? void 0 : _row$raised_against2.image) : null,
-                          alt: row === null || row === void 0 ? void 0 : (_row$raised_against3 = row.raised_against) === null || _row$raised_against3 === void 0 ? void 0 : _row$raised_against3.name,
-                          name: row === null || row === void 0 ? void 0 : (_row$raised_against4 = row.raised_against) === null || _row$raised_against4 === void 0 ? void 0 : _row$raised_against4.name,
-                          type: "circle",
-                          width: 32,
-                          height: 32,
-                          fontSize: "1.2rem"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "px-2",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block",
-                            children: row === null || row === void 0 ? void 0 : (_row$raised_against5 = row.raised_against) === null || _row$raised_against5 === void 0 ? void 0 : _row$raised_against5.name
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block f-10",
-                            style: {
-                              color: '#777',
-                              marginTop: '-0.30rem'
-                            },
-                            children: row === null || row === void 0 ? void 0 : (_row$raised_against6 = row.raised_against) === null || _row$raised_against6 === void 0 ? void 0 : _row$raised_against6.designation
-                          })]
-                        })]
-                      })
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Reason:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2 ",
-                      children: row === null || row === void 0 ? void 0 : row.revision_acknowledgement
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Explanation:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "sp1_ck_content",
-                        dangerouslySetInnerHTML: {
-                          __html: (_row$pm_comment = row === null || row === void 0 ? void 0 : row.pm_comment) !== null && _row$pm_comment !== void 0 ? _row$pm_comment : row === null || row === void 0 ? void 0 : row.lead_comment
-                        }
-                      })
-                    })]
-                  }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
-                    var _row$raised_against7;
-                    return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$raised_against7 = row.raised_against) === null || _row$raised_against7 === void 0 ? void 0 : _row$raised_against7.id) && (conv === null || conv === void 0 ? void 0 : conv.replies);
-                  })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Submitted Answer:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "d-flex flex-column",
-                        style: {
-                          gap: '16px'
-                        },
-                        children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(_toConsumableArray(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
-                          return c.question_for === (auth === null || auth === void 0 ? void 0 : auth.getId()) && (c === null || c === void 0 ? void 0 : c.replies);
-                        })), function (conv, index) {
-                          var _conv$replies;
-                          var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
-                          var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
-                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "d-flex flex-column",
-                            style: {
-                              gap: 6
-                            },
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                              className: "pl-3",
-                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "badge badge-primary",
-                                children: ["Question 0", index + 1, ":"]
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "px-2 font-medium",
-                                children: conv === null || conv === void 0 ? void 0 : conv.question
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "d-block text-right question-by f-12",
-                                children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                  href: raised_by.getUserLink(),
-                                  children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
-                                }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
-                              })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "p-3",
+              }), lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['CPR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Client"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("tbody", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Client:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$client = row.client) !== null && _row$client !== void 0 && _row$client.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$client2 = row.client) === null || _row$client2 === void 0 ? void 0 : _row$client2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$client3 = row.client) === null || _row$client3 === void 0 ? void 0 : _row$client3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$client4 = row.client) === null || _row$client4 === void 0 ? void 0 : _row$client4.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$client5 = row.client) === null || _row$client5 === void 0 ? void 0 : _row$client5.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block f-10",
                               style: {
-                                background: '#f8f8f8'
+                                color: '#777',
+                                marginTop: '-0.30rem'
                               },
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                                className: "",
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
-                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                    className: "badge badge-success d-inline mr-1",
-                                    children: "Answer:"
-                                  }), (_conv$replies = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies !== void 0 ? _conv$replies : 'Not answered yet!']
-                                }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                    className: "question-by f-12",
-                                    children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                      href: replied_by.getUserLink(),
-                                      children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
-                                    }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
-                                  })
-                                })]
-                              })
+                              children: "Lead Developer"
                             })]
-                          }, index);
-                        })
-                      })
-                    })]
-                  }) : null]
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                className: "mt-3 pb-2 py-2 position-relative",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                  className: "badge badge-secondary divider-text",
-                  children: "Response"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
-                className: "dispute-preview-table",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "whitespace-nowrap py-2",
-                      children: "Denied by:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2 px-3",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                        className: "d-flex align-items-center",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                          src: row !== null && row !== void 0 && (_row$raised_by = row.raised_by) !== null && _row$raised_by !== void 0 && _row$raised_by.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$raised_by2 = row.raised_by) === null || _row$raised_by2 === void 0 ? void 0 : _row$raised_by2.image) : null,
-                          alt: row === null || row === void 0 ? void 0 : (_row$raised_by3 = row.raised_by) === null || _row$raised_by3 === void 0 ? void 0 : _row$raised_by3.name,
-                          name: row === null || row === void 0 ? void 0 : (_row$raised_by4 = row.raised_by) === null || _row$raised_by4 === void 0 ? void 0 : _row$raised_by4.name,
-                          type: "circle",
-                          width: 32,
-                          height: 32,
-                          fontSize: "1.2rem"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "px-2",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block",
-                            children: row === null || row === void 0 ? void 0 : (_row$raised_by5 = row.raised_by) === null || _row$raised_by5 === void 0 ? void 0 : _row$raised_by5.name
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block f-10",
-                            style: {
-                              color: '#777',
-                              marginTop: '-0.30rem'
-                            },
-                            children: "Lead Developer"
                           })]
-                        })]
-                      })
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Reason:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: row === null || row === void 0 ? void 0 : row.deny_reason
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Explanation:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "sp1_ck_content",
-                        dangerouslySetInnerHTML: {
-                          __html: (_row$dev_comment = row === null || row === void 0 ? void 0 : row.dev_comment) !== null && _row$dev_comment !== void 0 ? _row$dev_comment : row === null || row === void 0 ? void 0 : row.lead_comment
-                        }
-                      })
-                    })]
-                  }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
-                    var _row$raised_by6;
-                    return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$raised_by6 = row.raised_by) === null || _row$raised_by6 === void 0 ? void 0 : _row$raised_by6.id) && (conv === null || conv === void 0 ? void 0 : conv.replies);
-                  })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Submitted Answer:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "d-flex flex-column",
-                        style: {
-                          gap: '16px'
-                        },
-                        children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
-                          return c.question_for === (auth === null || auth === void 0 ? void 0 : auth.getId()) && (c === null || c === void 0 ? void 0 : c.replies);
-                        }), function (conv, index) {
-                          var _conv$replies2;
-                          var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
-                          var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
-                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "d-flex flex-column",
-                            style: {
-                              gap: 6
-                            },
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                              className: "pl-3",
-                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "badge badge-primary",
-                                children: ["Question 0", index + 1, ":"]
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "px-2 font-medium",
-                                children: conv === null || conv === void 0 ? void 0 : conv.question
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "d-block text-right question-by f-12",
-                                children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                  href: raised_by.getUserLink(),
-                                  children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
-                                }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
-                              })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "p-3",
-                              style: {
-                                background: '#f8f8f8'
-                              },
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                                className: "",
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
-                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                    className: "badge badge-success d-inline mr-1",
-                                    children: "Answer:"
-                                  }), (_conv$replies2 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies2 !== void 0 ? _conv$replies2 : 'Not answered yet!']
-                                }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                    className: "question-by f-12",
-                                    children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                      href: replied_by.getUserLink(),
-                                      children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
-                                    }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
-                                  })
-                                })]
-                              })
-                            })]
-                          }, index);
                         })
-                      })
-                    })]
-                  }) : null]
-                })
-              })]
+                      })]
+                    })
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['SPR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Sales"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Sales:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$sales_person = row.sales_person) !== null && _row$sales_person !== void 0 && _row$sales_person.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$sales_person2 = row.sales_person) === null || _row$sales_person2 === void 0 ? void 0 : _row$sales_person2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$sales_person3 = row.sales_person) === null || _row$sales_person3 === void 0 ? void 0 : _row$sales_person3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$sales_person4 = row.sales_person) === null || _row$sales_person4 === void 0 ? void 0 : _row$sales_person4.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$sales_person5 = row.sales_person) === null || _row$sales_person5 === void 0 ? void 0 : _row$sales_person5.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: "Lead Developer"
+                            })]
+                          })]
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
+                      var _row$sales_person6;
+                      return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$sales_person6 = row.sales_person) === null || _row$sales_person6 === void 0 ? void 0 : _row$sales_person6.id) && !!(conv !== null && conv !== void 0 && conv.replies);
+                    })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(_toConsumableArray(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
+                            var _row$sales_person7;
+                            return c.question_for === (row === null || row === void 0 ? void 0 : (_row$sales_person7 = row.sales_person) === null || _row$sales_person7 === void 0 ? void 0 : _row$sales_person7.id) && !!(c !== null && c !== void 0 && c.replies);
+                          })), function (conv, index) {
+                            var _conv$replies;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies !== void 0 ? _conv$replies : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['SPR', 'CPR', 'PLR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Project Manager"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Project Manager:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$project_manager = row.project_manager) !== null && _row$project_manager !== void 0 && _row$project_manager.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$project_manager2 = row.project_manager) === null || _row$project_manager2 === void 0 ? void 0 : _row$project_manager2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$project_manager3 = row.project_manager) === null || _row$project_manager3 === void 0 ? void 0 : _row$project_manager3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$project_manager4 = row.project_manager) === null || _row$project_manager4 === void 0 ? void 0 : _row$project_manager4.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$project_manager5 = row.project_manager) === null || _row$project_manager5 === void 0 ? void 0 : _row$project_manager5.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: "Lead Developer"
+                            })]
+                          })]
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Reason:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2 ",
+                        children: row === null || row === void 0 ? void 0 : row.revision_acknowledgement
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Explanation:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "sp1_ck_content",
+                          dangerouslySetInnerHTML: {
+                            __html: row === null || row === void 0 ? void 0 : row.pm_comment
+                          }
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
+                      var _row$project_manager6;
+                      return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$project_manager6 = row.project_manager) === null || _row$project_manager6 === void 0 ? void 0 : _row$project_manager6.id) && !!(conv !== null && conv !== void 0 && conv.replies);
+                    })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(_toConsumableArray(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
+                            var _row$project_manager7;
+                            return c.question_for === (row === null || row === void 0 ? void 0 : (_row$project_manager7 = row.project_manager) === null || _row$project_manager7 === void 0 ? void 0 : _row$project_manager7.id) && !!(c !== null && c !== void 0 && c.replies);
+                          })), function (conv, index) {
+                            var _conv$replies2;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies2 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies2 !== void 0 ? _conv$replies2 : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['PLR', 'LDR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Lead Developer"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Lead Developer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$task4 = row.task) !== null && _row$task4 !== void 0 && (_row$task4$lead_devel = _row$task4.lead_developer) !== null && _row$task4$lead_devel !== void 0 && _row$task4$lead_devel.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$task5 = row.task) === null || _row$task5 === void 0 ? void 0 : (_row$task5$lead_devel = _row$task5.lead_developer) === null || _row$task5$lead_devel === void 0 ? void 0 : _row$task5$lead_devel.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$task6 = row.task) === null || _row$task6 === void 0 ? void 0 : (_row$task6$lead_devel = _row$task6.lead_developer) === null || _row$task6$lead_devel === void 0 ? void 0 : _row$task6$lead_devel.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$task7 = row.task) === null || _row$task7 === void 0 ? void 0 : (_row$task7$lead_devel = _row$task7.lead_developer) === null || _row$task7$lead_devel === void 0 ? void 0 : _row$task7$lead_devel.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$task8 = row.task) === null || _row$task8 === void 0 ? void 0 : (_row$task8$lead_devel = _row$task8.lead_developer) === null || _row$task8$lead_devel === void 0 ? void 0 : _row$task8$lead_devel.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: "Lead Developer"
+                            })]
+                          })]
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Reason:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2 ",
+                        children: (row === null || row === void 0 ? void 0 : row.dispute_between) === 'LDR' ? row === null || row === void 0 ? void 0 : row.revision_acknowledgement : row === null || row === void 0 ? void 0 : row.deny_reason
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Explanation:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "sp1_ck_content",
+                          dangerouslySetInnerHTML: {
+                            __html: row === null || row === void 0 ? void 0 : row.lead_comment
+                          }
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
+                      var _row$task9, _row$task9$lead_devel;
+                      return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$task9 = row.task) === null || _row$task9 === void 0 ? void 0 : (_row$task9$lead_devel = _row$task9.lead_developer) === null || _row$task9$lead_devel === void 0 ? void 0 : _row$task9$lead_devel.id) && !!(conv !== null && conv !== void 0 && conv.replies);
+                    })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(_toConsumableArray(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
+                            var _row$task10, _row$task10$lead_deve;
+                            return c.question_for === (row === null || row === void 0 ? void 0 : (_row$task10 = row.task) === null || _row$task10 === void 0 ? void 0 : (_row$task10$lead_deve = _row$task10.lead_developer) === null || _row$task10$lead_deve === void 0 ? void 0 : _row$task10$lead_deve.id) && !!(c !== null && c !== void 0 && c.replies);
+                          })), function (conv, index) {
+                            var _conv$replies3;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies3 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies3 !== void 0 ? _conv$replies3 : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['LDR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Developer"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Developer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$task11 = row.task) !== null && _row$task11 !== void 0 && (_row$task11$developer = _row$task11.developer) !== null && _row$task11$developer !== void 0 && _row$task11$developer.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$task12 = row.task) === null || _row$task12 === void 0 ? void 0 : (_row$task12$developer = _row$task12.developer) === null || _row$task12$developer === void 0 ? void 0 : _row$task12$developer.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$task13 = row.task) === null || _row$task13 === void 0 ? void 0 : (_row$task13$developer = _row$task13.developer) === null || _row$task13$developer === void 0 ? void 0 : _row$task13$developer.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$task14 = row.task) === null || _row$task14 === void 0 ? void 0 : (_row$task14$developer = _row$task14.developer) === null || _row$task14$developer === void 0 ? void 0 : _row$task14$developer.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$task15 = row.task) === null || _row$task15 === void 0 ? void 0 : (_row$task15$developer = _row$task15.developer) === null || _row$task15$developer === void 0 ? void 0 : _row$task15$developer.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: "Lead Developer"
+                            })]
+                          })]
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Reason:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2 ",
+                        children: row === null || row === void 0 ? void 0 : row.deny_reason
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Explanation:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "sp1_ck_content",
+                          dangerouslySetInnerHTML: {
+                            __html: row === null || row === void 0 ? void 0 : row.dev_comment
+                          }
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
+                      var _row$task16, _row$task16$developer;
+                      return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$task16 = row.task) === null || _row$task16 === void 0 ? void 0 : (_row$task16$developer = _row$task16.developer) === null || _row$task16$developer === void 0 ? void 0 : _row$task16$developer.id) && !!(conv !== null && conv !== void 0 && conv.replies);
+                    })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(_toConsumableArray(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
+                            var _row$task17, _row$task17$developer;
+                            return c.question_for === (row === null || row === void 0 ? void 0 : (_row$task17 = row.task) === null || _row$task17 === void 0 ? void 0 : (_row$task17$developer = _row$task17.developer) === null || _row$task17$developer === void 0 ? void 0 : _row$task17$developer.id) && !!(c !== null && c !== void 0 && c.replies);
+                          })), function (conv, index) {
+                            var _conv$replies4;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies4 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies4 !== void 0 ? _conv$replies4 : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_12___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null]
             }), usersIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Loader__WEBPACK_IMPORTED_MODULE_11__["default"], {
               title: "loading..."
             }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
@@ -23382,7 +23823,7 @@ var AnsQuestion = function AnsQuestion(_ref) {
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
                         className: "w-auto px-4 mx-1",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_form_DebounceInput__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_form_DebounceTextarea__WEBPACK_IMPORTED_MODULE_8__["default"], {
                           className: "form-control py-2 px-3 w-100",
                           placeholder: "Explaine here...",
                           rows: 3,
@@ -23484,10 +23925,10 @@ Button.propTypes = {
 
 /***/ }),
 
-/***/ "./resources/js/react/disputes/components/DisputeNotification.jsx":
-/*!************************************************************************!*\
-  !*** ./resources/js/react/disputes/components/DisputeNotification.jsx ***!
-  \************************************************************************/
+/***/ "./resources/js/react/disputes/components/DisputeNotificationBadge.jsx":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/react/disputes/components/DisputeNotificationBadge.jsx ***!
+  \*****************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -23497,11 +23938,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_popper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-popper */ "./node_modules/react-popper/lib/esm/usePopper.js");
+/* harmony import */ var react_popper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-popper */ "./node_modules/react-popper/lib/esm/usePopper.js");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context */ "./resources/js/react/disputes/context.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -23517,10 +23959,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var DisputeNotification = function DisputeNotification(_ref) {
-  var _window, _window$Laravel;
+
+var DisputeNotificationBadge = function DisputeNotificationBadge(_ref) {
+  var _window, _window$Laravel, _data$raised_against2, _data$raised_by2;
   var row = _ref.row,
     table = _ref.table;
+  var _useDispute = (0,_context__WEBPACK_IMPORTED_MODULE_3__.useDispute)(),
+    toggleModal = _useDispute.toggleModal;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     referenceElement = _React$useState2[0],
@@ -23533,7 +23978,7 @@ var DisputeNotification = function DisputeNotification(_ref) {
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     arrowElement = _React$useState6[0],
     setArrowElement = _React$useState6[1];
-  var _usePopper = (0,react_popper__WEBPACK_IMPORTED_MODULE_4__.usePopper)(referenceElement, popperElement, {
+  var _usePopper = (0,react_popper__WEBPACK_IMPORTED_MODULE_5__.usePopper)(referenceElement, popperElement, {
       placement: 'top',
       modifiers: [{
         name: 'offset',
@@ -23557,23 +24002,58 @@ var DisputeNotification = function DisputeNotification(_ref) {
   var hasReplied = lodash__WEBPACK_IMPORTED_MODULE_2___default().size(lodash__WEBPACK_IMPORTED_MODULE_2___default().filter(data.conversations, function (conv) {
     return conv.replies && !conv.replied_seen ? true : false;
   }));
-  var showNotification = unsolvedQuestion || hasReplied || !(data !== null && data !== void 0 && data.status) && (data === null || data === void 0 ? void 0 : data.need_authorization) && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+  var showNotification = unsolvedQuestion || hasReplied && lodash__WEBPACK_IMPORTED_MODULE_2___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) || !(data !== null && data !== void 0 && data.status) && (data === null || data === void 0 ? void 0 : data.need_authrization) && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1;
+  var modalMode = function modalMode() {
+    var _data$raised_by, _data$raised_against;
+    var mode = 'view';
+    if (unsolvedQuestion) mode = 'QUESTION_AND_ANSWER';
+    if (!(data !== null && data !== void 0 && data.status) && !(data !== null && data !== void 0 && data.need_authrization) && lodash__WEBPACK_IMPORTED_MODULE_2___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && !lodash__WEBPACK_IMPORTED_MODULE_2___default().includes([data === null || data === void 0 ? void 0 : (_data$raised_by = data.raised_by) === null || _data$raised_by === void 0 ? void 0 : _data$raised_by.id, data === null || data === void 0 ? void 0 : (_data$raised_against = data.raised_against) === null || _data$raised_against === void 0 ? void 0 : _data$raised_against.id], auth === null || auth === void 0 ? void 0 : auth.getId())) {
+      mode = 'RESOLVE';
+    }
+    if (!(data !== null && data !== void 0 && data.status) && data !== null && data !== void 0 && data.need_authrization && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) mode = 'ATHORIZATION';
+    if (data !== null && data !== void 0 && data.status) mode = 'view';
+    return mode;
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      onClick: function onClick() {
+        return toggleModal(data, modalMode());
+      },
       ref: setReferenceElement,
       style: {
-        width: 'fit-content'
+        width: 'fit-content',
+        color: data !== null && data !== void 0 && data.status ? '#28A745' : '',
+        fontWeight: '500'
       },
-      children: ["T", data.task_id, "D", data.id < 10 ? "0".concat(data.id) : data.id]
-    }), showNotification ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", _objectSpread(_objectSpread({
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+        className: "d-flex position-relative align-items-center",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+          className: data !== null && data !== void 0 && data.status ? 'fa-solid fa-check' : 'fa-regular fa-circle',
+          style: {
+            position: 'absoltue',
+            top: '0',
+            right: '100%'
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("span", {
+          className: "px-2 text-hover-underline",
+          style: {
+            cursor: 'pointer'
+          },
+          children: ["T", data.task_id, "D", data.id < 10 ? "0".concat(data.id) : data.id]
+        })]
+      })
+    }), showNotification ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", _objectSpread(_objectSpread({
       className: "dispute-tooltip",
+      onClick: function onClick() {
+        return toggleModal(data, modalMode());
+      },
       ref: setPopperElement,
       style: styles.popper
     }, attributes.popper), {}, {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "dispute-tooltip-content",
-        children: [unsolvedQuestion ? "".concat(unsolvedQuestion, " Questions") : null, hasReplied ? 'New Update' : null, data !== null && data !== void 0 && data.need_authorization && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1 ? 'New Update' : null]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        children: [unsolvedQuestion ? "".concat(unsolvedQuestion, " Questions") : null, hasReplied && !lodash__WEBPACK_IMPORTED_MODULE_2___default().includes([data === null || data === void 0 ? void 0 : (_data$raised_against2 = data.raised_against) === null || _data$raised_against2 === void 0 ? void 0 : _data$raised_against2.id, data === null || data === void 0 ? void 0 : (_data$raised_by2 = data.raised_by) === null || _data$raised_by2 === void 0 ? void 0 : _data$raised_by2.id], auth === null || auth === void 0 ? void 0 : auth.getId()) ? 'New Update' : null, data !== null && data !== void 0 && data.need_authorization && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1 ? 'New Update' : null]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         ref: setArrowElement,
         style: styles.arrow,
         className: "dispute-notif-arrow"
@@ -23581,7 +24061,7 @@ var DisputeNotification = function DisputeNotification(_ref) {
     })) : null]
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DisputeNotification);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DisputeNotificationBadge);
 
 /***/ }),
 
@@ -23599,7 +24079,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ResolveButton__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ResolveButton */ "./resources/js/react/disputes/components/ResolveButton.jsx");
-/* harmony import */ var _DisputeNotification__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DisputeNotification */ "./resources/js/react/disputes/components/DisputeNotification.jsx");
+/* harmony import */ var _DisputeNotificationBadge__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DisputeNotificationBadge */ "./resources/js/react/disputes/components/DisputeNotificationBadge.jsx");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _global_Avatar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../global/Avatar */ "./resources/js/react/global/Avatar.jsx");
@@ -23627,7 +24107,7 @@ var disputeTableColumn = [{
   cell: function cell(_ref) {
     var row = _ref.row,
       table = _ref.table;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_DisputeNotification__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_DisputeNotificationBadge__WEBPACK_IMPORTED_MODULE_2__["default"], {
       row: row,
       table: table
     });
@@ -23675,7 +24155,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        hrev: "account/clients/".concat(client === null || client === void 0 ? void 0 : client.id),
         children: client === null || client === void 0 ? void 0 : client.name
       })]
     });
@@ -23747,7 +24228,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/employees/".concat(salesPerson === null || salesPerson === void 0 ? void 0 : salesPerson.id),
         children: salesPerson === null || salesPerson === void 0 ? void 0 : salesPerson.name
       })]
     });
@@ -23773,7 +24255,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/clinets/".concat(project_manager === null || project_manager === void 0 ? void 0 : project_manager.id),
         children: project_manager === null || project_manager === void 0 ? void 0 : project_manager.name
       })]
     });
@@ -23791,6 +24274,9 @@ var disputeTableColumn = [{
     var row = _ref9.row;
     var data = row.original;
     var lead_developer = data === null || data === void 0 ? void 0 : (_data$task2 = data.task) === null || _data$task2 === void 0 ? void 0 : _data$task2.lead_developer;
+    if (!lead_developer) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      children: " --"
+    });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "person_rander",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -23800,7 +24286,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/employees/".concat(lead_developer === null || lead_developer === void 0 ? void 0 : lead_developer.id),
         children: lead_developer === null || lead_developer === void 0 ? void 0 : lead_developer.name
       })]
     });
@@ -23821,13 +24308,14 @@ var disputeTableColumn = [{
     return developer ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "person_rander",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        src: "/user-uploads/avatar/".concat(developer === null || developer === void 0 ? void 0 : developer.image),
+        src: developer !== null && developer !== void 0 && developer.image ? "/user-uploads/avatar/".concat(developer === null || developer === void 0 ? void 0 : developer.image) : null,
         alt: developer === null || developer === void 0 ? void 0 : developer.name,
         name: developer === null || developer === void 0 ? void 0 : developer.name,
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/employees/".concat(developer === null || developer === void 0 ? void 0 : developer.id),
         children: developer === null || developer === void 0 ? void 0 : developer.name
       })]
     }) : '--';
@@ -23853,7 +24341,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/employees/".concat(raised_by === null || raised_by === void 0 ? void 0 : raised_by.id),
         children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.name
       })]
     });
@@ -23879,7 +24368,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/".concat((data === null || data === void 0 ? void 0 : data.dispute_between) === 'CRP' ? 'clients' : 'employees', "/").concat(raised_against.id),
         children: raised_against === null || raised_against === void 0 ? void 0 : raised_against.name
       })]
     });
@@ -23915,11 +24405,11 @@ var disputeTableColumn = [{
     var winner = data === null || data === void 0 ? void 0 : data.winner;
     if (data !== null && data !== void 0 && data.status && !winner) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
       className: "badge badge-warning font-weight-bold text-white f-12",
-      children: " No Winner "
+      children: " Partially Responsible "
     });
     if (!winner) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
       className: "badge badge-warning font-weight-bold text-white f-12",
-      children: " Pending "
+      children: " No Decision Yet "
     });
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "person_rander",
@@ -23930,7 +24420,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/".concat((data === null || data === void 0 ? void 0 : data.dispute_between) === 'CRP' ? 'clients' : 'employees', "/").concat(winner.id),
         children: winner === null || winner === void 0 ? void 0 : winner.name
       })]
     });
@@ -23945,6 +24436,28 @@ var disputeTableColumn = [{
   cell: function cell(_ref15) {
     var row = _ref15.row;
     var data = row.original;
+    var resolved_by = data === null || data === void 0 ? void 0 : data.resolved_by;
+    var unsolvedQuestion = lodash__WEBPACK_IMPORTED_MODULE_5___default().size(lodash__WEBPACK_IMPORTED_MODULE_5___default().filter(data.conversations, function (conv) {
+      return !conv.replies ? true : false;
+    }));
+    if (!resolved_by) {
+      if (unsolvedQuestion > 0) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          className: "badge badge-primary font-weight-bold f-12",
+          children: " In Progress "
+        });
+      } else if (data !== null && data !== void 0 && data.need_authrization) {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          className: "badge badge-primary font-weight-bold f-12",
+          children: " Awaiting Authorization "
+        });
+      } else {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          className: "badge badge-light font-weight-bold f-12",
+          children: " No Activity Yet "
+        });
+      }
+    }
     if (data !== null && data !== void 0 && data.resolved_on) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
@@ -23956,10 +24469,7 @@ var disputeTableColumn = [{
           children: dayjs__WEBPACK_IMPORTED_MODULE_3___default()(data.resolved_on).format('hh:mm a')
         })]
       });
-    } else return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
-      className: "badge badge-warning font-weight-bold text-white f-12",
-      children: " Pending "
-    });
+    }
   }
 }, {
   id: 'resolved_by',
@@ -24003,7 +24513,8 @@ var disputeTableColumn = [{
         type: "circle",
         width: 24,
         height: 24
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("a", {
+        href: "/account/employees/".concat(resolved_by.id),
         children: resolved_by === null || resolved_by === void 0 ? void 0 : resolved_by.name
       })]
     });
@@ -24036,7 +24547,6 @@ var disputeTableColumn = [{
   header: 'Action',
   draggable: false,
   cell: function cell(_ref18) {
-    var _window, _window$Laravel, _window$Laravel$user, _window2, _window2$Laravel, _window2$Laravel$user;
     var row = _ref18.row,
       table = _ref18.table;
     var data = row.original;
@@ -24044,14 +24554,11 @@ var disputeTableColumn = [{
     var unsolvedQuestion = lodash__WEBPACK_IMPORTED_MODULE_5___default().size(lodash__WEBPACK_IMPORTED_MODULE_5___default().filter(data.conversations, function (conv) {
       return !conv.replies ? true : false;
     }));
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-      children: [!lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([1, 8], Number((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.role_id)) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_AnsQuestion__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ResolveButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
         row: row.original,
         table: table
-      }) : null, lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([1, 8], Number((_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$Laravel = _window2.Laravel) === null || _window2$Laravel === void 0 ? void 0 : (_window2$Laravel$user = _window2$Laravel.user) === null || _window2$Laravel$user === void 0 ? void 0 : _window2$Laravel$user.role_id)) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ResolveButton__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        row: row.original,
-        table: table
-      }) : null]
+      })
     });
   }
 }];
@@ -24375,12 +24882,12 @@ var FilterSidebar = function FilterSidebar(_ref) {
         title: "Dispute Raised By",
         state: developer,
         setState: setDeveloper,
-        roleIds: [5, 9, 10]
+        roleIds: [4, 5, 6, 7, 9, 10]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Dispute Raised Against",
         state: developer,
         setState: setDeveloper,
-        roleIds: [5, 9, 10]
+        roleIds: [4, 5, 6, 7, 9, 10]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Client",
         state: client,
@@ -24467,16 +24974,16 @@ var Filterbar = function Filterbar(_ref) {
     setSearchQuery = _React$useState10[1];
   var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
     _React$useState12 = _slicedToArray(_React$useState11, 2),
-    developer = _React$useState12[0],
-    setDeveloper = _React$useState12[1];
+    disputeRasiedBy = _React$useState12[0],
+    setDisputeRasiedBy = _React$useState12[1];
   var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
     _React$useState14 = _slicedToArray(_React$useState13, 2),
     client = _React$useState14[0],
     setClient = _React$useState14[1];
   var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
     _React$useState16 = _slicedToArray(_React$useState15, 2),
-    leadDeveloper = _React$useState16[0],
-    setLeadDeveloper = _React$useState16[1];
+    disputeRaisedAgainst = _React$useState16[0],
+    setDisputeRaisedAgainst = _React$useState16[1];
   var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
     _React$useState18 = _slicedToArray(_React$useState17, 2),
     pm = _React$useState18[0],
@@ -24506,15 +25013,15 @@ var Filterbar = function Filterbar(_ref) {
   var _search = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return search;
   }, [search]);
-  var _developer = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
-    return developer;
-  }, [developer]);
+  var dispute_rasied_by = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
+    return disputeRasiedBy;
+  }, [disputeRasiedBy]);
   var _client = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return client;
   }, [client]);
-  var _leadDeveloper = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
-    return leadDeveloper;
-  }, [leadDeveloper]);
+  var _disputeRaisedAgainst = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
+    return disputeRaisedAgainst;
+  }, [disputeRaisedAgainst]);
   var _pm = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return pm;
   }, [pm]);
@@ -24528,15 +25035,15 @@ var Filterbar = function Filterbar(_ref) {
     var filter = {
       start_date: start_date,
       end_date: end_date,
-      assignee_to: _developer === null || _developer === void 0 ? void 0 : _developer.id,
+      dispute_rasied_by: dispute_rasied_by === null || dispute_rasied_by === void 0 ? void 0 : dispute_rasied_by.id,
       client_id: _client === null || _client === void 0 ? void 0 : _client.id,
-      assignee_by: _leadDeveloper === null || _leadDeveloper === void 0 ? void 0 : _leadDeveloper.id,
+      dispute_raised_against: _disputeRaisedAgainst === null || _disputeRaisedAgainst === void 0 ? void 0 : _disputeRaisedAgainst.id,
       pm_id: _pm === null || _pm === void 0 ? void 0 : _pm.id,
       status: _status === null || _status === void 0 ? void 0 : _status.id,
       date_filter_by: date_filter_by
     };
     onFilter(filter);
-  }, [start_date, end_date, _developer, _client, _leadDeveloper, _pm, _status, date_filter_by]);
+  }, [start_date, end_date, dispute_rasied_by, _client, _disputeRaisedAgainst, _pm, _status, date_filter_by]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_filter_bar",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -24550,14 +25057,14 @@ var Filterbar = function Filterbar(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), width > 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Dispute Raised By",
-        state: leadDeveloper,
-        setState: setLeadDeveloper,
-        roleIds: [1, 4]
+        state: disputeRaisedAgainst,
+        setState: setDisputeRaisedAgainst,
+        roleIds: [4, 5, 6, 7, 9, 10]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Dispute Raised Against",
-        state: leadDeveloper,
-        setState: setLeadDeveloper,
-        roleIds: [1, 4]
+        state: disputeRaisedAgainst,
+        setState: setDisputeRaisedAgainst,
+        roleIds: [4, 5, 6, 7, 9, 10]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Client",
         state: client,
@@ -24590,12 +25097,12 @@ var Filterbar = function Filterbar(_ref) {
             children: "Filter"
           })]
         }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_FilterSidebar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-          developer: developer,
-          setDeveloper: setDeveloper,
+          disputeRasiedBy: disputeRasiedBy,
+          setDisputeRasiedBy: setDisputeRasiedBy,
           client: client,
           setClient: setClient,
-          leadDeveloper: leadDeveloper,
-          setLeadDeveloper: setLeadDeveloper,
+          disputeRaisedAgainst: disputeRaisedAgainst,
+          setDisputeRaisedAgainst: setDisputeRaisedAgainst,
           pm: pm,
           setPm: setPm,
           status: status,
@@ -24945,19 +25452,103 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Resolvebutton_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Resolvebutton.css */ "./resources/js/react/disputes/components/Resolvebutton.css");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../context */ "./resources/js/react/disputes/context.jsx");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+
+
+var ResolveButton = function ResolveButton(_ref) {
+  var _window, _window$Laravel;
+  var row = _ref.row,
+    table = _ref.table;
+  var resolved = row === null || row === void 0 ? void 0 : row.status;
+  var _useDispute = (0,_context__WEBPACK_IMPORTED_MODULE_3__.useDispute)(),
+    toggleModal = _useDispute.toggleModal;
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
+  var unsolvedQuestion = lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(row.conversations, function (conv) {
+    return !conv.replies && Number(conv === null || conv === void 0 ? void 0 : conv.question_for) === auth.getId() ? true : false;
+  }));
+  var modalMode = function modalMode() {
+    var _row$raised_by, _row$raised_against;
+    var mode = 'view';
+    if (unsolvedQuestion) mode = 'QUESTION_AND_ANSWER';
+    if (!(row !== null && row !== void 0 && row.status) && !(row !== null && row !== void 0 && row.need_authrization) && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && !lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([row === null || row === void 0 ? void 0 : (_row$raised_by = row.raised_by) === null || _row$raised_by === void 0 ? void 0 : _row$raised_by.id, row === null || row === void 0 ? void 0 : (_row$raised_against = row.raised_against) === null || _row$raised_against === void 0 ? void 0 : _row$raised_against.id], auth === null || auth === void 0 ? void 0 : auth.getId())) {
+      mode = 'RESOLVE';
+    }
+    if (!(row !== null && row !== void 0 && row.status) && row !== null && row !== void 0 && row.need_authrization && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) mode = 'ATHORIZATION';
+    if (row !== null && row !== void 0 && row.status) mode = 'view';
+    return mode;
+  };
+
+  // render text of button
+  var renderText = function renderText() {
+    var _row$raised_by2, _row$raised_against2, _row$raised_by3, _row$raised_against3;
+    var text = 'Resolve';
+    if (row !== null && row !== void 0 && row.status || lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([row === null || row === void 0 ? void 0 : (_row$raised_by2 = row.raised_by) === null || _row$raised_by2 === void 0 ? void 0 : _row$raised_by2.id, row === null || row === void 0 ? void 0 : (_row$raised_against2 = row.raised_against) === null || _row$raised_against2 === void 0 ? void 0 : _row$raised_against2.id], auth === null || auth === void 0 ? void 0 : auth.getId())) {
+      text = "View";
+    }
+    if ((auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1 && !(row !== null && row !== void 0 && row.status) && row !== null && row !== void 0 && row.need_authrization) {
+      text = "Authorize";
+    }
+    if (!(row !== null && row !== void 0 && row.status) && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 8 && row !== null && row !== void 0 && row.need_authrization) {
+      text = "Awaiting Authorization";
+    }
+    if (!(row !== null && row !== void 0 && row.status) && unsolvedQuestion && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([row === null || row === void 0 ? void 0 : (_row$raised_by3 = row.raised_by) === null || _row$raised_by3 === void 0 ? void 0 : _row$raised_by3.id, row === null || row === void 0 ? void 0 : (_row$raised_against3 = row.raised_against) === null || _row$raised_against3 === void 0 ? void 0 : _row$raised_against3.id], auth === null || auth === void 0 ? void 0 : auth.getId())) {
+      text = "Answer the Question";
+    }
+    return text;
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
+      onClick: function onClick() {
+        return toggleModal(row, modalMode());
+      },
+      className: "resolve-btn ".concat(resolved ? 'solved' : ''),
+      style: {
+        whiteSpace: 'nowrap'
+      },
+      children: renderText()
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ResolveButton);
+
+/***/ }),
+
+/***/ "./resources/js/react/disputes/components/ResolveModal.jsx":
+/*!*****************************************************************!*\
+  !*** ./resources/js/react/disputes/components/ResolveModal.jsx ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Resolvebutton_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Resolvebutton.css */ "./resources/js/react/disputes/components/Resolvebutton.css");
 /* harmony import */ var _global_Modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../global/Modal */ "./resources/js/react/global/Modal.jsx");
 /* harmony import */ var _global_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../global/Button */ "./resources/js/react/global/Button.jsx");
 /* harmony import */ var _global_Avatar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../global/Avatar */ "./resources/js/react/global/Avatar.jsx");
 /* harmony import */ var _global_Dropdown__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../global/Dropdown */ "./resources/js/react/global/Dropdown.jsx");
 /* harmony import */ var _global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../global/SubmitButton */ "./resources/js/react/global/SubmitButton.jsx");
-/* harmony import */ var _global_form_DebounceInput__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../global/form/DebounceInput */ "./resources/js/react/global/form/DebounceInput.jsx");
+/* harmony import */ var _global_form_DebounceTextarea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../global/form/DebounceTextarea */ "./resources/js/react/global/form/DebounceTextarea.jsx");
 /* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
 /* harmony import */ var _hooks_useUsers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../hooks/useUsers */ "./resources/js/react/hooks/useUsers.jsx");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var _global_Loader__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../global/Loader */ "./resources/js/react/global/Loader.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../context */ "./resources/js/react/disputes/context.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -24991,12 +25582,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
+
+
+
 var reducer = function reducer(state, action) {
   var _action$user;
   var getRandomId = function getRandomId() {
     return (Math.random() + 1).toString(36).substring(7);
   };
   switch (action.type) {
+    case 'INIT_QUESTIONS':
+      return state = action.data;
     case 'ADD_QUESTION':
       return [].concat(_toConsumableArray(state), [{
         question: action.question,
@@ -25018,82 +25614,100 @@ var reducer = function reducer(state, action) {
       return state.filter(function (question) {
         return question.id !== action.id;
       });
+    case 'ANSWER_QUESTION':
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(state, function (q) {
+        if (q.id === action.id) {
+          var _window, _window$Laravel, _window$Laravel$user;
+          return _objectSpread(_objectSpread({}, q), {}, {
+            replies: action.answer,
+            replied_by: (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.id
+          });
+        }
+        return q;
+      });
     case 'CLEAR':
       return state = [];
     default:
       return state;
   }
 };
-var ResolveButton = function ResolveButton(_ref) {
-  var _window, _window$Laravel, _row$resolved_by, _row$task$parent_task, _row$task, _row$task2, _row$task3, _row$raised_against, _row$raised_against2, _row$raised_against3, _row$raised_against4, _row$raised_against5, _row$raised_against6, _row$pm_comment, _row$raised_by, _row$raised_by2, _row$raised_by3, _row$raised_by4, _row$raised_by5, _row$dev_comment, _row$winner, _row$raised_by8, _row$raised_against9, _winner$name, _row$raised_by12, _row$raised_by13, _row$raised_against11, _row$raised_against12, _row$raised_by14, _row$raised_against13, _winner$name2, _row$raised_by15, _row$raised_by16, _row$raised_against14, _row$raised_against15, _row$raised_by17, _row$raised_against16;
-  var row = _ref.row,
-    table = _ref.table;
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
-    showModal = _React$useState2[0],
-    setShowModal = _React$useState2[1];
+var ResolveModal = function ResolveModal(_ref) {
+  var _window2, _window2$Laravel, _row$resolved_by, _row$task$parent_task, _row$task, _row$raised_by, _row$raised_by2, _row$raised_against, _row$raised_against2, _row$task2, _row$task3, _row$client, _row$client2, _row$client3, _row$client4, _row$client5, _row$client6, _row$sales_person, _row$sales_person2, _row$sales_person3, _row$sales_person4, _row$sales_person5, _row$sales_person6, _row$sales_person7, _row$sales_person8, _row$sales_person9, _row$project_manager, _row$project_manager2, _row$project_manager3, _row$project_manager4, _row$project_manager5, _row$project_manager6, _row$project_manager7, _row$project_manager8, _row$project_manager9, _row$task4, _row$task4$lead_devel, _row$task5, _row$task5$lead_devel, _row$task6, _row$task6$lead_devel, _row$task7, _row$task7$lead_devel, _row$task8, _row$task8$lead_devel, _row$task9, _row$task9$lead_devel, _row$task10, _row$task10$lead_deve, _row$task11, _row$task11$lead_deve, _row$task12, _row$task12$lead_deve, _row$task13, _row$task13$developer, _row$task14, _row$task14$developer, _row$task15, _row$task15$developer, _row$task16, _row$task16$developer, _row$task17, _row$task17$developer, _row$task18, _row$task18$developer, _row$task19, _row$task19$developer, _row$task20, _row$task20$developer, _row$task21, _row$task21$developer, _row$resolved_by3, _row$resolved_by4, _row$resolved_by5, _row$resolved_by6, _row$resolved_by7, _row$resolved_by8, _row$resolved_by9, _row$winner, _row$winner2, _row$winner3, _row$winner4, _row$winner5, _row$winner6, _row$winner7, _row$raised_by3, _row$raised_against3, _winner$name, _row$raised_by6, _row$raised_by7, _row$raised_against5, _row$raised_against6, _row$raised_by8, _row$raised_against7, _row$authorized_by, _row$authorized_by2, _row$authorized_by3, _row$authorized_by4, _row$authorized_by5, _row$authorized_by6, _row$authorized_by7, _row$winner8, _row$winner9, _row$winner10, _row$winner11, _row$winner12, _row$winner13, _row$winner14, _row$raised_by9, _row$raised_against8, _winner$name2, _row$raised_by13, _row$raised_by14, _row$raised_against10, _row$raised_against11, _row$raised_by15, _row$raised_against12, _row$authorized_by8, _row$authorized_by9, _row$resolved_by10, _row$resolved_by11, _row$resolved_by12, _row$resolved_by13;
+  var state = _ref.state;
   var _useUsers = (0,_hooks_useUsers__WEBPACK_IMPORTED_MODULE_10__.useUsers)(),
     users = _useUsers.users,
     getUserById = _useUsers.getUserById,
     usersIsFetching = _useUsers.usersIsFetching;
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
-    _React$useState4 = _slicedToArray(_React$useState3, 2),
-    conversations = _React$useState4[0],
-    setConversations = _React$useState4[1];
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default().useState([]),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    conversations = _React$useState2[0],
+    setConversations = _React$useState2[1];
+  var _useDispute = (0,_context__WEBPACK_IMPORTED_MODULE_14__.useDispute)(),
+    showResolveModal = _useDispute.showResolveModal,
+    row = _useDispute.rowData,
+    closeModal = _useDispute.close,
+    mode = _useDispute.mode,
+    setRowData = _useDispute.setRowData;
 
-  //   form
+  // form
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    hasQuestion = _React$useState4[0],
+    setHasQuestion = _React$useState4[1];
   var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
-    hasQuestion = _React$useState6[0],
-    setHasQuestion = _React$useState6[1];
-  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
+    finishedPartial = _React$useState6[0],
+    setFinishedPartial = _React$useState6[1];
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
-    finishedPartial = _React$useState8[0],
-    setFinishedPartial = _React$useState8[1];
-  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
+    winner = _React$useState8[0],
+    setWinner = _React$useState8[1];
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(0),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
-    winner = _React$useState10[0],
-    setWinner = _React$useState10[1];
-  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(50),
+    raisedByPercent = _React$useState10[0],
+    setRaisedByPercent = _React$useState10[1];
+  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(0),
     _React$useState12 = _slicedToArray(_React$useState11, 2),
-    raisedByPercent = _React$useState12[0],
-    setRaisedByPercent = _React$useState12[1];
-  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(50),
-    _React$useState14 = _slicedToArray(_React$useState13, 2),
-    raisedAgainstPercent = _React$useState14[0],
-    setRaisedAgainstPercent = _React$useState14[1];
+    raisedAgainstPercent = _React$useState12[0],
+    setRaisedAgainstPercent = _React$useState12[1];
   var _React$useReducer = react__WEBPACK_IMPORTED_MODULE_1___default().useReducer(reducer, []),
     _React$useReducer2 = _slicedToArray(_React$useReducer, 2),
     questions = _React$useReducer2[0],
     dispatch = _React$useReducer2[1];
-  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
+  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
+    _React$useState14 = _slicedToArray(_React$useState13, 2),
+    questionFor = _React$useState14[0],
+    setQuestionFor = _React$useState14[1];
+  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState16 = _slicedToArray(_React$useState15, 2),
-    questionFor = _React$useState16[0],
-    setQuestionFor = _React$useState16[1];
-  var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    resolveComment = _React$useState16[0],
+    setResolveComment = _React$useState16[1];
+  var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
     _React$useState18 = _slicedToArray(_React$useState17, 2),
-    resolveComment = _React$useState18[0],
-    setResolveComment = _React$useState18[1];
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
+    needAuthorization = _React$useState18[0],
+    setNeedAuthorization = _React$useState18[1];
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(true),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
-    needAuthorization = _React$useState20[0],
-    setNeedAuthorization = _React$useState20[1];
-  var _React$useState21 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(true),
-    _React$useState22 = _slicedToArray(_React$useState21, 2),
-    edit = _React$useState22[0],
-    setEdit = _React$useState22[1];
-  var _table$getState = table.getState(),
-    updateDisputeConversation = _table$getState.updateDisputeConversation,
-    updateDisputeById = _table$getState.updateDisputeById;
-  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
+    edit = _React$useState20[0],
+    setEdit = _React$useState20[1];
+  var updateDisputeConversation = state.updateDisputeConversation,
+    updateDisputeById = state.updateDisputeById;
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User((_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$Laravel = _window2.Laravel) === null || _window2$Laravel === void 0 ? void 0 : _window2$Laravel.user);
   var _useDisputeAnswerMake = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_9__.useDisputeAnswerMakeAsReadMutation)(),
     _useDisputeAnswerMake2 = _slicedToArray(_useDisputeAnswerMake, 2),
     disputeAnswerMakeAsRead = _useDisputeAnswerMake2[0],
     isLoading = _useDisputeAnswerMake2[1].isLoading;
+  var rowMemo = JSON.stringify(row);
 
   // DEFAULT INITIAL
   react__WEBPACK_IMPORTED_MODULE_1___default().useEffect(function () {
     setConversations(row === null || row === void 0 ? void 0 : row.conversations);
+    dispatch({
+      type: "INIT_QUESTIONS",
+      data: lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(row === null || row === void 0 ? void 0 : row.conversations, function (d) {
+        return d.replies ? false : true;
+      })
+    });
     if (row !== null && row !== void 0 && row.need_authrization) {
       setFinishedPartial(true);
       setRaisedAgainstPercent(row === null || row === void 0 ? void 0 : row.raised_against_percent);
@@ -25101,12 +25715,7 @@ var ResolveButton = function ResolveButton(_ref) {
       setNeedAuthorization(row === null || row === void 0 ? void 0 : row.need_authrization);
       setEdit(false);
     }
-  }, []);
-  var close = function close() {
-    setShowModal(false);
-    setHasQuestion(false);
-    setFinishedPartial(false);
-  };
+  }, [rowMemo]);
 
   // handle add question
   var addQuestion = function addQuestion() {
@@ -25114,6 +25723,17 @@ var ResolveButton = function ResolveButton(_ref) {
       type: 'ADD_QUESTION',
       question: '',
       user: questionFor !== null && questionFor !== void 0 ? questionFor : ''
+    });
+  };
+
+  // add Answer 
+  var addAnswer = function addAnswer(_ref2) {
+    var answer = _ref2.answer,
+      id = _ref2.id;
+    dispatch({
+      type: 'ANSWER_QUESTION',
+      id: id,
+      answer: answer
     });
   };
 
@@ -25126,9 +25746,9 @@ var ResolveButton = function ResolveButton(_ref) {
   };
 
   // update question
-  var updateQuestion = function updateQuestion(_ref2) {
-    var id = _ref2.id,
-      data = _ref2.data;
+  var updateQuestion = function updateQuestion(_ref3) {
+    var id = _ref3.id,
+      data = _ref3.data;
     dispatch({
       type: 'UPDATE_QUESTION',
       id: id,
@@ -25158,8 +25778,8 @@ var ResolveButton = function ResolveButton(_ref) {
     askDisputeQuestion = _useAskDisputeQuestio2[0],
     questionSubmitting = _useAskDisputeQuestio2[1].isLoading;
   var handleQuestionSubmittion = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var _window3, _window3$Laravel;
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var _window4, _window4$Laravel;
       var data, res;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
@@ -25167,15 +25787,15 @@ var ResolveButton = function ResolveButton(_ref) {
             case 0:
               data = {
                 questions: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(questions, function (q) {
-                  var _q$user, _window2, _window2$Laravel;
+                  var _q$user, _window3, _window3$Laravel;
                   return {
                     question: q.question,
                     question_for: q === null || q === void 0 ? void 0 : (_q$user = q.user) === null || _q$user === void 0 ? void 0 : _q$user.id,
-                    raised_by: (_window2 = window) === null || _window2 === void 0 ? void 0 : (_window2$Laravel = _window2.Laravel) === null || _window2$Laravel === void 0 ? void 0 : _window2$Laravel.user.id,
+                    raised_by: (_window3 = window) === null || _window3 === void 0 ? void 0 : (_window3$Laravel = _window3.Laravel) === null || _window3$Laravel === void 0 ? void 0 : _window3$Laravel.user.id,
                     dispute_id: row === null || row === void 0 ? void 0 : row.id
                   };
                 }),
-                raised_by: (_window3 = window) === null || _window3 === void 0 ? void 0 : (_window3$Laravel = _window3.Laravel) === null || _window3$Laravel === void 0 ? void 0 : _window3$Laravel.user.id,
+                raised_by: (_window4 = window) === null || _window4 === void 0 ? void 0 : (_window4$Laravel = _window4.Laravel) === null || _window4$Laravel === void 0 ? void 0 : _window4$Laravel.user.id,
                 dispute_id: row === null || row === void 0 ? void 0 : row.id
               };
               _context.prev = 1;
@@ -25188,107 +25808,95 @@ var ResolveButton = function ResolveButton(_ref) {
                 conversations: res === null || res === void 0 ? void 0 : res.data
               });
               setConversations(res === null || res === void 0 ? void 0 : res.data);
-              close();
-              _context.next = 13;
+              _context.next = 12;
               break;
-            case 10:
-              _context.prev = 10;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](1);
               console.log(_context.t0);
-            case 13:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 10]]);
+      }, _callee, null, [[1, 9]]);
     }));
     return function handleQuestionSubmittion() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
-  //   UPDATE ANSWER READ STATUS
-  var answerStatus = /*#__PURE__*/function () {
-    var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  //   handle answer questions
+  var _useAnswerDisputeQues = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_9__.useAnswerDisputeQuestionMutation)(),
+    _useAnswerDisputeQues2 = _slicedToArray(_useAnswerDisputeQues, 2),
+    answerDisputeQuestion = _useAnswerDisputeQues2[0],
+    answering = _useAnswerDisputeQues2[1].isLoading;
+  var handleSubmitAnswer = /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       var res;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(row && row !== null && row !== void 0 && row.conversations)) {
-                _context2.next = 12;
+              _context2.prev = 0;
+              _context2.next = 3;
+              return answerDisputeQuestion({
+                questions: questions
+              }).unwrap();
+            case 3:
+              res = _context2.sent;
+              setConversations(res === null || res === void 0 ? void 0 : res.data);
+              dispatch({
+                type: "INIT_QUESTIONS",
+                data: lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(res === null || res === void 0 ? void 0 : res.data, function (d) {
+                  return d.replies ? false : true;
+                })
+              });
+              _context2.next = 11;
+              break;
+            case 8:
+              _context2.prev = 8;
+              _context2.t0 = _context2["catch"](0);
+              console.log(_context2.t0);
+            case 11:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 8]]);
+    }));
+    return function handleSubmitAnswer() {
+      return _ref5.apply(this, arguments);
+    };
+  }();
+
+  //   UPDATE ANSWER READ STATUS
+  var answerStatus = /*#__PURE__*/function () {
+    var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      var _questions, res;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _questions = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(row === null || row === void 0 ? void 0 : row.conversations, function (q) {
+                return q.replies && !q.replied_seen ? 1 : 0;
+              });
+              if (!(lodash__WEBPACK_IMPORTED_MODULE_0___default().size(_questions) > 0)) {
+                _context3.next = 13;
                 break;
               }
-              _context2.prev = 1;
-              _context2.next = 4;
+              _context3.prev = 2;
+              _context3.next = 5;
               return disputeAnswerMakeAsRead({
-                questions: row === null || row === void 0 ? void 0 : row.conversations
+                questions: _toConsumableArray(_questions)
               }).unwrap();
-            case 4:
-              res = _context2.sent;
+            case 5:
+              res = _context3.sent;
               updateDisputeConversation({
                 disputeId: row === null || row === void 0 ? void 0 : row.id,
                 conversations: res === null || res === void 0 ? void 0 : res.data
               });
               setConversations(res === null || res === void 0 ? void 0 : res.data);
-              _context2.next = 12;
-              break;
-            case 9:
-              _context2.prev = 9;
-              _context2.t0 = _context2["catch"](1);
-              console.log(_context2.t0);
-            case 12:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2, null, [[1, 9]]);
-    }));
-    return function answerStatus() {
-      return _ref4.apply(this, arguments);
-    };
-  }();
-  var resolvedBy = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(row === null || row === void 0 ? void 0 : (_row$resolved_by = row.resolved_by) === null || _row$resolved_by === void 0 ? void 0 : _row$resolved_by.id));
-
-  // handle submit for authorization
-  console.log({
-    row: row
-  });
-  var _useDisputeSubmitToAu = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_9__.useDisputeSubmitToAuthorizationMutation)(),
-    _useDisputeSubmitToAu2 = _slicedToArray(_useDisputeSubmitToAu, 2),
-    disputeSubmitToAuthorization = _useDisputeSubmitToAu2[0],
-    submittingToAuthorization = _useDisputeSubmitToAu2[1].isLoading;
-  var handleSubmitForAuthorization = /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-      var _window4, _window4$Laravel, _window4$Laravel$user, data, res, _row$resolved_by2, _window5, _window5$Laravel, _window5$Laravel$user, _window6, _window6$Laravel, _window6$Laravel$user, _winner$id, _data, _res;
-      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              if (!(finishedPartial && !(row !== null && row !== void 0 && row.need_authrization))) {
-                _context3.next = 15;
-                break;
-              }
-              data = {
-                resolve_comment: resolveComment,
-                need_authrization: needAuthorization,
-                raised_by_percent: raisedByPercent,
-                raised_against_percent: raisedAgainstPercent,
-                resolve_by: (_window4 = window) === null || _window4 === void 0 ? void 0 : (_window4$Laravel = _window4.Laravel) === null || _window4$Laravel === void 0 ? void 0 : (_window4$Laravel$user = _window4$Laravel.user) === null || _window4$Laravel$user === void 0 ? void 0 : _window4$Laravel$user.id,
-                dispute_id: row === null || row === void 0 ? void 0 : row.id,
-                task_id: row === null || row === void 0 ? void 0 : row.task_id,
-                authorized: false
-              };
-              _context3.prev = 2;
-              _context3.next = 5;
-              return disputeSubmitToAuthorization(data).unwrap();
-            case 5:
-              res = _context3.sent;
-              console.log(res);
-              updateDisputeById({
-                disputeId: row === null || row === void 0 ? void 0 : row.id,
-                data: lodash__WEBPACK_IMPORTED_MODULE_0___default().head(res)
-              });
               _context3.next = 13;
               break;
             case 10:
@@ -25296,7 +25904,84 @@ var ResolveButton = function ResolveButton(_ref) {
               _context3.t0 = _context3["catch"](2);
               console.log(_context3.t0);
             case 13:
-              _context3.next = 26;
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3, null, [[2, 10]]);
+    }));
+    return function answerStatus() {
+      return _ref6.apply(this, arguments);
+    };
+  }();
+  var close = /*#__PURE__*/function () {
+    var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              answerStatus();
+              setHasQuestion(false);
+              setFinishedPartial(false);
+              closeModal();
+            case 4:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+    return function close() {
+      return _ref7.apply(this, arguments);
+    };
+  }();
+  var resolvedBy = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(row === null || row === void 0 ? void 0 : (_row$resolved_by = row.resolved_by) === null || _row$resolved_by === void 0 ? void 0 : _row$resolved_by.id));
+
+  // handle submit for authorization
+
+  var _useDisputeSubmitToAu = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_9__.useDisputeSubmitToAuthorizationMutation)(),
+    _useDisputeSubmitToAu2 = _slicedToArray(_useDisputeSubmitToAu, 2),
+    disputeSubmitToAuthorization = _useDisputeSubmitToAu2[0],
+    submittingToAuthorization = _useDisputeSubmitToAu2[1].isLoading;
+  var handleSubmitForAuthorization = /*#__PURE__*/function () {
+    var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var _window5, _window5$Laravel, _window5$Laravel$user, data, res, _row$resolved_by2, _window6, _window6$Laravel, _window6$Laravel$user, _window7, _window7$Laravel, _window7$Laravel$user, _winner$id, _data, _res;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
+            case 0:
+              if (!(finishedPartial && !(row !== null && row !== void 0 && row.need_authrization) && !(auth !== null && auth !== void 0 && auth.getRoleId()) === 1)) {
+                _context5.next = 15;
+                break;
+              }
+              data = {
+                resolve_comment: resolveComment,
+                need_authrization: needAuthorization,
+                raised_by_percent: raisedByPercent,
+                raised_against_percent: raisedAgainstPercent,
+                resolve_by: (_window5 = window) === null || _window5 === void 0 ? void 0 : (_window5$Laravel = _window5.Laravel) === null || _window5$Laravel === void 0 ? void 0 : (_window5$Laravel$user = _window5$Laravel.user) === null || _window5$Laravel$user === void 0 ? void 0 : _window5$Laravel$user.id,
+                dispute_id: row === null || row === void 0 ? void 0 : row.id,
+                task_id: row === null || row === void 0 ? void 0 : row.task_id,
+                authorized: false
+              };
+              _context5.prev = 2;
+              _context5.next = 5;
+              return disputeSubmitToAuthorization(data).unwrap();
+            case 5:
+              res = _context5.sent;
+              updateDisputeById({
+                disputeId: row === null || row === void 0 ? void 0 : row.id,
+                data: lodash__WEBPACK_IMPORTED_MODULE_0___default().head(res)
+              });
+              setRowData(lodash__WEBPACK_IMPORTED_MODULE_0___default().head(res));
+              _context5.next = 13;
+              break;
+            case 10:
+              _context5.prev = 10;
+              _context5.t0 = _context5["catch"](2);
+              console.log(_context5.t0);
+            case 13:
+              _context5.next = 27;
               break;
             case 15:
               _data = {
@@ -25304,935 +25989,1610 @@ var ResolveButton = function ResolveButton(_ref) {
                 need_authrization: needAuthorization,
                 raised_by_percent: raisedByPercent,
                 raised_against_percent: raisedAgainstPercent,
-                resolve_by: row !== null && row !== void 0 && row.need_authrization ? row === null || row === void 0 ? void 0 : (_row$resolved_by2 = row.resolved_by) === null || _row$resolved_by2 === void 0 ? void 0 : _row$resolved_by2.id : (_window5 = window) === null || _window5 === void 0 ? void 0 : (_window5$Laravel = _window5.Laravel) === null || _window5$Laravel === void 0 ? void 0 : (_window5$Laravel$user = _window5$Laravel.user) === null || _window5$Laravel$user === void 0 ? void 0 : _window5$Laravel$user.id,
+                resolve_by: row !== null && row !== void 0 && row.need_authrization ? row === null || row === void 0 ? void 0 : (_row$resolved_by2 = row.resolved_by) === null || _row$resolved_by2 === void 0 ? void 0 : _row$resolved_by2.id : (_window6 = window) === null || _window6 === void 0 ? void 0 : (_window6$Laravel = _window6.Laravel) === null || _window6$Laravel === void 0 ? void 0 : (_window6$Laravel$user = _window6$Laravel.user) === null || _window6$Laravel$user === void 0 ? void 0 : _window6$Laravel$user.id,
                 dispute_id: row === null || row === void 0 ? void 0 : row.id,
                 authorized: true,
                 task_id: row === null || row === void 0 ? void 0 : row.task_id,
-                authorized_by: row !== null && row !== void 0 && row.need_authrization ? (_window6 = window) === null || _window6 === void 0 ? void 0 : (_window6$Laravel = _window6.Laravel) === null || _window6$Laravel === void 0 ? void 0 : (_window6$Laravel$user = _window6$Laravel.user) === null || _window6$Laravel$user === void 0 ? void 0 : _window6$Laravel$user.id : null,
+                authorized_by: row !== null && row !== void 0 && row.need_authrization ? (_window7 = window) === null || _window7 === void 0 ? void 0 : (_window7$Laravel = _window7.Laravel) === null || _window7$Laravel === void 0 ? void 0 : (_window7$Laravel$user = _window7$Laravel.user) === null || _window7$Laravel$user === void 0 ? void 0 : _window7$Laravel$user.id : null,
                 winner: (_winner$id = winner === null || winner === void 0 ? void 0 : winner.id) !== null && _winner$id !== void 0 ? _winner$id : null,
                 authorize_comment: row !== null && row !== void 0 && row.need_authrization ? resolveComment : null
               };
-              _context3.prev = 16;
-              _context3.next = 19;
+              _context5.prev = 16;
+              _context5.next = 19;
               return disputeSubmitToAuthorization(_data).unwrap();
             case 19:
-              _res = _context3.sent;
+              _res = _context5.sent;
               updateDisputeById({
                 disputeId: row === null || row === void 0 ? void 0 : row.id,
                 data: lodash__WEBPACK_IMPORTED_MODULE_0___default().head(_res)
               });
-              _context3.next = 26;
+              setRowData(lodash__WEBPACK_IMPORTED_MODULE_0___default().head(_res));
+              _context5.next = 27;
               break;
-            case 23:
-              _context3.prev = 23;
-              _context3.t1 = _context3["catch"](16);
-              console.log(_context3.t1);
-            case 26:
+            case 24:
+              _context5.prev = 24;
+              _context5.t1 = _context5["catch"](16);
+              console.log(_context5.t1);
+            case 27:
             case "end":
-              return _context3.stop();
+              return _context5.stop();
           }
         }
-      }, _callee3, null, [[2, 10], [16, 23]]);
+      }, _callee5, null, [[2, 10], [16, 24]]);
     }));
     return function handleSubmitForAuthorization() {
-      return _ref5.apply(this, arguments);
+      return _ref8.apply(this, arguments);
     };
   }();
+
+  //   Filter Questions 
+  var filterQuestion = function filterQuestion(questions, userid) {
+    return lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(questions, function (conv) {
+      return conv.question_for === userid;
+    });
+  };
   var task = (_row$task$parent_task = row === null || row === void 0 ? void 0 : (_row$task = row.task) === null || _row$task === void 0 ? void 0 : _row$task.parent_task) !== null && _row$task$parent_task !== void 0 ? _row$task$parent_task : row === null || row === void 0 ? void 0 : row.task;
   var resolved = row === null || row === void 0 ? void 0 : row.status;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("button", {
-      onClick: function onClick() {
-        answerStatus();
-        setShowModal(true);
-      },
-      className: "resolve-btn ".concat(resolved ? 'solved' : ''),
-      children: resolved ? 'View' : 'Resolve'
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      isOpen: showModal,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      isOpen: showResolveModal,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
         className: "sp1_modal-content-wrapper",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
           className: "sp1_modal-panel sp1_task_create_modal_panel w-100",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
             className: "sp1_modal-head",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
               className: "sp1_modal-title",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("strong", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
                 children: "Dispute Resolve Form"
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
               onClick: close,
               "aria-label": "ModalClose",
               variant: "tertiary",
               className: "sp1_modal-close",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
                 className: "fa-solid fa-xmark"
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
             className: "sp1_modal-body sp1_task_create_modal_body",
             style: {
               maxHeight: 'calc(100vh - 110px)',
               overflowY: 'auto'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
               className: "px-3",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                 className: "alert alert-info",
-                children: ["This dispute is between project manager ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                  href: "#",
+                children: ["This dispute is between ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                  href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$raised_by = row.raised_by) === null || _row$raised_by === void 0 ? void 0 : _row$raised_by.id),
                   className: "badge badge-info",
-                  children: "Farhan Rahman"
-                }), " and lead developer ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                  href: "#",
+                  children: row === null || row === void 0 ? void 0 : (_row$raised_by2 = row.raised_by) === null || _row$raised_by2 === void 0 ? void 0 : _row$raised_by2.name
+                }), " and ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("a", {
+                  href: "/account/".concat((row === null || row === void 0 ? void 0 : row.dispute_between) === "CPR" ? 'clients' : 'employees', "/").concat(row === null || row === void 0 ? void 0 : (_row$raised_against = row.raised_against) === null || _row$raised_against === void 0 ? void 0 : _row$raised_against.id),
                   className: "badge badge-info",
-                  children: " Moniruzzaman "
-                }), " and was initiated on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                  href: "#",
+                  children: [" ", row === null || row === void 0 ? void 0 : (_row$raised_against2 = row.raised_against) === null || _row$raised_against2 === void 0 ? void 0 : _row$raised_against2.name, " "]
+                }), " and was initiated on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
                   className: "badge badge-info",
-                  children: "18th August 2023 03:55:54 PM"
+                  children: [dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.dispute_created_at).format('MMM DD, YYYY'), " "]
+                }), " at ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                  className: "badge badge-info",
+                  children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.dispute_created_at).format('hh:mm a')
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
                 className: "sp1-item-center",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("ul", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("ul", {
                   className: "nav",
                   style: {
                     gap: '10px'
                   },
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("li", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
                     className: "nav-item",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                      href: "/account/projects/".concat(row.project_id),
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                      href: "/account/projects/".concat(row === null || row === void 0 ? void 0 : row.project_id),
+                      target: "_blank",
                       className: "nav-link badge badge-secondary py-1 px-3",
                       children: "Project Dashboard"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("li", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
                     className: "nav-item",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                      href: "/account/projects/".concat(row.project_id, "?tab=deliverables"),
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                      href: "/account/projects/".concat(row === null || row === void 0 ? void 0 : row.project_id, "?tab=deliverables"),
+                      target: "_blank",
                       className: "nav-link badge badge-secondary py-1 px-3",
                       children: "Deliverables"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("li", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
                     className: "nav-item",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                      href: "/account/tasks/".concat(task.id),
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                      href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
+                      target: "_blank",
                       className: "nav-link badge badge-secondary py-1 px-3",
                       children: "Task"
                     })
-                  }), (row === null || row === void 0 ? void 0 : (_row$task2 = row.task) === null || _row$task2 === void 0 ? void 0 : _row$task2.parent_task) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("li", {
+                  }), (row === null || row === void 0 ? void 0 : (_row$task2 = row.task) === null || _row$task2 === void 0 ? void 0 : _row$task2.parent_task) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
                     className: "nav-item",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
                       href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : (_row$task3 = row.task) === null || _row$task3 === void 0 ? void 0 : _row$task3.id),
+                      target: "_blank",
                       className: "nav-link badge badge-secondary py-1 px-3",
                       children: "Subtasks"
                     })
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("li", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("li", {
                     className: "nav-item",
-                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                      href: "/account/projects/".concat(row.project_id, "?tab=tasks"),
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                      href: "/account/projects/".concat(row === null || row === void 0 ? void 0 : row.project_id, "?tab=tasks"),
+                      target: "_blank",
                       className: "nav-link badge badge-secondary py-1 px-3",
                       children: "Task List"
                     })
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                className: "mt-3 pb-2 py-2 position-relative",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                  className: "badge badge-secondary divider-text",
-                  children: "Revision"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
-                className: "dispute-preview-table",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "whitespace-nowrap py-2",
-                      children: "Revision Given By:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2 px-3",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                        className: "d-flex align-items-center",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                          src: row !== null && row !== void 0 && (_row$raised_against = row.raised_against) !== null && _row$raised_against !== void 0 && _row$raised_against.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$raised_against2 = row.raised_against) === null || _row$raised_against2 === void 0 ? void 0 : _row$raised_against2.image) : null,
-                          alt: row === null || row === void 0 ? void 0 : (_row$raised_against3 = row.raised_against) === null || _row$raised_against3 === void 0 ? void 0 : _row$raised_against3.name,
-                          name: row === null || row === void 0 ? void 0 : (_row$raised_against4 = row.raised_against) === null || _row$raised_against4 === void 0 ? void 0 : _row$raised_against4.name,
-                          type: "circle",
-                          width: 32,
-                          height: 32,
-                          fontSize: "1.2rem"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "px-2",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block",
-                            children: row === null || row === void 0 ? void 0 : (_row$raised_against5 = row.raised_against) === null || _row$raised_against5 === void 0 ? void 0 : _row$raised_against5.name
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block f-10",
-                            style: {
-                              color: '#777',
-                              marginTop: '-0.30rem'
-                            },
-                            children: row === null || row === void 0 ? void 0 : (_row$raised_against6 = row.raised_against) === null || _row$raised_against6 === void 0 ? void 0 : _row$raised_against6.designation
-                          })]
-                        })]
-                      })
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Reason:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2 ",
-                      children: row === null || row === void 0 ? void 0 : row.revision_acknowledgement
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Explanation:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "sp1_ck_content",
-                        dangerouslySetInnerHTML: {
-                          __html: (_row$pm_comment = row === null || row === void 0 ? void 0 : row.pm_comment) !== null && _row$pm_comment !== void 0 ? _row$pm_comment : row === null || row === void 0 ? void 0 : row.lead_comment
-                        }
-                      })
-                    })]
-                  }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
-                    var _row$raised_against7;
-                    return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$raised_against7 = row.raised_against) === null || _row$raised_against7 === void 0 ? void 0 : _row$raised_against7.id);
-                  })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Submitted Answer:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "d-flex flex-column",
-                        style: {
-                          gap: '16px'
-                        },
-                        children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(_toConsumableArray(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
-                          var _row$raised_against8;
-                          return c.question_for === (row === null || row === void 0 ? void 0 : (_row$raised_against8 = row.raised_against) === null || _row$raised_against8 === void 0 ? void 0 : _row$raised_against8.id);
-                        })), function (conv, index) {
-                          var _conv$replies;
-                          var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
-                          var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
-                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "d-flex flex-column",
-                            style: {
-                              gap: 6
-                            },
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                              className: "pl-3",
-                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "badge badge-primary",
-                                children: ["Question 0", index + 1, ":"]
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "px-2 font-medium",
-                                children: conv === null || conv === void 0 ? void 0 : conv.question
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "d-block text-right question-by f-12",
-                                children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                  href: raised_by.getUserLink(),
-                                  children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
-                                }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
-                              })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "p-3 position-relative",
-                              style: {
-                                background: '#f8f8f8'
-                              },
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                                className: "",
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
-                                  className: "",
-                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                    className: "badge badge-success d-inline mr-1",
-                                    children: "Answer:"
-                                  }), (_conv$replies = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies !== void 0 ? _conv$replies : 'Not answered yet!']
-                                }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                    className: "question-by f-12",
-                                    children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                      href: replied_by.getUserLink(),
-                                      children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
-                                    }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
-                                  })
-                                })]
-                              })
-                            })]
-                          }, index);
-                        })
-                      })
-                    })]
-                  }) : null]
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                className: "mt-3 pb-2 py-2 position-relative",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                  className: "badge badge-secondary divider-text",
-                  children: "Response"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
-                className: "dispute-preview-table",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tbody", {
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "whitespace-nowrap py-2",
-                      children: "Denied by:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2 px-3",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                        className: "d-flex align-items-center",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                          src: row !== null && row !== void 0 && (_row$raised_by = row.raised_by) !== null && _row$raised_by !== void 0 && _row$raised_by.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$raised_by2 = row.raised_by) === null || _row$raised_by2 === void 0 ? void 0 : _row$raised_by2.image) : null,
-                          alt: row === null || row === void 0 ? void 0 : (_row$raised_by3 = row.raised_by) === null || _row$raised_by3 === void 0 ? void 0 : _row$raised_by3.name,
-                          name: row === null || row === void 0 ? void 0 : (_row$raised_by4 = row.raised_by) === null || _row$raised_by4 === void 0 ? void 0 : _row$raised_by4.name,
-                          type: "circle",
-                          width: 32,
-                          height: 32,
-                          fontSize: "1.2rem"
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "px-2",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block",
-                            children: row === null || row === void 0 ? void 0 : (_row$raised_by5 = row.raised_by) === null || _row$raised_by5 === void 0 ? void 0 : _row$raised_by5.name
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block f-10",
-                            style: {
-                              color: '#777',
-                              marginTop: '-0.30rem'
-                            },
-                            children: "Lead Developer"
-                          })]
-                        })]
-                      })
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Reason:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: row === null || row === void 0 ? void 0 : row.deny_reason
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Explanation:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "sp1_ck_content",
-                        dangerouslySetInnerHTML: {
-                          __html: (_row$dev_comment = row === null || row === void 0 ? void 0 : row.dev_comment) !== null && _row$dev_comment !== void 0 ? _row$dev_comment : row === null || row === void 0 ? void 0 : row.lead_comment
-                        }
-                      })
-                    })]
-                  }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
-                    var _row$raised_by6;
-                    return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$raised_by6 = row.raised_by) === null || _row$raised_by6 === void 0 ? void 0 : _row$raised_by6.id);
-                  })) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Submitted Answer:"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "d-flex flex-column",
-                        style: {
-                          gap: '16px'
-                        },
-                        children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (conv) {
-                          var _row$raised_by7;
-                          return conv.question_for === (row === null || row === void 0 ? void 0 : (_row$raised_by7 = row.raised_by) === null || _row$raised_by7 === void 0 ? void 0 : _row$raised_by7.id);
-                        }), function (conv, index) {
-                          var _conv$replies2;
-                          var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
-                          var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
-                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "d-flex flex-column",
-                            style: {
-                              gap: 6
-                            },
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                              className: "pl-3",
-                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "badge badge-primary",
-                                children: ["Question 0", index + 1, ":"]
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "px-2 font-medium",
-                                children: conv === null || conv === void 0 ? void 0 : conv.question
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                className: "d-block text-right question-by f-12",
-                                children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                  href: raised_by.getUserLink(),
-                                  children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
-                                }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
-                              })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "p-3",
-                              style: {
-                                background: '#f8f8f8'
-                              },
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                                className: "",
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("p", {
-                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                    className: "badge badge-success d-inline mr-1",
-                                    children: "Answer:"
-                                  }), (_conv$replies2 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies2 !== void 0 ? _conv$replies2 : 'Not answered yet!']
-                                }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                    className: "question-by f-12",
-                                    children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-                                      href: replied_by.getUserLink(),
-                                      children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
-                                    }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
-                                  })
-                                })]
-                              })
-                            })]
-                          }, index);
-                        })
-                      })
-                    })]
-                  }) : null]
-                })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                className: "mt-3 pb-2 py-2 position-relative",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                  className: "badge badge-secondary divider-text",
-                  children: "Resolve"
-                })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
-                className: "dispute-preview-table",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("tbody", {
-                  children: row !== null && row !== void 0 && row.need_authrization || row !== null && row !== void 0 && row.status ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: " py-2 d-block",
-                          children: "Resolve By: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "px-3 py-2 w-100",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+              }), lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['CPR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Client"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("tbody", {
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Client:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
                           className: "d-flex align-items-center",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
-                            src: resolvedBy === null || resolvedBy === void 0 ? void 0 : resolvedBy.getAvatar(),
-                            alt: resolvedBy === null || resolvedBy === void 0 ? void 0 : resolvedBy.getName(),
-                            name: resolvedBy === null || resolvedBy === void 0 ? void 0 : resolvedBy.getName(),
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$client = row.client) !== null && _row$client !== void 0 && _row$client.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$client2 = row.client) === null || _row$client2 === void 0 ? void 0 : _row$client2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$client3 = row.client) === null || _row$client3 === void 0 ? void 0 : _row$client3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$client4 = row.client) === null || _row$client4 === void 0 ? void 0 : _row$client4.name,
                             type: "circle",
                             width: 32,
                             height: 32,
                             fontSize: "1.2rem"
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "px-2  py-2 ",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                            className: "px-2",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/clients/".concat(row === null || row === void 0 ? void 0 : (_row$client5 = row.client) === null || _row$client5 === void 0 ? void 0 : _row$client5.id),
                               className: "d-block",
-                              children: resolvedBy === null || resolvedBy === void 0 ? void 0 : resolvedBy.getName()
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+                              children: row === null || row === void 0 ? void 0 : (_row$client6 = row.client) === null || _row$client6 === void 0 ? void 0 : _row$client6.name
+                            })
+                          })]
+                        })
+                      })]
+                    })
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['SPR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Sales"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Sales:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$sales_person = row.sales_person) !== null && _row$sales_person !== void 0 && _row$sales_person.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$sales_person2 = row.sales_person) === null || _row$sales_person2 === void 0 ? void 0 : _row$sales_person2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$sales_person3 = row.sales_person) === null || _row$sales_person3 === void 0 ? void 0 : _row$sales_person3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$sales_person4 = row.sales_person) === null || _row$sales_person4 === void 0 ? void 0 : _row$sales_person4.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$sales_person5 = row.sales_person) === null || _row$sales_person5 === void 0 ? void 0 : _row$sales_person5.id),
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$sales_person6 = row.sales_person) === null || _row$sales_person6 === void 0 ? void 0 : _row$sales_person6.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
                               className: "d-block f-10",
                               style: {
                                 color: '#777',
                                 marginTop: '-0.30rem'
                               },
-                              children: resolvedBy === null || resolvedBy === void 0 ? void 0 : resolvedBy.getDesignationName()
+                              children: row === null || row === void 0 ? void 0 : (_row$sales_person7 = row.sales_person) === null || _row$sales_person7 === void 0 ? void 0 : _row$sales_person7.designation
                             })]
                           })]
                         })
                       })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: " py-2 ",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "d-block",
-                          children: "The Winner: "
-                        })
-                      }), row !== null && row !== void 0 && row.winner ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        className: "d-flex align-items-center",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                          className: "px-2  py-2 ",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                            className: "d-block font-weight-bold",
-                            children: row === null || row === void 0 ? void 0 : (_row$winner = row.winner) === null || _row$winner === void 0 ? void 0 : _row$winner.name
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$sales_person8 = row.sales_person) === null || _row$sales_person8 === void 0 ? void 0 : _row$sales_person8.id)) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$sales_person9 = row.sales_person) === null || _row$sales_person9 === void 0 ? void 0 : _row$sales_person9.id), function (f) {
+                            return lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? true : f.replies;
+                          }), function (conv, index) {
+                            var _conv$replies;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies !== void 0 ? _conv$replies : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
                           })
                         })
-                      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "px-3 w-100  py-2 ",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "position-relative w-100",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            children: [row === null || row === void 0 ? void 0 : (_row$raised_by8 = row.raised_by) === null || _row$raised_by8 === void 0 ? void 0 : _row$raised_by8.name, " : ", raisedByPercent, "%"]
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            children: [row === null || row === void 0 ? void 0 : (_row$raised_against9 = row.raised_against) === null || _row$raised_against9 === void 0 ? void 0 : _row$raised_against9.name, " : ", raisedAgainstPercent, "%"]
-                          }), !(row !== null && row !== void 0 && row.status) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("button", {
-                            onClick: function onClick() {
-                              return setEdit(true);
-                            },
-                            className: "dispute-edit-btn",
-                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                              className: "fa-regular fa-pen-to-square"
-                            })
-                          }) : null]
-                        })
                       })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "d-block",
-                          children: "Comment: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("td", {
-                        className: "px-3 py-2",
-                        children: [row === null || row === void 0 ? void 0 : row.resolve_comment, " dfsd"]
-                      })]
-                    })]
-                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: "Do you have any other questions?"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("td", {
-                      className: "px-3 py-2 vertical-center w-100",
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                        className: "d-flex align-items-center",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "form-check form-check-inline",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
-                            type: "radio",
-                            name: "authrize_question",
-                            className: "form-check-input",
-                            value: "yes",
-                            onChange: function onChange() {
-                              addQuestion();
-                              setHasQuestion(true);
-                            }
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("label", {
-                            className: "form-check-label",
-                            children: "Yes"
-                          })]
-                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "form-check form-check-inline",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
-                            type: "radio",
-                            name: "authrize_question",
-                            className: "form-check-input",
-                            value: "no",
-                            defaultChecked: true,
-                            onChange: function onChange() {
-                              setHasQuestion(false);
-                              clearQuestions();
-                            }
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("label", {
-                            className: "form-check-label",
-                            children: "No"
-                          })]
-                        })]
-                      }), hasQuestion && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                        children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(questions, function (question, index) {
-                          var _question$user, _row$raised_by9, _question$user2, _row$raised_by10, _row$raised_by11, _row$raised_against10, _question$user3;
-                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "mt-3 w-100",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "d-flex align-items-center",
+                    }) : null]
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['SPR', 'CPR', 'PLR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Project Manager"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Project Manager:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$project_manager = row.project_manager) !== null && _row$project_manager !== void 0 && _row$project_manager.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$project_manager2 = row.project_manager) === null || _row$project_manager2 === void 0 ? void 0 : _row$project_manager2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$project_manager3 = row.project_manager) === null || _row$project_manager3 === void 0 ? void 0 : _row$project_manager3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$project_manager4 = row.project_manager) === null || _row$project_manager4 === void 0 ? void 0 : _row$project_manager4.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$project_manager5 = row.project_manager) === null || _row$project_manager5 === void 0 ? void 0 : _row$project_manager5.id),
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$project_manager6 = row.project_manager) === null || _row$project_manager6 === void 0 ? void 0 : _row$project_manager6.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                              className: "d-block f-10",
                               style: {
-                                gap: '10px'
+                                color: '#777',
+                                marginTop: '-0.30rem'
                               },
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
-                                  className: "font-weight-bold py-2 px-3 border rounded-sm toggle-light",
-                                  children: (question === null || question === void 0 ? void 0 : (_question$user = question.user) === null || _question$user === void 0 ? void 0 : _question$user.name) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.name) || 'Click to select user'
-                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
-                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                                    onClick: function onClick() {
-                                      return askQuestionTo(row === null || row === void 0 ? void 0 : row.raised_by, question.id);
-                                    },
-                                    children: [row === null || row === void 0 ? void 0 : (_row$raised_by9 = row.raised_by) === null || _row$raised_by9 === void 0 ? void 0 : _row$raised_by9.name, (question === null || question === void 0 ? void 0 : (_question$user2 = question.user) === null || _question$user2 === void 0 ? void 0 : _question$user2.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by10 = row.raised_by) === null || _row$raised_by10 === void 0 ? void 0 : _row$raised_by10.id) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by11 = row.raised_by) === null || _row$raised_by11 === void 0 ? void 0 : _row$raised_by11.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                      className: "fa-solid fa-check ml-2"
-                                    }) : null]
-                                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                                    onClick: function onClick() {
-                                      return askQuestionTo(row === null || row === void 0 ? void 0 : row.raised_against, question.id);
-                                    },
-                                    children: [row === null || row === void 0 ? void 0 : (_row$raised_against10 = row.raised_against) === null || _row$raised_against10 === void 0 ? void 0 : _row$raised_against10.name, (question === null || question === void 0 ? void 0 : (_question$user3 = question.user) === null || _question$user3 === void 0 ? void 0 : _question$user3.id) === (row === null || row === void 0 ? void 0 : row.raised_against.id) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.id) === (row === null || row === void 0 ? void 0 : row.raised_against.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                      className: "fa-solid fa-check ml-2"
-                                    }) : null]
-                                  })]
+                              children: row === null || row === void 0 ? void 0 : (_row$project_manager7 = row.project_manager) === null || _row$project_manager7 === void 0 ? void 0 : _row$project_manager7.designation
+                            })]
+                          })]
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Reason:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2 ",
+                        children: row === null || row === void 0 ? void 0 : row.revision_acknowledgement
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Explanation:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "sp1_ck_content",
+                          dangerouslySetInnerHTML: {
+                            __html: row === null || row === void 0 ? void 0 : row.pm_comment
+                          }
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$project_manager8 = row.project_manager) === null || _row$project_manager8 === void 0 ? void 0 : _row$project_manager8.id)) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$project_manager9 = row.project_manager) === null || _row$project_manager9 === void 0 ? void 0 : _row$project_manager9.id), function (f) {
+                            return lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? true : f.replies;
+                          }), function (conv, index) {
+                            var _conv$replies2;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
                                 })]
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                              className: "form-group w-100 py-2",
-                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("label", {
-                                htmlFor: "",
-                                className: "d-flex align-items-center justify-content-between",
-                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-                                  children: ["Q", index + 1, ": Write your question here "]
-                                }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(questions) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("button", {
-                                  "aria-label": "removeQuestion",
-                                  onClick: function onClick() {
-                                    return removeQuestion(question.id);
-                                  },
-                                  className: "remove-question-btn",
-                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                    className: "fa-solid fa-trash"
-                                  })
-                                })]
-                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_form_DebounceInput__WEBPACK_IMPORTED_MODULE_8__["default"], {
-                                defaultValue: question.question,
-                                className: "form-control py-2 px-3 w-100",
-                                placeholder: "Write your question",
-                                onChange: function onChange(v) {
-                                  updateQuestion({
-                                    id: question.id,
-                                    data: _objectSpread(_objectSpread({}, question), {}, {
-                                      question: v
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies2 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies2 !== void 0 ? _conv$replies2 : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
                                     })
-                                  });
-                                }
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['PLR', 'LDR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Lead Developer"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Lead Developer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$task4 = row.task) !== null && _row$task4 !== void 0 && (_row$task4$lead_devel = _row$task4.lead_developer) !== null && _row$task4$lead_devel !== void 0 && _row$task4$lead_devel.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$task5 = row.task) === null || _row$task5 === void 0 ? void 0 : (_row$task5$lead_devel = _row$task5.lead_developer) === null || _row$task5$lead_devel === void 0 ? void 0 : _row$task5$lead_devel.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$task6 = row.task) === null || _row$task6 === void 0 ? void 0 : (_row$task6$lead_devel = _row$task6.lead_developer) === null || _row$task6$lead_devel === void 0 ? void 0 : _row$task6$lead_devel.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$task7 = row.task) === null || _row$task7 === void 0 ? void 0 : (_row$task7$lead_devel = _row$task7.lead_developer) === null || _row$task7$lead_devel === void 0 ? void 0 : _row$task7$lead_devel.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$task8 = row.task) === null || _row$task8 === void 0 ? void 0 : (_row$task8$lead_devel = _row$task8.lead_developer) === null || _row$task8$lead_devel === void 0 ? void 0 : _row$task8$lead_devel.id),
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$task9 = row.task) === null || _row$task9 === void 0 ? void 0 : (_row$task9$lead_devel = _row$task9.lead_developer) === null || _row$task9$lead_devel === void 0 ? void 0 : _row$task9$lead_devel.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: row === null || row === void 0 ? void 0 : (_row$task10 = row.task) === null || _row$task10 === void 0 ? void 0 : (_row$task10$lead_deve = _row$task10.lead_developer) === null || _row$task10$lead_deve === void 0 ? void 0 : _row$task10$lead_deve.designation
+                            })]
+                          })]
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Reason:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2 ",
+                        children: (row === null || row === void 0 ? void 0 : row.dispute_between) === 'LDR' ? row === null || row === void 0 ? void 0 : row.revision_acknowledgement : row === null || row === void 0 ? void 0 : row.deny_reason
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Explanation:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "sp1_ck_content",
+                          dangerouslySetInnerHTML: {
+                            __html: row === null || row === void 0 ? void 0 : row.lead_comment
+                          }
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$task11 = row.task) === null || _row$task11 === void 0 ? void 0 : (_row$task11$lead_deve = _row$task11.lead_developer) === null || _row$task11$lead_deve === void 0 ? void 0 : _row$task11$lead_deve.id)) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$task12 = row.task) === null || _row$task12 === void 0 ? void 0 : (_row$task12$lead_deve = _row$task12.lead_developer) === null || _row$task12$lead_deve === void 0 ? void 0 : _row$task12$lead_deve.id), function (f) {
+                            return lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? true : f.replies;
+                          }), function (conv, index) {
+                            var _conv$replies3;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question 0", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies3 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies3 !== void 0 ? _conv$replies3 : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null, lodash__WEBPACK_IMPORTED_MODULE_0___default().includes(['LDR'], row === null || row === void 0 ? void 0 : row.dispute_between) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Developer"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "whitespace-nowrap py-2",
+                        children: "Developer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2 px-3",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$task13 = row.task) !== null && _row$task13 !== void 0 && (_row$task13$developer = _row$task13.developer) !== null && _row$task13$developer !== void 0 && _row$task13$developer.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$task14 = row.task) === null || _row$task14 === void 0 ? void 0 : (_row$task14$developer = _row$task14.developer) === null || _row$task14$developer === void 0 ? void 0 : _row$task14$developer.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$task15 = row.task) === null || _row$task15 === void 0 ? void 0 : (_row$task15$developer = _row$task15.developer) === null || _row$task15$developer === void 0 ? void 0 : _row$task15$developer.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$task16 = row.task) === null || _row$task16 === void 0 ? void 0 : (_row$task16$developer = _row$task16.developer) === null || _row$task16$developer === void 0 ? void 0 : _row$task16$developer.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$task17 = row.task) === null || _row$task17 === void 0 ? void 0 : (_row$task17$developer = _row$task17.developer) === null || _row$task17$developer === void 0 ? void 0 : _row$task17$developer.id),
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$task18 = row.task) === null || _row$task18 === void 0 ? void 0 : (_row$task18$developer = _row$task18.developer) === null || _row$task18$developer === void 0 ? void 0 : _row$task18$developer.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: row === null || row === void 0 ? void 0 : (_row$task19 = row.task) === null || _row$task19 === void 0 ? void 0 : (_row$task19$developer = _row$task19.developer) === null || _row$task19$developer === void 0 ? void 0 : _row$task19$developer.designation
+                            })]
+                          })]
+                        })
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Reason:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2 ",
+                        children: row === null || row === void 0 ? void 0 : row.deny_reason
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Explanation:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "sp1_ck_content",
+                          dangerouslySetInnerHTML: {
+                            __html: row === null || row === void 0 ? void 0 : row.dev_comment
+                          }
+                        })
+                      })]
+                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$task20 = row.task) === null || _row$task20 === void 0 ? void 0 : (_row$task20$developer = _row$task20.developer) === null || _row$task20$developer === void 0 ? void 0 : _row$task20$developer.id)) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Submitted Answer:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          className: "d-flex flex-column",
+                          style: {
+                            gap: '16px'
+                          },
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(filterQuestion(conversations, row === null || row === void 0 ? void 0 : (_row$task21 = row.task) === null || _row$task21 === void 0 ? void 0 : (_row$task21$developer = _row$task21.developer) === null || _row$task21$developer === void 0 ? void 0 : _row$task21$developer.id), function (f) {
+                            return lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? true : f.replies;
+                          }), function (conv, index) {
+                            var _conv$replies4;
+                            var raised_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.raised_by));
+                            var replied_by = new _utils_user_details__WEBPACK_IMPORTED_MODULE_12__.User(getUserById(conv === null || conv === void 0 ? void 0 : conv.replied_by));
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "d-flex flex-column",
+                              style: {
+                                gap: 6
+                              },
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "pl-3",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "badge badge-primary",
+                                  children: ["Question ", index + 1, ":"]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "px-2 font-medium",
+                                  children: conv === null || conv === void 0 ? void 0 : conv.question
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                  className: "d-block text-right question-by f-12",
+                                  children: [" -by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                    href: raised_by.getUserLink(),
+                                    children: raised_by === null || raised_by === void 0 ? void 0 : raised_by.getName()
+                                  }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.created_at).format('hh:mm a')]
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "p-3 position-relative",
+                                style: {
+                                  background: '#f8f8f8'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                  className: "",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("p", {
+                                    className: "",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                      className: "badge badge-success d-inline mr-1",
+                                      children: "Answer:"
+                                    }), (_conv$replies4 = conv === null || conv === void 0 ? void 0 : conv.replies) !== null && _conv$replies4 !== void 0 ? _conv$replies4 : 'Not answered yet!']
+                                  }), (conv === null || conv === void 0 ? void 0 : conv.replies) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                      className: "question-by f-12",
+                                      children: [" - by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                                        href: replied_by.getUserLink(),
+                                        children: replied_by === null || replied_by === void 0 ? void 0 : replied_by.getName()
+                                      }), " on ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('MMM DD, YYYY'), " at ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(conv === null || conv === void 0 ? void 0 : conv.replied_date).format('hh:mm a')]
+                                    })
+                                  })]
+                                })
+                              })]
+                            }, index);
+                          })
+                        })
+                      })]
+                    }) : null]
+                  })
+                })]
+              }) : null, mode === 'QUESTION_AND_ANSWER' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: usersIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Loader__WEBPACK_IMPORTED_MODULE_13__["default"], {
+                  title: "loading..."
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                    className: "d-flex flex-column py-3 px-5 ",
+                    style: {
+                      gap: '16px'
+                    },
+                    children: lodash__WEBPACK_IMPORTED_MODULE_0___default().size(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
+                      return c.replies || c.question_for !== (auth === null || auth === void 0 ? void 0 : auth.getId()) ? false : true;
+                    })) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.Fragment, {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                        className: "mt-3 pb-2 py-2 position-relative",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                          className: "badge badge-secondary divider-text",
+                          children: "New Questions & Answer"
+                        })]
+                      }), lodash__WEBPACK_IMPORTED_MODULE_0___default().map(lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(conversations, function (c) {
+                        return c.replies || c.question_for !== (auth === null || auth === void 0 ? void 0 : auth.getId()) ? false : true;
+                      }), function (question, i) {
+                        var _getUserById;
+                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "form-group",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
+                            className: "mb-2 d-flex",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                              className: "d-block mr-2 font-weight-bold text-primary",
+                              children: ["Q", i + 1, "."]
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                              className: "d-block",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                className: "d-block f-16",
+                                children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("strong", {
+                                  children: question === null || question === void 0 ? void 0 : question.question
+                                }), " "]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                style: {
+                                  color: '#999'
+                                },
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("a", {
+                                  href: "account/employees/".concat(question === null || question === void 0 ? void 0 : question.raised_by),
+                                  className: "f-14",
+                                  style: {
+                                    color: '#999'
+                                  },
+                                  children: [" - ", (_getUserById = getUserById(question === null || question === void 0 ? void 0 : question.raised_by)) === null || _getUserById === void 0 ? void 0 : _getUserById.name]
+                                }), " - ", dayjs__WEBPACK_IMPORTED_MODULE_11___default()(question === null || question === void 0 ? void 0 : question.created_at).format('MMM DD, YYYY')]
                               })]
                             })]
-                          }, question.id);
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                            className: "w-auto px-4 mx-1",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_form_DebounceTextarea__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                              className: "form-control py-2 px-3 w-100",
+                              placeholder: "Explaine here...",
+                              rows: 3,
+                              onChange: function onChange(v) {
+                                return addAnswer({
+                                  answer: v,
+                                  id: question.id
+                                });
+                              }
+                            })
+                          })]
+                        }, i);
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                        className: "d-flex align-items-center",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                          onClick: close,
+                          className: "mr-3 ml-auto",
+                          children: " Close "
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                          onClick: handleSubmitAnswer,
+                          variant: "success",
+                          title: "Submit",
+                          className: "",
+                          isLoading: answering
+                        })]
+                      })]
+                    })
+                  })
+                })
+              }) : null, row !== null && row !== void 0 && row.status || lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 8], auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                className: "mt-3 pb-2 py-2 position-relative",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                  className: "badge badge-secondary divider-text",
+                  children: "Resolve"
+                })]
+              }) : null, !(row !== null && row !== void 0 && row.status) && row !== null && row !== void 0 && row.need_authrization || row !== null && row !== void 0 && row.status ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                className: "dispute-preview-table",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "py-2",
+                      children: "Review by"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "px-3 py-2 vertical-center w-100",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                        className: "d-flex align-items-center",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                          src: row !== null && row !== void 0 && (_row$resolved_by3 = row.resolved_by) !== null && _row$resolved_by3 !== void 0 && _row$resolved_by3.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$resolved_by4 = row.resolved_by) === null || _row$resolved_by4 === void 0 ? void 0 : _row$resolved_by4.image) : null,
+                          alt: row === null || row === void 0 ? void 0 : (_row$resolved_by5 = row.resolved_by) === null || _row$resolved_by5 === void 0 ? void 0 : _row$resolved_by5.name,
+                          name: row === null || row === void 0 ? void 0 : (_row$resolved_by6 = row.resolved_by) === null || _row$resolved_by6 === void 0 ? void 0 : _row$resolved_by6.name,
+                          type: "circle",
+                          width: 32,
+                          height: 32,
+                          fontSize: "1.2rem"
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "px-2",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                            href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$resolved_by7 = row.resolved_by) === null || _row$resolved_by7 === void 0 ? void 0 : _row$resolved_by7.id),
+                            className: "d-block",
+                            children: row === null || row === void 0 ? void 0 : (_row$resolved_by8 = row.resolved_by) === null || _row$resolved_by8 === void 0 ? void 0 : _row$resolved_by8.name
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                            className: "d-block f-10",
+                            style: {
+                              color: '#777',
+                              marginTop: '-0.30rem'
+                            },
+                            children: row === null || row === void 0 ? void 0 : (_row$resolved_by9 = row.resolved_by) === null || _row$resolved_by9 === void 0 ? void 0 : _row$resolved_by9.designation
+                          })]
+                        })]
+                      })
+                    })]
+                  }), row !== null && row !== void 0 && row.winner ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "py-2",
+                      children: "Winner"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "px-3 py-2 vertical-center w-100",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                        className: "d-flex align-items-center",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                          src: row !== null && row !== void 0 && (_row$winner = row.winner) !== null && _row$winner !== void 0 && _row$winner.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$winner2 = row.winner) === null || _row$winner2 === void 0 ? void 0 : _row$winner2.image) : null,
+                          alt: row === null || row === void 0 ? void 0 : (_row$winner3 = row.winner) === null || _row$winner3 === void 0 ? void 0 : _row$winner3.name,
+                          name: row === null || row === void 0 ? void 0 : (_row$winner4 = row.winner) === null || _row$winner4 === void 0 ? void 0 : _row$winner4.name,
+                          type: "circle",
+                          width: 32,
+                          height: 32,
+                          fontSize: "1.2rem"
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "px-2",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                            href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$winner5 = row.winner) === null || _row$winner5 === void 0 ? void 0 : _row$winner5.id),
+                            className: "d-block",
+                            children: row === null || row === void 0 ? void 0 : (_row$winner6 = row.winner) === null || _row$winner6 === void 0 ? void 0 : _row$winner6.name
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                            className: "d-block f-10",
+                            style: {
+                              color: '#777',
+                              marginTop: '-0.30rem'
+                            },
+                            children: row === null || row === void 0 ? void 0 : (_row$winner7 = row.winner) === null || _row$winner7 === void 0 ? void 0 : _row$winner7.designation
+                          })]
+                        })]
+                      })
+                    })]
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "py-2",
+                      children: "Partially Responsible"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("td", {
+                      className: "px-3 py-2 vertical-center w-100",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                        className: "d-flex align-items-center",
+                        children: [row === null || row === void 0 ? void 0 : (_row$raised_by3 = row.raised_by) === null || _row$raised_by3 === void 0 ? void 0 : _row$raised_by3.name, " - ", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%"]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                        className: "d-flex align-items-center",
+                        children: [row === null || row === void 0 ? void 0 : (_row$raised_against3 = row.raised_against) === null || _row$raised_against3 === void 0 ? void 0 : _row$raised_against3.name, " - ", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%"]
+                      })]
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "py-2",
+                      children: "Comment:"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                      className: "px-3 py-2 vertical-center w-100",
+                      children: row === null || row === void 0 ? void 0 : row.resolve_comment
+                    })]
+                  })]
+                })
+              }) : null, mode === 'RESOLVE' && !(row !== null && row !== void 0 && row.status) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: !(row !== null && row !== void 0 && row.need_authrization) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Do you have any other questions?"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("td", {
+                        className: "px-3 py-2 vertical-center w-100",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "form-check form-check-inline",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                              type: "radio",
+                              name: "authrize_question",
+                              className: "form-check-input",
+                              value: "yes",
+                              onChange: function onChange() {
+                                addQuestion();
+                                setHasQuestion(true);
+                              }
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("label", {
+                              className: "form-check-label",
+                              children: " Yes "
+                            })]
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "form-check form-check-inline",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                              type: "radio",
+                              name: "authrize_question",
+                              className: "form-check-input",
+                              value: "no",
+                              defaultChecked: true,
+                              onChange: function onChange() {
+                                setHasQuestion(false);
+                                clearQuestions();
+                              }
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("label", {
+                              className: "form-check-label",
+                              children: " No "
+                            })]
+                          })]
+                        }), hasQuestion && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                          children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(questions, function (question, index) {
+                            var _question$user, _row$raised_by4, _question$user2, _row$raised_by5, _row$raised_against4, _question$user3;
+                            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "mt-3 w-100",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "d-flex align-items-center",
+                                style: {
+                                  gap: '10px'
+                                },
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
+                                    className: "font-weight-bold py-2 px-3 border rounded-sm toggle-light",
+                                    children: (question === null || question === void 0 ? void 0 : (_question$user = question.user) === null || _question$user === void 0 ? void 0 : _question$user.name) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.name) || 'Click to select user'
+                                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                      onClick: function onClick() {
+                                        return askQuestionTo(row === null || row === void 0 ? void 0 : row.raised_by, question.id);
+                                      },
+                                      children: [row === null || row === void 0 ? void 0 : (_row$raised_by4 = row.raised_by) === null || _row$raised_by4 === void 0 ? void 0 : _row$raised_by4.name, (question === null || question === void 0 ? void 0 : (_question$user2 = question.user) === null || _question$user2 === void 0 ? void 0 : _question$user2.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by5 = row.raised_by) === null || _row$raised_by5 === void 0 ? void 0 : _row$raised_by5.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                        className: "fa-solid fa-check ml-2"
+                                      }) : null]
+                                    }), (row === null || row === void 0 ? void 0 : row.dispute_between) !== 'CPR' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                      onClick: function onClick() {
+                                        return askQuestionTo(row === null || row === void 0 ? void 0 : row.raised_against, question.id);
+                                      },
+                                      children: [row === null || row === void 0 ? void 0 : (_row$raised_against4 = row.raised_against) === null || _row$raised_against4 === void 0 ? void 0 : _row$raised_against4.name, (question === null || question === void 0 ? void 0 : (_question$user3 = question.user) === null || _question$user3 === void 0 ? void 0 : _question$user3.id) === (row === null || row === void 0 ? void 0 : row.raised_against.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                        className: "fa-solid fa-check ml-2"
+                                      }) : null]
+                                    }) : null]
+                                  })]
+                                })
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "form-group w-100 py-2",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
+                                  htmlFor: "",
+                                  className: "d-flex align-items-center justify-content-between",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                    children: ["Q", index + 1, ": Write your question here "]
+                                  }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(questions) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+                                    "aria-label": "removeQuestion",
+                                    onClick: function onClick() {
+                                      return removeQuestion(question.id);
+                                    },
+                                    className: "remove-question-btn",
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                      className: "fa-solid fa-trash"
+                                    })
+                                  })]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_form_DebounceTextarea__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                                  defaultValue: question.question,
+                                  className: "form-control py-2 px-3 w-100",
+                                  placeholder: "Write your question",
+                                  onChange: function onChange(v) {
+                                    updateQuestion({
+                                      id: question.id,
+                                      data: _objectSpread(_objectSpread({}, question), {}, {
+                                        question: v
+                                      })
+                                    });
+                                  }
+                                })]
+                              })]
+                            }, question.id);
+                          })
+                        }), hasQuestion && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+                          onClick: addQuestion,
+                          className: "bg-transparent",
+                          children: "+ New Question"
+                        })]
+                      })]
+                    }), !hasQuestion ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                          className: "py-2",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                            className: "pt-2 d-block",
+                            children: "The Winner: "
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("td", {
+                          className: "px-3 py-2 w-100",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
+                              className: "py-2 px-3 border rounded-sm toggle-light",
+                              children: finishedPartial ? 'Partially Responsible' : (_winner$name = winner === null || winner === void 0 ? void 0 : winner.name) !== null && _winner$name !== void 0 ? _winner$name : '--'
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                onClick: function onClick() {
+                                  setWinner(row === null || row === void 0 ? void 0 : row.raised_by);
+                                  setFinishedPartial(false);
+                                },
+                                children: [row === null || row === void 0 ? void 0 : (_row$raised_by6 = row.raised_by) === null || _row$raised_by6 === void 0 ? void 0 : _row$raised_by6.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by7 = row.raised_by) === null || _row$raised_by7 === void 0 ? void 0 : _row$raised_by7.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                  className: "fa-solid fa-check ml-2"
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                onClick: function onClick() {
+                                  setWinner(row === null || row === void 0 ? void 0 : row.raised_against);
+                                  setFinishedPartial(false);
+                                },
+                                children: [row === null || row === void 0 ? void 0 : (_row$raised_against5 = row.raised_against) === null || _row$raised_against5 === void 0 ? void 0 : _row$raised_against5.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_against6 = row.raised_against) === null || _row$raised_against6 === void 0 ? void 0 : _row$raised_against6.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                  className: "fa-solid fa-check ml-2"
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                onClick: function onClick() {
+                                  setFinishedPartial(true);
+                                  setNeedAuthorization(true);
+                                  setWinner(false);
+                                },
+                                children: ["Partially Responsible", finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                  className: "fa-solid fa-check ml-2"
+                                })]
+                              })]
+                            })]
+                          }), finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "d-flex align-items-center flex-wrap mt-3",
+                            style: {
+                              gap: '10px'
+                            },
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "input-group mb-2",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "input-group-prepend",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "input-group-text f-14 singleline-ellipsis",
+                                  children: row === null || row === void 0 ? void 0 : (_row$raised_by8 = row.raised_by) === null || _row$raised_by8 === void 0 ? void 0 : _row$raised_by8.name
+                                })
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                                type: "number",
+                                className: "form-control",
+                                placeholder: "50",
+                                min: 0,
+                                max: 100,
+                                value: raisedByPercent,
+                                style: {
+                                  minWidth: '80px'
+                                },
+                                onChange: function onChange(e) {
+                                  return setRaisedByPercent(e.target.value);
+                                }
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "input-group-append",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "input-group-text",
+                                  children: "%"
+                                })
+                              })]
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "input-group flex-nowrap mb-2",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "input-group-prepend",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                  className: "d-block input-group-text f-14 singleline-ellipsis",
+                                  children: row === null || row === void 0 ? void 0 : (_row$raised_against7 = row.raised_against) === null || _row$raised_against7 === void 0 ? void 0 : _row$raised_against7.name
+                                })
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                                type: "number",
+                                className: "form-control",
+                                placeholder: "50",
+                                min: 0,
+                                max: 100,
+                                value: raisedAgainstPercent,
+                                style: {
+                                  minWidth: '80px'
+                                },
+                                onChange: function onChange(e) {
+                                  return setRaisedAgainstPercent(e.target.value);
+                                }
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                className: "input-group-append",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                  className: "input-group-text",
+                                  children: "%"
+                                })
+                              })]
+                            })]
+                          })]
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                          className: "py-2",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                            className: "pt-2 d-block",
+                            children: "Reason: "
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                          className: "px-3 py-2 w-100",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("textarea", {
+                            rows: 4,
+                            className: "form-control p-2 f-14",
+                            value: resolveComment,
+                            onChange: function onChange(e) {
+                              return setResolveComment(e.target.value);
+                            },
+                            placeholder: "Explain why you select partial!"
+                          })
+                        })]
+                      })]
+                    }) : null]
+                  })
+                }) : null
+              }) : null, row !== null && row !== void 0 && row.status && row !== null && row !== void 0 && row.need_authrization ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                  className: "mt-3 pb-2 py-2 position-relative",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-secondary divider-text",
+                    children: "Authorities"
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                  className: "dispute-preview-table",
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Review by"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2 vertical-center w-100",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$authorized_by = row.authorized_by) !== null && _row$authorized_by !== void 0 && _row$authorized_by.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$authorized_by2 = row.authorized_by) === null || _row$authorized_by2 === void 0 ? void 0 : _row$authorized_by2.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$authorized_by3 = row.authorized_by) === null || _row$authorized_by3 === void 0 ? void 0 : _row$authorized_by3.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$authorized_by4 = row.authorized_by) === null || _row$authorized_by4 === void 0 ? void 0 : _row$authorized_by4.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$authorized_by5 = row.authorized_by) === null || _row$authorized_by5 === void 0 ? void 0 : _row$authorized_by5.id),
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$authorized_by6 = row.authorized_by) === null || _row$authorized_by6 === void 0 ? void 0 : _row$authorized_by6.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: row === null || row === void 0 ? void 0 : (_row$authorized_by7 = row.authorized_by) === null || _row$authorized_by7 === void 0 ? void 0 : _row$authorized_by7.designation
+                            })]
+                          })]
                         })
-                      }), hasQuestion && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("button", {
-                        onClick: addQuestion,
-                        className: "bg-transparent",
-                        children: "+ New Question"
+                      })]
+                    }), row !== null && row !== void 0 && row.winner ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Winner"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2 vertical-center w-100",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Avatar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+                            src: row !== null && row !== void 0 && (_row$winner8 = row.winner) !== null && _row$winner8 !== void 0 && _row$winner8.image ? "/user-uploads/avatar/".concat(row === null || row === void 0 ? void 0 : (_row$winner9 = row.winner) === null || _row$winner9 === void 0 ? void 0 : _row$winner9.image) : null,
+                            alt: row === null || row === void 0 ? void 0 : (_row$winner10 = row.winner) === null || _row$winner10 === void 0 ? void 0 : _row$winner10.name,
+                            name: row === null || row === void 0 ? void 0 : (_row$winner11 = row.winner) === null || _row$winner11 === void 0 ? void 0 : _row$winner11.name,
+                            type: "circle",
+                            width: 32,
+                            height: 32,
+                            fontSize: "1.2rem"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "px-2",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                              href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$winner12 = row.winner) === null || _row$winner12 === void 0 ? void 0 : _row$winner12.id),
+                              className: "d-block",
+                              children: row === null || row === void 0 ? void 0 : (_row$winner13 = row.winner) === null || _row$winner13 === void 0 ? void 0 : _row$winner13.name
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                              className: "d-block f-10",
+                              style: {
+                                color: '#777',
+                                marginTop: '-0.30rem'
+                              },
+                              children: row === null || row === void 0 ? void 0 : (_row$winner14 = row.winner) === null || _row$winner14 === void 0 ? void 0 : _row$winner14.designation
+                            })]
+                          })]
+                        })
+                      })]
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Partially Responsible"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("td", {
+                        className: "px-3 py-2 vertical-center w-100",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [row === null || row === void 0 ? void 0 : (_row$raised_by9 = row.raised_by) === null || _row$raised_by9 === void 0 ? void 0 : _row$raised_by9.name, " - ", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%"]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                          className: "d-flex align-items-center",
+                          children: [row === null || row === void 0 ? void 0 : (_row$raised_against8 = row.raised_against) === null || _row$raised_against8 === void 0 ? void 0 : _row$raised_against8.name, " - ", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%"]
+                        })]
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "py-2",
+                        children: "Comment:"
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                        className: "px-3 py-2 vertical-center w-100",
+                        children: row === null || row === void 0 ? void 0 : row.resolve_comment
                       })]
                     })]
                   })
-                })
-              }), row !== null && row !== void 0 && row.need_authrization ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                className: "mt-3 pb-2 py-2 position-relative",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                  className: "badge badge-secondary divider-text",
-                  children: "Authorize"
                 })]
-              }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("table", {
-                className: "dispute-preview-table",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("tbody", {
-                  children: row !== null && row !== void 0 && row.status ? row !== null && row !== void 0 && row.need_authrization ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "py-2",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                        className: "d-block",
-                        children: "Comment: "
-                      })
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                      className: "px-3 py-2",
-                      children: row === null || row === void 0 ? void 0 : row.authorize_comment
+              }) : null, !(row !== null && row !== void 0 && row.status) && mode === 'ATHORIZATION' ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: row !== null && row !== void 0 && row.need_authrization ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                    className: "mt-3 pb-2 py-2 position-relative",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                      className: "badge badge-secondary divider-text",
+                      children: "Authorities"
                     })]
-                  }) : null : !hasQuestion && (row !== null && row !== void 0 && row.need_authrization ? lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1], auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-                    children: [edit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "pt-2 d-block",
-                          children: "The Winner: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("td", {
-                        className: "px-3 py-2 w-100",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
-                            className: "py-2 px-3 border rounded-sm toggle-light",
-                            children: finishedPartial ? 'Partially Responsible' : (_winner$name = winner === null || winner === void 0 ? void 0 : winner.name) !== null && _winner$name !== void 0 ? _winner$name : '--'
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                              onClick: function onClick() {
-                                setWinner(row === null || row === void 0 ? void 0 : row.raised_by);
-                                setFinishedPartial(false);
-                              },
-                              children: [row === null || row === void 0 ? void 0 : (_row$raised_by12 = row.raised_by) === null || _row$raised_by12 === void 0 ? void 0 : _row$raised_by12.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by13 = row.raised_by) === null || _row$raised_by13 === void 0 ? void 0 : _row$raised_by13.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                className: "fa-solid fa-check ml-2"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("table", {
+                    className: "dispute-preview-table",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tbody", {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                          className: "py-2",
+                          children: "Do you have any other questions?"
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("td", {
+                          className: "px-3 py-2 vertical-center w-100",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                            className: "d-flex align-items-center",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "form-check form-check-inline",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                                type: "radio",
+                                name: "authrize_question",
+                                className: "form-check-input",
+                                value: "yes",
+                                onChange: function onChange() {
+                                  addQuestion();
+                                  setHasQuestion(true);
+                                }
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("label", {
+                                className: "form-check-label",
+                                children: " Yes "
                               })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                              onClick: function onClick() {
-                                setWinner(row === null || row === void 0 ? void 0 : row.raised_against);
-                                setFinishedPartial(false);
-                              },
-                              children: [row === null || row === void 0 ? void 0 : (_row$raised_against11 = row.raised_against) === null || _row$raised_against11 === void 0 ? void 0 : _row$raised_against11.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_against12 = row.raised_against) === null || _row$raised_against12 === void 0 ? void 0 : _row$raised_against12.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                className: "fa-solid fa-check ml-2"
-                              })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                              onClick: function onClick() {
-                                setFinishedPartial(true);
-                                setNeedAuthorization(true);
-                                setWinner(false);
-                              },
-                              children: ["Partially Responsible", finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                className: "fa-solid fa-check ml-2"
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "form-check form-check-inline",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                                type: "radio",
+                                name: "authrize_question",
+                                className: "form-check-input",
+                                value: "no",
+                                defaultChecked: true,
+                                onChange: function onChange() {
+                                  setHasQuestion(false);
+                                  clearQuestions();
+                                }
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("label", {
+                                className: "form-check-label",
+                                children: " No "
                               })]
                             })]
-                          })]
-                        }), finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "d-flex align-items-center mt-3",
-                          style: {
-                            gap: '10px'
-                          },
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "input-group mb-3",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-prepend",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text f-14",
-                                children: row === null || row === void 0 ? void 0 : (_row$raised_by14 = row.raised_by) === null || _row$raised_by14 === void 0 ? void 0 : _row$raised_by14.name
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
-                              type: "number",
-                              className: "form-control",
-                              placeholder: "50",
-                              min: 0,
-                              max: 100,
-                              value: raisedByPercent,
-                              style: {
-                                minWidth: '80px'
-                              },
-                              onChange: function onChange(e) {
-                                return setRaisedByPercent(e.target.value);
-                              }
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-append",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text",
-                                children: "%"
-                              })
-                            })]
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "input-group mb-3",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-prepend",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text f-14",
-                                children: row === null || row === void 0 ? void 0 : (_row$raised_against13 = row.raised_against) === null || _row$raised_against13 === void 0 ? void 0 : _row$raised_against13.name
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
-                              type: "number",
-                              className: "form-control",
-                              placeholder: "50",
-                              min: 0,
-                              max: 100,
-                              value: raisedAgainstPercent,
-                              style: {
-                                minWidth: '80px'
-                              },
-                              onChange: function onChange(e) {
-                                return setRaisedAgainstPercent(e.target.value);
-                              }
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-append",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text",
-                                children: "%"
-                              })
-                            })]
+                          }), hasQuestion && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                            children: lodash__WEBPACK_IMPORTED_MODULE_0___default().map(questions, function (question, index) {
+                              var _question$user4, _row$raised_by10, _question$user5, _row$raised_by11, _row$raised_by12, _row$raised_against9, _question$user6;
+                              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "mt-3 w-100",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                  className: "d-flex align-items-center",
+                                  style: {
+                                    gap: '10px'
+                                  },
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
+                                      className: "font-weight-bold py-2 px-3 border rounded-sm toggle-light",
+                                      children: (question === null || question === void 0 ? void 0 : (_question$user4 = question.user) === null || _question$user4 === void 0 ? void 0 : _question$user4.name) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.name) || 'Click to select user'
+                                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
+                                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                        onClick: function onClick() {
+                                          return askQuestionTo(row === null || row === void 0 ? void 0 : row.raised_by, question.id);
+                                        },
+                                        children: [row === null || row === void 0 ? void 0 : (_row$raised_by10 = row.raised_by) === null || _row$raised_by10 === void 0 ? void 0 : _row$raised_by10.name, (question === null || question === void 0 ? void 0 : (_question$user5 = question.user) === null || _question$user5 === void 0 ? void 0 : _question$user5.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by11 = row.raised_by) === null || _row$raised_by11 === void 0 ? void 0 : _row$raised_by11.id) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by12 = row.raised_by) === null || _row$raised_by12 === void 0 ? void 0 : _row$raised_by12.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                          className: "fa-solid fa-check ml-2"
+                                        }) : null]
+                                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                        onClick: function onClick() {
+                                          return askQuestionTo(row === null || row === void 0 ? void 0 : row.raised_against, question.id);
+                                        },
+                                        children: [row === null || row === void 0 ? void 0 : (_row$raised_against9 = row.raised_against) === null || _row$raised_against9 === void 0 ? void 0 : _row$raised_against9.name, (question === null || question === void 0 ? void 0 : (_question$user6 = question.user) === null || _question$user6 === void 0 ? void 0 : _question$user6.id) === (row === null || row === void 0 ? void 0 : row.raised_against.id) || (questionFor === null || questionFor === void 0 ? void 0 : questionFor.id) === (row === null || row === void 0 ? void 0 : row.raised_against.id) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                          className: "fa-solid fa-check ml-2"
+                                        }) : null]
+                                      })]
+                                    })]
+                                  })
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                  className: "form-group w-100 py-2",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("label", {
+                                    htmlFor: "",
+                                    className: "d-flex align-items-center justify-content-between",
+                                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("span", {
+                                      children: ["Q", index + 1, ": Write your question here "]
+                                    }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(questions) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+                                      "aria-label": "removeQuestion",
+                                      onClick: function onClick() {
+                                        return removeQuestion(question.id);
+                                      },
+                                      className: "remove-question-btn",
+                                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                        className: "fa-solid fa-trash"
+                                      })
+                                    })]
+                                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_form_DebounceTextarea__WEBPACK_IMPORTED_MODULE_8__["default"], {
+                                    defaultValue: question.question,
+                                    className: "form-control py-2 px-3 w-100",
+                                    placeholder: "Write your question",
+                                    onChange: function onChange(v) {
+                                      updateQuestion({
+                                        id: question.id,
+                                        data: _objectSpread(_objectSpread({}, question), {}, {
+                                          question: v
+                                        })
+                                      });
+                                    }
+                                  })]
+                                })]
+                              }, question.id);
+                            })
+                          }), hasQuestion && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("button", {
+                            onClick: addQuestion,
+                            className: "bg-transparent",
+                            children: "+ New Question"
                           })]
                         })]
-                      })]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "pt-2 d-block",
-                          children: "Reason: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "px-3 py-2 w-100",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("textarea", {
-                          rows: 4,
-                          className: "form-control p-2 f-14",
-                          value: resolveComment,
-                          onChange: function onChange(e) {
-                            return setResolveComment(e.target.value);
-                          },
-                          placeholder: "Explain why you select partial!"
-                        })
-                      })]
-                    })]
-                  }) : null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-                    children: [edit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "pt-2 d-block",
-                          children: "The Winner: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("td", {
-                        className: "px-3 py-2 w-100",
-                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
-                            className: "py-2 px-3 border rounded-sm toggle-light",
-                            children: finishedPartial ? 'Partially Responsible' : (_winner$name2 = winner === null || winner === void 0 ? void 0 : winner.name) !== null && _winner$name2 !== void 0 ? _winner$name2 : '--'
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                              onClick: function onClick() {
-                                setWinner(row === null || row === void 0 ? void 0 : row.raised_by);
-                                setFinishedPartial(false);
-                              },
-                              children: [row === null || row === void 0 ? void 0 : (_row$raised_by15 = row.raised_by) === null || _row$raised_by15 === void 0 ? void 0 : _row$raised_by15.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by16 = row.raised_by) === null || _row$raised_by16 === void 0 ? void 0 : _row$raised_by16.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                className: "fa-solid fa-check ml-2"
+                      }), !hasQuestion ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                            className: "py-2",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                              className: "pt-2 d-block",
+                              children: "The Winner: "
+                            })
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("td", {
+                            className: "px-3 py-2 w-100",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
+                                className: "py-2 px-3 border rounded-sm toggle-light",
+                                children: finishedPartial ? 'Partially Responsible' : (_winner$name2 = winner === null || winner === void 0 ? void 0 : winner.name) !== null && _winner$name2 !== void 0 ? _winner$name2 : '--'
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                  onClick: function onClick() {
+                                    setWinner(row === null || row === void 0 ? void 0 : row.raised_by);
+                                    setFinishedPartial(false);
+                                  },
+                                  children: [row === null || row === void 0 ? void 0 : (_row$raised_by13 = row.raised_by) === null || _row$raised_by13 === void 0 ? void 0 : _row$raised_by13.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_by14 = row.raised_by) === null || _row$raised_by14 === void 0 ? void 0 : _row$raised_by14.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                    className: "fa-solid fa-check ml-2"
+                                  })]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                  onClick: function onClick() {
+                                    setWinner(row === null || row === void 0 ? void 0 : row.raised_against);
+                                    setFinishedPartial(false);
+                                  },
+                                  children: [row === null || row === void 0 ? void 0 : (_row$raised_against10 = row.raised_against) === null || _row$raised_against10 === void 0 ? void 0 : _row$raised_against10.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_against11 = row.raised_against) === null || _row$raised_against11 === void 0 ? void 0 : _row$raised_against11.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                    className: "fa-solid fa-check ml-2"
+                                  })]
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                                  onClick: function onClick() {
+                                    setFinishedPartial(true);
+                                    setNeedAuthorization(true);
+                                    setWinner(false);
+                                  },
+                                  children: ["Partially Responsible", finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("i", {
+                                    className: "fa-solid fa-check ml-2"
+                                  })]
+                                })]
                               })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                              onClick: function onClick() {
-                                setWinner(row === null || row === void 0 ? void 0 : row.raised_against);
-                                setFinishedPartial(false);
+                            }), finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                              className: "d-flex align-items-center flex-wrap mt-3",
+                              style: {
+                                gap: '10px'
                               },
-                              children: [row === null || row === void 0 ? void 0 : (_row$raised_against14 = row.raised_against) === null || _row$raised_against14 === void 0 ? void 0 : _row$raised_against14.name, (winner === null || winner === void 0 ? void 0 : winner.id) === (row === null || row === void 0 ? void 0 : (_row$raised_against15 = row.raised_against) === null || _row$raised_against15 === void 0 ? void 0 : _row$raised_against15.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                className: "fa-solid fa-check ml-2"
-                              })]
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
-                              onClick: function onClick() {
-                                setFinishedPartial(true);
-                                setNeedAuthorization(true);
-                                setWinner(false);
-                              },
-                              children: ["Partially Responsible", finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-                                className: "fa-solid fa-check ml-2"
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "input-group mb-2",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                  className: "input-group-prepend",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                    className: "input-group-text f-14 singleline-ellipsis",
+                                    children: row === null || row === void 0 ? void 0 : (_row$raised_by15 = row.raised_by) === null || _row$raised_by15 === void 0 ? void 0 : _row$raised_by15.name
+                                  })
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                                  type: "number",
+                                  className: "form-control",
+                                  placeholder: "50",
+                                  min: 0,
+                                  max: 100,
+                                  value: raisedByPercent,
+                                  style: {
+                                    minWidth: '80px'
+                                  },
+                                  onChange: function onChange(e) {
+                                    return setRaisedByPercent(e.target.value);
+                                  }
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                  className: "input-group-append",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                    className: "input-group-text",
+                                    children: "%"
+                                  })
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+                                className: "input-group flex-nowrap mb-2",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                  className: "input-group-prepend",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                    className: "d-block input-group-text f-14 singleline-ellipsis",
+                                    children: row === null || row === void 0 ? void 0 : (_row$raised_against12 = row.raised_against) === null || _row$raised_against12 === void 0 ? void 0 : _row$raised_against12.name
+                                  })
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("input", {
+                                  type: "number",
+                                  className: "form-control",
+                                  placeholder: "50",
+                                  min: 0,
+                                  max: 100,
+                                  value: raisedAgainstPercent,
+                                  style: {
+                                    minWidth: '80px'
+                                  },
+                                  onChange: function onChange(e) {
+                                    return setRaisedAgainstPercent(e.target.value);
+                                  }
+                                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                                  className: "input-group-append",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                                    className: "input-group-text",
+                                    children: "%"
+                                  })
+                                })]
                               })]
                             })]
                           })]
-                        }), finishedPartial && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                          className: "d-flex align-items-center mt-3",
-                          style: {
-                            gap: '10px'
-                          },
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "input-group mb-3",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-prepend",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text f-14",
-                                children: row === null || row === void 0 ? void 0 : (_row$raised_by17 = row.raised_by) === null || _row$raised_by17 === void 0 ? void 0 : _row$raised_by17.name
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
-                              type: "number",
-                              className: "form-control",
-                              placeholder: "50",
-                              min: 0,
-                              max: 100,
-                              value: raisedByPercent,
-                              style: {
-                                minWidth: '80px'
-                              },
-                              onChange: function onChange(e) {
-                                setRaisedByPercent(e.target.value);
-                                setRaisedAgainstPercent(100 - Number(e.target.value));
-                              }
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-append",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text",
-                                children: "%"
-                              })
-                            })]
-                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                            className: "input-group mb-3",
-                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-prepend",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text f-14",
-                                children: row === null || row === void 0 ? void 0 : (_row$raised_against16 = row.raised_against) === null || _row$raised_against16 === void 0 ? void 0 : _row$raised_against16.name
-                              })
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("input", {
-                              type: "number",
-                              className: "form-control",
-                              placeholder: "50",
-                              min: 0,
-                              max: 100,
-                              value: raisedAgainstPercent,
-                              style: {
-                                minWidth: '80px'
-                              },
-                              onChange: function onChange(e) {
-                                setRaisedAgainstPercent(e.target.value);
-                                setRaisedByPercent(100 - Number(e.target.value));
-                              }
-                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                              className: "input-group-append",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                                className: "input-group-text",
-                                children: "%"
-                              })
-                            })]
-                          })]
+                        })
+                      }) : null, !hasQuestion ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                          className: "py-2",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                            className: "pt-2 d-block",
+                            children: "Reason: "
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("td", {
+                          className: "px-3 py-2 w-100",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("textarea", {
+                            rows: 4,
+                            className: "form-control p-2 f-14",
+                            value: resolveComment,
+                            onChange: function onChange(e) {
+                              return setResolveComment(e.target.value);
+                            },
+                            placeholder: "Explain why you select partial!"
+                          })
                         })]
-                      })]
-                    }), row !== null && row !== void 0 && row.need_authrization ? lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "pt-2 d-block",
-                          children: "Reason: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "px-3 py-2 w-100",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("textarea", {
-                          rows: 4,
-                          className: "form-control p-2 f-14",
-                          value: resolveComment,
-                          onChange: function onChange(e) {
-                            return setResolveComment(e.target.value);
-                          },
-                          placeholder: "Explain why you select partial!"
-                        })
-                      })]
-                    }) : null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("tr", {
-                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "py-2",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-                          className: "pt-2 d-block",
-                          children: "Reason: "
-                        })
-                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("td", {
-                        className: "px-3 py-2 w-100",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("textarea", {
-                          rows: 4,
-                          className: "form-control p-2 f-14",
-                          value: resolveComment,
-                          onChange: function onChange(e) {
-                            return setResolveComment(e.target.value);
-                          },
-                          placeholder: "Explain why you select partial!"
-                        })
-                      })]
-                    })]
-                  }))
+                      }) : null]
+                    })
+                  })]
+                }) : null
+              }) : null, row !== null && row !== void 0 && row.status && row !== null && row !== void 0 && row.need_authrization ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                className: "alert alert-success",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                  children: ["This dispute was authorized & resolved by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                    href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$authorized_by8 = row.authorized_by) === null || _row$authorized_by8 === void 0 ? void 0 : _row$authorized_by8.id),
+                    className: "badge badge-success",
+                    style: {
+                      color: '#fff !important'
+                    },
+                    children: row === null || row === void 0 ? void 0 : (_row$authorized_by9 = row.authorized_by) === null || _row$authorized_by9 === void 0 ? void 0 : _row$authorized_by9.name
+                  }), " on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-success",
+                    children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.authorize_on).format("MMM DD, YYYY")
+                  }), " at ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-success",
+                    children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.authorize_on).format("hh:mm A")
+                  }), " ( Previously reviewed by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                    href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$resolved_by10 = row.resolved_by) === null || _row$resolved_by10 === void 0 ? void 0 : _row$resolved_by10.id),
+                    className: "badge badge-info",
+                    children: row === null || row === void 0 ? void 0 : (_row$resolved_by11 = row.resolved_by) === null || _row$resolved_by11 === void 0 ? void 0 : _row$resolved_by11.name
+                  }), " on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-info",
+                    children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.resolved_on).format("MMM DD, YYYY")
+                  }), " at ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-info",
+                    children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.resolved_on).format("hh:mm A")
+                  }), " )"]
                 })
-              }), !(row !== null && row !== void 0 && row.status) && (!(row !== null && row !== void 0 && row.need_authrization) || row !== null && row !== void 0 && row.need_authrization && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-                className: "d-flex w-100 ",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-                  className: "ml-auto d-flex align-items-center justify-end pt-3 mb-4",
-                  children: [hasQuestion ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
-                    onClick: handleQuestionSubmittion,
-                    variant: "success",
-                    title: "Submit to ask question",
-                    className: "ml-auto",
-                    isLoading: questionSubmitting
-                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
-                    variant: "success",
-                    onClick: handleSubmitForAuthorization,
-                    title: !finishedPartial || row !== null && row !== void 0 && row.need_authrization ? 'Authorize & Resolve' : 'Send for Authorization',
-                    className: "ml-auto",
-                    isLoading: submittingToAuthorization
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
-                    onClick: close,
-                    className: "mr-3 ml-2",
-                    children: " Close "
+              }) : row !== null && row !== void 0 && row.status && !(row !== null && row !== void 0 && row.need_authrization) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+                className: "alert alert-success",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                  children: ["This dispute was authorized & resolved by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("a", {
+                    href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : (_row$resolved_by12 = row.resolved_by) === null || _row$resolved_by12 === void 0 ? void 0 : _row$resolved_by12.id),
+                    className: "badge badge-success",
+                    style: {
+                      color: '#fff !important'
+                    },
+                    children: row === null || row === void 0 ? void 0 : (_row$resolved_by13 = row.resolved_by) === null || _row$resolved_by13 === void 0 ? void 0 : _row$resolved_by13.name
+                  }), " on ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-success",
+                    children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.resolved_on).format("MMM DD, YYYY")
+                  }), " at ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("span", {
+                    className: "badge badge-success",
+                    children: dayjs__WEBPACK_IMPORTED_MODULE_11___default()(row === null || row === void 0 ? void 0 : row.resolved_on).format("hh:mm A")
                   })]
                 })
+              }) : null, !(row !== null && row !== void 0 && row.status) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(RanderButton, {
+                row: row,
+                auth: auth,
+                close: close,
+                hasQuestion: hasQuestion,
+                finishedPartial: finishedPartial,
+                handleQuestionSubmittion: handleQuestionSubmittion,
+                isLoading: questionSubmitting || submittingToAuthorization,
+                handleSubmitForAuthorization: handleSubmitForAuthorization
               }) : null]
             })
           })]
         })
       })
-    })]
+    })
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ResolveButton);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ResolveModal);
+var RanderButton = function RanderButton(_ref9) {
+  var _row$raised_by16, _row$raised_against13;
+  var row = _ref9.row,
+    auth = _ref9.auth,
+    close = _ref9.close,
+    isLoading = _ref9.isLoading,
+    handleQuestionSubmittion = _ref9.handleQuestionSubmittion,
+    handleSubmitForAuthorization = _ref9.handleSubmitForAuthorization,
+    finishedPartial = _ref9.finishedPartial,
+    hasQuestion = _ref9.hasQuestion;
+  var content = null;
+  var allowedForAction = lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([row === null || row === void 0 ? void 0 : (_row$raised_by16 = row.raised_by) === null || _row$raised_by16 === void 0 ? void 0 : _row$raised_by16.id, row === null || row === void 0 ? void 0 : (_row$raised_against13 = row.raised_against) === null || _row$raised_against13 === void 0 ? void 0 : _row$raised_against13.id], auth === null || auth === void 0 ? void 0 : auth.getId()) ? false : true;
+  if (!allowedForAction || row !== null && row !== void 0 && row.status) {
+    return null;
+  }
+  console.log();
+  if (!(row !== null && row !== void 0 && row.status)) {
+    if (row && !row.need_authrization) {
+      if (hasQuestion) {
+        content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          onClick: handleQuestionSubmittion,
+          variant: "success",
+          title: "Submit to ask question",
+          className: "ml-auto",
+          isLoading: isLoading
+        });
+      } else if (finishedPartial) {
+        if ((auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) {
+          content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            variant: "success",
+            onClick: handleSubmitForAuthorization,
+            title: "Authorize & Resolve",
+            className: "ml-auto",
+            isLoading: isLoading
+          });
+        } else {
+          content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+            variant: "success",
+            onClick: handleSubmitForAuthorization,
+            title: "Send for Authorization",
+            className: "ml-auto",
+            isLoading: isLoading
+          });
+        }
+      } else {
+        content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+          variant: "success",
+          onClick: handleSubmitForAuthorization,
+          title: "Authorize & Resolve",
+          className: "ml-auto",
+          isLoading: isLoading
+        });
+      }
+    } else if (row && row.need_authrization && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) {
+      content = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_SubmitButton__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        variant: "success",
+        onClick: handleSubmitForAuthorization,
+        title: "Authorize & Resolve",
+        className: "ml-auto",
+        isLoading: isLoading
+      });
+    }
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)("div", {
+    className: "d-flex w-100 ",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsxs)("div", {
+      className: "ml-auto d-flex align-items-center justify-end pt-3 mb-4",
+      children: [content, !(row !== null && row !== void 0 && row.status) ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_15__.jsx)(_global_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        onClick: close,
+        className: "mr-3 ml-2",
+        children: "Close"
+      }) : null]
+    })
+  });
+};
 
 /***/ }),
 
@@ -26322,6 +27682,73 @@ SearchBox.propTypes = {
 
 /***/ }),
 
+/***/ "./resources/js/react/disputes/context.jsx":
+/*!*************************************************!*\
+  !*** ./resources/js/react/disputes/context.jsx ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "DisputeContext": () => (/* binding */ DisputeContext),
+/* harmony export */   "default": () => (/* binding */ DisputeContextProvider),
+/* harmony export */   "useDispute": () => (/* binding */ useDispute)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+var DisputeContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext();
+function DisputeContextProvider(_ref) {
+  var children = _ref.children;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    showResolveModal = _React$useState2[0],
+    setShowResolveModal = _React$useState2[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0__.useState(null),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    rowData = _React$useState4[0],
+    setRowData = _React$useState4[1];
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0__.useState('view'),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    mode = _React$useState6[0],
+    setMode = _React$useState6[1];
+  var toggleModal = function toggleModal(data, mode) {
+    setShowResolveModal(!showResolveModal);
+    setRowData(data);
+    setMode(mode);
+  };
+  var close = function close() {
+    return setShowResolveModal(false);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)(DisputeContext.Provider, {
+    value: {
+      showResolveModal: showResolveModal,
+      setShowResolveModal: setShowResolveModal,
+      toggleModal: toggleModal,
+      rowData: rowData,
+      close: close,
+      setRowData: setRowData,
+      mode: mode,
+      setMode: setMode
+    },
+    children: children
+  });
+}
+var useDispute = function useDispute() {
+  return react__WEBPACK_IMPORTED_MODULE_0__.useContext(DisputeContext);
+};
+
+/***/ }),
+
 /***/ "./resources/js/react/disputes/index.jsx":
 /*!***********************************************!*\
   !*** ./resources/js/react/disputes/index.jsx ***!
@@ -26333,15 +27760,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ "./node_modules/react-dom/client.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDragLayer.js");
-/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/core/DndProvider.js");
-/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/hooks/useDragLayer.js");
+/* harmony import */ var react_dnd__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-dnd */ "./node_modules/react-dnd/dist/core/DndProvider.js");
+/* harmony import */ var react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-dnd-html5-backend */ "./node_modules/react-dnd-html5-backend/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _services_store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/store */ "./resources/js/react/services/store.js");
 /* harmony import */ var _Disputes__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Disputes */ "./resources/js/react/disputes/Disputes.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _context__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./context */ "./resources/js/react/disputes/context.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
@@ -26356,7 +27785,7 @@ var container = document.getElementById("disputeContainer");
 
 // custom drag layer 
 var DragLayer = function DragLayer() {
-  var _useDragLayer = (0,react_dnd__WEBPACK_IMPORTED_MODULE_6__.useDragLayer)(function (monitor) {
+  var _useDragLayer = (0,react_dnd__WEBPACK_IMPORTED_MODULE_7__.useDragLayer)(function (monitor) {
       return {
         item: monitor.getItem(),
         itemType: monitor.getItemType(),
@@ -26369,7 +27798,7 @@ var DragLayer = function DragLayer() {
   if (!currentOffset) {
     return null;
   }
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     style: {
       position: 'fixed',
       pointerEvents: 'none',
@@ -26377,7 +27806,7 @@ var DragLayer = function DragLayer() {
       left: currentOffset.x,
       top: currentOffset.y
     },
-    children: itemType === 'column' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+    children: itemType === 'column' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
       className: "py-2 px-2 pl-3 bg-white shadow border",
       style: {
         width: item.columnDef.size
@@ -26387,25 +27816,27 @@ var DragLayer = function DragLayer() {
   });
 };
 var Container = function Container() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(DragLayer, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Outlet, {})]
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_context__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(DragLayer, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Outlet, {})]
+    })
   });
 };
 if (container) {
-  react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(container).render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_redux__WEBPACK_IMPORTED_MODULE_2__.Provider, {
+  react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(container).render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().StrictMode), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_redux__WEBPACK_IMPORTED_MODULE_2__.Provider, {
       store: _services_store__WEBPACK_IMPORTED_MODULE_3__.store,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_dnd__WEBPACK_IMPORTED_MODULE_8__.DndProvider, {
-        backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_9__.HTML5Backend,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_10__.BrowserRouter, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_dnd__WEBPACK_IMPORTED_MODULE_9__.DndProvider, {
+        backend: react_dnd_html5_backend__WEBPACK_IMPORTED_MODULE_10__.HTML5Backend,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_11__.BrowserRouter, {
           basename: "/account/disputes",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Routes, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Routes, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
               path: "/",
-              element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(Container, {}),
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.Route, {
+              element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(Container, {}),
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
                 index: true,
-                element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_Disputes__WEBPACK_IMPORTED_MODULE_4__["default"], {})
+                element: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Disputes__WEBPACK_IMPORTED_MODULE_4__["default"], {})
               })
             })
           })
@@ -27459,10 +28890,10 @@ var SubmitButton = function SubmitButton(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/global/form/DebounceInput.jsx":
-/*!**********************************************************!*\
-  !*** ./resources/js/react/global/form/DebounceInput.jsx ***!
-  \**********************************************************/
+/***/ "./resources/js/react/global/form/DebounceTextarea.jsx":
+/*!*************************************************************!*\
+  !*** ./resources/js/react/global/form/DebounceTextarea.jsx ***!
+  \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -27489,7 +28920,7 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 
 
-var DebounceInput = function DebounceInput(_ref) {
+var DebounceTextarea = function DebounceTextarea(_ref) {
   var className = _ref.className,
     _ref$rows = _ref.rows,
     rows = _ref$rows === void 0 ? 2 : _ref$rows,
@@ -27508,16 +28939,19 @@ var DebounceInput = function DebounceInput(_ref) {
     }, debounceTime, [value]),
     _useDebounce2 = _slicedToArray(_useDebounce, 2),
     cancel = _useDebounce2[1];
+  var ref = react__WEBPACK_IMPORTED_MODULE_0___default().useRef();
+  var handleOnChange = function handleOnChange(e) {
+    setValue(e.target.value);
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_1__.jsx)("textarea", _objectSpread({
+    ref: ref,
     rows: rows,
     className: className,
     value: value,
-    onChange: function onChange(e) {
-      return setValue(e.target.value);
-    }
+    onChange: handleOnChange
   }, props));
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DebounceInput);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DebounceTextarea);
 
 /***/ }),
 
@@ -27599,6 +29033,11 @@ var DataTable = function DataTable(_ref) {
     pageSize = _React$useState6$.pageSize,
     setPagination = _React$useState6[1];
 
+  // initiat data
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    setData(tableData);
+  }, [tableData]);
+
   // use localstore
   var _useLocalStorage = (0,react_use__WEBPACK_IMPORTED_MODULE_7__["default"])(tableName),
     _useLocalStorage2 = _slicedToArray(_useLocalStorage, 1),
@@ -27650,7 +29089,7 @@ var DataTable = function DataTable(_ref) {
 
   // table instance...
   var table = (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_8__.useReactTable)({
-    data: tableData,
+    data: data,
     columns: columns,
     state: _objectSpread({
       sorting: sorting,
@@ -28457,6 +29896,20 @@ var Protfolio = function Protfolio() {
       }, _callee);
     }))();
   }, [_cms, _webCategory, _webtype, _webSubCategory, _theme, _plugin, _pageSize, _pageIndex]);
+  var subNiches = function subNiches() {
+    var data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_categories, function (d) {
+      return d.parent_category_id;
+    });
+    data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(data, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(d).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(subCategorySearch));
+    });
+    if (websiteCategory && websiteCategory.id) {
+      data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(data, function (d) {
+        return d.parent_category_id === websiteCategory.id;
+      });
+    }
+    return data;
+  };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("section", {
     className: "p-4",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
@@ -28640,12 +30093,10 @@ var Protfolio = function Protfolio() {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "portfolio-filter-dd-menu",
-              children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_categories, function (q) {
-                return q.parent_category_id && lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(q.category_name).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(subCategorySearch));
-              }), function (option) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("abbr", {
+              children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(subNiches(), function (option) {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("abbr", {
                   title: option.category_name,
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
+                  children: [console.table(option), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
                     className: "d-flex items-center justify-content-between",
                     onClick: function onClick() {
                       return setSubCategory(option);
@@ -28659,7 +30110,7 @@ var Protfolio = function Protfolio() {
                     }), (subCategory === null || subCategory === void 0 ? void 0 : subCategory.id) === option.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                       className: "fa-solid fa-check ml-"
                     })]
-                  })
+                  })]
                 }, option.id);
               })
             })]
@@ -30078,16 +31529,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _tasks_components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../tasks/components/Modal */ "./resources/js/react/tasks/components/Modal.jsx");
-/* harmony import */ var _tasks_components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../tasks/components/Button */ "./resources/js/react/tasks/components/Button.jsx");
-/* harmony import */ var _tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../tasks/components/form/Input */ "./resources/js/react/tasks/components/form/Input.jsx");
-/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
+/* harmony import */ var _services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/api/projectApiSlice */ "./resources/js/react/services/api/projectApiSlice.js");
+/* harmony import */ var _tasks_components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../tasks/components/Button */ "./resources/js/react/tasks/components/Button.jsx");
+/* harmony import */ var _tasks_components_Modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../tasks/components/Modal */ "./resources/js/react/tasks/components/Modal.jsx");
 /* harmony import */ var _tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../tasks/components/SubmitButton */ "./resources/js/react/tasks/components/SubmitButton.jsx");
-/* harmony import */ var _services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/api/projectApiSlice */ "./resources/js/react/services/api/projectApiSlice.js");
+/* harmony import */ var _tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../tasks/components/form/Input */ "./resources/js/react/tasks/components/form/Input.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -30117,78 +31568,78 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
     close = _ref.close,
     openTaskForm = _ref.openTaskForm,
     projectId = _ref.projectId;
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     themeDetails = _React$useState2[0],
     setThemeDetails = _React$useState2[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     themeName = _React$useState4[0],
     setThemeName = _React$useState4[1];
-  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     themeUrl = _React$useState6[0],
     setThemeUrl = _React$useState6[1];
-  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     designDetials = _React$useState8[0],
     setDesignDetails = _React$useState8[1];
-  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState('--'),
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState('--'),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
     designFileType = _React$useState10[0],
     setDesignFileType = _React$useState10[1];
-  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState12 = _slicedToArray(_React$useState11, 2),
     xDOrFigmaFile = _React$useState12[0],
     setXDorFigmaFile = _React$useState12[1];
-  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState14 = _slicedToArray(_React$useState13, 2),
     photoshopReferenceURL = _React$useState14[0],
     setPhotoshopReferenceURL = _React$useState14[1];
-  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_0___default().useState([{
+  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([{
       id: 'lgqsz',
       url: ''
     }]),
     _React$useState16 = _slicedToArray(_React$useState15, 2),
     designRefURL = _React$useState16[0],
     setDesignRefURL = _React$useState16[1];
-  var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState18 = _slicedToArray(_React$useState17, 2),
     designRefDescription = _React$useState18[0],
     setDesignRefDescription = _React$useState18[1];
-  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState20 = _slicedToArray(_React$useState19, 2),
     plugin = _React$useState20[0],
     setPlugin = _React$useState20[1];
-  var _React$useState21 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState21 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState22 = _slicedToArray(_React$useState21, 2),
     pluginName = _React$useState22[0],
     setPluginName = _React$useState22[1];
-  var _React$useState23 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState23 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState24 = _slicedToArray(_React$useState23, 2),
     pluginURL = _React$useState24[0],
     setPluginURL = _React$useState24[1];
-  var _React$useState25 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState25 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState26 = _slicedToArray(_React$useState25, 2),
     pluginGoogleDrive = _React$useState26[0],
     setPluginGoogleDrive = _React$useState26[1];
-  var _React$useState27 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState27 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState28 = _slicedToArray(_React$useState27, 2),
     pluginDescription = _React$useState28[0],
     setPluginDescription = _React$useState28[1];
-  var _React$useState29 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState29 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState30 = _slicedToArray(_React$useState29, 2),
     colorSchema = _React$useState30[0],
     setColorSchema = _React$useState30[1];
-  var _React$useState31 = react__WEBPACK_IMPORTED_MODULE_0___default().useState("#1D82F5"),
+  var _React$useState31 = react__WEBPACK_IMPORTED_MODULE_1___default().useState("#1D82F5"),
     _React$useState32 = _slicedToArray(_React$useState31, 2),
     primaryColor = _React$useState32[0],
     setPrimaryColor = _React$useState32[1];
-  var _React$useState33 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState33 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
     _React$useState34 = _slicedToArray(_React$useState33, 2),
     primaryColorDescription = _React$useState34[0],
     setPrimaryColorDescription = _React$useState34[1];
-  var _React$useState35 = react__WEBPACK_IMPORTED_MODULE_0___default().useState([{
+  var _React$useState35 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([{
       id: 'egqsz',
       color: '#1D82F5',
       description: ''
@@ -30196,11 +31647,11 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
     _React$useState36 = _slicedToArray(_React$useState35, 2),
     secondaryColors = _React$useState36[0],
     setSecondaryColors = _React$useState36[1];
-  var _React$useState37 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(null),
+  var _React$useState37 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
     _React$useState38 = _slicedToArray(_React$useState37, 2),
     error = _React$useState38[0],
     setError = _React$useState38[1];
-  var _useStoreProjectGuide = (0,_services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_7__.useStoreProjectGuidelineMutation)(),
+  var _useStoreProjectGuide = (0,_services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_3__.useStoreProjectGuidelineMutation)(),
     _useStoreProjectGuide2 = _slicedToArray(_useStoreProjectGuide, 2),
     storeProjectGuideline = _useStoreProjectGuide2[0],
     isLoading = _useStoreProjectGuide2[1].isLoading;
@@ -30224,7 +31675,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
 
   // handle secondary color change 
   var handleSecondaryColorChange = function handleSecondaryColorChange(e, id) {
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_5___default().map(secondaryColors, function (item) {
+    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
       return item.id === id ? {
         id: id,
         color: e.target.value,
@@ -30237,7 +31688,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
   // handle secondary color description change
   var handleSecondaryColorDescriptionChange = function handleSecondaryColorDescriptionChange(e, editor, id) {
     var text = editor.getData();
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_5___default().map(secondaryColors, function (item) {
+    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
       return item.id === id ? _objectSpread(_objectSpread({}, item), {}, {
         description: text
       }) : item;
@@ -30247,7 +31698,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
 
   // remove secondary color
   var removeSecondaryColor = function removeSecondaryColor(e, id) {
-    var newColors = lodash__WEBPACK_IMPORTED_MODULE_5___default().filter(secondaryColors, function (item) {
+    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(secondaryColors, function (item) {
       return item.id !== id;
     });
     setSecondaryColors(_toConsumableArray(newColors));
@@ -30266,7 +31717,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
 
   // handle on chagne ref url
   var handleRefUrlChange = function handleRefUrlChange(e, id) {
-    var newRef = lodash__WEBPACK_IMPORTED_MODULE_5___default().map(designRefURL, function (item) {
+    var newRef = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
       return item.id === id ? {
         id: id,
         url: e.target.value
@@ -30278,7 +31729,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
   // remove design ref
   var removeDesignRef = function removeDesignRef(e, id) {
     e.stopPropagation();
-    var newRef = lodash__WEBPACK_IMPORTED_MODULE_5___default().filter(designRefURL, function (item) {
+    var newRef = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(designRefURL, function (item) {
       return item.id !== id;
     });
     setDesignRefURL(_toConsumableArray(newRef));
@@ -30338,7 +31789,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
             count++;
           }
         } else if (designFileType === 'The Reference Site That Has to Be Clone') {
-          lodash__WEBPACK_IMPORTED_MODULE_5___default().map(designRefURL, function (item) {
+          lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
             if (item.url === '') {
               err.designRef = "You Have to Provide Reference Link!";
               count++;
@@ -30366,7 +31817,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
         err.pColorDesc = "You Have to Provide This Field!";
         count++;
       }
-      lodash__WEBPACK_IMPORTED_MODULE_5___default().map(secondaryColors, function (item) {
+      lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
         if (item.description === '') {
           err.sDescription = "You Have to Provide This Field!";
           count++;
@@ -30416,10 +31867,10 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
       theme_name: themeName,
       theme_url: themeUrl,
       design_details: designDetials === 'yes' ? 1 : 0,
-      design: designFileType,
+      design: designFileType === '--' ? null : designFileType,
       xd_url: xDOrFigmaFile,
       drive_url: photoshopReferenceURL,
-      reference_link: lodash__WEBPACK_IMPORTED_MODULE_5___default().compact(lodash__WEBPACK_IMPORTED_MODULE_5___default().map(designRefURL, function (item) {
+      reference_link: lodash__WEBPACK_IMPORTED_MODULE_0___default().compact(lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
         return item.url;
       })),
       instruction: designRefDescription,
@@ -30431,10 +31882,10 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
       color_schema: colorSchema === "yes" ? 1 : 0,
       primary_color: primaryColor,
       primary_color_description: primaryColorDescription,
-      color: lodash__WEBPACK_IMPORTED_MODULE_5___default().compact(lodash__WEBPACK_IMPORTED_MODULE_5___default().map(secondaryColors, function (item) {
+      color: lodash__WEBPACK_IMPORTED_MODULE_0___default().compact(lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
         return item.color;
       })),
-      color_description: lodash__WEBPACK_IMPORTED_MODULE_5___default().compact(lodash__WEBPACK_IMPORTED_MODULE_5___default().map(secondaryColors, function (item) {
+      color_description: lodash__WEBPACK_IMPORTED_MODULE_0___default().compact(lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
         return item.description;
       }))
     };
@@ -30447,8 +31898,8 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
       });
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
       isOpen: isOpen,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
         className: "sp1_modal-content-wrapper",
@@ -30461,7 +31912,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
               children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
                 children: "Provide Design Reference"
               })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
               onClick: close,
               "aria-label": "ModalClose",
               variant: "tertiary",
@@ -30479,7 +31930,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
               className: "py-4 px-3",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                   className: "form-group",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
@@ -30536,7 +31987,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                       className: "row",
                       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                         className: "col-12 col-md-6",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                           label: "Theme Name",
                           placeholder: "Write Theme Name",
                           value: themeName,
@@ -30547,7 +31998,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                         })
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                         className: "col-12 col-md-6",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                           label: "Theme URL",
                           placeholder: "Enter Theme URL",
                           value: themeUrl,
@@ -30560,7 +32011,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                     })
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                   className: "form-group",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
@@ -30653,7 +32104,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                     className: "px-3",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                       className: "form-group",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                         label: "XD/Figma File URL",
                         error: error === null || error === void 0 ? void 0 : error.xdFigma,
                         placeholder: "Provide the XD/Figma File URL",
@@ -30668,7 +32119,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                     className: "px-3",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                       className: "form-group",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                         label: "Input Google Drive File / Folder URL",
                         placeholder: "Input Google Drive File / Folder URL",
                         required: true,
@@ -30687,10 +32138,10 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                     },
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                       className: "form-group",
-                      children: [lodash__WEBPACK_IMPORTED_MODULE_5___default().map(designRefURL, function (item) {
+                      children: [lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                           className: "multipleInputItem",
-                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                             label: "Reference URL",
                             placeholder: "Reference URL",
                             required: true,
@@ -30699,7 +32150,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                             onChange: function onChange(e) {
                               return handleRefUrlChange(e, item.id);
                             }
-                          }), lodash__WEBPACK_IMPORTED_MODULE_5___default().size(designRefURL) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                          }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(designRefURL) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
                             "aria-label": "RemoveLink",
                             onClick: function onClick(e) {
                               return removeDesignRef(e, item.id);
@@ -30726,7 +32177,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                         })]
                       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                         className: "ck-editor-holder",
-                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                           onChange: function onChange(e, editor) {
                             return setDesignRefDescription(editor.getData());
                           }
@@ -30791,7 +32242,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                     },
                     children: [" ", error === null || error === void 0 ? void 0 : error.colorSchema, " "]
                   })]
-                }), colorSchema === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+                }), colorSchema === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                     className: "mt-3 mx-3 p-3",
                     style: {
@@ -30855,7 +32306,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                           })]
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                           className: "ck-editor-holder",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                             onChange: function onChange(e, editor) {
                               return setPrimaryColorDescription(editor.getData());
                             }
@@ -30887,7 +32338,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                         children: ["2. Secondary Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
                           children: "*"
                         }), " "]
-                      }), lodash__WEBPACK_IMPORTED_MODULE_5___default().map(secondaryColors, function (item, index) {
+                      }), lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item, index) {
                         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                           className: "p-3",
                           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
@@ -30929,7 +32380,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                                     })
                                   })
                                 })]
-                              }), lodash__WEBPACK_IMPORTED_MODULE_5___default().size(secondaryColors) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                              }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(secondaryColors) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
                                 "aria-label": "remove",
                                 onClick: function onClick(e) {
                                   return removeSecondaryColor(e, item.id);
@@ -30949,7 +32400,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                               })]
                             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                               className: "ck-editor-holder",
-                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                                 onChange: function onChange(e, editor) {
                                   return handleSecondaryColorDescriptionChange(e, editor, item.id);
                                 }
@@ -31035,7 +32486,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                     className: "row",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                       className: "col-12 col-md-4",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                         label: "Plugin Name",
                         required: true,
                         placeholder: "Enter Plugin Name",
@@ -31047,7 +32498,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                       className: "col-12 col-md-4",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                         label: "Plugin URL",
                         required: true,
                         placeholder: "Enter Plugin URL",
@@ -31059,7 +32510,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                       })
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                       className: "col-12 col-md-4",
-                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
                         label: "Share Google Drive Link",
                         required: true,
                         error: error === null || error === void 0 ? void 0 : error.pluginGoogleDrive,
@@ -31078,7 +32529,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                           children: "Write Instruction for Using This Plugin"
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
                           className: "ck-editor-holder",
-                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                             onChange: function onChange(e, editor) {
                               return setPluginDescription(editor.getData());
                             }
@@ -31096,7 +32547,7 @@ var ProjectManagerGuideline = function ProjectManagerGuideline(_ref) {
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                 className: "d-flex align-items-center justify-content-end",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                   onClick: close,
                   variant: "tertiary",
                   className: "mr-2",
@@ -41589,7 +43040,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".sp1_tlr_tbl_container{ \r\n    background: #fff;\r\n    padding: 16px;\r\n    padding-bottom: 0;\r\n    margin: 1rem;\r\n    border-radius: 10px;\r\n    overflow-y: auto;\r\n    box-shadow: 0 0 10px rgb(0 0 0 / 10%);\r\n}\r\n\r\n.sp1_tlr_tab{ \r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    border: 1px solid rgba(151, 151, 151, 0.219);\r\n}\r\n\r\n.sp1_tlr_tab:hover{\r\n    color: #fff;\r\n    background-color: rgba(21, 88, 245, 0.063);\r\n}\r\n\r\n.sp1_tlr_tab.active{\r\n    color: #fff !important;\r\n    background-color: var(--header_color) !important;\r\n}\r\n\r\n\r\n/* modal panel */\r\n.sp1_tlr--modal-panel{\r\n    width: 100%;\r\n    max-width: 80vw;\r\n}\r\n\r\n.sp1_tlr_loader{\r\n    width: 100%;\r\n    height: calc(100vh - 250px);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.sp1_tlh_resolve_btn{\r\n    padding-inline: 6px;\r\n    transition: all .3 ease-in-out;\r\n    border: 1px solid rgb(0 0 0 / 0%);\r\n}\r\n\r\n.sp1_tlh_resolve_btn:hover{\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.resolve--modal-panel{\r\n    width: 576px;\r\n}\r\n\r\n@media only screen and (max-width: 576px){\r\n    .resolve--modal-panel{\r\n        width: 95vw;\r\n    }\r\n}\r\n\r\n.deny_button{\r\n    color: #fff;\r\n    border-color: rgb(245, 29, 29);\r\n    background: rgb(245, 29, 29);\r\n}\r\n\r\n.deny_button:hover{ \r\n    border-color: rgb(185, 14, 14);\r\n    background: rgb(185, 14, 14);\r\n}\r\n\r\n.cnx__table_pagination_btn:disabled{\r\n    color: inherit !important;\r\n}\r\n\r\n.sp1_tasks_column_sort_btn{\r\n    background-color: transparent;\r\n}\r\n\r\n@media only screen and (max-width: 1400px){\r\n    .sp1_filter_toggle{\r\n        padding: 4px 8px;\r\n        border: 1px solid #f1f1f1;\r\n    }\r\n}\r\n\r\n.sp1_task_report_modal{\r\n    width: 80vw;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/tasks/tasks.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;IAChB,aAAa;IACb,iBAAiB;IACjB,YAAY;IACZ,mBAAmB;IACnB,gBAAgB;IAChB,qCAAqC;AACzC;;AAEA;IACI,iBAAiB;IACjB,kBAAkB;IAClB,WAAW;IACX,4CAA4C;AAChD;;AAEA;IACI,WAAW;IACX,0CAA0C;AAC9C;;AAEA;IACI,sBAAsB;IACtB,gDAAgD;AACpD;;;AAGA,gBAAgB;AAChB;IACI,WAAW;IACX,eAAe;AACnB;;AAEA;IACI,WAAW;IACX,2BAA2B;IAC3B,aAAa;IACb,mBAAmB;IACnB,uBAAuB;AAC3B;;AAEA;IACI,mBAAmB;IACnB,8BAA8B;IAC9B,iCAAiC;AACrC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI;QACI,WAAW;IACf;AACJ;;AAEA;IACI,WAAW;IACX,8BAA8B;IAC9B,4BAA4B;AAChC;;AAEA;IACI,8BAA8B;IAC9B,4BAA4B;AAChC;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI;QACI,gBAAgB;QAChB,yBAAyB;IAC7B;AACJ;;AAEA;IACI,WAAW;AACf","sourcesContent":[".sp1_tlr_tbl_container{ \r\n    background: #fff;\r\n    padding: 16px;\r\n    padding-bottom: 0;\r\n    margin: 1rem;\r\n    border-radius: 10px;\r\n    overflow-y: auto;\r\n    box-shadow: 0 0 10px rgb(0 0 0 / 10%);\r\n}\r\n\r\n.sp1_tlr_tab{ \r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    border: 1px solid rgba(151, 151, 151, 0.219);\r\n}\r\n\r\n.sp1_tlr_tab:hover{\r\n    color: #fff;\r\n    background-color: rgba(21, 88, 245, 0.063);\r\n}\r\n\r\n.sp1_tlr_tab.active{\r\n    color: #fff !important;\r\n    background-color: var(--header_color) !important;\r\n}\r\n\r\n\r\n/* modal panel */\r\n.sp1_tlr--modal-panel{\r\n    width: 100%;\r\n    max-width: 80vw;\r\n}\r\n\r\n.sp1_tlr_loader{\r\n    width: 100%;\r\n    height: calc(100vh - 250px);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.sp1_tlh_resolve_btn{\r\n    padding-inline: 6px;\r\n    transition: all .3 ease-in-out;\r\n    border: 1px solid rgb(0 0 0 / 0%);\r\n}\r\n\r\n.sp1_tlh_resolve_btn:hover{\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.resolve--modal-panel{\r\n    width: 576px;\r\n}\r\n\r\n@media only screen and (max-width: 576px){\r\n    .resolve--modal-panel{\r\n        width: 95vw;\r\n    }\r\n}\r\n\r\n.deny_button{\r\n    color: #fff;\r\n    border-color: rgb(245, 29, 29);\r\n    background: rgb(245, 29, 29);\r\n}\r\n\r\n.deny_button:hover{ \r\n    border-color: rgb(185, 14, 14);\r\n    background: rgb(185, 14, 14);\r\n}\r\n\r\n.cnx__table_pagination_btn:disabled{\r\n    color: inherit !important;\r\n}\r\n\r\n.sp1_tasks_column_sort_btn{\r\n    background-color: transparent;\r\n}\r\n\r\n@media only screen and (max-width: 1400px){\r\n    .sp1_filter_toggle{\r\n        padding: 4px 8px;\r\n        border: 1px solid #f1f1f1;\r\n    }\r\n}\r\n\r\n.sp1_task_report_modal{\r\n    width: 80vw;\r\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".sp1_tlr_tbl_container{ \r\n    background: #fff;\r\n    padding: 16px;\r\n    padding-bottom: 0;\r\n    margin: 1rem;\r\n    border-radius: 10px;\r\n    overflow-y: auto;\r\n    box-shadow: 0 0 10px rgb(0 0 0 / 10%);\r\n}\r\n\r\n.sp1_tlr_tab{ \r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    border: 1px solid rgba(151, 151, 151, 0.219);\r\n}\r\n\r\n.sp1_tlr_tab:hover{\r\n    color: #fff;\r\n    background-color: rgba(21, 88, 245, 0.063);\r\n}\r\n\r\n.sp1_tlr_tab.active{\r\n    color: #fff !important;\r\n    background-color: var(--header_color) !important;\r\n}\r\n\r\n\r\n/* modal panel */\r\n.sp1_tlr--modal-panel{\r\n    width: 100%;\r\n    max-width: 80vw;\r\n}\r\n\r\n.sp1_tlr_loader{\r\n    width: 100%;\r\n    height: calc(100vh - 250px);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.sp1_tlh_resolve_btn{\r\n    padding-inline: 6px;\r\n    transition: all .3 ease-in-out;\r\n    border: 1px solid rgb(0 0 0 / 0%);\r\n}\r\n\r\n.sp1_tlh_resolve_btn:hover{\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.resolve--modal-panel{\r\n    width: 576px;\r\n}\r\n\r\n@media only screen and (max-width: 576px){\r\n    .resolve--modal-panel{\r\n        width: 95vw;\r\n    }\r\n}\r\n\r\n.deny_button{\r\n    color: #fff;\r\n    border-color: rgb(245, 29, 29);\r\n    background: rgb(245, 29, 29);\r\n}\r\n\r\n.deny_button:hover{ \r\n    border-color: rgb(185, 14, 14);\r\n    background: rgb(185, 14, 14);\r\n}\r\n\r\n.cnx__table_pagination_btn:disabled{\r\n    color: inherit !important;\r\n}\r\n\r\n.sp1_tasks_column_sort_btn{\r\n    background-color: transparent;\r\n}\r\n\r\n@media only screen and (max-width: 1400px){\r\n    .sp1_filter_toggle{\r\n        padding: 4px 8px;\r\n        border: 1px solid #f1f1f1;\r\n    }\r\n}\r\n\r\n.sp1_task_report_modal{\r\n    width: 80vw;\r\n}\r\n\r\n.sp1_modal_items{\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 10px;\r\n}\r\n\r\n.sp1_task_auth_modal{ \r\n    width: clamp(280px, 50%, 500px);\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/tasks/tasks.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;IAChB,aAAa;IACb,iBAAiB;IACjB,YAAY;IACZ,mBAAmB;IACnB,gBAAgB;IAChB,qCAAqC;AACzC;;AAEA;IACI,iBAAiB;IACjB,kBAAkB;IAClB,WAAW;IACX,4CAA4C;AAChD;;AAEA;IACI,WAAW;IACX,0CAA0C;AAC9C;;AAEA;IACI,sBAAsB;IACtB,gDAAgD;AACpD;;;AAGA,gBAAgB;AAChB;IACI,WAAW;IACX,eAAe;AACnB;;AAEA;IACI,WAAW;IACX,2BAA2B;IAC3B,aAAa;IACb,mBAAmB;IACnB,uBAAuB;AAC3B;;AAEA;IACI,mBAAmB;IACnB,8BAA8B;IAC9B,iCAAiC;AACrC;;AAEA;IACI,kCAAkC;AACtC;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI;QACI,WAAW;IACf;AACJ;;AAEA;IACI,WAAW;IACX,8BAA8B;IAC9B,4BAA4B;AAChC;;AAEA;IACI,8BAA8B;IAC9B,4BAA4B;AAChC;;AAEA;IACI,yBAAyB;AAC7B;;AAEA;IACI,6BAA6B;AACjC;;AAEA;IACI;QACI,gBAAgB;QAChB,yBAAyB;IAC7B;AACJ;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,aAAa;IAEb,sBAAsB;IACtB,SAAS;AACb;;AAEA;IACI,+BAA+B;AACnC","sourcesContent":[".sp1_tlr_tbl_container{ \r\n    background: #fff;\r\n    padding: 16px;\r\n    padding-bottom: 0;\r\n    margin: 1rem;\r\n    border-radius: 10px;\r\n    overflow-y: auto;\r\n    box-shadow: 0 0 10px rgb(0 0 0 / 10%);\r\n}\r\n\r\n.sp1_tlr_tab{ \r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    border: 1px solid rgba(151, 151, 151, 0.219);\r\n}\r\n\r\n.sp1_tlr_tab:hover{\r\n    color: #fff;\r\n    background-color: rgba(21, 88, 245, 0.063);\r\n}\r\n\r\n.sp1_tlr_tab.active{\r\n    color: #fff !important;\r\n    background-color: var(--header_color) !important;\r\n}\r\n\r\n\r\n/* modal panel */\r\n.sp1_tlr--modal-panel{\r\n    width: 100%;\r\n    max-width: 80vw;\r\n}\r\n\r\n.sp1_tlr_loader{\r\n    width: 100%;\r\n    height: calc(100vh - 250px);\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.sp1_tlh_resolve_btn{\r\n    padding-inline: 6px;\r\n    transition: all .3 ease-in-out;\r\n    border: 1px solid rgb(0 0 0 / 0%);\r\n}\r\n\r\n.sp1_tlh_resolve_btn:hover{\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.resolve--modal-panel{\r\n    width: 576px;\r\n}\r\n\r\n@media only screen and (max-width: 576px){\r\n    .resolve--modal-panel{\r\n        width: 95vw;\r\n    }\r\n}\r\n\r\n.deny_button{\r\n    color: #fff;\r\n    border-color: rgb(245, 29, 29);\r\n    background: rgb(245, 29, 29);\r\n}\r\n\r\n.deny_button:hover{ \r\n    border-color: rgb(185, 14, 14);\r\n    background: rgb(185, 14, 14);\r\n}\r\n\r\n.cnx__table_pagination_btn:disabled{\r\n    color: inherit !important;\r\n}\r\n\r\n.sp1_tasks_column_sort_btn{\r\n    background-color: transparent;\r\n}\r\n\r\n@media only screen and (max-width: 1400px){\r\n    .sp1_filter_toggle{\r\n        padding: 4px 8px;\r\n        border: 1px solid #f1f1f1;\r\n    }\r\n}\r\n\r\n.sp1_task_report_modal{\r\n    width: 80vw;\r\n}\r\n\r\n.sp1_modal_items{\r\n    display: flex;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    gap: 10px;\r\n}\r\n\r\n.sp1_task_auth_modal{ \r\n    width: clamp(280px, 50%, 500px);\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

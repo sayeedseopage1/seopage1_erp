@@ -11,35 +11,53 @@ import SubmitButton from "../../../components/SubmitButton";
 
 const projectManagerAcknowladgement = [
     {
-        id: "CRx01",
+        id: "CPRx01",
         title: 'Client added some additional requirements which was not part of the actual job scope',
         isDeniable: false,
     },
     {
-        id: 'CRx02',
+        id: 'CPRx02',
         title: 'I submitted the work without proper checking and overlooked the issues',
         isDeniable: true,
     },
     {
-        id: 'CRx03',
+        id: 'CPRx03',
         title: 'I couldnt understand clients expectation properly earlier',
         isDeniable: false
     },
     {
-        id: 'CRx04',
+        id: 'CPRx04',
         title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
         isDeniable: false,
     }, 
     {
-        id: 'CRx05',
+        id: 'CPRx05',
         title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
-        isDeniable: true,
+        isDeniable: false,
         createDispute: true,
     }, 
     {
-        id: 'CRx06',
+        id: 'CPRx06',
         title: "The client is asking for some minor changes which he couldn’t specify until he saw the completed work and we can’t charge him for these",
-        isDeniable: true,
+        isDeniable: false,
+    },
+    {
+        id: 'SPRx01',
+        title: "Sales person discussed something in a verbal meeting with the client and then forgot to document it when assigning",
+        isDeniable: false,
+        createDispute: true,
+    },
+    {
+        id: 'SPRx02',
+        title: "Sales person couldn't define requirement properly and I also failed to define it after I took over",
+        isDeniable: false,
+        createDispute: true,
+    },
+    {
+        id: 'SPRx03',
+        title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
+        isDeniable: false,
+        createDispute: true,
     }
 ]
 
@@ -61,24 +79,25 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
         setAdditionalPaid('');
         setAdditionalInfo(null);
     };
- 
+
+    
+    // on blur 
+    const handleBlurEvent = () => {
+        Swal.fire({
+            title: 'Do you want to create a milestone?',
+            // showDenyButton: true, 
+            confirmButtonText: 'Yes',
+            // denyButtonText: `No`,
+            }).then(res => {
+            if(res.isConfirmed){
+                window.open(`/account/projects/${task?.projectId}?tab=milestones`, '_blank');
+            }
+        })          
+    }
 
     // additional payment 
     const hasAdditionalPayment = (isPay) =>{
-        setAdditionalPaid(() => isPay ? 'yes': 'no'); 
-        if(isPay){
-            Swal.fire({
-                title: 'Are you want to create milestone?',
-                showDenyButton: true, 
-                confirmButtonText: 'Yes',
-                denyButtonText: `No`,
-              }).then(res => {
-                if(res.isConfirmed){
-                    window.open(`/account/projects/${task?.projectId}?tab=milestones`, '_blank');
-                }
-              })
-              
-        }
+        setAdditionalPaid(() => isPay ? 'yes': 'no');  
     }
 
     // editor change text 
@@ -101,8 +120,8 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
             setReasonError('You have to select a reason from above options')
        }
 
-       console.log(additionalPaid)
-       if(reason && reason?.id === 'CRx01'){ 
+        
+       if(reason && reason?.id === 'CPRx01'){ 
             if(additionalPaid === 'yes' && additionalAmount === 0){
                 errorCount++;
                 setAdditionalError('You have to provide amount')
@@ -122,7 +141,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     const handleSubmition=(e)=>{
         e.preventDefault();
 
-        console.log(additionalInfo)
+         
  
         const data = {
             acknowledgement_id: reason?.id ,
@@ -186,7 +205,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                         {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
                     </div>
 
-                    {reason?.id === 'CRx01' && 
+                    {reason?.id === 'CPRx01' && 
                         <div className="form-group">
                             <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label> 
                             <div className="d-block"> 
@@ -239,6 +258,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                     className="form-control" 
                                     id="inlineFormInputGroup" 
                                     placeholder="300" 
+                                    onBlur={handleBlurEvent}
                                 />
                             </div>
                         </div> 

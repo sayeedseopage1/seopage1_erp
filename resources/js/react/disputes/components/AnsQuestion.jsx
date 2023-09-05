@@ -6,7 +6,7 @@ import Button from '../../global/Button';
 import Avatar from '../../global/Avatar';
 import Dropdown from '../../global/Dropdown';
 import SubmitButton from '../../global/SubmitButton';
-import DebounceInput from '../../global/form/DebounceInput';
+import DebounceInput from '../../global/form/DebounceTextarea';
 import { useUsers } from '../../hooks/useUsers';
 import { User } from '../../utils/user-details';
 import Loader from '../../global/Loader';
@@ -71,7 +71,9 @@ const AnsQuestion = ({row, table}) => {
   }
  
    
-  const task = row?.task?.parent_task ?? row?.task; 
+  const task = row?.task?.parent_task ?? row?.task;
+
+ 
   return (
    <React.Fragment>
         <button onClick={() => setShowModal(true)} className='resolve-btn solved'> View </button>
@@ -101,8 +103,8 @@ const AnsQuestion = ({row, table}) => {
                         style={{maxHeight: 'calc(100vh - 110px)', overflowY: 'auto'}}
                     >
                      <div className="px-3">
-                            <div className='alert alert-info'>
-                                This dispute is between project manager <a href="#" className='badge badge-info'>Farhan Rahman</a> and lead developer <a href='#' className='badge badge-info'> Moniruzzaman </a> and was initiated on <a href='#' className='badge badge-info'>18th August 2023 03:55:54 PM</a>
+                     <div className='alert alert-info'>
+                                This dispute is between <a href="#" className='badge badge-info'>{row?.raised_by?.name}</a> and <a href='#' className='badge badge-info'> {row?.raised_against?.name} </a> and was initiated on <span className='badge badge-info'>{dayjs(row?.dispute_created_at).format('MMM DD, YYYY')} </span> at <span className='badge badge-info'>{dayjs(row?.dispute_created_at).format('hh:mm a')}</span>
                             </div>
 
                             {/* tab */}
@@ -133,191 +135,433 @@ const AnsQuestion = ({row, table}) => {
                                 </ul>
                            </div>
 
-                            {/* devider */}
-                            <div className='mt-3 pb-2 py-2 position-relative'>
-                                <hr/>
-                                <span className='badge badge-secondary divider-text'>Revision</span>
-                            </div>
+                            {/* CLIENT */}
+                            {_.includes(['CPR'], row?.dispute_between) ?
+                                <React.Fragment>
+                                    <div className='mt-3 pb-2 py-2 position-relative'>
+                                        <hr/>
+                                        <span className='badge badge-secondary divider-text'> 
+                                            Client
+                                        </span>
+                                    </div>
 
-                            {/* Revision details */}
-                            <table className='dispute-preview-table'>
-                                <tbody>
-                                    <tr>
-                                        <td className='whitespace-nowrap py-2'>Revision Given By:</td>
-                                        <td className='py-2 px-3'>
-                                            <div className='d-flex align-items-center'>
-                                                <Avatar
-                                                    src={row?.raised_against?.image ? `/user-uploads/avatar/${row?.raised_against?.image}` : null}
-                                                    alt={row?.raised_against?.name}
-                                                    name={row?.raised_against?.name}
-                                                    type='circle'
-                                                    width={32}
-                                                    height={32}
-                                                    fontSize='1.2rem'
-                                                />
-
-                                                <div className='px-2'>
-                                                    <span className="d-block">{row?.raised_against?.name}</span>
-                                                    <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>
-                                                        {row?.raised_against?.designation}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td className='py-2'>Reason:</td>
-                                        <td className='px-3 py-2 '>
-                                            {row?.revision_acknowledgement}
-                                        </td>
-                                    </tr>
-    
-
-                                    <tr>
-                                        <td className='py-2'>Explanation:</td>
-                                        <td className='px-3 py-2'>
-                                            <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.pm_comment ?? row?.lead_comment }} />
-                                        </td>
-                                    </tr>
-
-                                    {_.size(_.filter(conversations, conv => conv.question_for === row?.raised_against?.id && conv?.replies)) ? 
-                                        <tr>
-                                            <td className='py-2'>Submitted Answer:</td>
-                                            <td className='px-3 py-2'> 
-                                                <div className='d-flex flex-column' style={{gap: '16px'}}>
-                                                    {_.map([..._.filter(conversations, c => c.question_for === auth?.getId() && c?.replies)], (conv, index) => {
-                                                    
-                                                    const raised_by = new User(getUserById(conv?.raised_by)); 
-                                                    const replied_by = new User(getUserById(conv?.replied_by)); 
+                                    <table className='dispute-preview-table'>
+                                        <tbody> 
+                                            <tr>
+                                                <td className='whitespace-nowrap py-2'>Client:</td>
+                                                <td className='py-2 px-3'>
+                                                    <div className='d-flex align-items-center'>
+                                                        <Avatar
+                                                            src={row?.client?.image ? `/user-uploads/avatar/${row?.client?.image}` : null}
+                                                            alt={row?.client?.name}
+                                                            name={row?.client?.name}
+                                                            type='circle'
+                                                            width={32}
+                                                            height={32}
+                                                            fontSize='1.2rem'
+                                                        />
 
 
-                                                    return (
-                                                        <div key={index} className='d-flex flex-column' style={{gap: 6}}>
-                                                            <div className="pl-3" > 
-                                                                <span className='badge badge-primary'>Question 0{index+1}:</span> 
-                                                                <span className='px-2 font-medium'>{conv?.question}</span> 
-                                                                <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
-                                                            </div>
+                                                        <div className='px-2'>
+                                                            <span className="d-block">{row?.client?.name}</span>
+                                                            <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>Lead Developer</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>  
+                                        </tbody>
+                                    </table>
+                                </React.Fragment>
+                             : null}
+                            {/* END CLIENT */}
 
-                                                            <div className='p-3' style={{background: '#f8f8f8'}}> 
-                                                                <div className=''> 
-                                                                    <p>
-                                                                        <span className='badge badge-success d-inline mr-1'>Answer:</span>  
-                                                                        {conv?.replies ?? 'Not answered yet!'}
-                                                                    </p>
 
-                                                                    {
-                                                                        conv?.replies && 
-                                                                        <div> 
-                                                                            <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
-                                                                        </div>
-                                                                    }
+
+                            {/* SALES */}
+                            {_.includes(['SPR'], row?.dispute_between) ?
+                                <React.Fragment>
+                                    <div className='mt-3 pb-2 py-2 position-relative'>
+                                        <hr/>
+                                        <span className='badge badge-secondary divider-text'> 
+                                            Sales
+                                        </span>
+                                    </div>
+
+                                    <table className='dispute-preview-table'>
+                                        <tbody> 
+                                            <tr>
+                                                <td className='whitespace-nowrap py-2'>Sales:</td>
+                                                <td className='py-2 px-3'>
+                                                    <div className='d-flex align-items-center'>
+                                                        <Avatar
+                                                            src={row?.sales_person?.image ? `/user-uploads/avatar/${row?.sales_person?.image}` : null}
+                                                            alt={row?.sales_person?.name}
+                                                            name={row?.sales_person?.name}
+                                                            type='circle'
+                                                            width={32}
+                                                            height={32}
+                                                            fontSize='1.2rem'
+                                                        />
+
+
+                                                        <div className='px-2'>
+                                                            <span className="d-block">{row?.sales_person?.name}</span>
+                                                            <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>Lead Developer</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>  
+                                            {/* <tr>
+                                                <td className='py-2'>Reason:</td>
+                                                <td className='px-3 py-2 '>
+                                                    {row?.revision_acknowledgement}
+                                                </td>
+                                            </tr>  */}
+
+                                            {/* <tr>
+                                                <td className='py-2'>Explanation:</td>
+                                                <td className='px-3 py-2'>
+                                                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.pm_comment }} />
+                                                </td>
+                                            </tr> */}
+
+                                            {_.size(_.filter(conversations, conv => conv.question_for === row?.sales_person?.id && !!conv?.replies)) ? 
+                                                <tr>
+                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='px-3 py-2'> 
+                                                        <div className='d-flex flex-column' style={{gap: '16px'}}>
+                                                            {_.map([..._.filter(conversations, c => c.question_for === row?.sales_person?.id && !!c?.replies)], (conv, index) => {
+                                                            
+                                                            const raised_by = new User(getUserById(conv?.raised_by)); 
+                                                            const replied_by = new User(getUserById(conv?.replied_by)); 
+
+
+                                                            return (
+                                                                <div key={index} className='d-flex flex-column' style={{gap: 6}}>
+                                                                    <div className="pl-3" > 
+                                                                        <span className='badge badge-primary'>Question 0{index+1}:</span> 
+                                                                        <span className='px-2 font-medium'>{conv?.question}</span> 
+                                                                        <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
+                                                                    </div>
+
+                                                                    <div className='p-3 position-relative' style={{background: '#f8f8f8'}}> 
+                                                                        <div className=''> 
+                                                                            <p className=''> 
+                                                                                <span className='badge badge-success d-inline mr-1'>Answer:</span>  
+                                                                                {conv?.replies ?? 'Not answered yet!'}
+                                                                            </p>
+                                                                            {
+                                                                                conv?.replies && 
+                                                                                <div> 
+                                                                                    <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
+                                                                                </div>
+                                                                            }
+                                                                        </div> 
+                                                                    </div>
                                                                 </div> 
-                                                            </div>
-                                                        </div> 
-                                                        )
-                                                    })}
-                                                </div>
-                                            </td>
-                                        </tr> : null
-                                    }
-                                    
-                                </tbody>
-                            </table>  
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </td>
+                                                </tr> : null
+                                            }
+                                        </tbody>
+                                    </table>
+                                </React.Fragment>
+                             : null}
+                            {/* END SALES */}
 
-                            {/* devider */}
-                            <div className='mt-3 pb-2 py-2 position-relative'>
-                                <hr/>
-                                <span className='badge badge-secondary divider-text'>Response</span>
-                            </div>
+                              
 
-                            {/* Response details */}
-                            <table className='dispute-preview-table'>
-                                <tbody>
-                                    <tr>
-                                        <td className='whitespace-nowrap py-2'>Denied by:</td>
-                                        <td className='py-2 px-3'>
-                                            <div className='d-flex align-items-center'>
-                                                <Avatar
-                                                    src={row?.raised_by?.image ? `/user-uploads/avatar/${row?.raised_by?.image}` : null}
-                                                    alt={row?.raised_by?.name}
-                                                    name={row?.raised_by?.name}
-                                                    type='circle'
-                                                    width={32}
-                                                    height={32}
-                                                    fontSize='1.2rem'
-                                                />
+                            {/* PROJECT MANAGER DISCRIPTIN */}
+                             {_.includes(['SPR', 'CPR', 'PLR'], row?.dispute_between) ?
+                                <React.Fragment>
+                                    <div className='mt-3 pb-2 py-2 position-relative'>
+                                        <hr/>
+                                        <span className='badge badge-secondary divider-text'> 
+                                            Project Manager
+                                        </span>
+                                    </div>
 
-
-                                                <div className='px-2'>
-                                                    <span className="d-block">{row?.raised_by?.name}</span>
-                                                    <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>Lead Developer</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>  
-
-                                    <tr>
-                                        <td className='py-2'>Reason:</td>
-                                        <td className='px-3 py-2'>
-                                            {row?.deny_reason}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td className='py-2'>Explanation:</td>
-                                        <td className='px-3 py-2'> 
-                                        <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.dev_comment ?? row?.lead_comment }} />
-                                        </td>
-                                    </tr>
-
-                                    {_.size(_.filter(conversations, conv => conv.question_for === row?.raised_by?.id && conv?.replies)) ? 
-                                        <tr>
-                                            <td className='py-2'>Submitted Answer:</td>
-                                            <td className='px-3 py-2'> 
-                                                <div className='d-flex flex-column' style={{gap: '16px'}}>
-                                                    {_.map(
-                                                        _.filter(
-                                                            conversations, 
-                                                            c => c.question_for === auth?.getId() && c?.replies), 
-                                                        (conv, index) => {
-                                                    const raised_by = new User(getUserById(conv?.raised_by)); 
-                                                    const replied_by = new User(getUserById(conv?.replied_by)); 
+                                    <table className='dispute-preview-table'>
+                                        <tbody> 
+                                            <tr>
+                                                <td className='whitespace-nowrap py-2'>Project Manager:</td>
+                                                <td className='py-2 px-3'>
+                                                    <div className='d-flex align-items-center'>
+                                                        <Avatar
+                                                            src={row?.project_manager?.image ? `/user-uploads/avatar/${row?.project_manager?.image}` : null}
+                                                            alt={row?.project_manager?.name}
+                                                            name={row?.project_manager?.name}
+                                                            type='circle'
+                                                            width={32}
+                                                            height={32}
+                                                            fontSize='1.2rem'
+                                                        />
 
 
-                                                    return (
-                                                        <div key={index} className='d-flex flex-column' style={{gap: 6}}>
-                                                            <div className="pl-3" > 
-                                                                <span className='badge badge-primary'>Question 0{index+1}:</span> 
-                                                                <span className='px-2 font-medium'>{conv?.question}</span> 
-                                                                <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
-                                                            </div>
+                                                        <div className='px-2'>
+                                                            <span className="d-block">{row?.project_manager?.name}</span>
+                                                            <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>Lead Developer</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr> 
+                                            
+                                            <tr>
+                                                <td className='py-2'>Reason:</td>
+                                                <td className='px-3 py-2 '>
+                                                    {row?.revision_acknowledgement}
+                                                </td>
+                                            </tr> 
 
-                                                            <div className='p-3' style={{background: '#f8f8f8'}}> 
-                                                                <div className=''> 
-                                                                    <p>
-                                                                        <span className='badge badge-success d-inline mr-1'>Answer:</span>  
-                                                                        {conv?.replies ?? 'Not answered yet!'}
-                                                                    </p>
+                                            <tr>
+                                                <td className='py-2'>Explanation:</td>
+                                                <td className='px-3 py-2'>
+                                                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.pm_comment }} />
+                                                </td>
+                                            </tr>
 
-                                                                    {
-                                                                        conv?.replies && 
-                                                                        <div> 
-                                                                            <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
-                                                                        </div>
-                                                                    }
+                                            {_.size(_.filter(conversations, conv => conv.question_for === row?.project_manager?.id && !!conv?.replies)) ? 
+                                                <tr>
+                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='px-3 py-2'> 
+                                                        <div className='d-flex flex-column' style={{gap: '16px'}}>
+                                                            {_.map([..._.filter(conversations, c => c.question_for === row?.project_manager?.id && !!c?.replies)], (conv, index) => {
+                                                            
+                                                            const raised_by = new User(getUserById(conv?.raised_by)); 
+                                                            const replied_by = new User(getUserById(conv?.replied_by)); 
+
+
+                                                            return (
+                                                                <div key={index} className='d-flex flex-column' style={{gap: 6}}>
+                                                                    <div className="pl-3" > 
+                                                                        <span className='badge badge-primary'>Question 0{index+1}:</span> 
+                                                                        <span className='px-2 font-medium'>{conv?.question}</span> 
+                                                                        <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
+                                                                    </div>
+
+                                                                    <div className='p-3 position-relative' style={{background: '#f8f8f8'}}> 
+                                                                        <div className=''> 
+                                                                            <p className=''> 
+                                                                                <span className='badge badge-success d-inline mr-1'>Answer:</span>  
+                                                                                {conv?.replies ?? 'Not answered yet!'}
+                                                                            </p>
+                                                                            {
+                                                                                conv?.replies && 
+                                                                                <div> 
+                                                                                    <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
+                                                                                </div>
+                                                                            }
+                                                                        </div> 
+                                                                    </div>
                                                                 </div> 
-                                                            </div>
-                                                        </div> 
-                                                        )
-                                                    })}
-                                                </div>
-                                            </td>
-                                        </tr> : null
-                                    }
-                                </tbody>
-                            </table> 
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </td>
+                                                </tr> : null
+                                            }
+                                        </tbody>
+                                    </table>
+                                </React.Fragment>
+                             : null}
+                            {/* END PROJECT MANAGER DISCRIPTION */}
+
+
+                            {/* LEAD DEVELOPER STATEMENT */}
+                            {_.includes(['PLR', 'LDR'], row?.dispute_between) ?
+                                <React.Fragment>
+                                    <div className='mt-3 pb-2 py-2 position-relative'>
+                                        <hr/>
+                                        <span className='badge badge-secondary divider-text'> 
+                                            Lead Developer
+                                        </span>
+                                    </div>
+
+                                    <table className='dispute-preview-table'>
+                                        <tbody> 
+                                            <tr>
+                                                <td className='whitespace-nowrap py-2'>Lead Developer:</td>
+                                                <td className='py-2 px-3'>
+                                                    <div className='d-flex align-items-center'>
+                                                        <Avatar
+                                                            src={row?.task?.lead_developer?.image ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}` : null}
+                                                            alt={row?.task?.lead_developer?.name}
+                                                            name={row?.task?.lead_developer?.name}
+                                                            type='circle'
+                                                            width={32}
+                                                            height={32}
+                                                            fontSize='1.2rem'
+                                                        />
+
+
+                                                        <div className='px-2'>
+                                                            <span className="d-block">{row?.task?.lead_developer?.name}</span>
+                                                            <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>Lead Developer</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr> 
+                                            
+
+                                            <tr>
+                                                <td className='py-2'>Reason:</td>
+                                                <td className='px-3 py-2 '>
+                                                    {row?.dispute_between === 'LDR' ? row?.revision_acknowledgement : row?.deny_reason}
+                                                </td>
+                                            </tr> 
+
+                                            <tr>
+                                                <td className='py-2'>Explanation:</td>
+                                                <td className='px-3 py-2'>
+                                                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.lead_comment }} />
+                                                </td>
+                                            </tr>
+
+                                            {_.size(_.filter(conversations, conv => conv.question_for === row?.task?.lead_developer?.id && !!conv?.replies)) ? 
+                                                <tr>
+                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='px-3 py-2'> 
+                                                        <div className='d-flex flex-column' style={{gap: '16px'}}>
+                                                            {_.map([..._.filter(conversations, c => c.question_for === row?.task?.lead_developer?.id && !!c?.replies)], (conv, index) => {
+                                                            
+                                                            const raised_by = new User(getUserById(conv?.raised_by)); 
+                                                            const replied_by = new User(getUserById(conv?.replied_by)); 
+
+
+                                                            return (
+                                                                <div key={index} className='d-flex flex-column' style={{gap: 6}}>
+                                                                    <div className="pl-3" > 
+                                                                        <span className='badge badge-primary'>Question 0{index+1}:</span> 
+                                                                        <span className='px-2 font-medium'>{conv?.question}</span> 
+                                                                        <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
+                                                                    </div>
+
+                                                                    <div className='p-3 position-relative' style={{background: '#f8f8f8'}}> 
+                                                                        <div className=''> 
+                                                                            <p className=''> 
+                                                                                <span className='badge badge-success d-inline mr-1'>Answer:</span>  
+                                                                                {conv?.replies ?? 'Not answered yet!'}
+                                                                            </p>
+                                                                            {
+                                                                                conv?.replies && 
+                                                                                <div> 
+                                                                                    <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
+                                                                                </div>
+                                                                            }
+                                                                        </div> 
+                                                                    </div>
+                                                                </div> 
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </td>
+                                                </tr> : null
+                                            }
+                                        </tbody>
+                                    </table>
+                                </React.Fragment>
+                             : null} 
+                            {/* END LEAD DEVELOPER STATEMENT */}
+
+
+                            {/* DEVELOPER */}
+                            {_.includes(['LDR'], row?.dispute_between) ?
+                                <React.Fragment>
+                                    <div className='mt-3 pb-2 py-2 position-relative'>
+                                        <hr/>
+                                        <span className='badge badge-secondary divider-text'> 
+                                            Developer
+                                        </span>
+                                    </div>
+
+                                    <table className='dispute-preview-table'>
+                                        <tbody> 
+                                            <tr>
+                                                <td className='whitespace-nowrap py-2'>Developer:</td>
+                                                <td className='py-2 px-3'>
+                                                    <div className='d-flex align-items-center'>
+                                                        <Avatar
+                                                            src={row?.task?.developer?.image ? `/user-uploads/avatar/${row?.task?.developer?.image}` : null}
+                                                            alt={row?.task?.developer?.name}
+                                                            name={row?.task?.developer?.name}
+                                                            type='circle'
+                                                            width={32}
+                                                            height={32}
+                                                            fontSize='1.2rem'
+                                                        />
+
+
+                                                        <div className='px-2'>
+                                                            <span className="d-block">{row?.task?.developer?.name}</span>
+                                                            <span className='d-block f-10' style={{color: '#777', marginTop: '-0.30rem'}}>Lead Developer</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr> 
+
+                                            <tr>
+                                                <td className='py-2'>Reason:</td>
+                                                <td className='px-3 py-2 '>
+                                                    {row?.deny_reason}
+                                                </td>
+                                            </tr> 
+
+                                            <tr>
+                                                <td className='py-2'>Explanation:</td>
+                                                <td className='px-3 py-2'>
+                                                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.dev_comment }} />
+                                                </td>
+                                            </tr>
+
+                                            {_.size(_.filter(conversations, conv => conv.question_for === row?.task?.developer?.id && !!conv?.replies)) ? 
+                                                <tr>
+                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='px-3 py-2'> 
+                                                        <div className='d-flex flex-column' style={{gap: '16px'}}>
+                                                            {_.map([..._.filter(conversations, c => c.question_for === row?.task?.developer?.id && !!c?.replies)], (conv, index) => {
+                                                            
+                                                            const raised_by = new User(getUserById(conv?.raised_by)); 
+                                                            const replied_by = new User(getUserById(conv?.replied_by)); 
+
+
+                                                            return (
+                                                                <div key={index} className='d-flex flex-column' style={{gap: 6}}>
+                                                                    <div className="pl-3" > 
+                                                                        <span className='badge badge-primary'>Question 0{index+1}:</span> 
+                                                                        <span className='px-2 font-medium'>{conv?.question}</span> 
+                                                                        <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
+                                                                    </div>
+
+                                                                    <div className='p-3 position-relative' style={{background: '#f8f8f8'}}> 
+                                                                        <div className=''> 
+                                                                            <p className=''> 
+                                                                                <span className='badge badge-success d-inline mr-1'>Answer:</span>  
+                                                                                {conv?.replies ?? 'Not answered yet!'}
+                                                                            </p>
+                                                                            {
+                                                                                conv?.replies && 
+                                                                                <div> 
+                                                                                    <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
+                                                                                </div>
+                                                                            }
+                                                                        </div> 
+                                                                    </div>
+                                                                </div> 
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </td>
+                                                </tr> : null
+                                            }
+                                        </tbody>
+                                    </table>
+                                </React.Fragment>
+                             : null} 
+                            {/* END DEVELOPER */}
+
+ 
                         </div>
 
                         

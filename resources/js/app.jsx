@@ -13,8 +13,6 @@ import './react/disputes/index';
 import './react/portfolios/index';
 
 
-
-
 import { createPopper } from '@popperjs/core';
 var toggle = document.querySelectorAll('.sp1_deal-stage-wrapper');
 

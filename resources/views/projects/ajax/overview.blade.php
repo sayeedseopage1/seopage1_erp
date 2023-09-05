@@ -21,30 +21,15 @@ $project->members->pluck('user_id')->toArray(); @endphp
     <div class="project-leftxx w-100 py-0 py-lg-5 py-md-0" id="project-left">
         @php
             $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
-            $client_review = \App\Models\ClientReview::where('project_id',$project->id)->count();
         @endphp
-        @if ($project->status == 'finished' || $project->status == 'partially finished' || $project->status == 'canceled')
-            @if ($client_review ==0)
-                  @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
-                    <div style="margin-bottom: -40px; margin-left:18%;">
-                        <a href="#"  class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
-                            Client Review
-                        </a>
-                        @include('projects.modals.client_review')
-                    </div>
-                @endif
-            @endif
-        @endif
-        <!-- @php
-            $deal = \App\Models\Deal::where('id',$project->deal_id)->first();
-        @endphp
-        <div style="margin-bottom: -40px;">
-            @if ($deal->lead_id !=null)
-                <a href="{{ route('leads.show',$deal->lead_id) }}" target="_blank" class="btn btn-primary">Lead</a>
-            @endif
-            <a href="{{ route('deals.show',$project->deal_id) }}" target="_blank" class="btn btn-primary ml-3">Deal</a>
-            <a href="{{ route('contracts.show',$project->deal_id) }}" target="_blank" class="btn btn-primary ml-3">Won Deal</a>
-        </div> -->
+        {{-- @if($q_c)
+            <div style="margin-bottom: -40px;">
+                <button type="button" class="btn btn-success" data-id="{{$project->id}}" data-toggle="modal" data-target="#client_review">
+                    Client Review
+                </button>
+                @include('projects.modals.client_review')
+            </div>
+        @endif --}}
         <div class="d-flex align-content-center flex-lg-row-reverse mb-4">
             @if (!$project->trashed())
             @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
@@ -270,19 +255,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                     <!-- PROGRESS END DATE END -->
                     <!-- See Task Guideline Start -->
-                    {{-- @php
+                    @php
                     $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->first();
                     @endphp
                     <div class="mt-4">
                         @if($task_guideline !=null)
                         <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">See Task Guideline</button>
                         @endif
-                    </div> --}}
+                    </div>
                     <!-- See Task Guideline End -->
                 </x-cards.data>
             </div>
             <!--Task Guideline Modal -->
-            {{-- <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
+            <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -474,7 +459,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         </div>
                     </div>
                 </div>
-            </div> --}}
+            </div>
             <!-- PROJECT PROGRESS END -->
             <!-- CLIENT START -->
             <div class="col-md-4 mb-4">
@@ -546,7 +531,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
         <!-- PROJECT PROGRESS AND CLIENT END -->
 
         <!--CLIENT REVIEW-->
-        @php
+        {{-- @php
             $client_review = \App\Models\ClientReview::where('project_id',$project->id)->orderBy('id','desc')->first();
         @endphp
         @if($client_review)
@@ -679,7 +664,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </x-cards.data>
                 </div>
             </div>
-        @endif
+        @endif --}}
         <!--END CLIENT REVIEW-->
         <!-- TASK STATUS AND BUDGET START -->
         <div class="row mb-4"  >
@@ -689,7 +674,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     <x-pie-chart id="task-chart" :labels="$taskChart['labels']" :values="$taskChart['values']" :colors="$taskChart['colors']" height="220" width="250" />
                 </x-cards.data>
                 <br>
-
                 <!--Top Management Pm Task Guideline Autonraization-->
                 @php
                     $task_guideline_authorization = App\Models\PmTaskGuidelineAuthorization::where('project_id',$project->id)->first();
@@ -716,7 +700,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 $q_c = \App\Models\QCSubmission::where('project_id',$project->id)->first();
                 $project_completion = \App\Models\ProjectSubmission::where('project_id',$project->id)->first();
                 ?>
-                @if ($q_c !=null || $project_completion !=null)
+                @if ($q_c !=null && $project_completion !=null)
                 <x-cards.data>
                     <div class="py-3">
                         <div class="container">
@@ -809,7 +793,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     @endif
                     @endif
                 @endif
-                <div class="col-12 mt-3">
+                    <div class="col-12 mt-3">
                         <x-cards.widget :title="__('Project Type')" :value="$project->deal->project_type" icon="clock" badge="true"/>
                     </div>
                 </div>
@@ -848,29 +832,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                     @endif
                 </div>
-
-                <!--Autonraization FOR PROJECT REQUEST EXTENSION -->
-                @if (Auth::user()->role_id ==1)
-                    @php
-                    $project_request_time_extension = App\Models\ProjectRequestTimeExtension::where('project_id',$project->id)->orderBy('id','desc')->first();
-                    @endphp
-                    @if ($project_request_time_extension != null && $project_request_time_extension->status =='pending')
-                    <div class="card my-3" style="border:none">
-                        <div class="py-3">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-12">
-                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#delayed_project_auth_form_modal{{ $project_request_time_extension->id }}">Delayed Project Time Extension Needs to be Authorized by Admin</button>
-                                    @include('projects.modals.delayed_project_auth_form_modal')
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                @endif
-            <!--End Autonraization FOR PROJECT REQUEST EXTENSION -->
-
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>

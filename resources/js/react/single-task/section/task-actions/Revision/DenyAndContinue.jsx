@@ -30,6 +30,7 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
     const [reasonError, setReasonError] = useState("");
     const [comment, setComment] = useState("");
     const [commentError, setCommentError] = useState("");
+    const [err, setErr] = useState(null);
 
     const handleEditorDataChange = (e, editor) => {
         const data = editor.getData();
@@ -61,7 +62,7 @@ const DenyAndContinue = ({onSubmit, isSubmitting, onBack, task}) => {
 
     const handleOnSubmit = e => {
         e.preventDefault();
-        if(comment !== ''){
+        if(validate()){
             onSubmit({
                 comment,
                 denyReason: reason

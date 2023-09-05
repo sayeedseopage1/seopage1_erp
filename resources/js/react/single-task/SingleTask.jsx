@@ -256,7 +256,7 @@ const SingleTaskPage = () => {
                                     <Guideline text={task?.guidelines} workEnv={task?.workEnvData} />
                                 </Accordion>
 
-                                {
+                                { 
                                     _.size(task?.revisions) > 0 &&
                                     <Accordion
                                         title={_.last(task?.revisions)?.revisionStatus}

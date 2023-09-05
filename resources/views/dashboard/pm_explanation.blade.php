@@ -1130,32 +1130,24 @@
 @endsection
 
 @push('scripts')
-    <script>
+<script>
         var body = document.getElementById('body');
         body.setAttribute("data-spy", "scroll");
         body.setAttribute("data-target", "#content_table");
 
+        var url = window.location;
+        var hash = url.hash;
+        if(hash){
+            var target = document.querySelector(hash);
+            target.style.border = '1px solid rgb(255 0 0 / 55%)';
+            target.style.boxShadow = '0 0 20px rgb(236 71 19 / 25%)';
+            target.style.scrollMarginTop = '100px';
 
-            var url = window.location;
-            var hash = url.hash;
-            if(hash){
-                var target = document.querySelector(hash);
-                target.style.border = '1px solid rgb(255 0 0 / 55%)';
-                target.style.boxShadow = '0 0 20px rgb(236 71 19 / 25%)';
-                target.style.scrollMarginTop = '100px';
-            }
+            // target link
+            const targetLink = document.querySelector(`a[href="${hash}"]`)
+            console.log(targetLink)
 
-    </script>
-    {{-- <script>
-        window.addEventListener("DOMContentLoaded", function() {
-        function scrollToElement(elementId) {
-            var element = document.getElementById(elementId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                console.error("Element with ID '" + elementId + "' not found.");
-            }
+            targetLink.style.color = '#49D100'
         }
-    });
-    </script> --}}
+    </script>
 @endpush

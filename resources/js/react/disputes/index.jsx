@@ -6,6 +6,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {store} from '../services/store';
 import Disputes from './Disputes';
+import DisputeContextProvider from './context';
  
 const container = document.getElementById("disputeContainer");
  
@@ -41,10 +42,12 @@ const DragLayer = () => {
 
 const Container = () => { 
   return(
-    <React.Fragment> 
-      <DragLayer />
-      <Outlet />
-    </React.Fragment>
+    <DisputeContextProvider>
+      <React.Fragment> 
+        <DragLayer />
+        <Outlet />
+      </React.Fragment>
+    </DisputeContextProvider>
   )
 }
  
@@ -53,14 +56,14 @@ if(container){
   ReactDOM.createRoot(container).render(
     <React.StrictMode>
      <Provider store={store}>
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider backend={HTML5Backend}> 
         <BrowserRouter basename='/account/disputes'>
-            <Routes>
-                <Route path='/' element={<Container />}>
-                    <Route index element={<Disputes />} />
-                </Route>
-            </Routes>
-        </BrowserRouter> 
+              <Routes>
+                  <Route path='/' element={<Container />}>
+                      <Route index element={<Disputes />} />
+                  </Route>
+              </Routes>
+          </BrowserRouter>  
       </DndProvider>
      </Provider>
     </React.StrictMode>

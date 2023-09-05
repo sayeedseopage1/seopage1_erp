@@ -102,7 +102,10 @@
               <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                   <button style="text-decoration: none" class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    July-August (Cycle)
+                  <div class="d-flex">
+                        <h6 class="monthDate"></h6>
+                        <h6 class="ml-1">(Cycle)</h6>
+                    </div>
                   </button>
                 </h2>
               </div>

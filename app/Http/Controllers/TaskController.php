@@ -23,7 +23,6 @@ use App\Models\SubTaskFile;
 use App\Models\Task;
 use App\Models\TaskboardColumn;
 use App\Models\TaskCategory;
-use App\Models\TaskDisputeQuestion;
 use App\Models\TaskLabel;
 use App\Models\TaskLabelList;
 use App\Models\TaskReply;
@@ -72,7 +71,7 @@ use App\Models\TaskNoteFile;
 use App\Models\ProjectTimeLog;
 use App\Models\TaskHistory;
 use App\Models\DeveloperStopTimer;
-
+use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 
 use function Symfony\Component\Cache\Traits\role;
@@ -931,8 +930,8 @@ class TaskController extends AccountBaseController
 
     public function TaskRevision(Request $request)
     {
-        // /dd($request);
-    //   /  DB::beginTransaction();
+    //    dd($request);
+    //    DB::beginTransaction();
       
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
@@ -979,12 +978,14 @@ class TaskController extends AccountBaseController
             $task_revision->pm_comment = $request->comment;
         }
         $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
+        $task_revision->acknowledgement_id = $request->acknowledgement_id;
 
         $task_revision->project_id = $task_status->project_id;
         $task_revision->added_by = Auth::id();
         $taskRevisionCount = TaskRevision::where('task_id', $task_status->id)->count();
         $task_revision->revision_no = $taskRevisionCount + 1 ;
         $task_revision->is_deniable = $request->is_deniable;
+        $task_revision->dispute_between = explode('x', $request->acknowledgement_id)[0];
         $task_revision->save();
        
         //dd($type);
@@ -2677,8 +2678,8 @@ class TaskController extends AccountBaseController
      
      /************* CLIENT HAS REVISION *************** */ 
     public function clientHasRevision(Request $request)
-    {  
-        // DB::beginTransaction();
+    {    
+        //    DB::beginTransaction();
         // chagne board column status
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
@@ -2703,7 +2704,10 @@ class TaskController extends AccountBaseController
         $task_revision->additional_amount= $request->additional_amount;
         $task_revision->additional_status= $request->additional_status;
         $task_revision->additional_deny_comment=$request->additional_comment;
-        $task_revision->client_pm_dispute = $request->dispute_create;
+
+        $task_revision->dispute_created = $request->dispute_create;
+        $task_revision->dispute_between = explode('x', $request->acknowledgement_id)[0];
+
         $task_revision->added_by = Auth::id();
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
@@ -2733,9 +2737,14 @@ class TaskController extends AccountBaseController
             'status' => 200,
         ]);
     }
-    //    ACCEPT AND CONTINUE BUTTON SECTION
+
+
+
+    //ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
     { 
+        
+        //  DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
@@ -2764,6 +2773,8 @@ class TaskController extends AccountBaseController
                 $tasks_accept->lead_comment = $selected_subtask['comment'];
                 $tasks_accept->project_id = $request->project_id;
                 $tasks_accept->is_deniable = $selected_subtask['is_deniable'];
+                $tasks_accept->acknowledgement_id = $selected_subtask['acknowledgement_id'];
+                $tasks_accept->dispute_between = $selected_subtask['acknowledgement_id'] ?  explode('x', $selected_subtask['acknowledgement_id'])[0] : '';
                 $tasks_accept->save(); 
  
               //  dd($tasks_accept,$sub_task_status);
@@ -2820,9 +2831,13 @@ class TaskController extends AccountBaseController
         ]);
     }
 
-    //        DENY AND CONTINUE BUTTON SECTION
+
+
+    // DENY AND CONTINUE BUTTON SECTION
     public function denyContinue(Request $request)
     { 
+        
+        
     //    DB::beginTransaction();
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
@@ -2850,6 +2865,8 @@ class TaskController extends AccountBaseController
                 $tasks_accept->lead_comment = $selected_subtask['comment'];
                 $tasks_accept->project_id = $request->project_id;
                 $tasks_accept->is_deniable = $selected_subtask['is_deniable'];
+                $tasks_accept->acknowledgement_id = $selected_subtask['acknowledgement_id'];
+                $tasks_accept->dispute_between = $selected_subtask['acknowledgement_id'] ?  explode('x', $selected_subtask['acknowledgement_id'])[0] : '';
                 $tasks_accept->save(); 
               //  dd($tasks_accept,$sub_task_status);
             }
@@ -2914,6 +2931,8 @@ class TaskController extends AccountBaseController
     //        REVISION REASON SYSTEM
     public function revisionReason(Request $request)
     {
+        // dd($request, 'sldkfs');
+        //  DB::beginTransaction();
         $revision_reason = new TaskRevision();
         $revision_reason->task_id = $request->task_id;
         $revision_reason->revision_reason = $request->revision_reason;
@@ -2925,7 +2944,7 @@ class TaskController extends AccountBaseController
 
     public function accept_or_revision_by_developer(Request $request)
     {
-        // dd($request);
+        // dd("accept_or_revision_by_developer");
         //  DB::beginTransaction();
          
         $task_status = Task::find($request->task_id);
@@ -3995,34 +4014,24 @@ class TaskController extends AccountBaseController
                 'message' => 'You cannot add task as project manager did not create any project deliverable yet',
                 'status'=> 400, 
             ]);
-
-        }else 
-        {
+        }else {
             $project_assign_date = PMProject::where('project_id', $id)->value('created_at');
             $project= Project::where('id',$id)->first();
             
            // dd($hoursDifference);
             if($project->deliverable_authorizaton == '0')
             {
-              //  dd("true");
                 return response()->json([
                     'message' => 'You can not create task as top management did not authorized the deliverable yet',
                     'status'=> 400,
-                   
                 ]);
 
-            }else 
-            {
-              //  dd("false");
+            }else {
                 return response()->json([
                     'message' => 'You can create tasks',
                     'status'=> 200,
-                   
                 ]);
-
             }
-           
-
         }
 
     }
@@ -4033,9 +4042,15 @@ class TaskController extends AccountBaseController
     // RE USEABLE MATHOD
     public function create_dispute($revision){ 
 
+        // DB::beginTransaction(); 
+        // dispute between 
+        $between = $revision->dispute_between;
+
         // get user by task id
         $task_user = TaskUser::where('task_id', $revision->task_id)->get()->first();
- 
+        $project_details = DB::table('projects')->where('id', $revision->project_id)->first();
+        $deals = DB::table('deals')->where('id', $project_details->deal_id)->first();
+        
         // added 5 day from created time 
          $due_date = Carbon::now();
          $due_date->addDays(5);
@@ -4048,6 +4063,19 @@ class TaskController extends AccountBaseController
         $dispute->raised_against= $revision->added_by;
         $dispute->raised_by = $task_user->user_id;
         $dispute->due_date = $due_date; 
+    
+        if(!is_null($between)){
+            if($between == 'CPR'){ 
+                $dispute->raised_against= $project_details->client_id;
+                $dispute->raised_by = $revision->added_by;
+            }
+
+            if($between == 'SPR'){
+                $dispute->raised_against= $deals->added_by;
+                $dispute->raised_by = $revision->added_by;
+            } 
+        }
+ 
         $dispute->save(); 
     } 
  
@@ -4060,6 +4088,7 @@ class TaskController extends AccountBaseController
 
     public function get_dispute_data($filter){
 
+        $logged_user = Auth::user();
         
         // filter data
         $start_date = $filter["start_date"] ?? NULL;
@@ -4068,7 +4097,7 @@ class TaskController extends AccountBaseController
         $project_id = $filter["project_id"] ?? NULL;
         $dispute_id = $filter["dispute_id"] ?? NULL;
         $raised_by = $filter["raised_by"] ?? NULL;
-        $raised_against = $filter["raised_against"] ?? NULL;
+        $raised_against =   $filter["raised_against"] ?? NULL;
 
 
         //get user 
@@ -4083,8 +4112,8 @@ class TaskController extends AccountBaseController
 
             if(!$is_client){
                 $employee_details = [
-                    "designation" => $user->employeeDetail->designation->name,
-                    "emplyee_id" => $user->employeeDetail->employee_id,
+                    "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
+                    "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
                 ];
                 $user_response = array_merge($user_response, $employee_details);
             }
@@ -4093,29 +4122,40 @@ class TaskController extends AccountBaseController
         }
 
         // get task details
-        function get_task($task_id){
+        function get_task($task_id){ 
+
             $task = DB::table('tasks')
                 ->where('tasks.id',$task_id)
-                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id')
-                ->select('tasks.id as id', 'heading as title', 'subtask_id', 'project_members.lead_developer_id as lead_developer')
+                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id') 
+                ->leftJoin('task_users', 'tasks.id', 'task_users.task_id') 
+                ->select(
+                    'tasks.id as id', 
+                    'tasks.heading as title', 
+                    'tasks.subtask_id', 
+                    'project_members.lead_developer_id as lead_developer',
+                    'task_users.user_id as task_user_id'
+                )
                 ->first();
 
             if($task->lead_developer){
                 $task->lead_developer =get_user($task->lead_developer, false);
             }
-            
-            if($task->subtask_id){
+
+            if($task->subtask_id){ 
                 $subtask = DB::table('sub_tasks')
-                    ->select('task_id', 'assigned_to', 'added_by')
+                    ->select('sub_tasks.task_id as parent_task_id')
                     ->where('id', $task->subtask_id)
                     ->first();
+                
+                  //  dd($subtask);
 
-                if($subtask->assigned_to){
-                    $task->developer = get_user($subtask->assigned_to, false);
+                if($task->task_user_id){
+                    $task->developer = get_user($task->task_user_id, false);
                 }
  
-                $task->parent_task = get_task($subtask->task_id);
+                $task->parent_task = get_task($subtask->parent_task_id);
             } 
+            
             return $task;
         }
   
@@ -4139,17 +4179,22 @@ class TaskController extends AccountBaseController
                     'projects.deal_id as project_deal_id',
                     'deals.added_by as deal_added_by'
                   )
-                  ->where(function($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $start_date, $end_date){
+                  ->where(function($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $start_date, $end_date, $logged_user){
                         if($task_id) {
                             $query->where('disputes.task_id', $task_id);
                         }
 
-                        if($raised_by){
-                            $query->where('disputes.raised_by', $raised_by);
-                        }
-
-                        if($raised_against){
-                            $query->where('disputes.raised_against', $raised_against);
+                        if(collect([1,8])->contains($logged_user->role_id)){
+                            if($raised_by){
+                                $query->where('disputes.raised_by', $raised_by);
+                            }
+    
+                            if($raised_against){
+                                $query->where('disputes.raised_against', $raised_against);
+                            }
+                        }else{
+                            $query->where('disputes.raised_against', $logged_user->id)
+                                ->orWhere('disputes.raised_by', $logged_user->id); 
                         }
 
                         if($project_id){
@@ -4185,6 +4230,9 @@ class TaskController extends AccountBaseController
                     }
                     if($dispute->winner){
                         $dispute->winner = get_user($dispute->winner, false);
+                    }
+                    if($dispute->authorized_by){
+                        $dispute->authorized_by = get_user($dispute->authorized_by, false);
                     }
                 });
 
@@ -4288,7 +4336,6 @@ class TaskController extends AccountBaseController
 
         if($request->authorized){
             $query = TaskRevisionDispute::find($id);
-            $query->need_authrization = $request->need_authrization;
             $query->resolve_comment = $request->resolve_comment;
             $query->raised_against_percent = $request->raised_against_percent;
             $query->raised_by_percent = $request->raised_by_percent;
@@ -4300,6 +4347,11 @@ class TaskController extends AccountBaseController
             $query->authorize_on = Carbon::now();
             $query->status = true;
             $query->save();
+
+            // change status on revision table
+            $revision = TaskRevision::find($query->revision_id);
+            $revision-> dispute_status = true;
+            $revision->save();
 
             $filter = [ 
                 "dispute_id" => $request->dispute_id ?? NULL,
@@ -4323,9 +4375,24 @@ class TaskController extends AccountBaseController
             return  $this->get_dispute_data($filter); 
         }
     }
+
+    public function taskGuidelineAuthorization($id){
+        $pm_task_guideline = PmTaskGuideline::where('project_id',$id)->first();
+
+        $already_submitted = $pm_task_guideline ? true : false;
+
+        if($already_submitted && $pm_task_guideline->status ==1){
+           $is_allow = true;
+        }else $is_allow = false;
+
+        return response()->json([
+            "status_code" => 200,
+            "is_allow" => $is_allow,
+            "is_submitted_already" => $already_submitted,
+            "message" => $already_submitted ? 'Please wait until deliverable is authorized' : ''
+        ], 200);
+    }
     
  
     /************* END TASK DISPUTE *************** */
-
-   
 }

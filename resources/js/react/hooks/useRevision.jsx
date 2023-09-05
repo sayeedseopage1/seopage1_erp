@@ -16,24 +16,24 @@ export const useRevision = () => {
 
         return [
             {
-                id: 'revision1',
+                id: 'PLRx01',
                 revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right",
                 isDeniable: false,
             },
             {
-                id: 'revision2',
+                id: 'PLRx02',
                 revision: "The work done is aligned with my instruction, but after seeing it, I want to give some minor changes",
                 isDeniable: false,
-            },
+            },  
             {
-                id: 'revision3',
+                id: 'PLRx3',
                 revision: "The team lead/project coordinator’s delivered work doesn’t match my shared requirement",
                 isDeniable: true,
             },
             {
-                id: 'revision4',
+                id: 'PLRx04',
                 revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
-                isDeniable: false
+                isDeniable: true
             },
         ]
     }
@@ -47,23 +47,23 @@ export const useRevision = () => {
         }else{
             return [
                 {
-                    id: 'revision1',
+                    id: 'LDRx1',
                     revision: "The concerned developer’s delivered work doesn’t match my shared requirement",
                     isDeniable: true,
                 },
                 {
-                    id: 'revision2',
+                    id: 'LDRx2',
                     revision: "My instruction was incomplete/incorrect and I have to make some changes in the instruction now to make it right.",
                     isDeniable: false,
                 },
-                
                 {
-                    id: 'revision4',
+                    id: 'LDRx3',
                     revision: "The work done is aligned with my instruction but after seeing it, I want to give some minor changes.",
                     isDeniable: false
                 },
+                
                 {
-                    id: 'revision3',
+                    id: 'LDRx4',
                     revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
                     isDeniable: true,
                 },

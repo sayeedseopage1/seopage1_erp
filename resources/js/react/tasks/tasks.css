@@ -89,3 +89,14 @@
 .sp1_task_report_modal{
     width: 80vw;
 }
+
+.sp1_modal_items{
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sp1_task_auth_modal{ 
+    width: clamp(280px, 50%, 500px);
+}

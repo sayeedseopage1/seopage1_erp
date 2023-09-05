@@ -132,6 +132,8 @@ const RevisionViewModal = ({task, close}) => {
                 {show === "ASSINEE_TO_DEV" &&
                     <AssigneeRevisionToDev 
                         task={task}
+                        revision={revision}
+                        type={true}
                         onSubmit={(data) =>handleOnSubmit( data, 'ASSINEE_TO_DEV' )}
                         isSubmitting = {isLoadingRevisionReview}
                         onBack={() => setShow("ACCEPT_AND_CONTINUE")}
@@ -152,6 +154,7 @@ const RevisionViewModal = ({task, close}) => {
                     <AssigneeRevisionToDev 
                         task={task}
                         revision={revision}
+                        type={false}
                         onSubmit={(data) => handleOnSubmit(data, 'DENY_ASSINEE_TO_DEV')}
                         isSubmitting = {isLoadingRevisionReview}
                         onBack={() => setShow("DENY_AND_CONTINUE")}

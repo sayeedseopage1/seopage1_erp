@@ -1,11 +1,11 @@
-import React from "react";
-import Modal from "../../tasks/components/Modal";
-import Button from "../../tasks/components/Button";
-import Input from "../../tasks/components/form/Input";
-import CKEditorComponent from "../../ckeditor";
 import _ from "lodash";
-import SubmitButton from "../../tasks/components/SubmitButton";
+import React from "react";
+import CKEditorComponent from "../../ckeditor";
 import { useStoreProjectGuidelineMutation } from "../../services/api/projectApiSlice";
+import Button from "../../tasks/components/Button";
+import Modal from "../../tasks/components/Modal";
+import SubmitButton from "../../tasks/components/SubmitButton";
+import Input from "../../tasks/components/form/Input";
 
 const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => {
     const [themeDetails, setThemeDetails] = React.useState("");
@@ -246,7 +246,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
             theme_name: themeName,
             theme_url: themeUrl,
             design_details: designDetials === 'yes' ? 1 : 0,
-            design: designFileType, 
+            design: designFileType === '--' ? null : designFileType, 
             xd_url: xDOrFigmaFile, 
             drive_url: photoshopReferenceURL,
             reference_link: _.compact(_.map(designRefURL, item => item.url)),

@@ -12,6 +12,9 @@ export default function CKEditorComponent ({data="", onChange, placeholder="Type
         <>
             <CKEditor
                 onReady={editor => { 
+
+                        editor.ui.view.toolbar.element.remove();
+                    
                         editor.ui.getEditableElement()?.parentElement.insertBefore(
                             editor.ui.view.toolbar.element,
                             editor.ui.getEditableElement()

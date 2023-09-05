@@ -8,12 +8,12 @@ import _ from "lodash";
 
 const options = [
     {
-        id: 'revision1',
+        id: 'LDRx10',
         revision: "I overlooked a few things while checking",
         isDeniable: true,
     },
     {
-        id: 'revision2',
+        id: 'LDRx11',
         revision: "I couldn't understand a few things in the instruction",
         isDeniable: false
     }
@@ -24,9 +24,10 @@ const AssigneeRevisionToDev = ({
     onBack,
     onSubmit,
     revision,
+    type= false,
     isSubmitting = false, 
 }) => {
-    const [reason, setReason] = useState("");
+    const [reason, setReason] = useState(null);
     const [reasonError, setReasonError] = useState("");
     const [comments, setComments] = useState([]);
     const [commentError, setCommentError] = useState(false);
@@ -35,9 +36,8 @@ const AssigneeRevisionToDev = ({
     const [isDeniable, setIsDeniable] = useState(false);
 
     // radio button change
-    const handleChange = (e,isDeniable) => {
-        setReason(e.target.value);
-        setIsDeniable(isDeniable);
+    const handleChange = (value) => {
+        setReason(value); 
     };
 
     // editor change text
@@ -50,10 +50,11 @@ const AssigneeRevisionToDev = ({
             _comments.push({
                 id: id,
                 subtask_id: id,
-                comment: data
+                comment: data,
+                acknowledgement_id: reason?.id ?? ''
             })
         }else{
-           _comments[index] = {id: id, subtask_id: id, comment: data}
+           _comments[index] = {id: id, subtask_id: id, comment: data, acknowledgement_id: reason?.id ?? ''}
         }
 
         setComments([..._comments]);
@@ -63,7 +64,7 @@ const AssigneeRevisionToDev = ({
     // validation
     const validate = () => {
         let errorCount = 0;
-        if (reason === "" && revision?.isDeniable && revision?.isAccept) {
+        if (reason === null && revision?.is_deniable && type) {
             errorCount++;
             setReasonError("You have to select a reason from below options");
         }
@@ -96,9 +97,9 @@ const AssigneeRevisionToDev = ({
 
         const data = {
             task_id: task?.id,
-            reason,
+            reason: reason?.revision, 
             comments,
-            is_deniable: isDeniable
+            is_deniable:reason?.isDeniable ?? false
         }; 
         if(validate()){  
             onSubmit(data)
@@ -110,12 +111,13 @@ const AssigneeRevisionToDev = ({
         onBack();
     }; 
 
+    console.log({revision, type})
 
     return (
         <React.Fragment>
             <form action="">
                 {
-                    revision?.isDeniable && revision?.isAccept && (
+                    (revision?.is_deniable !== 0 && type) ? (
                         <div className="form-group">
                             <label htmlFor="" className="font-weight-bold">
                                 Revision Acknowledgement<sup className="f-16">*</sup> :
@@ -130,7 +132,7 @@ const AssigneeRevisionToDev = ({
                                                 name="exampleRadios"
                                                 id={revision.id}
                                                 required={true}
-                                                onChange={e => handleChange(e, revision.isDeniable)}
+                                                onChange={() => handleChange(revision)}
                                                 value={revision.revision}
                                                 style={{
                                                     width: "16px",
@@ -155,7 +157,7 @@ const AssigneeRevisionToDev = ({
                                 </small>
                             )}
                         </div>
-                    )
+                    ):null
                 }
                 
 
@@ -221,7 +223,7 @@ export default AssigneeRevisionToDev;
 
 const NextAndContinueButton = ({ onClick, isLoading }) => {
     if (!isLoading) {
-        return <Button className="ml-auto" onClick={onClick}>Accept & Continue</Button>;
+        return <Button className="ml-auto" onClick={onClick}> Continue</Button>;
     } else {
         return (
             <Button className="cursor-processing ml-auto">
