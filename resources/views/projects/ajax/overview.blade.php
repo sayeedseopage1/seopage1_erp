@@ -676,8 +676,8 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <br>
                 <!--Top Management Pm Task Guideline Autonraization-->
                 @php
-                    $task_guideline_authorization = App\Models\PmTaskGuidelineAuthorization::where('project_id',$project->id)->first();
-                    $status_count = App\Models\PmTaskGuidelineAuthorization::where('project_id', $project->id)->where('status',0)->count();
+                    $task_guideline_authorization = App\Models\PMTaskGuidelineAuthorization::where('project_id',$project->id)->first();
+                    $status_count = App\Models\PMTaskGuidelineAuthorization::where('project_id', $project->id)->where('status',0)->count();
                 @endphp
                 @if ($task_guideline_authorization !== null && $status_count !=0)
                 <div class="card mb-3" style="border:none">
