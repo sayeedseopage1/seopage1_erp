@@ -21,7 +21,7 @@
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
-                    <th scope="col">Project Status</th>
+                   
                     <th scope="col">Start Date</th>
                     <th scope="col">End Date</th>
                     <th scope="col">Complection Time Days</th>
@@ -44,7 +44,7 @@
                         </td>
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
-                        <td>{{ $item->project_status }}</td>
+                        
                         <td>{{ $item->project_start_date }}</td>
                         <td>{{ $item->project_completion_date }}</td>
                         <td>{{ $item->completion_time_days }}</td>

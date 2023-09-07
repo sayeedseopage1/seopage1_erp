@@ -21,7 +21,7 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Start Date</th>
-                    <th scope="col">Project Status</th>
+                    <th scope="col">Delayed On</th>
                     <th scope="col">Status</th>
                     </tr>
                 </thead>
@@ -42,8 +42,23 @@
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_creation_date }}</td>
-                        <td>{{ $item->project_status }}</td>
                         <td>
+                          @php 
+                          $delayed_date = App\Models\ProjectRequestTimeExtension::where('project_id',$item->id)->orderBy('id','desc')->first();
+                          if($delayed_date != null)
+                          {
+                            $delayed_on = \Carbon\Carbon::parse($item->project_creation_date)->addDay(15+$delayed_date->day);
+                          }else 
+                          {
+                            $delayed_on = \Carbon\Carbon::parse($item->project_creation_date)->addDay(15);
+
+                          }
+
+
+                          @endphp
+                          
+                          {{ $delayed_on }}</td>
+                          <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>
                             @endif

@@ -20,6 +20,7 @@
                                 <th scope="col">Project Budget</th>
                                 <th scope="col">Milestone Cost</th>
                                 <th scope="col">Milestone Start</th>
+                                <th scope="col">Milestone Complection Date</th>
                                 <th scope="col">Milestone Status</th>
                               </tr>
                             </thead>
@@ -40,6 +41,7 @@
                                     <td>{{ $item->project_budget }} $</td>
                                     <td>{{ $item->cost }}</td>
                                     <td>{{ $item->milestone_creation_date }}</td>
+                                    <td>{{ $item->milestone_completion_date }}</td>
                                     <td>
                                         @if ($item->milestone_status == 'incomplete')
                                             <span class="badge badge-warning">{{ $item->milestone_status }}</span>

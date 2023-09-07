@@ -24,10 +24,7 @@ class PortfolioController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Portfolio';
         $this->activeSettingMenu = 'portfolio';
-        $this->middleware(function ($request, $next) {
-            abort_403(user()->permission('manage_company_setting') !== 'all');
-            return $next($request);
-        });
+       
     }
     /**
      * Display a listing of the resource.

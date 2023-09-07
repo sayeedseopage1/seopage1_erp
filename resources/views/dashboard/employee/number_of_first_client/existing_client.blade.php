@@ -4,8 +4,8 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title" id="exampleModalLabel"><h4>Existing clients for this cycle: {{count($no_of_existing_clients_this_cycle)}}</h4>
-                
-               
+
+
           </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -20,6 +20,7 @@
                     <th scope="col">Client User Name</th>
                     <th scope="col">Image</th>
                     <th scope="col">Client Badge</th>
+                    <th scope="col">Client Creation Date</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,6 +39,7 @@
                             @endif
                         </td>
                         <td>{{ $item->client_badge }}</td>
+                        <td>{{ $item->created_at }}</td>
                     </tr>
                     @endforeach
                 </tbody>

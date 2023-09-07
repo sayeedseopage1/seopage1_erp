@@ -21,7 +21,7 @@
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
-                    <th scope="col">Project Status</th>
+                    <th scope="col">Canceled On</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -41,7 +41,7 @@
                         </td>
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
-                        <td>{{ $item->project_status }}</td>
+                        <td>{{ $item->project_canceled_date }}</td>
                         <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>

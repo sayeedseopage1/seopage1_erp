@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\PMProject;
 use App\Models\ProjectRequestTimeExtension;
 use Illuminate\Console\Command;
 use App\Models\User;
@@ -35,9 +36,11 @@ class DelayedProject extends Command
     {
         $projects= Project::select('projects.*')
         ->join('deals','deals.id','projects.deal_id')
+        ->join('p_m_projects','p_m_projects.project_id','projects.id')
         
         ->where('deals.project_type','fixed')
-        ->where('projects.status','in progress')->where('delayed_status',0)->get();
+        ->where('projects.status','in progress')
+        ->where('p_m_projects.delayed_status',0)->get();
   
           //$daily_bonus= User::where('id',Auth::id())->first();
           //dd($daily_bonus->packages->price);
@@ -64,7 +67,7 @@ class DelayedProject extends Command
   
                   if($days >= 15)
                   {
-                    $project_id= Project::find($project->id);
+                    $project_id= PMProject::where('project_id',$project->id)->first();
                     $project_id->delayed_status = 1; 
                     $project_id->save();
                  

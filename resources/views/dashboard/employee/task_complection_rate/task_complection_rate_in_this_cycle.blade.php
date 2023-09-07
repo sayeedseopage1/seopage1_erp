@@ -36,6 +36,7 @@
                     <th scope="col">Hours Log</th>
                     <th scope="col">Assign to</th>
                     <th scope="col">Creation Date</th>
+                    <th scope="col">Completion Date</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -86,6 +87,7 @@
                             </div>
                         </td>
                         <td>{{ $item->task_creation_date }}</td>
+                        <td>{{ $item->task_completion_date }}</td>
                         <td>
                             @if ($taskboard_column->id ==1)
                             <div class="d-flex">

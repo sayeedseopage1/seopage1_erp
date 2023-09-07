@@ -42,7 +42,7 @@
                     @foreach ($total_tasks_assigned_this_cycle_get as $item)
                         @php
                             $project = \App\Models\Project::where('id',$item->project_id)->first();
-                            $user = \App\Models\User::where('id',$project->client_id)->first();
+                            $client = \App\Models\User::where('id',$project->client_id)->first();
                             $taskboard_column = \App\Models\TaskboardColumn::where('id',$item->board_column_id)->first();
                         @endphp
                     <tr>
@@ -52,7 +52,7 @@
                             <a href="{{ route('projects.show',$project->id) }}">{{ $project->project_name }}</a>
                         </td>
                         <td>
-                            <a href="{{ route('clients.show',$user->id) }}">{{ $user->name }}</a>
+                            <a href="{{ route('clients.show',$client->id) }}">{{ $client->name }}</a>
                         </td>
                         <td>{{ $item->due_date }}</td>
                         <td>

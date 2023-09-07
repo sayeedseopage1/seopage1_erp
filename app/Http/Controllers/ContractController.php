@@ -988,6 +988,7 @@ class ContractController extends AccountBaseController
     }
     public function storedealDetails(Request $request)
     {
+       // dd($request);
         $deal_hourly_checked = Deal::where('id', $request->id)->first();
         if ($deal_hourly_checked->project_type != 'hourly') {
             $validated = $request->validate([
@@ -1140,6 +1141,7 @@ class ContractController extends AccountBaseController
             $deal->description9 = $request->description9;
             
             $deal->save();
+            //dd($deal);
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
@@ -2615,6 +2617,7 @@ public function storeClientDeal(Request $request){
     $deal->start_date = $newDate;
     $deal->client_badge = 'existing client';
     $deal->save();
+   // dd($deal);
     //$lead_con_id = Lead::where('id', $request->lead_id)->first();
     if (Auth::id() != null) {
         $agent_id = SalesCount::where('user_id', Auth::id())->first();
@@ -2636,13 +2639,15 @@ public function storeClientDeal(Request $request){
 
     $user_name = User::where('user_name', $request->user_name)->first();
         $user = $existing_client;
+       // dd($user);
 
 
 
 
     $deal_client = Deal::find($deal->id);
+    
     $deal_client->client_id = $user->id;
-    $deal->submission_status= 'Submitted';
+    // $deal->submission_status= 'Submitted';
 
     $client_details= ClientForm::where('client_username',$user->user_name)->first();
     // /dd($client_details);

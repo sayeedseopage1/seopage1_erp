@@ -26,6 +26,11 @@
             gap: 10px;
 
         }
+
+        #content_table li a{
+            color: #45474B;
+        }
+
         #content_table li a.active{
             color: red;
         }
@@ -554,7 +559,7 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="card p-2" style="border: none; height: 100%" id="task_assigned_for_this_cycle">
                             <div class="card-title">
                                 <h5>Task Assigned For This Cycle</h5>
@@ -562,6 +567,16 @@
                             <div class="text-left">
                                 <p>The number of tasks the project manager assigned to the lead developer during the assign
                                     cycle (June 16th-July 15th).</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card p-2" style="border: none; height: 100%" id="total-client">
+                            <div class="card-title">
+                                <h5>Total Clients</h5>
+                            </div>
+                            <div class="text-left">
+                                <p>All clients including, new and existing clients entered into the system in the current assign cycle (16th June - 15th July)</p>
                             </div>
                         </div>
                     </div>
@@ -967,6 +982,9 @@
                             <a class="nav-link" href="#existing-client">Existing clients</a>
                         </li>
                         <li>
+                            <a class="nav-link" href="#total-client">Total clients</a>
+                        </li>
+                        <li>
                             <a class="nav-link" href="#in-progress-projects-for-this-cycle-number">100% in progress projects for this cycle (Number)</a>
                         </li>
                         <li>
@@ -1130,7 +1148,7 @@
 @endsection
 
 @push('scripts')
-<script>
+    <script>
         var body = document.getElementById('body');
         body.setAttribute("data-spy", "scroll");
         body.setAttribute("data-target", "#content_table");

@@ -7,7 +7,7 @@
             <h4>{{(count($no_of_accepted_projects))+ (count($no_of_100_finished_project_previous_cycle)) - (count($no_of_100_finished_project_this_cycle))}} projects assigned</h4>
             <h4>{{count($no_of_100_finished_project_previous_cycle)}} projects completed</h4>
             <h4>Percentage: {{round($project_completion_rate_count_previous_cycle_100_in_progress,2)}}%</h4>
-           
+
           </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -23,8 +23,9 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Project Start Time</th>
+                    <th scope="col">100% in Progress Date</th>
                     <th scope="col">Project Status</th>
-                   
+
                   </tr>
                 </thead>
                 <tbody>
@@ -44,7 +45,8 @@
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_start_date }}</td>
-                       
+                        <td>{{ $item->updated_at }}</td>
+
                         <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>
