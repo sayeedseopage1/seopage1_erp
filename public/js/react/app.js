@@ -29901,11 +29901,35 @@ var Protfolio = function Protfolio() {
       return d.parent_category_id;
     });
     data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(data, function (d) {
-      return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(d).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(subCategorySearch));
+      return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(d.category_name).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(subCategorySearch));
     });
     if (websiteCategory && websiteCategory.id) {
       data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(data, function (d) {
         return d.parent_category_id === websiteCategory.id;
+      });
+    }
+    return data;
+  };
+  var filterThemes = function filterThemes() {
+    var data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_themes, function (f) {
+      var _f$theme_name;
+      return (f === null || f === void 0 ? void 0 : (_f$theme_name = f.theme_name) === null || _f$theme_name === void 0 ? void 0 : _f$theme_name.toLowerCase()) !== 'n/a';
+    });
+    if (themeSearch) {
+      data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_themes, function (q) {
+        return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(q.theme_name).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(themeSearch));
+      });
+    }
+    return data;
+  };
+  var filterPlugin = function filterPlugin() {
+    var data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_plugins, function (f) {
+      var _f$plugin_name;
+      return (f === null || f === void 0 ? void 0 : (_f$plugin_name = f.plugin_name) === null || _f$plugin_name === void 0 ? void 0 : _f$plugin_name.toLowerCase()) !== 'n/a';
+    });
+    if (pluginSearch) {
+      data = lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_plugins, function (q) {
+        return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(q.plugin_name).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(pluginSearch));
       });
     }
     return data;
@@ -30002,7 +30026,7 @@ var Protfolio = function Protfolio() {
                       return setWebsiteType(option);
                     },
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-                      className: "singleline-ellipsis",
+                      className: "multiline-ellipsis",
                       style: {
                         width: '90%'
                       },
@@ -30094,9 +30118,9 @@ var Protfolio = function Protfolio() {
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "portfolio-filter-dd-menu",
               children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(subNiches(), function (option) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("abbr", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("abbr", {
                   title: option.category_name,
-                  children: [console.table(option), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
                     className: "d-flex items-center justify-content-between",
                     onClick: function onClick() {
                       return setSubCategory(option);
@@ -30110,7 +30134,7 @@ var Protfolio = function Protfolio() {
                     }), (subCategory === null || subCategory === void 0 ? void 0 : subCategory.id) === option.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                       className: "fa-solid fa-check ml-"
                     })]
-                  })]
+                  })
                 }, option.id);
               })
             })]
@@ -30142,9 +30166,7 @@ var Protfolio = function Protfolio() {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "portfolio-filter-dd-menu",
-              children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_themes, function (q) {
-                return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(q.theme_name).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(themeSearch) && lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(q.theme_name) !== 'n/a');
-              }), function (option) {
+              children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(filterThemes(), function (option) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("abbr", {
                   title: option.theme_name,
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
@@ -30193,9 +30215,7 @@ var Protfolio = function Protfolio() {
               })
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "portfolio-filter-dd-menu",
-              children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(lodash__WEBPACK_IMPORTED_MODULE_6___default().filter(filterMenuItems === null || filterMenuItems === void 0 ? void 0 : filterMenuItems.website_plugins, function (q) {
-                return lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(q.plugin_name).includes(lodash__WEBPACK_IMPORTED_MODULE_6___default().lowerCase(pluginSearch));
-              }), function (option) {
+              children: lodash__WEBPACK_IMPORTED_MODULE_6___default().map(filterPlugin(), function (option) {
                 return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("abbr", {
                   title: option.plugin_name,
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_global_Dropdown__WEBPACK_IMPORTED_MODULE_1__["default"].Item, {
@@ -30875,7 +30895,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var PortfolioModal = function PortfolioModal(_ref) {
-  var _data$niche$category_, _data$niche, _data$sub_niche$categ, _data$sub_niche, _data$project_budget, _data$theme_name, _data$hourly_budget, _data$main_page_numbe, _data$secondary_page_, _data$description;
+  var _data$niche$category_, _data$niche, _data$sub_niche$categ, _data$sub_niche, _data$project_budget, _data$theme_name, _data$hourly_budget, _data$main_page_numbe, _data$secondary_page_;
   var isOpen = _ref.isOpen,
     close = _ref.close,
     data = _ref.data,
@@ -31031,12 +31051,12 @@ var PortfolioModal = function PortfolioModal(_ref) {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("p", {
                   className: "font-weight-bold f-14 mb-2",
                   children: "Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot):"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                }), data !== null && data !== void 0 && data.description ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                   dangerouslySetInnerHTML: {
-                    __html: (_data$description = data === null || data === void 0 ? void 0 : data.description) !== null && _data$description !== void 0 ? _data$description : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                      children: "No major functionalities to mention for this project"
-                    })
+                    __html: data === null || data === void 0 ? void 0 : data.description
                   }
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+                  children: "No major functionalities to mention for this project"
                 })]
               })]
             })
@@ -41953,13 +41973,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _components_Searchbox__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/Searchbox */ "./resources/js/react/tasks/components/Searchbox.jsx");
 /* harmony import */ var _components_TaskTableColumns__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/TaskTableColumns */ "./resources/js/react/tasks/components/TaskTableColumns.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../components/Button */ "./resources/js/react/tasks/components/Button.jsx");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../components/Modal */ "./resources/js/react/tasks/components/Modal.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -41991,6 +42015,10 @@ var Tasks = function Tasks() {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     search = _React$useState4[0],
     setSearch = _React$useState4[1];
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(false),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    showAuthorizationModal = _React$useState6[0],
+    setShowAuthorizationModal = _React$useState6[1];
   var onFilter = function onFilter(filter) {
     var queryObject = lodash__WEBPACK_IMPORTED_MODULE_8___default().pickBy(filter, Boolean);
     var queryString = new URLSearchParams(queryObject).toString();
@@ -42006,27 +42034,37 @@ var Tasks = function Tasks() {
       });
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  var close = function close() {
+    return setShowAuthorizationModal(false);
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
         onFilter: onFilter
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
       className: "sp1_tlr_container",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
         className: "sp1_tlr_tbl_container",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
           className: "mb-3 d-flex align-items-center flex-wrap justify-content-between",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_1__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_1__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+            onClick: function onClick() {
+              return setShowAuthorizationModal(true);
+            },
+            className: "sp1_tlr_tab active mr-auto ml-2 mb-2 text-white",
+            children: "Authorize"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+            className: "mb-2",
             style: {
               maxWidth: '300px'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Searchbox__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Searchbox__WEBPACK_IMPORTED_MODULE_9__["default"], {
               value: search,
               onChange: setSearch
             })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_TasksTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_TasksTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
           isLoading: isFetching,
           filter: filter,
           tableName: "tasksTable",
@@ -42034,6 +42072,85 @@ var Tasks = function Tasks() {
           reportPermission: [5, 1, 8],
           tableColumns: _components_TaskTableColumns__WEBPACK_IMPORTED_MODULE_10__.TaskTableColumns
         })]
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_12__["default"], {
+      isOpen: showAuthorizationModal,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+        className: "sp1_modal-content-wrapper",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+          className: "sp1_modal-panel sp1_task_auth_modal ",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+            className: "sp1_modal-head",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+              className: "sp1_modal-title pl-2",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("strong", {
+                children: "Primary Page Development"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+              onClick: close,
+              "aria-label": "ModalClose",
+              variant: "tertiary",
+              className: "sp1_modal-close",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("i", {
+                className: "fa-solid fa-xmark"
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+            className: "sp1_modal-body p-3",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("ul", {
+              className: "sp1_modal_items px-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: "Page name: "
+                }), " page name here..."]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: "Page URL: "
+                }), " page name here..."]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: "Task: "
+                }), " Home Page Design"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: "Sub-Task: "
+                }), " Home Page Design"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: " Assigned By: "
+                }), " Moniruzzaman"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: " Assigned To: "
+                }), " Md. Mahfuz Khan"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: " Project: "
+                }), " Build website"]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("li", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("b", {
+                  children: " Client: "
+                }), " Jonathan R."]
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+              className: "w-100 mt-3",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
+                className: "w-fit d-flex align-items-center ml-auto",
+                style: {
+                  gap: '10px'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+                  variant: "success",
+                  className: "ml-auto",
+                  children: "Authorize"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_11__["default"], {
+                  variant: "danger",
+                  children: "Deny"
+                })]
+              })
+            })]
+          })]
+        })
       })
     })]
   });
@@ -42932,7 +43049,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".portfolio-item{\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n    padding: 10px 16px;\r\n    border: 1px solid #f2f2f2;\r\n    border-radius: 6px;\r\n    background-color: #fff; \r\n}\r\n\r\n.portfolio-item:hover{\r\n    cursor: pointer; \r\n    border: 1px solid #e7e7e7;\r\n}\r\n\r\n.portfolio-item-favicon{\r\n    width: 32px;\r\n    height: 32px;\r\n    border-radius: 50%;\r\n}\r\n\r\n.portfolio-item-link{\r\n    color: #1D82F5;\r\n    word-wrap: break-word;\r\n    -ms-word-break: break-all;\r\n    word-break: break-all;\r\n    flex: 1;\r\n}\r\n\r\n.portfolio-item-icon{\r\n    color: #999999;\r\n    background-color: transparent;\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n    padding: 3px 6px;\r\n    border-radius: 4px;\r\n    position: relative;\r\n}\r\n\r\n.portfolio-item-icon:hover{\r\n    color: #777;\r\n    background-color: rgb(0 0 0 / 5%);\r\n}\r\n\r\n.portfolio-item-icon i.fa-check{\r\n    color: #33a805;\r\n}\r\n\r\n.portfolio-item-icon .copied-tooltip {\r\n    display: block;\r\n    font-size: 12px;\r\n    padding: 0 10px;\r\n    background: #272829;\r\n    color: #fff;\r\n    position: absolute;\r\n    bottom: 100%;\r\n    left: 50%;\r\n    border-radius: 10px;\r\n    transform: translateX(-50%);\r\n}\r\n\r\n/* new update tooltip message */\r\n.dispute-status-tooltip{\r\n    position: relative;\r\n}\r\n\r\n.dispute-tooltip{  \r\n    background-color: rgb(25, 26, 27);\r\n    z-index: 1;\r\n    border-radius: 6px;\r\n    /* border: 1px solid #41c7e2; */\r\n    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);\r\n    transform: rotate(45deg);\r\n}\r\n\r\n\r\n.dispute-notif-arrow{\r\n    overflow: hidden;  \r\n    width: 12px;\r\n    height: 10px;\r\n}\r\n\r\n.dispute-notif-arrow::before{\r\n    position: absolute;\r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: rgb(25, 26, 27);\r\n    content: '';\r\n    /* border: 1px solid #41c7e2; */\r\n    transform: rotate(45deg);\r\n    transform-origin: center; \r\n    top: -7px;\r\n    left: 1px;\r\n}\r\n\r\n\r\n.dispute-tooltip-content{\r\n    font-size: 10px;\r\n    padding: 0px 6px;\r\n    color: white;\r\n}\r\n\r\n.portfolio-filter-dd-toggle{\r\n    width: 100%;\r\n    padding: 10px 10px;\r\n    background: #fff;\r\n    border-radius: 3px;\r\n    box-shadow: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.portfolio-filter-dd-menu{\r\n    height: 350px;\r\n    overflow-y: auto;\r\n    position: relative;\r\n}\r\n\r\n  \r\n.portfolio-filter-dd-menu::-webkit-scrollbar{ \r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: transparent !important;\r\n} \r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb{\r\n    background-color: rgb(219, 219, 219) !important;\r\n    border: 2px solid rgb(255, 255, 255) !important;\r\n}\r\n \r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb:hover{\r\n    border: 0 !important;\r\n    background-color: rgb(197, 197, 197) !important;\r\n}\r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-track{\r\n    background-color: rgba(219, 219, 219, 0.1) !important;\r\n}\r\n\r\n\r\n.filter-item{\r\n    padding: 2px 10px;\r\n    background-color: #ffffff;\r\n    font-size: 13px;\r\n    display: flex;\r\n    align-items: center; \r\n    gap: 3px;\r\n    border-radius: 6px;\r\n    box-shadow: rgb(0 0 0 / 10%);\r\n}\r\n\r\n.filter-item button{\r\n    padding-right: 6px;\r\n    padding-left: 3px;\r\n    background-color: transparent;\r\n}\r\n\r\n.filter-item button:hover{\r\n    color: red;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/portfolios/portfolio.css"],"names":[],"mappings":"AAAA;IACI,aAAa;IACb,mBAAmB;IACnB,SAAS;IACT,kBAAkB;IAClB,yBAAyB;IACzB,kBAAkB;IAClB,sBAAsB;AAC1B;;AAEA;IACI,eAAe;IACf,yBAAyB;AAC7B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;AACtB;;AAEA;IACI,cAAc;IACd,qBAAqB;IACrB,yBAAyB;IACzB,qBAAqB;IACrB,OAAO;AACX;;AAEA;IACI,cAAc;IACd,6BAA6B;IAC7B,kCAAkC;IAClC,gBAAgB;IAChB,kBAAkB;IAClB,kBAAkB;AACtB;;AAEA;IACI,WAAW;IACX,iCAAiC;AACrC;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,cAAc;IACd,eAAe;IACf,eAAe;IACf,mBAAmB;IACnB,WAAW;IACX,kBAAkB;IAClB,YAAY;IACZ,SAAS;IACT,mBAAmB;IACnB,2BAA2B;AAC/B;;AAEA,+BAA+B;AAC/B;IACI,kBAAkB;AACtB;;AAEA;IACI,iCAAiC;IACjC,UAAU;IACV,kBAAkB;IAClB,+BAA+B;IAC/B,8CAA8C;IAI9C,wBAAwB;AAC5B;;;AAGA;IACI,gBAAgB;IAChB,WAAW;IACX,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,iCAAiC;IACjC,WAAW;IACX,+BAA+B;IAG/B,wBAAwB;IACxB,wBAAwB;IACxB,SAAS;IACT,SAAS;AACb;;;AAGA;IACI,eAAe;IACf,gBAAgB;IAChB,YAAY;AAChB;;AAEA;IACI,WAAW;IACX,kBAAkB;IAClB,gBAAgB;IAChB,kBAAkB;IAClB,sCAAsC;AAC1C;;AAEA;IACI,aAAa;IACb,gBAAgB;IAChB,kBAAkB;AACtB;;;AAGA;IACI,WAAW;IACX,YAAY;IACZ,wCAAwC;AAC5C;;AAEA;IACI,+CAA+C;IAC/C,+CAA+C;AACnD;;AAEA;IACI,oBAAoB;IACpB,+CAA+C;AACnD;;AAEA;IACI,qDAAqD;AACzD;;;AAGA;IACI,iBAAiB;IACjB,yBAAyB;IACzB,eAAe;IACf,aAAa;IACb,mBAAmB;IACnB,QAAQ;IACR,kBAAkB;IAClB,4BAA4B;AAChC;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,6BAA6B;AACjC;;AAEA;IACI,UAAU;AACd","sourcesContent":[".portfolio-item{\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n    padding: 10px 16px;\r\n    border: 1px solid #f2f2f2;\r\n    border-radius: 6px;\r\n    background-color: #fff; \r\n}\r\n\r\n.portfolio-item:hover{\r\n    cursor: pointer; \r\n    border: 1px solid #e7e7e7;\r\n}\r\n\r\n.portfolio-item-favicon{\r\n    width: 32px;\r\n    height: 32px;\r\n    border-radius: 50%;\r\n}\r\n\r\n.portfolio-item-link{\r\n    color: #1D82F5;\r\n    word-wrap: break-word;\r\n    -ms-word-break: break-all;\r\n    word-break: break-all;\r\n    flex: 1;\r\n}\r\n\r\n.portfolio-item-icon{\r\n    color: #999999;\r\n    background-color: transparent;\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n    padding: 3px 6px;\r\n    border-radius: 4px;\r\n    position: relative;\r\n}\r\n\r\n.portfolio-item-icon:hover{\r\n    color: #777;\r\n    background-color: rgb(0 0 0 / 5%);\r\n}\r\n\r\n.portfolio-item-icon i.fa-check{\r\n    color: #33a805;\r\n}\r\n\r\n.portfolio-item-icon .copied-tooltip {\r\n    display: block;\r\n    font-size: 12px;\r\n    padding: 0 10px;\r\n    background: #272829;\r\n    color: #fff;\r\n    position: absolute;\r\n    bottom: 100%;\r\n    left: 50%;\r\n    border-radius: 10px;\r\n    transform: translateX(-50%);\r\n}\r\n\r\n/* new update tooltip message */\r\n.dispute-status-tooltip{\r\n    position: relative;\r\n}\r\n\r\n.dispute-tooltip{  \r\n    background-color: rgb(25, 26, 27);\r\n    z-index: 1;\r\n    border-radius: 6px;\r\n    /* border: 1px solid #41c7e2; */\r\n    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);\r\n    \r\n    -webkit-transform: rotate(45deg);\r\n    -ms-transform: rotate(45deg);\r\n    transform: rotate(45deg);\r\n}\r\n\r\n\r\n.dispute-notif-arrow{\r\n    overflow: hidden;  \r\n    width: 12px;\r\n    height: 10px;\r\n}\r\n\r\n.dispute-notif-arrow::before{\r\n    position: absolute;\r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: rgb(25, 26, 27);\r\n    content: '';\r\n    /* border: 1px solid #41c7e2; */\r\n    -webkit-transform: rotate(45deg);\r\n    -ms-transform: rotate(45deg);\r\n    transform: rotate(45deg);\r\n    transform-origin: center; \r\n    top: -7px;\r\n    left: 1px;\r\n}\r\n\r\n\r\n.dispute-tooltip-content{\r\n    font-size: 10px;\r\n    padding: 0px 6px;\r\n    color: white;\r\n}\r\n\r\n.portfolio-filter-dd-toggle{\r\n    width: 100%;\r\n    padding: 10px 10px;\r\n    background: #fff;\r\n    border-radius: 3px;\r\n    box-shadow: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.portfolio-filter-dd-menu{\r\n    height: 350px;\r\n    overflow-y: auto;\r\n    position: relative;\r\n}\r\n\r\n  \r\n.portfolio-filter-dd-menu::-webkit-scrollbar{ \r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: transparent !important;\r\n} \r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb{\r\n    background-color: rgb(219, 219, 219) !important;\r\n    border: 2px solid rgb(255, 255, 255) !important;\r\n}\r\n \r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb:hover{\r\n    border: 0 !important;\r\n    background-color: rgb(197, 197, 197) !important;\r\n}\r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-track{\r\n    background-color: rgba(219, 219, 219, 0.1) !important;\r\n}\r\n\r\n\r\n.filter-item{\r\n    padding: 2px 10px;\r\n    background-color: #ffffff;\r\n    font-size: 13px;\r\n    display: flex;\r\n    align-items: center; \r\n    gap: 3px;\r\n    border-radius: 6px;\r\n    box-shadow: rgb(0 0 0 / 10%);\r\n}\r\n\r\n.filter-item button{\r\n    padding-right: 6px;\r\n    padding-left: 3px;\r\n    background-color: transparent;\r\n}\r\n\r\n.filter-item button:hover{\r\n    color: red;\r\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".portfolio-item{\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n    padding: 10px 16px;\r\n    border: 1px solid #f2f2f2;\r\n    border-radius: 6px;\r\n    background-color: #fff; \r\n}\r\n\r\n.portfolio-item:hover{\r\n    cursor: pointer; \r\n    border: 1px solid #e7e7e7;\r\n}\r\n\r\n.portfolio-item-favicon{\r\n    width: 32px;\r\n    height: 32px;\r\n    border-radius: 50%;\r\n}\r\n\r\n.portfolio-item-link{\r\n    color: #1D82F5;\r\n    word-wrap: break-word;\r\n    -ms-word-break: break-all;\r\n    word-break: break-all;\r\n    flex: 1;\r\n}\r\n\r\n.portfolio-item-icon{\r\n    color: #999999;\r\n    background-color: transparent;\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n    padding: 3px 6px;\r\n    border-radius: 4px;\r\n    position: relative;\r\n}\r\n\r\n.portfolio-item-icon:hover{\r\n    color: #777;\r\n    background-color: rgb(0 0 0 / 5%);\r\n}\r\n\r\n.portfolio-item-icon i.fa-check{\r\n    color: #33a805;\r\n}\r\n\r\n.portfolio-item-icon .copied-tooltip {\r\n    display: block;\r\n    font-size: 12px;\r\n    padding: 0 10px;\r\n    background: #272829;\r\n    color: #fff;\r\n    position: absolute;\r\n    bottom: 100%;\r\n    left: 50%;\r\n    border-radius: 10px;\r\n    transform: translateX(-50%);\r\n}\r\n\r\n/* new update tooltip message */\r\n.dispute-status-tooltip{\r\n    position: relative;\r\n}\r\n\r\n.dispute-tooltip{  \r\n    background-color: rgb(25, 26, 27);\r\n    z-index: 1;\r\n    border-radius: 6px;\r\n    /* border: 1px solid #41c7e2; */\r\n    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);\r\n    transform: rotate(45deg);\r\n}\r\n\r\n\r\n.dispute-notif-arrow{\r\n    overflow: hidden;  \r\n    width: 12px;\r\n    height: 10px;\r\n}\r\n\r\n.dispute-notif-arrow::before{\r\n    position: absolute;\r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: rgb(25, 26, 27);\r\n    content: '';\r\n    /* border: 1px solid #41c7e2; */\r\n    transform: rotate(45deg);\r\n    transform-origin: center; \r\n    top: -7px;\r\n    left: 1px;\r\n}\r\n\r\n\r\n.dispute-tooltip-content{\r\n    font-size: 10px;\r\n    padding: 0px 6px;\r\n    color: white;\r\n}\r\n\r\n.portfolio-filter-dd-toggle{\r\n    width: 100%;\r\n    padding: 10px 10px;\r\n    background: #fff;\r\n    border-radius: 3px;\r\n    box-shadow: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.portfolio-filter-dd-menu{\r\n    height: -moz-fit-content;\r\n    height: fit-content;\r\n    max-height: 350px;\r\n    width: 250px;\r\n    overflow-y: auto;\r\n    position: relative;\r\n}\r\n\r\n  \r\n.portfolio-filter-dd-menu::-webkit-scrollbar{ \r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: transparent !important;\r\n} \r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb{\r\n    background-color: rgb(219, 219, 219) !important;\r\n    border: 2px solid rgb(255, 255, 255) !important;\r\n}\r\n \r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb:hover{\r\n    border: 0 !important;\r\n    background-color: rgb(197, 197, 197) !important;\r\n}\r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-track{\r\n    background-color: rgba(219, 219, 219, 0.1) !important;\r\n}\r\n\r\n\r\n.filter-item{\r\n    padding: 2px 10px;\r\n    background-color: #ffffff;\r\n    font-size: 13px;\r\n    display: flex;\r\n    align-items: center; \r\n    gap: 3px;\r\n    border-radius: 6px;\r\n    box-shadow: rgb(0 0 0 / 10%);\r\n}\r\n\r\n.filter-item button{\r\n    padding-right: 6px;\r\n    padding-left: 3px;\r\n    background-color: transparent;\r\n}\r\n\r\n.filter-item button:hover{\r\n    color: red;\r\n}\r\n ", "",{"version":3,"sources":["webpack://./resources/js/react/portfolios/portfolio.css"],"names":[],"mappings":"AAAA;IACI,aAAa;IACb,mBAAmB;IACnB,SAAS;IACT,kBAAkB;IAClB,yBAAyB;IACzB,kBAAkB;IAClB,sBAAsB;AAC1B;;AAEA;IACI,eAAe;IACf,yBAAyB;AAC7B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;AACtB;;AAEA;IACI,cAAc;IACd,qBAAqB;IACrB,yBAAyB;IACzB,qBAAqB;IACrB,OAAO;AACX;;AAEA;IACI,cAAc;IACd,6BAA6B;IAC7B,kCAAkC;IAClC,gBAAgB;IAChB,kBAAkB;IAClB,kBAAkB;AACtB;;AAEA;IACI,WAAW;IACX,iCAAiC;AACrC;;AAEA;IACI,cAAc;AAClB;;AAEA;IACI,cAAc;IACd,eAAe;IACf,eAAe;IACf,mBAAmB;IACnB,WAAW;IACX,kBAAkB;IAClB,YAAY;IACZ,SAAS;IACT,mBAAmB;IACnB,2BAA2B;AAC/B;;AAEA,+BAA+B;AAC/B;IACI,kBAAkB;AACtB;;AAEA;IACI,iCAAiC;IACjC,UAAU;IACV,kBAAkB;IAClB,+BAA+B;IAC/B,8CAA8C;IAI9C,wBAAwB;AAC5B;;;AAGA;IACI,gBAAgB;IAChB,WAAW;IACX,YAAY;AAChB;;AAEA;IACI,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,iCAAiC;IACjC,WAAW;IACX,+BAA+B;IAG/B,wBAAwB;IACxB,wBAAwB;IACxB,SAAS;IACT,SAAS;AACb;;;AAGA;IACI,eAAe;IACf,gBAAgB;IAChB,YAAY;AAChB;;AAEA;IACI,WAAW;IACX,kBAAkB;IAClB,gBAAgB;IAChB,kBAAkB;IAClB,sCAAsC;AAC1C;;AAEA;IACI,wBAAmB;IAAnB,mBAAmB;IACnB,iBAAiB;IACjB,YAAY;IACZ,gBAAgB;IAChB,kBAAkB;AACtB;;;AAGA;IACI,WAAW;IACX,YAAY;IACZ,wCAAwC;AAC5C;;AAEA;IACI,+CAA+C;IAC/C,+CAA+C;AACnD;;AAEA;IACI,oBAAoB;IACpB,+CAA+C;AACnD;;AAEA;IACI,qDAAqD;AACzD;;;AAGA;IACI,iBAAiB;IACjB,yBAAyB;IACzB,eAAe;IACf,aAAa;IACb,mBAAmB;IACnB,QAAQ;IACR,kBAAkB;IAClB,4BAA4B;AAChC;;AAEA;IACI,kBAAkB;IAClB,iBAAiB;IACjB,6BAA6B;AACjC;;AAEA;IACI,UAAU;AACd","sourcesContent":[".portfolio-item{\r\n    display: flex;\r\n    align-items: center;\r\n    gap: 10px;\r\n    padding: 10px 16px;\r\n    border: 1px solid #f2f2f2;\r\n    border-radius: 6px;\r\n    background-color: #fff; \r\n}\r\n\r\n.portfolio-item:hover{\r\n    cursor: pointer; \r\n    border: 1px solid #e7e7e7;\r\n}\r\n\r\n.portfolio-item-favicon{\r\n    width: 32px;\r\n    height: 32px;\r\n    border-radius: 50%;\r\n}\r\n\r\n.portfolio-item-link{\r\n    color: #1D82F5;\r\n    word-wrap: break-word;\r\n    -ms-word-break: break-all;\r\n    word-break: break-all;\r\n    flex: 1;\r\n}\r\n\r\n.portfolio-item-icon{\r\n    color: #999999;\r\n    background-color: transparent;\r\n    border: 1px solid rgb(0 0 0 / 10%);\r\n    padding: 3px 6px;\r\n    border-radius: 4px;\r\n    position: relative;\r\n}\r\n\r\n.portfolio-item-icon:hover{\r\n    color: #777;\r\n    background-color: rgb(0 0 0 / 5%);\r\n}\r\n\r\n.portfolio-item-icon i.fa-check{\r\n    color: #33a805;\r\n}\r\n\r\n.portfolio-item-icon .copied-tooltip {\r\n    display: block;\r\n    font-size: 12px;\r\n    padding: 0 10px;\r\n    background: #272829;\r\n    color: #fff;\r\n    position: absolute;\r\n    bottom: 100%;\r\n    left: 50%;\r\n    border-radius: 10px;\r\n    transform: translateX(-50%);\r\n}\r\n\r\n/* new update tooltip message */\r\n.dispute-status-tooltip{\r\n    position: relative;\r\n}\r\n\r\n.dispute-tooltip{  \r\n    background-color: rgb(25, 26, 27);\r\n    z-index: 1;\r\n    border-radius: 6px;\r\n    /* border: 1px solid #41c7e2; */\r\n    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);\r\n    \r\n    -webkit-transform: rotate(45deg);\r\n    -ms-transform: rotate(45deg);\r\n    transform: rotate(45deg);\r\n}\r\n\r\n\r\n.dispute-notif-arrow{\r\n    overflow: hidden;  \r\n    width: 12px;\r\n    height: 10px;\r\n}\r\n\r\n.dispute-notif-arrow::before{\r\n    position: absolute;\r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: rgb(25, 26, 27);\r\n    content: '';\r\n    /* border: 1px solid #41c7e2; */\r\n    -webkit-transform: rotate(45deg);\r\n    -ms-transform: rotate(45deg);\r\n    transform: rotate(45deg);\r\n    transform-origin: center; \r\n    top: -7px;\r\n    left: 1px;\r\n}\r\n\r\n\r\n.dispute-tooltip-content{\r\n    font-size: 10px;\r\n    padding: 0px 6px;\r\n    color: white;\r\n}\r\n\r\n.portfolio-filter-dd-toggle{\r\n    width: 100%;\r\n    padding: 10px 10px;\r\n    background: #fff;\r\n    border-radius: 3px;\r\n    box-shadow: 1px solid rgb(0 0 0 / 10%);\r\n}\r\n\r\n.portfolio-filter-dd-menu{\r\n    height: fit-content;\r\n    max-height: 350px;\r\n    width: 250px;\r\n    overflow-y: auto;\r\n    position: relative;\r\n}\r\n\r\n  \r\n.portfolio-filter-dd-menu::-webkit-scrollbar{ \r\n    width: 10px;\r\n    height: 10px;\r\n    background-color: transparent !important;\r\n} \r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb{\r\n    background-color: rgb(219, 219, 219) !important;\r\n    border: 2px solid rgb(255, 255, 255) !important;\r\n}\r\n \r\n.portfolio-filter-dd-menu::-webkit-scrollbar-thumb:hover{\r\n    border: 0 !important;\r\n    background-color: rgb(197, 197, 197) !important;\r\n}\r\n\r\n.portfolio-filter-dd-menu::-webkit-scrollbar-track{\r\n    background-color: rgba(219, 219, 219, 0.1) !important;\r\n}\r\n\r\n\r\n.filter-item{\r\n    padding: 2px 10px;\r\n    background-color: #ffffff;\r\n    font-size: 13px;\r\n    display: flex;\r\n    align-items: center; \r\n    gap: 3px;\r\n    border-radius: 6px;\r\n    box-shadow: rgb(0 0 0 / 10%);\r\n}\r\n\r\n.filter-item button{\r\n    padding-right: 6px;\r\n    padding-left: 3px;\r\n    background-color: transparent;\r\n}\r\n\r\n.filter-item button:hover{\r\n    color: red;\r\n}\r\n "],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

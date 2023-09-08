@@ -133,7 +133,10 @@ const PortfolioModal = ({isOpen, close, data, isLoading}) => {
                                 <div className="col-12 mb-3">
                                     <p className='font-weight-bold f-14 mb-2'>Is There Any Major Functions You Want To Mention About This Project? (Mention the name of the functionality and a brief description with screenshot):</p>
                                     
-                                    <div dangerouslySetInnerHTML={{__html: data?.description ?? <span>No major functionalities to mention for this project</span>}} />
+                                    {data?.description ? 
+                                        <div dangerouslySetInnerHTML={{__html: data?.description }}  />:
+                                        <span>No major functionalities to mention for this project</span>    
+                                    }
                                 </div>
                             </div>
                         }

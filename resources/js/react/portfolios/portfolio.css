@@ -113,7 +113,9 @@
 }
 
 .portfolio-filter-dd-menu{
-    height: 350px;
+    height: fit-content;
+    max-height: 350px;
+    width: 250px;
     overflow-y: auto;
     position: relative;
 }
@@ -160,3 +162,4 @@
 .filter-item button:hover{
     color: red;
 }
+ 

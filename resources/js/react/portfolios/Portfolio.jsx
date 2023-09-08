@@ -68,7 +68,7 @@ const Protfolio = () => {
 
   const subNiches = () => {
         let data = _.filter(filterMenuItems?.website_categories, d => d.parent_category_id);
-        data = _.filter(data, d => _.lowerCase(d).includes(_.lowerCase(subCategorySearch)));
+        data = _.filter(data, d => _.lowerCase(d.category_name).includes(_.lowerCase(subCategorySearch)));
 
         if(websiteCategory && websiteCategory.id){
             data = _.filter(data, d => d.parent_category_id === websiteCategory.id);
@@ -77,6 +77,22 @@ const Protfolio = () => {
         return data;
   }
  
+
+  const filterThemes = () => {
+    let data =  _.filter(filterMenuItems?.website_themes, f => f?.theme_name?.toLowerCase() !== 'n/a');
+    if(themeSearch) {
+        data = _.filter(filterMenuItems?.website_themes, q => _.lowerCase(q.theme_name).includes(_.lowerCase(themeSearch)))
+    }
+    return data;
+  }
+
+  const filterPlugin = () => {
+    let data =  _.filter(filterMenuItems?.website_plugins, f => f?.plugin_name?.toLowerCase() !== 'n/a');
+    if(pluginSearch) {
+        data = _.filter(filterMenuItems?.website_plugins, q => _.lowerCase(q.plugin_name).includes(_.lowerCase(pluginSearch)))
+    }
+    return data;
+  }
   
     return(
         <section className='p-4'>
@@ -136,7 +152,7 @@ const Protfolio = () => {
                                 ), option => (
                                     <abbr title={option.website_type} key={option.id}>
                                         <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setWebsiteType(option)}>
-                                            <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.website_type }</span>
+                                            <span className='multiline-ellipsis' style={{width: '90%'}}>{ option.website_type }</span>
                                             {websiteType?.id === option.id && <i className='fa-solid fa-check ml-' />}
                                         </Dropdown.Item>
                                     </abbr>
@@ -199,7 +215,6 @@ const Protfolio = () => {
                             <div className='portfolio-filter-dd-menu'>
                                 {_.map(subNiches(), option => (
                                     <abbr title={option.category_name} key={option.id}>
-                                        {console.table(option)}
                                         <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setSubCategory(option)}>
                                         <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.category_name }</span>
                                         {subCategory?.id === option.id && <i className='fa-solid fa-check ml-' />}
@@ -228,12 +243,8 @@ const Protfolio = () => {
                                 <SearchBox value={themeSearch} onChange={setThemeSearch} autoFocus={true} />
                             </div>
                             <div className='portfolio-filter-dd-menu'>
-                                {_.map(
-                                    _.filter(filterMenuItems?.website_themes, q => 
-                                        _.lowerCase(q.theme_name).includes(_.lowerCase(themeSearch) &&
-                                        _.lowerCase(q.theme_name) !== 'n/a'
-                                    )
-                                ), option => (
+                                
+                                {_.map(filterThemes(), option => (
                                     <abbr title={option.theme_name} key={option.id}>
                                         <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setTheme(option)}>
                                             <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.theme_name }</span>
@@ -262,11 +273,7 @@ const Protfolio = () => {
                                 <SearchBox value={pluginSearch} onChange={setPluginSearch} autoFocus={true} />
                             </div>
                             <div className='portfolio-filter-dd-menu'>
-                                {_.map(
-                                    _.filter(filterMenuItems?.website_plugins, q => 
-                                        _.lowerCase(q.plugin_name).includes(_.lowerCase(pluginSearch) 
-                                    )
-                                ), option => (
+                                {_.map(filterPlugin(), option => (
                                     <abbr title={option.plugin_name} key={option.id}>
                                         <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setPlugin(option)}>
                                             <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.plugin_name }</span>
