@@ -3,13 +3,17 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Cancelation Rate</h5>
+          <div class="modal-title"><h4>Total Assigned Project Number: {{count($no_of_projects)}}</h4>
+            <h4>Accepted Projects: {{count($no_of_accepted_projects)}}</h4> 
+           <h4>Canceled Projects:  {{count($cancelled_projects_this_cycle)}}</h4>  
+           <h4>Cancellation rate:  {{round($project_cancelation_rate)}}%</h4>  
+             </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="monthlyCancelationRateTable" class="display" style="width:100%">
+            <table id="monthlyCacleRateTable" class="display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Sl No</th>
@@ -17,7 +21,7 @@
                     <th scope="col">Project Name</th>
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
-                    <th scope="col">Project Status</th>
+                    <th scope="col">Canceled On</th>
                     <th scope="col">Status</th>
                   </tr>
                 </thead>
@@ -37,7 +41,7 @@
                         </td>
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
-                        <td>{{ $item->project_status }}</td>
+                        <td>{{ $item->project_canceled_date }}</td>
                         <td>
                             @if ($item->status == 'in progress')
                                 <span class="badge badge-primary">{{ $item->status }}</span>
@@ -65,7 +69,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthlyCancelationRateTable',{
+      new DataTable('#monthlyCacleRateTable',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

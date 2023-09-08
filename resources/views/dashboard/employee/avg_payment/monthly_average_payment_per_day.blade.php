@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="avgPayment{{ count($total_milestone_completed_this_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="monthlyAvgPayment{{ count($total_milestone_completed_this_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
@@ -16,7 +16,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
-                        <table id="avg_payment_per_day" class="display" style="width:100%">
+                        <table id="monthly_avg_payment_per_day" class="display" style="width:100%">
                             <thead>
                               <tr>
                                 <th scope="col">Sl No</th>
@@ -78,7 +78,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#avg_payment_per_day',{
+      new DataTable('#monthly_avg_payment_per_day',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

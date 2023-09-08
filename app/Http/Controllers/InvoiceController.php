@@ -332,7 +332,7 @@ class InvoiceController extends AccountBaseController
         $new_milestone->original_currency_id= $update_milestone->original_currency_id;
         $new_milestone->invoice_created= 0; 
         $new_milestone->status= 'incomplete';
-        $new_milestone->added_by = Auth::id();
+        $new_milestone->added_by = 62;
         $new_milestone->project_id = $update_milestone->project_id;
         $new_milestone->save();
 

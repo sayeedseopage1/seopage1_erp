@@ -685,7 +685,14 @@
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average project completion time</h5>
                 <div class="d-flex flex-wrap">
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionDays{{ count($average_project_completion_rate) }}"> {{round($average_completion_days,2)}} days</a>
+                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionDays{{ count($average_project_completion_rate) }}"> 
+                            @if($average_completion_days == 0)
+                            N\A 
+                            @else 
+                            {{round($average_completion_days,2)}} days
+
+                            @endif
+                           </a>
                         <span class="f-12 font-weight-normal text-lightest">
                             @lang('Average project compeltion time for this cycle')
                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#average_project_completion_time_for_this_cycle_modal"></i>
@@ -695,7 +702,13 @@
                     @include('dashboard.employee.average_project.monthly_average_project_completion_time')
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionInThisDays{{ count($average_project_completion_rate_previous_cycle) }}" style="color: green"> {{round($average_completion_days_previous_cycle,2)}} days</a>
+                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionInThisDays{{ count($average_project_completion_rate_previous_cycle) }}" style="color: green"> 
+                            @if($average_completion_days_previous_cycle == 0) 
+                            N\A 
+                            @else 
+                            {{round($average_completion_days_previous_cycle,2)}} days
+                            @endif
+                           </a>
                         <span class="f-12 font-weight-normal text-lightest">
                             @lang('Average project compeltion time in this cycle')
                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#average_project_completion_time_in_this_cycle_modal"></i>
@@ -1001,19 +1014,19 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Rel. Count per day
                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#avg_payment_modal"></i>
                         @include('dashboard.card-data-modal.avg_payment')
                 </h5>
                 <div class="d-flex flex-wrap">
-                    <a href="#" onclick="event.preventDefault()">
+                    <a href="#" data-toggle="modal" data-target="#monthlyAvgPayment{{ count($total_milestone_completed_this_cycle) }}">
                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                             {{round($avg_payment_release_per_day,2)}} per day
                         </p>
                     </a>
+                    @include('dashboard.employee.avg_payment.monthly_average_payment_per_day')
                 </div>
             </div>
             <div class="d-block">
