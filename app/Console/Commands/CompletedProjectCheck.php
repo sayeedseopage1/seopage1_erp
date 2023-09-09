@@ -41,7 +41,7 @@ class CompletedProjectCheck extends Command
         ->join('deals','deals.id','projects.deal_id')
         ->where('deals.project_type','fixed')
         
-        ->where('status','in progress')
+        ->where('projects.status','in progress')
         ->get();
   
           //$daily_bonus= User::where('id',Auth::id())->first();
