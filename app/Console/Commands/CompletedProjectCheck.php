@@ -53,12 +53,12 @@ class CompletedProjectCheck extends Command
             ->where('invoices.status','paid')->where('project_milestones.project_id',$project->id)->count();
             $canceled_milestones=  $total_milestones= ProjectMilestone::where('status','canceled')->where('project_id',$project->id)->count();
 
-            if($project->due_amount < 3 && $canceled_milestones == 0)
+            if($project->due < 3 && $canceled_milestones == 0)
             {
                 $update_project = Project::where('id',$project->id)->first();
                 $update_project->status = 'finished';
                 $update_project->save();
-            }elseif($project->due_amount < 3 && $canceled_milestones != 0)
+            }elseif($project->due < 3 && $canceled_milestones != 0)
             {
                 $update_project = Project::where('id',$project->id)->first();
                 $update_project->status = 'partially finished';
@@ -66,11 +66,11 @@ class CompletedProjectCheck extends Command
 
             }
            
-            if ($total_milestones == $completed_milestones && $canceled_milestones == 0) {
+            if ($total_milestones == $completed_milestones && $canceled_milestones == 0 && $project->due < 3) {
                 $update_project = Project::where('id',$project->id)->first();
                 $update_project->status = 'finished';
                 $update_project->save();
-            }elseif($total_milestones == ($completed_milestones+ $canceled_milestones) && $canceled_milestones != 0)
+            }elseif($total_milestones == ($completed_milestones+ $canceled_milestones) && $canceled_milestones != 0 && $project->due < 3)
             {
                 $update_project = Project::where('id',$project->id)->first();
                 $update_project->status = 'partially finished';
