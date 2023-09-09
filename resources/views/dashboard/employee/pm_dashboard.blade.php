@@ -1051,7 +1051,7 @@
                                                     @include('dashboard.card-data-modal.caused_by_me')
                                                 </span>
                                             </p>
-                                            @include('dashboard.employee.number_of_revision_for_cycle.caused_by_me')
+                                            <!-- @include('dashboard.employee.number_of_revision_for_cycle.caused_by_me') -->
 
                                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                                 <a href="#" data-toggle="modal" data-target="#causedByOther{{count($caused_by_other_for_cycle)}}" style="color: green">{{ count($caused_by_me_for_cycle) }}</a>
@@ -1061,7 +1061,7 @@
                                                     @include('dashboard.card-data-modal.caused_by_others')
                                                 </span>
                                             </p>
-                                            @include('dashboard.employee.number_of_revision_for_cycle.caused_by_other')
+                                            <!-- @include('dashboard.employee.number_of_revision_for_cycle.caused_by_other') -->
 
                                             <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
                                                 <a href="#" data-toggle="modal" data-target="#disputeForCycle{{count($dispute_for_cycle)}}" style="color: red">{{ count($dispute_for_cycle) }}</a>
@@ -1071,7 +1071,7 @@
                                                     @include('dashboard.card-data-modal.disputed')
                                                 </span>
                                             </p>
-                                            @include('dashboard.employee.number_of_revision_for_cycle.dispute')
+                                            <!-- @include('dashboard.employee.number_of_revision_for_cycle.dispute') -->
                                         </div>
                                     </div>
                                     <div class="d-block">
@@ -1092,6 +1092,7 @@
                                                     @include('dashboard.card-data-modal.caused_by_me_in_cycle')
                                                 </span>
                                             </p>
+                                            
                                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                                 <a href="#" onclick="event.preventDefault()" style="color: green">{{ count($caused_by_other_in_cycle) }}</a>
                                                 <span class="f-12 font-weight-normal text-lightest">

@@ -761,9 +761,7 @@
 
                             @else --}}
 
-                                    @if (
-                                     
-                                     0Auth::user()->role_id==4)
+                                    @if (Auth::user()->role_id==4)
                                         <div class="sp1_deal-stage-wrapper">
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#clientDealaddStageModal"
                                         data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>

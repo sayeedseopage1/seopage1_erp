@@ -596,17 +596,17 @@
                                                     $website_theme = App\Models\ProjectWebsiteTheme::find($project_portfolio->theme_name);
                                                     @endphp
                                                     <p class="fw-normal mb-1">
-                                                        {{ $website_theme->theme_name }}
+                                                        {{ $website_theme->theme_name ?? '' }}
                                                     </p>
                                                     <p class="fw-normal mb-1">
-                                                        {{ $website_theme->theme_url }}
+                                                        {{ $website_theme->theme_url ?? '' }}
                                                     </p>
                                                 @else
                                                     <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->theme_name }}
+                                                        {{ $project_portfolio->theme_name ?? ''}}
                                                     </p>
                                                     <p class="fw-normal mb-1">
-                                                        {{ $project_portfolio->theme_url }}
+                                                        {{ $project_portfolio->theme_url ??  '' }}
                                                     </p>
                                                  @endif
                                             @else
@@ -667,10 +667,10 @@
                                                     @endphp
                                                    
                                                     <p class="fw-normal mb-1">
-                                                        {{ $website_plugin->plugin_name }}
+                                                        {{ $website_plugin->plugin_name ?? '' }}
                                                     </p>
                                                     <p class="fw-normal mb-1">
-                                                        {{ $website_plugin->plugin_url }}
+                                                        {{ $website_plugin->plugin_url ?? '' }}
                                                     </p>
                                                 @else
                                                  <p>--</p>

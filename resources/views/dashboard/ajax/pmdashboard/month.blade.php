@@ -925,7 +925,7 @@
                             @include('dashboard.card-data-modal.caused_by_me')
                         </span>
                     </p>
-                    @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_me')
+                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_me') -->
 
                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#monthlyCausedByOther{{count($caused_by_other_for_previous_cycle)}}" style="color: green">{{ count($caused_by_other_for_previous_cycle) }}</a>
@@ -935,7 +935,7 @@
                             @include('dashboard.card-data-modal.caused_by_others')
                         </span>
                     </p>
-                    @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_other')
+                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_other') -->
 
                     <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#monthlyDisputeForCycle{{count($dispute_for_previous_cycle)}}" style="color: red">{{ count($dispute_for_previous_cycle) }}</a>
@@ -945,7 +945,7 @@
                             @include('dashboard.card-data-modal.disputed')
                         </span>
                     </p>
-                    @include('dashboard.employee.number_of_revision_for_cycle.monthly_dispute')
+                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_dispute') -->
                 </div>
             </div>
             <div class="d-block">
