@@ -104,7 +104,9 @@ class ClientDealDataTable extends DataTable
 
                 return $action;
             })
+          
             ->addColumn('project_name', function($row) {
+           //   dd($row);
               if ($row->won_lost== 'Yes') {
                 $deal= Deal::where('deal_id',$row->short_code)->first();
                 $project= Project::where('deal_id',$deal->id)->first();
@@ -385,7 +387,7 @@ class ClientDealDataTable extends DataTable
      */
     public function query(DealStage $model)
     {
-    //   dd($model);
+       //dd($model);
         return $model->where('client_username', $this->request->client_username);
         return $model->newQuery();
     }

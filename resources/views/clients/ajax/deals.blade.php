@@ -18,13 +18,15 @@
          $('#clientdealdatatable-table').on('preXhr.dt', function(e, settings, data) {
 
         var status = $('#status').val();
-        var client_username = "{{ $client->name }}";
+        var client_username = "{{ $client->user_name }}";
+      //  console.log(client_username);
         var categoryID = $('#category_id').val();
         var teamID = $('#team_id').val();
         var employee_id = $('#employee_id').val();
         var searchText = $('#search-text-field').val();
         data['status'] = status;
         data['client_username'] = client_username;
+     
         data['category_id'] = categoryID;
         data['team_id'] = teamID;
         data['employee_id'] = employee_id;

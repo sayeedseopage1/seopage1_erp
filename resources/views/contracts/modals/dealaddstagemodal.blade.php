@@ -82,7 +82,7 @@
                                     <label for="client_name" class="form-label"><strong>Client Name <span style="color:red;">*<span></strong>
                                         <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Client Name" data-html="true" data-trigger="hover"></i>
                                     </label>
-                                    <input name="client_name"  id="client_name" type="text" value="{{old('client_name')}}" class="form-control height-35 f-14 " placeholder="Enter Client Name">
+                                    <input name="client_name"  id="client_name2" type="text" value="{{old('client_name')}}" class="form-control height-35 f-14 " placeholder="Enter Client Name">
                                     <label id="clientNameError" class="text-danger" for=""></label>
                                 </div>
                             @endif
@@ -123,7 +123,7 @@
                                     <label for="profile_link" class="form-label"><strong>Profile Link </strong>
                                         <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Profile Link" data-html="true" data-trigger="hover"></i>
                                     </label>
-                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" required>
+                                    <input name="profile_link" value="{{$deal->profile_link}}" readonly id="profile_link_1" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" required>
 
                                 </div>
                             @else
@@ -131,7 +131,7 @@
                                     <label for="profile_link" class="form-label"><strong>Profile Link</strong>
                                         <i class="fa fa-question-circle" data-toggle="popover" data-placement="top" data-content="Profile Link" data-html="true" data-trigger="hover"></i>
                                     </label>
-                                    <input name="profile_link"  id="profile_link" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" >
+                                    <input name="profile_link"  id="profile_link_2" type="text" class="form-control height-35 f-14" placeholder="Enter Client Profile Link" >
 
                                 </div>
 
@@ -340,10 +340,18 @@
         var data= {
             '_token': "{{ csrf_token() }}",
             'deal_id': document.getElementById("deal_id").value,
+            @if($deal->client_name != null)
             'client_name': document.getElementById("client_name").value,
+            @else
+            'client_name': document.getElementById("client_name2").value,
+            @endif
             'user_name': document.getElementById("user_name").value,
             'project_name': document.getElementById("project_name").value,
-            'profile_link': document.getElementById("profile_link").value,
+            @if($deal->profile_link != null)
+            'profile_link': document.getElementById("profile_link_1").value,
+            @else
+            'profile_link': document.getElementById("profile_link_2").value,
+            @endif
             'message_link[]': document.getElementById("message_link").value,
             'amount': document.getElementById("amount").value,
             'original_currency_id': document.getElementById("original_currency_id").value,

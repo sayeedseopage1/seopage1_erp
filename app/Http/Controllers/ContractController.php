@@ -224,6 +224,7 @@ class ContractController extends AccountBaseController
     }
     public function storeDeal(Request $request)
     {
+        // dd($request->all());
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
         $aw_dt = date('Y-m-d H:i:s', $award_date);
@@ -453,7 +454,7 @@ class ContractController extends AccountBaseController
     }
     public function storeLeadDeal(Request $request)
     {
-        //        dd($request->all());
+            //    dd($request->all());
         \DB::beginTransaction();
         $current_time = Carbon::now()->format('d-m-Y H:i:s');
         $award_date = strtotime($request->award_time);
@@ -1141,7 +1142,7 @@ class ContractController extends AccountBaseController
             $deal->description9 = $request->description9;
             
             $deal->save();
-            //dd($deal);
+           // dd($deal);
             $project_id = Project::where('deal_id', $request->id)->first();
             $project = Project::find($project_id->id);
             $project->project_name = $request->project_name;
@@ -1154,6 +1155,7 @@ class ContractController extends AccountBaseController
             $project->due = $deal->amount;
             $project->currency_id = 1;
             $project->save();
+           
             if ($deal->project_type == 'hourly') {
                 // dd("true");
                 $milestone = new ProjectMilestone();
@@ -1201,6 +1203,7 @@ class ContractController extends AccountBaseController
             $client->email = $request->client_email;
             $client->name = $request->client_name;
             $client->save();
+          
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -1329,12 +1332,14 @@ class ContractController extends AccountBaseController
 
 
             $deal_pm_id = Deal::where('id', $request->id)->first();
+           
             $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
 
             $project_admin_update = Project::find($project_id->id);
             $project_admin_update->added_by = $project_id->pm_id;
             $project_admin_update->project_admin = $project_id->pm_id;
             $project_admin_update->save();
+           
 
             //qualified sales start from here
             $qualified_sale = new QualifiedSale();
@@ -1359,8 +1364,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
             $qualified_sale->save();
-            //    / dd($qualified_sale);
-
+            
 
 
 
@@ -1378,6 +1382,8 @@ class ContractController extends AccountBaseController
             if ($deal->project_type == 'fixed') {
                 Mail::to($user->email)->send(new WonDealMail($project_id));
             }
+           // dd("skdlkasmd ");
+
 
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
@@ -1416,6 +1422,7 @@ class ContractController extends AccountBaseController
             $deal = Deal::find($deal->id);
             $deal->authorization_status = 2;
             $deal->save();
+          
             $sender = User::where('id', Auth::id())->first();
 
 
@@ -1468,6 +1475,7 @@ class ContractController extends AccountBaseController
                 $project_member->project_id = $project->id;
                 $project_member->save();
             } 
+          //  dd("asd asl d");
 
             
             DB::commit();

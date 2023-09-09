@@ -49,6 +49,13 @@ class CompletedProjectCheck extends Command
           //dd($sponsor_bonus['royality_bonus']);
   
           foreach ($projects as $project) {
+            if($project->dispute_status == 1)
+            {
+                $update_dispute =  Project::where('id',$project->id)->first();
+                $update_dispute->status = 'canceled';
+                $update_dispute->save(); 
+
+            }
             $total_milestones= ProjectMilestone::where('project_id',$project->id)->count();
             $completed_milestones= ProjectMilestone::select('project_milestones.*')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
