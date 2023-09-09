@@ -38,6 +38,8 @@ class CompletedProjectCheck extends Command
     public function handle()
     {
         $projects= Project::select('projects.*')
+        ->join('deals','deals.id','projects.deal_id')
+        ->where('deals.project_type','fixed')
         
         ->where('status','in progress')
         ->get();
@@ -51,7 +53,7 @@ class CompletedProjectCheck extends Command
             $completed_milestones= ProjectMilestone::select('project_milestones.*')
             ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
             ->where('invoices.status','paid')->where('project_milestones.project_id',$project->id)->count();
-            $canceled_milestones=  $total_milestones= ProjectMilestone::where('status','canceled')->where('project_id',$project->id)->count();
+            $canceled_milestones=ProjectMilestone::where('status','canceled')->where('project_id',$project->id)->count();
 
             if($project->due < 3 && $canceled_milestones == 0)
             {
