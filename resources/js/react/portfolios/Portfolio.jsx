@@ -51,8 +51,8 @@ const Protfolio = () => {
         website_category: _webCategory?.id,
         website_type: _webtype?.id,
         website_sub_category: _webSubCategory?.id, 
-        theme: _theme?.id, 
-        plugin: _plugin?.id
+        theme_name: _theme?.id, 
+        plugin_name: _plugin?.id
     }
 
     const queryObject = _.pickBy(query, Boolean);
@@ -294,7 +294,7 @@ const Protfolio = () => {
                         <div className='d-flex flex-wrap align-items-center' style={{gap: '4px'}}>
                             { cms && 
                                 <div className='filter-item'>   
-                                    <span ><span className='f-12 '>Website type: </span> <span className='font-weight-bold'>{cms?.cms_name} </span> </span>
+                                    <span ><span className='f-12 '>Website CMS: </span> <span className='font-weight-bold'>{cms?.cms_name} </span> </span>
                                     <button onClick={() => setCms(null)}> 
                                     <i className='fa-solid fa-xmark' /> 
                                     </button> 
@@ -313,7 +313,7 @@ const Protfolio = () => {
                                 <div className='filter-item'> 
                                 
                                 <span >
-                                    <span className='f-12 '>Website type: </span> <span className='font-weight-bold'>{websiteCategory?.category_name}  </span> 
+                                    <span className='f-12 '>Niche Category: </span> <span className='font-weight-bold'>{websiteCategory?.category_name}  </span> 
                                 </span> 
                                     
                                     <button onClick={() => setWebsiteCategory(null)}> 
@@ -324,7 +324,7 @@ const Protfolio = () => {
                             { subCategory && 
                             <div className='filter-item'> 
                                 <span>
-                                    <span className='f-12 '>Website type: </span> <span className='font-weight-bold'>{subCategory?.category_name} </span> 
+                                    <span className='f-12 '>Sub Niche Category: </span> <span className='font-weight-bold'>{subCategory?.category_name} </span> 
                                 </span> 
                             
                                 <button onClick={() => setSubCategory(null)}> 
@@ -335,7 +335,7 @@ const Protfolio = () => {
                             { theme && 
                                 <div className='filter-item'> 
                                     <span>
-                                        <span className='f-12 '>Website type: </span> <span className='font-weight-bold'>{theme?.theme_name}  </span> 
+                                        <span className='f-12 '>Theme: </span> <span className='font-weight-bold'>{theme?.theme_name}  </span> 
                                     </span> 
                                     <button onClick={() => setTheme(null)}> 
                                         <i className='fa-solid fa-xmark' /> 
@@ -346,7 +346,7 @@ const Protfolio = () => {
                             { plugin &&
                                 <div className='filter-item'>   
                                     <span>
-                                        <span className='f-12 '>Website type: </span> <span className='font-weight-bold'>{plugin?.plugin_name} </span> 
+                                        <span className='f-12 '>Plugin: </span> <span className='font-weight-bold'>{plugin?.plugin_name} </span> 
                                     </span> 
                                     <button onClick={() => setPlugin(null)}> 
                                         <i className='fa-solid fa-xmark' /> 

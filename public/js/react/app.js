@@ -32906,8 +32906,8 @@ var Protfolio = function Protfolio() {
       website_category: _webCategory === null || _webCategory === void 0 ? void 0 : _webCategory.id,
       website_type: _webtype === null || _webtype === void 0 ? void 0 : _webtype.id,
       website_sub_category: _webSubCategory === null || _webSubCategory === void 0 ? void 0 : _webSubCategory.id,
-      theme: _theme === null || _theme === void 0 ? void 0 : _theme.id,
-      plugin: _plugin === null || _plugin === void 0 ? void 0 : _plugin.id
+      theme_name: _theme === null || _theme === void 0 ? void 0 : _theme.id,
+      plugin_name: _plugin === null || _plugin === void 0 ? void 0 : _plugin.id
     };
     var queryObject = lodash__WEBPACK_IMPORTED_MODULE_6___default().pickBy(query, Boolean);
     var queryString = new URLSearchParams(queryObject).toString();
@@ -33288,7 +33288,7 @@ var Protfolio = function Protfolio() {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "f-12 ",
-              children: "Website type: "
+              children: "Website CMS: "
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
               className: "font-weight-bold",
               children: [cms === null || cms === void 0 ? void 0 : cms.cms_name, " "]
@@ -33324,7 +33324,7 @@ var Protfolio = function Protfolio() {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "f-12 ",
-              children: "Website type: "
+              children: "Niche Category: "
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
               className: "font-weight-bold",
               children: [websiteCategory === null || websiteCategory === void 0 ? void 0 : websiteCategory.category_name, "  "]
@@ -33342,7 +33342,7 @@ var Protfolio = function Protfolio() {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "f-12 ",
-              children: "Website type: "
+              children: "Sub Niche Category: "
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
               className: "font-weight-bold",
               children: [subCategory === null || subCategory === void 0 ? void 0 : subCategory.category_name, " "]
@@ -33360,7 +33360,7 @@ var Protfolio = function Protfolio() {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "f-12 ",
-              children: "Website type: "
+              children: "Theme: "
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
               className: "font-weight-bold",
               children: [theme === null || theme === void 0 ? void 0 : theme.theme_name, "  "]
@@ -33378,7 +33378,7 @@ var Protfolio = function Protfolio() {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
               className: "f-12 ",
-              children: "Website type: "
+              children: "Plugin: "
             }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
               className: "font-weight-bold",
               children: [plugin === null || plugin === void 0 ? void 0 : plugin.plugin_name, " "]

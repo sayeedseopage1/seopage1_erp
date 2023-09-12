@@ -33,22 +33,24 @@ class RevisionCalculatorController extends AccountBaseController
         //dd($request->all());
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
-dd($startDate,$endDate);
-
-        // $startDate= '31-01-2023 00:00:00';
-        // $endDate= '31-12-2023 00:00:00'; 
-    
-        $project_managers = DB::table('users')->select([
-           'users.id as project_manager_id','users.name as project_manager_name',
-            DB::raw('(SELECT COUNT(projects.id) FROM projects WHERE projects.pm_id = users.id  AND DATE(projects.updated_at) >= "'.$endDate.'") as project_count'),
-            DB::raw('(SELECT SUM(projects.project_budget) FROM projects WHERE projects.pm_id = users.id  AND DATE(projects.updated_at) >= "'.$endDate.'") as total_project_value'),
-        ])
-       
-
-        ->leftJoin('projects','projects.pm_id','users.id')
-        ->groupBy('users.id')
-        ->where('role_id',4)->get();
-        dd($project_managers);
+        
+        // Check if $startDate and $endDate are not null and valid dates
+        if ($startDate && $endDate) {
+            $project_managers = DB::table('projects')->select([
+                'pm.id as project_manager_id',
+                'pm.name as project_manager_name',
+                DB::raw('(SELECT COUNT(projects.id) FROM projects WHERE projects.pm_id = pm.id AND DATE(projects.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as project_count'),
+                DB::raw('(SELECT SUM(projects.project_budget) FROM projects WHERE projects.pm_id = pm.id AND DATE(projects.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as total_project_value'),
+                DB::raw('(SELECT COUNT(tasks.id) FROM tasks WHERE tasks.project_id = projects.id AND DATE(tasks.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as total_tasks'),
+            ])
+            ->leftJoin('users as pm', 'pm.id', 'projects.pm_id')
+            ->leftJoin('tasks', 'tasks.project_id', 'projects.id')
+            ->groupBy('pm.id')
+            ->where('role_id', 4)
+            ->get();
+        
+            dd($project_managers);
+        }
 
 
     }
