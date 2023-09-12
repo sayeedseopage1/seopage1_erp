@@ -300,6 +300,9 @@
                             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                                 <x-sub-menu-item :link="route('disputes.index')" :text="__('Disputes')" />
                             @endif
+                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                                <x-sub-menu-item :link="route('revision-calculator.index')" :text="__('Revision Calculator')" />
+                            @endif
                             {{-- @endif --}}
                         </div>
                     </x-menu-item>

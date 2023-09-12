@@ -1,0 +1,65 @@
+.tableContainer{  
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+ 
+.table tr{
+    border: none;
+}
+.table tr:nth-child(evet){
+    background-color: #fdfdfd;
+}
+
+.table tbody tr td:not(:last-child), 
+.table thead tr th:not(:last-child){
+    border-width: 0 1px 1px 0 !important; 
+}
+
+.table tbody tr td:last-child, 
+.table thead tr th:last-child{
+    border-width: 0 0px 1px 0 !important; 
+}
+
+.table tbody tr td:not(:first-child), 
+.table thead tr th:not(:first-child){
+    border-left: none !important;
+}
+
+.table tbody tr:last-child td, 
+.table thead tr:last-child th{
+    border-bottom-width: 0 !important;
+}
+
+
+.table th[data-column-id = "revision_breakdown"]{
+    background-color: rgb(239, 239, 239) !important;
+}
+
+.modal_panel{  
+    width: 70vw;
+}
+
+.modal_body{ 
+    padding: 10px 16px 20px;
+}
+
+
+
+@media only screen and (max-width: 1400px){
+    .modal_panel{  
+        width: 80vw; 
+    }
+}
+ 
+
+@media only screen and (max-width: 756px){
+    .modal_panel{  
+        width: 100vw !important; 
+    }
+}
+
+
+
+.modal_title_bar{
+    background-color: #f1f1f1;
+}

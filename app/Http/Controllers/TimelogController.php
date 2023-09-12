@@ -379,15 +379,7 @@ class TimelogController extends AccountBaseController
      ->count();
      //dd($today_timelog_count);
 
-    $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
-    if($task_revision != null)
-    {
-        $project_time_log = ProjectTimeLog::where('task_id',$task_revision->task_id)->first();
-        $project_time_log->revision_id = $task_revision->id;
-        $project_time_log->revision_status = 1;
-        $project_time_log->save();
-
-    }
+    
   
  
  // Check if the query returned any result
@@ -474,6 +466,15 @@ class TimelogController extends AccountBaseController
                        $timeLog->start_time = now();
                        $timeLog->hourly_rate = 0;
                        $timeLog->memo = $task_status->heading;
+                       $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
+                        if($task_revision != null)
+                        {
+                           
+                            $timeLog->revision_id = $task_revision->id;
+                            $timeLog->revision_status = 1;
+                          
+
+                        }
                        $timeLog->save();
            
                        if ($request->project_id != '') {

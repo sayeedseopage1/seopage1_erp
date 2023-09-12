@@ -1403,4 +1403,9 @@ abbr {
   font-weight: 500;
 }
 
+.highlight {
+  background-color: blue;
+  color: white;
+}
+
 /*# sourceMappingURL=seopage1.css.map*/

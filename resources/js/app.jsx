@@ -11,6 +11,9 @@ import './react/tasks/index';
 import './react/projects/index';
 import './react/disputes/index';
 import './react/portfolios/index';
+import './react/RevisionCalculator/main';
+
+
 
 
 import { createPopper } from '@popperjs/core';

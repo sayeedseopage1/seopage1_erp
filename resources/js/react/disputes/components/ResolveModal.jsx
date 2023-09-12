@@ -221,8 +221,9 @@ const close =async () => {
  
 
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
+ 
   const handleSubmitForAuthorization = async () =>{
-        if(finishedPartial && !row?.need_authrization && !auth?.getRoleId() === 1){
+        if(finishedPartial && needAuthorization && auth?.getRoleId() !== 1){ 
             const data = {
                 resolve_comment: resolveComment,
                 need_authrization: needAuthorization,
@@ -1054,7 +1055,10 @@ const close =async () => {
                                                                             {row?.raised_by?.name}
                                                                             {winner?.id === row?.raised_by?.id && <i className='fa-solid fa-check ml-2'/> } 
                                                                         </Dropdown.Item>
-                                                                        <Dropdown.Item onClick={() => {setWinner(row?.raised_against); setFinishedPartial(false)}}>
+                                                                        <Dropdown.Item onClick={() => {
+                                                                            setWinner(row?.raised_against); 
+                                                                            setFinishedPartial(false);  
+                                                                        }}>
                                                                             {row?.raised_against?.name}
                                                                             {winner?.id === row?.raised_against?.id && <i className='fa-solid fa-check ml-2'/> }
                                                                         </Dropdown.Item> 
@@ -1465,7 +1469,14 @@ const close =async () => {
 
                             {/* status */}
                             {
-                                (row?.status && row?.need_authrization)? 
+                                (!row?.status && row?.need_authrization && auth.getRoleId() !== 1)?(
+                                    <div className="alert alert-success text-center">
+                                        <React.Fragment>
+                                            Awaiting Authorization
+                                        </React.Fragment>
+                                    </div>
+                                ) 
+                                :(row?.status && row?.need_authrization)? 
                                     <div className="alert alert-success">
                                         <React.Fragment>
                                             This dispute was authorized & resolved by <a href={`/account/employees/${row?.authorized_by?.id}`} className='badge badge-success' style={{color: '#fff !important'}}>{row?.authorized_by?.name}</a> on <span className='badge badge-success'>{dayjs(row?.authorize_on).format("MMM DD, YYYY")}</span> at <span className="badge badge-success">{dayjs(row?.authorize_on).format("hh:mm A")}</span> ( Previously reviewed by <a href={`/account/employees/${row?.resolved_by?.id}`} className='badge badge-info'>{row?.resolved_by?.name}</a> on <span className='badge badge-info'>{dayjs(row?.resolved_on).format("MMM DD, YYYY")}</span> at <span className="badge badge-info">{dayjs(row?.resolved_on).format("hh:mm A")}</span> )

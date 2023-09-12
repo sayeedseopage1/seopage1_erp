@@ -1054,8 +1054,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('timelogs/approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
     Route::resource('timelogs', TimelogController::class);
 
-    Route::resource('disputes', DisputeController::class);
+    Route::resource('disputes', DisputeController::class); 
+    Route::any('revision-calculator/{any?}', [RevisionCalculatorController::class, 'index'])->where('any', '.*');
     Route::resource('revision-calculator', RevisionCalculatorController::class);
+    Route::get('revision-calculator-data', [RevisionCalculatorController::class, 'getData']);
 
 
     // Contracts
