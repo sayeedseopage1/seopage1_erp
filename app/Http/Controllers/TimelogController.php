@@ -380,10 +380,15 @@ class TimelogController extends AccountBaseController
      //dd($today_timelog_count);
 
     $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
-    $project_time_log = ProjectTimeLog::where('task_id',$task_revision->task_id)->first();
-    $project_time_log->revision_id = $task_revision->id;
-    $project_time_log->revision_status = 1;
-    $project_time_log->save();
+    if($task_revision != null)
+    {
+        $project_time_log = ProjectTimeLog::where('task_id',$task_revision->task_id)->first();
+        $project_time_log->revision_id = $task_revision->id;
+        $project_time_log->revision_status = 1;
+        $project_time_log->save();
+
+    }
+  
  
  // Check if the query returned any result
         if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)

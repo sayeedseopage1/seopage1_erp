@@ -758,7 +758,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
         $update_project= Project::find($project->id);
-        $update_project->project_budget= $project->project_budget-$milestone->cost;
+       // $update_project->project_budget= $project->project_budget-$milestone->cost;
         $update_project->due= $project->due- $milestone->cost;
         $update_project->milestone_cancel_amount= $project->milestone_cancel_amount+ $milestone->cost;
         $update_project->milestone_cancel_count= $project->milestone_cancel_count+ 1;
@@ -776,18 +776,28 @@ class ProjectMilestoneController extends AccountBaseController
         $deal= Deal::find($deal_id->id);
         // $deal->actual_amount= $deal->actual_amount- $milestone->actual_cost;
         // $deal->amount= $deal->amount- $milestone->cost;
-        $deal->upsell_actual_amount= $deal->upsell_actual_amount- $milestone->actual_cost;
-        $deal->upsell_amount= $deal->upsell_amount- $milestone->cost;
-        $deal->save();
+        if($deal->upsell_actual_amount > 0 && $deal->upsell_amount > 0)
+        {
+            $deal->upsell_actual_amount= $deal->upsell_actual_amount- $milestone->actual_cost;
+            $deal->upsell_amount= $deal->upsell_amount- $milestone->cost;
+            $deal->save();
+
+        }
+       
         $contract_id= Contract::where('deal_id',$deal->id)->first();
         $contract= Contract::find($contract_id->id);
         // $contract->actual_amount= $contract->actual_amount- $milestone->actual_cost;
         // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
         // $contract->amount= $contract->amount- $milestone->cost;
-        $contract->upsell_actual_amount= $contract->upsell_actual_amount- $milestone->actual_cost;
-       // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
-        $contract->upsell_amount= $contract->upsell_amount- $milestone->cost;
-        $contract->save();
+        if($contract->upsell_actual_amount > 0 && $contract->upsell_amount > 0)
+        {
+            $contract->upsell_actual_amount= $contract->upsell_actual_amount- $milestone->actual_cost;
+            // $contract->original_amount= $contract->original_amount- $milestone->actual_cost;
+             $contract->upsell_amount= $contract->upsell_amount- $milestone->cost;
+             $contract->save();
+
+        }
+       
         $user= User::where('id',$project->pm_id)->first();
         $log_user = Auth::user();
         $activity = new ProjectActivity();
