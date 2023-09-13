@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\TaskRevision;
 use App\Models\Task;
 use App\Models\Project;
+use App\Models\ProjectTimelog;
 use DB;
 
 class RevisionCalculatorController extends AccountBaseController
@@ -56,46 +57,49 @@ class RevisionCalculatorController extends AccountBaseController
                 $total_tasks = Task::select('tasks.*')
                 ->leftJoin('projects','projects.id','tasks.project_id')
                 ->where('tasks.added_by',$pm->project_manager_id)
-                ->whereBetween('tasks.created_at', [$startDate, $endDate])
+                ->whereBetween('projects.created_at', [$startDate, $endDate])
                 ->count();
 
                 $tasks_revisions= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
-                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->whereBetween('projects.created_at', [$startDate, $endDate])
+                ->count();
+                $project_timelogs= ProjectTimelog::leftJoin('projects','projects.id','project_time_logs.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+                ->where('project_time_logs.revision_status',1)
+                ->whereBetween('projects.created_at', [$startDate, $endDate])
+                ->sum('total_minutes');
+                $sales_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+                ->where('task_revision.is_accept',1)
+                ->where('task_revisions.dispute_between','SPR')
+                ->whereBetween('projects.created_at', [$startDate, $endDate])
+                ->count();
+                $total_disputes= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+                ->where('task_revision.dispute_created',1)
+              
+                ->whereBetween('projects.created_at', [$startDate, $endDate])
+                ->count();
+                $total_disputes_not_solved= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+                ->where('task_revision_disputes.status',0)
+              
+                ->whereBetween('projects.created_at', [$startDate, $endDate])
                 ->count();
             $pm->total_projects = $total_projects;
             $pm->total_project_value= $total_project_value;
             $pm->total_tasks= $total_tasks;
             $pm->total_revisions= $tasks_revisions;
+            $pm->minutes_spent= $project_timelogs;
+            $pm->sales_issues= $sales_issues;
+            $pm->total_disputes_not_solved= $total_disputes_not_solved;
             }
         
             dd($users); 
            
-            $projects = DB::table('users as pm')->select([
-                //'projects.id',
-                'pm.id as project_manager_id',
-                'pm.name as project_manager_name',
-                DB::raw('(SELECT COUNT(projects.id) FROM projects WHERE projects.pm_id = pm.id AND DATE(projects.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as project_count'),
-                DB::raw('(SELECT SUM(projects.project_budget) FROM projects WHERE projects.pm_id = pm.id AND DATE(projects.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as total_project_value'),
-                DB::raw('(SELECT COUNT(tasks.id) FROM tasks WHERE tasks.added_by = pm.id AND DATE(tasks.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as total_tasks'),
-                //DB::raw('(SELECT COUNT(task_revisions.id) FROM task_revisions WHERE task_revisions.project_id = projects.id AND DATE(task_revisions.created_at) BETWEEN "'.$startDate.'" AND "'.$endDate.'") as total_task_revisions'),
-            ])
-            ->leftJoin('projects', 'projects.pm_id', 'pm.id')
-            ->leftJoin('tasks', 'tasks.project_id', 'projects.id')
-            
-            ->where('pm.role_id', 4)
-            ->where('projects.project_status', 'Accepted')
-            ->take(10)->get();
-            foreach ($projects as $project) {
-                $project->total_task_revisions= TaskRevision::
-                select('task_revisions.id')
-                
-                ->where('task_revisions.project_id','projects.id')
-               
-                ->count();
-            }
-        
-            dd($projects);
+           
         }
 
 
