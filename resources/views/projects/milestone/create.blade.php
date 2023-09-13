@@ -244,8 +244,8 @@ $(document).ready(function() {
         var selectedValue = select.value;
 
         var randomID = generateRandomID(5);
-
-        var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-')) + '/'  + <?php echo $project->deal_id; ?> + '/' + randomID;
+        var origin = window.location.origin;
+        var url = origin + '/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-')) + '/'  + <?php echo $project->deal_id; ?> + '/' + randomID;
 
         var generatedLinkContainer = document.getElementById('generatedLinkContainer');
         generatedLinkContainer.value = url;

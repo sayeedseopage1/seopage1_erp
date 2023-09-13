@@ -198,8 +198,8 @@ $(document).ready(function() {
     function generateURL() {
         var select = document.querySelector('#service_type');
         var selectedValue = select.value;
-
-        var url = 'http://127.0.0.1:8000/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-'))+ '/' + <?php echo $milestone->project->deal_id; ?>;
+        var origin = window.location.origin;
+        var url = origin + '/deals/service-type/' + encodeURIComponent(selectedValue.toLowerCase().replace(/ /g, '-'))+ '/' + <?php echo $milestone->project->deal_id; ?>;
 
         var generatedLinkContainer = document.getElementById('generatedLinkContainer');
         generatedLinkContainer.value = url;
