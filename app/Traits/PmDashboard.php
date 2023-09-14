@@ -249,6 +249,7 @@ trait PmDashboard
             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
             ->orderBy('projects.updated_at','desc')
             ->sum('projects.project_budget');
+          
             $this->no_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
             ->leftJoin('project_milestones', function ($join) {
@@ -282,10 +283,14 @@ trait PmDashboard
            ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
             ->sum('projects.project_budget');
+            $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
+            $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
+            $this->value_of_100_and_finish_this_cycle = $this->value_of_100_finished_project_this_cycle+$this->value_of_finished_projects_this_cycle;
+            $this->value_of_100_and_finish_previous_cycle = $this->value_of_100_finished_project_previous_cycle+$this->value_of_finished_projects_previous_cycle;
             if (count($this->no_of_accepted_projects) > 0 ) {
                 $this->project_completion_rate_count_this_cycle=  ((count($this->no_of_finished_projects_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
                 $this->project_completion_rate_count_previous_cycle = ((count($this->no_of_finished_projects_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_finished_projects_previous_cycle))- (count($this->no_of_finished_projects_this_cycle))) * 100);
-                $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_finished_project_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
+                $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_and_finish_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
 
             }else {
                 $this->project_completion_rate_count_this_cycle= 0;
@@ -295,18 +300,18 @@ trait PmDashboard
 
 
             }
-            if(count($this->no_of_100_finished_project_previous_cycle) > 0)
+            if(count($this->no_of_100_and_finish_this_cycle) > 0)
             {
-                $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_finished_project_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_finished_project_previous_cycle))- (count($this->no_of_100_finished_project_this_cycle))) * 100);
+                $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_and_finish_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_and_finish_previous_cycle))- (count($this->no_of_100_and_finish_this_cycle))) * 100);
 
             }else
             {
                 $this->project_completion_rate_count_previous_cycle_100_in_progress = 0;
 
             }
-            if($this->value_of_100_finished_project_previous_cycle > 0)
+            if($this->value_of_100_and_finish_previous_cycle > 0)
             {
-                $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_finished_project_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_finished_project_previous_cycle- $this->value_of_100_finished_project_this_cycle) * 100);
+                $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_and_finish_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_and_finish_previous_cycle- $this->value_of_100_and_finish_this_cycle) * 100);
 
             }else
             {
@@ -318,7 +323,7 @@ trait PmDashboard
             if (($this->accepted_project_value) > 0 ) {
                 $this->project_completion_rate_count_this_cycle_value=  (($this->value_of_finished_projects_this_cycle)/($this->accepted_project_value) )*100;
                 $this->project_completion_rate_count_previous_cycle_value =( ($this->value_of_finished_projects_previous_cycle) / ($this->accepted_project_value+ $this->value_of_finished_projects_previous_cycle -$this->value_of_finished_projects_this_cycle) *100);
-                $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_finished_project_this_cycle/$this->accepted_project_value )*100;
+                $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_and_finish_this_cycle/$this->accepted_project_value )*100;
 
             }else {
                 $this->project_completion_rate_count_this_cycle_value= 0;
@@ -999,10 +1004,14 @@ trait PmDashboard
            ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
             ->whereBetween('projects.updated_at', [$startMonth, $release_date])
             ->sum('projects.project_budget');
+            $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
+            $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
+            $this->value_of_100_and_finish_this_cycle = $this->value_of_100_finished_project_this_cycle+$this->value_of_finished_projects_this_cycle;
+            $this->value_of_100_and_finish_previous_cycle = $this->value_of_100_finished_project_previous_cycle+$this->value_of_finished_projects_previous_cycle;
             if (count($this->no_of_accepted_projects) > 0 ) {
                 $this->project_completion_rate_count_this_cycle=  ((count($this->no_of_finished_projects_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
                 $this->project_completion_rate_count_previous_cycle = ((count($this->no_of_finished_projects_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_finished_projects_previous_cycle))- (count($this->no_of_finished_projects_this_cycle))) * 100);
-                $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_finished_project_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
+                $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_and_finish_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
 
             }else {
                 $this->project_completion_rate_count_this_cycle= 0;
@@ -1012,28 +1021,30 @@ trait PmDashboard
 
 
             }
-            if(count($this->no_of_100_finished_project_previous_cycle) > 0)
+            if(count($this->no_of_100_and_finish_this_cycle) > 0)
             {
-                $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_finished_project_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_finished_project_previous_cycle))- (count($this->no_of_100_finished_project_this_cycle))) * 100);
+                $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_and_finish_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_and_finish_previous_cycle))- (count($this->no_of_100_and_finish_this_cycle))) * 100);
 
             }else
             {
                 $this->project_completion_rate_count_previous_cycle_100_in_progress = 0;
 
             }
-            if($this->value_of_100_finished_project_previous_cycle > 0)
+            if($this->value_of_100_and_finish_previous_cycle > 0)
             {
-                $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_finished_project_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_finished_project_previous_cycle- $this->value_of_100_finished_project_this_cycle) * 100);
+                $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_and_finish_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_and_finish_previous_cycle- $this->value_of_100_and_finish_this_cycle) * 100);
 
             }else
             {
                 $this->project_completion_rate_count_previous_cycle_value_100_in_progress = 0;
 
             }
+
+
             if (($this->accepted_project_value) > 0 ) {
                 $this->project_completion_rate_count_this_cycle_value=  (($this->value_of_finished_projects_this_cycle)/($this->accepted_project_value) )*100;
                 $this->project_completion_rate_count_previous_cycle_value =( ($this->value_of_finished_projects_previous_cycle) / ($this->accepted_project_value+ $this->value_of_finished_projects_previous_cycle -$this->value_of_finished_projects_this_cycle) *100);
-                $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_finished_project_this_cycle/$this->accepted_project_value )*100;
+                $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_and_finish_this_cycle/$this->accepted_project_value )*100;
 
             }else {
                 $this->project_completion_rate_count_this_cycle_value= 0;

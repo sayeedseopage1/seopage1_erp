@@ -1,11 +1,11 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="progressProjectForThisCycleValue{{ count($no_of_100_finished_project_this_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="progressProjectForThisCycleValue{{ count($no_of_100_and_finish_this_cycle) }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title" id="exampleModalLabel">
             <h4>{{round($accepted_project_value)}}$ assigned</h4>
-            <h4>{{round($value_of_100_finished_project_this_cycle)}}$ completed</h4>
+            <h4>{{round($value_of_100_and_finish_this_cycle)}}$ completed</h4>
             <h4>Percentage: {{round($project_completion_rate_count_this_cycle_value_100_in_progress,2)}}%</h4>
 
           </div>
@@ -30,7 +30,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    @foreach ($no_of_100_finished_project_this_cycle as $item)
+                    @foreach ($no_of_100_and_finish_this_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $deal = \App\Models\Deal::where('id',$item->deal_id)->first();

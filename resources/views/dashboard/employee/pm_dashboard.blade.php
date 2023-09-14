@@ -304,7 +304,7 @@
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of 100% in progress projects</h5>
                                         <div class="d-flex flex-wrap">
                                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#progressProjectForThisCycle{{ count($no_of_100_finished_project_this_cycle) }}"> {{ count($no_of_100_finished_project_this_cycle) }}</a>
+                                                <a href="#" data-toggle="modal" data-target="#progressProjectForThisCycle{{ count($no_of_100_and_finish_this_cycle) }}"> {{ count($no_of_100_and_finish_this_cycle) }}</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('100% in progress projects for this cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_progress_for_cycle_modal"></i>
@@ -313,7 +313,7 @@
                                             </p>
                                             @include('dashboard.employee.progress_projects.progress_projects_for_this_cycle')
                                             <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#progressProjectInThisCycle{{ count($no_of_100_finished_project_previous_cycle) }}"> {{ count($no_of_100_finished_project_previous_cycle) }}</a>
+                                                <a href="#" data-toggle="modal" data-target="#progressProjectInThisCycle{{ count($no_of_100_and_finish_previous_cycle) }}"> {{ count($no_of_100_and_finish_previous_cycle) }}</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('100% in progress projects in this cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_progress_in_cycle_modal"></i>
@@ -336,7 +336,7 @@
                                         <div class="d-flex flex-wrap">
 
                                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#progressProjectForThisCycleValue{{ count($no_of_100_finished_project_this_cycle) }}"> {{ round($value_of_100_finished_project_this_cycle,2) }}$</a>
+                                                <a href="#" data-toggle="modal" data-target="#progressProjectForThisCycleValue{{ count($no_of_100_and_finish_this_cycle) }}"> {{ round($value_of_100_and_finish_this_cycle,2) }}$</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('100% in progress projects for this cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_progress_for_cycle_value_modal"></i>
@@ -346,7 +346,7 @@
                                             @include('dashboard.employee.progress_projects_value.progress_projects_for_this_cycle_value')
 
                                             <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#progressProjectInThisCycleValue{{ count($no_of_100_finished_project_previous_cycle) }}"> {{ round($value_of_100_finished_project_previous_cycle,2) }}$</a>
+                                                <a href="#" data-toggle="modal" data-target="#progressProjectInThisCycleValue{{ count($no_of_100_and_finish_previous_cycle) }}"> {{ round($value_of_100_and_finish_previous_cycle,2) }}$</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('100% in progress projects in this cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_progress_in_cycle_value_modal"></i>
@@ -370,7 +370,7 @@
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Count)</h5>
                                         <div class="d-flex flex-wrap">
                                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#projectComplectionProgressForThisCycleCount{{ count($no_of_100_finished_project_this_cycle) }}">  {{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}%</a>
+                                                <a href="#" data-toggle="modal" data-target="#projectComplectionProgressForThisCycleCount{{ count($no_of_100_and_finish_this_cycle) }}">  {{ round($project_completion_rate_count_this_cycle_100_in_progress, 2) }}%</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('Project completion rate for this Cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_modal"></i>
@@ -380,7 +380,7 @@
                                             @include('dashboard.employee.projects_completion_progress_rate_count.project_complection_rate_for_this_cycle_count')
 
                                             <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#projectComplectionProgressInThisCycleCount{{ count($no_of_100_finished_project_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}%</a>
+                                                <a href="#" data-toggle="modal" data-target="#projectComplectionProgressInThisCycleCount{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_100_in_progress, 2) }}%</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('Project completion rate in this Cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_modal"></i>
@@ -401,7 +401,7 @@
                                         <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Value)</h5>
                                         <div class="d-flex flex-wrap">
                                             <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisValue{{ count($no_of_100_finished_project_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}%</a>
+                                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisValue{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}%</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('Project completion rate for this Cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_value_modal"></i>
@@ -411,7 +411,7 @@
                                             @include('dashboard.employee.projects_completion_progress_rate_value.project_complection_rate_for_this_cycle_value')
 
                                             <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisValue{{ count($no_of_100_finished_project_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}%</a>
+                                                <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisValue{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}%</a>
                                                 <span class="f-12 font-weight-normal text-lightest">
                                                     @lang('Project completion rate in this Cycle')
                                                     <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_value_modal"></i>
