@@ -1148,7 +1148,7 @@
                                                 @include('dashboard.card-data-modal.avg_payment')
                                         </h5>
                                         <div class="d-flex flex-wrap">
-                                            <a href="#" data-toggle="modal" data-target="#avgPayment{{ count($total_milestone_completed_this_cycle) }}">
+                                            <a href="#" data-toggle="modal" data-target="#avgPayment{{ count($total_milestone_completed_this_current_month) }}">
                                                 <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                                     {{round($avg_payment_release_per_day,2)}} per day
                                                 </p>

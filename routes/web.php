@@ -188,6 +188,7 @@ use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\RevisionCalculatorController;
+use App\Http\Controllers\PmPaymentReleaseHistory;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1243,6 +1244,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
+
+    Route::resource('pm-payment-history',PmPaymentReleaseHistory::class);
     
     //Portfolio Section
     Route::get('/portfolio/filter-menu', [PortfolioController::class, 'get_filter_data'])->name("filter-menu");

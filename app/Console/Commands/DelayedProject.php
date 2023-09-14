@@ -39,7 +39,8 @@ class DelayedProject extends Command
         ->join('p_m_projects','p_m_projects.project_id','projects.id')
         
         ->where('deals.project_type','fixed')
-        ->where('projects.status','in progress')
+        ->whereIn('projects.status',['in progress', 'finished'])
+       
         ->where('p_m_projects.delayed_status',0)->get();
   
           //$daily_bonus= User::where('id',Auth::id())->first();

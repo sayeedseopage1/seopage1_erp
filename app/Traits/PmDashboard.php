@@ -405,6 +405,23 @@ trait PmDashboard
            // ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
 
             ->get();
+            $this->total_milestone_completed_this_current_month= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+            ->leftJoin('payments','payments.invoice_id','invoices.id')
+            ->orderBy('payments.paid_on','desc')
+           //->groupBy('project_milestones.id')
+
+           // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+            ->whereBetween('payments.paid_on', [$this->startMonth, $this->endMonth])
+            ->where('projects.pm_id', Auth::id())
+            ->where('project_milestones.status', 'complete')
+
+
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->get();
             if (count($this->total_milestone_assigned_this_cycle) > 0 ) {
                 $this->milestone_completion_rate_count_this_cycle=  ((count($this->total_milestone_completed_this_cycle))/(count($this->total_milestone_assigned_this_cycle)) )*100;
                 $this->milestone_completion_rate_count_previous_cycle = ((count($this->total_milestone_completed_previous_cycle)) / ((count($this->total_milestone_assigned_this_cycle))+(count($this->total_milestone_completed_previous_cycle))- (count($this->total_milestone_completed_this_cycle))) * 100);
@@ -1079,6 +1096,23 @@ trait PmDashboard
 
 
             ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+            ->where('projects.pm_id', Auth::id())
+            ->where('project_milestones.status', 'complete')
+
+
+            ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+            ->get();
+            $this->total_milestone_completed_this_current_month= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+            ->leftJoin('payments','payments.invoice_id','invoices.id')
+            ->orderBy('payments.paid_on','desc')
+           //->groupBy('project_milestones.id')
+
+           // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+            ->whereBetween('payments.paid_on', [$startMonth, $endMonth])
             ->where('projects.pm_id', Auth::id())
             ->where('project_milestones.status', 'complete')
 
