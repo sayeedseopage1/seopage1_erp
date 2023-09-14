@@ -11,7 +11,7 @@
         <div class="select-box d-flex pr-2 border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
             <div class="select-status d-flex">
-                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500"
+                <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500 getMonth"
                     id="datatableRange" placeholder="@lang('placeholders.dateRange')">
             </div>
         </div>
@@ -35,8 +35,8 @@
             <!-- CLIENT END -->
         @endif
 
-        <!-- SEARCH BY TASK START -->
-        <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
+         <!-- SEARCH BY TASK START -->
+         <div class="task-search d-flex  py-1 px-lg-3 px-0 border-right-grey align-items-center">
             <form class="w-100 mr-1 mr-lg-0 mr-md-1 ml-md-1 ml-0 ml-lg-0">
                 <div class="input-group bg-grey rounded">
                     <div class="input-group-prepend">
@@ -72,7 +72,7 @@
     <div class="content-wrapper">
         <div class="row">
             <div class="col-md-12">
-                <div class="row mt-3">
+                <div class="row mt-3" id="pm-card-data">
                     <div class="col-md-4">
                         <div class="card p-3" style="border: none">
                             <p style="font-size: 16px; color:#777; font-weight: bold;">Pending Amount (Upto last month)</p>
@@ -124,43 +124,59 @@
     </div>
     <!-- CONTENT WRAPPER END -->
 
+
+
 @endsection
 
 @push('scripts')
+
     @include('sections.datatable_js')
 
     <script>
             $('#pm-payments-table').on('preXhr.dt', function(e, settings, data) {
+                var dateRangePicker = $('#datatableRange').data('daterangepicker');
+                var startDate = $('#datatableRange').val();
+                var searchText = $('#search-text-field').val();
+                var PmId = $('#PmId').val();
 
-            var PmId = $('#PmId').val();
+                data['PmId'] = PmId;
+                data['searchText'] = searchText;
 
-            data['PmId'] = PmId;
+                if (startDate == '') {
+                    data['startDate'] = null;
+                    data['endDate'] = null;
+                } else {
+                    data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                    data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+                }
 
-            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
-            var startDate = $('#datatableRange').val();
+                @if (!is_null(request('start')) && !is_null(request('end')))
+                    data['startDate'] = '{{ request('start') }}';
+                    data['endDate'] = '{{ request('end') }}';
+                @endif
+                });
 
-            if (startDate == '') {
-                data['startDate'] = null;
-                data['endDate'] = null;
-            } else {
-                data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-            }
+                const showTable = () => {
+                window.LaravelDataTables["pm-payments-table"].draw();
+                // cardContent();
 
-            @if (!is_null(request('start')) && !is_null(request('end')))
-                data['startDate'] = '{{ request('start') }}';
-                data['endDate'] = '{{ request('end') }}';
-            @endif
+                }
+
+                $('#PmId,#search-text-field').on('change keyup', function() {
+                if ($('#PmId').val() != "all") {
+                    $('#reset-filters').removeClass('d-none');
+                    showTable();
+                }else if ($('#search-text-field').val() != "") {
+                    $('#reset-filters').removeClass('d-none');
+                    showTable();
+                }
             });
 
-            const showTable = () => {
-            window.LaravelDataTables["pm-payments-table"].draw();
-            }
-            $('#PmId').on('change keyup', function() {
-            if ($('#PmId').val() != "all") {
-                $('#reset-filters').removeClass('d-none');
-                showTable();
-            }
+        $('#reset-filters').click(function() {
+            $('#filter-form')[0].reset();
+            $('.filter-box .select-picker').selectpicker("refresh");
+            $('#reset-filters').addClass('d-none');
+            showTable();
         });
 
 
@@ -232,5 +248,52 @@
             })
         };
 
+        $( document ).ready(function() {
+            @if (!is_null(request('start')) && !is_null(request('end')))
+            $('#datatableRange').val('{{ request('start') }}' +
+            ' @lang("app.to") ' + '{{ request('end') }}');
+            $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
+            $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
+                showTable();
+            @endif
+        });
+
+        // function cardContent() {
+        //     var dateRangePicker = $('#datatableRange').data('daterangepicker');
+        //     var startDate = $('#datatableRange').val();
+
+        //     if (startDate == '') {
+        //         startDate = null;
+        //         endDate = null;
+        //     } else {
+        //         startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+        //         endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+        //     }
+
+        //     var data = new Array();
+        //     var pmID = $('#PmId').val();
+        //     // var searchText = $('#search-text-field').val();
+
+        //     var url = "{{ route('getMonthDate') }}";
+
+        //     $.easyAjax({
+        //         url: url,
+        //         container: '#pm-card-data',
+        //         blockUI: true,
+        //         type: "POST",
+        //         data: {
+        //             startDate: startDate,
+        //             endDate: endDate,
+        //             pmID: pmID,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         success: function(response) {
+        //             console.log(response);
+        //             $('#pm-card-data .card-body').html(response.html);
+        //             // $('#totalEarnings').html(response.totalEarnings);
+        //         }
+        //     });
+        // }
+        // cardContent();
     </script>
 @endpush

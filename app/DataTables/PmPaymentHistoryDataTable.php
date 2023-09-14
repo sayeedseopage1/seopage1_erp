@@ -142,12 +142,47 @@ class PmPaymentHistoryDataTable extends BaseDataTable
             })
             ->editColumn('budget', function ($row) {
                 $symbol = (isset($row->currency)) ? $row->currency->currency_symbol : '';
+                return currency_formatter($row->project_budget, $symbol);
+            })
+            ->editColumn('amount', function ($row) {
+                $symbol = (isset($row->currency)) ? $row->currency->currency_symbol : '';
                 return currency_formatter($row->amount, $symbol);
             })
             ->editColumn('unreleased_amount', function ($row) {
+                $released_amount_project = DB::table('projects')
+                ->join('project_milestones', 'projects.id', '=',
+                    'project_milestones.project_id'
+                )
+                ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
+                ->where('projects.id', $row->project_id)
+                ->where('payments.created_at', '<=', $row->created_at)
+                ->sum('project_milestones.cost');
+               
+                $unreleased_project_amount = $row->project_budget-$released_amount_project;
+                if($unreleased_project_amount < 1)
+                {
+                    $unreleased_amount_project =0 ;
+
+                }else 
+                {
+                    $unreleased_amount_project = $unreleased_project_amount ;
+
+                }
                 $symbol = (isset($row->currency)) ? $row->currency->currency_symbol : '';
-                return currency_formatter(($row->project_budget-$row->amount), $symbol);
+                return currency_formatter(($unreleased_amount_project), $symbol);
             })
+            ->editColumn('total_amount', function ($row) {
+                $released_amount_project = DB::table('payments')
+                ->where('payments.added_by', $row->pm_id)
+                ->where('payments.created_at', '<', $row->created_at)
+                ->sum('payments.amount');
+               
+                $total_amount = $row->amount+$released_amount_project ;
+                
+                $symbol = (isset($row->currency)) ? $row->currency->currency_symbol : '';
+                return currency_formatter(($total_amount), $symbol);
+            })
+          
             ->addIndexColumn()
             ->smart(false)
             ->setRowId(function ($row) {
@@ -224,8 +259,8 @@ $PmId= $this->request()->PmId;
         if ($request->searchText != '') {
             $model = $model->where(function ($query) {
                 $query->where('projects.project_name', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('payments.amount', 'like', '%' . request('searchText') . '%')
-                    ->orWhere('invoices.id', 'like', '%' . request('searchText') . '%');
+                    ->orWhere('project_milestones.milestone_title', 'like', '%' . request('searchText') . '%')
+                    ->orWhere('payments.amount', 'like', '%' . request('searchText') . '%');
             });
         }
 
@@ -289,10 +324,10 @@ $PmId= $this->request()->PmId;
             __('app.project')  => ['data' => 'project_id', 'name' => 'project_id', 'title' => __('app.project')],
             __('Project Manager')  => ['data' => 'project_manager', 'name' => 'project_manager', 'title' => __('Project Manager')],
             __('Client')  => ['data' => 'client_id', 'name' => 'client_id', 'title' => __('Client')],
-            __('modules.budget') => ['data' => 'amount', 'name' => 'amount', 'title' => __('Budget')],
+            __('modules.budget') => ['data' => 'budget', 'name' => 'budget', 'title' => __('Project Budget')],
             __('Released amount') => ['data' => 'amount', 'name' => 'amount', 'title' => __('Released amount')],
             __('modules.unreleased_amount') => ['data' => 'unreleased_amount', 'name' => 'unreleased_amount', 'title' => __('Unreleased Amount')],
-            __('Total released amount') => ['data' => 'unreleased_amount', 'name' => 'unreleased_amount', 'title' => __('Total released amount')],
+            __('Total released amount') => ['data' => 'total_amount', 'name' => 'total_amount', 'title' => __('Total released amount')],
             Column::computed('action', __('app.action'))
                 ->exportable(false)
                 ->printable(false)

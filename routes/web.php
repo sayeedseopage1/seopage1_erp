@@ -1246,6 +1246,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('client-review', ClientReviewController::class);
 
     Route::resource('pm-payment-history',PmPaymentReleaseHistory::class);
+    Route::post('pm-payment-history-filter-date',[PmPaymentReleaseHistory::class,'getMonthDate'])->name('getMonthDate');
     
     //Portfolio Section
     Route::get('/portfolio/filter-menu', [PortfolioController::class, 'get_filter_data'])->name("filter-menu");
