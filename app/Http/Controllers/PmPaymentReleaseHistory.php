@@ -38,9 +38,11 @@ class PmPaymentReleaseHistory extends AccountBaseController
             }
         }
        
+       
         $startDate = Carbon::now()->startofMonth();
         $assignEndDate = Carbon::now()->endofMonth();
         $pmId = 209;
+      
        
 
         // $startDate= '2023-07-01 00:00:00';
@@ -81,10 +83,10 @@ class PmPaymentReleaseHistory extends AccountBaseController
         ->join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
         ->leftJoin('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
         ->where('project_milestones.created_at', '<', $startDate)
-        // ->where(function ($q1) use ($startDate) {
-        //     $q1->whereNull('payments.paid_on')
-        //         ->orWhere('payments.paid_on', '>', $startDate);
-        // })
+        ->where(function ($q1) use ($startDate) {
+            $q1->whereNull('payments.paid_on')
+                ->orWhere('payments.paid_on', '>', $startDate);
+        })
         ->whereNot('project_milestones.status', 'canceled')
             ->where('projects.pm_id', $pmId)
             ->sum('project_milestones.cost');
@@ -140,11 +142,30 @@ class PmPaymentReleaseHistory extends AccountBaseController
 
     public function getMonthDate(Request $request)
     {
-        // dd($request->all());
+    //   /  dd($request->startDate, $request->endDate,$request->pmID);
         $startDate = Carbon::parse($request->startDate);
         $assignEndDate = Carbon::parse($request->endDate);
        
         $pmId = $request->pmID;
+        if($request->startDate == null)
+        {
+            $startDate = Carbon::now()->startofMonth();
+            $assignEndDate = Carbon::now()->endofMonth();
+            $pmId = 209;
+        }
+        if($request->endDate == null)
+        {
+            
+            $assignEndDate = Carbon::now()->endofMonth();
+           
+        }
+        if($request->pmID == null)
+        {
+           
+            $pmId = 209;
+        }
+      // dd($startDate, $assignEndDate,$pmId );
+       
        
 
         // $startDate= '2023-07-01 00:00:00';

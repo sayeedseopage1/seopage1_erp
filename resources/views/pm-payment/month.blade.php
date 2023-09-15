@@ -13,7 +13,7 @@
                     <h5>{{$pm_released_amount_month}}</h5>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4"></div>
                 <div class="card p-3" style="border: none">
                     <p style="font-size: 16px; color:#777; font-weight: bold;">Total Assigned Amount (For this month)</p>
                     <h5>{{$total_assigned_amount_for_this_cycle}}</h5>

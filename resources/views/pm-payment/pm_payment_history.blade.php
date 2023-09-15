@@ -12,7 +12,7 @@
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('app.date')</p>
             <div class="select-status d-flex">
                 <input type="text" class="position-relative text-dark form-control border-0 p-2 text-left f-14 f-w-500 getMonth"
-                    id="datatableRange" placeholder="@lang('placeholders.dateRange')">
+                    id="datatableRange2" placeholder="@lang('placeholders.dateRange')">
             </div>
         </div>
         <!-- DATE END -->
@@ -136,46 +136,81 @@
 @push('scripts')
 
     @include('sections.datatable_js')
+    <script type="text/javascript">
+        $(function() {
+
+            var start = moment().clone().startOf('month');
+            var end = moment();
+
+            function cb(start, end) {
+                $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                    ' @lang("app.to") ' + end.format(
+                        '{{ global_setting()->moment_date_format }}'));
+                $('#reset-filters').removeClass('d-none');
+            }
+
+            $('#datatableRange2').daterangepicker({
+                locale: daterangeLocale,
+                linkedCalendars: false,
+                startDate: start,
+                endDate: end,
+                ranges: daterangeConfig
+            }, cb);
+
+
+            $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+                showTable();
+            });
+
+        });
+
+    </script>
 
     <script>
-            $('#pm-payments-table').on('preXhr.dt', function(e, settings, data) {
-                var dateRangePicker = $('#datatableRange').data('daterangepicker');
-                var startDate = $('#datatableRange').val();
-                var searchText = $('#search-text-field').val();
-                var PmId = $('#PmId').val();
+           $('#pm-payments-table').on('preXhr.dt', function(e, settings, data) {
+    var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+    var startDate = $('#datatableRange2').val();
+    var searchText = $('#search-text-field').val();
+    var PmId = $('#PmId').val();
 
-                data['PmId'] = PmId;
-                data['searchText'] = searchText;
+    if (startDate == '') {
+        // Calculate the first day of the current month
+        var firstDay = moment().startOf('month');
+        
+        // Calculate the last day of the current month
+        var lastDay = moment().endOf('month');
+        
+        data['startDate'] = firstDay.format('{{ global_setting()->moment_date_format }}');
+        data['endDate'] = lastDay.format('{{ global_setting()->moment_date_format }}');
+    } else {
+        data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+        data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+    }
 
-                if (startDate == '') {
-                    data['startDate'] = null;
-                    data['endDate'] = null;
-                } else {
-                    data['startDate'] = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-                    data['endDate'] = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-                }
+    data['PmId'] = PmId;
+    data['searchText'] = searchText;
 
-                @if (!is_null(request('start')) && !is_null(request('end')))
-                    data['startDate'] = '{{ request('start') }}';
-                    data['endDate'] = '{{ request('end') }}';
-                @endif
-                });
+    @if (!is_null(request('start')) && !is_null(request('end')))
+        data['startDate'] = '{{ request('start') }}';
+        data['endDate'] = '{{ request('end') }}';
+    @endif
+});
 
-                const showTable = () => {
-                window.LaravelDataTables["pm-payments-table"].draw();
-                 cardContent();
+const showTable = () => {
+    window.LaravelDataTables["pm-payments-table"].draw();
+    cardContent();
+}
 
-                }
+$('#PmId,#search-text-field').on('change keyup', function() {
+    if ($('#PmId').val() != "all") {
+        $('#reset-filters').removeClass('d-none');
+        showTable();
+    } else if ($('#search-text-field').val() != "") {
+        $('#reset-filters').removeClass('d-none');
+        showTable();
+    }
+});
 
-                $('#PmId,#search-text-field').on('change keyup', function() {
-                if ($('#PmId').val() != "all") {
-                    $('#reset-filters').removeClass('d-none');
-                    showTable();
-                }else if ($('#search-text-field').val() != "") {
-                    $('#reset-filters').removeClass('d-none');
-                    showTable();
-                }
-            });
 
         $('#reset-filters').click(function() {
             $('#filter-form')[0].reset();
@@ -255,17 +290,17 @@
 
         $( document ).ready(function() {
             @if (!is_null(request('start')) && !is_null(request('end')))
-            $('#datatableRange').val('{{ request('start') }}' +
+            $('#datatableRange2').val('{{ request('start') }}' +
             ' @lang("app.to") ' + '{{ request('end') }}');
-            $('#datatableRange').data('daterangepicker').setStartDate("{{ request('start') }}");
-            $('#datatableRange').data('daterangepicker').setEndDate("{{ request('end') }}");
+            $('#datatableRange2').data('daterangepicker').setStartDate("{{ request('start') }}");
+            $('#datatableRange2').data('daterangepicker').setEndDate("{{ request('end') }}");
                 showTable();
             @endif
         });
 
         function cardContent() {
-            var dateRangePicker = $('#datatableRange').data('daterangepicker');
-            var startDate = $('#datatableRange').val();
+            var dateRangePicker = $('#datatableRange2').data('daterangepicker');
+            var startDate = $('#datatableRange2').val();
 
             if (startDate == '') {
                 startDate = null;
@@ -293,7 +328,7 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    console.log(response.html);
+                   // console.log(response.html);
                     $('#monthwrapper').html(response.html);
                     // $('#totalEarnings').html(response.totalEarnings);
                 }

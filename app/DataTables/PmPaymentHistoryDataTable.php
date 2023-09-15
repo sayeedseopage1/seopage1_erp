@@ -43,53 +43,6 @@ class PmPaymentHistoryDataTable extends BaseDataTable
                     return '<input type="checkbox"  class="select-table-row"  id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
                 }
             })
-            ->addColumn('action', function ($row) {
-                $action = '<div class="task_view">
-
-                <div class="dropdown">
-                    <a class="task_view_more d-flex align-items-center justify-content-center dropdown-toggle" type="link"
-                        id="dropdownMenuLink-' . $row->id . '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="icon-options-vertical icons"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink-' . $row->id . '" tabindex="0">';
-
-                $action .= '<a href="' . route('payments.show', $row->id) . '" class="openRightModal dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
-
-                $action .= '<a href="' . route('payments.download', $row->id) . '" class="dropdown-item"><i class="fa fa-download mr-2"></i>' . __('app.download') . '</a>';
-
-                if (
-                    ($this->editPaymentPermission == 'all'
-                    || ($this->editPaymentPermission == 'added' && isset($row->added_by) && user()->id == $row->added_by)
-                    || ($this->editPaymentPermission == 'owned' && isset($row->invoice) && user()->id == $row->invoice->client_id)
-                    || ($this->editPaymentPermission == 'both' && isset($row->invoice) && (user()->id == $row->invoice->client_id && isset($row->added_by) && user()->id == $row->added_by)))
-                    && $row->status != 'failed' && ($row->gateway == null || $row->gateway == 'Offline')
-                    ) {
-                    $action .= '<a class="dropdown-item openRightModal" href="' . route('payments.edit', [$row->id]) . '">
-                            <i class="fa fa-edit mr-2"></i>
-                            ' . trans('app.edit') . '
-                        </a>';
-                }
-
-                if (
-                    ($this->deletePaymentPermission == 'all'
-                    || ($this->deletePaymentPermission == 'added' && user()->id == $row->added_by)
-                    || ($this->deletePaymentPermission == 'owned' && isset($row->invoice) && user()->id == $row->invoice->client_id)
-                    || ($this->deletePaymentPermission == 'both' && isset($row->invoice) && (user()->id == $row->invoice->client_id && isset($row->added_by) && user()->id == $row->added_by))
-                    )
-                    && ($row->gateway == 'Offline' || $row->gateway == null || $row->status == 'failed')
-                ) {
-                    $action .= '<a class="dropdown-item delete-table-row" href="javascript:;" data-payment-id="' . $row->id . '">
-                            <i class="fa fa-trash mr-2"></i>
-                            ' . trans('app.delete') . '
-                        </a>';
-                }
-
-                $action .= '</div>
-                </div>
-            </div>';
-
-                return $action;
-            })
             ->editColumn(
                 'created_at',
                 function ($row) {
@@ -219,7 +172,7 @@ $PmId= $this->request()->PmId;
             ->groupBy('payments.id')
             ->select('payments.id','projects.project_budget','projects.pm_id','projects.client_id', 'payments.project_id', 'payments.currency_id', 'project_milestones.id as milestone_id', 'project_milestones.milestone_title as milestone_title', 'payments.amount', 'payments.created_at', 'payments.remarks', 'payments.bill', 'payments.added_by', 'payments.order_id', 'payments.gateway');
 
-            // dd($model);
+        //   /  dd($model->total_amount);
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
             $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
@@ -328,12 +281,6 @@ $PmId= $this->request()->PmId;
             __('Released amount') => ['data' => 'amount', 'name' => 'amount', 'title' => __('Released amount')],
             __('modules.unreleased_amount') => ['data' => 'unreleased_amount', 'name' => 'unreleased_amount', 'title' => __('Unreleased Amount')],
             __('Total released amount') => ['data' => 'total_amount', 'name' => 'total_amount', 'title' => __('Total released amount')],
-            Column::computed('action', __('app.action'))
-                ->exportable(false)
-                ->printable(false)
-                ->orderable(false)
-                ->searchable(false)
-                ->addClass('text-right pr-20')
         ];
     }
 

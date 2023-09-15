@@ -37,10 +37,12 @@ use Carbon\CarbonPeriod;
 use Froiden\Envato\Traits\AppBoot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Traits\PmDashboardAdminView;
 
 class DashboardController extends AccountBaseController
 {
-    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard;
+    use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView;
 
     public function __construct()
     {
@@ -427,5 +429,46 @@ class DashboardController extends AccountBaseController
     public function pmDashboardExplanation(){
         $this->pageTitle = 'PM Cycle Explanation';
         return view('dashboard.pm_explanation',$this->data);
+    }
+    public function pmPerformance(Request $request){
+      //  dd($request->all());
+        if($request->pm_id == null)
+        {
+            $this->pm = User::where('id', 209)->first();
+            $this->pageTitle = 'PM Performance';
+
+            return $this->PmDashboardAdminView($this->pm);
+
+        }else 
+        {
+           // dd("true");
+            $this->pm = User::where('id', $request->pm_id)->first();
+            $this->pageTitle = 'PM Performance';
+          //  dd("dkasdmlkas");
+    
+            return $this->PmDashboardAdminPmView($this->pm);
+
+        }
+        
+
+        // if ($request->selected_pm_id) {
+        //     $this->selected_pm = User::where('id', $request->selected_pm_id)->first();
+        // }else
+        // {
+        //     $this->selected_pm = '';
+
+        // }
+
+       
+    }
+
+    public function getPmData(Request $request){
+       // dd($request);
+        $this->pm = User::where('id', $request->selected_pm_id)->first();
+        $this->pageTitle = 'PM Performance';
+      //  dd("dkasdmlkas");
+
+        return $this->PmDashboardAdminPmView($this->pm);
+      
     }
 }
