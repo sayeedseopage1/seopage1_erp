@@ -92,21 +92,7 @@
             <div class="card mt-3 p-3" style="border: none">
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="d-flex">
-                            <div class="user_image mr-2 mt-2">
-                                @if ($selected_pm->image)
-                                    <img src="{{ asset('user-uploads/avatar/'.$selected_pm->image) }}" alt="" class="img-rounded" width="50" height="50">
-                                @else
-                                    <img src="{{ asset('img/avatar.png') }}" alt="" class="img-rounded" width="50" height="50">
-                                @endif
-                            </div>
-                            <div class="user_name mr-3 mt-3">
-                            <a href="{{ route('employees.show', $selected_pm->id) }}" style="color: black"><span class="f-18 d-block">{{ $selected_pm->name }}</span></a>
-                                <span class="f-14 d-block" style="margin-top:-0.2rem; color:#777;">{{ $designation->name }}</span>
-                            </div>
-                        </div>
                     </div>
-                    <div class="col-md-4"></div>
                     <div class="col-md-4">
                         @php
                             $all_pm = App\Models\User::where('role_id',4)->get();
@@ -119,6 +105,8 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div class="col-md-4">
                     </div>
                 </div>
             </div>
