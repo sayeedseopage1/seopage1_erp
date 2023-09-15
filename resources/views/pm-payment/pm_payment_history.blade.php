@@ -70,50 +70,55 @@
 @section('content')
     <!-- CONTENT WRAPPER START -->
     <div class="content-wrapper">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row mt-3" id="pm-card-data">
-                    <div class="col-md-4">
-                        <div class="card p-3" style="border: none">
-                            <p style="font-size: 16px; color:#777; font-weight: bold;">Pending Amount (Upto last month)</p>
-                            <h5>0</h5>
+        <div id="monthwrapper">
+            <div class="row">
+                <div class="col-md-12" id="pm-card-data">
+                    <div class="row mt-3" >
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Pending Amount (Upto last month)</p>
+                                <h5>{{$pm_pending_milestone_value_upto_last_month}}</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Total Released Amount (This month)</p>
+                                <h5>{{$pm_released_amount_month}}</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Total Assigned Amount (For this month)</p>
+                                <h5>{{$total_assigned_amount_for_this_cycle}}</h5>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="card p-3" style="border: none">
-                            <p style="font-size: 16px; color:#777; font-weight: bold;">Total Released Amount (This month)</p>
-                            <h5>0</h5>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Total Released Amount (For this months projects)</p>
+                                <h5>{{$pm_released_amount_this_month_create}}</h5>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card p-3" style="border: none">
-                            <p style="font-size: 16px; color:#777; font-weight: bold;">Total Assigned Amount (For this month)</p>
-                            <h5>0</h5>
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Total Unreleased Amount (For this months projects)</p>
+                                <h5>{{$pm_unreleased_amount_month}}</h5>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-md-4">
-                        <div class="card p-3" style="border: none">
-                            <p style="font-size: 16px; color:#777; font-weight: bold;">Total Released Amount (For this months projects)</p>
-                            <h5>0</h5>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card p-3" style="border: none">
-                            <p style="font-size: 16px; color:#777; font-weight: bold;">Total Unreleased Amount (For this months projects)</p>
-                            <h5>0</h5>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card p-3" style="border: none">
-                            <p style="font-size: 16px; color:#777; font-weight: bold;">Total Unreleased Amount (Overall)</p>
-                            <h5>0</h5>
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Total Unreleased Amount (Overall)</p>
+                                <h5>{{$pm_pending_milestone_value}}</h5>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
         </div>
+       
         <div class="row">
             <div class="col-md-12">
                 <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
@@ -158,7 +163,7 @@
 
                 const showTable = () => {
                 window.LaravelDataTables["pm-payments-table"].draw();
-                // cardContent();
+                 cardContent();
 
                 }
 
@@ -258,42 +263,42 @@
             @endif
         });
 
-        // function cardContent() {
-        //     var dateRangePicker = $('#datatableRange').data('daterangepicker');
-        //     var startDate = $('#datatableRange').val();
+        function cardContent() {
+            var dateRangePicker = $('#datatableRange').data('daterangepicker');
+            var startDate = $('#datatableRange').val();
 
-        //     if (startDate == '') {
-        //         startDate = null;
-        //         endDate = null;
-        //     } else {
-        //         startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
-        //         endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
-        //     }
+            if (startDate == '') {
+                startDate = null;
+                endDate = null;
+            } else {
+                startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
+                endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');
+            }
 
-        //     var data = new Array();
-        //     var pmID = $('#PmId').val();
-        //     // var searchText = $('#search-text-field').val();
+            var data = new Array();
+            var pmID = $('#PmId').val();
+            // var searchText = $('#search-text-field').val();
 
-        //     var url = "{{ route('getMonthDate') }}";
+            var url = "{{ route('getMonthDate') }}";
 
-        //     $.easyAjax({
-        //         url: url,
-        //         container: '#pm-card-data',
-        //         blockUI: true,
-        //         type: "POST",
-        //         data: {
-        //             startDate: startDate,
-        //             endDate: endDate,
-        //             pmID: pmID,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             console.log(response);
-        //             $('#pm-card-data .card-body').html(response.html);
-        //             // $('#totalEarnings').html(response.totalEarnings);
-        //         }
-        //     });
-        // }
-        // cardContent();
+            $.easyAjax({
+                url: url,
+                container: '#pm-card-data',
+                blockUI: true,
+                type: "POST",
+                data: {
+                    startDate: startDate,
+                    endDate: endDate,
+                    pmID: pmID,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    console.log(response.html);
+                    $('#monthwrapper').html(response.html);
+                    // $('#totalEarnings').html(response.totalEarnings);
+                }
+            });
+        }
+        cardContent();
     </script>
 @endpush
