@@ -52,12 +52,9 @@ class PmPaymentHistoryDataTable extends BaseDataTable
                 }
             )
             ->editColumn('milestone_title', function ($row) {
-                if (!is_null($row->milestone_id)) {
-                    return $row->milestone_title;
-                }
-                else {
-                    return '--';
-                }
+                
+                    return $row->mile_title;
+               
             })
             ->editColumn('project_id', function ($row) {
                 if (!is_null($row->project)) {
@@ -164,13 +161,15 @@ class PmPaymentHistoryDataTable extends BaseDataTable
 // //dd($this->request()->PmId);
 $PmId= $this->request()->PmId;
 
-        $model = Payment::with(['project:id,project_name', 'currency:id,currency_symbol,currency_code'])
+        $model = Payment::with(['currency:id,currency_symbol,currency_code'])
+        ->leftJoin('invoices','invoices.id','payments.invoice_id')
             ->leftJoin('projects', 'projects.id', '=', 'payments.project_id')
-            ->leftJoin('project_milestones', 'project_milestones.project_id', '=', 'payments.project_id')
-            ->leftJoin('orders', 'orders.id', '=', 'payments.order_id')
+            
+            ->leftJoin('project_milestones', 'project_milestones.id', '=', 'invoices.milestone_id')
+           // ->leftJoin('orders', 'orders.id', '=', 'payments.order_id')
             ->where('projects.pm_id',$PmId)
             ->groupBy('payments.id')
-            ->select('payments.id','projects.project_budget','projects.pm_id','projects.client_id', 'payments.project_id', 'payments.currency_id', 'project_milestones.id as milestone_id', 'project_milestones.milestone_title as milestone_title', 'payments.amount', 'payments.created_at', 'payments.remarks', 'payments.bill', 'payments.added_by', 'payments.order_id', 'payments.gateway');
+            ->select('payments.id','projects.project_budget','projects.pm_id','projects.client_id', 'payments.project_id', 'payments.currency_id', 'project_milestones.id as milestone_id', 'project_milestones.milestone_title as mile_title', 'payments.amount', 'payments.created_at', 'payments.added_by');
 
         //   /  dd($model->total_amount);
 
