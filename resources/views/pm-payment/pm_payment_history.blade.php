@@ -118,7 +118,7 @@
 
 
         </div>
-       
+
         <div class="row">
             <div class="col-md-12">
                 <div class="d-flex flex-column w-tables rounded mt-3 bg-white">
@@ -136,6 +136,35 @@
 @push('scripts')
 
     @include('sections.datatable_js')
+    <script type="text/javascript">
+        $(function() {
+
+            var start = moment().clone().startOf('month');
+            var end = moment();
+
+            function cb(start, end) {
+                $('#datatableRange2').val(start.format('{{ global_setting()->moment_date_format }}') +
+                    ' @lang("app.to") ' + end.format(
+                        '{{ global_setting()->moment_date_format }}'));
+                $('#reset-filters').removeClass('d-none');
+            }
+
+            $('#datatableRange2').daterangepicker({
+                locale: daterangeLocale,
+                linkedCalendars: false,
+                startDate: start,
+                endDate: end,
+                ranges: daterangeConfig
+            }, cb);
+
+
+            $('#datatableRange2').on('apply.daterangepicker', function(ev, picker) {
+                showTable();
+            });
+
+        });
+
+    </script>
 
     <script>
            $('#pm-payments-table').on('preXhr.dt', function(e, settings, data) {
@@ -147,10 +176,10 @@
     if (startDate == '') {
         // Calculate the first day of the current month
         var firstDay = moment().startOf('month');
-        
+
         // Calculate the last day of the current month
         var lastDay = moment().endOf('month');
-        
+
         data['startDate'] = firstDay.format('{{ global_setting()->moment_date_format }}');
         data['endDate'] = lastDay.format('{{ global_setting()->moment_date_format }}');
     } else {

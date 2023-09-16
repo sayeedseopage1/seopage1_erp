@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>The total number of revisions that anyone else other than the PM was held responsible from all the revisions that came in the release cycle (June 16th-July 31st) for the tasks associated with projects assigned to that PM in the assign cycle i.e. June 16th-July 15th.</p>
+          <p>The total number of revisions that anyone else other than the PM was held responsible for from all the revisions that came in the release cycle (June 16th-July 31st) for the tasks associated with projects assigned in the assign cycle i.e. June 16th-July 15th + the number of old tasks that got revisions due to others (June 16th-July 31st).</p>
         </div>
         <div class="modal-footer">
             <a href="{{ route('pm-dashboard-explanation') }}#caused_by_others" target="_blank" class="btn btn-secondary">See Details</a>

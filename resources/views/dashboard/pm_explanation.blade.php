@@ -600,9 +600,7 @@
                                 <h5>Tasks Completed In This Cycle</h5>
                             </div>
                             <div class="text-left">
-                                <p>The value of your tasks that got completed during the release cycle (June 16th-July 31st)
-                                    from the ones you assigned to the lead developer during the assign cycle (June 16th-July
-                                    15th).</p>
+                                <p>The number of your tasks that got completed during the release cycle (June 16th-July 31st) from the ones you assigned to the lead developer during the assign cycle (June 16th-July 15th) plus the old tasks that got completed during the current release cycle</p>
                             </div>
                         </div>
                     </div>
@@ -749,9 +747,7 @@
                                 <h5>Total Cancelled Project In This Cycle</h5>
                             </div>
                             <div class="text-left">
-                                <p>The number of projects that got fully canceled or partially finished in the release cycle
-                                    (June 16th-July 15th) from the projects assigned before the end of the current assign
-                                    cycle (i.e. before 15th July if the current cycle is June 16th-July 15th).</p>
+                                <p>The number of projects that got fully canceled or partially finished in the release cycle (June 16th-July 15th) from the projects assigned in the current assign cycle (16th June-15th July) and the old projects that got fully or partially canceled during this release cycle (16th June-31st July)</p>
                             </div>
                         </div>
                     </div>
@@ -853,10 +849,7 @@
                                 <h5>Caused By Others</h5>
                             </div>
                             <div class="text-left">
-                                <p>The total number of revisions that anyone else other than the PM was held responsible
-                                    from all the revisions that came in the release cycle (June 16th-July 31st) for the
-                                    tasks associated with projects assigned to that PM in the assign cycle i.e. June
-                                    16th-July 15th.</p>
+                                <p>The total number of revisions that anyone else other than the PM was held responsible for from all the revisions that came in the release cycle (June 16th-July 31st) for the tasks associated with projects assigned in the assign cycle i.e. June 16th-July 15th + the number of old tasks that got revisions due to others (June 16th-July 31st).</p>
                             </div>
                         </div>
                     </div>
@@ -866,9 +859,7 @@
                                 <h5>Disputed</h5>
                             </div>
                             <div class="text-left">
-                                <p>The total number of disputed revisions from all the revisions that came in the release
-                                    cycle (June 16th-July 31st) for the tasks associated with projects assigned to that PM
-                                    in the assign cycle i.e. June 16th-July 15th.</p>
+                                <p>The total number of disputed revisions from all the revisions that came in the release cycle (June 16th-July 31st) for the tasks associated with projects assigned in the assign cycle i.e. June 16th-July 15th +Number of old tasks that got Disputed in the release cycle (June 16th-July 31st).</p>
                             </div>
                         </div>
                     </div>
@@ -923,8 +914,7 @@
                                 <h5>Cancelation Rate</h5>
                             </div>
                             <div class="text-left">
-                                <p>Number of projects canceled in the release cycle (June 16-July 31st)/Number of projects
-                                    assigned in the assign cycle (June 16-July 15).</p>
+                                <p>Number of projects canceled in the release cycle (June 16-July 31st)/Number of projects assigned in the assign cycle (June 16-July 15). If any old project got canceled during this release cycle (June 16-July 31st), that will also count. Also, partially canceled ones will count here as well.</p>
                             </div>
                         </div>
                     </div>

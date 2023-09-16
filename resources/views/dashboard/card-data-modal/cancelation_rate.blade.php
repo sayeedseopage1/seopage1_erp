@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>Number of projects canceled in the release cycle (June 16-July 31st)/Number of projects assigned in the assign cycle (June 16-July 15).</p>
+          <p>Number of projects canceled in the release cycle (June 16-July 31st)/Number of projects assigned in the assign cycle (June 16-July 15). If any old project got canceled during this release cycle (June 16-July 31st), that will also count. Also, partially canceled ones will count here as well.</p>
         </div>
         <div class="modal-footer">
             <a href="{{ route('pm-dashboard-explanation') }}#cancelation_rate" target="_blank" class="btn btn-secondary">See Details</a>
