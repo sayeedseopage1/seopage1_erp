@@ -166,7 +166,7 @@ $PmId= $this->request()->PmId;
 
         $model = Payment::with(['project:id,project_name', 'currency:id,currency_symbol,currency_code'])
             ->leftJoin('projects', 'projects.id', '=', 'payments.project_id')
-            ->leftJoin('project_milestones', 'project_milestones.project_id', '=', 'projects.id')
+            ->leftJoin('project_milestones', 'project_milestones.project_id', '=', 'payemnts.project_id')
             ->leftJoin('orders', 'orders.id', '=', 'payments.order_id')
             ->where('projects.pm_id',$PmId)
             ->groupBy('payments.id')

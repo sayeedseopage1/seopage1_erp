@@ -105,6 +105,31 @@ use App\Models\CashPoint;
 use App\Models\Seopage1Team;
 use App\Models\AuthorizationAction;
 use App\Models\ProjectRequestTimeExtension;
+use App\Models\BasicSeo;
+use App\Models\BlogArticle;
+use App\Models\PmBasicSeo;
+use App\Models\PmBlogArticle;
+use App\Models\PmProductCategory;
+use App\Models\PmProductDescription;
+use App\Models\PmWebContent;
+use App\Models\ProductCategoryCollection;
+use App\Models\ProductDescription;
+use App\Models\SalesBasicSeo;
+use App\Models\SalesBlogArticle;
+use App\Models\SalesProductCategory;
+use App\Models\SalesProductDescription;
+use App\Models\SalesWebContent;
+use App\Models\WebContent;
+use App\Notifications\PmUpdateBasicSeoNotification;
+use App\Notifications\PmUpdateBlogArticleNotification;
+use App\Notifications\PmUpdateProductCategoryNotification;
+use App\Notifications\PmUpdateProductDescriptionNotification;
+use App\Notifications\PmUpdateWebContentNotification;
+use App\Notifications\UpdateClientBasicSeoNotification;
+use App\Notifications\UpdateClientBlogArticlesNotification;
+use App\Notifications\UpdateClientFormNotification;
+use App\Notifications\UpdateClientProductCategoryNotification;
+use App\Notifications\UpdateClientProductDescriptionNotification;
 
 class ProjectController extends AccountBaseController
 {
@@ -3773,6 +3798,1233 @@ class ProjectController extends AccountBaseController
         return $sub_categories;
     }
 
+//Cross Departmental Work
+public function viewWebContent(Request $request, $id){
+    $this->pageTitle = 'Web-Content';
+    $this->web_contents = WebContent::where('deal_id',$request->id)->paginate(10);
+    return view('service-type.web_content_view',$this->data);
+}
+public function viewBlogArticle(Request $request, $id){
+    $this->pageTitle = 'Blog Article';
+    $this->blog_artcles = BlogArticle::where('deal_id',$request->id)->paginate(10);
+    return view('service-type.blog_artcle_view',$this->data);
+}
+public function viewProductDescription(Request $request, $id){
+    $this->pageTitle = 'Product Description';
+    $this->product_descriptions = ProductDescription::where('deal_id',$request->id)->paginate(5);
+    return view('service-type.product_description_view',$this->data);
+}
+public function viewProductCategoryCollection(Request $request, $id){
+    $this->pageTitle = 'Product Category Collection';
+    $this->product_categories = ProductCategoryCollection::where('deal_id',$request->id)->paginate(5);
+    return view('service-type.product_category_collection_view',$this->data);
+}
+public function viewBasicSEO(Request $request, $id){
+    $this->pageTitle = 'Basic SEO';
+    $this->basic_seos = BasicSeo::where('deal_id',$request->id)->paginate(5);
+    return view('service-type.basic_seo_view',$this->data);
+}
+
+// Edit web content
+public function EditWebContent(Request $request, $id){
+    $this->pageTitle = 'Edit web content';
+    $this->web_content = WebContent::find($id);
+    return view('service-type.edit_web_content',$this->data);
+}
+
+// Edit Blog Article
+public function EditBlogArticle(Request $request, $id){
+    $this->pageTitle = 'Edit blog article';
+    $this->blog_article = BlogArticle::find($id);
+    return view('service-type.edit_blog_article',$this->data);
+}
+
+// Edit Product description
+public function EditProductDescription(Request $request, $id){
+    $this->pageTitle = 'Edit product description';
+    $this->product_description = ProductDescription::find($id);
+    return view('service-type.edit_product_description',$this->data);
+}
+
+// Edit Product Category
+public function EditProductCategory(Request $request, $id){
+    $this->pageTitle = 'Edit product category';
+    $this->product_category = ProductCategoryCollection::find($id);
+    return view('service-type.edit_product_category',$this->data);
+}
+public function EditBasicSEO(Request $request, $id){
+    $this->pageTitle = 'Edit basic seo';
+    $this->basic_seo = BasicSeo::find($id);
+    return view('service-type.edit_basic_seo',$this->data);
+}
+
+// ================================= UPDATE WEB CONTENT START =======================
+
+public function updateSalesWebContent(Request $request, $id){
+    $validated = $request->validate([
+        'website_link' => 'required|url',
+        'website_niche' => 'required',
+        'website_name' => 'required',
+        'product_list' => 'required',
+        'country' => 'required',
+        'city' => 'required',
+        'interest' => 'required',
+        'buying_habit1' => 'required',
+        'buying_habit2' => 'required',
+        'buying_habit3' => 'required',
+        'language' => 'required',
+    ], [
+        'website_link.required' => 'This field is required!!',
+        'website_niche.required' => 'This field is required!!',
+        'website_name.required' => 'This field is required!!',
+        'product_list.required' => 'This field is required!!',
+        'country.required' => 'This field is required!!',
+        'city.required' => 'This field is required!!',
+        'interest.required' => 'This field is required!!',
+        'buying_habit1.required' => 'This field is required!!',
+        'buying_habit2.required' => 'This field is required!!',
+        'buying_habit3.required' => 'This field is required!!',
+        'language.required' => 'This field is required!!',
+    ]);
+
+    $sales_web_content = new SalesWebContent();
+    $user = Deal::where('id',$request->deal_id)->first();
+    $pm_id = User::where('id',$user->pm_id)->first();
+
+
+    if($request->website_link){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->website_link = $request->website_link;
+    }
+    if($request->website_niche){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->website_niche = $request->website_niche;
+    }
+    if($request->website_name){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->website_name = $request->website_name;
+    }
+    if($request->product_list){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->product_list = $request->product_list;
+    }
+    if($request->country){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->country = $request->country;
+    }
+    if($request->city){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->city = $request->city;
+    }
+    if($request->interest){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->interest = $request->interest;
+    }
+    if($request->buying_habit1){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->buying_habit1 = $request->buying_habit1;
+    }
+    if($request->buying_habit2){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->buying_habit2 = $request->buying_habit2;
+    }
+    if($request->buying_habit3){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->buying_habit3 = $request->buying_habit3;
+    }
+    if($request->language){
+        $sales_web_content->deal_id = $request->deal_id;
+        $sales_web_content->web_content_id = $request->web_content_id;
+        $sales_web_content->language = $request->language;
+    }
+    $sales_web_content->milestone_id = $request->milestone_id;
+    $sales_web_content->status = 'submitted';
+    $sales_web_content->save();
+
+    Notification::send($pm_id, new UpdateClientFormNotification($sales_web_content));
+
+    return response()->json([
+        'status'=>200,
+        'website_link'=>$sales_web_content->website_link,
+        'website_niche'=>$sales_web_content->website_niche,
+        'website_name'=>$sales_web_content->website_name,
+        'product_list'=>$sales_web_content->product_list,
+        'country'=>$sales_web_content->country,
+        'city'=>$sales_web_content->city,
+        'interest'=>$sales_web_content->interest,
+        'buying_habit1'=>$sales_web_content->buying_habit1,
+        'buying_habit2'=>$sales_web_content->buying_habit2,
+        'buying_habit3'=>$sales_web_content->buying_habit3,
+        'language'=>$sales_web_content->language,
+    ]);
+}
+public function updateSalesWebContentPageList(Request $request ,$id){
+    $data = $request->all();
+    $page_names = json_encode($data['page_name']);
+    $quantitys = json_encode($data['quantity']);
+    $approximate_words = json_encode($data['approximate_word']);
+
+    $sales_web_content = SalesWebContent::find($id);
+    $sales_web_content->page_name = $page_names;
+    $sales_web_content->quantity = $quantitys;
+    $sales_web_content->approximate_word = $approximate_words;
+    $sales_web_content->save();
+
+    return response()->json(['status'=>200]);
+}
+public function updateSalesWebContentReferenceWebsite(Request $request ,$id){
+    // dd($request->all());
+    $data = $request->all();
+    $reference_websites = json_encode($data['reference_website']);
+    $description1 = json_encode($data['description1']);
+    $description2 = json_encode($data['description2']);
+    $description3 = json_encode($data['description3']);
+
+    $sales_web_content = SalesWebContent::find($id);
+    $sales_web_content->reference_website = $reference_websites;
+    $sales_web_content->competitor_content = $data['competitor_content'];
+    $sales_web_content->description1 = $description1;
+    $sales_web_content->description2 = $description2;
+    $sales_web_content->description3 = $description3;
+    $sales_web_content->save();
+
+    return response()->json(['status'=>200]);
+}
+public function updateSalesWebContentBusinessInfo(Request $request ,$id){
+    $data = $request->all();
+    $folder_links = json_encode($data['folder_link']);
+
+    $sales_web_content = SalesWebContent::find($id);
+    // dd($sales_web_content);
+    $sales_web_content->business_information = $data['business_information'];
+    $sales_web_content->share_file_info = $data['share_file_info'];
+    $sales_web_content->folder_link = $folder_links;
+    $sales_web_content->save();
+
+    return response()->json([
+        'status'=>200,
+    ]);
+}
+public function updateSalesWebContentDemographicInfo(Request $request ,$id){
+
+    $sales_web_content = SalesWebContent::find($id);
+    $sales_web_content->gender = $request->gender;
+    $sales_web_content->age1 = $request->age1;
+    $sales_web_content->age2 = $request->age2;
+    $sales_web_content->monthly_income = $request->monthly_income;
+    $sales_web_content->education_level = $request->education_level;
+    $sales_web_content->save();
+
+    return response()->json([
+        'status'=>200,
+    ]);
+}
+// ================================= WEB CONTENT END=======================
+
+
+// ================================= BLOG ARTICLES START =======================
+
+public function updateSalesBlogArticle(Request $request, $id){
+    $validated = $request->validate([
+        'website_link' => 'required|url',
+        'website_niche' => 'required',
+        'website_name' => 'required',
+        'product_no' => 'required',
+    ], [
+        'website_link.required' => 'This field is required!!',
+        'website_niche.required' => 'This field is required!!',
+        'website_name.required' => 'This field is required!!',
+        'product_no.required' => 'This field is required!!',
+    ]);
+
+    $sales_blog_article = new SalesBlogArticle();
+    $user = Deal::where('id',$request->deal_id)->first();
+    $pm_id = User::where('id',$user->pm_id)->first();
+
+    if($request->website_link){
+        $sales_blog_article->deal_id = $request->deal_id;
+        $sales_blog_article->blog_article_id = $request->blog_article_id;
+        $sales_blog_article->website_link = $request->website_link;
+    }
+    if($request->website_niche){
+        $sales_blog_article->deal_id = $request->deal_id;
+        $sales_blog_article->blog_article_id = $request->blog_article_id;
+        $sales_blog_article->website_niche = $request->website_niche;
+    }
+    if($request->website_name){
+        $sales_blog_article->deal_id = $request->deal_id;
+        $sales_blog_article->blog_article_id = $request->blog_article_id;
+        $sales_blog_article->website_name = $request->website_name;
+    }
+    if($request->product_no){
+        $sales_blog_article->deal_id = $request->deal_id;
+        $sales_blog_article->blog_article_id = $request->blog_article_id;
+        $sales_blog_article->product_no = $request->product_no;
+    }
+    $sales_blog_article->milestone_id= $request->milestone_id;
+    $sales_blog_article->status = 'submitted';
+    $sales_blog_article->save();
+
+    Notification::send($pm_id, new UpdateClientBlogArticlesNotification($sales_blog_article));
+
+    return response()->json([
+        'status'=>200,
+        'website_link'=>$sales_blog_article->website_link,
+        'website_niche'=>$sales_blog_article->website_niche,
+        'website_name'=>$sales_blog_article->website_name,
+        'product_no'=>$sales_blog_article->product_no,
+    ]);
+}
+
+public function updateSalesBlogArticleBusinessInfo(Request $request ,$id){
+    $data = $request->all();
+    $folder_links = json_encode($data['folder_link']);
+
+    $sales_blog_article = SalesBlogArticle::find($id);
+    $sales_blog_article->business_information = $data['business_information'];
+    $sales_blog_article->share_file_info = $data['share_file_info'];
+    $sales_blog_article->folder_link = $folder_links;
+    $sales_blog_article->save();
+
+    return response()->json([
+        'status'=>200,
+    ]);
+}
+
+public function updateSalesBlogArticleReferenceblog(Request $request ,$id){
+    $data = $request->all();
+    $blog_urls = json_encode($data['blog_url']);
+
+    $sales_blog_article = SalesBlogArticle::find($id);
+    $sales_blog_article->blog_url = $blog_urls;
+    $sales_blog_article->save();
+
+    return response()->json(['status'=>200]);
+}
+
+public function updateSalesBlogArticleTopiceInfo(Request $request ,$id){
+
+    $data = $request->all();
+    $topic_links = json_encode($data['topic_link']);
+
+    $sales_blog_article = SalesBlogArticle::find($id);
+    $sales_blog_article->topic_info = $data['topic_info'];
+    $sales_blog_article->topic_link = $topic_links;
+    $sales_blog_article->save();
+
+    return response()->json(['status'=>200]);
+}
+
+public function updateSalesBlogArticleKeywordsInfo(Request $request ,$id){
+    $data = $request->all();
+    $keyword_links = json_encode($data['keyword_link']);
+
+    $sales_blog_article = SalesBlogArticle::find($id);
+    $sales_blog_article->keyword_info = $data['keyword_info'];
+    $sales_blog_article->keyword_link = $keyword_links;
+    $sales_blog_article->save();
+
+    return response()->json(['status'=>200]);
+}
+// ================================= BLOG ARTICLES END =======================
+
+
+
+// ================================= PRODUCT DESCRIPTION START =======================
+public function updateProductDescription(Request $request, $id){
+    $validated = $request->validate([
+        'website_link' => 'required|url',
+        'website_niche' => 'required',
+        'website_name' => 'required',
+        'product_no' => 'required',
+        'word_count' => 'required',
+    ], [
+        'website_link.required' => 'This field is required!!',
+        'website_niche.required' => 'This field is required!!',
+        'website_name.required' => 'This field is required!!',
+        'product_no.required' => 'This field is required!!',
+        'word_count.required' => 'This field is required!!',
+    ]);
+
+    $sales_product_description = new SalesProductDescription();
+    $user = Deal::where('id',$request->deal_id)->first();
+    $pm_id = User::where('id',$user->pm_id)->first();
+
+    if($request->website_link){
+        $sales_product_description->website_link = $request->website_link;
+    }
+    if($request->website_niche){
+        $sales_product_description->website_niche = $request->website_niche;
+    }
+    if($request->website_name){
+        $sales_product_description->website_name = $request->website_name;
+    }
+    if($request->product_no){
+        $sales_product_description->product_no = $request->product_no;
+    }
+    if($request->word_count){
+        $sales_product_description->word_count = $request->word_count;
+    }
+    $sales_product_description->deal_id = $request->deal_id;
+    $sales_product_description->product_description_id = $request->product_description_id;
+    $sales_product_description->milestone_id= $request->milestone_id;
+    $sales_product_description->status = 'submitted';
+    $sales_product_description->save();
+
+    Notification::send($pm_id, new UpdateClientProductDescriptionNotification($sales_product_description));
+
+    return response()->json([
+        'status'=>200,
+        'website_link'=>$sales_product_description->website_link,
+        'website_niche'=>$sales_product_description->website_niche,
+        'website_name'=>$sales_product_description->website_name,
+        'product_no'=>$sales_product_description->product_no,
+        'word_count'=>$sales_product_description->word_count,
+    ]);
+}
+
+public function updateSalesProductDescriptionBusinessInfo(Request $request ,$id){
+    $data = $request->all();
+    $folder_links = json_encode($data['folder_link']);
+
+    $sales_product_description = SalesProductDescription::find($id);
+    $sales_product_description->business_information = $data['business_information'];
+    $sales_product_description->share_file_info = $data['share_file_info'];
+    $sales_product_description->folder_link = $folder_links;
+    $sales_product_description->save();
+
+    return response()->json([
+        'status'=>200,
+    ]);
+}
+
+public function updateSalesProductDescriptionReferenceblog(Request $request ,$id){
+    $data = $request->all();
+    $blog_urls = json_encode($data['blog_url']);
+
+    $sales_product_description = SalesProductDescription::find($id);
+    $sales_product_description->blog_url = $blog_urls;
+    $sales_product_description->save();
+
+    return response()->json(['status'=>200]);
+}
+
+public function updateSalesProductDescriptionProductList(Request $request ,$id){
+    $data = $request->all();
+    $product_lists = json_encode($data['product_list']);
+
+    $sales_product_description = SalesProductDescription::find($id);
+    $sales_product_description->product_list = $product_lists;
+    $sales_product_description->save();
+
+    return response()->json(['status'=>200]);
+}
+ // ================================= PRODUCT DESCRIPTION END =======================
+
+
+public function updateProductCategory(Request $request, $id){
+    // dd($request->all());
+
+    $validated = $request->validate([
+        'website_link' => 'required|url',
+        'website_niche' => 'required',
+        'website_name' => 'required',
+        'product_no' => 'required',
+        'word_count' => 'required',
+    ], [
+        'website_link.required' => 'This field is required!!',
+        'website_niche.required' => 'This field is required!!',
+        'website_name.required' => 'This field is required!!',
+        'product_no.required' => 'This field is required!!',
+        'word_count.required' => 'This field is required!!',
+    ]);
+
+    $data = $request->all();
+
+    $sales_product_category = new SalesProductCategory();
+    $user = Deal::where('id',$request->deal_id)->first();
+    $pm_id = User::where('id',$user->pm_id)->first();
+
+    if($request->website_link){
+        $sales_product_category->website_link = $request->website_link;
+    }
+    if($request->website_niche){
+        $sales_product_category->website_niche = $request->website_niche;
+    }
+    if($request->website_name){
+        $sales_product_category->website_name = $request->website_name;
+    }
+    if($request->product_no){
+        $sales_product_category->product_no = $request->product_no;
+    }
+    if($request->word_count){
+        $sales_product_category->word_count = $request->word_count;
+    }
+    $sales_product_category->deal_id = $request->deal_id;
+    $sales_product_category->product_cat_callection_id = $request->product_category_id;
+    $sales_product_category->milestone_id= $request->milestone_id;
+    $sales_product_category->status = 'submitted';
+    $sales_product_category->save();
+
+    Notification::send($pm_id, new UpdateClientProductCategoryNotification($sales_product_category));
+
+    return response()->json([
+        'status'=>200,
+        'website_link'=>$sales_product_category->website_link,
+        'website_niche'=>$sales_product_category->website_niche,
+        'website_name'=>$sales_product_category->website_name,
+        'product_no'=>$sales_product_category->product_no,
+        'word_count'=>$sales_product_category->word_count,
+    ]);
+}
+public function updateSalesProductCategoryBusinessInfo(Request $request ,$id){
+    $data = $request->all();
+    $folder_links = json_encode($data['folder_link']);
+
+    $sales_product_category = SalesProductCategory::find($id);
+    $sales_product_category->business_information = $data['business_information'];
+    $sales_product_category->share_file_info = $data['share_file_info'];
+    $sales_product_category->folder_link = $folder_links;
+    $sales_product_category->save();
+
+    return response()->json([
+        'status'=>200,
+    ]);
+}
+
+public function updateSalesProductCategoryReferenceblog(Request $request ,$id){
+    $data = $request->all();
+    $category_urls = json_encode($data['category_url']);
+
+    $sales_product_category = SalesProductCategory::find($id);
+    $sales_product_category->category_url = $category_urls;
+    $sales_product_category->save();
+
+    return response()->json(['status'=>200]);
+}
+public function updateSalesProductCategoryProductList(Request $request ,$id){
+    $data = $request->all();
+    $category_lists = json_encode($data['category_list']);
+
+    $sales_product_category = SalesProductCategory::find($id);
+    $sales_product_category->category_list = $category_lists;
+    $sales_product_category->save();
+
+    return response()->json(['status'=>200]);
+}
+
+// ================================= BASIC SEO =======================
+public function updateBasicSEO(Request $request, $id){
+
+    $validated = $request->validate([
+        'owner_name' => 'required|url',
+        'business_name' => 'required',
+        'business_address' => 'required',
+        'phone_number' => 'required',
+        'zip_code' => 'required',
+    ], [
+        'owner_name.required' => 'This field is required!!',
+        'business_name.required' => 'This field is required!!',
+        'business_address.required' => 'This field is required!!',
+        'phone_number.required' => 'This field is required!!',
+        'zip_code.required' => 'This field is required!!',
+    ]);
+
+    $sales_basic_seo = new SalesBasicSeo();
+    $user = Deal::where('id',$request->deal_id)->first();
+    $pm_id = User::where('id',$user->pm_id)->first();
+
+    if($request->owner_name){
+        $sales_basic_seo->owner_name = $request->owner_name;
+    }
+    if($request->business_name){
+        $sales_basic_seo->business_name = $request->business_name;
+    }
+    if($request->business_address){
+        $sales_basic_seo->business_address = $request->business_address;
+    }
+    if($request->phone_number){
+        $sales_basic_seo->phone_number = $request->phone_number;
+    }
+    if($request->zip_code){
+        $sales_basic_seo->zip_code = $request->zip_code;
+    }
+    $sales_basic_seo->deal_id = $request->deal_id;
+    $sales_basic_seo->basic_seo_id = $request->basic_seo_id;
+    $sales_basic_seo->milestone_id= $request->milestone_id;
+    $sales_basic_seo->status = 'submitted';
+    $sales_basic_seo->save();
+
+    Notification::send($pm_id, new UpdateClientBasicSeoNotification($sales_basic_seo));
+
+    return response()->json([
+        'status'=>200,
+        'owner_name'=>$sales_basic_seo->owner_name,
+        'business_name'=>$sales_basic_seo->business_name,
+        'business_address'=>$sales_basic_seo->business_address,
+        'phone_number'=>$sales_basic_seo->phone_number,
+        'zip_code'=>$sales_basic_seo->zip_code,
+    ]);
+}
+public function updateSalesBasicSeoGoogleSearch(Request $request ,$id){
+    $sales_basic_seo = SalesBasicSeo::find($id);
+    $sales_basic_seo->google_search_info = $request->google_search_info;
+    $sales_basic_seo->done1 = $request->done1;
+    $sales_basic_seo->email1 = $request->email1;
+    $sales_basic_seo->password1 = $request->password1;
+    $sales_basic_seo->save();
+
+    return response()->json(['status'=>200]);
+}
+public function updateSalesBasicSeoGoogleAnalytic(Request $request ,$id){
+    $sales_basic_seo = SalesBasicSeo::find($id);
+    $sales_basic_seo->google_analytic_info = $request->google_analytic_info;
+    $sales_basic_seo->done2 = $request->done2;
+    $sales_basic_seo->email2 = $request->email2;
+    $sales_basic_seo->password2 = $request->password2;
+    $sales_basic_seo->save();
+
+    return response()->json(['status'=>200]);
+}
+public function updateSalesBasicSeoGoogleAccountInfo(Request $request ,$id){
+    $sales_basic_seo = SalesBasicSeo::find($id);
+    $sales_basic_seo->google_business_account_info = $request->google_business_account_info;
+    $sales_basic_seo->done3 = $request->done3;
+    $sales_basic_seo->email3 = $request->email3;
+    $sales_basic_seo->password3 = $request->password3;
+    $sales_basic_seo->save();
+
+    return response()->json(['status'=>200]);
+}
+public function updateSalesBasicSeoShareCms(Request $request ,$id){
+    $sales_basic_seo = SalesBasicSeo::find($id);
+    $sales_basic_seo->share_cms_access_info = $request->share_cms_access_info;
+    $sales_basic_seo->url = $request->url;
+    $sales_basic_seo->user_name = $request->user_name;
+    $sales_basic_seo->password4 = $request->password4;
+    $sales_basic_seo->save();
+
+    return response()->json(['status'=>200]);
+}
+// ================== Update Web Content =======================
+public function updatePmWebContent(Request $request){
+    // DB::beginTransaction();
+    $data = $request->all();
+    $folder_links = json_encode($data['folder_link']);
+    $reference_websites = json_encode($data['reference_website']);
+    $description1 = json_encode($data['description1']);
+    $description2 = json_encode($data['description2']);
+    $description3 = json_encode($data['description3']);
+    $page_names = json_encode($data['page_name1']);
+    $quantitys = json_encode($data['quantity1']);
+    $approximate_words = json_encode($data['approximate_word1']);
+    $website_links = json_encode($data['website_link']);
+    $pm_page_names = json_encode($data['page_name']);
+    $pm_quantitys = json_encode($data['quantity']);
+    $pm_approximate_words = json_encode($data['approximate_word']);
+
+    $pm_web_content = new PmWebContent();
+    $pm_web_content->sales_web_content_id = $data['sales_web_content_id'];
+    $pm_web_content->deal_id = $data['deal_id'];
+    $pm_web_content->website_link = $data['website_link2'];
+    $pm_web_content->website_niche = $data['website_niche2'];
+    $pm_web_content->website_name = $data['website_name2'];
+    $pm_web_content->business_information = $data['business_information2'];
+    $pm_web_content->share_file = $request->share_file;
+    $pm_web_content->folder_link = $folder_links;
+    $pm_web_content->reference_website = $reference_websites;
+    $pm_web_content->competitor_content = $request->competitor_content;
+    $pm_web_content->description1 = $description1;
+    $pm_web_content->description2 = $description2;
+    $pm_web_content->description3 = $description3;
+    $pm_web_content->product_list = $data['product_list1'];
+    $pm_web_content->page_name1 = $page_names;
+    $pm_web_content->quantity1 = $quantitys;
+    $pm_web_content->approximate_word = $approximate_words;
+    $pm_web_content->gender = $data['target_audience_gender'];
+    $pm_web_content->age1 = $data['target_audience_age1'];
+    $pm_web_content->age2 = $data['target_audience_age2'];
+    $pm_web_content->monthly_income = $data['monthly_income1'];
+    $pm_web_content->education_level = $data['education_level1'];
+    $pm_web_content->country = $data['country1'];
+    $pm_web_content->city = $data['city1'];
+    $pm_web_content->interest = $data['interest1'];
+    $pm_web_content->buying_habit1 = $data['interest_buying_habit1'];
+    $pm_web_content->buying_habit2 = $data['interest_buying_habit2'];
+    $pm_web_content->buying_habit3 = $data['interest_buying_habit3'];
+    $pm_web_content->language = $data['thor_native_language'];
+    $pm_web_content->word_appropriate = $data['word_appropriate'];
+    $pm_web_content->word_client_initially = $data['word_client_initially'];
+    $pm_web_content->additional_word = $data['additional_word'];
+    $pm_web_content->layout_content = $data['layout_content'];
+    $pm_web_content->theme_link = $website_links;
+    $pm_web_content->pm_page_name = $pm_page_names;
+    $pm_web_content->pm_quantity= $pm_quantitys;
+    $pm_web_content->pm_approximate_word= $pm_approximate_words;
+    $pm_web_content->milestone_id= $request->milestone_id;
+    $pm_web_content->save();
+
+
+    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+    $project_id = Project::where('deal_id', $request->deal_id)->first();
+    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+    // dd($left_minutes);
+
+    $left_in_hours = round($left_minutes / 60, 0);
+    $left_in_minutes = $left_minutes % 60;
+
+    if ($left_minutes < 1) {
+        // return response()->json([
+        //     "message" => "The given data was invalid.",
+        //     "errors" => [
+        //         "estimate_hours" => [
+        //             "Estimate hours cannot exceed from project allocation hours !"
+        //         ]
+        //     ]
+        // ], 422);
+    }
+
+    // dd($request);
+    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+    $ganttTaskArray = [];
+    $gantTaskLinkArray = [];
+    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+    $task = new Task();
+    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+    $task->description = '<p>'.$data['website_link2'] .'</p><br><p>'
+    .$data['website_niche2'].'</p></br><p>'.$data['website_name2'].'</p></br><p>'
+    .$data['business_information2'].'</p></br><p>'.$request->share_file.'</p></br><p>'.$folder_links.'</p></br><p>'.$reference_websites.'</p></br><p>'.$request->competitor_content.'</p></br><p>'
+    .$description1.'</p></br><p>'.$description2.'</p></br><p>'.$description3.'</p></br><p>'.$data['product_list1'].'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'.$approximate_words.'</p></br><p>'
+    .$data['target_audience_gender'].'</p></br><p>'.$data['target_audience_age1'].'</p></br><p>'.$data['target_audience_age2'].'</p></br><p>'.$data['monthly_income1'].'</p></br><p>'.$data['education_level1'].'</p></br><p>'
+    .$data['country1'].'</p></br><p>'.$data['city1'].'</p></br><p>'.$data['interest1'].'</p></br><p>'.$data['interest_buying_habit1'].'</p></br><p>'.$data['interest_buying_habit2'].'</p></br><p>'.$data['interest_buying_habit3'].'</p></br><p>'
+    .$data['thor_native_language'].'</p></br><p>'.$data['word_appropriate'].'</p></br><p>'.$data['word_client_initially'].'</p></br><p>'.$data['additional_word'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'
+    .$website_links.'</p></br><p>'.$pm_page_names.'</p></br><p>'.$pm_quantitys.'</p></br><p>'.$pm_approximate_words.'</p></br>';
+
+    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+    $task->start_date = Carbon::now()->format('Y-m-d');
+    // $task->due_date = $dueDate;
+    $task->project_id = $project_id->id;
+    // $task->task_category_id = $request->category_id;
+    $task->priority = 'medium';
+    $task->board_column_id = 2;
+
+    $task->estimate_hours = 0;
+    $task->estimate_minutes = 0;
+    // $task->deliverable_id = $request->deliverable_id;
+
+
+    if ($request->milestone_id != '') {
+        $task->milestone_id = $request->milestone_id;
+    }
+
+    $task->task_status = "pending";
+    $total_hours = 0;
+    $total_minutes = 0;
+    $total_in_minutes = 0;
+    $task->estimate_time_left_minutes = $total_in_minutes;
+
+    $task->save();
+
+    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+    $task->saveQuietly();
+
+    $users = User::where('role_id',13)->get();
+    foreach ($users as $user) {
+        $task_user = new TaskUser();
+        $task_user->user_id = $user->id;
+        $task_user->task_id= $task->id;
+        $task_user->save();
+        Notification::send($user, new PmUpdateWebContentNotification($task_user));
+    }
+
+
+    return response()->json(['status'=>200]);
+}
+
+
+// ==================================Update PM Blog Articles======================
+public function updatePmBlogArticle(Request $request){
+
+// dd($request->all());
+    $data = $request->all();
+
+    $folderLinks = json_encode($data['folder_link']);
+    $blogUrls = json_encode($data['blog_url']);
+    $topicLinks = json_encode($data['topic_link']);
+    $keywordLinks = json_encode($data['keyword_link']);
+    $website_links = json_encode($data['website_link']);
+    $page_names = json_encode($data['page_name']);
+    $quantitys = json_encode($data['quantity']);
+    $approximate_words = json_encode($data['approximate_word']);
+
+    $pm_blog_article = new PmBlogArticle();
+    $pm_blog_article->word_appropriate = $data['word_appropriate'];
+    $pm_blog_article->word_client_initially = $data['word_client_initially'];
+    $pm_blog_article->website_link = $data['website_link_2'];
+    $pm_blog_article->website_niche = $data['website_niche_2'];
+    $pm_blog_article->website_name = $data['website_name'];
+    $pm_blog_article->business_information = $data['business_information'];
+    $pm_blog_article->product_no = $data['product_no'];
+    $pm_blog_article->sales_blog_article_id = $data['sales_blog_article_id'];
+    $pm_blog_article->deal_id = $data['deal_id'];
+    $pm_blog_article->additional_word = $data['additional_word'];
+    $pm_blog_article->layout_content = $data['layout_content'];
+    $pm_blog_article->share_file_info = $request->share_file_info;
+    $pm_blog_article->folder_link = $folderLinks;
+    $pm_blog_article->blog_url = $blogUrls;
+    $pm_blog_article->topic_info = $data['topic_info'];
+    $pm_blog_article->topic_link = $topicLinks;
+    $pm_blog_article->keyword_info = $data['keyword_info'];
+    $pm_blog_article->keyword_link = $keywordLinks;
+    $pm_blog_article->theme_link = $website_links;
+    $pm_blog_article->page_name = $page_names;
+    $pm_blog_article->quantity = $quantitys;
+    $pm_blog_article->approximate_word = $approximate_words;
+    $pm_blog_article->milestone_id= $request->milestone_id;
+    $pm_blog_article->save();
+
+     // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+     $project_id = Project::where('deal_id', $request->deal_id)->first();
+     $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+     $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+     $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+     $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+     // dd($left_minutes);
+
+     $left_in_hours = round($left_minutes / 60, 0);
+     $left_in_minutes = $left_minutes % 60;
+
+     if ($left_minutes < 1) {
+         // return response()->json([
+         //     "message" => "The given data was invalid.",
+         //     "errors" => [
+         //         "estimate_hours" => [
+         //             "Estimate hours cannot exceed from project allocation hours !"
+         //         ]
+         //     ]
+         // ], 422);
+     }
+
+     // dd($request);
+     $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+     $ganttTaskArray = [];
+     $gantTaskLinkArray = [];
+     $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+     $task = new Task();
+     $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+     $task->description = '<p>'.$data['word_appropriate'] .'</p><br><p>'
+     .$data['word_client_initially'].'</p></br><p>'.$data['website_link_2'].'</p></br><p>'
+     .$data['website_niche_2'].'</p></br><p>'.$data['website_name'].'</p></br><p>'.$data['business_information'].'</p></br><p>'.$data['product_no'].'</p></br><p>'
+     .$data['additional_word'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'.$request->share_file_info.'</p></br><p>'.$folderLinks.'</p></br><p>'.$blogUrls.'</p></br><p>'.$data['topic_info'].'</p></br><p>'.$topicLinks.'</p></br><p>'
+     .$data['keyword_info'].'</p></br><p>'.$keywordLinks.'</p></br><p>'.$website_links.'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'
+     .$approximate_words.'</p></br>';
+
+     // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+     $task->start_date = Carbon::now()->format('Y-m-d');
+     // $task->due_date = $dueDate;
+     $task->project_id = $project_id->id;
+     // $task->task_category_id = $request->category_id;
+     $task->priority = 'medium';
+     $task->board_column_id = 2;
+
+     $task->estimate_hours = 0;
+     $task->estimate_minutes = 0;
+     // $task->deliverable_id = $request->deliverable_id;
+
+
+     if ($request->milestone_id != '') {
+         $task->milestone_id = $request->milestone_id;
+     }
+
+     $task->task_status = "pending";
+     $total_hours = 0;
+     $total_minutes = 0;
+     $total_in_minutes = 0;
+     $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+     $task->save();
+
+     $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+     $task->saveQuietly();
+
+     $users = User::where('role_id',13)->get();
+     foreach ($users as $user) {
+         $task_user = new TaskUser();
+         $task_user->user_id = $user->id;
+         $task_user->task_id= $task->id;
+         $task_user->save();
+         Notification::send($user, new PmUpdateBlogArticleNotification($task_user));
+     }
+
+    return response()->json(['status'=>200]);
+}
+// ==================================Update PM Product Description======================
+public function updatePmProductDescription(Request $request){
+    // dd($request->all());
+    $data = $request->all();
+
+    $folder_links = json_encode($data['folder_link']);
+    $blogUrls = json_encode($data['blog_url']);
+    $product_lists = json_encode($data['product_list']);
+    $website_links = json_encode($data['website_link']);
+    $page_names = json_encode($data['page_name']);
+    $quantitys = json_encode($data['quantity']);
+    $approximate_words = json_encode($data['approximate_word']);
+
+    $pm_product_description = new PmProductDescription();
+
+    $pm_product_description->sales_product_description_id = $data['sales_product_description_id'];
+    $pm_product_description->deal_id = $data['deal_id'];
+    $pm_product_description->word_appropriate = $data['word_appropriate'];
+    $pm_product_description->word_client_initially = $data['word_client_initially'];
+    $pm_product_description->website_link = $data['website_link_2'];
+    $pm_product_description->website_niche = $data['website_niche_2'];
+    $pm_product_description->website_name = $data['website_name'];
+    $pm_product_description->business_information = $data['business_information'];
+    $pm_product_description->additional_word = $data['additional_word'];
+    $pm_product_description->product_no = $data['product_no'];
+    $pm_product_description->word_count = $data['word_count'];
+    $pm_product_description->layout_content = $data['layout_content'];
+    $pm_product_description->share_file_info = $request->share_file_info;
+    $pm_product_description->folder_link = $folder_links;
+    $pm_product_description->blog_url = $blogUrls;
+    $pm_product_description->product_list = $product_lists;
+    $pm_product_description->theme_link = $website_links;
+    $pm_product_description->page_name = $page_names;
+    $pm_product_description->quantity = $quantitys;
+    $pm_product_description->approximate_word = $approximate_words;
+    $pm_product_description->milestone_id= $request->milestone_id;
+    $pm_product_description->save();
+
+
+    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+    $project_id = Project::where('deal_id', $request->deal_id)->first();
+    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+    // dd($left_minutes);
+
+    $left_in_hours = round($left_minutes / 60, 0);
+    $left_in_minutes = $left_minutes % 60;
+
+    if ($left_minutes < 1) {
+        // return response()->json([
+        //     "message" => "The given data was invalid.",
+        //     "errors" => [
+        //         "estimate_hours" => [
+        //             "Estimate hours cannot exceed from project allocation hours !"
+        //         ]
+        //     ]
+        // ], 422);
+    }
+
+    // dd($request);
+    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+    $ganttTaskArray = [];
+    $gantTaskLinkArray = [];
+    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+    $task = new Task();
+    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+    $task->description = '<p>'.$data['word_appropriate'] .'</p><br><p>'
+    .$data['word_client_initially'].'</p></br><p>'.$data['website_link_2'].'</p></br><p>'
+    .$data['website_niche_2'].'</p></br><p>'.$data['website_name'].'</p></br><p>'.$data['business_information'].'</p></br><p>'.$data['additional_word'].'</p></br><p>'
+    .$data['product_no'].'</p></br><p>'.$data['word_count'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'.$request->share_file_info.'</p></br><p>'.$folder_links.'</p></br><p>'.$blogUrls.'</p></br><p>'.$product_lists.'</p></br><p>'
+    .$website_links.'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'.$approximate_words.'</p></br>';
+
+    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+    $task->start_date = Carbon::now()->format('Y-m-d');
+    // $task->due_date = $dueDate;
+    $task->project_id = $project_id->id;
+    // $task->task_category_id = $request->category_id;
+    $task->priority = 'medium';
+    $task->board_column_id = 2;
+
+    $task->estimate_hours = 0;
+    $task->estimate_minutes = 0;
+    // $task->deliverable_id = $request->deliverable_id;
+
+
+    if ($request->milestone_id != '') {
+        $task->milestone_id = $request->milestone_id;
+    }
+
+    $task->task_status = "pending";
+    $total_hours = 0;
+    $total_minutes = 0;
+    $total_in_minutes = 0;
+    $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+    $task->save();
+
+    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+    $task->saveQuietly();
+
+    $users = User::where('role_id',13)->get();
+    foreach ($users as $user) {
+        $task_user = new TaskUser();
+        $task_user->user_id = $user->id;
+        $task_user->task_id= $task->id;
+        $task_user->save();
+        Notification::send($user, new PmUpdateProductDescriptionNotification($task_user));
+    }
+
+
+    return response()->json(['status'=>200]);
+}
+
+// ===================== Update Pm Product Category =================
+public function updatePmProductCategory(Request $request){
+    $data = $request->all();
+    $folder_links = json_encode($data['folder_link']);
+    $categoryUrls = json_encode($data['category_url']);
+    $category_lists = json_encode($data['category_list']);
+    $website_links = json_encode($data['website_link']);
+    $page_names = json_encode($data['page_name']);
+    $quantitys = json_encode($data['quantity']);
+    $approximate_words = json_encode($data['approximate_word']);
+
+    $pm_product_category = new PmProductCategory();
+    $pm_product_category->sales_product_category_id = $data['sales_product_category_id'];
+    $pm_product_category->deal_id = $data['deal_id'];
+    $pm_product_category->word_appropriate = $data['word_appropriate'];
+    $pm_product_category->word_client_initially = $data['word_client_initially'];
+    $pm_product_category->website_link = $data['website_link_2'];
+    $pm_product_category->website_niche = $data['website_niche_2'];
+    $pm_product_category->website_name = $data['website_name'];
+    $pm_product_category->business_information = $data['business_information'];
+    $pm_product_category->share_file_info = $request->share_file_info;
+    $pm_product_category->folder_link = $folder_links;
+    $pm_product_category->category_url = $categoryUrls;
+    $pm_product_category->product_no = $data['product_no'];
+    $pm_product_category->category_list = $category_lists;
+    $pm_product_category->word_count = $data['word_count'];
+    $pm_product_category->additional_word = $data['additional_word'];
+    $pm_product_category->layout_content = $data['layout_content'];
+    $pm_product_category->theme_link = $website_links;
+    $pm_product_category->page_name = $page_names;
+    $pm_product_category->quantity = $quantitys;
+    $pm_product_category->approximate_word = $approximate_words;
+    $pm_product_category->milestone_id= $request->milestone_id;
+    $pm_product_category->save();
+
+    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+    $project_id = Project::where('deal_id', $request->deal_id)->first();
+    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+    // dd($left_minutes);
+
+    $left_in_hours = round($left_minutes / 60, 0);
+    $left_in_minutes = $left_minutes % 60;
+
+    if ($left_minutes < 1) {
+        // return response()->json([
+        //     "message" => "The given data was invalid.",
+        //     "errors" => [
+        //         "estimate_hours" => [
+        //             "Estimate hours cannot exceed from project allocation hours !"
+        //         ]
+        //     ]
+        // ], 422);
+    }
+
+    // dd($request);
+    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+    $ganttTaskArray = [];
+    $gantTaskLinkArray = [];
+    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+    $task = new Task();
+    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+    $task->description = '<p>'.$data['word_appropriate'] .'</p><br><p>'
+    .$data['word_client_initially'].'</p></br><p>'.$data['website_link_2'].'</p></br><p>'
+    .$data['website_niche_2'].'</p></br><p>'.$data['website_name'].'</p></br><p>'.$data['business_information'].'</p></br><p>'.$request->share_file_info.'</p></br><p>'.$folder_links.'</p></br><p>'
+    .$categoryUrls.'</p></br><p>'.$data['product_no'].'</p></br><p>'.$category_lists.'</p></br><p>'.$data['word_count'].'</p></br><p>'.$data['additional_word'].'</p></br><p>'.$data['layout_content'].'</p></br><p>'
+    .$website_links.'</p></br><p>'.$page_names.'</p></br><p>'.$quantitys.'</p></br><p>'.$approximate_words.'</p></br>';
+
+    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+    $task->start_date = Carbon::now()->format('Y-m-d');
+    // $task->due_date = $dueDate;
+    $task->project_id = $project_id->id;
+    // $task->task_category_id = $request->category_id;
+    $task->priority = 'medium';
+    $task->board_column_id = 2;
+
+    $task->estimate_hours = 0;
+    $task->estimate_minutes = 0;
+    // $task->deliverable_id = $request->deliverable_id;
+
+
+    if ($request->milestone_id != '') {
+        $task->milestone_id = $request->milestone_id;
+    }
+
+    $task->task_status = "pending";
+    $total_hours = 0;
+    $total_minutes = 0;
+    $total_in_minutes = 0;
+    $task->estimate_time_left_minutes = $total_in_minutes;
+
+
+    $task->save();
+
+    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+    $task->saveQuietly();
+
+    $users = User::where('role_id',13)->get();
+    foreach ($users as $user) {
+        $task_user = new TaskUser();
+        $task_user->user_id = $user->id;
+        $task_user->task_id= $task->id;
+        $task_user->save();
+        Notification::send($user, new PmUpdateProductCategoryNotification($task_user));
+    }
+
+    return response()->json(['status'=>200]);
+}
+// =========================== PM BASIC SEO ========================
+public function updatePmBasicSEO(Request $request){
+
+    $pm_basic_seo = new PmBasicSeo();
+    $pm_basic_seo->sales_basic_seo_id = $request->sales_basic_seo_id;
+    $pm_basic_seo->deal_id = $request->deal_id;
+    $pm_basic_seo->owner_name = $request->owner_name2;
+    $pm_basic_seo->business_name = $request->business_name2;
+    $pm_basic_seo->business_address = $request->business_address2;
+    $pm_basic_seo->phone_number = $request->phone_number2;
+    $pm_basic_seo->zip_code = $request->zip_code2;
+    $pm_basic_seo->google_search_info = $request->google_search_info;
+    $pm_basic_seo->done1 = $request->done1;
+    $pm_basic_seo->google_search_info_email = $request->google_search_info_email;
+    $pm_basic_seo->google_search_info_password = $request->google_search_info_password;
+    $pm_basic_seo->google_analytic_info = $request->google_analytic_info;
+    $pm_basic_seo->done2 = $request->done2;
+    $pm_basic_seo->google_analytic_info_email = $request->google_analytic_info_email;
+    $pm_basic_seo->google_analytic_info_password = $request->google_analytic_info_password;
+    $pm_basic_seo->google_business_account_info = $request->google_business_account_info;
+    $pm_basic_seo->done3 = $request->done3;
+    $pm_basic_seo->google_business_account_info_email = $request->google_business_account_info_email;
+    $pm_basic_seo->google_business_account_info_password = $request->google_business_account_info_password;
+    $pm_basic_seo->share_cms_access_info = $request->share_cms_access_info;
+    $pm_basic_seo->login_url = $request->login_url;
+    $pm_basic_seo->email = $request->email;
+    $pm_basic_seo->password = $request->password;
+    $pm_basic_seo->confirm_adding = $request->confirm_adding;
+    $pm_basic_seo->google_console_setup = $request->google_console_setup;
+    $pm_basic_seo->google_analytics_setup = $request->google_analytics_setup;
+    $pm_basic_seo->sitemap_setup = $request->sitemap_setup;
+    $pm_basic_seo->robots_txt_setup = $request->robots_txt_setup;
+    $pm_basic_seo->google_business_setup = $request->google_business_setup;
+    $pm_basic_seo->milestone_id= $request->milestone_id;
+    $pm_basic_seo->save();
+
+    // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
+
+    $project_id = Project::where('deal_id', $request->deal_id)->first();
+    $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
+    $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
+    $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
+    $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
+    // dd($left_minutes);
+
+    $left_in_hours = round($left_minutes / 60, 0);
+    $left_in_minutes = $left_minutes % 60;
+
+    if ($left_minutes < 1) {
+        // return response()->json([
+        //     "message" => "The given data was invalid.",
+        //     "errors" => [
+        //         "estimate_hours" => [
+        //             "Estimate hours cannot exceed from project allocation hours !"
+        //         ]
+        //     ]
+        // ], 422);
+    }
+
+    // dd($request);
+    $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
+
+    $ganttTaskArray = [];
+    $gantTaskLinkArray = [];
+    $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+    $task = new Task();
+    $task->heading = $project_id->project_name . ' - Cross Departmental Task';
+
+    $task->description = '<p>'.$request->owner_name2 .'</p><br><p>'
+    .$request->business_name2.'</p></br><p>'.$request->business_address2.'</p></br><p>'
+    .$request->phone_number2.'</p></br><p>'.$request->zip_code2.'</p></br><p>'.$request->google_search_info.'</p></br><p>'.$request->done1.'</p></br><p>'.$request->google_search_info_email.'</p></br><p>'
+    .$request->google_search_info_password.'</p></br><p>'.$request->google_analytic_info.'</p></br><p>'.$request->done2.'</p></br><p>'.$request->google_analytic_info_email.'</p></br><p>'.$request->google_analytic_info_password.'</p></br><p>'.$request->google_business_account_info.'</p></br><p>'
+    .$request->done3.'</p></br><p>'.$request->google_business_account_info_email.'</p></br><p>'.$request->google_business_account_info_password.'</p></br><p>'.$request->share_cms_access_info.'</p></br><p>'
+    .$request->login_url.'</p></br><p>'.$request->email.'</p></br><p>'.$request->password.'</p></br><p>'.$request->confirm_adding.'</p></br><p>'.$request->google_console_setup.'</p></br><p>'
+    .$request->google_analytics_setup.'</p></br><p>'.$request->sitemap_setup.'</p></br><p>'.$request->robots_txt_setup.'</p></br><p>'.$request->google_business_setup.'</p></br>';
+
+    // $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+    $task->start_date = Carbon::now()->format('Y-m-d');
+    // $task->due_date = $dueDate;
+    $task->project_id = $project_id->id;
+    // $task->task_category_id = $request->category_id;
+    $task->priority = 'medium';
+    $task->board_column_id = 2;
+
+    $task->estimate_hours = 0;
+    $task->estimate_minutes = 0;
+    // $task->deliverable_id = $request->deliverable_id;
+
+
+    if ($request->milestone_id != '') {
+        $task->milestone_id = $request->milestone_id;
+    }
+
+    $task->task_status = "pending";
+    $total_hours = 0;
+    $total_minutes = 0;
+    $total_in_minutes = 0;
+    $task->estimate_time_left_minutes = $total_in_minutes;
+
+    $task->save();
+
+    $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
+    $task->saveQuietly();
+
+    $users = User::where('role_id',13)->get();
+    foreach ($users as $user) {
+        $task_user = new TaskUser();
+        $task_user->user_id = $user->id;
+        $task_user->task_id= $task->id;
+        $task_user->save();
+        Notification::send($user, new PmUpdateBasicSeoNotification($task_user));
+    }
+
+    return response()->json(['status'=>200]);
+}
 
 
     public function Niche()

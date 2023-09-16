@@ -1303,8 +1303,8 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                                     }
                                     $page_name_array = explode(', ', $page_names);
 
-                                    if (is_string($sales_web_content->quantitys) && is_array(json_decode($sales_web_content->quantitys, true))) {
-                                        $array = json_decode($sales_web_content->quantitys, true);
+                                    if (is_string($sales_web_content->quantity) && is_array(json_decode($sales_web_content->quantity, true))) {
+                                        $array = json_decode($sales_web_content->quantity, true);
                                         $quantitys = implode(', ', $array);
                                     }
                                     $quantity_array = explode(', ', $quantitys);
