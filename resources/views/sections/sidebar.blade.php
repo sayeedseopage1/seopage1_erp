@@ -805,6 +805,7 @@
                         @if(Auth::user()->role_id == 1)
                         <x-sub-menu-item  :link="route('kpi-settings.index')" :text="'KPI Settings'" />
                         <x-sub-menu-item  :link="route('incentive-settings.index')" :text="'Incentives Settings'" />
+                        <x-sub-menu-item  :link="route('dashboard.core.metric')" :text="'PM Core Metrics Settings'" />
 
                         <div class="accordionItemContent pb-2">
                             <div class="accordion sidebar_sub_item" id="accordionExample">

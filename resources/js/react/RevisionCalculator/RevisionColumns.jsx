@@ -10,7 +10,15 @@ export const revisionColumns = [
         sort: row => row?.project_manager?.name,
         rowSpan: 2,
         searchText: (row) =>  `${row?.project_manager?.name}`,
-        row: ({row}) => <span className="singleline-ellipsis"> {row?.project_manager?.name} </span> 
+        row: ({row}) => {
+            return(
+                <abbr title={row?.project_manager?.name} >
+                    <span className="singleline-ellipsis"> 
+                        {row?.project_manager?.name} 
+                    </span> 
+                </abbr>
+            )
+        }
     },
 
     {
@@ -117,7 +125,7 @@ export const revisionColumns = [
                 row: ({row}) =>{
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                            to={`client-issues-table?pm=${row?.project_manager?.id}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.client_side_issues}
@@ -134,7 +142,7 @@ export const revisionColumns = [
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                            to={`project-manager-issues-table?pm=${row?.project_manager?.id}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.project_manager_issues}

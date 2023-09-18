@@ -1,0 +1,115 @@
+.table-container {
+    overflow-y: auto;
+}
+
+.table-container:hover {
+    overflow-y: auto;
+}
+
+.table-container::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent !important;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 219) !important;
+    border: 2px solid rgb(255, 255, 255) !important;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    border: 0 !important;
+    background-color: rgb(197, 197, 197) !important;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background-color: rgba(219, 219, 219, 0.1) !important;
+}
+
+.sp1-data-table {
+    width: 100%;
+}
+
+.sp1-data-table-thead {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.sp1-data-table-th,
+.sp1-data-table-td {
+    padding: 6px 0;
+    font-size: 13px;
+    transition: background 0.2s ease-in-out;
+}
+
+sp1_tasks_tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.sp1-data-table-td {
+    padding: 10px;
+    max-width: 350px;
+    min-height: 150px;
+    font-weight: 500;
+    position: relative;
+    color: #646770 !important;
+    border-bottom: 1px solid rgb(236, 236, 236);
+}
+
+.sp1-data-table-td a {
+    color: #646770 !important;
+}
+
+.sp1-data-table-td a:hover {
+    text-decoration: underline !important;
+}
+
+.sp1-data-table-th {
+    height: 36px;
+    padding: 3px 10px;
+    background: rgb(255, 255, 255);
+    border-bottom: 2px solid rgb(242, 242, 245);
+    background-color: #ffffff;
+    position: relative;
+    color: #8a929c;
+    cursor: default;
+    min-width: min-content;
+}
+
+.sp1-data-table-th > .resizer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    cursor: col-resize;
+    height: 100% !important;
+}
+
+.sp1-data-table-th > .resizer.isResizing:hover {
+    background: #777;
+}
+
+.sp1-data-table-tr:hover > td {
+    background-color: #f5f5f5;
+    color: #222;
+}
+
+.sp1-data-table-body > .sp1-data-table-tr:hover .sp1-data-table-td {
+    background-color: rgba(233, 235, 240, 0.349);
+}
+
+.sp1_drag_th.__dragging {
+    background-color: rgba(170, 173, 180, 0.222);
+}
+
+.sp1_drag_th.__drop-area {
+    background-color: rgba(34, 45, 71, 0.349);
+}
+
+.sp1-data-table-sort-btn {
+    background-color: transparent;
+}

@@ -12,7 +12,10 @@ import './react/projects/index';
 import './react/disputes/index';
 import './react/portfolios/index';
 import './react/RevisionCalculator/main';
+// import './react/revison-page/main'
 
+// react latest components
+import './react-latest/routes/routes'
 
 
 

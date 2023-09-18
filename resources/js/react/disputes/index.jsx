@@ -6,7 +6,8 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {store} from '../services/store';
 import Disputes from './Disputes';
-import DisputeContextProvider from './context';
+import DisputeContextProvider from './context';  
+import Toaster from '../global/Toaster';
  
 const container = document.getElementById("disputeContainer");
  
@@ -43,7 +44,8 @@ const DragLayer = () => {
 const Container = () => { 
   return(
     <DisputeContextProvider>
-      <React.Fragment> 
+      <React.Fragment>  
+        <Toaster /> 
         <DragLayer />
         <Outlet />
       </React.Fragment>
@@ -69,3 +71,4 @@ if(container){
     </React.StrictMode>
   )
 }
+

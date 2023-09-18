@@ -324,6 +324,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dashboard-advanced', [DashboardController::class, 'advancedDashboard'])->name('dashboard.advanced');
     Route::get('dashboard-pm-performance', [DashboardController::class, 'pmPerformance'])->name('dashboard.pm_performance');
     Route::post('dashboard-pm-data', [DashboardController::class, 'getPmData'])->name('dashboard.getPmData');
+    Route::get('dashboard-core-metric', [DashboardController::class, 'coreMetric'])->name('dashboard.core.metric');
+    Route::put('update-core-metric/{id}', [DashboardController::class, 'updateCoreMetric'])->name('update-core-metrics');
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
     Route::post('dashboard/widget/{dashboardType}', [DashboardController::class, 'widget'])->name('dashboard.widget');
     Route::post('dashboard/week-timelog', [DashboardController::class, 'weekTimelog'])->name('dashboard.week_timelog');
@@ -729,6 +731,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/task-timer-check/{id}', [TaskController::class, 'TaskTimeCheck']);
     
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
+
+    Route::get('tasks/revisions', [TaskController::class, 'task_revisions']);
     Route::get('tasks/get-task-revision/{id}', [TaskController::class, 'GetRevision']);
     Route::get('tasks/get-developer-tasks/{id}', [TaskController::class, 'DeveloperTask'])->name('get-developer-tasks');
     Route::get('tasks/get-task-submissions/{id}', [TaskController::class, 'GetTaskSubmission'])->name('get-task-submission');
@@ -752,6 +756,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/deny-continue', [TaskController::class, 'denyContinue'])->name('tasks.deny_continue');
     Route::post('tasks/revision-reason', [TaskController::class, 'revisionReason'])->name('tasks.revision_reason');
     Route::post('tasks/revision/accept-or-revision-by-developer', [TaskController::class, 'accept_or_revision_by_developer'])->name('accept_or_revision_by_developer');
+    Route::put('tasks/sales-response-on-revision', [TaskController::class, 'sales_response_on_pm_revision'])->name('sales-response-on-revision');
     Route::group(
         ['prefix' => 'tasks'],
         function () {

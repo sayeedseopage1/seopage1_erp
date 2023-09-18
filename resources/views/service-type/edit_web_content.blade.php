@@ -1136,6 +1136,7 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
 
                                 <!--Reference Blogs-->
                                 @php
+                                    $reference_websites = ''; 
                                     if (is_string($sales_web_content->reference_website) && is_array(json_decode($sales_web_content->reference_website, true))) {
                                         $array = json_decode($sales_web_content->reference_website, true);
                                         $reference_websites = implode(', ', $array);
@@ -1297,6 +1298,9 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                                 </div>
                                 <!--Product list-->
                                 @php
+                                    $page_names = '';
+                                    $quantitys = '';
+                                    $approximate_words = '';
                                     if (is_string($sales_web_content->page_name) && is_array(json_decode($sales_web_content->page_name, true))) {
                                         $array = json_decode($sales_web_content->page_name, true);
                                         $page_names = implode(', ', $array);

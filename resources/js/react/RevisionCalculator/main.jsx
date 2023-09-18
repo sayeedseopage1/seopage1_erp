@@ -11,6 +11,8 @@ import ProjectElaboration from './ProjectElaboration';
 import NumberOfTask from './NumberOfTask';
 import NumberOfRevision from './NumberOfRevision';
 import SalesIssuesTable from './SalesIssuesTable';
+import ClientIssuesTable from './ClientIssuesTable';
+import PMIssuesTable from './PMIssuesTable';
  
 const container = document.getElementById("revisionCalculator");
 
@@ -26,6 +28,8 @@ if(container){
                 <Route path="number-of-project-table" element={<NumberOfTask />} />
                 <Route path="number-of-revision-table" element={<NumberOfRevision />} />
                 <Route path="sales-issues-table" element={<SalesIssuesTable />} />
+                <Route path="client-issues-table" element={<ClientIssuesTable />} />
+                <Route path="project-manager-issues-table" element={<PMIssuesTable />} />
               </Route>
           </Routes>
         </DndProvider>

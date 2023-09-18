@@ -79,7 +79,16 @@ const cookData = () => {
             developer_issues: faker.string.numeric(2),
             total_disputes: faker.string.numeric(2),
             unsolved_dispute: faker.string.numeric(2),
-            created_at: faker.date.anytime()
+            created_at: faker.date.anytime(),
+            revision_request_raised_by: {
+                id: faker.number.int(), 
+                name: faker.person.fullName(),
+                avatar: faker.image.avatar(),
+            },
+            reason_for_revision: faker.lorem.sentence({ min: 2, max: 5 }),
+            disputed: faker.datatype.boolean(),
+            total_comments: faker.string.numeric(2),
+            verdict: faker.lorem.sentence({ min: 2, max: 5 })
         })
     }
 
@@ -95,6 +104,4 @@ export const projectElaborationData = (l) => {
 
     return data;
 }
-
-
-
+ 

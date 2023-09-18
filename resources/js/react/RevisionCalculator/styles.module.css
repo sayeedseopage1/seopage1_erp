@@ -6,6 +6,20 @@
 .table tr{
     border: none;
 }
+
+.table tr td button span.table_asc_desc{
+    color: red !important;
+}
+
+.table tr th{
+    border-color: #d9e6fc;
+    background-color: #DCE8FD;
+}
+
+.table tr td{
+    padding: 6px 10px;
+}
+ 
 .table tr:nth-child(evet){
     background-color: #fdfdfd;
 }
@@ -25,14 +39,13 @@
     border-left: none !important;
 }
 
-.table tbody tr:last-child td, 
-.table thead tr:last-child th{
+.table tbody tr:last-child td{
     border-bottom-width: 0 !important;
 }
 
 
 .table th[data-column-id = "revision_breakdown"]{
-    background-color: rgb(239, 239, 239) !important;
+    background-color: #d9e6fc;
 }
 
 .modal_panel{  
@@ -57,9 +70,12 @@
         width: 100vw !important; 
     }
 }
-
-
+ 
 
 .modal_title_bar{
     background-color: #f1f1f1;
+}
+
+.table_date_picker{
+    border: 1px solid rgb(236, 236, 236);
 }

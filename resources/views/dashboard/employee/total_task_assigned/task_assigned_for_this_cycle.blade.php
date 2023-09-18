@@ -73,6 +73,7 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="" style="width: 28px;">
+                                    @if($item->assined_to_avatar != null)
                                     <div style="width: 32px; height: 28px;">
                                         @if ($item->assined_to_avatar)
                                             <img src="{{ asset('user-uploads/avatar/'.$item->assined_to_avatar) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
@@ -80,8 +81,13 @@
                                             <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
                                         @endif
                                     </div>
+                                    @endif
                                 </div>
+                                @if($item->assined_to_name != null)
                                 <a href="{{ route('employees.show',$item->assined_to_id) }}" class="pl-2 ">{{ $item->assined_to_name }}</a>
+                                @else 
+                                -- 
+                                @endif
                             </div>
                         </td>
                         <td>{{ $item->task_creation_date }}</td>

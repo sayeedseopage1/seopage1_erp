@@ -39,6 +39,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Traits\PmDashboardAdminView;
+use App\Models\PmCoreMetric;
 
 class DashboardController extends AccountBaseController
 {
@@ -471,4 +472,57 @@ class DashboardController extends AccountBaseController
         return $this->PmDashboardAdminPmView($this->pm);
       
     }
-}
+    public function coreMetric(){
+        $this->pageTitle = "Update Core Metrics";
+        $this->pm_core_metrics = PmCoreMetric::orderBy('id','desc')->first();
+        return view('core_metric.index',$this->data);
+      }
+      public function updateCoreMetric (Request $request ,$id)
+      {
+        $validator =  $request->validate([
+            'released_amount_for_cycle' => 'required|numeric|min:0',
+            'total_released_amount' => 'required|numeric|min:0',
+            'avg_project_completion_time_for_cycle' => 'required|numeric|min:0',
+            'avg_project_completion_time_in_cycle' => 'required|numeric|min:0',
+            'progress_project_count' => 'required|numeric|min:0',
+            'progress_project_count_2' => 'required|numeric|min:0',
+            'progress_project_value' => 'required|numeric|min:0',
+            'progress_project_value_2' => 'required|numeric|min:0',
+            'project_completion_rate_for_this_cycle_count' => 'required|numeric|min:0',
+            'project_completion_rate_in_this_cycle_count' => 'required|numeric|min:0',
+            'project_completion_rate_for_this_cycle_value' => 'required|numeric|min:0',
+            'project_completion_rate_in_this_cycle_value' => 'required|numeric|min:0',
+            'value_of_upsale' => 'required|numeric|min:0',
+            'current' => 'required|numeric|min:0',
+            'current_plus_old_ones' => 'required|numeric|min:0',
+            'cancelation_rate' => 'required|numeric|min:0',
+            'number_of_revisions_for_cycle' => 'required|numeric|min:0',
+            'number_of_revisions_in_cycle' => 'required|numeric|min:0',
+            'avg_payment_per_day' => 'required|numeric|min:0',
+        ]);
+
+        $pm_core_metric = PmCoreMetric::find($id);
+        $pm_core_metric->released_amount_for_cycle = $request->released_amount_for_cycle;
+        $pm_core_metric->total_released_amount = $request->total_released_amount;
+        $pm_core_metric->avg_project_completion_time_for_cycle = $request->avg_project_completion_time_for_cycle;
+        $pm_core_metric->avg_project_completion_time_in_cycle = $request->avg_project_completion_time_in_cycle;
+        $pm_core_metric->progress_project_count = $request->progress_project_count;
+        $pm_core_metric->progress_project_count_2 = $request->progress_project_count_2;
+        $pm_core_metric->progress_project_value = $request->progress_project_value;
+        $pm_core_metric->progress_project_value_2 = $request->progress_project_value_2;
+        $pm_core_metric->project_completion_rate_for_this_cycle_count = $request->project_completion_rate_for_this_cycle_count;
+        $pm_core_metric->project_completion_rate_in_this_cycle_count = $request->project_completion_rate_in_this_cycle_count;
+        $pm_core_metric->project_completion_rate_for_this_cycle_value = $request->project_completion_rate_for_this_cycle_value;
+        $pm_core_metric->project_completion_rate_in_this_cycle_value = $request->project_completion_rate_in_this_cycle_value;
+        $pm_core_metric->value_of_upsale = $request->value_of_upsale;
+        $pm_core_metric->current = $request->current;
+        $pm_core_metric->current_plus_old_ones = $request->current_plus_old_ones;
+        $pm_core_metric->cancelation_rate = $request->cancelation_rate;
+        $pm_core_metric->number_of_revisions_for_cycle = $request->number_of_revisions_for_cycle;
+        $pm_core_metric->number_of_revisions_in_cycle = $request->number_of_revisions_in_cycle;
+        $pm_core_metric->avg_payment_per_day = $request->avg_payment_per_day;
+        $pm_core_metric->save();
+
+        return response()->json(['status'=>200]);
+      }
+  }

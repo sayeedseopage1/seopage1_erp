@@ -19,6 +19,11 @@ import { User } from '../../utils/user-details';
 import Loader from '../../global/Loader';
 import DebounceTextarea from '../../global/form/DebounceTextarea';
 import { useDispute } from '../context';
+import { CompareDate } from '../../utils/dateController';
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const compareDate = new CompareDate();
 
 
 const reducer = (state, action) => {
@@ -37,8 +42,9 @@ const reducer = (state, action) => {
                 {
                     question: action.question,
                     answer: '',
-                    user: action.user ?? '',
-                    id: getRandomId()
+                    user: '',
+                    id: getRandomId(),
+                    isNew: action.isNew
                 }
             ];
 
@@ -124,7 +130,8 @@ React.useEffect(() => {
 
   // handle add question
   const addQuestion = () => { 
-    dispatch({ type: 'ADD_QUESTION', question: '', user: questionFor ?? '' })
+    setQuestionFor(null);
+    dispatch({ type: 'ADD_QUESTION', question: '', user: '', isNew: true })
   }
 
    // add Answer 
@@ -154,9 +161,9 @@ React.useEffect(() => {
   // submitQuestion
   const [askDisputeQuestion, {isLoading:questionSubmitting}] = useAskDisputeQuestionMutation();
 
-  const handleQuestionSubmittion = async () => {
+  const handleQuestionSubmittion = async () => { 
     const data = {
-        questions: _.map(questions, q => ({
+        questions: _.map(_.filter(questions, q => q.isNew), q => ({
             question: q.question, 
             question_for: q?.user?.id, 
             raised_by: window?.Laravel?.user.id,
@@ -168,7 +175,13 @@ React.useEffect(() => {
     try{
         const res = await askDisputeQuestion(data).unwrap();
         updateDisputeConversation({disputeId:row?.id, conversations: res?.data});
-        setConversations(res?.data);  
+        setConversations(res?.data); 
+        dispatch({
+            type:"INIT_QUESTIONS", 
+            data: _.filter(res.data, d => d.replies ? false : true)
+        }); 
+        addQuestion();
+
     }catch(err){
         console.log(err)
     }
@@ -180,6 +193,7 @@ React.useEffect(() => {
   const handleSubmitAnswer = async () => { 
     try{
         const res = await answerDisputeQuestion({questions: questions}).unwrap();
+        updateDisputeConversation({disputeId:row?.id, conversations: res?.data})
         setConversations(res?.data);
         dispatch({type:"INIT_QUESTIONS", data: _.filter(res?.data, d => d.replies ? false : true)}); 
     }catch(err){
@@ -223,7 +237,24 @@ const close =async () => {
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
  
   const handleSubmitForAuthorization = async () =>{
+        // check all question is answered or expand already 24hour
+        let error = false; 
+        _.forEach(conversations, conv => {
+            const created_date = compareDate.dayjs();
+            const hour = compareDate.dayjs().diff(created_date, 'hour', true);
+
+            if(!conv.replied_by && hour < 24){  
+                return error = true;
+            }
+        })
+        
+        if(error){
+            return toast.warn(`Some questions are not answered!`); 
+        } 
+
         if(finishedPartial && needAuthorization && auth?.getRoleId() !== 1){ 
+
+            // send for Authorization
             const data = {
                 resolve_comment: resolveComment,
                 need_authrization: needAuthorization,
@@ -237,6 +268,8 @@ const close =async () => {
         
             try{ 
                 const res = await disputeSubmitToAuthorization(data).unwrap();
+
+                toast.warn(`Successfully sending request for approval!`);
                 updateDisputeById({
                     disputeId: row?.id,
                     data: _.head(res),
@@ -246,6 +279,7 @@ const close =async () => {
                 console.log(err)
             }
         }else{
+            //Authorize
             const data = {
                 resolve_comment: row?.need_authrization ? row?.resolve_comment : resolveComment,
                 need_authrization: needAuthorization,
@@ -262,6 +296,8 @@ const close =async () => {
 
             try{ 
                 const res = await disputeSubmitToAuthorization(data).unwrap();
+                
+                toast.warn(`The dispute has been successfully resolved`);
                 updateDisputeById({
                     disputeId: row?.id,
                     data: _.head(res)
@@ -277,13 +313,8 @@ const close =async () => {
   const filterQuestion = (questions, userid) => _.filter(questions, conv => conv.question_for === userid);  
 
   const task = row?.task?.parent_task ?? row?.task; 
-  const resolved = row?.status;
-
-  
-
-
-
-
+  const resolved = row?.status; 
+ 
   return (
    <React.Fragment>
 
@@ -423,7 +454,14 @@ const close =async () => {
                                                         </div>
                                                     </div>
                                                 </td>
-                                            </tr>  
+                                            </tr>   
+
+                                            <tr>
+                                                <td className='py-2'>Explanation:</td>
+                                                <td className='px-3 py-2'>
+                                                    <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.sale_comment }} />
+                                                </td>
+                                            </tr>
 
                                             {_.size(filterQuestion(conversations, row?.sales_person?.id)) ? 
                                                 <tr>
@@ -975,12 +1013,12 @@ const close =async () => {
 
                                                         {hasQuestion && 
                                                             <div>
-                                                                {_.map(questions, (question, index) => (
+                                                                {_.map(_.filter(questions, q => q.isNew), (question, index) => (
                                                                     <div key={question.id} className='mt-3 w-100'>
                                                                         <div className='d-flex align-items-center' style={{gap: '10px'}}>  
                                                                             <Dropdown>
                                                                                 <Dropdown.Toggle className="font-weight-bold py-2 px-3 border rounded-sm toggle-light"> 
-                                                                                    { question?.user?.name || questionFor?.name || 'Click to select user'} 
+                                                                                    { question?.user?.name || 'Click to select user'} 
                                                                                 </Dropdown.Toggle> 
                                                                                 <Dropdown.Menu>
                                                                                     <Dropdown.Item onClick={() => askQuestionTo(row?.raised_by, question.id)}>
@@ -1023,6 +1061,7 @@ const close =async () => {
                                                                                     onChange={(v) => {
                                                                                         updateQuestion({
                                                                                             id: question.id, 
+                                                                                            user: questionFor,
                                                                                             data: {...question, question: v}
                                                                                         });
                                                                                     }} 
@@ -1297,32 +1336,32 @@ const close =async () => {
 
                                                             {hasQuestion && 
                                                                 <div>
-                                                                    {_.map(questions, (question, index) => (
-                                                                        <div key={question.id} className='mt-3 w-100'>
-                                                                            <div className='d-flex align-items-center' style={{gap: '10px'}}>  
-                                                                                <Dropdown>
-                                                                                    <Dropdown.Toggle className="font-weight-bold py-2 px-3 border rounded-sm toggle-light"> 
-                                                                                        { question?.user?.name || questionFor?.name || 'Click to select user'} 
-                                                                                    </Dropdown.Toggle> 
-                                                                                    <Dropdown.Menu>
-                                                                                        <Dropdown.Item onClick={() => askQuestionTo(row?.raised_by, question.id)}>
-                                                                                            {row?.raised_by?.name}
-                                                                                            {question?.user?.id === row?.raised_by?.id ||
-                                                                                            questionFor?.id === row?.raised_by?.id ? 
-                                                                                                <i className='fa-solid fa-check ml-2'/> 
-                                                                                            : null}
-                                                                                        </Dropdown.Item>
+                                                                    {_.map(_.filter(questions, q => q.isNew), (question, index) => (
+                                                                    <div key={question.id} className='mt-3 w-100'>
+                                                                        <div className='d-flex align-items-center' style={{gap: '10px'}}>  
+                                                                            <Dropdown>
+                                                                                <Dropdown.Toggle className="font-weight-bold py-2 px-3 border rounded-sm toggle-light"> 
+                                                                                    { question?.user?.name || 'Click to select user'} 
+                                                                                </Dropdown.Toggle> 
+                                                                                <Dropdown.Menu>
+                                                                                    <Dropdown.Item onClick={() => askQuestionTo(row?.raised_by, question.id)}>
+                                                                                        {row?.raised_by?.name}
+                                                                                        {question?.user?.id === row?.raised_by?.id ? 
+                                                                                            <i className='fa-solid fa-check ml-2'/> 
+                                                                                        : null}
+                                                                                    </Dropdown.Item>
+                                                                                    {row?.dispute_between !== 'CPR' ? 
                                                                                         <Dropdown.Item onClick={() => askQuestionTo(row?.raised_against, question.id)}>
                                                                                             {row?.raised_against?.name}
                                                                                             
-                                                                                            {question?.user?.id === row?.raised_against.id ||
-                                                                                            questionFor?.id === row?.raised_against.id ? 
+                                                                                            {question?.user?.id === row?.raised_against.id ? 
                                                                                                 <i className='fa-solid fa-check ml-2'/> 
                                                                                             : null}
                                                                                         </Dropdown.Item> 
-                                                                                    </Dropdown.Menu>
-                                                                                </Dropdown>
-                                                                            </div> 
+                                                                                    :null}
+                                                                                </Dropdown.Menu>
+                                                                            </Dropdown>
+                                                                        </div> 
 
                                                                             <div className="form-group w-100 py-2"> 
                                                                                 <label htmlFor="" className='d-flex align-items-center justify-content-between'>
@@ -1345,6 +1384,7 @@ const close =async () => {
                                                                                         onChange={(v) => {
                                                                                             updateQuestion({
                                                                                                 id: question.id, 
+                                                                                                user: questionFor,
                                                                                                 data: {...question, question: v}
                                                                                             });
                                                                                         }} 
@@ -1534,39 +1574,38 @@ const RanderButton = ({
     if(!allowedForAction || row?.status){
         return null;
     }
-
-    console.log()
+ 
 
     if(!row?.status){
-        if(row && !row.need_authrization){
-            if(hasQuestion){
-                content = (
-                    <SubmitButton 
-                        onClick={handleQuestionSubmittion} 
-                        variant="success" 
-                        title="Submit to ask question" 
-                        className="ml-auto"
-                        isLoading={isLoading}
-                    />
-                )
-            }else if(finishedPartial){
-                if(auth?.getRoleId() === 1){
-                    content = <SubmitButton 
-                        variant="success" 
-                        onClick={handleSubmitForAuthorization} 
-                        title='Authorize & Resolve'
-                        className="ml-auto" 
-                        isLoading={isLoading}
-                    />
-                }else{
-                    content = <SubmitButton 
-                        variant="success" 
-                        onClick={handleSubmitForAuthorization} 
-                        title='Send for Authorization'
-                        className="ml-auto" 
-                        isLoading={isLoading}
-                    />
-                }
+        if(hasQuestion){
+            content = (
+                <SubmitButton 
+                    onClick={handleQuestionSubmittion} 
+                    variant="success" 
+                    title="Submit to ask question" 
+                    className="ml-auto"
+                    isLoading={isLoading}
+                />
+            )
+        }else if(row && !row.need_authrization){
+                if(finishedPartial){
+                    if(auth?.getRoleId() === 1){
+                        content = <SubmitButton 
+                            variant="success" 
+                            onClick={handleSubmitForAuthorization} 
+                            title='Authorize & Resolve'
+                            className="ml-auto" 
+                            isLoading={isLoading}
+                        />
+                    }else{
+                        content = <SubmitButton 
+                            variant="success" 
+                            onClick={handleSubmitForAuthorization} 
+                            title='Send for Authorization'
+                            className="ml-auto" 
+                            isLoading={isLoading}
+                        />
+                    }
             }else{
                 content = <SubmitButton 
                     variant="success" 
@@ -1586,7 +1625,7 @@ const RanderButton = ({
                     isLoading={isLoading}
                 />
             )
-        }
+        }else null;
     }
 
     return (

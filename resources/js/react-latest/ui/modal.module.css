@@ -1,0 +1,76 @@
+.dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background: rgba(0, 0, 0, 0);
+    width: 100vw;
+    height: 100vh;
+}
+
+.dialog_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(7, 7, 7, 0.25);
+}
+
+.dialog_overlay_enter {
+    transition: 0.1s ease-out;
+}
+
+.dialog_overlay_enter_from {
+    opacity: 0;
+}
+
+.dialog_overlay_enter_to {
+    opacity: 1;
+}
+
+.dialog_overlay_leave {
+    transition: 0.1s ease-in;
+}
+
+.dialog_overlay_leave_from {
+    opacity: 1;
+}
+
+.dialog_overlay_leave_to {
+    opacity: 0;
+}
+
+.dialog_panel_enter {
+    transition: 0.1s ease-out;
+}
+
+.dialog_panel_leave {
+    transition: 0.1s ease-in;
+}
+
+.dialog_panel_enter_from,
+.dialog_panel_leave_to {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.dialog_panel_enter_to,
+.dialog_panel_leave_from {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.panel_container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.panel_wrapper {
+    display: flex;
+    min-height: 100%;
+    align-items: center;
+    justify-content: center;
+}

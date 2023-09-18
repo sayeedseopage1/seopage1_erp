@@ -1,0 +1,308 @@
+.table-container {
+    overflow: auto;
+}
+
+.table-container::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: transparent !important;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 219) !important;
+    border: 2px solid rgb(255, 255, 255) !important;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    border: 0 !important;
+    background-color: rgb(197, 197, 197) !important;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background-color: rgba(219, 219, 219, 0.1) !important;
+}
+
+.sp1_table,
+.sp1_table_thead tr th,
+.sp1_table_tbody tr td {
+    border: 1px solid #f0f0f0 !important;
+    border-collapse: collapse;
+}
+.sp1_table {
+    position: relative;
+    width: 100%;
+}
+
+.sp1_table_thead tr th,
+.sp1_table_tbody tr td {
+    padding: 3px 10px;
+    text-align: center;
+}
+
+.sp1_table_thead {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    background-color: #fff;
+}
+
+.scrollbar::-webkit-scrollbar {
+    width: 10p !important;
+    height: 10px !important;
+    background-color: transparent !important;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 219) !important;
+    border: 2px solid rgb(255, 255, 255) !important;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+    border: 0 !important;
+    background-color: rgb(197, 197, 197) !important;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+    background-color: rgba(219, 219, 219, 0.1) !important;
+}
+.sp1_table_thead tr th {
+    font-size: 14px;
+    color: #2d3035;
+    cursor: default;
+    position: relative;
+    background: rgba(225, 225, 225, 0.082);
+}
+
+.isDragging {
+    background: rgba(185, 185, 185, 0.4) !important;
+    opacity: 0.3;
+}
+
+.isOver {
+    background: rgba(185, 185, 185, 0.4) !important;
+}
+
+.sp1_table_tbody tr td {
+    color: #2d3035;
+    padding: 8px 10px;
+}
+
+.sp1_table_tbody tr:nth-child(even) {
+    background: rgba(129, 129, 129, 0.05);
+}
+
+/* .sp1_table-thead tr th:first-child,
+.sp1_table-tbody tr td:first-child{
+    text-align: left;
+} */
+
+.sp1_table_tbody tr td:hover {
+    background: rgba(129, 129, 129, 0.082);
+    cursor: default;
+}
+
+.sp1_table_tbody tr:hover {
+    background: rgba(184, 184, 184, 0.082);
+}
+
+.sp1_table tr {
+    border: none;
+}
+
+.sp1_table tr td {
+    padding: 6px 10px;
+}
+
+.sp1_table tr:nth-child(evet) {
+    background-color: #fdfdfd;
+}
+
+.sp1_table tbody tr td:not(:last-child),
+.sp1_table thead tr th:not(:last-child) {
+    border-width: 0 1px 1px 0 !important;
+}
+
+.sp1_table tbody tr td:last-child,
+.sp1_table thead tr th:last-child {
+    border-width: 0 0px 1px 0 !important;
+}
+
+.sp1_table tbody tr td:not(:first-child),
+.sp1_table thead tr th:not(:first-child) {
+    border-left: none !important;
+}
+
+.sp1_table tbody tr:last-child td {
+    border-bottom-width: 0 !important;
+}
+
+.single_line {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+abbr {
+    text-decoration: none !important;
+}
+
+.search_bar {
+    margin-left: auto;
+    width: fit-content;
+    position: relative;
+}
+
+.search_bar__icon {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+}
+
+.search_bar__icon svg {
+    fill: rgb(0 0 0 / 40%);
+}
+
+.search_bar input {
+    padding: 8px 10px 8px 30px;
+    border: 1px solid rgb(216, 216, 216);
+    border-radius: 6px;
+    outline: none;
+    box-shadow: inset 0 0 6px rgb(0 0 0 / 10%);
+    transition: all 0.3s ease-in-out;
+    background-color: #fff;
+    color: rgb(0 0 0 / 80%);
+}
+
+.search_bar input::-webkit-search-cancel-button:hover {
+    cursor: pointer;
+}
+
+.search_bar input:focus {
+    box-shadow: inset 0 0 6px rgb(0 0 0 / 0%);
+    border: 1px solid rgb(194, 194, 194);
+}
+
+.search_bar input::placeholder {
+    color: rgb(0 0 0 / 40%);
+}
+
+.highlight {
+    background-color: blue;
+    color: white;
+}
+
+.table_drag__layout {
+    background-color: #fff;
+    border: 1px solid rgb(0 0 0 / 30%);
+    padding: 3px 20px;
+    font-weight: 500;
+    color: rgb(0 0 0 / 80%);
+}
+
+/* Pagination */
+.sp1_table__pagination {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    align-items: center;
+    font-size: 14px;
+    color: #424549;
+    justify-content: space-between;
+}
+
+.table_pagiantion__dd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.table_pagiantion__dd select {
+    padding: 6px;
+    background-color: #f4f4f4;
+    border: 1px solid rgb(0 0 0 / 0%);
+    border-radius: 3px;
+}
+
+.table_pagiantion__dd select:hover {
+    border: 1px solid rgb(0 0 0 / 10%);
+}
+
+.table_pagiantion__info {
+    white-space: nowrap;
+}
+
+.table_pagiantion__info,
+.table_pagiantion__button_group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.table_pagiantion__button {
+    width: fit-content;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    display: -moz-grid;
+    display: -ms-grid;
+    display: grid;
+    place-items: center;
+    border-radius: 6px;
+    outline: none !important;
+    transition: all border 0.4s ease-in-out;
+}
+
+.table_pagiantion__button:hover {
+    border-color: #d0d0d0;
+}
+
+.table_pagiantion__button.active {
+    color: #fff;
+    background: #1d82f5 !important;
+}
+
+.sp1_data_table_sort_btn {
+    background: transparent;
+    outline: none !important;
+    border: none;
+    padding: 3px;
+}
+.table_asc_desc {
+    height: 10px;
+    color: #ccc;
+    margin-bottom: 10px;
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+.table_asc_desc::before {
+    content: "\2191";
+}
+
+.table_asc_desc::after {
+    content: "\2193";
+}
+
+.table_asc_desc.desc::before {
+    color: #424242;
+}
+
+.table_asc_desc.asc::after {
+    color: #424242;
+}
+
+.table_navigation {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}

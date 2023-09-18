@@ -61,9 +61,11 @@ use Toastr;
 use Auth;
 use App\Models\ProjectDeliverable;
 use function _PHPStan_7d6f0f6a4\React\Promise\all;
+use function Clue\StreamFilter\fun;
 use function PHPUnit\Framework\isNull;
 use App\Models\TaskComment;
 use App\Models\AuthorizationAction;
+use App\Models\Deal;
 use App\Models\DeveloperReportIssue;
 use App\Models\TaskNote;
 use App\Models\TaskNoteFile;
@@ -92,6 +94,17 @@ class TaskController extends AccountBaseController
             abort_403(!in_array('tasks', $this->user->modules));
             return $next($request);
         });
+
+        $this->role = [
+            3 => 'C',
+            4 => 'PM',
+            5 => "D",
+            6 => "LD",
+            7 => "S",
+            8 => "S",
+            9 => "UD",
+            "null" => "C"
+        ];
     }
 
     public function index()
@@ -2674,17 +2687,31 @@ class TaskController extends AccountBaseController
     }
 
     
+    
 
      
      /************* CLIENT HAS REVISION *************** */ 
     public function clientHasRevision(Request $request)
     {    
-        //    DB::beginTransaction();
+
+        
+        $dispute_between = explode('x', $request->acknowledgement_id)[0];
+
+        $auth = Auth::user();
+           
+           
         // chagne board column status
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
         $task_status->board_column_id = 1;
         $task_status->save();
+
+        $sale = null;
+        if($dispute_between == 'SPR'){
+            // find sale person
+            $project_deal_id = Project::find($task_status->project_id)->deal_id;
+            $sale = Deal::find($project_deal_id)->added_by;
+       }
 
         // store revision on revision table
         $task_revision = new TaskRevision(); // instance of TaskRevision
@@ -2692,11 +2719,16 @@ class TaskController extends AccountBaseController
         $task_revision->pm_comment= $request->comment;
         $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
         $task_revision->task_id = $request->task_id;
-        $task_revision->is_deniable = $request->is_deniable;
-        
-        if ($task_status->subtask_id != null) {
-            $task_revision->subtask_id = $task_status->subtask_id;
+        $task_revision->is_deniable = $request->is_deniable; 
+
+        if($request->is_deniable == false && $auth->role_id != 1 ){ 
+            $task_revision->final_responsible_person = $this->role[$auth->role_id];
         }
+
+        
+        // if ($task_status->subtask_id != null) {
+        //     $task_revision->subtask_id = $task_status->subtask_id;
+        // }
         $task_revision->revision_status = "Client Has Revision";
 
         $task_revision->project_id = $task_status->project_id;
@@ -2704,9 +2736,10 @@ class TaskController extends AccountBaseController
         $task_revision->additional_amount= $request->additional_amount;
         $task_revision->additional_status= $request->additional_status;
         $task_revision->additional_deny_comment=$request->additional_comment;
+        $task_revision->sale_person = $sale;
 
         $task_revision->dispute_created = $request->dispute_create;
-        $task_revision->dispute_between = explode('x', $request->acknowledgement_id)[0];
+        $task_revision->dispute_between = $dispute_between;
 
         $task_revision->added_by = Auth::id();
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
@@ -2724,6 +2757,7 @@ class TaskController extends AccountBaseController
         //     $updateTask->board_column_id=1;
         //     $updateTask->save();
         // }
+        // dd($task_revision);
         $task_revision->save();
  
 
@@ -2731,20 +2765,16 @@ class TaskController extends AccountBaseController
         if($request->dispute_create){
             $this->create_dispute($task_revision, $request);
         }
-
-
+ 
         return response()->json([
             'status' => 200,
         ]);
     }
 
 
-
     //ACCEPT AND CONTINUE BUTTON SECTION
     public function acceptContinue(Request $request)
-    { 
-        
-        //  DB::beginTransaction();
+    {  
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
         $task_status->board_column_id = 3;
@@ -2782,13 +2812,16 @@ class TaskController extends AccountBaseController
         }
 
         if ($request->subTask== null) {
+
             $tasks_accept = TaskRevision::find($request->revision_id);
 //        $tasks_accept->subtask_id = implode(",", $request->subTask);
             // $tasks_accept->revision_reason = $request->revision_acknowledgement;
 //        $tasks_accept->comment = implode(",", $request->comment); 
             $tasks_accept->lead_comment = $request->comment;
-            $tasks_accept->approval_status = 'accepted';
+            $tasks_accept->approval_status = 'accepted'; 
             $tasks_accept->is_accept = true;
+            $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
+
             $tasks_accept->save();  
         }else{
             $subTaskArray = $request->subTask;
@@ -2808,9 +2841,10 @@ class TaskController extends AccountBaseController
             // $tasks_accept->subtask_id = $tasks_accept->subtask_id;
             // $tasks_accept->revision_reason = $request->revision_acknowledgement;
             $tasks_accept->approval_status = 'accepted';  
+
             $tasks_accept->is_accept = true;
-            $tasks_accept->save();  
-            
+            $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
+            $tasks_accept->save();   
         }
 
         foreach ($subtasks as $subtask) {
@@ -2824,7 +2858,6 @@ class TaskController extends AccountBaseController
                 $sub_task_status->save();
             }
         }
-
        // dd($tasks_accept,$sub_task_status);
         return response()->json([
             'status' => 200,
@@ -2900,6 +2933,7 @@ class TaskController extends AccountBaseController
             $tasks_accept = TaskRevision::find($request->revision_id);
             $tasks_accept->approval_status = 'accepted';
             $tasks_accept->is_deny = true;
+            $tasks_accept->dispute_created = true;
             $tasks_accept->lead_comment = $request->comment;
             $tasks_accept->deny_reason = $request->deny_reason;
             $tasks_accept->save(); 
@@ -2942,10 +2976,13 @@ class TaskController extends AccountBaseController
         ]);
     }
 
+    /*************** PM->LEAD->DEV *************************/ 
+
     public function accept_or_revision_by_developer(Request $request)
     {
         // dd("accept_or_revision_by_developer");
         //  DB::beginTransaction();
+        
          
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "in progress";
@@ -2953,14 +2990,19 @@ class TaskController extends AccountBaseController
         $task_status->save();
 
         $tasks_accept = TaskRevision::find($request->revision_id);
+
+        $added_by_role_id = User::find($tasks_accept->added_by)->role_id;
+
         if ($request->mode == 'deny') {
             $tasks_accept->is_deny=true; 
             $tasks_accept->dispute_created = true;
             $tasks_accept->deny_reason = $request ->deny_reason;
         } elseif($request->mode == 'accept') {
             $tasks_accept->is_accept=true;
+            $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
         }elseif($request->mode=='continue'){
             $tasks_accept->is_accept=true;
+            $tasks_accept->final_responsible_person = $this->role[$added_by_role_id]; 
         }
         $tasks_accept->task_id = $task_status->id;
       //  $tasks_accept->subtask_id = $task_status->subtask_id;
@@ -4077,6 +4119,7 @@ class TaskController extends AccountBaseController
         }
  
         $dispute->save(); 
+        // dd($revision, $dispute); 
     } 
  
  
@@ -4137,8 +4180,9 @@ class TaskController extends AccountBaseController
                 )
                 ->first();
 
+
             if($task->lead_developer){
-                $task->lead_developer =get_user($task->lead_developer, false);
+                $task->lead_developer = get_user($task->lead_developer, false); 
             }
 
             if($task->subtask_id){ 
@@ -4333,7 +4377,6 @@ class TaskController extends AccountBaseController
     //  SEND FOR AUTHORIZATION
     public function dispute_send_for_authorization(Request $request){
         $id = $request->dispute_id; 
-
         if($request->authorized){
             $query = TaskRevisionDispute::find($id);
             $query->resolve_comment = $request->resolve_comment;
@@ -4348,9 +4391,18 @@ class TaskController extends AccountBaseController
             $query->status = true;
             $query->save();
 
+            
+            
+ 
+
             // change status on revision table
             $revision = TaskRevision::find($query->revision_id);
             $revision-> dispute_status = true;
+            if($query->winner){
+                $responsible_person = $query->raised_against != $query->winner ? $query->raised_against : $query->raised_by;
+                $responsible_person_role = User::find($responsible_person)->role_id;
+                $revision-> final_responsible_person = $this->role[$responsible_person_role];
+            } 
             $revision->save();
 
             $filter = [ 
@@ -4395,4 +4447,162 @@ class TaskController extends AccountBaseController
     
  
     /************* END TASK DISPUTE *************** */
+
+
+
+    // get task
+    public function get_task_revision($filter) {
+
+        $revision_id = $filter['revision_id'] ?? null;
+
+        $author = Auth::user();
+
+
+         //get user 
+         function get_user($user_id, $is_client){ 
+            $user = User::where( 'id', $user_id)->get()->first();
+            $user_response = [
+                "id" => $user->id,
+                "name" => $user->name,
+                "image" => $user->image,
+                "role_id" => $user->role_id,
+           ];
+
+            if(!$is_client){
+                $employee_details = [
+                    "designation" => $user->employeeDetail ? $user->employeeDetail->designation->name : null,
+                    "emplyee_id" => $user->employeeDetail ? $user->employeeDetail->employee_id : null,
+                ];
+                $user_response = array_merge($user_response, $employee_details);
+            }
+
+           return $user_response; 
+        }
+
+        // get task details
+        function get_task($task_id){ 
+
+            $task = DB::table('tasks')
+                ->where('tasks.id',$task_id)
+                ->leftJoin('project_members', 'tasks.project_id', 'project_members.project_id') 
+                ->leftJoin('task_users', 'tasks.id', 'task_users.task_id') 
+                ->select(
+                    'tasks.id as id', 
+                    'tasks.heading as title', 
+                    'tasks.subtask_id', 
+                    'project_members.lead_developer_id as lead_developer',
+                    'task_users.user_id as task_user_id'
+                )
+                ->first();
+
+
+            if($task->lead_developer){
+                $task->lead_developer = get_user($task->lead_developer, false); 
+            }
+
+            if($task->subtask_id){ 
+                $subtask = DB::table('sub_tasks')
+                    ->select('sub_tasks.task_id as parent_task_id')
+                    ->where('id', $task->subtask_id)
+                    ->first();
+                
+                  //  dd($subtask);
+
+                if($task->task_user_id){
+                    $task->developer = get_user($task->task_user_id, false);
+                }
+ 
+                $task->parent_task = get_task($subtask->parent_task_id);
+            } 
+            
+            return $task;
+        }
+  
+
+        $revisions = DB::table('task_revisions as revisions')
+                    ->leftJoin('projects', 'revisions.project_id', 'projects.id')
+                    ->leftJoin('deals', 'projects.deal_id', 'deals.id')
+                    ->leftJoin('tasks', 'revisions.task_id', 'tasks.id')
+                    ->leftJoin('task_users', 'tasks.id', 'task_users.task_id')
+                    ->select(
+                      'revisions.*',
+                      'revisions.created_at as revision_created_at',
+                      'revisions.updated_at as revision_updated_at',
+                      'projects.id as project_id',
+                      'projects.project_name as project_name',
+                      'projects.client_id as client_id', 
+                      'projects.pm_id as pm_id',
+                      'projects.deal_id as project_deal_id',
+                      'projects.status as project_status',
+                      'deals.added_by as deal_added_by',
+                      'tasks.*', 
+                      'tasks.id as task_id',
+                      'revisions.id as id', 
+                      'tasks.status as task_status',
+                      'task_users.user_id as task_assign_to',
+                    )
+                    ->where(function($query) use ($author, $revision_id){
+                        if($author->role_id != 1){
+                           $query->where('task_users.user_id', $author->id)
+                                ->orWhere('tasks.added_by', $author->id)
+                                ->orWhere('revisions.added_by', $author->id)
+                                ->orWhere('revisions.sale_person', $author->id);
+                        }
+
+                        if($revision_id){
+                            $query->where('revisions.id', $revision_id);
+                        }
+                    })
+                    ->get();
+
+ 
+
+                    $revisions->each(function ($revision){
+                        $revision->task_assign_to = get_user($revision->task_assign_to, false);
+                        $revision->client = get_user($revision->client_id, true);
+                        $revision->deal_added_by = get_user($revision->deal_added_by, false);
+                        $revision->project_manager = get_user($revision->pm_id, false);
+                        if($revision->sale_person){
+                            $revision->sale_person = get_user($revision->sale_person, false);
+                        }
+                        $revision->added_by = get_user($revision->added_by, false);
+
+                        if($revision->subtask_id){
+                            $revision->lead_developer = $revision->added_by; 
+                            $revision->developer = $revision->task_assign_to;
+                        }else{
+                            $revision->lead_developer = $revision->task_assign_to; 
+                            $revision->developer = null;
+                        }
+                    });
+
+        return response()->json($revisions, 200);
+    }
+
+    /************** GET TASKS REVISIONs ************* */
+    public function task_revisions(Request $request){ 
+
+        return $this-> get_task_revision(null); 
+    }
+ 
+
+    /******************* SALES ACTION ON PM REVISION  *********************** */
+    public function sales_response_on_pm_revision(Request $request){ 
+        //  DB::beginTransaction();
+
+        $revision = TaskRevision::find($request->revision_id);
+        $revision->sale_deny = $request->action_type === 'deny';
+        $revision->sale_accept = $request->action_type === 'accept'; 
+        $revision->sale_comment = $request->sale_comment;
+        $revision->final_responsible_person = $revision->sale_accept ? 'S' : null;
+        $revision->dispute_created = $revision->sale_deny;
+
+        $revision->save();
+        
+        if($revision->dispute_created){
+           $this->create_dispute($revision);
+        } 
+
+        return $this-> get_task_revision(["revision_id" => $revision->id]);  // get all new infomatin & return as response
+    }
 }
