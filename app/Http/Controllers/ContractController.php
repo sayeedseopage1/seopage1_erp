@@ -862,11 +862,25 @@ class ContractController extends AccountBaseController
             $milestone->actual_cost =  $request->cost;
             $project = Project::where('id', $request->project_id)->first();
             $deal = Deal::where('id', $project->deal_id)->first();
+            
             //dd($deal);
             $milestone->original_currency_id = $deal->original_currency_id;
             $currency = Currency::where('id', $deal->original_currency_id)->first();
             //dd($currency);
             $milestone->cost = ($request->cost) / $currency->exchange_rate;
+            // if($request->milestone_type == 'Client Created this Milestone')
+            // {
+            //     $deal->settled_milestone_amount= $deal->settled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
+            //     $milestone->active_status= 1;
+
+            // }else 
+            // {
+            //     $deal->unsettled_milestone_amount= $deal->unsettled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
+            //     $milestone->active_status= 0;
+
+            // }
+            // $deal->save();
+            
             $milestone->summary = $request->summary;
             $milestone->currency_id = 1;
 
@@ -881,7 +895,7 @@ class ContractController extends AccountBaseController
             }
             if($request->service_type == 'blogs-articles'){
                 $blog_article = BlogArticle::where('random_id', $request->random_id)->first();
-                dd($blog_article);
+              //  dd($blog_article);
                 $blog_article->milestone_id = $milestone->id;
                 $blog_article->save();
             }
@@ -929,6 +943,7 @@ class ContractController extends AccountBaseController
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
         $deal = Deal::where('id', $project_id->deal_id)->first();
+       
         $milestone_amount = ProjectMilestone::where('project_id', $project_id->id)->sum('actual_cost');
         $updated_amount = $milestone_amount - $projectmilestone->actual_cost;
         $check = ($deal->actual_amount) - ($updated_amount);
@@ -955,11 +970,23 @@ class ContractController extends AccountBaseController
                 $milestone->actual_cost =  $request->cost;
                 $project = Project::where('id', $milestone->project_id)->first();
                 $deal = Deal::where('id', $project->deal_id)->first();
+               
                 //dd($deal);
                 $milestone->original_currency_id = $deal->original_currency_id;
                 $currency = Currency::where('id', $deal->original_currency_id)->first();
                 //dd($currency);
                 $milestone->cost = ($request->cost) / $currency->exchange_rate;
+                // if($milestone->milestone_type == 'Client Created this Milestone')
+                // {
+                //     $deal->settled_milestone_amount= $deal->settled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
+                
+    
+                // }else 
+                // {
+                //     $deal->settled_milestone_amount= $deal->unsettled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
+    
+                // }
+                // $deal->save();
                 $milestone->summary = $request->summary;
                 $milestone->currency_id = 1;
                 $milestone->milestone_type = $request->milestone_type;

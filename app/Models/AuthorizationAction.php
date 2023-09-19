@@ -67,6 +67,13 @@ class AuthorizationAction extends Model
             'project_deliverable_time_extention' => [
                 'approved', 'review'
             ],
+            'saleslead_price_authorization' => [
+                 'review'
+            ],
+            'project_manager_accept_project' => [
+                'review'
+           ],
+            
             'milestone_cancel' => [
                 'approved', 'review'
             ],
