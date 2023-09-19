@@ -41,7 +41,7 @@ const PortfolioModal = ({isOpen, close, data, isLoading}) => {
                                 </div>
 
                                 <div className="col-12 col-md-6 col-lg-4 mb-3">
-                                    <p className='font-weight-bold f-14 mb-2'>Project Title:</p>
+                                    <p className='font-weight-bold f-14 mb-2'>Client Name:</p>
                                     <div className='d-flex align-items-center'>
                                         <Avatar
                                             src={data?.client_image ? `/user-uploads/avatar/${data?.client_image}`: null}

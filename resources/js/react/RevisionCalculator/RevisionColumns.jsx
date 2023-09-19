@@ -7,14 +7,14 @@ export const revisionColumns = [
         id: "pm_name",
         heading: "Project Manager Name",
         moveable: true,
-        sort: row => row?.project_manager?.name,
+        sort: row => row?.project_manager_name,
         rowSpan: 2,
-        searchText: (row) =>  `${row?.project_manager?.name}`,
+        searchText: (row) =>  `${row?.project_manager_name}`,
         row: ({row}) => {
             return(
-                <abbr title={row?.project_manager?.name} >
+                <abbr title={row?.project_manager_name} >
                     <span className="singleline-ellipsis"> 
-                        {row?.project_manager?.name} 
+                        {row?.project_manager_name} 
                     </span> 
                 </abbr>
             )
@@ -25,17 +25,17 @@ export const revisionColumns = [
         id: 'assigned_projects_count',
         heading: 'Assigned projects count',
         moveable: true,
-        sort: (row) => row.number_of_project,
+        sort: (row) => row.total_projects,
         rowSpan: 2,
-        searchText: (row) => `${row?.number_of_project}`,
+        searchText: (row) => `${row?.total_projects}`,
         row: ({row}) => {
 
             return(
                 <Link 
-                    to={`project-elaboration?pm=${row?.project_manager?.id}`} 
+                    to={`project-elaboration?pm=${row?.project_manager_id}`} 
                     className="singleline-ellipsis"
                 >
-                    {row?.number_of_project}
+                    {row?.total_projects}
                 </Link>
             )
         }
@@ -47,22 +47,22 @@ export const revisionColumns = [
         sort: (d) => d.total_project_value,
         rowSpan: 2,
         searchText: (row) => `${row?.total_project_value}`,
-        row: ({row}) => <span className="singleline-ellipsis"> ${row?.total_project_value} </span>
+        row: ({row}) => <span className="singleline-ellipsis"> ${Number(row.total_project_value).toFixed(2)} </span>
     },
     {
         id: 'number_of_task',
         heading: 'Number of tasks',
         moveable: true,
-        sort: row => row?.number_of_tasks,
+        sort: row => row?.total_tasks,
         rowSpan: 2,
-        searchText: (row) => `${row?.number_of_tasks}`,
+        searchText: (row) => `${row?.total_tasks}`,
         row: ({row}) => {
             return(
                 <Link 
-                    to={`number-of-project-table?pm=${row?.project_manager?.id}`} 
+                    to={`number-of-project-table?pm=${row?.project_manager_id}`} 
                     className="singleline-ellipsis"
                 >
-                    {row?.number_of_tasks}
+                    {row?.total_tasks}
                 </Link>
             )
         }
@@ -71,16 +71,16 @@ export const revisionColumns = [
         id: 'total_number_of_revision',
         heading: 'Total no of revisions',
         moveable: true,
-        sort: row => row?.total_number_of_revision,
+        sort: row => row?.total_revisions,
         rowSpan: 2,
-        searchText: (row) => `${row?.total_number_of_revision}`,
+        searchText: (row) => `${row?.total_revisions}`,
         row: ({row}) => {
             return(
                 <Link 
-                    to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                    to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
                     className="singleline-ellipsis"
                 >
-                    {row?.total_number_of_revision}
+                    {row?.total_revisions}
                 </Link>
             )
         }
@@ -89,10 +89,10 @@ export const revisionColumns = [
         id: 'total_time_spent_in_revision',
         heading: 'Hours spent in revisions (On developers end)',
         moveable: true,
-        sort: row => row?.hours_spent_in_revision,
+        sort: row => row?.minutes_spent,
         rowSpan: 2,
-        searchText: (row) => `${row?.hours_spent_in_revision}`,
-        row: ({row}) => <span>{row?.hours_spent_in_revision}</span>
+        searchText: (row) => `${row?.minutes_spent}`,
+        row: ({row}) => <span>{row?.minutes_spent}</span>
     },
     {
         id: 'revision_breakdown',
@@ -108,7 +108,7 @@ export const revisionColumns = [
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`sales-issues-table?pm=${row?.project_manager?.id}`} 
+                            to={`sales-issues-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.sales_issues}
@@ -120,15 +120,15 @@ export const revisionColumns = [
                 id: 'client_side_issues',
                 heading: 'Client Side Issues',
                 moveable: false, 
-                sort: row => row?.client_side_issues,
-                searchText: (row) => `${row?.client_side_issues}`,
+                sort: row => row?.client_issues,
+                searchText: (row) => `${row?.client_issues}`,
                 row: ({row}) =>{
                     return(
                         <Link 
-                            to={`client-issues-table?pm=${row?.project_manager?.id}`} 
+                            to={`client-issues-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
-                            {row?.client_side_issues}
+                            {row?.client_issues}
                         </Link>
                     )
                 } 
@@ -137,15 +137,15 @@ export const revisionColumns = [
                 id: 'project_manager_issues',
                 heading: 'Project Manager Issues',
                 moveable: false,
-                sort: row => row?.project_manager_issues,
-                searchText: (row) => `${row?.project_manager_issues}`,
+                sort: row => row?.pm_issues,
+                searchText: (row) => `${row?.pm_issues}`,
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`project-manager-issues-table?pm=${row?.project_manager?.id}`} 
+                            to={`project-manager-issues-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
-                            {row?.project_manager_issues}
+                            {row?.pm_issues}
                         </Link>
                     )
                 } 
@@ -159,7 +159,7 @@ export const revisionColumns = [
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.lead_developer_issues}
@@ -176,7 +176,7 @@ export const revisionColumns = [
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.developer_issues}
@@ -193,7 +193,7 @@ export const revisionColumns = [
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.total_disputes}
@@ -205,15 +205,15 @@ export const revisionColumns = [
                 id: 'disputed_not_solved',
                 heading: 'Disputed & not solved',
                 moveable: false,
-                sort: row => row?.unsolved_dispute,
-                searchText: (row) => `${row?.unsolved_dispute}`,
+                sort: row => row?.total_disputes_not_solved,
+                searchText: (row) => `${row?.total_disputes_not_solved}`,
                 row: ({row}) => {
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager?.id}`} 
+                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
                             className="singleline-ellipsis"
                         >
-                            {row?.unsolved_dispute}
+                            {row?.total_disputes_not_solved}
                         </Link>
                     )
                 } 

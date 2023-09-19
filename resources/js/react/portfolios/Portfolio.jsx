@@ -119,9 +119,9 @@ const Protfolio = () => {
                                         _.lowerCase(q.cms_name).includes(_.lowerCase(cmsSearch))
                                 ), option => (
                                     <abbr key={option.id} title={option.cms_name}>
-                                    <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setCms(option)}>
+                                    <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>{setCms(option), setCmsSearch('')}}>
                                         <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.cms_name }</span>
-                                        {cms?.id === option.id && <i className='fa-solid fa-check ml-' />}
+                                        {cms?.id === option.id && <i className='fa-solid fa-check ' />}
                                     </Dropdown.Item>
                                     </abbr> 
                                 ))}
@@ -151,9 +151,9 @@ const Protfolio = () => {
                                         _.lowerCase(q.website_type).includes(_.lowerCase(websiteTypeSearch))
                                 ), option => (
                                     <abbr title={option.website_type} key={option.id}>
-                                        <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setWebsiteType(option)}>
+                                        <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>{setWebsiteType(option),setWebsiteTypeSearch('') }}>
                                             <span className='multiline-ellipsis' style={{width: '90%'}}>{ option.website_type }</span>
-                                            {websiteType?.id === option.id && <i className='fa-solid fa-check ml-' />}
+                                            {websiteType?.id === option.id && <i className='fa-solid fa-check' />}
                                         </Dropdown.Item>
                                     </abbr>
                                 ))}
@@ -186,9 +186,9 @@ const Protfolio = () => {
                                     )
                                 ), option => (
                                     <abbr title={option.category_name} key={option.id}>
-                                        <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setWebsiteCategory(option)}>
+                                        <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>{setWebsiteCategory(option), setWebsiteCategorySearch('')}}>
                                             <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.category_name }</span>
-                                            {websiteCategory?.id === option.id && <i className='fa-solid fa-check ml-' />}
+                                            {websiteCategory?.id === option.id && <i className='fa-solid fa-check ' />}
                                         </Dropdown.Item>
                                     </abbr>
                                 ))}
@@ -215,7 +215,7 @@ const Protfolio = () => {
                             <div className='portfolio-filter-dd-menu'>
                                 {_.map(subNiches(), option => (
                                     <abbr title={option.category_name} key={option.id}>
-                                        <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>setSubCategory(option)}>
+                                        <Dropdown.Item className="d-flex items-center justify-content-between" onClick={()=>{setSubCategory(option),setSubCategorySearch('') }}>
                                         <span className='singleline-ellipsis' style={{width: '90%'}}>{ option.category_name }</span>
                                         {subCategory?.id === option.id && <i className='fa-solid fa-check ml-' />}
                                     </Dropdown.Item>

@@ -7,11 +7,12 @@ import styles from './styles.module.css';
 import JqueryDateRangePicker from './JqueryDateRangePicker';
 import { useLazyGetRevisionCalculatorDataQuery } from '../services/api/revisionCalculatorApiSlice';
 
-const data = fakeData(300);
+// const data = fakeData(300);
 
 const RevisionCalculator = () => {
   const [pageIndex, setPageIndex] = useState(1);
   const [nRows, setNRows] = useState(10);
+  const [data, setData] = useState([]);
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -39,7 +40,8 @@ const RevisionCalculator = () => {
           const queryString = new URLSearchParams(queryObject).toString();
    
         try{
-          let res = getRevisionCalculatorData(`?${queryString}`).unwrap();
+          let res = await getRevisionCalculatorData(`?${queryString}`).unwrap();
+          setData(res);
           console.log(res)
         }catch(err){
           console.log(err)
@@ -62,9 +64,10 @@ const RevisionCalculator = () => {
           perPageRow={nRows}
           onPageChange={(value) => setPageIndex(value)}
           onPageRowChange={(n) => setNRows(n)} 
-          total={data.length}
+          total={data.length }
           tableClass={styles.table}
           tableContainerClass={styles.tableContainer}
+          uniq_id="project_manager_id"
           navbar={
             <JqueryDateRangePicker
               startDate = {startDate}

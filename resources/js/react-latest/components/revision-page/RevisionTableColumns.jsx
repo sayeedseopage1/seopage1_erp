@@ -2,6 +2,7 @@ import _ from "lodash";
 import styles from "../../styles/revision-page.module.css";
 import SaleActionButton from "./SaleActionButton";
 import PersonColumn from "../../ui/PersonColumn";
+import Popover from '../../ui/Popover';
 
 export const RevisionTableColumns = [
     {
@@ -21,14 +22,15 @@ export const RevisionTableColumns = [
         accessorFn: (row) => row.project_name,
         cell: (row) => {
             const data = row.row.original;
-            
 
             return (
-               <a href={`/account/projects/${data?.project_id}`}>
+                <a href={`/account/projects/${data?.project_id}`}>
                     <abbr title={row.getValue()}>
-                        <span className="multiline-ellipsis">{row.getValue()}</span>
+                        <span className="multiline-ellipsis">
+                            {row.getValue()}
+                        </span>
                     </abbr>
-               </a> 
+                </a>
             );
         },
     },
@@ -38,16 +40,21 @@ export const RevisionTableColumns = [
         draggable: true,
         sortable: true,
         accessorFn: (row) => row.client.name,
-        cell: (row) => {
-            const data = row.row.original;
+        cell: ({ row }) => {
+            const d = row.original;
 
-            return (
-                <a href={`/account/clients/${data?.client?.id}`}>
-                    <abbr title={row.getValue()}>
-                        <span className="multiline-ellipsis">{row.getValue()}</span>
-                    </abbr>
-                </a>
-            );
+            const person = d?.client;
+
+            if (person) {
+                return (
+                    <PersonColumn
+                        name={person.name}
+                        avatar={person.image}
+                        slug=""
+                        profileLink={`/account/employees/${person.id}`}
+                    />
+                );
+            } else return <span> -- </span>;
         },
     },
     {
@@ -70,9 +77,30 @@ export const RevisionTableColumns = [
         draggable: true,
         sortable: true,
         accessorFn: (row) => row.pm_comment || row.lead_comment,
-        cell: (row) => {
-            return ( 
-                <div className="multiline-ellipsis" dangerouslySetInnerHTML={{__html: row.getValue()?.slice(0, 80)}} /> 
+        cell: ({row}) => {
+            const data = row.original;
+            
+            const text = data.pm_comment || data.lead_comment
+
+            return (
+                <Popover>
+                    <Popover.Button>
+                        <div
+                            className="multiline-ellipsis"
+                            dangerouslySetInnerHTML={{
+                                __html: text?.slice(0, 200),
+                            }}
+                        />
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className={styles.revision_popover_panel}>
+                            <div dangerouslySetInnerHTML={{
+                                __html: text
+                            }} />
+                        </div>
+                    </Popover.Panel>
+                </Popover>
             );
         },
     },
@@ -83,10 +111,26 @@ export const RevisionTableColumns = [
         sortable: true,
         accessorFn: (row) => row.revision_acknowledgement,
         cell: (row) => {
+            const text = row.getValue()
             return (
-                <abbr title={row.getValue()}>
-                    <span className="multiline-ellipsis">{row.getValue()}</span>
-                </abbr>
+                <Popover>
+                    <Popover.Button>
+                        <div
+                            className="multiline-ellipsis"
+                            dangerouslySetInnerHTML={{
+                                __html: text?.slice(0, 200),
+                            }}
+                        />
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className={styles.revision_popover_panel}>
+                            <div dangerouslySetInnerHTML={{
+                                __html: text
+                            }} />
+                        </div>
+                    </Popover.Panel>
+                </Popover> 
             );
         },
     },
@@ -95,20 +139,20 @@ export const RevisionTableColumns = [
         header: "Revision Provided By",
         draggable: true,
         sortable: true,
-        accessorFn: (row) => row.project_manager.name,
-        cell: ({row}) => {
+        accessorFn: (row) => row?.project_manager?.name,
+        cell: ({ row }) => {
             const d = row.original;
 
-            if(d.project_manager){
-                return(
+            if (d?.project_manager) {
+                return (
                     <PersonColumn
-                        name={d.project_manager.name} 
+                        name={d.project_manager.name}
                         avatar={d.project_manager.image}
-                        slug = {d.project_manager.designation}
+                        slug={d.project_manager.designation}
                         profileLink={`/account/employees/${d.project_manager.id}`}
                     />
-                )  
-            }else return <span> -- </span>
+                );
+            } else return <span> -- </span>;
             // return (
             //     <abbr title={row.getValue()}>
             //         <span className="multiline-ellipsis">{row.getValue()}</span>
@@ -121,13 +165,23 @@ export const RevisionTableColumns = [
         header: "Revision Due To",
         draggable: true,
         sortable: true,
-        accessorFn: (row) => row?.sale_person ? row.sale_person.name : row?.task_assign_to.name,
-        cell: (row) => {
-            return (
-                <abbr title={row.getValue()}>
-                    <span className="multiline-ellipsis">{row.getValue()}</span>
-                </abbr>
-            );
+        accessorFn: (row) =>
+            row?.sale_person ? row.sale_person.name : row?.task_assign_to.name,
+        cell: ({ row }) => {
+            const d = row.original;
+
+            const person = d?.sale_person || d?.task_assign_to;
+
+            if (person) {
+                return (
+                    <PersonColumn
+                        name={person.name}
+                        avatar={person.image}
+                        slug={person.designation}
+                        profileLink={`/account/employees/${person.id}`}
+                    />
+                );
+            } else return <span> -- </span>;
         },
     },
     {
@@ -135,13 +189,22 @@ export const RevisionTableColumns = [
         header: "Project Manager",
         draggable: true,
         sortable: true,
-        accessorFn: (row) => row.project_manager.name,
-        cell: (row) => {
-            return (
-                <abbr title={row.getValue()}>
-                    <span className="multiline-ellipsis">{row.getValue()}</span>
-                </abbr>
-            );
+        accessorFn: (row) => row?.project_manager?.name,
+        cell: ({ row }) => {
+            const d = row.original;
+
+            const person = d?.project_manager;
+
+            if (person) {
+                return (
+                    <PersonColumn
+                        name={person.name}
+                        avatar={person.image}
+                        slug={person.designation}
+                        profileLink={`/account/employees/${person.id}`}
+                    />
+                );
+            } else return <span> -- </span>;
         },
     },
     {
@@ -149,13 +212,22 @@ export const RevisionTableColumns = [
         header: "Lead Developer",
         draggable: true,
         sortable: true,
-        accessorFn: (row) => row.lead_developer.name,
-        cell: (row) => {
-            return (
-                <abbr title={row.getValue()}>
-                    <span className="multiline-ellipsis">{row.getValue()}</span>
-                </abbr>
-            );
+        accessorFn: (row) => row?.lead_developer.name,
+        cell: ({ row }) => {
+            const d = row.original;
+
+            const person = d?.lead_developer;
+
+            if (person) {
+                return (
+                    <PersonColumn
+                        name={person.name}
+                        avatar={person.image}
+                        slug={person.designation}
+                        profileLink={`/account/employees/${person.id}`}
+                    />
+                );
+            } else return <span> -- </span>;
         },
     },
     {
@@ -164,40 +236,84 @@ export const RevisionTableColumns = [
         draggable: true,
         sortable: true,
         accessorFn: (row) => row.deal_added_by.name,
-        cell: (row) => {
-            return (
-                <abbr title={row.getValue()}>
-                    <span className="multiline-ellipsis">{row.getValue()}</span>
-                </abbr>
-            );
+        cell: ({ row }) => {
+            const d = row.original;
+
+            const person = d?.deal_added_by;
+
+            if (person) {
+                return (
+                    <PersonColumn
+                        name={person.name}
+                        avatar={person.image}
+                        slug={person.designation}
+                        profileLink={`/account/employees/${person.id}`}
+                    />
+                );
+            } else return <span> -- </span>;
         },
     },
     {
         id: "status",
         header: "Action/Status",
         draggable: true,
-        cell: ({row,table}) => {
-            const data = row.original; 
+        cell: ({ row, table }) => {
+            const data = row.original;
             const user = window?.Laravel?.user;
-            
-            if((Number(user.role_id) === 8 && (data.sale_accept || data.sale_deny)) || Number(user.role_id) === 1){
+
+            if (
+                (Number(user.role_id) === 8 &&
+                    (data.sale_accept || data.sale_deny)) ||
+                Number(user.role_id) === 1
+            ) {
                 const status = () => {
-                    if(data.sale_accept) {
-                        return <div className={`${styles.status} f-12`} > {`Accepted by ${data?.deal_added_by?.name}` } </div> 
-                    }else if (data.sale_deny){
-                        return <div className={`${styles.status} f-12`} > {`Denied by ${data?.deal_added_by?.name}` } </div> 
-                    }else if(data.is_accept) { 
-                        return <div className={`${styles.status} f-12`} > {`Accepted by ${data?.task_assign_to?.name}` } </div> 
-                    }else if (data.is_deny){
-                        return <div className={`${styles.status} f-12`} > {`Denied by ${data?.task_assign_to?.name}` } </div> 
-                    }
-                }  
-    
-                return status()  
-            }else{
-                return <SaleActionButton row={data} table={table} />
+                    if (data.sale_accept) {
+                        return (
+                            <div className={`${styles.status} f-12`}>
+                                {" "}
+                                {`Accepted by ${data?.deal_added_by?.name}`}{" "}
+                            </div>
+                        );
+                    } else if (data.sale_deny) {
+                        return (
+                            <div
+                                className={`${styles.status} ${styles.deny} f-12`}
+                            >
+                                {" "}
+                                {`Denied by ${data?.deal_added_by?.name}`}{" "}
+                            </div>
+                        );
+                    } else if (data.is_accept) {
+                        return (
+                            <div className={`${styles.status} f-12`}>
+                                {" "}
+                                {`Accepted by ${data?.task_assign_to?.name}`}{" "}
+                            </div>
+                        );
+                    } else if (data.is_deny) {
+                        return (
+                            <div
+                                className={`${styles.status} ${styles.deny} f-12`}
+                            >
+                                {" "}
+                                {`Denied by ${data?.task_assign_to?.name}`}{" "}
+                            </div>
+                        );
+                    } else
+                        return (
+                            <div
+                                className={`${styles.status} ${styles.pending} f-12`}
+                            >
+                                {" "}
+                                Pending{" "}
+                            </div>
+                        );
+                };
+
+                return status();
+            } else {
+                return <SaleActionButton row={data} table={table} />;
             }
-            
         },
-    }
+    },
 ];

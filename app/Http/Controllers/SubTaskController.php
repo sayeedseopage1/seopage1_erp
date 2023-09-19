@@ -50,8 +50,8 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-       // dd($request);
-    //    / DB::beginTransaction();
+        //dd($request);
+// DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
        
@@ -70,6 +70,10 @@ class SubTaskController extends AccountBaseController
             'estimate_minutes' => 'required',
             'description' => 'required',
             'user_id' => 'required',
+            'user_id' => 'required',
+            'page_type' => 'required',
+            'page_url' => 'required',
+           
 
 
         ];
@@ -108,14 +112,14 @@ class SubTaskController extends AccountBaseController
         $total_minutes = $hours + $minutes;
         if ($check_estimation->estimate_time_left_minutes - $total_minutes < 0) {
 
-            // return response()->json([
-            //     "message" => "The given data was invalid.",
-            //     "errors" => [
-            //         "hours" => [
-            //             "Estimate hours cannot exceed from project allocation hours !"
-            //         ]
-            //     ]
-            // ], 422);
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours cannot exceed from project allocation hours !"
+                    ]
+                ]
+            ], 422);
 
         }
         $this->addPermission = user()->permission('add_sub_tasks');
@@ -181,6 +185,11 @@ class SubTaskController extends AccountBaseController
         $task_type = new TaskType();
         $task_type->task_id= $task_s->id;
         $task_type->page_type= $request->page_type;
+        if($request->page_type == 'Primary Page Development')
+        {
+            $task_type->authorization_status= 0;
+
+        }
         $task_type->page_name= $request->page_name;
         $task_type->page_url= $request->page_url;
         $task_type->task_type_other= $request->task_type_other;
@@ -188,6 +197,7 @@ class SubTaskController extends AccountBaseController
         $task_type->existing_design_link = $request->existing_design_link;
         $task_type->number_of_pages= $request->number_of_pages;
         $task_type->save();
+       // dd($task_type);
         
 
         $authorization_action = new AuthorizationAction();

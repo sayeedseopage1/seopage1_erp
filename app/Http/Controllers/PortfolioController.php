@@ -24,7 +24,10 @@ class PortfolioController extends AccountBaseController
         parent::__construct();
         $this->pageTitle = 'Portfolio';
         $this->activeSettingMenu = 'portfolio';
-       
+        $this->middleware(function ($request, $next) {
+            abort_403(user()->permission('manage_company_setting') !== 'all');
+            return $next($request);
+        });
     }
     /**
      * Display a listing of the resource.
@@ -284,7 +287,8 @@ class PortfolioController extends AccountBaseController
         $page_size = $request->page_size ?? 10;
         
         $data = DB::table('project_portfolios')
-            ->where('portfolio_link', '<>', null)
+            ->where('portfolio_link', '!=', null)
+            ->whereNotIn('portfolio_link',["n/a", "N/A","null", "na", "NA"])
             ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_name, $plugin_name) {
                 if ($cms) {
                     $query->where('cms_category', $cms);

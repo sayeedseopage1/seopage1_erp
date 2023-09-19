@@ -40,11 +40,37 @@
 }
 
 .status{
+    width: fit-content;
     background: #e6f8ef;
     color:  #00b95d;
-    padding: 0.35rem 1rem;
+    padding: 0.25rem 0.85rem;
     font-size: 12px;
     line-height: 1.6;
     letter-spacing: 0.52px;
     overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid #80dcae;
+
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.status.deny{
+    background: #fee6e6;
+    color:  #f22121;
+    border-color: #f99c9c;
+}
+
+
+.revision_popover_panel{
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+    /* width: clamp(255px, 100%, 350px); */
+    width: 350px;
 }

@@ -1,7 +1,7 @@
 export const ProjectElaborationTableColumns = [
     {
         id: "pm_name",
-        heading: "Project Manager Name",
+        heading: "Project Name",
         moveable: false,
         sortBy: "pm_id",
         rowSpan: 2,
