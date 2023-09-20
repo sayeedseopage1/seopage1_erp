@@ -117,10 +117,10 @@
                       <div class="card-header" id="headingOne">
                         <h2 class="mb-0">
                           <button style="text-decoration: none" class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <div class="d-flex">
+                            {{-- <div class="d-flex">
                                 <h6 class="monthDate"></h6>
                                 <h6 class="ml-1">(Cycle)</h6>
-                            </div>
+                            </div> --}}
                           </button>
                         </h2>
                       </div>
@@ -1173,8 +1173,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-end">
-                                    <button type="button" class="btn btn-secondary mt-3" id="adminViewMore">View More..</button>
+                                <div class="d-flex justify-content-center">
+                                    <button type="button" class="btn btn-primary mt-3" id="adminViewMore">View More..</button>
                                 </div>
                             </div>
                         </div>

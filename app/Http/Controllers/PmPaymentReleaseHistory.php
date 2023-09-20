@@ -55,6 +55,8 @@ class PmPaymentReleaseHistory extends AccountBaseController
         $this->total_assigned_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
             ->where('projects.pm_id', $pmId)
             ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
+            ->whereNot('project_milestones.status', 'canceled')
+            ->where('projects.project_status','Accepted')
             ->sum('cost');
        
 
@@ -73,6 +75,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
             })
             ->whereNot('project_milestones.status', 'canceled')
             ->where('projects.pm_id', $pmId)
+            ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
          
 
@@ -89,6 +92,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
         })
         ->whereNot('project_milestones.status', 'canceled')
             ->where('projects.pm_id', $pmId)
+            ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
           
 
@@ -105,7 +109,8 @@ class PmPaymentReleaseHistory extends AccountBaseController
                 ->orWhere('payments.paid_on', '>', $assignEndDate);
         })
         ->whereNot('project_milestones.status', 'canceled')
-            ->where('users.id', $pmId)
+            ->where('projects.pm_id', $pmId)
+            ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
 
            
@@ -117,7 +122,9 @@ class PmPaymentReleaseHistory extends AccountBaseController
         ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
         //->whereNotNull('project_milestones.invoice_id')
         ->whereBetween('payments.paid_on', [$startDate, $assignEndDate])
-        ->where('users.id', $pmId)
+        ->where('payments.added_by', $pmId)
+        ->whereNot('project_milestones.status', 'canceled')
+        ->where('projects.project_status','Accepted')
         ->sum('project_milestones.cost');
        
 
@@ -131,7 +138,9 @@ class PmPaymentReleaseHistory extends AccountBaseController
         //->whereNotNull('project_milestones.invoice_id')
         ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
         ->whereBetween('payments.paid_on', [$startDate, $assignEndDate])
-        ->where('users.id', $pmId)
+        ->where('payments.added_by', $pmId)
+        ->whereNot('project_milestones.status', 'canceled')
+        ->where('projects.project_status','Accepted')
         ->sum('project_milestones.cost');
     //   /  dd($this->project_managers);
        
@@ -178,6 +187,8 @@ class PmPaymentReleaseHistory extends AccountBaseController
         $this->total_assigned_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
             ->where('projects.pm_id', $pmId)
             ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
+            ->where('projects.project_status','Accepted')
+            ->whereNot('project_milestones.status', 'canceled')
             ->sum('cost');
 
 
@@ -222,6 +233,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
             })
             ->whereNot('project_milestones.status', 'canceled')
             ->where('projects.pm_id', $pmId)
+            ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
 
 
@@ -238,6 +250,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
         })
         ->whereNot('project_milestones.status', 'canceled')
             ->where('projects.pm_id', $pmId)
+            ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
 
 
@@ -253,7 +266,8 @@ class PmPaymentReleaseHistory extends AccountBaseController
                 ->orWhere('payments.paid_on', '>', $assignEndDate);
         })
         ->whereNot('project_milestones.status', 'canceled')
-            ->where('users.id', $pmId)
+            ->where('projects.pm_id', $pmId)
+            ->where('projects.project_status','Accepted')
             ->sum('project_milestones.cost');
 
 
@@ -265,7 +279,9 @@ class PmPaymentReleaseHistory extends AccountBaseController
         ->join('payments', 'project_milestones.invoice_id', '=', 'payments.invoice_id')
         //->whereNotNull('project_milestones.invoice_id')
         ->whereBetween('payments.paid_on', [$startDate, $assignEndDate])
-        ->where('users.id', $pmId)
+        ->where('payments.added_by', $pmId)
+        ->where('projects.project_status','Accepted')
+       
         ->sum('project_milestones.cost');
 
 
@@ -278,7 +294,9 @@ class PmPaymentReleaseHistory extends AccountBaseController
         //->whereNotNull('project_milestones.invoice_id')
         ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
         ->whereBetween('payments.paid_on', [$startDate, $assignEndDate])
-        ->where('users.id', $pmId)
+        ->where('payments.added_by', $pmId)
+        ->where('projects.project_status','Accepted')
+      
         ->sum('project_milestones.cost');
        // dd($this->data);
         // $data['labels'] = $this->pm_pending_milestone_value_upto_last_month->toArray();

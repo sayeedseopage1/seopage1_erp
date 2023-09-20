@@ -1,7 +1,435 @@
 <div class="row">
     <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyReleasedAmountCycle{{ count($total_released_amount_this_cycle_get) }}"> {{ round($total_released_amount_this_cycle, 2) }} ($)</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Released amount for this Cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#released_amount_for_cycle"></i>
+                            @include('dashboard.card-data-modal.released_amount_for_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.total_released_amount.monthly_released_amount_cycle')
+
+                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyTotalReleasedAmount{{ count($total_released_amount_previous_cycle_get) }}" style="color: green"> {{ round($total_released_amount_previous_cycle, 2) }} ($)</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Total released amount')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#total_released_amount_modal"></i>
+                            @include('dashboard.card-data-modal.total_released_amount')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.total_released_amount.monthly_total_released_amount')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average project completion time</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionDays{{ count($average_project_completion_rate) }}">
+                            @if($average_completion_days == 0)
+                            N\A
+                            @else
+                            {{round($average_completion_days,2)}} days
+
+                            @endif
+                           </a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Average project compeltion time for this cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#average_project_completion_time_for_this_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.average_project_completion_time_for_this_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.average_project.monthly_average_project_completion_time')
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionInThisDays{{ count($average_project_completion_rate_previous_cycle) }}" style="color: green">
+                            @if($average_completion_days_previous_cycle == 0)
+                            N\A
+                            @else
+                            {{round($average_completion_days_previous_cycle,2)}} days
+                            @endif
+                           </a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Average project compeltion time in this cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#average_project_completion_time_in_this_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.average_project_completion_time_in_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.average_project.monthly_average_project_completion_time_in_this_cycle')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Count)</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionProgressForThisCycleCount{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_100_in_progress, 2) }}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Project completion rate for this Cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.project_completion_rate_for_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.projects_completion_progress_rate_count.monthly_project_complection_rate_for_this_cycle_count')
+
+                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionProgressInThisCycleCount{{ count($no_of_100_and_finish_previous_cycle) }}">{{ round($project_completion_rate_count_previous_cycle_100_in_progress, 2) }}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Project completion rate in this Cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.project_completion_rate_in_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.projects_completion_progress_rate_count.monthly_project_complection_rate_in_this_cycle_count')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Value)</h5>
+                <div class="d-flex flex-wrap">
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateForThisValue{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Project completion rate for this Cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_value_modal"></i>
+                            @include('dashboard.card-data-modal.project_completion_rate_for_cycle_value')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.projects_completion_progress_rate_value.monthly_project_complection_rate_for_this_cycle_value')
+
+                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateInThisValue{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Project completion rate in this Cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_value_modal"></i>
+                            @include('dashboard.card-data-modal.project_completion_rate_in_cycle_value')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.projects_completion_progress_rate_value.monthly_project_complection_rate_in_this_cycle_value')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Count)</h5>
+                <div class="d-flex flex-wrap">
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateForThisCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle,2)}}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Project Completion rate for this cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_complection_rate_for_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.project_complection_rate_for_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.project_completion_rate_count.monthly_project_completion_rate_for_this_cycle')
+
+                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateInThisCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle,2)}}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Project Completion rate in this cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_complection_rate_in_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.project_complection_rate_in_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.project_completion_rate_count.monthly_project_completion_rate_in_this_cycle')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Value)</h5>
+                <div class="d-flex flex-wrap">
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#projectProgressForCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle_value,2)}}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('100% in progress projects for cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#in_progress_project_for_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.in_progress_project_for_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.project_completion_rate_value.project_progress_for_cycle')
+
+                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#completedProjectForCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle_value,2)}}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Completed/Finished projects for cycle')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#completed_or_finished_project_in_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.completed_or_finished_project_in_cycle')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.project_completion_rate_value.completed_project_for_cycle')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of upsale/cross sales</h5>
+                <div class="d-flex flex-wrap">
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyNoOfNewDealsAdded{{ count($no_of_new_deals_added_previous) }}">{{ count($no_of_new_deals_added_previous) }}</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Number of New deals added')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#number_of_new_deals_added_modal"></i>
+                            @include('dashboard.card-data-modal.number_of_new_deals_added')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.upsale_cross_sales.monthly_no_of_new_deals_added')
+
+                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyNumberOfMilestoneAdd{{ count($no_of_new_milestones_added_on_old_projects) }}">{{count($no_of_new_milestones_added_on_old_projects)}}</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Number of new milestones added on old projects')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#number_Of_new_milestones_added_on_old_projects_added_modal"></i>
+                            @include('dashboard.card-data-modal.number_Of_new_milestones_added_on_old_projects_added')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.upsale_cross_sales.monthly_number_of_milestone_add')
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 mt-3">
+                        <a href="#" data-toggle="modal" data-target="#monthlyNumberOfOldProject{{ count($no_of_new_milestones_added_on_old_projects_id) }}">{{count($no_of_new_milestones_added_on_old_projects_id)}}</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Number of old projects where there is upsales/cross sales')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#old_projects_upsales_cross_sales_modal"></i>
+                            @include('dashboard.card-data-modal.old_projects_upsales_cross_sales')
+                        </span>
+                    </p>
+                    @include('dashboard.employee.upsale_cross_sales.monthly_number_of_old_project')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
+            style="height: 100%;">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of upsale/crosssale
+                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#value_of_upsale_crosssale_modal"></i>
+                        @include('dashboard.card-data-modal.value_of_upsale_crosssale')
+                </h5>
+                <div class="d-flex flex-wrap">
+                    <a href="#" data-toggle="modal" data-target="#monthlyValueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects) }}">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{round($no_of_new_milestones_added_on_old_projects_value,2)}}$<span
+                                class="f-12 font-weight-normal text-lightest"></span>
+                        </p>
+                    </a>
+                     @include('dashboard.employee.upsale_cross_sales.monthly_value_of_upsale')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects percentage</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#"  data-toggle="modal" data-target="#MonthlytotalDelayProject{{count($no_of_delayed_projects_this_cycle)}}">{{round($delayed_projects_percentage_this_cycle,2)}}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Current')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#current_modal"></i>
+                            @include('dashboard.card-data-modal.current')
+                        </span>
+                    </p>
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#"  data-toggle="modal" data-target="#MonthlytotalDelayProjectInthisCycle{{count($no_of_delayed_projects)}}">{{round($delayed_projects_percentage_previous_cycle,2)}}%</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Current plus old ones')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#current_plus_old_ones_modal"></i>
+                            @include('dashboard.card-data-modal.current_plus_old_ones')
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0 h-100">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Cancelation rate
+                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#cancelation_rate_modal"></i>
+                        @include('dashboard.card-data-modal.cancelation_rate')
+                </h5>
+                <div class="d-flex flex-wrap">
+                    <a href="#" data-toggle="modal" data-target="#monthlyCancelationRateData{{ count($cancelled_projects_this_cycle) }}">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{round($project_cancelation_rate,2)}}%
+                        </p>
+                    </a>
+                    @include('dashboard.employee.cancelation_rate.monthly_cancelation_rate')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions for cycle</h5>
+                <div class="d-flex flex-wrap">
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyCausedByMe{{count($caused_by_me_for_previous_cycle)}}">{{ count($caused_by_me_for_previous_cycle) }}</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Caused by me')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_me_modal"></i>
+                            @include('dashboard.card-data-modal.caused_by_me')
+                        </span>
+                    </p>
+                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_me') -->
+
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyCausedByOther{{count($caused_by_other_for_previous_cycle)}}" style="color: green">{{ count($caused_by_other_for_previous_cycle) }}</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Caused By others')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_others_modal"></i>
+                            @include('dashboard.card-data-modal.caused_by_others')
+                        </span>
+                    </p>
+                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_other') -->
+
+                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                        <a href="#" data-toggle="modal" data-target="#monthlyDisputeForCycle{{count($dispute_for_previous_cycle)}}" style="color: red">{{ count($dispute_for_previous_cycle) }}</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Disputed')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#disputed_modal"></i>
+                            @include('dashboard.card-data-modal.disputed')
+                        </span>
+                    </p>
+                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_dispute') -->
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions in cycle</h5>
+                <div class="d-flex flex-wrap">
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" onclick="event.preventDefault()">0</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Caused by me')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_me_in_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.caused_by_me_in_cycle')
+                        </span>
+                    </p>
+                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                        <a href="#" onclick="event.preventDefault()" style="color: green">0</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Caused By others')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_others_in_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.caused_by_others_in_cycle')
+                        </span>
+                    </p>
+                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
+                        <a href="#" onclick="event.preventDefault()" style="color: red">0</a>
+                        <span class="f-12 font-weight-normal text-lightest">
+                            @lang('Disputed')
+                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#disputed_in_cycle_modal"></i>
+                            @include('dashboard.card-data-modal.disputed_in_cycle')
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
+            <div class="d-block text-capitalize">
+                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Rel. Count per day
+                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#avg_payment_modal"></i>
+                        @include('dashboard.card-data-modal.avg_payment')
+                </h5>
+                <div class="d-flex flex-wrap">
+                    <a href="#" data-toggle="modal" data-target="#monthlyAvgPayment{{ count($total_milestone_completed_this_current_month) }}">
+                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
+                            {{round($avg_payment_release_per_day,2)}} per day
+                        </p>
+                    </a>
+                    @include('dashboard.employee.avg_payment.monthly_average_payment_per_day')
+                </div>
+            </div>
+            <div class="d-block">
+                <i class="fa fa-list text-lightest f-27"></i>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mt-3">
+    <div class="col-md-6">
+        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of projects</h5>
                 <div class="d-flex flex-wrap">
@@ -86,38 +514,7 @@
     </div>
 </div>
 <div class="row mt-3">
-    <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
-                <div class="d-flex flex-wrap">
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyReleasedAmountCycle{{ count($total_released_amount_this_cycle_get) }}"> {{ round($total_released_amount_this_cycle, 2) }} ($)</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Released amount for this Cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#released_amount_for_cycle"></i>
-                            @include('dashboard.card-data-modal.released_amount_for_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.total_released_amount.monthly_released_amount_cycle')
 
-                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyTotalReleasedAmount{{ count($total_released_amount_previous_cycle_get) }}" style="color: green"> {{ round($total_released_amount_previous_cycle, 2) }} ($)</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Total released amount')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#total_released_amount_modal"></i>
-                            @include('dashboard.card-data-modal.total_released_amount')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.total_released_amount.monthly_total_released_amount')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
     <div class="col-md-6">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
             style="height: 100%;">
@@ -236,71 +633,6 @@
     <div class="col-md-6">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Count)</h5>
-                <div class="d-flex flex-wrap">
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionProgressForThisCycleCount{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_100_in_progress, 2) }}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Project completion rate for this Cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.project_completion_rate_for_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.projects_completion_progress_rate_count.monthly_project_complection_rate_for_this_cycle_count')
-
-                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionProgressInThisCycleCount{{ count($no_of_100_and_finish_previous_cycle) }}">{{ round($project_completion_rate_count_previous_cycle_100_in_progress, 2) }}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Project completion rate in this Cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.project_completion_rate_in_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.projects_completion_progress_rate_count.monthly_project_complection_rate_in_this_cycle_count')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Value)</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateForThisValue{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Project completion rate for this Cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_value_modal"></i>
-                            @include('dashboard.card-data-modal.project_completion_rate_for_cycle_value')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.projects_completion_progress_rate_value.monthly_project_complection_rate_for_this_cycle_value')
-
-                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateInThisValue{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Project completion rate in this Cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_value_modal"></i>
-                            @include('dashboard.card-data-modal.project_completion_rate_in_cycle_value')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.projects_completion_progress_rate_value.monthly_project_complection_rate_in_this_cycle_value')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mt-3">
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of fully completed/Finished projects
                 </h5>
                 <div class="d-flex flex-wrap">
@@ -365,73 +697,6 @@
     </div>
 
 
-</div>
-<div class="row mt-3">
-
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Count)</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateForThisCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle,2)}}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Project Completion rate for this cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_complection_rate_for_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.project_complection_rate_for_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.project_completion_rate_count.monthly_project_completion_rate_for_this_cycle')
-
-                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyProjectComplectionRateInThisCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle,2)}}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Project Completion rate in this cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_complection_rate_in_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.project_complection_rate_in_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.project_completion_rate_count.monthly_project_completion_rate_in_this_cycle')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project completion rate (Value)</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#projectProgressForCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle_value,2)}}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('100% in progress projects for cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#in_progress_project_for_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.in_progress_project_for_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.project_completion_rate_value.project_progress_for_cycle')
-
-                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#completedProjectForCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle_value,2)}}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Completed/Finished projects for cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#completed_or_finished_project_in_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.completed_or_finished_project_in_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.project_completion_rate_value.completed_project_for_cycle')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="row mt-3">
@@ -679,117 +944,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Average project completion time</h5>
-                <div class="d-flex flex-wrap">
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionDays{{ count($average_project_completion_rate) }}">
-                            @if($average_completion_days == 0)
-                            N\A
-                            @else
-                            {{round($average_completion_days,2)}} days
 
-                            @endif
-                           </a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Average project compeltion time for this cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#average_project_completion_time_for_this_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.average_project_completion_time_for_this_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.average_project.monthly_average_project_completion_time')
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyAverageComplectionInThisDays{{ count($average_project_completion_rate_previous_cycle) }}" style="color: green">
-                            @if($average_completion_days_previous_cycle == 0)
-                            N\A
-                            @else
-                            {{round($average_completion_days_previous_cycle,2)}} days
-                            @endif
-                           </a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Average project compeltion time in this cycle')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#average_project_completion_time_in_this_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.average_project_completion_time_in_cycle')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.average_project.monthly_average_project_completion_time_in_this_cycle')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row mt-3">
-<div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">No of upsale/cross sales</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyNoOfNewDealsAdded{{ count($no_of_new_deals_added_previous) }}">{{ count($no_of_new_deals_added_previous) }}</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Number of New deals added')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#number_of_new_deals_added_modal"></i>
-                            @include('dashboard.card-data-modal.number_of_new_deals_added')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.upsale_cross_sales.monthly_no_of_new_deals_added')
-
-                    <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyNumberOfMilestoneAdd{{ count($no_of_new_milestones_added_on_old_projects) }}">{{count($no_of_new_milestones_added_on_old_projects)}}</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Number of new milestones added on old projects')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#number_Of_new_milestones_added_on_old_projects_added_modal"></i>
-                            @include('dashboard.card-data-modal.number_Of_new_milestones_added_on_old_projects_added')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.upsale_cross_sales.monthly_number_of_milestone_add')
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5 mt-3">
-                        <a href="#" data-toggle="modal" data-target="#monthlyNumberOfOldProject{{ count($no_of_new_milestones_added_on_old_projects_id) }}">{{count($no_of_new_milestones_added_on_old_projects_id)}}</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Number of old projects where there is upsales/cross sales')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#old_projects_upsales_cross_sales_modal"></i>
-                            @include('dashboard.card-data-modal.old_projects_upsales_cross_sales')
-                        </span>
-                    </p>
-                    @include('dashboard.employee.upsale_cross_sales.monthly_number_of_old_project')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0"
-            style="height: 100%;">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Value of upsale/crosssale
-                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#value_of_upsale_crosssale_modal"></i>
-                        @include('dashboard.card-data-modal.value_of_upsale_crosssale')
-                </h5>
-                <div class="d-flex flex-wrap">
-                    <a href="#" data-toggle="modal" data-target="#monthlyValueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects) }}">
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{round($no_of_new_milestones_added_on_old_projects_value,2)}}$<span
-                                class="f-12 font-weight-normal text-lightest"></span>
-                        </p>
-                    </a>
-                     @include('dashboard.employee.upsale_cross_sales.monthly_value_of_upsale')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="row mt-3">
     <div class="col-md-6">
@@ -859,35 +1014,6 @@
 </div>
 <div class="row mt-3">
     <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects percentage</h5>
-                <div class="d-flex flex-wrap">
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#"  data-toggle="modal" data-target="#MonthlytotalDelayProject{{count($no_of_delayed_projects_this_cycle)}}">{{round($delayed_projects_percentage_this_cycle,2)}}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Current')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#current_modal"></i>
-                            @include('dashboard.card-data-modal.current')
-                        </span>
-                    </p>
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#"  data-toggle="modal" data-target="#MonthlytotalDelayProjectInthisCycle{{count($no_of_delayed_projects)}}">{{round($delayed_projects_percentage_previous_cycle,2)}}%</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Current plus old ones')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#current_plus_old_ones_modal"></i>
-                            @include('dashboard.card-data-modal.current_plus_old_ones')
-                        </span>
-                    </p>
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
         <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
             <div class="d-block text-capitalize">
                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed completed</h5>
@@ -909,129 +1035,16 @@
         </div>
     </div>
 </div>
-<div class="row mt-3">
-    <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions for cycle</h5>
-                <div class="d-flex flex-wrap">
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyCausedByMe{{count($caused_by_me_for_previous_cycle)}}">{{ count($caused_by_me_for_previous_cycle) }}</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Caused by me')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_me_modal"></i>
-                            @include('dashboard.card-data-modal.caused_by_me')
-                        </span>
-                    </p>
-                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_me') -->
-
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyCausedByOther{{count($caused_by_other_for_previous_cycle)}}" style="color: green">{{ count($caused_by_other_for_previous_cycle) }}</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Caused By others')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_others_modal"></i>
-                            @include('dashboard.card-data-modal.caused_by_others')
-                        </span>
-                    </p>
-                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_caused_by_other') -->
-
-                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
-                        <a href="#" data-toggle="modal" data-target="#monthlyDisputeForCycle{{count($dispute_for_previous_cycle)}}" style="color: red">{{ count($dispute_for_previous_cycle) }}</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Disputed')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#disputed_modal"></i>
-                            @include('dashboard.card-data-modal.disputed')
-                        </span>
-                    </p>
-                    <!-- @include('dashboard.employee.number_of_revision_for_cycle.monthly_dispute') -->
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div
-            class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions in cycle</h5>
-                <div class="d-flex flex-wrap">
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" onclick="event.preventDefault()">0</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Caused by me')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_me_in_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.caused_by_me_in_cycle')
-                        </span>
-                    </p>
-                    <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                        <a href="#" onclick="event.preventDefault()" style="color: green">0</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Caused By others')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_others_in_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.caused_by_others_in_cycle')
-                        </span>
-                    </p>
-                    <p class="mb-0 f-21 font-weight-bold text-danger d-grid mr-5">
-                        <a href="#" onclick="event.preventDefault()" style="color: red">0</a>
-                        <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Disputed')
-                            <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#disputed_in_cycle_modal"></i>
-                            @include('dashboard.card-data-modal.disputed_in_cycle')
-                        </span>
-                    </p>
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary mt-3" id="mAdminViewMore">View More..</button>
 </div>
-<div class="row mt-3">
-<div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Cancelation rate
-                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#cancelation_rate_modal"></i>
-                        @include('dashboard.card-data-modal.cancelation_rate')
-                </h5>
-                <div class="d-flex flex-wrap">
-                    <a href="#" data-toggle="modal" data-target="#monthlyCancelationRateData{{ count($cancelled_projects_this_cycle) }}">
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{round($project_cancelation_rate,2)}}%
-                        </p>
-                    </a>
-                    @include('dashboard.employee.cancelation_rate.monthly_cancelation_rate')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="bg-white p-20 rounded b-shadow-4 d-flex justify-content-between align-items-center mb-4 mb-md-0 mb-lg-0">
-            <div class="d-block text-capitalize">
-                <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Avg. Payment Rel. Count per day
-                    <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#avg_payment_modal"></i>
-                        @include('dashboard.card-data-modal.avg_payment')
-                </h5>
-                <div class="d-flex flex-wrap">
-                    <a href="#" data-toggle="modal" data-target="#monthlyAvgPayment{{ count($total_milestone_completed_this_current_month) }}">
-                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                            {{round($avg_payment_release_per_day,2)}} per day
-                        </p>
-                    </a>
-                    @include('dashboard.employee.avg_payment.monthly_average_payment_per_day')
-                </div>
-            </div>
-            <div class="d-block">
-                <i class="fa fa-list text-lightest f-27"></i>
-            </div>
-        </div>
-    </div>
-</div>
+<script>
+    $('#mAdminViewMore').click(function(){
+        $('#admin_no_of_projects, #admin_no_of_client, #admin_no_of_progress_project, #admin_no_of_fully_completed, #admin_total_milestone_assigned, #admin_milestone_completion_rate, #admin_total_task_assigned, #admin_cancled_projects, #admin_delayed_completed').toggle();
+        if ($(this).text() == 'View More..') {
+            $(this).text('View Less..');
+        }else{
+            $(this).text('View More..');
+        }
+    });
+</script>

@@ -529,6 +529,7 @@ class ProjectsDataTable extends BaseDataTable
         //dd($request);
         $model = $model
             ->with('members', 'members.user', 'client', 'client.clientDetails', 'currency', 'client.session')
+            ->leftJoin('p_m_projects', 'p_m_projects.project_id', 'projects.id')
             ->leftJoin('project_members', 'project_members.project_id', 'projects.id')
             ->leftJoin('users', 'project_members.user_id', 'users.id')
             ->leftJoin('users as client', 'projects.client_id', 'users.id')
@@ -613,7 +614,7 @@ class ProjectsDataTable extends BaseDataTable
         if ($request->startDate && $request->endDate) {
             $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
-            $model->whereBetween(DB::raw('DATE(projects.`created_at`)'), [$startDate, $endDate]);
+            $model->whereBetween(DB::raw('DATE(p_m_projects.`created_at`)'), [$startDate, $endDate]);
         }
 
         $model->groupBy('projects.id');

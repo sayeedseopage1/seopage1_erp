@@ -1028,8 +1028,8 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-end">
-    <button type="button" class="btn btn-secondary mt-3" id="mAdminViewMore">View More..</button>
+<div class="d-flex justify-content-center">
+    <button type="button" class="btn btn-primary mt-3" id="mAdminViewMore">View More..</button>
 </div>
 <script>
     $('#mAdminViewMore').click(function(){

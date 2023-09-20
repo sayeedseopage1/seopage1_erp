@@ -189,6 +189,7 @@ use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
+use App\Http\Controllers\RevisionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1066,6 +1067,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::any('revision-calculator/{any?}', [RevisionCalculatorController::class, 'index'])->where('any', '.*');
     Route::resource('revision-calculator', RevisionCalculatorController::class);
     Route::get('revision-calculator-data', [RevisionCalculatorController::class, 'getData']);
+    Route::get('revision-calculator-data/assigne-project-count/{id}', [RevisionCalculatorController::class, 'AssignProjects']);
+    Route::get('revision-calculator-data/no-of-tasks/{id}', [RevisionCalculatorController::class, 'TotalTasks']);
+    Route::get('revision-calculator-data/no-of-revisions/{id}', [RevisionCalculatorController::class, 'TotalRevisions']);
+    Route::get('revision-calculator-data/sales-issues/{id}', [RevisionCalculatorController::class, 'SalesIssue']);
+    Route::get('revision-calculator-data/pm-issues/{id}', [RevisionCalculatorController::class, 'PMIssue']);
+    Route::get('revision-calculator-data/client-issues/{id}', [RevisionCalculatorController::class, 'ClientIssue']);
+    Route::get('revision-calculator-data/ldev-issues/{id}', [RevisionCalculatorController::class, 'LeadDevIssue']);
+    Route::get('revision-calculator-data/dev-issues/{id}', [RevisionCalculatorController::class, 'DevIssue']);
+    Route::get('revision-calculator-data/total-dispute/{id}', [RevisionCalculatorController::class, 'TotalDispute']);
+    Route::get('revision-calculator-data/dispute-not-resolve/{id}', [RevisionCalculatorController::class, 'DisputeNotResolve']);
 
 
     // Contracts
@@ -1251,6 +1262,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
+
+    Route::get('revision/{any?}', [RevisionController::class, 'index'])->where('any', '.*');
+    Route::resource('revision',RevisionController::class);
 
     Route::resource('pm-payment-history',PmPaymentReleaseHistory::class);
     Route::post('pm-payment-history-filter-date',[PmPaymentReleaseHistory::class,'getMonthDate'])->name('getMonthDate');

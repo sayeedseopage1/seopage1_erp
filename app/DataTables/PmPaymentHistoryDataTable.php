@@ -167,7 +167,7 @@ $PmId= $this->request()->PmId;
             
             ->leftJoin('project_milestones', 'project_milestones.id', '=', 'invoices.milestone_id')
            // ->leftJoin('orders', 'orders.id', '=', 'payments.order_id')
-            ->where('projects.pm_id',$PmId)
+            ->where('projects.added_by',$PmId)
             ->groupBy('payments.id')
             ->select('payments.id','projects.project_budget','projects.pm_id','projects.client_id', 'payments.project_id', 'payments.currency_id', 'project_milestones.id as milestone_id', 'project_milestones.milestone_title as mile_title', 'payments.amount', 'payments.created_at', 'payments.added_by');
 

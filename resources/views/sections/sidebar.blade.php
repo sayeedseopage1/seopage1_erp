@@ -381,6 +381,14 @@
                             {{-- <x-sub-menu-item link="" :text="'Resource'" /> --}}
 
                 @endif
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7)
+                <li class="accordionItem closeIt">
+                        <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{ route('revision.index') }}" title="Revisions">
+                            <i class="fa fa-history" aria-hidden="true"></i>
+                            <span class="pl-3">Revision</span>
+                        </a>
+                </li>
+                @endif
                 @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                 <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('PM Payment History')" :count="$unreadMessagesCount"
                              :link="route('pm-payment-history.index')">
