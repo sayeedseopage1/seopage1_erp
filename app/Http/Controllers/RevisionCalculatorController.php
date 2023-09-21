@@ -746,7 +746,6 @@ public function TotalDispute(Request $request, $id)
         ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')  
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_created',1)
-        ->where('task_revisions.final_responsible_person','LD')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
       
@@ -758,7 +757,7 @@ public function TotalDispute(Request $request, $id)
 }
 
 }
-public function DisputeNotResolved(Request $request, $id)
+public function DisputeNotResolve(Request $request, $id)
 {
     $startDate = $request->input('start_date' , null);
     $endDate = $request->input('end_date', null);
@@ -783,8 +782,7 @@ public function DisputeNotResolved(Request $request, $id)
         ->leftJoin('task_revision_disputes','task_revision_disputes.revision_id','task_revisions.id')      
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_created',1)
-        ->where('task_revisions.dispute_status',0)
-        ->where('task_revisions.final_responsible_person','LD')
+        ->where('task_revisions.dispute_status',0)                                                                     
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
       
