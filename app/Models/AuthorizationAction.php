@@ -86,13 +86,15 @@ class AuthorizationAction extends Model
             'task_submission_by_lead_developer' => [
                 'approved', 'review'
             ],
+            '  task_assign_by_lead_developer' => [
+                 'review'
+            ],
+          
           
             'task_approved_by_lead_develoer' => [
                  'review'
             ],
-            'task_revision_by_lead_developer' => [
-                'review'
-            ],
+          
             'task_revision_by_project_manager' => [
                 'review'
             ],

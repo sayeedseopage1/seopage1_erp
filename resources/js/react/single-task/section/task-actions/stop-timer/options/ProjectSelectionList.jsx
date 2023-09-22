@@ -67,7 +67,7 @@ const ProjectSelectionList = ({ project, setProject }) => {
                                         : "task-selection-list-option"
                                 }
                             >
-                                {project.project_name}
+                                <span>{project.project_name} <span className="badge badge-success ml-2">{project.client_name}</span></span>
                             </Combobox.Option>
                         ))
                     ) : (

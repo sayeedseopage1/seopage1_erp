@@ -7,6 +7,7 @@ use App\Models\BlogArticle;
 use App\Models\ProductCategoryCollection;
 use App\Models\ProductDescription;
 use App\Models\projectDescription;
+use App\Models\ProjectMilestone;
 use App\Models\WebContent;
 use Artisan;
 use Carbon\Carbon;
@@ -1420,6 +1421,17 @@ class HomeController extends Controller
         $web_content->language = $data['language'];
         $web_content->status = $data['status'];
         $web_content->save();
+
+        // $deal = Deal::where('id',$web_content->deal_id)->first();
+
+        // $admin_users = User::where('role_id',1)->get();
+        // $sales_users = User::where('role_id',7)->get();
+        // $team_lead_users = User::where('role_id',8)->get();
+        // $pm_user = User::where('id',$deal->id)->get();
+
+
+
+
 
         $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
         foreach($users as $user){

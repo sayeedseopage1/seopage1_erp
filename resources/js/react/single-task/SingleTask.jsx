@@ -22,6 +22,7 @@ import { BoardColumn, SingleTask } from "../utils/single-task";
 import { User } from "../utils/user-details";
 import GenarelLoader from "./components/loader/GenarelLoader";
 import PMGuideline from "./components/PMGuideline";
+import Toaster from '../global/Toaster'
 
 const SingleTaskPage = () => {
     const { task:Task } = useSelector((s) => s.subTask);
@@ -348,7 +349,7 @@ const SingleTaskPage = () => {
                             </div>
                             {/* End Time Estimate */}
 
-                            <div className="d-flex align-items-center mb-2">
+                            {/* <div className="d-flex align-items-center mb-2">
                                 <div className="">
                                     Parent Task Hours Logged:
                                 </div>
@@ -366,7 +367,7 @@ const SingleTaskPage = () => {
                                 >
                                     {task?.subTaskTimeLog || "--"}
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="d-flex align-items-center mb-2">
                                 <div className="">Total Hours Logged: </div>
@@ -387,6 +388,7 @@ const SingleTaskPage = () => {
                     </div>
                 </div>
             </div>
+            <Toaster />
         </div>
     );
 };

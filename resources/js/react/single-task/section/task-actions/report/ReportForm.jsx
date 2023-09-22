@@ -28,7 +28,7 @@ const ReportForm = ({close, task, onSuccess}) => {
     const [error, setError]  = useState("");
 
 
-    const [createReport, {isLoading}] = useCreateReportMutation();
+    const [createReport, {isLoading}] = useCreateReportMutation(); 
 
 
     const Toast = Swal.mixin({
@@ -100,8 +100,7 @@ const ReportForm = ({close, task, onSuccess}) => {
 
     return (
         <React.Fragment>
-            <form className="px-3">
-                {/* reason selection */}
+            <form className="px-3"> 
                 <div className="form-group">
                     {reason?.info && <div className="f-12 alert alert-info py-1">{reason?.info}</div>}
                     <label htmlFor="" className="font-weight-bold">Select Reason for report</label> 

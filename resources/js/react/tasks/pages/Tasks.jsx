@@ -80,7 +80,6 @@ const Tasks = () => {
     const closeTable = () => setShowAuthorizationTableModal(false);
     const close = () => setShowAuthorizationModal(false);
 
-    console.log({tasksType})
 
     return (
         <React.Fragment>

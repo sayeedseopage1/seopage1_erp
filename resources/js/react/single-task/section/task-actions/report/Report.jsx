@@ -6,8 +6,7 @@ import Loader from "../../../components/Loader";
 const ReportForm = lazy(() => import("./ReportForm"));
 
 const ReportControl = ({ task }) => {
-    const [reportModalOpen, setReportModalOpen] = useState(false);
-    const singleTask = new SingleTask(task);
+    const [reportModalOpen, setReportModalOpen] = useState(false); 
 
     const close = () => setReportModalOpen(false);
 
@@ -36,7 +35,7 @@ const ReportControl = ({ task }) => {
                             </Button>
                         </div>
                         <Suspense fallback={<div className="py-3 d-flex align-items-center justify-content-center"><Loader /></div>}>
-                            <ReportForm task={singleTask} close={close} />
+                            <ReportForm task={task} close={close} />
                         </Suspense>
                     </div>
                 </div>

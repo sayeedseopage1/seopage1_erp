@@ -267,7 +267,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
         if(isValide()){
             storeProjectGuideline(data).unwrap()
             .then(res => {
-                openTaskForm();
+                // openTaskForm();
                 close();
             })
             .catch(err => console.log(err));

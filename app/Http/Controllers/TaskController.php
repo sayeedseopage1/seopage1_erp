@@ -945,13 +945,14 @@ class TaskController extends AccountBaseController
     public function TaskRevision(Request $request)
     {
     //    dd($request);
-    //    DB::beginTransaction();
+      //  DB::beginTransaction();
       
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
         $task_status->task_status = "revision";
         $task_status->board_column_id = 1;
         $task_status->save();
+        
         $board_column = TaskBoardColumn::where('id',$task_status->board_column_id)->first();
        
       
@@ -1001,6 +1002,7 @@ class TaskController extends AccountBaseController
         $task_revision->is_deniable = $request->is_deniable;
         $task_revision->dispute_between = explode('x', $request->acknowledgement_id)[0];
         $task_revision->save();
+        //dd($task_revision);
        
         //dd($type);
         //authorizatoin action start here
@@ -4021,12 +4023,21 @@ class TaskController extends AccountBaseController
         ->where('sub_tasks.task_id',$task->id)     
         
         ->count();
+        $subtasks_details = Subtask::select('tasks.id','tasks.heading','clients.name as client_name','clients.id as clientId')
+        ->join('tasks','tasks.subtask_id','sub_tasks.id')
+        ->join('projects','projects.id','tasks.project_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->whereIn('tasks.board_column_id',[1,2,3,6])
+        ->where('sub_tasks.task_id',$task->id)     
+        
+        ->get();
         if($subtasks > 0)
                 {
                   //  dd("true");
                  return response()->json([
                      'message' => 'You cannot complete this task',
                      'status'=> true,
+                     'subtasks'=> $subtasks_details,
                     
                  ]);
          
@@ -4431,18 +4442,28 @@ class TaskController extends AccountBaseController
 
     public function taskGuidelineAuthorization($id){
         $pm_task_guideline = PmTaskGuideline::where('project_id',$id)->first();
+        $task_count= Task::where('project_id',$id)->count();
+       // dd($task_count);
 
         $already_submitted = $pm_task_guideline ? true : false;
 
         if($already_submitted && $pm_task_guideline->status ==1){
            $is_allow = true;
-        }else $is_allow = false;
+        }else 
+        
+        
+        $is_allow = false;
+        if($task_count > 0)
+        {
+            $is_allow = true;
+
+        }
 
         return response()->json([
             "status_code" => 200,
             "is_allow" => $is_allow,
             "is_submitted_already" => $already_submitted,
-            "message" => $already_submitted ? 'Please wait until deliverable is authorized' : ''
+            "message" => 'Please wait until task guideline is authorized'
         ], 200);
     }
     

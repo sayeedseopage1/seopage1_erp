@@ -9,6 +9,8 @@ import SubmitButton from "../../components/SubmitButton";
 import { useDispatch } from "react-redux";
 import { setTaskStatus } from "../../../services/features/subTaskSlice";
 import Loader from "../../components/Loader";
+import {toast} from 'react-toastify'
+ 
 
 const MarkAsComplete = ({task, auth}) => {
     // form data
@@ -18,6 +20,7 @@ const MarkAsComplete = ({task, auth}) => {
     const [files, setFiles] = useState([]);
     const [comment, setComment] = useState('');
     const [commentErr, setCommentErr] = useState('');
+    const [showAlert, setShowAlert] = useState();
 
     const [markAsComplete, {isLoading: isSubmitting}] = useMarkAsCompleteMutation();
     const [ checkSubTaskState, {isFetching} ] = useLazyCheckSubTaskStateQuery();
@@ -32,11 +35,28 @@ const MarkAsComplete = ({task, auth}) => {
             .unwrap()
             .then(res => {
                 if(res.status === 'true' || res.status === true){
-                    Swal.fire({
-                        title: 'You can\'t complete this task because you have some pending subtask?',
-                        // showCancelButton: true,
-                        confirmButtonText: 'Ok', 
-                      })
+                      
+                    const htmlContent =  <div className="__tostar_modal">
+                        <strong>You can't complete this task because you have some pending subtask?</strong>
+                        <ul className="py-1">
+                            {res.subtasks.map((el, idx) => 
+                                <li 
+                                    key={el.id} 
+                                    style={{listStyle: 'unset', fontSize: '13px'}}
+                                > 
+                                    <a href={`/accounts/tasks/${el.id}`}> 
+                                       {idx + 1}. {el.heading} 
+                                    </a> (<a href={`/account/clients/${el.clientId}`}>{el.client_name}</a>)
+                                </li>
+                            )}
+                        </ul> 
+                    </div>
+                    ;
+
+                    toast.warn(htmlContent, {
+                        position: 'top-center', 
+                        icon: false,
+                    });
                 }else {
                     setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
                 } 
@@ -278,6 +298,7 @@ const MarkAsComplete = ({task, auth}) => {
                 </div>
                 </div>
             </Modal>
+ 
         </>
     );
 };

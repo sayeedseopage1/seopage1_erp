@@ -100,3 +100,12 @@
 .sp1_task_auth_modal{ 
     width: clamp(280px, 50%, 500px);
 }
+
+.revision_popover_panel{
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+    /* width: clamp(255px, 100%, 350px); */
+    width: 350px;
+}

@@ -23,6 +23,7 @@ import { SingleTask } from "../../../utils/single-task";
 import { useEffect } from "react";
 import { User } from "../../../utils/user-details";
 import { Listbox } from "@headlessui/react";
+import LeadConfirmationModal from "./LeadConfirmationModal";
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -63,7 +64,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     // const {  } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=estimation_time`);
     const [ getTaskDetails, {data: estimation, isFetching}] = useLazyGetTaskDetailsQuery();
 
-    
+    const [showForm, setShowForm] = React.useState(false); 
 
     const required_error = error?.status === 422 ? error?.data : null;
     // handle change
@@ -216,7 +217,13 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                         /> }
                     {/* end working environment form */}
 
-                    {!isWorkingEnvironmentSubmit && (
+                    {!isWorkingEnvironmentSubmit && 
+                        <LeadConfirmationModal 
+                            isOpen={!isWorkingEnvironmentSubmit && !showForm} 
+                            onConfirm={() => setShowForm(true)} 
+                        />
+                    }
+                    {!isWorkingEnvironmentSubmit && showForm && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
                                 <Input

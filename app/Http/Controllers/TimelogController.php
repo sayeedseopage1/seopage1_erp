@@ -366,7 +366,8 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(Request $request)
     {
-       //  DB::beginTransaction();
+       
+       // DB::beginTransaction();
      $userID = Auth::id(); // Replace with the actual user ID
 
      $yesterdayDate = ProjectTimeLog::where('user_id', $userID)
@@ -432,6 +433,7 @@ class TimelogController extends AccountBaseController
                $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
                //  dd($task_status);
                  $timeLog = new ProjectTimeLog();
+               
            
                    $activeTimer = ProjectTimeLog::with('user')
                        ->whereNull('end_time')
@@ -467,6 +469,7 @@ class TimelogController extends AccountBaseController
                        $timeLog->hourly_rate = 0;
                        $timeLog->memo = $task_status->heading;
                        $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
+                    //  /  dd($task_revision);
                         if($task_revision != null)
                         {
                            
@@ -546,6 +549,16 @@ class TimelogController extends AccountBaseController
                        $timeLog->start_time = now();
                        $timeLog->hourly_rate = 0;
                        $timeLog->memo = $task_status->heading;
+                       $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
+                       //  /  dd($task_revision);
+                           if($task_revision != null)
+                           {
+                              
+                               $timeLog->revision_id = $task_revision->id;
+                               $timeLog->revision_status = 1;
+                             
+   
+                           }
                        $timeLog->save();
            
                        if ($request->project_id != '') {
@@ -617,6 +630,16 @@ class TimelogController extends AccountBaseController
                     $timeLog->start_time = now();
                     $timeLog->hourly_rate = 0;
                     $timeLog->memo = $task_status->heading;
+                    $task_revision = TaskRevision::where('task_id',$request->task_id)->first();
+                    //  /  dd($task_revision);
+                        if($task_revision != null)
+                        {
+                           
+                            $timeLog->revision_id = $task_revision->id;
+                            $timeLog->revision_status = 1;
+                          
+
+                        }
                     $timeLog->save();
         
                     if ($request->project_id != '') {
@@ -645,7 +668,7 @@ class TimelogController extends AccountBaseController
             
         }
 
-   // dd($day);
+  // dd($timeLog);
      
 
      

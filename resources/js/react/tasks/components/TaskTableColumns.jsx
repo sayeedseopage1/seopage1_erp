@@ -15,6 +15,7 @@ import Modal from "./Modal";
 import Loader from "./Loader";
 import { storeTasks } from "../../services/features/tasksSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Popover from '../../global/Popover';
 
 const compareDate = new CompareDate();
 
@@ -40,11 +41,13 @@ export const TaskTableColumns = [
       cell: ({row}) => {
         const data = row?.original;  
         return (
-          <abbr title={data?.heading} style={{textDecoration: 'none'}}>
-            <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
-            </div>
-          </abbr>
+          <>
+              <abbr title={data?.heading} style={{textDecoration: 'none'}}>
+                <div className='d-flex align-items-center' style={{gap: '10px'}}>
+                    <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
+                </div>
+              </abbr>  
+          </>
         )
       }
     },

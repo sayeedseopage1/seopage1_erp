@@ -1540,3 +1540,4 @@ Route::post('/upload', [HomeController::class, 'upload'])->name('upload');
 Route::get('/task-guideline-approved-authorization/{id}', [TaskController::class, 'taskGuidelineApprovedAuthorization']);
 Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 'taskGuidelineDenyAuthorization']);
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
+Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
