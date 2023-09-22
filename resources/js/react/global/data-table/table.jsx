@@ -7,6 +7,7 @@ import TableColumn from './TableColumn';
 import styles from './table.module.css';
 import { paginate } from './utils';
 import EmptyTable from './EmptyTable';
+import { Placeholder } from '../Placeholder';
 
 
 const DataTable = ({
@@ -24,6 +25,8 @@ const DataTable = ({
     tableContainerClass="",
     isLoading = false,
     navbar,
+    uniq_id = 'id',
+    state = {}
 }) => {
   const [mainData, setMainData] = useState([]);
   const [tableData, setTableData] = useState(null);
@@ -126,11 +129,9 @@ const DataTable = ({
   const onSort = (_sort) => { 
     const { key, order, col } = _sort;  
     setSort(_sort);
-    console.log(_sort)
 
     if(col && col.sort){  
-        console.log('sorted')
-        let p = paginate(mainData, 1, 10);
+        let p = paginate(mainData, 1, perPageRow);
         let d = _.orderBy(p, d => col.sort(d), order);
         prepareTableData(d);
     } 
@@ -148,6 +149,7 @@ const DataTable = ({
         tableName,
         columnOrder,
         sort,
+        ...state
     }, 
     onSortChange: onSort,
     columnOrderChange: setColumnOrder, 
@@ -195,14 +197,14 @@ const DataTable = ({
             return index === 0 && (
                 <React.Fragment>
                     <td rowSpan={_.size(value)}> 
-                        {col.row({row, table})}
+                        {col.row({row, table, parent: value})}
                     </td>
                 </React.Fragment>
             );
         }else{   
             return (
                 <React.Fragment>
-                    <td> {col.row({row, table})} </td>
+                    <td> {col.row({row, table, parent: value})} </td>
                 </React.Fragment>
             )  
         }
@@ -216,7 +218,7 @@ const DataTable = ({
             _.map(value, (row, index)=>{
                 
                 rows.push(
-                    <React.Fragment key={row?.created_at}>
+                    <React.Fragment key={ row[uniq_id] ?? `${row?.id}${index*100}`}>
                         <tr>
                             {
                                 _.map(tableColumns, (col, i) => {
@@ -253,8 +255,7 @@ const DataTable = ({
     const rows = []
         data?.forEach(row => {  
             rows.push(
-                <React.Fragment key={row.id}>
-                    
+                <React.Fragment key={row[uniq_id]}>
                     <tr >
                         {_.map(tableColumns, col =>{  
                             if(col.subHeading){
@@ -277,6 +278,7 @@ const DataTable = ({
     return rows;
   }
   /********** END RENDER ROWS ************ */
+ 
 
   return (
     <React.Fragment>
@@ -323,7 +325,7 @@ const DataTable = ({
                     </thead>
 
                     <tbody className={styles.sp1_table_tbody}> 
-                        {
+                        { !isLoading && _.size(data) > 0 &&
                             margeRow ? 
                             renderMargeRows(tableData) : 
                             renderRows(tableData?.data ?? [])
@@ -336,6 +338,28 @@ const DataTable = ({
                                         <EmptyTable />
                                     </td>
                                 </tr> : null
+                        }
+
+                        {
+                            isLoading && _.size(data) === 0  ?
+                            _.times(perPageRow, item => (
+                                <tr key={item}>
+                                    {_.map( tableColumns, (head) =>{
+                                        if(head.subHeading){
+                                           return _.map(head.subHeading, (subHead) => (
+                                                <td key={subHead.id}>
+                                                    {subHead.loader ? subHead.loader () : <Placeholder />}
+                                                </td>
+                                           ))
+                                        }else{
+                                            return <td key={head.id}>
+                                                {head.loader ? head.loader() : <Placeholder />}
+                                            </td>
+                                        }
+                                    })}
+                                </tr>
+                            ))
+                            :null
                         }
                     </tbody>
                 </table>

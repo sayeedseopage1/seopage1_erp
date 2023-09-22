@@ -2,7 +2,7 @@ import _ from "lodash";
 import styles from "../../styles/revision-page.module.css";
 import SaleActionButton from "./SaleActionButton";
 import PersonColumn from "../../ui/PersonColumn";
-import Popover from '../../ui/Popover';
+import Popover from "../../ui/Popover";
 
 export const RevisionTableColumns = [
     {
@@ -77,10 +77,10 @@ export const RevisionTableColumns = [
         draggable: true,
         sortable: true,
         accessorFn: (row) => row.pm_comment || row.lead_comment,
-        cell: ({row}) => {
+        cell: ({ row }) => {
             const data = row.original;
-            
-            const text = data.pm_comment || data.lead_comment
+
+            const text = data.pm_comment || data.lead_comment;
 
             return (
                 <Popover>
@@ -95,9 +95,11 @@ export const RevisionTableColumns = [
 
                     <Popover.Panel>
                         <div className={styles.revision_popover_panel}>
-                            <div dangerouslySetInnerHTML={{
-                                __html: text
-                            }} />
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: text,
+                                }}
+                            />
                         </div>
                     </Popover.Panel>
                 </Popover>
@@ -111,7 +113,7 @@ export const RevisionTableColumns = [
         sortable: true,
         accessorFn: (row) => row.revision_acknowledgement,
         cell: (row) => {
-            const text = row.getValue()
+            const text = row.getValue();
             return (
                 <Popover>
                     <Popover.Button>
@@ -125,12 +127,14 @@ export const RevisionTableColumns = [
 
                     <Popover.Panel>
                         <div className={styles.revision_popover_panel}>
-                            <div dangerouslySetInnerHTML={{
-                                __html: text
-                            }} />
+                            <div
+                                dangerouslySetInnerHTML={{
+                                    __html: text,
+                                }}
+                            />
                         </div>
                     </Popover.Panel>
-                </Popover> 
+                </Popover>
             );
         },
     },
@@ -262,16 +266,16 @@ export const RevisionTableColumns = [
             const user = window?.Laravel?.user;
 
             if (
-                (Number(user.role_id) === 8 &&
+                (Number(user.role_id) === 7 &&
                     (data.sale_accept || data.sale_deny)) ||
                 Number(user.role_id) === 1
             ) {
                 const status = () => {
                     if (data.sale_accept) {
+                        console.log("sales accepted")
                         return (
                             <div className={`${styles.status} f-12`}>
-                                {" "}
-                                {`Accepted by ${data?.deal_added_by?.name}`}{" "}
+                                {`Accepted by ${data?.deal_added_by?.name}`}
                             </div>
                         );
                     } else if (data.sale_deny) {
@@ -279,15 +283,13 @@ export const RevisionTableColumns = [
                             <div
                                 className={`${styles.status} ${styles.deny} f-12`}
                             >
-                                {" "}
-                                {`Denied by ${data?.deal_added_by?.name}`}{" "}
+                                {`Denied by ${data?.deal_added_by?.name}`}
                             </div>
                         );
                     } else if (data.is_accept) {
                         return (
                             <div className={`${styles.status} f-12`}>
-                                {" "}
-                                {`Accepted by ${data?.task_assign_to?.name}`}{" "}
+                                {`Accepted by ${data?.task_assign_to?.name}`}
                             </div>
                         );
                     } else if (data.is_deny) {
@@ -295,8 +297,7 @@ export const RevisionTableColumns = [
                             <div
                                 className={`${styles.status} ${styles.deny} f-12`}
                             >
-                                {" "}
-                                {`Denied by ${data?.task_assign_to?.name}`}{" "}
+                                {`Denied by ${data?.task_assign_to?.name}`}
                             </div>
                         );
                     } else
@@ -304,8 +305,7 @@ export const RevisionTableColumns = [
                             <div
                                 className={`${styles.status} ${styles.pending} f-12`}
                             >
-                                {" "}
-                                Pending{" "}
+                                Pending
                             </div>
                         );
                 };

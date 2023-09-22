@@ -13,6 +13,10 @@ import NumberOfRevision from './NumberOfRevision';
 import SalesIssuesTable from './SalesIssuesTable';
 import ClientIssuesTable from './ClientIssuesTable';
 import PMIssuesTable from './PMIssuesTable';
+import LeadDevIssue from './LedDevIssues';
+import DevIssuesTable from './DevIssues';
+import TotalDisputeTable from './TotalDisputeTable';
+import TotalUnsolvedDisputeTable from './TotalUnsolvedDisputeTable';
  
 const container = document.getElementById("revisionCalculator");
 
@@ -30,6 +34,10 @@ if(container){
                 <Route path="sales-issues-table" element={<SalesIssuesTable />} />
                 <Route path="client-issues-table" element={<ClientIssuesTable />} />
                 <Route path="project-manager-issues-table" element={<PMIssuesTable />} />
+                <Route path="lead-developer-issues-table" element={<LeadDevIssue />} />
+                <Route path="developer-issues-table" element={<DevIssuesTable />} />
+                <Route path="total-dispute-table" element= {<TotalDisputeTable />} />
+                <Route path="total-unsolved-dispute-table" element= {<TotalUnsolvedDisputeTable />} />
               </Route>
           </Routes>
         </DndProvider>

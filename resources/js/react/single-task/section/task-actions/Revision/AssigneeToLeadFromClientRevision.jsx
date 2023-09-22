@@ -16,17 +16,17 @@ const projectManagerAcknowladgement = [
         isDeniable: false,
     },
     {
-        id: 'CPRx02',
+        id: 'PLRx12',
         title: 'I submitted the work without proper checking and overlooked the issues',
         isDeniable: true,
     },
     {
-        id: 'CPRx03',
+        id: 'PLRx03',
         title: 'I couldnt understand clients expectation properly earlier',
         isDeniable: false
     },
     {
-        id: 'CPRx04',
+        id: 'PLRx04',
         title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
         isDeniable: false,
     }, 
@@ -45,19 +45,19 @@ const projectManagerAcknowladgement = [
         id: 'SPRx01',
         title: "Sales person discussed something in a verbal meeting with the client and then forgot to document it when assigning",
         isDeniable: false,
-        createDispute: true,
+        createDispute: false,
     },
     {
         id: 'SPRx02',
         title: "Sales person couldn't define requirement properly and I also failed to define it after I took over",
         isDeniable: false,
-        createDispute: true,
+        createDispute: false,
     },
     {
         id: 'SPRx03',
         title: "Sales overpromised: This task is not doable to this extent or in this way and I informed management about it on day 1",
         isDeniable: false,
-        createDispute: true,
+        createDispute: false,
     }
 ]
 

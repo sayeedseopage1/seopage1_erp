@@ -56,6 +56,24 @@ const taskApiSlice = apiSlice.injectEndpoints({
             }), 
             invalidatesTags: ['TASKSREPORT']
         }),
+
+        
+        getTaskTypeData: build.query({
+            query: () => `/account/tasks-type`
+        }),
+
+        updateTasktypeAuthStatus: build.mutation({
+            query: (body) => ({
+                url: `/account/tasks-type-authorization/${body.task_type_id}`,
+                method: 'PUT',
+                body: {
+                    ...body,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                }
+            })
+        })
         
     })
 }) ;
@@ -73,6 +91,8 @@ export const {
      useLazyGetTasksReportsQuery,
      useResolveReportMutation,
      useStoreProjectTaskMutation,
-     useUpdateTaskMutation
+     useUpdateTaskMutation,
+     useLazyGetTaskTypeDataQuery,
+     useUpdateTasktypeAuthStatusMutation,
 } = taskApiSlice;
 

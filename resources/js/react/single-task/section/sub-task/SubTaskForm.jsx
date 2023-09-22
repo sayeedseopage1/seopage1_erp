@@ -3,7 +3,6 @@ import Button from "../../components/Button";
 import Input from "../../components/form/Input";
 import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import AssginedToSelection from "./AssignedToSelection";
-import StatusSelection from "./StatusSelection";
 import PrioritySelection from "./PrioritySelection";
 import DatePicker from "../comments/DatePicker";
 import CKEditorComponent from "../../../ckeditor";
@@ -490,7 +489,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                     name="pageTypeName"
                                                     required={true}
                                                     value={pageTypeName}
-                                                    error={required_error?.title?.[0]}
+                                                    error={required_error?.page_type?.[0]}
                                                     onChange={(e) => handleChange(e, setPageTypeName)}
                                                 />
                                             </div>: 
@@ -503,8 +502,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                         placeholder="Enter page name"
                                                         name="page name"
                                                         required={true}
-                                                        value={pageName}
-                                                        error={required_error?.title?.[0]}
+                                                        value={pageName} 
                                                         onChange={(e) => handleChange(e, setPageName)}
                                                     />
                                                 </div>
@@ -519,7 +517,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                         name="page url"
                                                         required={true}
                                                         value={pageURL}
-                                                        error={required_error?.title?.[0]}
+                                                        error={required_error?.page_url?.[0]}
                                                         onChange={(e) => handleChange(e, setPageURL)}
                                                     />
                                                 </div>
@@ -541,7 +539,6 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                     name="number_of_pages"
                                                     required={true}
                                                     value={numberOfPage}
-                                                    error={required_error?.title?.[0]}
                                                     onChange={(e) => handleChange(e, setNumberOfPage)}
                                                 />
                                             </div>
@@ -555,7 +552,6 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                     name="exiting_project_url"
                                                     required={true}
                                                     value={existingDesignLink}
-                                                    error={required_error?.title?.[0]}
                                                     onChange={(e) => handleChange(e, setExistingDesignLink)}
                                                 />
                                             </div>
@@ -626,6 +622,8 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                             onChange={handleEditorChange}
                                         />
                                     </div>
+
+                                    {required_error?.description?.[0] && <span className="text-danger"><small> {required_error?.description?.[0]} </small></span>}
                                 </div>
                             </div>
 

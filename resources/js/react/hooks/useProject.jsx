@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import {
     useLazyCheckPMTaskGuidelineQuery,
     useLazyGetProjectDeliverableStatusQuery,
+    useLazyGetProjectManagerTaskGuidelineStatusQuery,
 } from "../services/api/projectApiSlice";
 
 export const useProject = () => {
@@ -36,6 +37,35 @@ export const useProject = () => {
             return false; // Handle errors and assume project guideline status is false
         }
     };
+
+    // project manager task guideline authorizationStatus
+    const [
+        getProjectManagerTaskGuidelineStatus,
+        {isFetching: pmTaskGuidelineStatusIsFetching}
+    ] = useLazyGetProjectManagerTaskGuidelineStatusQuery();
+
+    const isTaskGuidelineAuthorized = async (projectId) => {
+        try{
+            const res = await getProjectManagerTaskGuidelineStatus(projectId).unwrap();
+            console.log(res)
+            if(res && res.is_allow){
+                return true;
+            }
+
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: res.message,
+                showConfirmButton: true,
+            });
+
+            return false;
+            
+        }catch(error){
+            console.log(error)
+            return false;
+        }
+    }
 
     // deliverable status
     const [
@@ -77,5 +107,7 @@ export const useProject = () => {
         getProjectGuidelineStaus,
         projectGuidelineStatusIsLoading,
         projectDeliverableStatusIsLoading,
+        isTaskGuidelineAuthorized,
+        pmTaskGuidelineStatusIsFetching
     };
 };

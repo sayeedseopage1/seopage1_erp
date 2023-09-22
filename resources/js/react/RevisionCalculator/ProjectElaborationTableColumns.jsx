@@ -1,23 +1,27 @@
+import _ from "lodash";
+
 export const ProjectElaborationTableColumns = [
     {
-        id: "pm_name",
+        id: "project_id",
         heading: "Project Name",
         moveable: false,
-        sortBy: "pm_id",
+        sort: row => row?.project_name,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.project_manager?.name}`,
+        searchText: (row) => `${row['projectId']} ${row['project_name']}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const pm_name = row?.project_manager?.name;
+            const text = row?.project_name
             const isEqual = search
-                ? _.includes(_.lowerCase(pm_name), _.lowerCase(search))
+                ? _.includes(_.lowerCase(text), _.lowerCase(search))
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {pm_name}
-                </span>
+                <abbr title={text}>
+                    <a href={`/account/projects/${row?.projectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                        {text}
+                    </a>
+                </abbr>
             );
         },
     },
@@ -25,21 +29,21 @@ export const ProjectElaborationTableColumns = [
         id: "client_name",
         heading: "Client Name",
         moveable: false,
-        sortBy: "client_id",
+        sort: row => `${row.client_name}`,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.client?.name}`,
+        searchText: (row) => `${row?.client_name}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const client_name = row?.client?.name;
+            const client_name = row?.client_name;
             const isEqual = search
                 ? _.includes(_.lowerCase(client_name), _.lowerCase(search))
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a href={`/account/clients/${row?.clientId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {client_name}
-                </span>
+                </a>
             );
         },
     },
@@ -47,19 +51,19 @@ export const ProjectElaborationTableColumns = [
         id: "project_budget",
         heading: "Project budget",
         moveable: false,
-        sortBy: "project_budget",
+        sort: row => row?.project_budget,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.total_project_value}`,
+        searchText: (row) => `${row?.project_budget}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const tv = row?.total_project_value;
+            const project_budget = row?.project_budget;
             const isEqual = search
-                ? _.includes(_.lowerCase(tv), _.lowerCase(search))
+                ? _.includes(_.lowerCase(project_budget), _.lowerCase(search))
                 : "";
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {tv}
+                <span className={`singleline-ellipsis text-right ${isEqual ? "highlight" : ""}`}>
+                    {Number(project_budget).toFixed(2)}
                 </span>
             );
         },
@@ -71,17 +75,16 @@ export const ProjectElaborationTableColumns = [
         sortBy: "number_of_task",
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.number_of_tasks}`,
-        row: ({ row, table }) => {
+        row: ({ row, table}) => { 
             const search = table.state.search;
-            const tt = row?.number_of_tasks;
+            const tt = row?.total_tasks;
             const isEqual = search
                 ? _.includes(_.lowerCase(tt), _.lowerCase(search))
                 : "";
 
             return (
                 <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {tt}
+                  {tt}
                 </span>
             );
         },
@@ -91,20 +94,22 @@ export const ProjectElaborationTableColumns = [
         id: "task_title",
         heading: "Task Title",
         moveable: false,
-        sortBy: "task_id",
+        sort: row => row?.task_title,
         rowSpan: 2,
-        searchText: (row) => `${row?.task?.name}`,
+        searchText: (row) => `${row?.task_title}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const task_name = row?.task?.name;
+            const task_name = row?.task_title;
             const isEqual = search
                 ? _.includes(_.lowerCase(task_name), _.lowerCase(search))
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {task_name}
-                </span>
+                <abbr title={row?.task_title}>
+                    <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                        {task_name}
+                    </a>
+                </abbr>
             );
         },
     },
@@ -113,19 +118,19 @@ export const ProjectElaborationTableColumns = [
         id: "task_count",
         heading: "Revisions count",
         moveable: false,
-        sortBy: "task_count",
+        sort:(row) => row?.total_revisions,
         rowSpan: 2,
-        searchText: (row) => `${row?.task?.total_number_of_revision}`,
+        searchText: (row) => `${row?.total_revisions}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const tr = row?.task?.total_number_of_revision;
+            const total_revisions = row?.total_revisions;
             const isEqual = search
-                ? _.includes(_.lowerCase(tr), _.lowerCase(search))
+                ? _.includes(_.lowerCase(total_revisions), _.lowerCase(search))
                 : "";
 
             return (
                 <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {tr}
+                    {total_revisions}
                 </span>
             );
         },
@@ -137,10 +142,10 @@ export const ProjectElaborationTableColumns = [
         sortBy: "total_time_spent_in_revision",
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.hours_spent_in_revision}`,
+        searchText: (row) => `${row?.total_time_spent}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const hs = row?.hours_spent_in_revision;
+            const hs = row?.total_time_spent;
             const isEqual = search
                 ? _.includes(_.lowerCase(hs), _.lowerCase(search))
                 : "";
@@ -186,10 +191,10 @@ export const ProjectElaborationTableColumns = [
                 heading: "Client Side Issues",
                 moveable: false,
                 sortBy: "client_side_issues",
-                searchText: (row) => `${row?.client_side_issues}`,
+                searchText: (row) => `${row?.client_issues}`,
                 row: ({ row, table }) => {
                     const search = table.state.search;
-                    const ci = row?.client_side_issues;
+                    const ci = row?.client_issues;
                     const isEqual = search
                         ? _.includes(_.lowerCase(ci), _.lowerCase(search))
                         : "";
@@ -210,10 +215,10 @@ export const ProjectElaborationTableColumns = [
                 heading: "Project Manager Issues",
                 moveable: false,
                 sortBy: "project_manager_issues",
-                searchText: (row) => `${row?.project_manager_issues}`,
+                searchText: (row) => `${row?.pm_issues}`,
                 row: ({ row, table }) => {
                     const search = table.state.search;
-                    const pmi = row?.project_manager_issues;
+                    const pmi = row?.pm_issues;
                     const isEqual = search
                         ? _.includes(_.lowerCase(pmi), _.lowerCase(search))
                         : "";
@@ -306,10 +311,10 @@ export const ProjectElaborationTableColumns = [
                 heading: "Disputed & not solved",
                 moveable: false,
                 sortBy: "disputed_not_solved",
-                searchText: (row) => `${row?.unsolved_dispute}`,
+                searchText: (row) => `${row?.disputes_not_solved}`,
                 row: ({ row, table }) => {
                     const search = table.state.search;
-                    const usd = row?.unsolved_dispute;
+                    const usd = row?.disputes_not_solved;
                     const isEqual = search
                         ? _.includes(_.lowerCase(usd), _.lowerCase(search))
                         : "";

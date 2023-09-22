@@ -60,7 +60,7 @@ const Paginate = ({ perPageRow, pageIndex, total, onPageChange, onPageRowChange 
       </div>
       <div className={styles.table_pagiantion__info}>
         <span>
-          Showing {startRow} to {endRow} of {total} entries
+          Showing {startRow + 1} to {endRow} of {total} entries
         </span>
         <div className={styles.table_pagiantion__button_group}>
           <Button pageIndex={pageIndex} onClick={() => onPageChange(pageIndex > 1 ? pageIndex - 1 : 1)}>

@@ -99,9 +99,11 @@ const DisputeNotificationBadge = ({row, table}) => {
                 >
                     {/* tooltip content */}
                     <div className='dispute-tooltip-content'> 
-                        {unsolvedQuestion ? `${unsolvedQuestion} Questions` : null}
+                        {/* {unsolvedQuestion ? `${unsolvedQuestion} Questions` : null}
                         {hasReplied && !_.includes([data?.raised_against?.id, data?.raised_by?.id], auth?.getId()) ? 'New Update' : null}
-                        {(data?.need_authorization && auth?.getRoleId() === 1) ? 'New Update': null}
+                        {(data?.need_authorization && auth?.getRoleId() === 1) ? 'New Update': null} */}
+
+                        <SwitchAction auth={auth} unsolvedQuestion={unsolvedQuestion} data={data} />
                     </div>
                     <div 
                         ref={setArrowElement} 
@@ -115,7 +117,13 @@ const DisputeNotificationBadge = ({row, table}) => {
         </React.Fragment>
     )
 }
-
-
-
 export default DisputeNotificationBadge
+
+
+const SwitchAction = ({unsolvedQuestion, data, auth}) => { 
+    if(_.includes([data?.raised_against?.id, data?.raised_by?.id], auth?.getId()) && unsolvedQuestion){
+        return `${unsolvedQuestion} Questions`;
+    }else{
+        return `New Update`;
+    } 
+}

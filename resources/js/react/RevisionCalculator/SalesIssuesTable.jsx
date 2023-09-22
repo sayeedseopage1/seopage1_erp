@@ -1,21 +1,65 @@
-import React, {useState} from 'react' 
+import React, {useState, useEffect} from 'react' 
 import { projectElaborationData } from './faker';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './styles.module.css';
 import Modal from '../global/Modal';
 import Button from '../global/Button';
 import DataTable from '../global/data-table/table';
+import { PMIssuesTableColumns } from './PMIssuesTableColumns';
+import { useLazyGetRevisionCalculatorDataDevIssuesQuery, useLazyGetRevisionCalculatorDataSalesIssuesQuery } from '../services/api/revisionCalculatorApiSlice';
+
+
 import { SalesIssuesTableColumns } from './SalesIssuesTableColumns';
+
 
 
 const data = projectElaborationData(50);
 
 const SalesIssuesTable = () => {
+    const [data, setData] = useState([]);
     const [pageIndex, setPageIndex] = useState(1);
     const [nRows, setNRows] = useState(10);
-    const navigation = useNavigate(); 
+    const navigation = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const pm_id = searchParams.get('pm');
+    const start_date = searchParams.get('start_date');
+    const end_date = searchParams.get('end_date');
+    const filter = {pm_id, start_date, end_date} 
     
     const goBack = ()=> navigation(`/`);
+
+    const [
+        getRevisionCalculatorDataSalesIssues,
+        {isFetching}
+    ] = useLazyGetRevisionCalculatorDataSalesIssuesQuery();
+
+    
+  // fetch data 
+  useEffect(() => { 
+    ( async () => {
+        const queryObject = _.pickBy(filter, Boolean);
+        const queryString = new URLSearchParams(queryObject).toString();
+
+        try{
+            let res = await getRevisionCalculatorDataSalesIssues(`/${pm_id}?${queryString}`).unwrap();
+            const arr = [];
+            _.forEach(res.sales_issues, d => {
+                arr.push({
+                    ...d,
+                    uid: Math.random().toString(36).substr(2, 5)
+                })
+            })
+
+            setData(arr); 
+
+        } catch(err){
+            console.log(err)
+        }
+    })()
+  }, [])
+
+  console.log(data)
   
     return (
       <Modal isOpen={true}> 
@@ -48,8 +92,10 @@ const SalesIssuesTable = () => {
                           onPageChange={(value) => setPageIndex(value)}
                           onPageRowChange={(n) => setNRows(n)} 
                           total={data.length}
+                          uniq_id='uid'
+                          isLoading={isFetching}
                           tableClass={styles.table}
-                          groupBy={(data) => _.groupBy(data, d=>d.project_manager.id)}
+                          groupBy={(data) => _.groupBy(data, d=>d.projectId)}
                           tableContainerClass={styles.tableContainer}
                       />  
   

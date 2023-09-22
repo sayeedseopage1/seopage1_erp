@@ -48,6 +48,9 @@ table.dispute-preview-table{
 table.dispute-preview-table tr td{
    vertical-align: top;
    text-align: justify;
+   white-space: wrap;
+   word-wrap: break-word !important;
+   word-break: break-all !important;
    /* border: 1px solid #d3d3d3;
    border-collapse: collapse;
    padding: 10px; */
@@ -167,3 +170,4 @@ button.remove-question-btn:hover{
 .dispute-edit-btn:hover{
     color: var(--header_color);
 }
+

@@ -77,7 +77,7 @@ export const disputeTableColumn = [
             const data = row.original;
             const task = data?.task?.parent_task ?? data.task; 
             return(
-                <a href={`/account/tasks/${task?.id}`}>{task?.title}</a>
+                <a href={`/account/tasks/${task?.id}`} className='multine-ellipsis'>{task?.title}</a>
             )
         }
     },
@@ -89,7 +89,7 @@ export const disputeTableColumn = [
             const data = row.original;
             const task = data.task; 
             return(
-                <a href={`/account/tasks/${task?.id}`}>{task.title}</a>
+                <a href={`/account/tasks/${task?.id}`} className='multine-ellipsis'>{task.title}</a>
             )
         }
     },
@@ -338,7 +338,75 @@ export const disputeTableColumn = [
             )
         }
     },
-    
+    {
+        id: 'authorized_on',
+        header: 'Authorized On',
+        draggable: true,
+        accessorFn: (row) => `${row.authorize_on ? dayjs(row.authorize_on).format('MMM DD, YYYY') : ''}`,
+        cell: ({row}) => {
+            const data = row.original;
+            const authorized_by = data?.authorized_by; 
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
+            
+            if(!authorized_by && !data?.status){
+                if( unsolvedQuestion > 0){
+                    return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
+                }else if(data?.need_authrization){
+                    return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
+                }else { 
+                    return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
+                } 
+            }
+
+            if(!authorized_by && data?.status){
+                return <span className='badge badge-light font-weight-bold f-12'> Not Applicable </span>;
+            }
+
+
+            if(data?.authorize_on && data?.status){
+                return <>
+                    <span style={{whiteSpace:'nowrap'}}>{dayjs(data.authorize_on).format('MMM DD, YYYY')}</span> <br/>
+                    <span>{dayjs(data.authorize_on).format('hh:mm a')}</span>
+                </>
+            }
+        }
+    },
+    {
+        id: 'authorized_by',
+        header: 'Authorized By',
+        draggable: true,
+        accessorFn: (row) => `${row?.authorized_by?.id}`,
+        cell: ({row}) => {
+            const data = row.original; 
+            const authorized_by = data?.authorized_by; 
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
+            
+            if(!authorized_by){
+                if( unsolvedQuestion > 0){
+                    return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
+                }else if(data?.need_authrization){
+                    return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
+                }else { 
+                    return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
+                } 
+            }
+
+
+            return (
+                <div className='person_rander'>
+                    <Avatar
+                        src={authorized_by?.image ? `/user-uploads/avatar/${authorized_by?.image}`: null}
+                        alt={authorized_by?.name}
+                        name={authorized_by?.name}
+                        type='circle'
+                        width={24}
+                        height={24}
+                    />
+                    <a href={`/account/employees/${authorized_by.id}`}>{authorized_by?.name}</a> 
+                </div>
+            )
+        }
+    }, 
     {
         id: 'due_date',
         header: 'Due Date',

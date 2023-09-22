@@ -1,25 +1,25 @@
 export const PMIssuesTableColumns = [ 
     {
-        id: "pm_name",
-        heading: "Project Manager Name",
+        id: "project_name",
+        heading: "Project Name",
         moveable: true,
-        sort: row => row?.project_manager?.name,
+        sort: row => row?.project_name,
         rowSpan: 2,
         marge: true,
-        searchText: (row) =>  `${row?.project_manager?.name}`,
-        row: ({row}) => <span className="singleline-ellipsis"> {row?.project_manager?.name} </span> 
+        searchText: (row) =>  `${row?.project_name}`,
+        row: ({row}) => <span className="singleline-ellipsis"> {row?.project_name} </span> 
     },
     {
         id: "client_name",
         heading: "Client Name",
         moveable: false,
-        sortBy: "client_id",
+        sort: (row) =>row?.client_name,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.client?.name}`,
+        searchText: (row) => `${row?.client_name}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const client_name = row?.client?.name;
+            const client_name = row?.client_name;
             const isEqual = search
                 ? _.includes(_.lowerCase(client_name), _.lowerCase(search))
                 : "";
@@ -35,12 +35,12 @@ export const PMIssuesTableColumns = [
         id: "task_title",
         heading: "Task Title",
         moveable: false,
-        sortBy: "task_id",
+        sort: (row) => `${row?.task_title}`,
         rowSpan: 2,
-        searchText: (row) => `${row?.task?.name}`,
+        searchText: (row) => `${row?.task_title}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const task_name = row?.task?.name;
+            const task_name = row?.task_title;
             const isEqual = search
                 ? _.includes(_.lowerCase(task_name), _.lowerCase(search))
                 : "";
@@ -56,13 +56,13 @@ export const PMIssuesTableColumns = [
         id: "revision_request_raised_by",
         heading: "Revision request raised by",
         moveable: false,
-        sortBy: "project_budget",
+        sort: (row) => `${row?.revision_raised_by_name}`,
         rowSpan: 2,
         marge: false,
-        searchText: (row) => `${row?.revision_request_raised_by}`,
+        searchText: (row) => `${row?.revision_raised_by_name}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const tv = row?.revision_request_raised_by?.name;
+            const tv = row?.revision_raised_by_name;
             const isEqual = search
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
@@ -95,10 +95,10 @@ export const PMIssuesTableColumns = [
         id: 'total_comments',
         heading: 'Total comments',
         moveable: true,
-        sort: row => row?.total_comments,
+        sort: row => row?.disputes_comments,
         rowSpan: 2,
-        searchText: (row) => `${row?.total_comments}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.total_comments}</span>
+        searchText: (row) => `${row?.disputes_comments}`,
+        row: ({row}) => <span className="singleline-ellipsis">{row?.disputes_comments}</span>
     },
     {
         id: 'verdict',
@@ -107,7 +107,22 @@ export const PMIssuesTableColumns = [
         sort: row => row?.verdict,
         rowSpan: 2,
         searchText: (row) => `${row?.verdict}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.verdict}</span>
+        row: ({row}) => <Verdict row={row} />
     },
      
 ];
+
+
+
+const Verdict = ({row}) => {
+    if(row?.status){
+        if(row?.winner){
+            return <span> Verdict given in favor of {row?.winner}  </span>
+        }else{
+            return null
+        }
+    }
+    return <span className="singleline-ellipsis">
+        N/A
+    </span>
+}

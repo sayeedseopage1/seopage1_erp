@@ -61,6 +61,7 @@ export const {
     // // query
     useGetAllFilterOptionQuery,
     useGetAllProjectsOptionsQuery,
+    useLazyGetAllProjectsOptionsQuery,
     // useGetDepartmentOptionsQuery,
     // useGetShiftOptionsQuery,
     // useGetEmployeeOptionsQuery,

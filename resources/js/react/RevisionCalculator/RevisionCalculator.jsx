@@ -68,6 +68,11 @@ const RevisionCalculator = () => {
           tableClass={styles.table}
           tableContainerClass={styles.tableContainer}
           uniq_id="project_manager_id"
+          isLoading={isFetching}
+          state={{
+            startDate,
+            endDate
+          }}
           navbar={
             <JqueryDateRangePicker
               startDate = {startDate}

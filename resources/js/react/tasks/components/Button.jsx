@@ -28,7 +28,7 @@ Button.propTypes = {
     children: PropTypes.node.isRequired || PropTypes.string.isRequired || PropTypes.array.isRequired,
     disabled: PropTypes.bool,
     className: PropTypes.string,
-    variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'success']),
+    variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary', 'success', 'danger']),
     size: PropTypes.oneOf(['sm', 'md', 'lg']),
     onClick: PropTypes.func,
     href: PropTypes.string

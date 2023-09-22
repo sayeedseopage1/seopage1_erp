@@ -7,7 +7,7 @@ const Avatar = ({type="square", width= 32, height=32, className, src, alt, name,
     return(
         <>
             <div 
-                className='border sp1-item-center' 
+                className={`border sp1-item-center ${className}`}
                 style={{width: `${width}px`, height: `${height}px`, 
                 overflow: 'hidden', 
                 borderRadius: type === 'circle' ? '100%' : '6px'
@@ -24,7 +24,7 @@ const Avatar = ({type="square", width= 32, height=32, className, src, alt, name,
                                 borderRadius: type === 'circle' ? '100%' : '6px'
                             }} 
                         /> : 
-                        <span className='font-weight-bold' style={{fontSize}}>
+                        <span className='font-weight-bold' style={{fontSize, textDecoration: 'none !important'}}>
                             { modifiedName } 
                         </span> 
                 }

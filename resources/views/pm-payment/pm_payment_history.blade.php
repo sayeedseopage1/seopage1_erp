@@ -113,6 +113,14 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4">
+                            <div class="card p-3" style="border: none">
+                                <p style="font-size: 16px; color:#777; font-weight: bold;">Cancelled Amount</p>
+                                <h5>{{$total_canceled_amount_for_this_cycle}}</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

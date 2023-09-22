@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Placeholder } from '../global/Placeholder';
 
 
 
@@ -10,6 +11,7 @@ export const revisionColumns = [
         sort: row => row?.project_manager_name,
         rowSpan: 2,
         searchText: (row) =>  `${row?.project_manager_name}`,
+        loader: () => <Placeholder />,
         row: ({row}) => {
             return(
                 <abbr title={row?.project_manager_name} >
@@ -27,12 +29,14 @@ export const revisionColumns = [
         moveable: true,
         sort: (row) => row.total_projects,
         rowSpan: 2,
-        searchText: (row) => `${row?.total_projects}`,
-        row: ({row}) => {
-
+        searchText: (row) => `${row?.total_projects}`, 
+        loader: () => <Placeholder />,
+        row: ({row, table}) => {
+            const { startDate, endDate } = table.state;
+        
             return(
                 <Link 
-                    to={`project-elaboration?pm=${row?.project_manager_id}`} 
+                    to={`project-elaboration?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                     className="singleline-ellipsis"
                 >
                     {row?.total_projects}
@@ -47,6 +51,7 @@ export const revisionColumns = [
         sort: (d) => d.total_project_value,
         rowSpan: 2,
         searchText: (row) => `${row?.total_project_value}`,
+        loader: () => <Placeholder />,
         row: ({row}) => <span className="singleline-ellipsis"> ${Number(row.total_project_value).toFixed(2)} </span>
     },
     {
@@ -56,10 +61,12 @@ export const revisionColumns = [
         sort: row => row?.total_tasks,
         rowSpan: 2,
         searchText: (row) => `${row?.total_tasks}`,
-        row: ({row}) => {
+        loader: () => <Placeholder />,
+        row: ({row, table}) => {
+            const { startDate, endDate } = table.state;
             return(
                 <Link 
-                    to={`number-of-project-table?pm=${row?.project_manager_id}`} 
+                    to={`number-of-project-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                     className="singleline-ellipsis"
                 >
                     {row?.total_tasks}
@@ -74,10 +81,12 @@ export const revisionColumns = [
         sort: row => row?.total_revisions,
         rowSpan: 2,
         searchText: (row) => `${row?.total_revisions}`,
-        row: ({row}) => {
+        loader: () => <Placeholder />,
+        row: ({row, table}) => {
+            const { startDate, endDate } = table.state;
             return(
                 <Link 
-                    to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
+                    to={`number-of-revision-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                     className="singleline-ellipsis"
                 >
                     {row?.total_revisions}
@@ -92,6 +101,7 @@ export const revisionColumns = [
         sort: row => row?.minutes_spent,
         rowSpan: 2,
         searchText: (row) => `${row?.minutes_spent}`,
+        loader: () => <Placeholder />,
         row: ({row}) => <span>{row?.minutes_spent}</span>
     },
     {
@@ -105,10 +115,12 @@ export const revisionColumns = [
                 moveable: true,
                 sort: row => row?.sales_issues,
                 searchText: (row) => `${row?.sales_issues}`,
-                row: ({row}) => {
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`sales-issues-table?pm=${row?.project_manager_id}`} 
+                            to={`sales-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.sales_issues}
@@ -122,10 +134,12 @@ export const revisionColumns = [
                 moveable: false, 
                 sort: row => row?.client_issues,
                 searchText: (row) => `${row?.client_issues}`,
-                row: ({row}) =>{
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`client-issues-table?pm=${row?.project_manager_id}`} 
+                            to={`client-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.client_issues}
@@ -139,10 +153,12 @@ export const revisionColumns = [
                 moveable: false,
                 sort: row => row?.pm_issues,
                 searchText: (row) => `${row?.pm_issues}`,
-                row: ({row}) => {
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`project-manager-issues-table?pm=${row?.project_manager_id}`} 
+                            to={`project-manager-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.pm_issues}
@@ -156,10 +172,12 @@ export const revisionColumns = [
                 moveable: false,
                 sort: row => row?.lead_developer_issues,
                 searchText: (row) => `${row?.lead_developer_issues}`,
-                row: ({row}) => {
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
+                            to={`lead-developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.lead_developer_issues}
@@ -173,10 +191,12 @@ export const revisionColumns = [
                 moveable: false,
                 sort: row => row?.developer_issues,
                 searchText: (row) => `${row?.developer_issues}`,
-                row: ({row}) => {
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
+                            to={`developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.developer_issues}
@@ -190,10 +210,12 @@ export const revisionColumns = [
                 moveable: false,
                 sort: row => row?.total_disputes,
                 searchText: (row) => `${row?.total_disputes}`,
-                row: ({row}) => {
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
+                            to={`total-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.total_disputes}
@@ -207,10 +229,12 @@ export const revisionColumns = [
                 moveable: false,
                 sort: row => row?.total_disputes_not_solved,
                 searchText: (row) => `${row?.total_disputes_not_solved}`,
-                row: ({row}) => {
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const { startDate, endDate } = table.state;
                     return(
                         <Link 
-                            to={`number-of-revision-table?pm=${row?.project_manager_id}`} 
+                            to={`total-unsolved-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
                             className="singleline-ellipsis"
                         >
                             {row?.total_disputes_not_solved}

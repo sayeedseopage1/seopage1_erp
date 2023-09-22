@@ -1,44 +1,47 @@
 export const NumberOfTaskTableColumns = [ 
+    
     {
         id: "task_title",
         heading: "Task Title",
         moveable: false,
-        sortBy: "task_id",
+        sort: row => row?.task_title,
         rowSpan: 2,
-        searchText: (row) => `${row?.task?.name}`,
+        searchText: (row) => `${row?.task_title}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const task_name = row?.task?.name;
+            const task_name = row?.task_title;
             const isEqual = search
                 ? _.includes(_.lowerCase(task_name), _.lowerCase(search))
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {task_name}
-                </span>
+                <abbr title={row?.task_title}>
+                    <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                        {task_name}
+                    </a>
+                </abbr>
             );
         },
-    }, 
+    },
     {
         id: "client_name",
         heading: "Client Name",
         moveable: false,
-        sortBy: "client_id",
+        sort: row => `${row.client_name}`,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.client?.name}`,
+        searchText: (row) => `${row?.client_name}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const client_name = row?.client?.name;
+            const client_name = row?.client_name;
             const isEqual = search
                 ? _.includes(_.lowerCase(client_name), _.lowerCase(search))
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a href={`/account/clients/${row?.clientId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {client_name}
-                </span>
+                </a>
             );
         },
     },
@@ -46,31 +49,31 @@ export const NumberOfTaskTableColumns = [
         id: "project_budget",
         heading: "Project budget",
         moveable: false,
-        sortBy: "project_budget",
+        sort: row => row?.project_budget,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.total_project_value}`,
+        searchText: (row) => `${row?.project_budget}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const tv = row?.total_project_value;
+            const project_budget = row?.project_budget;
             const isEqual = search
-                ? _.includes(_.lowerCase(tv), _.lowerCase(search))
+                ? _.includes(_.lowerCase(project_budget), _.lowerCase(search))
                 : "";
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {tv}
+                <span className={`singleline-ellipsis text-right ${isEqual ? "highlight" : ""}`}>
+                    {Number(project_budget).toFixed(2)}
                 </span>
             );
         },
-    },  
+    }, 
     {
-        id: 'total_number_of_revision',
+        id: 'total_revisions',
         heading: 'Total no of revisions',
         moveable: true,
-        sort: row => row?.task?.total_number_of_revision,
+        sort: row => row?.total_revisions,
         rowSpan: 2,
-        searchText: (row) => `${row?.task?.total_number_of_revision}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.task?.total_number_of_revision}</span>
+        searchText: (row) => `${row?.total_revisions}`,
+        row: ({row}) => <span className="singleline-ellipsis">{row?.total_revisions}</span>
     }, 
     {
         id: "total_time_spent_in_revision",
@@ -79,10 +82,10 @@ export const NumberOfTaskTableColumns = [
         sortBy: "total_time_spent_in_revision",
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row?.hours_spent_in_revision}`,
+        searchText: (row) => `${row?.total_time_spent}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const hs = row?.hours_spent_in_revision;
+            const hs = row?.total_time_spent;
             const isEqual = search
                 ? _.includes(_.lowerCase(hs), _.lowerCase(search))
                 : "";
@@ -128,10 +131,10 @@ export const NumberOfTaskTableColumns = [
                 heading: "Client Side Issues",
                 moveable: false,
                 sortBy: "client_side_issues",
-                searchText: (row) => `${row?.client_side_issues}`,
+                searchText: (row) => `${row?.client_issues}`,
                 row: ({ row, table }) => {
                     const search = table.state.search;
-                    const ci = row?.client_side_issues;
+                    const ci = row?.client_issues;
                     const isEqual = search
                         ? _.includes(_.lowerCase(ci), _.lowerCase(search))
                         : "";
@@ -152,10 +155,10 @@ export const NumberOfTaskTableColumns = [
                 heading: "Project Manager Issues",
                 moveable: false,
                 sortBy: "project_manager_issues",
-                searchText: (row) => `${row?.project_manager_issues}`,
+                searchText: (row) => `${row?.pm_issues}`,
                 row: ({ row, table }) => {
                     const search = table.state.search;
-                    const pmi = row?.project_manager_issues;
+                    const pmi = row?.pm_issues;
                     const isEqual = search
                         ? _.includes(_.lowerCase(pmi), _.lowerCase(search))
                         : "";
@@ -248,10 +251,10 @@ export const NumberOfTaskTableColumns = [
                 heading: "Disputed & not solved",
                 moveable: false,
                 sortBy: "disputed_not_solved",
-                searchText: (row) => `${row?.unsolved_dispute}`,
+                searchText: (row) => `${row?.disputes_not_solved}`,
                 row: ({ row, table }) => {
                     const search = table.state.search;
-                    const usd = row?.unsolved_dispute;
+                    const usd = row?.disputes_not_solved;
                     const isEqual = search
                         ? _.includes(_.lowerCase(usd), _.lowerCase(search))
                         : "";

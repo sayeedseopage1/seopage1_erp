@@ -55,9 +55,16 @@ class PmPaymentReleaseHistory extends AccountBaseController
         $this->total_assigned_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
             ->where('projects.pm_id', $pmId)
             ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
-            ->whereNot('project_milestones.status', 'canceled')
+           
             ->where('projects.project_status','Accepted')
             ->sum('cost');
+    $this->total_canceled_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+    ->where('projects.pm_id', $pmId)
+    ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
+    ->whereBetween('project_milestones.updated_at', [$startDate, $assignEndDate])
+    ->where('projects.project_status', 'Accepted')
+    ->where('project_milestones.status', 'canceled')
+    ->sum('cost');
        
 
 
@@ -188,8 +195,15 @@ class PmPaymentReleaseHistory extends AccountBaseController
             ->where('projects.pm_id', $pmId)
             ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
             ->where('projects.project_status','Accepted')
-            ->whereNot('project_milestones.status', 'canceled')
+          
             ->sum('cost');
+            $this->total_canceled_amount_for_this_cycle = Project::join('project_milestones', 'projects.id', '=', 'project_milestones.project_id')
+    ->where('projects.pm_id', $pmId)
+    ->whereBetween('project_milestones.created_at', [$startDate, $assignEndDate])
+    ->whereBetween('project_milestones.updated_at', [$startDate, $assignEndDate])
+    ->where('projects.project_status', 'Accepted')
+    ->where('project_milestones.status', 'canceled')
+    ->sum('cost');
 
 
         //View transaction history by project manager  payment release date in the particular month//

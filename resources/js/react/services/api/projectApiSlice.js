@@ -30,8 +30,11 @@ const projectApiSlice = apiSlice.injectEndpoints({
         // deliverable
         getProjectDeliverableStatus: build.query({
             query: (projectId) =>  `/account/tasks/add-tasks/project-deliverables/${projectId}`
-        })
+        }),
         
+        getProjectManagerTaskGuidelineStatus: build.query({
+            query: (projectId) => `task-guideline-authorization/${projectId}`
+        }),   
     })
 }) ;
 
@@ -44,6 +47,7 @@ export const {
      useGetMilestoneDetailsQuery,
      useLazyGetMilestoneDetailsQuery,
      useLazyGetProjectDeliverableStatusQuery,
+     useLazyGetProjectManagerTaskGuidelineStatusQuery
 
 } = projectApiSlice;
 

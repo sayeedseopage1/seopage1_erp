@@ -90,6 +90,14 @@ const DisputeTableLoader = () => {
             <td className='sp1-data-table-td'>
                 <Placeholder  height={12}  className='mb-1'/>
             </td>
+            
+            <td className='sp1-data-table-td'> 
+                <PersonLoader />
+            </td>
+            
+            <td className='sp1-data-table-td'>
+                <Placeholder  height={12}  className='mb-1'/>
+            </td>
  
             <td className='sp1-data-table-td'>
                 <Placeholder  height={12}  className='mb-1'/>

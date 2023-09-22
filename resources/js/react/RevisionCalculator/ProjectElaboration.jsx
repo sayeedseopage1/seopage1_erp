@@ -1,21 +1,49 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import Modal from '../global/Modal';
 import Button from '../global/Button';
 import styles from './styles.module.css';
 import { projectElaborationData } from './faker';
 import DataTable from '../global/data-table/table'; 
 import { ProjectElaborationTableColumns } from './ProjectElaborationTableColumns';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLazyProjectElaborationDataQuery } from '../services/api/revisionCalculatorApiSlice';
 
-const data = projectElaborationData(50);
+// const data = projectElaborationData(50);
 
 
 const ProjectElaboration = () => {
+  const [data, setData] = useState([]);
   const [pageIndex, setPageIndex] = useState(1);
   const [nRows, setNRows] = useState(10);
   const navigation = useNavigate(); 
   
   const goBack = ()=> navigation(`/`);
+  const [searchParams] = useSearchParams();
+
+  const pm_id = searchParams.get('pm');
+  const start_date = searchParams.get('start_date');
+  const end_date = searchParams.get('end_date');
+  const filter = {pm_id, start_date, end_date}
+
+  const [projectElaborationData, {isFetching}] = useLazyProjectElaborationDataQuery();
+
+  // fetch data 
+  useEffect(() => { 
+    ( async () => {
+        const queryObject = _.pickBy(filter, Boolean);
+        const queryString = new URLSearchParams(queryObject).toString();
+
+        try{
+            let res = await projectElaborationData(`/${pm_id}?${queryString}`).unwrap();
+            setData(res);
+            console.log({res})
+
+        } catch(err){
+            console.log(err)
+        }
+    })()
+  }, [])
+
 
   return (
     <Modal isOpen={true}> 
@@ -44,7 +72,9 @@ const ProjectElaboration = () => {
                         onPageRowChange={(n) => setNRows(n)} 
                         total={data.length}
                         tableClass={styles.table}
-                        groupBy={(data) => _.groupBy(data, d=>d.project_manager.id)}
+                        isLoading={isFetching}
+                        uniq_id='id'
+                        groupBy={(data) => _.groupBy(data, d=>d.projectId)}
                         tableContainerClass={styles.tableContainer}
                     />  
 

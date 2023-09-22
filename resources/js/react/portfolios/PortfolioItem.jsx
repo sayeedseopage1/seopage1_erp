@@ -38,6 +38,7 @@ const PortfolioItem = ({id, url, onClick, isLoading}) => {
           }
       ]
   });  
+ 
 
   const [getPortfolioDataById, {isFetching}] = useLazyGetPortfolioDataByIdQuery();
   

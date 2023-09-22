@@ -28,10 +28,10 @@ export const NumberOfRevisionTableColumns = [
         heading: "Client Side Issues",
         moveable: false,
         sortBy: "client_side_issues",
-        searchText: (row) => `${row?.client_side_issues}`,
+        searchText: (row) => `${row?.client_issues}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const ci = row?.client_side_issues;
+            const ci = row?.client_issues;
             const isEqual = search
                 ? _.includes(_.lowerCase(ci), _.lowerCase(search))
                 : "";
@@ -52,10 +52,10 @@ export const NumberOfRevisionTableColumns = [
         heading: "Project Manager Issues",
         moveable: false,
         sortBy: "project_manager_issues",
-        searchText: (row) => `${row?.project_manager_issues}`,
+        searchText: (row) => `${row?.pm_issues}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const pmi = row?.project_manager_issues;
+            const pmi = row?.pm_issues;
             const isEqual = search
                 ? _.includes(_.lowerCase(pmi), _.lowerCase(search))
                 : "";
@@ -148,10 +148,10 @@ export const NumberOfRevisionTableColumns = [
         heading: "Disputed & not solved",
         moveable: false,
         sortBy: "disputed_not_solved",
-        searchText: (row) => `${row?.unsolved_dispute}`,
+        searchText: (row) => `${row?.total_disputes_not_solved}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const usd = row?.unsolved_dispute;
+            const usd = row?.total_disputes_not_solved;
             const isEqual = search
                 ? _.includes(_.lowerCase(usd), _.lowerCase(search))
                 : "";

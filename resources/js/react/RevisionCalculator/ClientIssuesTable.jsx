@@ -1,21 +1,63 @@
-import React, {useState} from 'react' 
-import { projectElaborationData } from './faker';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react'  
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './styles.module.css';
 import Modal from '../global/Modal';
 import Button from '../global/Button';
 import DataTable from '../global/data-table/table';
 import { ClientIssuesTableColumns } from './ClientIssuesTableColumns';
-
-
-const data = projectElaborationData(50);
+import { useLazyGetRevisionCalculatorDataClientIssuesQuery } from '../services/api/revisionCalculatorApiSlice';
+import { useEffect } from 'react';
+import { PMIssuesTableColumns } from './PMIssuesTableColumns';
+ 
 
 const ClientIssuesTable = () => {
+    const [data, setData] = useState([]);
     const [pageIndex, setPageIndex] = useState(1);
     const [nRows, setNRows] = useState(10);
-    const navigation = useNavigate(); 
+    const navigation = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const pm_id = searchParams.get('pm');
+    const start_date = searchParams.get('start_date');
+    const end_date = searchParams.get('end_date');
+    const filter = {pm_id, start_date, end_date} 
     
     const goBack = ()=> navigation(`/`);
+
+    const [
+        getRevisionCalculatorDataClientIssues,
+        {isFetching}
+    ] = useLazyGetRevisionCalculatorDataClientIssuesQuery()
+
+    
+  // fetch data 
+  useEffect(() => { 
+    ( async () => {
+        const queryObject = _.pickBy(filter, Boolean);
+        const queryString = new URLSearchParams(queryObject).toString();
+
+        try{
+            let res = await getRevisionCalculatorDataClientIssues(`/${pm_id}?${queryString}`).unwrap();
+            
+            console.log(res)
+            const arr = [];
+            _.forEach(res.client_isuess, d => {
+                arr.push({
+                    ...d,
+                    uid: Math.random().toString(36).substr(2, 5)
+                })
+            })
+
+            setData(arr); 
+
+        } catch(err){
+            console.log(err)
+        }
+    })()
+  }, [])
+
+  console.log(data)
+  
   
     return (
       <Modal isOpen={true}> 
@@ -38,21 +80,22 @@ const ClientIssuesTable = () => {
                   {/* body */}
                   <div className={`sp1_modal-body ${styles.modal_body}`}>
   
-                      <DataTable
+                  <DataTable
                           data={data} 
                           margeRow={true}
-                          tableName='clientIssuesTableTable'
-                          columns={ClientIssuesTableColumns}
+                          tableName='RevisionDevIssuesTableTable'
+                          columns={PMIssuesTableColumns}
                           pageIndex={pageIndex}
                           perPageRow={nRows}
                           onPageChange={(value) => setPageIndex(value)}
                           onPageRowChange={(n) => setNRows(n)} 
                           total={data.length}
+                          uniq_id='uid'
+                          isLoading={isFetching}
                           tableClass={styles.table}
-                          groupBy={(data) => _.groupBy(data, d=>d.project_manager.id)}
+                          groupBy={(data) => _.groupBy(data, d=>d.projectId)}
                           tableContainerClass={styles.tableContainer}
-                      />  
-  
+                      /> 
                   </div>
                   {/* end body */}
               </div>  

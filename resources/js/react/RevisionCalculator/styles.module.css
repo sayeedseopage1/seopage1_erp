@@ -79,3 +79,48 @@
 .table_date_picker{
     border: 1px solid rgb(236, 236, 236);
 }
+
+
+.revision_popover_panel{
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+    /* width: clamp(255px, 100%, 350px); */
+    width: 100%;
+    max-width: 350px;
+}
+
+
+.comment_number{
+    padding: 10px;
+    border: 1px solid #ccc; 
+}
+
+.comment_modal{
+    max-height: 80vh;
+    overflow-y: auto;
+}
+ 
+.comment_item{
+    max-width: 550px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #dfdfdf;
+}
+
+.comment_item_header{
+   font-size: 16px; 
+}
+
+.comment_item_header span{
+    font-size: 13px;
+    color: #777;
+    display: block;
+}
+
+.comment_item_body{
+    padding: 6px 0;
+    color: #2f2f35;
+}
+

@@ -96,8 +96,7 @@ abbr {
   text-decoration: none !important;
 }
 
-.search_bar {
-  margin-bottom: 10px;
+.search_bar { 
   margin-left: auto;
   width: fit-content;
   position: relative;
@@ -111,7 +110,7 @@ abbr {
 }
 
 .search_bar__icon svg {
-  fill: rgb(0 0 0 / 40%);
+  fill: rgb(0 0 0 / 40%); 
 }
 
 .search_bar input {
@@ -250,4 +249,5 @@ abbr {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-bottom: 10px;
 }
