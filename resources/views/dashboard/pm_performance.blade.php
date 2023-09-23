@@ -155,7 +155,7 @@
                                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Total Released Amount</h5>
                                                 <div class="d-flex flex-wrap">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#releasedAmountCycle{{ count($total_released_amount_this_cycle_get) }}"> {{ round($total_released_amount_this_cycle, 2) }} ($) / {{ $pm_core_metrics->released_amount_for_cycle ?? ''}} ($)</a>
+                                                        <a href="#" data-toggle="modal" data-target="#releasedAmountCycle{{ count($total_released_amount_this_cycle_get) }}"> {{ round($total_released_amount_this_cycle, 2) }}$ ({{ $pm_core_metrics->released_amount_for_cycle ?? '' }}$)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Released amount for this Cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#released_amount_for_cycle"></i>
@@ -165,7 +165,7 @@
                                                     @include('dashboard.employee.total_released_amount.released_amount_cycle')
 
                                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#totalReleasedAmount{{ count($total_released_amount_previous_cycle_get) }}" style="color: green"> {{ round($total_released_amount_previous_cycle, 2) }} ($) / {{ $pm_core_metrics->total_released_amount ?? ''}} ($)</a>
+                                                        <a href="#" data-toggle="modal" data-target="#totalReleasedAmount{{ count($total_released_amount_previous_cycle_get) }}" style="color: green"> {{ round($total_released_amount_previous_cycle, 2) }}$ ({{ $pm_core_metrics->total_released_amount ?? ''}}$)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Total released amount')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#total_released_amount_modal"></i>
@@ -189,10 +189,10 @@
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
                                                         <a href="#" data-toggle="modal" data-target="#averageComplectionDays{{ count($average_project_completion_rate) }}">
                                                             @if($average_completion_days == 0)
-                                                            N\A / {{ $pm_core_metrics->avg_project_completion_time_for_cycle ?? ''}} days
+                                                            NA ({{ $pm_core_metrics->avg_project_completion_time_for_cycle ?? ''}} days)
                                                             @else
 
-                                                            {{round($average_completion_days,2)}} days / {{ $pm_core_metrics->avg_project_completion_time_for_cycle ?? ''}}  days
+                                                            {{round($average_completion_days,2)}} days ({{ $pm_core_metrics->avg_project_completion_time_for_cycle ?? ''}}  days)
                                                             @endif
                                                         </a>
                                                         <span class="f-12 font-weight-normal text-lightest">
@@ -207,9 +207,9 @@
                                                         <a href="#" data-toggle="modal" data-target="#averageComplectionInThisDays{{ count($average_project_completion_rate_previous_cycle) }}" style="color: green">
                                                             @if($average_completion_days_previous_cycle == 0)
 
-                                                            N\A / {{ $pm_core_metrics->avg_project_completion_time_in_cycle ?? ''}} days
+                                                            NA ({{ $pm_core_metrics->avg_project_completion_time_in_cycle ?? ''}} days)
                                                             @else
-                                                            {{round($average_completion_days_previous_cycle,2)}} days / {{ $pm_core_metrics->avg_project_completion_time_in_cycle ?? ''}} days
+                                                            {{round($average_completion_days_previous_cycle,2)}} days ({{ $pm_core_metrics->avg_project_completion_time_in_cycle ?? ''}} days)
 
                                                             @endif
                                                             </a>
@@ -235,7 +235,7 @@
                                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Count)</h5>
                                                 <div class="d-flex flex-wrap">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionProgressForThisCycleCount{{ count($no_of_100_and_finish_this_cycle) }}">  {{ round($project_completion_rate_count_this_cycle_100_in_progress, 2) }}% / {{ $pm_core_metrics->progress_project_count ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionProgressForThisCycleCount{{ count($no_of_100_and_finish_this_cycle) }}">  {{ round($project_completion_rate_count_this_cycle_100_in_progress, 2) }}% ({{ $pm_core_metrics->progress_project_count ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Project completion rate for this Cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_modal"></i>
@@ -245,7 +245,7 @@
                                                     @include('dashboard.employee.projects_completion_progress_rate_count.project_complection_rate_for_this_cycle_count')
 
                                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionProgressInThisCycleCount{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_100_in_progress, 2) }}% / {{ $pm_core_metrics->progress_project_count_2 ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionProgressInThisCycleCount{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_100_in_progress, 2) }}% ({{ $pm_core_metrics->progress_project_count_2 ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Project completion rate in this Cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_modal"></i>
@@ -266,7 +266,7 @@
                                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Project Completion Rate (100% in progress projects Value)</h5>
                                                 <div class="d-flex flex-wrap">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisValue{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}% / {{ $pm_core_metrics->progress_project_value ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisValue{{ count($no_of_100_and_finish_this_cycle) }}">{{ round($project_completion_rate_count_this_cycle_value_100_in_progress, 2) }}% ({{ $pm_core_metrics->progress_project_value ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Project completion rate for this Cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_for_cycle_value_modal"></i>
@@ -276,7 +276,7 @@
                                                     @include('dashboard.employee.projects_completion_progress_rate_value.project_complection_rate_for_this_cycle_value')
 
                                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisValue{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}% / {{ $pm_core_metrics->progress_project_value_2 ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisValue{{ count($no_of_100_and_finish_previous_cycle) }}" style="color: green">{{ round($project_completion_rate_count_previous_cycle_value_100_in_progress, 2) }}% ({{ $pm_core_metrics->progress_project_value_2 ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Project completion rate in this Cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_completion_rate_in_cycle_value_modal"></i>
@@ -300,7 +300,7 @@
                                                 <div class="d-flex flex-wrap">
 
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle,2)}}% / {{ $pm_core_metrics->project_completion_rate_for_this_cycle_count ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateForThisCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle,2)}}% ({{ $pm_core_metrics->project_completion_rate_for_this_cycle_count ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Project Completion rate for this cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_complection_rate_for_cycle_modal"></i>
@@ -310,7 +310,7 @@
                                                     @include('dashboard.employee.project_completion_rate_count.project_completion_rate_for_this_cycle')
 
                                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle,2)}}% / {{ $pm_core_metrics->project_completion_rate_in_this_cycle_count ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectComplectionRateInThisCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle,2)}}% ({{ $pm_core_metrics->project_completion_rate_in_this_cycle_count ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Project Completion rate in this cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#project_complection_rate_in_cycle_modal"></i>
@@ -332,7 +332,7 @@
                                                 <div class="d-flex flex-wrap">
 
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#projectProgressForCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle_value,2)}}% / {{ $pm_core_metrics->project_completion_rate_for_this_cycle_value ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#projectProgressForCycle{{ count($no_of_finished_projects_this_cycle) }}"> {{round($project_completion_rate_count_this_cycle_value,2)}}% ({{ $pm_core_metrics->project_completion_rate_for_this_cycle_value ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Completed/Finished projects for cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#in_progress_project_for_cycle_modal"></i>
@@ -342,7 +342,7 @@
                                                     @include('dashboard.employee.project_completion_rate_value.project_progress_for_cycle')
 
                                                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#completedProjectForCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle_value,2)}}% / {{ $pm_core_metrics->project_completion_rate_in_this_cycle_value ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#completedProjectForCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle_value,2)}}% ({{ $pm_core_metrics->project_completion_rate_in_this_cycle_value ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Completed/Finished projects In cycle')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#completed_or_finished_project_in_cycle_modal"></i>
@@ -411,7 +411,7 @@
                                                 <div class="d-flex flex-wrap">
                                                     <a href="#" data-toggle="modal" data-target="#valueOfUpsale{{ count($no_of_new_milestones_added_on_old_projects) }}">
                                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                            {{round($no_of_new_milestones_added_on_old_projects_value,2)}}$ / {{ $pm_core_metrics->value_of_upsale ?? ''}} usd<span
+                                                            {{round($no_of_new_milestones_added_on_old_projects_value,2)}}$ ({{ $pm_core_metrics->value_of_upsale ?? ''}} usd)<span
                                                                 class="f-12 font-weight-normal text-lightest"></span>
                                                         </p>
                                                     </a>
@@ -431,7 +431,7 @@
                                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Delayed projects percentage</h5>
                                                 <div class="d-flex flex-wrap">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#currentCycle{{count($no_of_delayed_projects_this_cycle)}}">{{round($delayed_projects_percentage_this_cycle,2)}}% > {{ $pm_core_metrics->current ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#currentCycle{{count($no_of_delayed_projects_this_cycle)}}">{{round($delayed_projects_percentage_this_cycle,2)}}%  (<span class="f-15">Equals or less than</span> {{ $pm_core_metrics->current ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Current')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#current_modal"></i>
@@ -440,7 +440,7 @@
                                                     </p>
                                                     @include('dashboard.employee.delayed_project_percentage.currect')
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#currectPlus{{count($no_of_delayed_projects)}}">{{round($delayed_projects_percentage_previous_cycle,2)}}% > {{ $pm_core_metrics->current_plus_old_ones ?? ''}}%</a>
+                                                        <a href="#" data-toggle="modal" data-target="#currectPlus{{count($no_of_delayed_projects)}}">{{round($delayed_projects_percentage_previous_cycle,2)}}% (<span class="f-15">Equals or less than</span> {{ $pm_core_metrics->current_plus_old_ones ?? ''}}%)</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Current plus old ones')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#current_plus_old_ones_modal"></i>
@@ -464,8 +464,8 @@
                                                 </h5>
                                                 <div class="d-flex flex-wrap">
                                                     <a href="#" data-toggle="modal" data-target="#cancelationRateData{{ count($cancelled_projects_this_cycle) }}">
-                                                        <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                            {{round($project_cancelation_rate,2)}}% > {{ $pm_core_metrics->cancelation_rate ?? ''}}%
+                                                        <p class="mb-0 f-21 font-weight-bold text-blue mr-5">
+                                                            {{round($project_cancelation_rate,2)}}% (<span class="f-15">Equals Or Less Than</span> {{ $pm_core_metrics->cancelation_rate ?? ''}}%)
                                                         </p>
                                                     </a>
                                                     @include('dashboard.employee.cancelation_rate.cancelation_rate')
@@ -484,7 +484,7 @@
                                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions for cycle</h5>
                                                 <div class="d-flex flex-wrap">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" data-toggle="modal" data-target="#causedByMe{{count($caused_by_me_for_cycle)}}">{{ count($caused_by_me_for_cycle) }} > {{ $pm_core_metrics->number_of_revisions_for_cycle ?? ''}}</a>
+                                                        <a href="#" data-toggle="modal" data-target="#causedByMe{{count($caused_by_me_for_cycle)}}">{{ count($caused_by_me_for_cycle) }} (<span class="f-15">Equals or less than</span> {{ $pm_core_metrics->number_of_revisions_for_cycle ?? ''}})</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Caused by me')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_me_modal"></i>
@@ -525,7 +525,7 @@
                                                 <h5 class="f-15 f-w-500 mb-20 text-darkest-grey">Number of revisions in cycle</h5>
                                                 <div class="d-flex flex-wrap">
                                                     <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                        <a href="#" onclick="event.preventDefault()">{{ count($caused_by_me_in_cycle) }} > {{ $pm_core_metrics->number_of_revisions_in_cycle ?? ''}}</a>
+                                                        <a href="#" onclick="event.preventDefault()">{{ count($caused_by_me_in_cycle) }}(<span class="f-15">Equals or less than</span> {{ $pm_core_metrics->number_of_revisions_in_cycle ?? ''}})</a>
                                                         <span class="f-12 font-weight-normal text-lightest">
                                                             @lang('Caused by me')
                                                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#caused_by_me_in_cycle_modal"></i>
@@ -569,7 +569,7 @@
                                                 <div class="d-flex flex-wrap">
                                                     <a href="#" data-toggle="modal" data-target="#avgPayment{{ count($total_milestone_completed_this_current_month) }}">
                                                         <p class="mb-0 f-21 font-weight-bold text-blue d-grid mr-5">
-                                                            {{round($avg_payment_release_per_day,2)}} per day / {{ $pm_core_metrics->avg_payment_per_day ?? ''}} per day
+                                                            {{round($avg_payment_release_per_day,2)}} per day ({{ $pm_core_metrics->avg_payment_per_day ?? ''}} per day)
                                                         </p>
                                                     </a>
                                                     @include('dashboard.employee.avg_payment.average_payment_per_day')
@@ -1174,7 +1174,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center">
-                                    <button type="button" class="btn btn-primary mt-3" id="adminViewMore">View More..</button>
+                                    <button type="button" class="btn btn-primary mt-3 btn-lg" id="adminViewMore" style="padding: 18px; width:15%; font-size:25px;">View More</button>
                                 </div>
                             </div>
                         </div>
@@ -1192,10 +1192,10 @@
     <script>
         $('#adminViewMore').click(function(){
             $('#admin_no_of_projects, #admin_no_of_client, #admin_no_of_progress_project, #admin_no_of_fully_completed, #admin_total_milestone_assigned, #admin_milestone_completion_rate, #admin_total_task_assigned, #admin_cancled_projects, #admin_delayed_completed').toggle();
-            if ($(this).text() == 'View More..') {
-                $(this).text('View Less..');
+            if ($(this).text() == 'View More') {
+                $(this).text('View Less');
             }else{
-                $(this).text('View More..');
+                $(this).text('View More');
             }
         });
     </script>

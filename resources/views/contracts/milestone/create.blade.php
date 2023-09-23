@@ -206,7 +206,7 @@
     document.getElementById("copyButton").addEventListener("click", function() {
         var generatedLink = document.getElementById("generatedLinkContainer").value;
 
-        navigator.clipboard.writeText(generatedLink)
+        navigator?.clipboard.writeText(generatedLink)
             .then(function() {
                 alert("Copied: " + generatedLink);
                 document.getElementById("linkSubmit").removeAttribute("disabled");

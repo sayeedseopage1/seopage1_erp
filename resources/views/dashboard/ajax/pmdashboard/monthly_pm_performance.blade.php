@@ -1036,15 +1036,15 @@
     </div>
 </div>
 <div class="d-flex justify-content-center">
-    <button type="button" class="btn btn-primary mt-3" id="mAdminViewMore">View More..</button>
+    <button type="button" class="btn btn-primary mt-3 btn-lg" id="mAdminViewMore" style="padding: 18px; width:15%; font-size:25px;">View More</button>
 </div>
 <script>
     $('#mAdminViewMore').click(function(){
         $('#admin_no_of_projects, #admin_no_of_client, #admin_no_of_progress_project, #admin_no_of_fully_completed, #admin_total_milestone_assigned, #admin_milestone_completion_rate, #admin_total_task_assigned, #admin_cancled_projects, #admin_delayed_completed').toggle();
-        if ($(this).text() == 'View More..') {
-            $(this).text('View Less..');
+        if ($(this).text() == 'View More') {
+            $(this).text('View Less');
         }else{
-            $(this).text('View More..');
+            $(this).text('View More');
         }
     });
 </script>
