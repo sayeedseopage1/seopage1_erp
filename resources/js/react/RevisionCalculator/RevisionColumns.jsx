@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Placeholder } from '../global/Placeholder';
-
-
+import {convertTime} from '../utils/converTime';
 
 export const revisionColumns = [
     {
@@ -102,7 +101,7 @@ export const revisionColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.minutes_spent}`,
         loader: () => <Placeholder />,
-        row: ({row}) => <span>{row?.minutes_spent}</span>
+        row: ({row}) => <span>{convertTime(row?.minutes_spent)}</span>
     },
     {
         id: 'revision_breakdown',
