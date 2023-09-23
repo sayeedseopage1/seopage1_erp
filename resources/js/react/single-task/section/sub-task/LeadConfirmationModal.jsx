@@ -1,30 +1,37 @@
 import React from 'react'
 import Modal from '../../components/Modal'
 import Button from '../../components/Button'
+import {User} from '../../../utils/user-details';
 
 const LeadConfirmationModal = ({isOpen, onConfirm}) => {
   const [buttonVisible, setButtonVisible] = React.useState(false);
   const [countDown, setCountDown] = React.useState(20);
+  const auth = new User(window.Laravel.user);
 
-  React.useEffect(() => {
-    let count = countDown ?? 0;
+  React.useEffect(() => { 
+    if(auth.getRoleId() && auth.getRoleId() === 6){
+      let count = countDown ?? 0;
 
-    let timeIntervelId = setInterval(() => {
-        setCountDown(count--);
-    }, 1000);
-
-
-    let timeOutId = setTimeout(() => {
-      setButtonVisible(true);
-      clearInterval(timeIntervelId)
-    }, 22000);
-
+      let timeIntervelId = setInterval(() => {
+          setCountDown(count--);
+      }, 1000);
+  
+  
+      let timeOutId = setTimeout(() => {
+        setButtonVisible(true);
+        clearInterval(timeIntervelId)
+      }, 22000);
+  
+      
+  
+      return () => {
+        clearTimeout(timeOutId);
+        clearInterval(timeIntervelId);
+      };
+    }
     
-
-    return () => {
-      clearTimeout(timeOutId);
-      clearInterval(timeIntervelId);
-    };
+    
+    return () =>  onConfirm(); 
   }, []);
 
 

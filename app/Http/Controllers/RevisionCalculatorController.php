@@ -551,7 +551,7 @@ class RevisionCalculatorController extends AccountBaseController
           
         if ($startDate && $endDate) { 
 
-            $data['sales_issues'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+            $data['sales_issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
             'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
             'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
             'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -599,7 +599,7 @@ public function PMIssue(Request $request, $id)
       
     if ($startDate && $endDate) { 
 
-        $data['pm_issues'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        $data['pm_issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -645,7 +645,7 @@ public function ClientIssue(Request $request, $id)
       
     if ($startDate && $endDate) { 
 
-        $data['client_issues'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        $data['client_issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -691,7 +691,7 @@ public function LeadDevIssue(Request $request, $id)
       
     if ($startDate && $endDate) { 
 
-        $data['lead_dev__issues'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        $data['lead_dev__issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -737,7 +737,7 @@ public function DevIssue(Request $request, $id)
       
     if ($startDate && $endDate) { 
 
-        $data['dev__issues'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        $data['dev__issues'] = TaskRevision::select('task_revisions.id','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -783,7 +783,7 @@ public function TotalDispute(Request $request, $id)
       
     if ($startDate && $endDate) { 
 
-        $data['total_disputes'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        $data['total_disputes'] = TaskRevision::select('task_revisions.id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
@@ -829,7 +829,7 @@ public function DisputeNotResolve(Request $request, $id)
       
     if ($startDate && $endDate) { 
 
-        $data['dispute_not_resolved'] = TaskRevision::select('task_revisions.id','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
+        $data['dispute_not_resolved'] = TaskRevision::select('task_revisions.id','task_revisions.deny_reason','task_revisions.sale_comment','task_revision_disputes.created_at as dispute_creation_date','task_revisions.dispute_between','pm.id as project_manager_id','pm.name as project_manager_name','projects.project_name','projects.id as ProjectId',
         'clients.id as clientId','clients.name as client_name','tasks.heading as task_title','revision_added_by.id as revision_raised_by_id','revision_added_by.name as revision_raised_by_name',
         'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',

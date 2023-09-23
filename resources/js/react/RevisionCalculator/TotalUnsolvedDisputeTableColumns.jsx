@@ -5,6 +5,7 @@ import Popover from "../global/Popover";
 import { useState } from "react";
 import Modal from "../global/Modal";
 import Button from "../global/Button";
+import dayjs from "dayjs";
 
 export const TotalUnsolvedDisputeTableColumns = [
     {
@@ -70,10 +71,10 @@ export const TotalUnsolvedDisputeTableColumns = [
                 : "";
 
             return (
-                <abbr title={row?.task_title}>
-                    <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <abbr title={row?.task_title}> 
+                   <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {task_name}
-                    </a>
+                    </span>
                 </abbr>
             );
         },
@@ -110,18 +111,18 @@ export const TotalUnsolvedDisputeTableColumns = [
         id: "developer_name",
         heading: "Developers name",
         moveable: false,
-        sort: row => row?.task_title,
+        sort: row => row?.developer_name,
         rowSpan: 2,
-        searchText: (row) => `${row?.task_title}`,
+        searchText: (row) => `${row?.developer_name}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const task_name = row?.task_title;
+            const task_name = row?.developer_name;
             const isEqual = search
                 ? _.includes(_.lowerCase(task_name), _.lowerCase(search))
                 : "";
 
             return (
-                <abbr title={row?.task_title}>
+                <abbr title={row?.developer_name}>
                     <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {task_name}
                     </a>
@@ -161,21 +162,14 @@ export const TotalUnsolvedDisputeTableColumns = [
         id: "dispute_start_date",
         heading: "Dispute start date",
         moveable: false,
-        sort: row => row?.task_title,
+        sort: row => row?.dispute_creation_date,
         rowSpan: 2,
-        searchText: (row) => `${row?.task_title}`,
-        row: ({ row, table }) => {
-            const search = table.state.search;
-            const task_name = row?.task_title;
-            const isEqual = search
-                ? _.includes(_.lowerCase(task_name), _.lowerCase(search))
-                : "";
-
+        searchText: (row) => `${row?.dispute_creation_date}`,
+        row: ({ row, table }) => { 
             return (
                 <abbr title={row?.task_title}>
-                    <a href={`/account/tasks/${row?.id}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                        {task_name}
-                    </a>
+                <span style={{minWidth: '160px'}}>{dayjs(row?.dispute_creation_date).format('DD MMM, YYYY')}</span> <br/>
+                <span>at {dayjs(row?.dispute_creation_date).format('hh:mm A')}</span>
                 </abbr>
             );
         },
@@ -195,23 +189,82 @@ export const TotalUnsolvedDisputeTableColumns = [
                 ? _.includes(_.lowerCase(task_name), _.lowerCase(search))
                 : "";
 
+            let responsible = () => {
+                if(row?.dispute_between === 'SPR'){
+                    return `Sales and Project Manager`;
+                }else if(row?.dispute_between === 'CPR'){
+                    return `Clients and Project Manager`;
+                }else if(row?.dispute_between === 'PLR'){
+                    return `Project Manager and Lead Developer`
+                }else if(row?.dispute_between === 'LDR'){
+                    return `Lead Developer and Developer`
+                }
+            }
+
+            const comment = (b) => {
+                if(b === 'SPR'){
+                   return(
+                    <div>
+                        <div>
+                            <h6>Sales</h6>
+                            <p> {row?.sale_comment} </p>
+                        </div>
+
+                        <div>
+                            <h6>Project Manager</h6>
+                            <p> {row?.reason_for_revision} </p>
+                        </div>
+                    </div>
+                   )
+                }else if (b === 'CPR'){
+                    return(
+                        <div>
+                            <div>
+                                <h6>Project Manager</h6>
+                                <p> {row?.reason_for_revision} </p>
+                            </div>
+                        </div>
+                    )
+                }else if(b === 'PLR'){
+                    return(
+                        <div>
+                            <div>
+                                <h6>Project Manager</h6>
+                                <p> {row?.reason_for_revision} </p>
+                            </div>
+    
+                            <div>
+                                <h6>Lead Developer</h6> 
+                                <p>{row?.deny_reason}</p>
+                            </div>
+                        </div>
+                       )
+                }else if(b === 'LDR'){
+                    return(
+                        <div>
+                            <div>
+                                <h6>Lead Developer</h6>
+                                <p> {row?.reason_for_revision} </p>
+                            </div>
+    
+                            <div>
+                                <h6>Developer</h6> 
+                                <p>{row?.deny_reason}</p>
+                            </div>
+                        </div>
+                       )
+                }
+            }
+
             return ( 
                 <Popover>
                     <Popover.Button>
-                        Contradictory claims between PM and lead Developer
+                        Contradictory claims between {responsible()}; 
                     </Popover.Button>
 
                     <Popover.Panel>
                         <div className={styles.revision_popover_panel}>
-                            <div>
-                                <h6>Project Manger</h6>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, alias quis! Repudiandae, molestias consectetur. Doloribus cum praesentium id nemo laudantium quam totam quasi. Porro voluptas placeat debitis minus earum quis.</p>
-                            </div>
-
-                            <div>
-                                <h6>Lead Developer</h6>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, alias quis! Repudiandae, molestias consectetur. Doloribus cum praesentium id nemo laudantium quam totam quasi. Porro voluptas placeat debitis minus earum quis.</p>
-                            </div>
+                            { comment(row?.dispute_between)}
                         </div>
                     </Popover.Panel>
                 </Popover> 
@@ -239,6 +292,7 @@ export const TotalUnsolvedDisputeTableColumns = [
         },
     },
 ];
+
 
 
 // Comments

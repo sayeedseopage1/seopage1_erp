@@ -107,7 +107,25 @@ export const ClientIssuesTableColumns = [
         sort: row => row?.verdict,
         rowSpan: 2,
         searchText: (row) => `${row?.verdict}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.verdict}</span>
+        row: ({row}) => <Verdict row={row} />
     },
      
 ];
+
+
+const Verdict = ({row}) => {
+    if(row?.status){
+        if(row?.winner){
+            return <a href={`/account/employees/${row?.winner}`}> Verdict given in favor of {row?.winner_name}  </a>
+        }else{
+            return (
+                <div>
+                     Both parties were hold partially responsible. Party {row?.dispute_raised_by_name} ({row?.raised_by_percent}%) & Party {row?.dispute_rasied_against_name} ({row?.raised_against_percent}%)
+                </div>
+            )
+        }
+    }
+    return <span className="singleline-ellipsis">
+        N/A
+    </span>
+}

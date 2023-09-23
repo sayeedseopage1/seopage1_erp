@@ -8,8 +8,8 @@ const FilterItem = ({children, id, renderOn=""}) => {
     <div 
       id={id} 
       className={`
-          ${styles.filterbar_item} 
-          ${renderOn === 'EXPAND_MENU' ? styles.expande_menu_item : ''}
+          ${styles.filterItem} 
+          ${renderOn === 'EXPAND_MENU' ? styles.extendFilterItem: ''}
       `}
     >
         {children}

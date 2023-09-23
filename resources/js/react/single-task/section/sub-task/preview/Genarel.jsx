@@ -212,6 +212,15 @@ const Genarel = ({task, isFetching}) => {
 
                 <div className="row">
                     <div className="col-6 col-sm-5 col-md-3 col-xl-6">
+                    Total Hours Logged{" "}
+                    </div>
+                    <div className="col-6 col-sm-7 col-md-9 col-xl-6">
+                        : {task?.parentTaskTimeLog || "--"}
+                    </div>
+                </div>
+
+                {/* <div className="row">
+                    <div className="col-6 col-sm-5 col-md-3 col-xl-6">
                         Parent Task Hours Logged{" "}
                     </div>
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
@@ -235,7 +244,7 @@ const Genarel = ({task, isFetching}) => {
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
                         : {task?.totalTimeLog || "--"}
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="col-12 border-top py-4 mt-4">

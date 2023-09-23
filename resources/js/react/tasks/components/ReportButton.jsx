@@ -38,6 +38,8 @@ const ReportButton = ({row}) => {
 
     setIsOpen(true);
   }
+
+  console.log({row, reports})
  
   const close = () => setIsOpen(false)
   const reportCount = row?.subtasks_reports_count;

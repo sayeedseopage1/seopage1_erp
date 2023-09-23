@@ -1,0 +1,57 @@
+.filterbar {
+    width: 100%;
+    background: #fff;
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+}
+.filterItems {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.filterItem {
+    padding-inline: 10px;
+    border-right: 1px solid rgb(223, 223, 223);
+}
+
+.filterItem:last-child {
+    border-right: none;
+    min-width: 150px;
+    max-width: 300px;
+}
+
+/* filter item dropdown */
+.filterItemTitle {
+    font-size: 13px;
+    color: #777;
+    font-weight: 500;
+}
+
+.filterDropdownToggle {
+    display: flex;
+}
+
+.filterItemValue {
+    width: 100%;
+    text-align: left;
+    background-color: transparent;
+}
+
+.fiterOptions {
+    max-width: 300px;
+    padding-right: 10px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.filterOption {
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    border-bottom: 1px dashed rgb(0 0 0 / 10%);
+}

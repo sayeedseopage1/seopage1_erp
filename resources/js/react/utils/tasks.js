@@ -51,5 +51,6 @@ export class Task {
         this.subtasks_hours_logged = data?.subtasks_hours_logged;
         this.due_on = data?.due_on;
         this.create_on = data?.create_on;
+        this.orginal = data;
     }
 }

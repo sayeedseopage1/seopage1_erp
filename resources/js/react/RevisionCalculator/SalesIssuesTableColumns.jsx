@@ -134,9 +134,13 @@ export const SalesIssuesTableColumns = [
 const Verdict = ({row}) => {
     if(row?.status){
         if(row?.winner){
-            return <span> Verdict given in favor of {row?.winner}  </span>
+            return <a href={`/account/employees/${row?.winner}`}> Verdict given in favor of {row?.winner_name}  </a>
         }else{
-            return null
+            return (
+                <div>
+                     Both parties were hold partially responsible. Party {row?.dispute_raised_by_name} ({row?.raised_by_percent}%) & Party {row?.dispute_rasied_against_name} ({row?.raised_against_percent}%)
+                </div>
+            )
         }
     }
     return <span className="singleline-ellipsis">

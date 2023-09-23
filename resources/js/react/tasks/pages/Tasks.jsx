@@ -37,6 +37,7 @@ const Tasks = () => {
             .unwrap()
             .then(res => {
                 const data = _.orderBy(res?.tasks, 'due_date', 'desc');
+                console.log(data)
                 dispatch(storeTasks({tasks: data}))
             })
             .catch(err => console.log(err))
@@ -109,7 +110,7 @@ const Tasks = () => {
                         filter={filter} 
                         tableName="tasksTable"
                         search={search}
-                        reportPermission={[5, 1, 8]}
+                        reportPermission={[6, 5, 1, 8]}
                         tableColumns={TaskTableColumns}
                     />
                 </div>
@@ -121,7 +122,12 @@ const Tasks = () => {
                             {/* header */}
                             <div className="sp1_modal-head">
                                 <div className="sp1_modal-title pl-2"><strong>Primary Page Development</strong></div>
-                                <Button onClick={closeTable} aria-label="ModalClose" variant='tertiary' className='sp1_modal-close'>
+                                <Button 
+                                    onClick={closeTable} 
+                                    aria-label="ModalClose" 
+                                    variant='tertiary' 
+                                    className='sp1_modal-close'
+                                >
                                     <i className='fa-solid fa-xmark'/>
                                 </Button>
                             </div>
