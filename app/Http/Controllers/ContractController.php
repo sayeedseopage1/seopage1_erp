@@ -905,7 +905,7 @@ class ContractController extends AccountBaseController
                 $product_description->save();
             }
             if($request->service_type == 'product-category'){
-                $product_category = ProductCategoryController::where('random_id', $request->random_id)->first();
+                $product_category = ProductCategoryCollection::where('random_id', $request->random_id)->first();
                 $product_category->milestone_id = $milestone->id;
                 $product_category->save();
             }
