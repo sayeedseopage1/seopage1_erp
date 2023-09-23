@@ -5715,10 +5715,30 @@ public function updatePmBasicSEO(Request $request){
                 $mode = 'canceled';
             } else {
             }
-            $data = Project::select('id', 'project_name')->where('status', $mode)->get();
+            $data = Project::select(
+                        'projects.id as id', 
+                        'projects.status as project_status',
+                        'projects.project_name', 
+                        'users.id as client_id', 
+                        'users.name as client_name',
+                        'users.status as client_status'
+                    )
+                    ->leftJoin('users', 'projects.client_id', 'users.id')
+                    ->where('projects.status', $mode)
+                    ->get();
         } else {
 
-            $data = Project::select('id', 'project_name')->where('status', 'in progress')->get();
+            $data = Project::select(
+                        'projects.id as id', 
+                        'projects.status as project_status',
+                        'projects.project_name', 
+                        'users.id as client_id', 
+                        'users.name as client_name',
+                        'users.status as client_status'
+                    )
+                    ->leftJoin('users', 'projects.client_id', 'users.id')
+                    ->where('projects.status', 'in progress')
+                    ->get();
         }
 
         return response()->json($data);
