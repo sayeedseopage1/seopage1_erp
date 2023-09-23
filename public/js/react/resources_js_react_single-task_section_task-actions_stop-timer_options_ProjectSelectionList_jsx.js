@@ -90,7 +90,12 @@ var ProjectSelectionList = function ProjectSelectionList(_ref) {
                 active = _ref2.active;
               return selected ? "task-selection-list-option selected" : active ? "task-selection-list-option active" : "task-selection-list-option";
             },
-            children: project.project_name
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
+              children: [project.project_name, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+                className: "badge badge-success ml-2",
+                children: project.client_name
+              })]
+            })
           }, project.id);
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
           className: "task-selection-list-option",

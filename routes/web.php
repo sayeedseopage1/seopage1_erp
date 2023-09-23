@@ -1259,6 +1259,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/insights/sections/add', [InsightsController::class,'storeSection'])->name('insights/sections/add');
     Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
     Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
+
+    Route::get('/tasks-type',[TaskController::class,'getTasksType']);
+    Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
     
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);

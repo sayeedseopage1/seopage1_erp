@@ -6,7 +6,7 @@ import { User } from "../utils/user-details";
 import useSWR from "swr";
 import DataTable from "../ui/basic-table/DataTable";
 import Toaster from "../ui/Toaster";
-import Filterbar from "../components/filterbar/Filterbar";
+// import Filterbar from "../components/filterbar/Filterbar";
 
 const Revision = () => {
     const auth = new User(window.Laravel.user);
@@ -22,7 +22,7 @@ const Revision = () => {
         <section className={styles.revision_section_container}>
             {/* filter */}
             <div>
-                <Filterbar />
+                {/* <Filterbar /> */}
             </div>
             {/* end filter */}
             <div className={styles.table_container}>
