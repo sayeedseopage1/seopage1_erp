@@ -940,7 +940,7 @@ class TaskController extends AccountBaseController
 
 
         }
-    }
+    } 
 
     public function TaskRevision(Request $request)
     {
@@ -3133,9 +3133,14 @@ class TaskController extends AccountBaseController
 
        }
        $users = User::where('role_id',1)->get();
+       if($pm_task_guideline_authorization != null)
+       {
+
+       
        foreach($users as $user){
            Notification::send($user, new PmTaskGuidelineNotification($pm_task_guideline_authorization));
        }
+    }
 
        return response()->json(['status' => 200]);
 
@@ -4069,6 +4074,7 @@ class TaskController extends AccountBaseController
     }
     public function get_tasks_project_deliverable($id)
     {
+       
         $deliverables = ProjectDeliverable::where('project_id',$id)->count();
         if($deliverables < 1)
         {
@@ -4079,10 +4085,11 @@ class TaskController extends AccountBaseController
         }else {
             $project_assign_date = PMProject::where('project_id', $id)->value('created_at');
             $project= Project::where('id',$id)->first();
-            
+          
            // dd($hoursDifference);
-            if($project->deliverable_authorizaton == '0')
+            if($project->deliverable_authorization == 0 || $project->deliverable_authorization == '0')
             {
+               
                 return response()->json([
                     'message' => 'You can not create task as top management did not authorized the deliverable yet',
                     'status'=> 400,
@@ -4094,6 +4101,7 @@ class TaskController extends AccountBaseController
                     'status'=> 200,
                 ]);
             }
+          
         }
 
     }
@@ -4461,7 +4469,7 @@ class TaskController extends AccountBaseController
             "status_code" => 200,
             "is_allow" => $is_allow,
             "is_submitted_already" => $already_submitted,
-            "message" => 'Please wait until deliverable is authorized'
+            "message" => 'Please wait until task guideline is authorized'
         ], 200);
     }
     

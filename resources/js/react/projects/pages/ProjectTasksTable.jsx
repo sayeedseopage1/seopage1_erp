@@ -103,14 +103,12 @@ const ProjectTasks = () => {
     // hanlde task add form
     const handleTaskAddForm = async (e) => {
         e.preventDefault();
-        const deliverable = await isDeliverable(projectId);
-        // console.log({deliverable})
+        const deliverable = await isDeliverable(projectId); 
         if (deliverable) {
-            const guideline = await getProjectGuidelineStaus(projectId); 
-            const isAuthorized = await isTaskGuidelineAuthorized(projectId);
-            // console.log({guideline})
-            if (guideline && isAuthorized) {
-                setShowTaskCreationForm(true); 
+            const guideline = await getProjectGuidelineStaus(projectId);  
+            if (guideline) { 
+                const isAuthorized = await isTaskGuidelineAuthorized(projectId);
+                isAuthorized && setShowTaskCreationForm(true); 
             } else setShowProjectGuidelineForm(true);
         }
     };
