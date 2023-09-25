@@ -4472,6 +4472,9 @@ public function updatePmWebContent(Request $request){
     $pm_web_content->pm_quantity= $pm_quantitys;
     $pm_web_content->pm_approximate_word= $pm_approximate_words;
     $pm_web_content->milestone_id= $request->milestone_id;
+    if($request->submitted_by){
+        $pm_web_content->submitted_by= $request->submitted_by;
+    }
     $pm_web_content->save();
 
 
@@ -4597,6 +4600,9 @@ public function updatePmBlogArticle(Request $request){
     $pm_blog_article->quantity = $quantitys;
     $pm_blog_article->approximate_word = $approximate_words;
     $pm_blog_article->milestone_id= $request->milestone_id;
+    if($request->submitted_by){
+        $pm_blog_article->submitted_by= $request->submitted_by;
+    }
     $pm_blog_article->save();
 
      // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
@@ -4714,6 +4720,9 @@ public function updatePmProductDescription(Request $request){
     $pm_product_description->quantity = $quantitys;
     $pm_product_description->approximate_word = $approximate_words;
     $pm_product_description->milestone_id= $request->milestone_id;
+    if($request->submitted_by){
+        $pm_product_description->submitted_by= $request->submitted_by;
+    }
     $pm_product_description->save();
 
 
@@ -4830,6 +4839,9 @@ public function updatePmProductCategory(Request $request){
     $pm_product_category->quantity = $quantitys;
     $pm_product_category->approximate_word = $approximate_words;
     $pm_product_category->milestone_id= $request->milestone_id;
+    if($request->submitted_by){
+        $pm_product_category->submitted_by= $request->submitted_by;
+    }
     $pm_product_category->save();
 
     // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER
@@ -4944,6 +4956,9 @@ public function updatePmBasicSEO(Request $request){
     $pm_basic_seo->robots_txt_setup = $request->robots_txt_setup;
     $pm_basic_seo->google_business_setup = $request->google_business_setup;
     $pm_basic_seo->milestone_id= $request->milestone_id;
+    if($request->submitted_by){
+        $pm_basic_seo->submitted_by= $request->submitted_by;
+    }
     $pm_basic_seo->save();
 
     // AUTO TASK ASSIGN FOR SALES PROJECT MANAGER

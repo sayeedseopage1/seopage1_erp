@@ -1375,6 +1375,52 @@ class HomeController extends Controller
         }
         return response()->json(['status'=>200]);
     }
+     //   PROJECT MANAGER MILESTONE STORE LINK FUNCTION
+     public function storePmLink(Request $request){
+        // dd($request->all());
+        if ($request->service_type=='web-content'){
+            $web_content = new WebContent();
+            $web_content->deal_id = $request->deal_id;
+            $web_content->random_id = $request->random_id;
+            $web_content->client_link = $request->value;
+            $web_content->submitted_by = $request->submitted_by;
+            $web_content->service_type = $request->service_type;
+            $web_content->save();
+        }
+        if ($request->service_type=='blogs-articles'){
+            $blog_article = new BlogArticle();
+            $blog_article->deal_id = $request->deal_id;
+            $blog_article->random_id = $request->random_id;
+            $blog_article->client_link = $request->value;
+            $blog_article->service_type = $request->service_type;
+            $blog_article->save();
+        }
+        if ($request->service_type=='product-description'){
+            $product_description = new ProductDescription();
+            $product_description->deal_id = $request->deal_id;
+            $product_description->random_id = $request->random_id;
+            $product_description->client_link = $request->value;
+            $product_description->service_type = $request->service_type;
+            $product_description->save();
+        }
+        if ($request->service_type=='product-category'){
+            $product_category = new ProductCategoryCollection();
+            $product_category->deal_id = $request->deal_id;
+            $product_category->random_id = $request->random_id;
+            $product_category->client_link = $request->value;
+            $product_category->service_type = $request->service_type;
+            $product_category->save();
+        }
+        if ($request->service_type=='basic-seo'){
+            $basic_seo = new BasicSeo();
+            $basic_seo->deal_id = $request->deal_id;
+            $basic_seo->random_id = $request->random_id;
+            $basic_seo->client_link = $request->value;
+            $basic_seo->service_type = $request->service_type;
+            $basic_seo->save();
+        }
+        return response()->json(['status'=>200]);
+    }
     // ==================== VIEW WEB CONTENT START ==================
     public function webContent($id, $random_id){
         return view('service-type.web_content',compact('id','random_id'));
@@ -1422,21 +1468,21 @@ class HomeController extends Controller
         $web_content->status = $data['status'];
         $web_content->save();
 
-        // $deal = Deal::where('id',$web_content->deal_id)->first();
 
-        // $admin_users = User::where('role_id',1)->get();
-        // $sales_users = User::where('role_id',7)->get();
-        // $team_lead_users = User::where('role_id',8)->get();
-        // $pm_user = User::where('id',$deal->id)->get();
-
-
-
-
-
-        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-        foreach($users as $user){
-
-            Notification::send($user, new ClientFormSubmitNotification($web_content));
+        if($web_content->submitted_by == 4){
+            $milestone = ProjectMilestone::where('id',$web_content->milestone_id)->first();
+            $pm = User::where('id',$milestone->added_by)->first();
+            $users = User::where('role_id',1)->orWhere('id',$pm->id)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientFormSubmitNotification($web_content));
+                }
+        }else{
+            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientFormSubmitNotification($web_content));
+                }
         }
 
         return response()->json(['status'=>200]);
@@ -1471,10 +1517,20 @@ class HomeController extends Controller
         $blog_article->keyword_link = $keywordLinks;
         $blog_article->save();
 
-        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-        foreach($users as $user){
-
-            Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+        if($blog_article->submitted_by == 4){
+            $milestone = ProjectMilestone::where('id',$blog_article->milestone_id)->first();
+            $pm = User::where('id',$milestone->added_by)->first();
+            $users = User::where('role_id',1)->orWhere('id',$pm->id)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+                }
+        }else{
+            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientBlogArticleSubmitNotification($blog_article));
+                }
         }
 
         return response()->json(['status'=>200]);
@@ -1506,10 +1562,20 @@ class HomeController extends Controller
         $product_description->status = $data['status'];
         $product_description->save();
 
-        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-        foreach($users as $user){
-
-            Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
+        if($product_description->submitted_by == 4){
+            $milestone = ProjectMilestone::where('id',$product_description->milestone_id)->first();
+            $pm = User::where('id',$milestone->added_by)->first();
+            $users = User::where('role_id',1)->orWhere('id',$pm->id)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                     Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
+                }
+        }else{
+            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                     Notification::send($user, new ClientProductDescriptionSubmitNotification($product_description));
+                }
         }
 
         return response()->json(['status'=>200]);
@@ -1542,10 +1608,20 @@ class HomeController extends Controller
         $product_category_collection->status = $data['status'];
         $product_category_collection->save();
 
-        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-        foreach($users as $user){
-
-            Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
+        if($product_category_collection->submitted_by == 4){
+            $milestone = ProjectMilestone::where('id',$product_category_collection->milestone_id)->first();
+            $pm = User::where('id',$milestone->added_by)->first();
+            $users = User::where('role_id',1)->orWhere('id',$pm->id)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
+                }
+        }else{
+            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientProductCategoryCollectionSubmitNotification($product_category_collection));
+                }
         }
         return response()->json(['status'=>200]);
     }
@@ -1580,10 +1656,20 @@ class HomeController extends Controller
         $basic_seo->status = $request->status;
         $basic_seo->save();
 
-        $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
-        foreach($users as $user){
-
-            Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
+        if($basic_seo->submitted_by == 4){
+            $milestone = ProjectMilestone::where('id',$basic_seo->milestone_id)->first();
+            $pm = User::where('id',$milestone->added_by)->first();
+            $users = User::where('role_id',1)->orWhere('id',$pm->id)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
+                }
+        }else{
+            $users = User::where('role_id',1)->orWhere('role_id',7)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+                {
+                    Notification::send($user, new ClientBasicSeoSubmitNotification($basic_seo));
+                }
         }
 
         return response()->json(['status'=>200]);

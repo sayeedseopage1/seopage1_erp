@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('deal_id');
             $table->string('random_id');
             $table->integer('milestone_id');
+            $table->integer('submitted_by')->nullable();
             $table->string('client_link')->nullable();
             $table->string('service_type')->nullable();
             $table->string('owner_name')->nullable();

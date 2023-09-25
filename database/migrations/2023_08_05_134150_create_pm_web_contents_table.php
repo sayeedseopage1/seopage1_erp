@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('sales_web_content_id');
             $table->integer('deal_id');
             $table->integer('milestone_id');
+            $table->integer('submitted_by')->nullable();
             $table->string('website_link')->nullable();
             $table->string('website_niche')->nullable();
             $table->string('website_name')->nullable();

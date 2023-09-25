@@ -297,11 +297,7 @@ class TaskController extends AccountBaseController
             }else {
                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
             }
-          
-
-            
-            
-        
+ 
            foreach ($tasks as $task) {
             $task->files= TaskFile::where('task_id',$task->id)->get();
             $subtasks_hours_logged = Subtask::select('tasks.*')
@@ -337,14 +333,23 @@ class TaskController extends AccountBaseController
                         ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
                         
                         ->count('report_issues.id');
+                        $tasks_reports_count = Task::select('tasks.*','developer_report_issues.id as report_issues')
+            
+                        ->where('tasks.id', $task->id) 
+
+                            ->leftJoin('developer_report_issues as report_issues', 'report_issues.task_id', 'tasks.id')
+                            
+                            ->count('report_issues.id');
+                           
             
             $task->subtasks_hours_logged = $subtasks_hours_logged+ $task_hours_logged;
             $task->subtasks_completed_count = $subtasks_completed_count;
             $task->subtasks_timer_active = $subtasks_timer_active;
             
-            $task->subtasks_reports_count = $subtasks_reports_count;
+            $task->subtasks_reports_count = $subtasks_reports_count+$tasks_reports_count;
             
         }
+    //    dd($tasks);
         
                 return response()->json([
                     'status' => 200,
@@ -610,7 +615,7 @@ class TaskController extends AccountBaseController
     }
     public function get_parent_tasks_report_issues($id)
     {
-        $tasks = Subtask::select(
+        $sub_tasks = Subtask::select(
             'developer_report_issues.*',
             'developer_report_issues.comment','person.id as responsible_person_id','person.name as responsible_person_name',
             'person.image as responsible_person_avatar','report_issue_added_by.id as report_issue_added_by','report_issue_added_by.name as report_issue_added_by',
@@ -618,7 +623,8 @@ class TaskController extends AccountBaseController
   
         )
             ->where('sub_tasks.task_id', $id)
-            ->join('tasks','tasks.subtask_id','sub_tasks.id')
+           
+            ->leftjoin('tasks','tasks.subtask_id','sub_tasks.id')
             ->leftJoin('developer_report_issues','developer_report_issues.task_id','tasks.id')
           
            
@@ -630,10 +636,33 @@ class TaskController extends AccountBaseController
           //  ->groupBy('tasks.id')
             ->orderBy('id', 'desc')
             ->get();
+            $tasks = Task::select(
+                'developer_report_issues.*',
+                'developer_report_issues.comment','person.id as responsible_person_id','person.name as responsible_person_name',
+                'person.image as responsible_person_avatar','report_issue_added_by.id as report_issue_added_by','report_issue_added_by.name as report_issue_added_by',
+                'report_issue_added_by.image as report_issue_added_by_avatar',  'developer_report_issues.previousNotedIssue',  'developer_report_issues.reason',
+      
+            )
+                ->where('tasks.id', $id)
+                ->where('subtask_id',null)
+               
+                
+                ->leftJoin('developer_report_issues','developer_report_issues.task_id','tasks.id')
+              
+               
+                ->join('users as person', 'person.id', 'developer_report_issues.person')
+                ->join('users as report_issue_added_by', 'report_issue_added_by.id', 'developer_report_issues.added_by')
+              
+               
+                
+              //  ->groupBy('tasks.id')
+                ->orderBy('id', 'desc')
+                ->get();
+                $mergedArray = $sub_tasks->merge($tasks);
        
             return response()->json([
                 'status' => 200,
-                'tasks'=> $tasks,
+                'tasks'=> $mergedArray,
                
             ]);
 
@@ -3135,12 +3164,10 @@ class TaskController extends AccountBaseController
        $users = User::where('role_id',1)->get();
        if($pm_task_guideline_authorization != null)
        {
-
-       
-       foreach($users as $user){
-           Notification::send($user, new PmTaskGuidelineNotification($pm_task_guideline_authorization));
-       }
-    }
+            foreach($users as $user){
+                Notification::send($user, new PmTaskGuidelineNotification($pm_task_guideline_authorization));
+            }
+        }
 
        return response()->json(['status' => 200]);
 
@@ -4456,9 +4483,10 @@ class TaskController extends AccountBaseController
         }
     }
 
+    /************* TASK GUIDELINE AUTHORIZATION *************** */
     public function taskGuidelineAuthorization($id){
         $pm_task_guideline = PmTaskGuideline::where('project_id',$id)->first();
-
+        $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline->project_id)->where('status',2)->get();
         $already_submitted = $pm_task_guideline ? true : false;
 
         if($already_submitted && $pm_task_guideline->status ==1){
@@ -4466,10 +4494,15 @@ class TaskController extends AccountBaseController
         }else $is_allow = false;
 
         return response()->json([
+            "theme_details" => $pm_task_guideline->theme_details,
+            "pm_task_guideline_authorization" => $pm_task_guideline_authorization,
+            "design_details" => $pm_task_guideline->design_details,
+            "color_schema" => $pm_task_guideline->color_schema,
+            "plugin_research" => $pm_task_guideline->plugin_research,
             "status_code" => 200,
             "is_allow" => $is_allow,
             "is_submitted_already" => $already_submitted,
-            "message" => 'Please wait until task guideline is authorized'
+            "message" => $already_submitted ? 'Please wait until tasks guideline is authorized' : ''
         ], 200);
     }
     

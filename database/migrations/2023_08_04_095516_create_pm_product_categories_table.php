@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('sales_product_category_id');
             $table->integer('deal_id');
             $table->integer('milestone_id');
+            $table->integer('submitted_by')->nullable();
             $table->string('word_appropriate')->nullable();
             $table->string('word_client_initially')->nullable();
             $table->string('website_link')->nullable();

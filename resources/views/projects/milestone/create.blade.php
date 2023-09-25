@@ -153,6 +153,7 @@
             '_token': "{{ csrf_token() }}",
             'value': buttonValue,
             'deal_id': {{$project->deal_id}},
+            'submitted_by': {{Auth::user()->role_id}},
             'random_id': linkId,
             'service_type': document.getElementById("service_type").value,
         }
@@ -164,7 +165,7 @@
         });
         $.ajax({
             type: "POST",
-            url: "{{route('store-link')}}",
+            url: "{{route('store-pm-link')}}",
             data: data,
             dataType: "json",
             success: function (response) {
@@ -270,7 +271,7 @@ $(document).ready(function() {
     document.getElementById("copyButton").addEventListener("click", function() {
         var generatedLink = document.getElementById("generatedLinkContainer").value;
 
-        navigator.clipboard.writeText(generatedLink)
+        navigator?.clipboard.writeText(generatedLink)
             .then(function() {
                 alert("Copied: " + generatedLink);
                 document.getElementById("linkBtn").removeAttribute("disabled");

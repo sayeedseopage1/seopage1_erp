@@ -116,6 +116,7 @@
             '_token': "{{ csrf_token() }}",
             'value': buttonValue,
             'deal_id': {{$milestone->project->deal_id}},
+            'submitted_by': {{Auth::user()->role_id}},
             'service_type': document.getElementById("service_type").value,
         }
         // console.log(data);
@@ -222,7 +223,7 @@ $(document).ready(function() {
     document.getElementById("copyButton").addEventListener("click", function() {
         var generatedLink = document.getElementById("generatedLinkContainer").value;
 
-        navigator.clipboard.writeText(generatedLink)
+        navigator?.clipboard.writeText(generatedLink)
             .then(function() {
                 alert("Copied: " + generatedLink);
                 document.getElementById("linkBtn").removeAttribute("disabled");

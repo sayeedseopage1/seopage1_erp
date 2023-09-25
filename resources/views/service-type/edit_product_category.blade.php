@@ -5,6 +5,7 @@ $sales_product_category = \App\Models\SalesProductCategory::where('product_cat_c
 $deal = \App\Models\Deal::where('id',$product_category->deal_id)->first();
 $project = \App\Models\Project::where('deal_id',$product_category->deal_id)->first();
 $pm = \App\Models\User::where('id',$project->pm_id)->first();
+$productCategory = \App\Models\ProductCategoryCollection::where('id',$product_category->id)->first();
 @endphp
 <div class="container-fluid">
     @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 1)
@@ -486,369 +487,735 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                                 <input type="hidden" name="sales_product_category_id" id="sales_product_category_id" value="{{ $sales_product_category->id }}">
                                 <input type="hidden" name="deal_id" id="deal_id" value="{{ $sales_product_category->deal_id }}">
                                 <input type="hidden" name="milestone_id" id="milestone_id" value="{{ $sales_product_category->milestone_id }}">
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <h6 class="mt-2">Website Link & Niche:</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="url" name="website_link_2" id="website_link_2" value="{{ $sales_product_category->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" name="website_niche_2" id="website_niche_2" value="{{ $sales_product_category->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                @if ($productCategory !=null && $productCategory->submitted_by ==4)
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Website Link & Niche:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="url" name="website_link_2" id="website_link_2" value="{{ $productCategory->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="website_niche_2" id="website_niche_2" value="{{ $productCategory->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- Website Link & Niche Ends Here -->
-                                <!-- Website Name/Business Name -->
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <h6>Website Name/Business Name:</h6>
+                                    <!-- Website Link & Niche Ends Here -->
+                                    <!-- Website Name/Business Name -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6>Website Name/Business Name:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="website_name" id="website_name_2" value="{{ $productCategory->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                                        </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <input type="text" name="website_name" id="website_name_2" value="{{ $sales_product_category->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <textarea name="business_information" id="business_information_2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $sales_product_category->business_information !!}</textarea>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <textarea name="business_information" id="business_information_2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $productCategory->business_information !!}</textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="">Want to share file?</label>
-                                                    <div class="mt-2 d-flex">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="share_file_info" value="1" id="share_file_yesBtn" {{ ($sales_product_category->share_file_info=="1")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="share_file_yesBtn">
-                                                                Yes
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check" style="margin-left: 10px;">
-                                                            <input class="form-check-input" type="radio" name="share_file_info" value="0" id="share_file_noBtn" {{ ($sales_product_category->share_file_info=="0")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="share_file_noBtn">
-                                                                No
-                                                            </label>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Want to share file?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="1" id="share_file_yesBtn" {{ ($productCategory->share_file_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="0" id="share_file_noBtn" {{ ($productCategory->share_file_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @if ($sales_product_category!=null && $sales_product_category->share_file_info==1)
+                                            @if ($productCategory!=null && $productCategory->share_file_info==1)
 
-                                            @php
-                                                if (is_string($sales_product_category->folder_link) && is_array(json_decode($sales_product_category->folder_link, true))) {
-                                                    $array = json_decode($sales_product_category->folder_link, true);
-                                                    $folder_links = implode(', ', $array);
-                                                }
-                                                $folder_links_array = explode(', ', $folder_links);
-                                            @endphp
-                                            @if ($folder_links_array)
-                                                @foreach($folder_links_array as $folder_link)
-                                                <div class="row mt-3" id="folderLinkForm" >
-                                                    <div class="col-md-10 share-file-link" id="share-file-link-list-1">
-                                                        <div class="row mb-3">
-                                                            <div class="col-md-12">
-                                                                <input type="text" name="folder_link_2[]" id="folder_link_2" value="{{ $folder_link }}" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                @php
+                                                    if (is_string($productCategory->folder_link) && is_array(json_decode($productCategory->folder_link, true))) {
+                                                        $array = json_decode($productCategory->folder_link, true);
+                                                        $folder_links = implode(', ', $array);
+                                                    }
+                                                    $folder_links_array = explode(', ', $folder_links);
+                                                @endphp
+                                                @if ($folder_links_array)
+                                                    @foreach($folder_links_array as $folder_link)
+                                                    <div class="row mt-3" id="folderLinkForm" >
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" value="{{ $folder_link }}" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2 append-buttons">
-                                                        <div class="clearfix">
-                                                            <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                            <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    @endforeach
+                                                @else
+                                                    <div class="row mt-3" id="folderLinkForm" style="display: none;">
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                @endforeach
-                                            @else
-                                                <div class="row mt-3" id="folderLinkForm" style="display: none;">
-                                                    <div class="col-md-10 share-file-link" id="share-file-link-list-1">
-                                                        <div class="row mb-3">
-                                                            <div class="col-md-12">
-                                                                <input type="text" name="folder_link_2[]" id="folder_link_2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-2 append-buttons">
-                                                        <div class="clearfix">
-                                                            <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                            <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                @endif
                                             @endif
-                                        @endif
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!--Reference Blogs-->
+                                    <!--Reference Blogs-->
 
-                                @php
-                                    $category_urls_array = [];
+                                    @php
+                                        $category_urls_array = [];
 
-                                    if ($sales_product_category->category_url !== null && is_string($sales_product_category->category_url)) {
-                                        $array = json_decode($sales_product_category->category_url, true);
+                                        if ($productCategory->category_url !== null && is_string($productCategory->category_url)) {
+                                            $array = json_decode($productCategory->category_url, true);
 
-                                        if (is_array($array)) {
-                                            $category_urls = implode(', ', $array);
-                                            $category_urls_array = explode(', ', $category_urls);
+                                            if (is_array($array)) {
+                                                $category_urls = implode(', ', $array);
+                                                $category_urls_array = explode(', ', $category_urls);
+                                            }
                                         }
-                                    }
-                                @endphp
-                                @if ($category_urls_array)
-                                    @foreach($category_urls_array as $category_url)
-                                    <div class="row mt-3">
-                                        <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <h6>Reference product category/collection page description for the tone and style:</h6>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group" style="margin-left: 90px;">
-                                                        <input type="url" id="category_url_2" class="form-control placeholderText height-35 f-14" value="{{ $category_url }}" placeholder="Enter reference product category/collection page URL" name="category_url_2[]"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                @else
-                                    <div class="row mt-3">
-                                        <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <h6 class="mt-2">Reference product category/collection page description for the tone and style:</h6>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group" style="margin-left: 90px;">
-                                                        <input type="url" id="category_url_2" class="form-control placeholderText height-35 f-14" placeholder="Enter reference product category/collection page URL" name="category_url_2[]"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                                <!--Product Description-->
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <h6 class="mt-2">How many product category/collection pages do you need written</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" name="product_no_2" id="product_no_2" value="{{ $sales_product_category->product_no }}" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
-                                    </div>
-                                </div>
-                                <!--Product list-->
-                                @php
-                                    $category_lists_array = [];
-
-                                    if ($sales_product_category->category_list !== null && is_string($sales_product_category->category_list)) {
-                                        $array = json_decode($sales_product_category->category_list, true);
-
-                                        if (is_array($array)) {
-                                            $category_lists = implode(', ', $array);
-                                            $category_lists_array = explode(', ', $category_lists);
-                                        }
-                                    }
-                                @endphp
-                                @if ($category_lists_array)
-                                    @foreach($category_lists_array as $category_list)
-                                    <div class="row mt-3">
-                                        <div class="col-md-10 dynamic-product-list" id="dynamic-product-list-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <h6>List of product category/collection pages that need texts:</h6>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group" style="margin-left: 90px;">
-                                                        <input type="url" id="category_list_2" class="form-control placeholderText height-35 f-14" value="{{ $category_list }}" placeholder="Enter reference blog url" name="category_list_2[]"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-product-list-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-product-list-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                @else
-                                    <div class="row mt-3">
-                                        <div class="col-md-10 dynamic-product-list" id="dynamic-product-list-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <h6 class="mt-2">List of product category/collection pages that need texts:</h6>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group" style="margin-left: 90px;">
-                                                        <input type="url" id="category_list_2" class="form-control placeholderText height-35 f-14"  placeholder="Enter reference blog url" name="category_list_2[]"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-product-list-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-product-list-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <!--Keywords-->
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <h6>Expected word count per product category/collection page</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" name="word_count_2" id="word_count_2" value="{{ $sales_product_category->word_count }}" class="form-control placeholderText height-35 f-14" placeholder="Input word count here">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group mt-2">
-                                            <h6>How many words do we need to do appropriates?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group mt-2">
-                                            <h6>How many words did the client pay for initially?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group mt-2">
-                                            <h6>Did he confirm he will pay for any additional words if the need be?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="d-flex mt-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
-                                                <label class="form-check-label mt-1 ml-2" for="yes_btn1">
-                                                Yes
-                                                </label>
-                                            </div>
-                                            <div class="form-check ml-3">
-                                                <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
-                                                <label class="form-check-label mt-1 ml-2" for="no_btn1">
-                                                No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <h6>Do we have any layout we need to follow for the content?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="d-flex mt-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
-                                                <label class="form-check-label mt-1 ml-2" for="yes_btn2">
-                                                Yes
-                                                </label>
-                                            </div>
-                                            <div class="form-check ml-3">
-                                                <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
-                                                <label class="form-check-label mt-1 ml-2" for="no_btn2">
-                                                No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3" style="display: none" id="website-link-form">
-                                    <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
-                                        <div class="row mb-3">
-                                            <div class="col-md-4"></div>
-                                            <div class="col-md-8">
-                                                <div class="form-group" style="margin-left: 10%;">
-                                                    <label class="form-check-label mb-1">Website link or Theme link:</label>
-                                                    <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 append-buttons">
-                                        <div class="clearfix mt-4">
-                                            <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <h6 style="margin-top: 40px;">Pages List :</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                    @endphp
+                                    @if ($category_urls_array)
+                                        @foreach($category_urls_array as $category_url)
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
                                                 <div class="row mb-3">
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="">Page name</label>
-                                                            <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                        <h6>Reference product category/collection page description for the tone and style:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_url_2" class="form-control placeholderText height-35 f-14" value="{{ $category_url }}" placeholder="Enter reference product category/collection page URL" name="category_url_2[]"/>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label for="">Quantity</label>
-                                                        <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label for="">Approximate word</label>
-                                                        <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                            <div class="col-md-2 append-buttons">
                                                 <div class="clearfix">
-                                                    <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                    <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6 class="mt-2">Reference product category/collection page description for the tone and style:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_url_2" class="form-control placeholderText height-35 f-14" placeholder="Enter reference product category/collection page URL" name="category_url_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <!--Product Description-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">How many product category/collection pages do you need written</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="product_no_2" id="product_no_2" value="{{ $productCategory->product_no }}" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
+                                        </div>
+                                    </div>
+                                    <!--Product list-->
+                                    @php
+                                        $category_lists_array = [];
+
+                                        if ($productCategory->category_list !== null && is_string($productCategory->category_list)) {
+                                            $array = json_decode($productCategory->category_list, true);
+
+                                            if (is_array($array)) {
+                                                $category_lists = implode(', ', $array);
+                                                $category_lists_array = explode(', ', $category_lists);
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($category_lists_array)
+                                        @foreach($category_lists_array as $category_list)
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-product-list" id="dynamic-product-list-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6>List of product category/collection pages that need texts:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_list_2" class="form-control placeholderText height-35 f-14" value="{{ $category_list }}" placeholder="Enter reference blog url" name="category_list_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-product-list-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-product-list-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-product-list" id="dynamic-product-list-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6 class="mt-2">List of product category/collection pages that need texts:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_list_2" class="form-control placeholderText height-35 f-14"  placeholder="Enter reference blog url" name="category_list_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-product-list-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-product-list-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!--Keywords-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6>Expected word count per product category/collection page</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="word_count_2" id="word_count_2" value="{{ $productCategory->word_count }}" class="form-control placeholderText height-35 f-14" placeholder="Input word count here">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words do we need to do appropriates?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words did the client pay for initially?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>Did he confirm he will pay for any additional words if the need be?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn1">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn1">
+                                                    No
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <h6>Do we have any layout we need to follow for the content?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn2">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn2">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" style="display: none" id="website-link-form">
+                                        <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
+                                            <div class="row mb-3">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group" style="margin-left: 10%;">
+                                                        <label class="form-check-label mb-1">Website link or Theme link:</label>
+                                                        <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix mt-4">
+                                                <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Pages List :</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">Page name</label>
+                                                                <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quantity</label>
+                                                            <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Approximate word</label>
+                                                            <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Website Link & Niche:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="url" name="website_link_2" id="website_link_2" value="{{ $sales_product_category->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="website_niche_2" id="website_niche_2" value="{{ $sales_product_category->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Website Link & Niche Ends Here -->
+                                    <!-- Website Name/Business Name -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6>Website Name/Business Name:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="website_name" id="website_name_2" value="{{ $sales_product_category->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <textarea name="business_information" id="business_information_2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $sales_product_category->business_information !!}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Want to share file?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="1" id="share_file_yesBtn" {{ ($sales_product_category->share_file_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="0" id="share_file_noBtn" {{ ($sales_product_category->share_file_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($sales_product_category!=null && $sales_product_category->share_file_info==1)
+
+                                                @php
+                                                    if (is_string($sales_product_category->folder_link) && is_array(json_decode($sales_product_category->folder_link, true))) {
+                                                        $array = json_decode($sales_product_category->folder_link, true);
+                                                        $folder_links = implode(', ', $array);
+                                                    }
+                                                    $folder_links_array = explode(', ', $folder_links);
+                                                @endphp
+                                                @if ($folder_links_array)
+                                                    @foreach($folder_links_array as $folder_link)
+                                                    <div class="row mt-3" id="folderLinkForm" >
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" value="{{ $folder_link }}" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="row mt-3" id="folderLinkForm" style="display: none;">
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!--Reference Blogs-->
+
+                                    @php
+                                        $category_urls_array = [];
+
+                                        if ($sales_product_category->category_url !== null && is_string($sales_product_category->category_url)) {
+                                            $array = json_decode($sales_product_category->category_url, true);
+
+                                            if (is_array($array)) {
+                                                $category_urls = implode(', ', $array);
+                                                $category_urls_array = explode(', ', $category_urls);
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($category_urls_array)
+                                        @foreach($category_urls_array as $category_url)
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6>Reference product category/collection page description for the tone and style:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_url_2" class="form-control placeholderText height-35 f-14" value="{{ $category_url }}" placeholder="Enter reference product category/collection page URL" name="category_url_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6 class="mt-2">Reference product category/collection page description for the tone and style:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_url_2" class="form-control placeholderText height-35 f-14" placeholder="Enter reference product category/collection page URL" name="category_url_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <!--Product Description-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">How many product category/collection pages do you need written</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="product_no_2" id="product_no_2" value="{{ $sales_product_category->product_no }}" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
+                                        </div>
+                                    </div>
+                                    <!--Product list-->
+                                    @php
+                                        $category_lists_array = [];
+
+                                        if ($sales_product_category->category_list !== null && is_string($sales_product_category->category_list)) {
+                                            $array = json_decode($sales_product_category->category_list, true);
+
+                                            if (is_array($array)) {
+                                                $category_lists = implode(', ', $array);
+                                                $category_lists_array = explode(', ', $category_lists);
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($category_lists_array)
+                                        @foreach($category_lists_array as $category_list)
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-product-list" id="dynamic-product-list-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6>List of product category/collection pages that need texts:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_list_2" class="form-control placeholderText height-35 f-14" value="{{ $category_list }}" placeholder="Enter reference blog url" name="category_list_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-product-list-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-product-list-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-product-list" id="dynamic-product-list-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6 class="mt-2">List of product category/collection pages that need texts:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="category_list_2" class="form-control placeholderText height-35 f-14"  placeholder="Enter reference blog url" name="category_list_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-product-list-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-product-list-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!--Keywords-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6>Expected word count per product category/collection page</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="word_count_2" id="word_count_2" value="{{ $sales_product_category->word_count }}" class="form-control placeholderText height-35 f-14" placeholder="Input word count here">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words do we need to do appropriates?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words did the client pay for initially?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>Did he confirm he will pay for any additional words if the need be?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn1">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn1">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <h6>Do we have any layout we need to follow for the content?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn2">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn2">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" style="display: none" id="website-link-form">
+                                        <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
+                                            <div class="row mb-3">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group" style="margin-left: 10%;">
+                                                        <label class="form-check-label mb-1">Website link or Theme link:</label>
+                                                        <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix mt-4">
+                                                <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Pages List :</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">Page name</label>
+                                                                <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quantity</label>
+                                                            <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Approximate word</label>
+                                                            <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-primary mt-5 " id="pm_product_category_submit">Submit</button>
                                 </div>
@@ -935,6 +1302,9 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                     'deal_id': {{$product_category->deal_id}},
                     'product_category_id': {{$product_category->id}},
                     'milestone_id': {{$product_category->milestone_id}},
+                    @if ($productCategory !=null && $productCategory->submitted_by ==4)
+                    'submitted_by': {{$productCategory->submitted_by}},
+                    @endif
                 }
                 $.ajaxSetup({
                 headers: {

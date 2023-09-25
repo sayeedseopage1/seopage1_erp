@@ -5,6 +5,7 @@ $sales_blog_article = \App\Models\SalesBlogArticle::where('blog_article_id',$blo
 $deal = \App\Models\Deal::where('id',$blog_article->deal_id)->first();
 $project = \App\Models\Project::where('deal_id',$blog_article->deal_id)->first();
 $pm = \App\Models\User::where('id',$project->pm_id)->first();
+$blogArticle = \App\Models\BlogArticle::where('id',$blog_article->id)->first();
 @endphp
 <div class="container-fluid">
     @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 1)
@@ -551,219 +552,237 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                                 <input type="hidden" name="sales_blog_article_id" id="sales_blog_article_id" value="{{ $sales_blog_article->id }}">
                                 <input type="hidden" name="deal_id" id="deal_id" value="{{ $sales_blog_article->deal_id }}">
                                 <input type="hidden" name="milestone_id" id="milestone_id" value="{{ $sales_blog_article->milestone_id }}">
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <h6 class="mt-2">Website Link & Niche:</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="url" name="website_link_2" id="website_link_2" value="{{ $sales_blog_article->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="text" name="website_niche_2" id="website_niche_2" value="{{ $sales_blog_article->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                @if ($blogArticle !=null && $blogArticle->submitted_by ==4)
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Website Link & Niche:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="url" name="website_link_2" id="website_link_2" value="{{ $blogArticle->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="website_niche_2" id="website_niche_2" value="{{ $blogArticle->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <!-- Website Link & Niche Ends Here -->
-                                <!-- Website Name/Business Name -->
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <h6>Website Name/Business Name:</h6>
+                                    <!-- Website Link & Niche Ends Here -->
+                                    <!-- Website Name/Business Name -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6>Website Name/Business Name:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="website_name" id="website_name_2" value="{{ $blogArticle->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                                        </div>
                                     </div>
-                                    <div class="col-md-8">
-                                        <input type="text" name="website_name" id="website_name_2" value="{{ $sales_blog_article->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <textarea name="business_information" id="business_information_2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $sales_blog_article->business_information !!}</textarea>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <textarea name="business_information" id="business_information_2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $blogArticle->business_information !!}</textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="">Want to share file?</label>
-                                                    <div class="mt-2 d-flex">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="share_file_info" value="1" id="share_file_yesBtn" {{ ($sales_blog_article->share_file_info=="1")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="share_file_yesBtn">
-                                                                Yes
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check" style="margin-left: 10px;">
-                                                            <input class="form-check-input" type="radio" name="share_file_info" value="0" id="share_file_noBtn" {{ ($sales_blog_article->share_file_info=="0")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="share_file_noBtn">
-                                                                No
-                                                            </label>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Want to share file?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="1" id="share_file_yesBtn" {{ ($blogArticle->share_file_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="0" id="share_file_noBtn" {{ ($blogArticle->share_file_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @if ($sales_blog_article!=null && $sales_blog_article->share_file_info==1)
+                                            @if ($blogArticle!=null && $blogArticle->share_file_info==1)
 
-                                            @php
-                                                if (is_string($sales_blog_article->folder_link) && is_array(json_decode($sales_blog_article->folder_link, true))) {
-                                                    $array = json_decode($sales_blog_article->folder_link, true);
-                                                    $folder_links = implode(', ', $array);
+                                                @php
+                                                    if (is_string($blogArticle->folder_link) && is_array(json_decode($blogArticle->folder_link, true))) {
+                                                        $array = json_decode($blogArticle->folder_link, true);
+                                                        $folder_links = implode(', ', $array);
+                                                    }
+                                                    $folder_links_array = explode(', ', $folder_links);
+                                                @endphp
+                                                @if ($folder_links_array)
+                                                    @foreach($folder_links_array as $folder_link)
+                                                    <div class="row mt-3" id="folderLinkFormShow" >
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" value="{{ $folder_link }}" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="row mt-3" id="folderLinkFormShow" style="display: none;">
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!--Reference Blogs-->
+
+                                    @php
+                                        $blog_urls_array = [];
+
+                                        if ($blogArticle->blog_url !== null && is_string($blogArticle->blog_url)) {
+                                            $array = json_decode($blogArticle->blog_url, true);
+
+                                            if (is_array($array)) {
+                                                $blog_urls = implode(', ', $array);
+                                                $blog_urls_array = explode(', ', $blog_urls);
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($blog_urls_array)
+                                        @foreach($blog_urls_array as $blog_url)
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6>Reference Blogs:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="blog_url_2" class="form-control placeholderText height-35 f-14" value="{{ $blog_url }}" placeholder="Enter reference blog url" name="blog_url_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @endforeach
+                                    @else
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
+                                                <div class="row mb-3">
+                                                    <div class="col-md-4">
+                                                        <h6>Reference Blogs:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="blog_url_2" class="form-control placeholderText height-35 f-14"  placeholder="Enter reference blog url" name="blog_url_2[]"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 append-buttons">
+                                                <div class="clearfix">
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <!--Product Description-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">How many blogs/articles do you need written?</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="product_no" id="product_no_2" value="{{ $blogArticle->product_no }}" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
+                                        </div>
+                                    </div>
+                                    <!--Topics-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Topics:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="topic_info_2" value="1" id="topic_info_btn1" {{ ($blogArticle->topic_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="topic_info_btn1">
+                                                                    Research and collect topics for me
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="topic_info_2" value="0" id="topic_info_btn2" {{ ($blogArticle->topic_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="topic_info_btn2">
+                                                                    I have the topics
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($blogArticle !=null && $blogArticle->topic_info==0)
+                                                @php
+                                                if (is_string($blogArticle->topic_link) && is_array(json_decode($blogArticle->topic_link, true))) {
+                                                    $array = json_decode($blogArticle->topic_link, true);
+                                                    $topic_links = implode(', ', $array);
                                                 }
-                                                $folder_links_array = explode(', ', $folder_links);
-                                            @endphp
-                                            @if ($folder_links_array)
-                                                @foreach($folder_links_array as $folder_link)
-                                                <div class="row mt-3" id="folderLinkFormShow" >
-                                                    <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                $topic_links_array = explode(', ', $topic_links);
+                                                @endphp
+
+                                                @foreach ($topic_links_array as $topic_link)
+                                                <div class="row mt-3" id="topicinfoForm">
+                                                    <div class="col-md-10 topic-info-link" id="topic-info-link-list-1">
                                                         <div class="row mb-3">
                                                             <div class="col-md-12">
-                                                                <input type="text" name="folder_link_2[]" id="folder_link_2" value="{{ $folder_link }}" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                <input type="text" name="topic_link_2[]" id="topic_link_2" value="{{ $topic_link }}" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-2 append-buttons">
                                                         <div class="clearfix">
-                                                            <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                            <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            <button type="button" id="add-topic-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                            <button type="button" id="remove-topic-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 @endforeach
                                             @else
-                                                <div class="row mt-3" id="folderLinkFormShow" style="display: none;">
-                                                    <div class="col-md-10 share-file-link" id="share-file-link-list-1">
-                                                        <div class="row mb-3">
-                                                            <div class="col-md-12">
-                                                                <input type="text" name="folder_link_2[]" id="folder_link_2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-2 append-buttons">
-                                                        <div class="clearfix">
-                                                            <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                            <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endif
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <!--Reference Blogs-->
-
-                                @php
-                                    $blog_urls_array = [];
-
-                                    if ($sales_blog_article->blog_url !== null && is_string($sales_blog_article->blog_url)) {
-                                        $array = json_decode($sales_blog_article->blog_url, true);
-
-                                        if (is_array($array)) {
-                                            $blog_urls = implode(', ', $array);
-                                            $blog_urls_array = explode(', ', $blog_urls);
-                                        }
-                                    }
-                                @endphp
-                                @if ($blog_urls_array)
-                                    @foreach($blog_urls_array as $blog_url)
-                                    <div class="row mt-3">
-                                        <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <h6>Reference Blogs:</h6>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group" style="margin-left: 90px;">
-                                                        <input type="url" id="blog_url_2" class="form-control placeholderText height-35 f-14" value="{{ $blog_url }}" placeholder="Enter reference blog url" name="blog_url_2[]"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                @else
-                                    <div class="row mt-3">
-                                        <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <h6>Reference Blogs:</h6>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="form-group" style="margin-left: 90px;">
-                                                        <input type="url" id="blog_url_2" class="form-control placeholderText height-35 f-14"  placeholder="Enter reference blog url" name="blog_url_2[]"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
-                                <!--Product Description-->
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <h6 class="mt-2">How many blogs/articles do you need written?</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input type="text" name="product_no" id="product_no_2" value="{{ $sales_blog_article->product_no }}" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
-                                    </div>
-                                </div>
-                                <!--Topics-->
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <h6 class="mt-2">Topics:</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="topic_info_2" value="1" id="topic_info_btn1" {{ ($sales_blog_article->topic_info=="1")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="topic_info_btn1">
-                                                                Research and collect topics for me
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check" style="margin-left: 10px;">
-                                                            <input class="form-check-input" type="radio" name="topic_info_2" value="0" id="topic_info_btn2" {{ ($sales_blog_article->topic_info=="0")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="topic_info_btn2">
-                                                                I have the topics
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @if ($sales_blog_article !=null && $sales_blog_article->topic_info==0)
-                                            @php
-                                            if (is_string($sales_blog_article->topic_link) && is_array(json_decode($sales_blog_article->topic_link, true))) {
-                                                $array = json_decode($sales_blog_article->topic_link, true);
-                                                $topic_links = implode(', ', $array);
-                                            }
-                                            $topic_links_array = explode(', ', $topic_links);
-                                            @endphp
-
-                                            @foreach ($topic_links_array as $topic_link)
-                                            <div class="row mt-3" id="topicinfoForm">
+                                            <div class="row mt-3" id="topicinfoForm" style="display: none;">
                                                 <div class="col-md-10 topic-info-link" id="topic-info-link-list-1">
                                                     <div class="row mb-3">
                                                         <div class="col-md-12">
-                                                            <input type="text" name="topic_link_2[]" id="topic_link_2" value="{{ $topic_link }}" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
+                                                            <input type="text" name="topic_link_2[]" id="topic_link_2" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -774,68 +793,68 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                                                     </div>
                                                 </div>
                                             </div>
-                                            @endforeach
-                                        @else
-                                        <div class="row mt-3" id="topicinfoForm" style="display: none;">
-                                            <div class="col-md-10 topic-info-link" id="topic-info-link-list-1">
-                                                <div class="row mb-3">
-                                                    <div class="col-md-12">
-                                                        <input type="text" name="topic_link_2[]" id="topic_link_2" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 append-buttons">
-                                                <div class="clearfix">
-                                                    <button type="button" id="add-topic-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                    <button type="button" id="remove-topic-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                                </div>
-                                            </div>
+                                            @endif
                                         </div>
-                                        @endif
                                     </div>
-                                </div>
 
-                                <!--Keywords-->
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <h6 class="mt-2">Keywords:</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <div class="d-flex">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="keyword_info_2" value="1" id="keyword_info_btn1" {{ ($sales_blog_article->keyword_info=="1")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="keyword_info_btn1">
-                                                                Research and collect keywords for me
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check" style="margin-left: 10px;">
-                                                            <input class="form-check-input" type="radio" name="keyword_info_2" value="0" id="keyword_info_btn2" {{ ($sales_blog_article->keyword_info=="0")? "checked" : "" }}>
-                                                            <label class="form-check-label mt-1 ml-1" for="keyword_info_btn2">
-                                                                I have the keywords
-                                                            </label>
+                                    <!--Keywords-->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Keywords:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="keyword_info_2" value="1" id="keyword_info_btn1" {{ ($blogArticle->keyword_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="keyword_info_btn1">
+                                                                    Research and collect keywords for me
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="keyword_info_2" value="0" id="keyword_info_btn2" {{ ($blogArticle->keyword_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="keyword_info_btn2">
+                                                                    I have the keywords
+                                                                </label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @if ($sales_blog_article !=null && $sales_blog_article->keyword_info==0)
-                                            @php
-                                            if (is_string($sales_blog_article->keyword_link) && is_array(json_decode($sales_blog_article->keyword_link, true))) {
-                                                $array = json_decode($sales_blog_article->keyword_link, true);
-                                                $keyword_links = implode(', ', $array);
-                                            }
-                                            $keyword_links_array = explode(', ', $keyword_links);
-                                            @endphp
+                                            @if ($blogArticle !=null && $blogArticle->keyword_info==0)
+                                                @php
+                                                if (is_string($blogArticle->keyword_link) && is_array(json_decode($blogArticle->keyword_link, true))) {
+                                                    $array = json_decode($blogArticle->keyword_link, true);
+                                                    $keyword_links = implode(', ', $array);
+                                                }
+                                                $keyword_links_array = explode(', ', $keyword_links);
+                                                @endphp
 
-                                            @foreach ($keyword_links_array as $keyword_link)
-                                            <div class="row mt-3" id="keywordinfoForm">
+                                                @foreach ($keyword_links_array as $keyword_link)
+                                                <div class="row mt-3" id="keywordinfoForm">
+                                                    <div class="col-md-10 keyword-info-link" id="keyword-info-link-list-1">
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="keyword_link_2[]" id="keyword_link_2" value="{{ $keyword_link }}" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 append-buttons">
+                                                        <div class="clearfix">
+                                                            <button type="button" id="add-keyword-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                            <button type="button" id="remove-keyword-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="row mt-3" id="keywordinfoForm" style="display: none;">
                                                 <div class="col-md-10 keyword-info-link" id="keyword-info-link-list-1">
                                                     <div class="row mb-3">
                                                         <div class="col-md-12">
-                                                            <input type="text" name="keyword_link_2[]" id="keyword_link_2" value="{{ $keyword_link }}" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
+                                                            <input type="text" name="keyword_link_2[]" id="keyword_link_2" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -846,149 +865,572 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                                                     </div>
                                                 </div>
                                             </div>
-                                            @endforeach
-                                        @else
-                                        <div class="row mt-3" id="keywordinfoForm" style="display: none;">
-                                            <div class="col-md-10 keyword-info-link" id="keyword-info-link-list-1">
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words do we need to do appropriates?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words did the client pay for initially?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>Did he confirm he will pay for any additional words if the need be?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn1">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn1">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <h6>Do we have any layout we need to follow for the content?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn2">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn2">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" style="display: none" id="website-link-form">
+                                        <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
+                                            <div class="row mb-3">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group" style="margin-left: 10%;">
+                                                        <label class="form-check-label mb-1">Website link or Theme link:</label>
+                                                        <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix mt-4">
+                                                <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Pages List :</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">Page name</label>
+                                                                <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quantity</label>
+                                                            <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Approximate word</label>
+                                                            <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Website Link & Niche:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="url" name="website_link_2" id="website_link_2" value="{{ $sales_blog_article->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="website_niche_2" id="website_niche_2" value="{{ $sales_blog_article->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Website Link & Niche Ends Here -->
+                                    <!-- Website Name/Business Name -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <h6>Website Name/Business Name:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="website_name" id="website_name_2" value="{{ $sales_blog_article->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <textarea name="business_information" id="business_information_2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $sales_blog_article->business_information !!}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Want to share file?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="1" id="share_file_yesBtn" {{ ($sales_blog_article->share_file_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="share_file_info" value="0" id="share_file_noBtn" {{ ($sales_blog_article->share_file_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($sales_blog_article!=null && $sales_blog_article->share_file_info==1)
+
+                                                @php
+                                                    if (is_string($sales_blog_article->folder_link) && is_array(json_decode($sales_blog_article->folder_link, true))) {
+                                                        $array = json_decode($sales_blog_article->folder_link, true);
+                                                        $folder_links = implode(', ', $array);
+                                                    }
+                                                    $folder_links_array = explode(', ', $folder_links);
+                                                @endphp
+                                                @if ($folder_links_array)
+                                                    @foreach($folder_links_array as $folder_link)
+                                                    <div class="row mt-3" id="folderLinkFormShow" >
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" value="{{ $folder_link }}" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="row mt-3" id="folderLinkFormShow" style="display: none;">
+                                                        <div class="col-md-10 share-file-link" id="share-file-link-list-1">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-12">
+                                                                    <input type="text" name="folder_link_2[]" id="folder_link_2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 append-buttons">
+                                                            <div class="clearfix">
+                                                                <button type="button" id="add-share-file" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                                <button type="button" id="remove-share-file" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!--Reference Blogs-->
+
+                                    @php
+                                        $blog_urls_array = [];
+
+                                        if ($sales_blog_article->blog_url !== null && is_string($sales_blog_article->blog_url)) {
+                                            $array = json_decode($sales_blog_article->blog_url, true);
+
+                                            if (is_array($array)) {
+                                                $blog_urls = implode(', ', $array);
+                                                $blog_urls_array = explode(', ', $blog_urls);
+                                            }
+                                        }
+                                    @endphp
+                                    @if ($blog_urls_array)
+                                        @foreach($blog_urls_array as $blog_url)
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
                                                 <div class="row mb-3">
-                                                    <div class="col-md-12">
-                                                        <input type="text" name="keyword_link_2[]" id="keyword_link_2" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
+                                                    <div class="col-md-4">
+                                                        <h6>Reference Blogs:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="blog_url_2" class="form-control placeholderText height-35 f-14" value="{{ $blog_url }}" placeholder="Enter reference blog url" name="blog_url_2[]"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-2 append-buttons">
                                                 <div class="clearfix">
-                                                    <button type="button" id="add-keyword-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                    <button type="button" id="remove-keyword-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
                                                 </div>
                                             </div>
                                         </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group mt-2">
-                                            <h6>How many words do we need to do appropriates?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group mt-2">
-                                            <h6>How many words did the client pay for initially?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-8">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group mt-2">
-                                            <h6>Did he confirm he will pay for any additional words if the need be?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="d-flex mt-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
-                                                <label class="form-check-label mt-1 ml-2" for="yes_btn1">
-                                                Yes
-                                                </label>
-                                            </div>
-                                            <div class="form-check ml-3">
-                                                <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
-                                                <label class="form-check-label mt-1 ml-2" for="no_btn1">
-                                                No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <h6>Do we have any layout we need to follow for the content?</h6>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="d-flex mt-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
-                                                <label class="form-check-label mt-1 ml-2" for="yes_btn2">
-                                                Yes
-                                                </label>
-                                            </div>
-                                            <div class="form-check ml-3">
-                                                <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
-                                                <label class="form-check-label mt-1 ml-2" for="no_btn2">
-                                                No
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3" style="display: none" id="website-link-form">
-                                    <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
-                                        <div class="row mb-3">
-                                            <div class="col-md-4"></div>
-                                            <div class="col-md-8">
-                                                <div class="form-group" style="margin-left: 10%;">
-                                                    <label class="form-check-label mb-1">Website link or Theme link:</label>
-                                                    <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 append-buttons">
-                                        <div class="clearfix mt-4">
-                                            <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <h6 style="margin-top: 40px;">Pages List :</h6>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="row">
-                                            <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                        @endforeach
+                                    @else
+                                        <div class="row mt-3">
+                                            <div class="col-md-10 dynamic-reference-blog" id="dynamic-reference-blog-list-1">
                                                 <div class="row mb-3">
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="">Page name</label>
-                                                            <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                        <h6>Reference Blogs:</h6>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <div class="form-group" style="margin-left: 90px;">
+                                                            <input type="url" id="blog_url_2" class="form-control placeholderText height-35 f-14"  placeholder="Enter reference blog url" name="blog_url_2[]"/>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label for="">Quantity</label>
-                                                        <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label for="">Approximate word</label>
-                                                        <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                            <div class="col-md-2 append-buttons">
                                                 <div class="clearfix">
-                                                    <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                    <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    <button type="button" id="add-reference-blog" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                    <button type="button" id="remove-reference-blog" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <!--Product Description-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">How many blogs/articles do you need written?</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="product_no" id="product_no_2" value="{{ $sales_blog_article->product_no }}" class="form-control placeholderText height-35 f-14" placeholder="Input the no. of products here!">
+                                        </div>
+                                    </div>
+                                    <!--Topics-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Topics:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="topic_info_2" value="1" id="topic_info_btn1" {{ ($sales_blog_article->topic_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="topic_info_btn1">
+                                                                    Research and collect topics for me
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="topic_info_2" value="0" id="topic_info_btn2" {{ ($sales_blog_article->topic_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="topic_info_btn2">
+                                                                    I have the topics
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($sales_blog_article !=null && $sales_blog_article->topic_info==0)
+                                                @php
+                                                if (is_string($sales_blog_article->topic_link) && is_array(json_decode($sales_blog_article->topic_link, true))) {
+                                                    $array = json_decode($sales_blog_article->topic_link, true);
+                                                    $topic_links = implode(', ', $array);
+                                                }
+                                                $topic_links_array = explode(', ', $topic_links);
+                                                @endphp
+
+                                                @foreach ($topic_links_array as $topic_link)
+                                                <div class="row mt-3" id="topicinfoForm">
+                                                    <div class="col-md-10 topic-info-link" id="topic-info-link-list-1">
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="topic_link_2[]" id="topic_link_2" value="{{ $topic_link }}" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 append-buttons">
+                                                        <div class="clearfix">
+                                                            <button type="button" id="add-topic-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                            <button type="button" id="remove-topic-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="row mt-3" id="topicinfoForm" style="display: none;">
+                                                <div class="col-md-10 topic-info-link" id="topic-info-link-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <input type="text" name="topic_link_2[]" id="topic_link_2" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where topics are available">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-topic-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-topic-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!--Keywords-->
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h6 class="mt-2">Keywords:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <div class="d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="keyword_info_2" value="1" id="keyword_info_btn1" {{ ($sales_blog_article->keyword_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="keyword_info_btn1">
+                                                                    Research and collect keywords for me
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="keyword_info_2" value="0" id="keyword_info_btn2" {{ ($sales_blog_article->keyword_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="keyword_info_btn2">
+                                                                    I have the keywords
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($sales_blog_article !=null && $sales_blog_article->keyword_info==0)
+                                                @php
+                                                if (is_string($sales_blog_article->keyword_link) && is_array(json_decode($sales_blog_article->keyword_link, true))) {
+                                                    $array = json_decode($sales_blog_article->keyword_link, true);
+                                                    $keyword_links = implode(', ', $array);
+                                                }
+                                                $keyword_links_array = explode(', ', $keyword_links);
+                                                @endphp
+
+                                                @foreach ($keyword_links_array as $keyword_link)
+                                                <div class="row mt-3" id="keywordinfoForm">
+                                                    <div class="col-md-10 keyword-info-link" id="keyword-info-link-list-1">
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="keyword_link_2[]" id="keyword_link_2" value="{{ $keyword_link }}" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 append-buttons">
+                                                        <div class="clearfix">
+                                                            <button type="button" id="add-keyword-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                            <button type="button" id="remove-keyword-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="row mt-3" id="keywordinfoForm" style="display: none;">
+                                                <div class="col-md-10 keyword-info-link" id="keyword-info-link-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <input type="text" name="keyword_link_2[]" id="keyword_link_2" class="form-control placeholderText height-35 f-14" placeholder="Share google doc or sheet or drive link where keywords are available">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-keyword-info" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-keyword-info" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words do we need to do appropriates?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words did the client pay for initially?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>Did he confirm he will pay for any additional words if the need be?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn1">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn1">
+                                                    No
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <h6>Do we have any layout we need to follow for the content?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn2">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn2">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" style="display: none" id="website-link-form">
+                                        <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
+                                            <div class="row mb-3">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group" style="margin-left: 10%;">
+                                                        <label class="form-check-label mb-1">Website link or Theme link:</label>
+                                                        <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix mt-4">
+                                                <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Pages List :</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">Page name</label>
+                                                                <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quantity</label>
+                                                            <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Approximate word</label>
+                                                            <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" class="btn btn-primary mt-5 " id="pm_submit">Submit</button>
                                 </div>
@@ -1223,6 +1665,9 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
                     'page_name': page_name_values,
                     'quantity': quantity_values,
                     'approximate_word': approximate_word_values,
+                    @if ($blogArticle !=null && $blogArticle->submitted_by ==4)
+                    'submitted_by': {{ $blogArticle->submitted_by }},
+                    @endif
                 }
                 $.ajaxSetup({
                 headers: {

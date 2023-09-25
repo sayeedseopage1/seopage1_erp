@@ -506,8 +506,8 @@
             "@lang('app.last30Days')": [moment().subtract(29, 'days'), moment()],
             "@lang('app.thisMonth')": [moment().startOf('month'), moment().endOf(
                 'month')],
-            "@lang('app.lastMonth')": [moment().startOf('month').subtract(1, 'month'), moment().endOf(
-                'month').subtract(1, 'month')],
+            "@lang('app.lastMonth')": [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf(
+                'month')],
             "@lang('app.last90Days')": [moment().subtract(89, 'days'), moment()],
             "@lang('app.last6Months')": [moment().subtract(6, 'months'), moment()],
             "@lang('app.last1Year')": [moment().subtract(1, 'years'), moment()]

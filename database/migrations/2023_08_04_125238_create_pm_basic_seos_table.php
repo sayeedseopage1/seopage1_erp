@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('sales_basic_seo_id');
             $table->integer('deal_id');
             $table->integer('milestone_id');
+            $table->integer('submitted_by')->nullable();
             $table->string('owner_name')->nullable();
             $table->string('business_name')->nullable();
             $table->string('business_address')->nullable();

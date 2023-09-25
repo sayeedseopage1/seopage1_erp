@@ -1298,6 +1298,7 @@ Route::get('/thankyou', [HomeController::class, 'Thankyou']);
 //Service type section
 Route::get('/deals/service-type/web-content/{id}/{random_id}', [HomeController::class, 'webContent']);
 Route::post('/deals/link-store', [HomeController::class, 'storeLink'])->name('store-link');
+Route::post('/deals/pm-link-store', [HomeController::class, 'storePmLink'])->name('store-pm-link');
 Route::post('/deals/store/web-content', [HomeController::class, 'storeWebContent'])->name('store_web_content');
 Route::get('/deals/service-type/blogs-articles/{id}/{random_id}', [HomeController::class, 'blogArticle']);
 Route::post('/deals/store/blog-articles', [HomeController::class, 'storeBlogArticle'])->name('store_blog_articles');
