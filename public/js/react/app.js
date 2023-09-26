@@ -26604,17 +26604,17 @@ var ClientIssuesTableColumns = [{
   heading: 'Disputed (Y/N)',
   moveable: true,
   sort: function sort(row) {
-    return row === null || row === void 0 ? void 0 : row.disputed;
+    return row === null || row === void 0 ? void 0 : row.dispute_created;
   },
   rowSpan: 2,
   searchText: function searchText(row) {
-    return "".concat(row === null || row === void 0 ? void 0 : row.disputed);
+    return "".concat(row === null || row === void 0 ? void 0 : row.dispute_created);
   },
   row: function row(_ref6) {
     var _row6 = _ref6.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
       className: "singleline-ellipsis",
-      children: _row6 !== null && _row6 !== void 0 && _row6.disputed ? 'YES' : 'N/A'
+      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'N/A'
     });
   }
 }, {
@@ -26657,13 +26657,24 @@ var Verdict = function Verdict(_ref9) {
   var row = _ref9.row;
   if (row !== null && row !== void 0 && row.status) {
     if (row !== null && row !== void 0 && row.winner) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
-        href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.winner),
-        children: [" Verdict given in favor of ", row === null || row === void 0 ? void 0 : row.winner_name, "  "]
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+        children: [" Verdict given in favor of ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
+          href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.winner),
+          className: "hover-underline",
+          children: [" ", row === null || row === void 0 ? void 0 : row.winner_name, "  "]
+        }), " "]
       });
     } else {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        children: ["Both parties were hold partially responsible. Party ", row === null || row === void 0 ? void 0 : row.dispute_raised_by_name, " (", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%) & Party ", row === null || row === void 0 ? void 0 : row.dispute_rasied_against_name, " (", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%)"]
+        children: ["Both parties were hold partially responsible. Party ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+          className: "hover-underline",
+          href: "/accounts/employees/".concat(row === null || row === void 0 ? void 0 : row.dispute_raised_by_id),
+          children: row === null || row === void 0 ? void 0 : row.dispute_raised_by_name
+        }), " (", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%) & Party ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+          className: "hover-underline",
+          href: "/accounts/employees/".concat(row === null || row === void 0 ? void 0 : row.dispute_raised_by_id),
+          children: row === null || row === void 0 ? void 0 : row.dispute_rasied_against_name
+        }), " (", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%)"]
       });
     }
   }
@@ -28077,6 +28088,7 @@ var PMIssuesTableColumns = [{
   row: function row(_ref) {
     var _row = _ref.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+      title: _row === null || _row === void 0 ? void 0 : _row.project_name,
       className: "singleline-ellipsis",
       children: [" ", _row === null || _row === void 0 ? void 0 : _row.project_name, " "]
     });
@@ -28122,6 +28134,7 @@ var PMIssuesTableColumns = [{
     var task_name = _row3 === null || _row3 === void 0 ? void 0 : _row3.task_title;
     var isEqual = search ? _.includes(_.lowerCase(task_name), _.lowerCase(search)) : "";
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+      title: task_name,
       className: "singleline-ellipsis ".concat(isEqual ? "highlight" : ""),
       children: task_name
     });
@@ -28145,6 +28158,7 @@ var PMIssuesTableColumns = [{
     var tv = _row4 === null || _row4 === void 0 ? void 0 : _row4.revision_raised_by_name;
     var isEqual = search ? _.includes(_.lowerCase(tv), _.lowerCase(search)) : "";
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+      title: tv,
       className: "singleline-ellipsis ".concat(isEqual ? "highlight" : ""),
       children: tv
     });
@@ -28161,10 +28175,12 @@ var PMIssuesTableColumns = [{
     return "".concat(row === null || row === void 0 ? void 0 : row.reason_for_revision);
   },
   row: function row(_ref5) {
+    var _row5$reason_for_revi;
     var _row5 = _ref5.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+      title: _row5 === null || _row5 === void 0 ? void 0 : _row5.reason_for_revision,
       className: "singleline-ellipsis",
-      children: _row5 === null || _row5 === void 0 ? void 0 : _row5.reason_for_revision
+      children: (_row5$reason_for_revi = _row5 === null || _row5 === void 0 ? void 0 : _row5.reason_for_revision) !== null && _row5$reason_for_revi !== void 0 ? _row5$reason_for_revi : '--'
     });
   }
 }, {
@@ -28172,17 +28188,17 @@ var PMIssuesTableColumns = [{
   heading: 'Disputed (Y/N)',
   moveable: true,
   sort: function sort(row) {
-    return row === null || row === void 0 ? void 0 : row.disputed;
+    return row === null || row === void 0 ? void 0 : row.dispute_created;
   },
   rowSpan: 2,
   searchText: function searchText(row) {
-    return "".concat(row === null || row === void 0 ? void 0 : row.disputed);
+    return "".concat(row === null || row === void 0 ? void 0 : row.dispute_created);
   },
   row: function row(_ref6) {
     var _row6 = _ref6.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
       className: "singleline-ellipsis",
-      children: _row6 !== null && _row6 !== void 0 && _row6.disputed ? 'YES' : 'N/A'
+      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'N/A'
     });
   }
 }, {
@@ -28225,13 +28241,24 @@ var Verdict = function Verdict(_ref9) {
   var row = _ref9.row;
   if (row !== null && row !== void 0 && row.status) {
     if (row !== null && row !== void 0 && row.winner) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
-        href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.winner),
-        children: [" Verdict given in favor of ", row === null || row === void 0 ? void 0 : row.winner_name, "  "]
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+        children: [" Verdict given in favor of ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
+          href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.winner),
+          className: "hover-underline",
+          children: [" ", row === null || row === void 0 ? void 0 : row.winner_name, "  "]
+        }), " "]
       });
     } else {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-        children: ["Both parties were hold partially responsible. Party ", row === null || row === void 0 ? void 0 : row.dispute_raised_by_name, " (", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%) & Party ", row === null || row === void 0 ? void 0 : row.dispute_rasied_against_name, " (", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%)"]
+        children: ["Both parties were hold partially responsible. Party ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+          className: "hover-underline",
+          href: "/accounts/employees/".concat(row === null || row === void 0 ? void 0 : row.dispute_raised_by_id),
+          children: row === null || row === void 0 ? void 0 : row.dispute_raised_by_name
+        }), " (", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%) & Party ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+          className: "hover-underline",
+          href: "/accounts/employees/".concat(row === null || row === void 0 ? void 0 : row.dispute_raised_by_id),
+          children: row === null || row === void 0 ? void 0 : row.dispute_rasied_against_name
+        }), " (", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%)"]
       });
     }
   }
@@ -29540,17 +29567,17 @@ var SalesIssuesTableColumns = [{
   heading: 'Disputed (Y/N)',
   moveable: true,
   sort: function sort(row) {
-    return row === null || row === void 0 ? void 0 : row.disputed;
+    return row === null || row === void 0 ? void 0 : row.dispute_created;
   },
   rowSpan: 2,
   searchText: function searchText(row) {
-    return "".concat(row === null || row === void 0 ? void 0 : row.disputed);
+    return "".concat(row === null || row === void 0 ? void 0 : row.dispute_created);
   },
   row: function row(_ref6) {
     var _row6 = _ref6.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
       className: "singleline-ellipsis",
-      children: _row6 !== null && _row6 !== void 0 && _row6.disputed ? 'YES' : 'N/A'
+      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'N/A'
     });
   }
 }, {
@@ -29593,13 +29620,24 @@ var Verdict = function Verdict(_ref9) {
   var row = _ref9.row;
   if (row !== null && row !== void 0 && row.status) {
     if (row !== null && row !== void 0 && row.winner) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
-        href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.winner),
-        children: [" Verdict given in favor of ", row === null || row === void 0 ? void 0 : row.winner_name, "  "]
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+        children: [" Verdict given in favor of ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+          href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.winner),
+          className: "hover-underline",
+          children: [" ", row === null || row === void 0 ? void 0 : row.winner_name, "  "]
+        }), " "]
       });
     } else {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-        children: ["Both parties were hold partially responsible. Party ", row === null || row === void 0 ? void 0 : row.dispute_raised_by_name, " (", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%) & Party ", row === null || row === void 0 ? void 0 : row.dispute_rasied_against_name, " (", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%)"]
+        children: ["Both parties were hold partially responsible. Party ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+          className: "hover-underline",
+          href: "/accounts/employees/".concat(row === null || row === void 0 ? void 0 : row.dispute_raised_by_id),
+          children: row === null || row === void 0 ? void 0 : row.dispute_raised_by_name
+        }), " (", row === null || row === void 0 ? void 0 : row.raised_by_percent, "%) & Party ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+          className: "hover-underline",
+          href: "/accounts/employees/".concat(row === null || row === void 0 ? void 0 : row.dispute_raised_by_id),
+          children: row === null || row === void 0 ? void 0 : row.dispute_rasied_against_name
+        }), " (", row === null || row === void 0 ? void 0 : row.raised_against_percent, "%)"]
       });
     }
   }
@@ -34236,7 +34274,7 @@ var Filterbar = function Filterbar(_ref) {
   var _search = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return search;
   }, [search]);
-  var dispute_rasied_by = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
+  var _dispute_rasied_by = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return disputeRasiedBy;
   }, [disputeRasiedBy]);
   var _client = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
@@ -34255,18 +34293,26 @@ var Filterbar = function Filterbar(_ref) {
     return dateType;
   }, [dateType]);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    console.log({
+      start_date: start_date,
+      end_date: end_date,
+      _dispute_rasied_by: _dispute_rasied_by,
+      _client: _client,
+      _disputeRaisedAgainst: _disputeRaisedAgainst,
+      _pm: _pm,
+      _status: _status
+    });
     var filter = {
       start_date: start_date,
       end_date: end_date,
-      dispute_rasied_by: dispute_rasied_by === null || dispute_rasied_by === void 0 ? void 0 : dispute_rasied_by.id,
+      dispute_rasied_by: _dispute_rasied_by === null || _dispute_rasied_by === void 0 ? void 0 : _dispute_rasied_by.id,
       client_id: _client === null || _client === void 0 ? void 0 : _client.id,
       dispute_raised_against: _disputeRaisedAgainst === null || _disputeRaisedAgainst === void 0 ? void 0 : _disputeRaisedAgainst.id,
       pm_id: _pm === null || _pm === void 0 ? void 0 : _pm.id,
-      status: _status === null || _status === void 0 ? void 0 : _status.id,
-      date_filter_by: date_filter_by
+      status: _status === null || _status === void 0 ? void 0 : _status.id
     };
     onFilter(filter);
-  }, [start_date, end_date, dispute_rasied_by, _client, _disputeRaisedAgainst, _pm, _status, date_filter_by]);
+  }, [start_date, end_date, _dispute_rasied_by, _client, _disputeRaisedAgainst, _pm, _status]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "sp1_task_filter_bar",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -34280,8 +34326,8 @@ var Filterbar = function Filterbar(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), width > 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Dispute Raised By",
-        state: disputeRaisedAgainst,
-        setState: setDisputeRaisedAgainst,
+        state: disputeRasiedBy,
+        setState: setDisputeRasiedBy,
         roleIds: [4, 5, 6, 7, 9, 10]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_UserFilter__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: "Dispute Raised Against",
@@ -34298,9 +34344,6 @@ var Filterbar = function Filterbar(_ref) {
         state: pm,
         setState: setPm,
         roleIds: [4]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_StatusFilter__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        state: status,
-        setState: setStatus
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {})]
     }), width < 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {

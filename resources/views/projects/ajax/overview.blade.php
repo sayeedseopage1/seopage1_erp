@@ -1181,6 +1181,58 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+        @php
+            $working_environment= App\Models\WorkingEnvironment::where('project_id',$project->id)->first();
+        @endphp
+        @if($working_environment != null)
+        <div class="row mb-4" >
+            <!-- BUDGET VS SPENT START -->
+            <div class="col-md-12">
+                <x-cards.data>
+                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                        <div class="col">
+                            <h4>Site Url</h4>
+                            <br>
+                            <p>{{$working_environment->site_url}}</p>
+
+                        </div>
+                        <div class="col">
+                            <h4>Frontend Password</h4>
+                            <br>
+                            <p>{{$working_environment->frontend_password}}</p>
+
+                        </div>
+                        <div class="col">
+                            <h4>Login Url</h4>
+                            <br>
+                            <p>{{$working_environment->login_url}}</p>
+
+                        </div>
+                        <div class="col">
+                            <h4>Login Url</h4>
+                            <br>
+                            <p>{{$working_environment->login_url}}</p>
+
+                        </div>
+                        <div class="col">
+                            <h4>Email</h4>
+                            <br>
+                            <p>{{$working_environment->email}}</p>
+
+                        </div>
+                        <div class="col">
+                            <h4>Password</h4>
+                            <br>
+                            <p>{{$working_environment->password}}</p>
+
+                        </div>
+
+                    </div>
+                </x-cards.data>
+            </div>
+            <!-- BUDGET VS SPENT END -->
+        </div>
+        @endif
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">

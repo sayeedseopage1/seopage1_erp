@@ -4195,8 +4195,10 @@ class TaskController extends AccountBaseController
         $project_id = $filter["project_id"] ?? NULL;
         $dispute_id = $filter["dispute_id"] ?? NULL;
         $raised_by = $filter["raised_by"] ?? NULL;
-        $raised_against =   $filter["raised_against"] ?? NULL;
+        $raised_against =  $filter["raised_against"] ?? NULL;
+        $client_id =   $filter["client_id"] ?? NULL;
 
+        
 
         //get user 
         function get_user($user_id, $is_client){ 
@@ -4278,7 +4280,7 @@ class TaskController extends AccountBaseController
                     'projects.deal_id as project_deal_id',
                     'deals.added_by as deal_added_by'
                   )
-                  ->where(function($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $start_date, $end_date, $logged_user){
+                  ->where(function($query) use ($task_id, $project_id, $dispute_id, $raised_by, $raised_against, $client_id, $start_date, $end_date, $logged_user){
                         if($task_id) {
                             $query->where('disputes.task_id', $task_id);
                         }
@@ -4294,6 +4296,10 @@ class TaskController extends AccountBaseController
                         }else{
                             $query->where('disputes.raised_against', $logged_user->id)
                                 ->orWhere('disputes.raised_by', $logged_user->id); 
+                        }
+
+                        if($client_id){
+                            $query->where('projects.client_id', $client_id);
                         }
 
                         if($project_id){
@@ -4339,14 +4345,16 @@ class TaskController extends AccountBaseController
     }
 
     public function get_disputes(Request $request){ 
+          
         $filter = [
             "start_date" => $request->start_date ?? NULL,
             "end_date" => $request->end_date ?? NULL,
             "task_id" => $request->task_id ?? NULL,
             "project_id" => $request->project_id ?? NULL,
             "dispute_id" => $request->dispute_id ?? NULL,
-            "raised_by" => $request->raised_by ?? NULL,
-            "raised_against" => $request->raised_against ?? NULL,
+            "raised_by" => $request->dispute_rasied_by ?? NULL,
+            "raised_against" => $request->dispute_raised_against ?? NULL,
+            'client_id' => $request->client_id ?? NULL
         ];
 
         return $this->get_dispute_data($filter);
@@ -4734,11 +4742,9 @@ class TaskController extends AccountBaseController
         'developers.id as developer_id',
          
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'"), 0) as total_time_spent'),
-       
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
-       
         ->join('users as clients','clients.id','projects.client_id')
         ->join('users as developers','developers.id','project_time_logs.user_id')
         ->where('project_time_logs.user_id',$id)
@@ -4753,37 +4759,46 @@ class TaskController extends AccountBaseController
 
     public function checkInProgressTask($id)
     {
-        // $tasks= Task::select('tasks.id')
-        // ->leftjoin('task_users','task_users.task_id','tasks.id')
-        // ->leftJoin('sub_tasks','sub_tasks.task_id','tasks.id')
-        // ->leftJoin('tasks as subtasks','subtasks.subtask_id','sub_tasks.id')
-        // ->where('task_users.user_id',$id)
-        // ->where('subtasks.board_column_id',8)
-        // ->where('tasks.board_column_id',2)
-        // ->get();
-    //     $tasks = Task::select('tasks.id')
-    // ->leftJoin('task_users', 'task_users.task_id', 'tasks.id')
-    // ->leftJoin('sub_tasks', 'sub_tasks.task_id', 'tasks.id')
-    // ->leftJoin('tasks as subtasks', 'subtasks.subtask_id', 'sub_tasks.id')
-    // ->where('task_users.user_id', $id)
-    // ->where('tasks.board_column_id', 2)
-    // ->where(function ($query) {
-    //     $query->where('subtasks.board_column_id', 8);
-              
-    // })
-    // ->get();
-    $tasks = Subtask::select('tasks.id')
-    ->leftJoin('tasks', 'tasks.id', 'sub_tasks.task_id')
-    ->leftJoin('tasks as subtasks', 'subtasks.subtask_id', 'sub_tasks.id')
-    ->leftJoin('task_users', 'task_users.task_id', 'tasks.id')
-    ->where('task_users.user_id', $id)
-    ->where('tasks.board_column_id', 2)
-    ->where('subtasks.board_column_id', 8)
+        
+    $tasks= Task::select('tasks.id')
+    ->leftJoin('task_users','task_users.task_id','tasks.id')
+    
+    ->where('task_users.user_id',$id)
+    ->where('tasks.board_column_id',2)
     
     ->get();
+    foreach($tasks as $task)
+    {
+        $subtasks= Subtask::leftJoin('tasks as subtasks','subtasks.subtask_id','sub_tasks.id')
+        ->where('sub_tasks.task_id',$task->id)
+        ->where('subtasks.board_column_id','!=',8)
+        ->count();
+        $task->subtask_not_finish = $subtasks;
+    }
+    $countTasksWithSubtasksNotFinished = $tasks->filter(function ($task) {
+        return $task->subtask_not_finish == 0;
+    })->count();
 
+    if($countTasksWithSubtasksNotFinished > 0)
+    {
+        return response()->json([
+            'message'=>'You cannot create tasks as you have already 6 tasks need to submit',
+            'status'=>400
+        ]);
 
+    }else 
+    {
+        return response()->json([
+            'message'=>'You can create task',
+            'status'=>200
+        ]);
 
-        dd($tasks);
+    }
+
+    }
+
+    public function storeDailySubmission(Request $request)
+    {
+        dd($request);
     }
 }

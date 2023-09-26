@@ -31,7 +31,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const start_date = React.useMemo(() => startDate, [startDate]);
     const end_date = React.useMemo(() => endDate, [endDate]);
     const _search = React.useMemo(() => search, [search]);
-    const dispute_rasied_by = React.useMemo(() => disputeRasiedBy, [disputeRasiedBy]);
+    const _dispute_rasied_by = React.useMemo(() => disputeRasiedBy, [disputeRasiedBy]);
     const _client = React.useMemo(() => client, [client]);
     const _disputeRaisedAgainst = React.useMemo(() => disputeRaisedAgainst, [disputeRaisedAgainst]);
     const _pm = React.useMemo(() => pm, [pm]);
@@ -39,27 +39,34 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
 
     React.useEffect(() => {
+        console.log({
+            start_date,
+        end_date,
+        _dispute_rasied_by,
+        _client,
+        _disputeRaisedAgainst,
+        _pm,
+        _status,
+        })
         const filter = {
             start_date,
             end_date,
-            dispute_rasied_by: dispute_rasied_by?.id,
+            dispute_rasied_by: _dispute_rasied_by?.id,
             client_id: _client?.id,
             dispute_raised_against: _disputeRaisedAgainst?.id,
             pm_id: _pm?.id,
-            status: _status?.id,
-            date_filter_by,
+            status: _status?.id, 
         };
 
         onFilter(filter);
     }, [
         start_date,
         end_date,
-        dispute_rasied_by,
+        _dispute_rasied_by,
         _client,
         _disputeRaisedAgainst,
         _pm,
         _status,
-        date_filter_by,
     ]);
 
     return (
@@ -77,8 +84,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                 <React.Fragment> 
                     <UserFilter
                         title="Dispute Raised By"
-                        state={disputeRaisedAgainst}
-                        setState={setDisputeRaisedAgainst}
+                        state={disputeRasiedBy}
+                        setState={setDisputeRasiedBy}
                         roleIds={[4,5,6, 7, 9, 10]}
                     />  
                     <HDivider />
@@ -108,8 +115,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     />
                     <HDivider /> 
 
-                    <StatusFilter state={status} setState={setStatus} />
-                    <HDivider /> 
+                    {/* <StatusFilter state={status} setState={setStatus} /> */}
+                    {/* <HDivider />  */}
                 </React.Fragment>
             )}
 

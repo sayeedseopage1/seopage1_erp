@@ -7,7 +7,7 @@ export const PMIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <span className="singleline-ellipsis"> {row?.project_name} </span> 
+        row: ({row}) => <span title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </span> 
     },
     {
         id: "client_name",
@@ -46,7 +46,7 @@ export const PMIssuesTableColumns = [
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <span title={task_name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {task_name}
                 </span>
             );
@@ -67,7 +67,7 @@ export const PMIssuesTableColumns = [
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <span title={tv} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {tv}
                 </span>
             );
@@ -80,16 +80,18 @@ export const PMIssuesTableColumns = [
         sort: row => row?.reason_for_revision,
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.reason_for_revision}</span>
+        row: ({row}) => <span title={row?.reason_for_revision} className="singleline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
     },
     {
         id: 'disputed',
         heading: 'Disputed (Y/N)',
         moveable: true,
-        sort: row => row?.disputed,
+        sort: row => row?.dispute_created,
         rowSpan: 2,
-        searchText: (row) => `${row?.disputed}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.disputed ? 'YES' : 'N/A'}</span>
+        searchText: (row) => `${row?.dispute_created}`,
+        row: ({row}) =>{
+            return <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'N/A'}</span>
+        }
     },  
     {
         id: 'total_comments',
@@ -117,11 +119,11 @@ export const PMIssuesTableColumns = [
 const Verdict = ({row}) => {
     if(row?.status){
         if(row?.winner){
-            return <a href={`/account/employees/${row?.winner}`}> Verdict given in favor of {row?.winner_name}  </a>
+            return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
         }else{
             return (
                 <div>
-                     Both parties were hold partially responsible. Party {row?.dispute_raised_by_name} ({row?.raised_by_percent}%) & Party {row?.dispute_rasied_against_name} ({row?.raised_against_percent}%)
+                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/accounts/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/accounts/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_rasied_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             )
         }

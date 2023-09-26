@@ -86,10 +86,10 @@ export const ClientIssuesTableColumns = [
         id: 'disputed',
         heading: 'Disputed (Y/N)',
         moveable: true,
-        sort: row => row?.disputed,
+        sort: row => row?.dispute_created,
         rowSpan: 2,
-        searchText: (row) => `${row?.disputed}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.disputed ? 'YES' : 'N/A'}</span>
+        searchText: (row) => `${row?.dispute_created}`,
+        row: ({row}) => <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'N/A'}</span>
     },  
     {
         id: 'total_comments',
@@ -112,15 +112,14 @@ export const ClientIssuesTableColumns = [
      
 ];
 
-
 const Verdict = ({row}) => {
     if(row?.status){
         if(row?.winner){
-            return <a href={`/account/employees/${row?.winner}`}> Verdict given in favor of {row?.winner_name}  </a>
+            return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
         }else{
             return (
                 <div>
-                     Both parties were hold partially responsible. Party {row?.dispute_raised_by_name} ({row?.raised_by_percent}%) & Party {row?.dispute_rasied_against_name} ({row?.raised_against_percent}%)
+                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/accounts/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/accounts/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_rasied_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             )
         }
