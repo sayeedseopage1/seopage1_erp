@@ -4724,4 +4724,30 @@ class TaskController extends AccountBaseController
             'status'=>200
         ]);
     }
+
+    public function get_today_tasks($id)
+    {
+        $startDate= '2023-08-01';
+        $endDate= '2023-08-31';
+        $tasks = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','projects.id as projectId',
+        'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
+        'developers.id as developer_id',
+         
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'"), 0) as total_time_spent'),
+       
+        )
+        ->join('tasks','tasks.id','project_time_logs.task_id')
+        ->join('projects','projects.id','tasks.project_id')
+       
+        ->join('users as clients','clients.id','projects.client_id')
+        ->join('users as developers','developers.id','project_time_logs.user_id')
+        ->where('project_time_logs.user_id',$id)
+        ->whereBetween('project_time_logs.created_at', [$startDate, $endDate])
+        ->groupBy('tasks.id')
+        ->get();
+        return response()->json([
+            'data' => $tasks,
+            'status' => 200
+        ]);
+    }
 }

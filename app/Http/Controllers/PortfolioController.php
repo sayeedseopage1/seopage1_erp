@@ -283,13 +283,16 @@ class PortfolioController extends AccountBaseController
         $website_category = $request->website_category ?? null;
         $website_sub_category = $request->website_sub_category ?? null;
         $theme_name = $request->theme_name ?? null;
+        $theme_id = $request->theme_id ?? null;
         $plugin_name = $request->plugin_name ?? null;
+        $plugin_id = $request->plugin_id ?? null; 
         $page_size = $request->page_size ?? 10;
+ 
         
         $data = DB::table('project_portfolios')
             ->where('portfolio_link', '!=', null)
             ->whereNotIn('portfolio_link',["n/a", "N/A","null", "na", "NA"])
-            ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_name, $plugin_name) {
+            ->where(function($query) use ($cms, $website_type, $website_category, $website_sub_category, $theme_name, $theme_id, $plugin_name, $plugin_id) {
                 if ($cms) {
                     $query->where('cms_category', $cms);
                 }
@@ -307,12 +310,16 @@ class PortfolioController extends AccountBaseController
                 }
         
                 if ($theme_name) {
-                    $query->where('theme_name', $theme_name);
+                    $query->where('theme_name', $theme_name)
+                        ->orWhere('theme_name', $theme_id);
                 }
+ 
         
                 if ($plugin_name) {
-                    $query->where('plugin_name', $plugin_name);
+                    $query->where('plugin_name', $plugin_name)
+                      //  ->orWhere('plugin_name', $plugin_id);
                 }
+ 
             })->paginate($page_size);
         
         return response()->json($data, 200);

@@ -39,7 +39,7 @@ const Protfolio = () => {
   const  _plugin = React.useMemo(() => plugin, [plugin]);
   const _pageIndex = React.useMemo(() => pageIndex, [pageIndex]);
   const _pageSize = React.useMemo(() => pageSize, [pageSize]);
-
+ 
 
   const [getPortfolioData, {isFetching: dataLoading}] = useLazyGetPortfolioDataQuery();
   
@@ -51,8 +51,10 @@ const Protfolio = () => {
         website_category: _webCategory?.id,
         website_type: _webtype?.id,
         website_sub_category: _webSubCategory?.id, 
-        theme_name: _theme?.id, 
-        plugin_name: _plugin?.id
+        theme_name: _theme?.theme_name,
+        theme_id: _theme?.id,
+        plugin_name: _plugin?.plugin_name,
+        plugin_id: _plugin?.id, 
     }
 
     const queryObject = _.pickBy(query, Boolean);

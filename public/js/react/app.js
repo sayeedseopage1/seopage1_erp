@@ -39508,8 +39508,10 @@ var Protfolio = function Protfolio() {
       website_category: _webCategory === null || _webCategory === void 0 ? void 0 : _webCategory.id,
       website_type: _webtype === null || _webtype === void 0 ? void 0 : _webtype.id,
       website_sub_category: _webSubCategory === null || _webSubCategory === void 0 ? void 0 : _webSubCategory.id,
-      theme_name: _theme === null || _theme === void 0 ? void 0 : _theme.id,
-      plugin_name: _plugin === null || _plugin === void 0 ? void 0 : _plugin.id
+      theme_name: _theme === null || _theme === void 0 ? void 0 : _theme.theme_name,
+      theme_id: _theme === null || _theme === void 0 ? void 0 : _theme.id,
+      plugin_name: _plugin === null || _plugin === void 0 ? void 0 : _plugin.plugin_name,
+      plugin_id: _plugin === null || _plugin === void 0 ? void 0 : _plugin.id
     };
     var queryObject = lodash__WEBPACK_IMPORTED_MODULE_6___default().pickBy(query, Boolean);
     var queryString = new URLSearchParams(queryObject).toString();

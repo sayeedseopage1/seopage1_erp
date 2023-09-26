@@ -804,6 +804,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-sub-tasks/report-issues/{id}', [TaskController::class, 'get_sub_tasks_report_issues']);
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
+    Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
     ->where('any', '^(?!api\/)[\/\w\.-]*')
