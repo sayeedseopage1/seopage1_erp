@@ -1190,6 +1190,13 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <div class="col-md-12">
                 <x-cards.data>
                     <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
+                       
+                        <div class="col">
+                            <h3>Working Environment</h3>
+                            <br>
+                            
+
+                        </div>
                         <div class="col">
                             <h4>Site Url</h4>
                             <br>
