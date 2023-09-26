@@ -343,7 +343,7 @@ const SingleTaskPage = () => {
                                 <div className="">Time Estimate: </div>
                                 <div
                                     className={`d-flex align-items-center font-weight-bold pl-2 ${loadingClass}`}
-                                >
+                                > 
                                     {task?.getEstimateTime()}
                                 </div>
                             </div>
@@ -372,7 +372,7 @@ const SingleTaskPage = () => {
                             <div className="d-flex align-items-center mb-2">
                                 <div className="">Total Hours Logged: </div>
                                 <div className="d-flex align-items-center font-weight-bold pl-2">
-                                    {task?.totalTimeLog || "--"}
+                                    { (task.isSubtask ? task?.parentTaskTimeLog : task?.totalTimeLog )|| "--"}
                                 </div>
                             </div>
                         </div>

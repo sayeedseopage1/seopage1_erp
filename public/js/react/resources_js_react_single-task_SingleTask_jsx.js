@@ -1000,7 +1000,7 @@ var SingleTaskPage = function SingleTaskPage() {
                 children: "Total Hours Logged: "
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)("div", {
                 className: "d-flex align-items-center font-weight-bold pl-2",
-                children: (task === null || task === void 0 ? void 0 : task.totalTimeLog) || "--"
+                children: (task.isSubtask ? task === null || task === void 0 ? void 0 : task.parentTaskTimeLog : task === null || task === void 0 ? void 0 : task.totalTimeLog) || "--"
               })]
             })]
           }), task && (task === null || task === void 0 ? void 0 : task.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_23__.jsx)(_section_submitted_work_SubmittedWork__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -6129,7 +6129,7 @@ var SubTask = function SubTask(_ref) {
                 })
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
                 href: "/account/tasks/".concat(subTask === null || subTask === void 0 ? void 0 : subTask.id),
-                target: "__blank",
+                target: "_blank",
                 className: "border text-dark mr-2 py-1 px-2",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                   className: "fa-solid fa-arrow-up-right-from-square"

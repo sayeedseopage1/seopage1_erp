@@ -147,7 +147,11 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                         }}
                                     /> :<i className="fa-regular fa-pen-to-square"></i>}
                                 </a>}
-                                <a href={`/account/tasks/${subTask?.id}`} target="__blank" className="border text-dark mr-2 py-1 px-2">
+                                <a 
+                                    href={`/account/tasks/${subTask?.id}`} 
+                                    target="_blank" 
+                                    className="border text-dark mr-2 py-1 px-2"
+                                >
                                     {/* <i className="fa-solid fa-up-right-and-down-left-from-center" /> */}
                                     <i className="fa-solid fa-arrow-up-right-from-square"></i>
                                 </a>
