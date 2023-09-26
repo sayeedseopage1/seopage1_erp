@@ -36,13 +36,19 @@ const SaleActionButton = ({row, table}) => {
           return;
         }
 
+        try{
+            let res = saleRevisionAction({
+                sale_comment: comment,
+                action_type: type,
+                revision_id: row.id,
+            })
 
-        saleRevisionAction({
-            sale_comment: comment,
-            action_type: type,
-            revision_id: row.id,
-        })
-
+            if(res){
+                close();
+            }
+        }catch(error){
+            console.log(error)
+        }
     }
 
 
@@ -90,8 +96,21 @@ const SaleActionButton = ({row, table}) => {
                             </Card.Body>
                             <Card.Footer>
                                 <Button onClick={close} variant="tertiary" className="font-weight-normal mr-auto"> Close</Button>
-                                <Button variant="danger" onClick={e => handleSubmit(e, 'deny')} className="font-weight-normal"> Deny </Button>
-                                <Button variant="success" onClick={e => handleSubmit(e, 'accept')} className="font-weight-normal"> Accept </Button>
+                                <Button 
+                                    variant="danger" 
+                                    onClick={e => handleSubmit(e, 'deny')} 
+                                    className="font-weight-normal"
+                                    isLoading={isLoading}
+                                > 
+                                    Deny 
+                                </Button>
+                                <Button 
+                                    variant="success" 
+                                    onClick={e => handleSubmit(e, 'accept')} 
+                                    className="font-weight-normal"
+                                > 
+                                    Accept 
+                                </Button>
                             </Card.Footer>
                         </Card>  
                     </div>

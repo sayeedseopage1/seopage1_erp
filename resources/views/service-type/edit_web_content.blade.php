@@ -8,1365 +8,251 @@ $pm = \App\Models\User::where('id',$project->pm_id)->first();
 $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
 @endphp
 <div class="container-fluid">
-    @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+    @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 1)
     <div class="row">
         <div class="col-12">
-            <div class="card mb-5 mt-3" style="border: none">
-                <h4 class="text-center my-3">Fields Needed to be Filled by Project Manager ({{ $pm->name }})</h4>
+            <div class="card mb-2 mt-3">
                 <div class="card-body">
-                    <form action="" method="post" id="pm_form">
-                        @csrf
-                        <input type="hidden" name="sales_web_content_id" id="sales_web_content_id" value="{{ $sales_web_content->id }}">
-                        <input type="hidden" name="deal_id" id="deal_id" value="{{ $webContent->deal_id }}">
-                        <input type="hidden" name="milestone_id" id="milestone_id" value="{{ $webContent->milestone_id }}">
-                        @if ($webContent !=null && $webContent->submitted_by ==4)
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6>Website Link & Niche:</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="url" name="website_link2" id="website_link2" value="{{ $webContent->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="text" name="website_niche2" id="website_niche2" value="{{ $webContent->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Website Link & Niche Ends Here -->
-                            <!-- Website Name/Business Name -->
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6>Website Name/Business Name:</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <input type="text" name="website_name2" id="website_name2" value="{{ $webContent->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea name="business_information2" id="business_information2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $webContent->business_information !!}</textarea>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="">Want to share file?</label>
-                                                <div class="mt-2 d-flex">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="share_file" value="1" id="share_file_info_yesBtn" {{ ($webContent->share_file_info=="1")? "checked" : "" }}>
-                                                        <label class="form-check-label mt-1 ml-1" for="share_file_info_yesBtn">
-                                                            Yes
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check" style="margin-left: 10px;">
-                                                        <input class="form-check-input" type="radio" name="share_file" value="0" id="share_file_info_noBtn" {{ ($webContent->share_file_info=="0")? "checked" : "" }}>
-                                                        <label class="form-check-label mt-1 ml-1" for="share_file_info_noBtn">
-                                                            No
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if ($webContent!=null && $webContent->share_file_info==1)
-                                        @php
-                                            if (is_string($webContent->folder_link) && is_array(json_decode($webContent->folder_link, true))) {
-                                                $array = json_decode($webContent->folder_link, true);
-                                                $folder_links = implode(', ', $array);
-                                            }
-                                            $folder_links_array = explode(', ', $folder_links);
-                                        @endphp
-                                        @foreach ($folder_links_array as $folder_link)
-                                        <div class="row mt-3" id="shareFolderLinkForm">
-                                            <div class="col-md-10 dynamic-folderLink" id="dynamic-folderLink-list-1">
-                                                <div class="row mb-3">
-                                                    <div class="col-md-12">
-                                                        <input type="text" name="folder_link2[]" value="{{ $folder_link }}" id="folder_link2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2 append-buttons">
-                                                <div class="clearfix">
-                                                    <button type="button" id="add-folder" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                    <button type="button" id="remove-folder" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                    @else
-                                    <div class="row mt-3" id="shareFolderLinkForm" style="display: none;">
-                                        <div class="col-md-10 dynamic-folderLink" id="dynamic-folderLink-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-12">
-                                                    <input type="text" name="folder_link2[]" id="folder_link2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-folder" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-folder" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-
-                            <!--Reference Blogs-->
-                            @php
-                                if (is_string($webContent->reference_website) && is_array(json_decode($webContent->reference_website, true))) {
-                                    $array = json_decode($webContent->reference_website, true);
-                                    $reference_websites = implode(', ', $array);
-                                }
-                                $reference_websites_array = explode(', ', $reference_websites);
-                            @endphp
-                            <div class="row mt-3">
-                                <div class="col-md-10 dynamic-product" id="dynamic-product-list-1">
-                                    @if ($reference_websites_array !=null)
-                                    @foreach ($reference_websites_array as $item)
-                                    <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <h6>Competitors/Reference Website:</h6>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group" style="margin-left: 90px;">
-                                                <input type="text" id="reference_website2" value="{{ $item }}" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website2[]"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="">Does your competitor's content match exactly to what you do?</label>
-                                                <div class="mt-2 d-flex">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="competitor_content2" value="1" id="competitor_content_yesBtn" {{ ($webContent->competitor_content=="1")? "checked" : "" }}>
-                                                        <label class="form-check-label mt-1 ml-1" for="competitor_content_yesBtn">
-                                                            Yes
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check" style="margin-left: 10px;">
-                                                        <input class="form-check-input" type="radio" name="competitor_content2" value="0" id="competitor_content_noBtn" {{ ($webContent->competitor_content=="0")? "checked" : "" }}>
-                                                        <label class="form-check-label mt-1 ml-1" for="competitor_content_noBtn">
-                                                            No
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                    @else
-                                    <div class="row mb-3">
-                                        <div class="col-md-4">
-                                            <h6>Competitors/Reference Website:</h6>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group" style="margin-left: 90px;">
-                                                <input type="text" id="reference_website" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website2[]"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="">Does your competitor's content match exactly to what you do?</label>
-                                                <div class="mt-2 d-flex">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="competitor_content2" value="1" id="competitor_content_yesBtn" {{ ($webContent->competitor_content=="1")? "checked" : "" }}>
-                                                        <label class="form-check-label mt-1 ml-1" for="competitor_content_yesBtn">
-                                                            Yes
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check" style="margin-left: 10px;">
-                                                        <input class="form-check-input" type="radio" name="competitor_content2" value="0" id="competitor_content_noBtn" {{ ($webContent->competitor_content=="0")? "checked" : "" }}>
-                                                        <label class="form-check-label mt-1 ml-1" for="competitor_content_noBtn">
-                                                            No
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    @if ($webContent !=null && $webContent->competitor_content==0)
-                                        @php
-                                            if (is_string($webContent->description1) && is_array(json_decode($webContent->description1, true))) {
-                                                $array = json_decode($webContent->description1, true);
-                                                $description1 = implode(', ', $array);
-                                            }
-                                            $description1_array = explode(', ', $description1);
-
-                                            if (is_string($webContent->description2) && is_array(json_decode($webContent->description2, true))) {
-                                                $array = json_decode($webContent->description2, true);
-                                                $description2 = implode(', ', $array);
-                                            }
-                                            $description2_array = explode(', ', $description2);
-
-                                            if (is_string($webContent->description3) && is_array(json_decode($webContent->description3, true))) {
-                                                $array = json_decode($webContent->description3, true);
-                                                $description3 = implode(', ', $array);
-                                            }
-                                            $description3_array = explode(', ', $description3);
-                                        @endphp
-                                        @if ($description1_array || $description2_array || $description3_array)
-                                            <div class="row mt-3 mb-4" id="competitor_content_noForm">
-                                                <div class="col-md-4"></div>
-                                                <div class="col-md-8">
-                                                    <div class="row" style="margin-left: 9%;">
-                                                        @foreach ($description1_array as $description1)
-                                                        <div class="col-md-4" style="margin-top: 23px;">
-                                                            <label class="form-label" for="">What are the major differences?</label>
-                                                            <textarea name="competitor_content_description1[]"  id="competitor_content_description1" rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description1 !!}</textarea>
-                                                        </div>
-                                                        @endforeach
-                                                        @foreach ($description2_array as $description2)
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="">What are things that they do, and you don't?</label>
-                                                            <textarea name="competitor_content_description2[]" id="competitor_content_description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description2 !!}</textarea>
-                                                        </div>
-                                                        @endforeach
-                                                        @foreach ($description3_array as $description3)
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="">What are things that they don't, and you do?</label>
-                                                            <textarea name="competitor_content_description3[]" id="competitor_content_description3" rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description3 !!}</textarea>
-                                                        </div>
-                                                        @endforeach
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="row mt-3 mb-4" id="competitor_content_noForm" style="display: none;">
-                                                <div class="col-md-4"></div>
-                                                <div class="col-md-8">
-                                                    <div class="row" style="margin-left: 9%;">
-                                                        <div class="col-md-4" style="margin-top: 23px;">
-                                                            <label class="form-label" for="">What are the major differences?</label>
-                                                            <textarea name="competitor_content_description1[]" id="competitor_content_description1" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="">What are things that they do, and you don't?</label>
-                                                            <textarea name="competitor_content_description2[]" id="competitor_content_description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class="form-label" for="">What are things that they don't, and you do?</label>
-                                                            <textarea name="competitor_content_description3[]" id="competitor_content_description3" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endif
-                                </div>
-                                <div class="col-md-2 append-buttons">
-                                    <div class="clearfix">
-                                        <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                        <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Product Description-->
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6>Service/Product list:</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <input type="text" id="product_list1" value="{{ $webContent->product_list }}" class="form-control placeholderText height-35 f-14" placeholder="Type your page or product name" name="product_list1"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--Product list-->
-                            @php
-                                if (is_string($webContent->page_name) && is_array(json_decode($webContent->page_name, true))) {
-                                    $array = json_decode($webContent->page_name, true);
-                                    $page_names = implode(', ', $array);
-                                }
-                                $page_name_array = explode(', ', $page_names);
-
-                                if (is_string($webContent->quantity) && is_array(json_decode($webContent->quantity, true))) {
-                                    $array = json_decode($webContent->quantity, true);
-                                    $quantitys = implode(', ', $array);
-
-                                }
-                                $quantity_array = explode(', ', $quantitys);
-
-                                if (is_string($webContent->approximate_word) && is_array(json_decode($webContent->approximate_word, true))) {
-                                    $array = json_decode($webContent->approximate_word, true);
-                                    $approximate_words = implode(', ', $array);
-                                }
-                                $approximate_word_array = explode(', ', $approximate_words);
-                            @endphp
-                            @if ($page_name_array !=null || $quantity_array !=null || $approximate_word_array !=null)
-                            <div class="row mt-4">
-                                <div class="col-md-11 dynamic-page" id="dynamic-page-list-1">
-                                    <div class="row mb-4">
-                                        <div class="col-md-3" style="margin-top: 22px;">
-                                            <h6>Pages list:</h6>
-                                        </div>
-                                        @foreach ($page_name_array as $page_name)
-                                        <div class="col-md-3" style="margin-left: 11%">
-                                            <div class="form-group">
-                                                <label for="">Type Page name</label>
-                                                <input type="text" name="page_name1[]" value="{{ $page_name }}" id="page_name1" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                        @foreach ($quantity_array as $quantity)
-                                        <div class="col-md-2">
-                                            <label for="">Quantity</label>
-                                            <input type="number" name="quantity1[]" value="{{ $quantity }}" id="quantity1" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                        </div>
-                                        @endforeach
-                                        @foreach ($approximate_word_array as $approximate_word)
-                                        <div class="col-md-2">
-                                            <label for="">Approximate word count per page</label>
-                                            <input type="text" name="approximate_word1[]" value="{{ $approximate_word }}" id="approximate_word1" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
-                                        </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                                <div class="col-md-1 append-buttons" style="margin-top: 22px;">
-                                    <div class="clearfix">
-                                        <button type="button" id="add-page-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                        <button type="button" id="remove-page-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            @else
-                            <div class="row mt-4">
-                                <div class="col-md-11 dynamic-page" id="dynamic-page-list-1">
-                                    <div class="row mb-4">
-                                        <div class="col-md-3" style="margin-top: 22px;">
-                                            <h6>Pages list:</h6>
-                                        </div>
-                                        <div class="col-md-3" style="margin-left: 11%">
-                                            <div class="form-group">
-                                                <label for="">Type Page name</label>
-                                                <input type="text" name="page_name1[]" id="page_name1" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="">Quantity</label>
-                                            <input type="number" name="quantity1[]" id="quantity1" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label for="">Approximate word count per page</label>
-                                            <input type="text" name="approximate_word1[]" id="approximate_word1" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-1 append-buttons" style="margin-top: 22px;">
-                                    <div class="clearfix">
-                                        <button type="button" id="add-page-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                        <button type="button" id="remove-page-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-
-                            <!--Keywords-->
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6 style="margin-top: 40px;">Target Audience:</h6>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="">Gender</label>
-                                    <select name="target_audience_gender" id="target_audience_gender" class="form-control height-35 f-14 placeholderText">
-                                        <option value="">--</option>
-                                        <option value="male" {{ ($webContent->gender=="Male")? "selected" : "" }}>Male</option>
-                                        <option value="female" {{ ($webContent->gender=="Female")? "selected" : "" }}>Female</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="">Age (Put a Range)</label>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <input type="number" name="target_audience_age1" value="{{ $webContent->age1 }}" id="target_audience_age1" class="form-control placeholderText height-35 f-14" placeholder="18">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <input type="number" name="target_audience_age2" value="{{ $webContent->age2 }}" id="target_audience_age2" class="form-control placeholderText height-35 f-14" placeholder="25 ">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="">Monthly Income (in USD)</label>
-                                    <input type="text" name="monthly_income1" value="{{ $webContent->monthly_income }}" id="monthly_income1" class="form-control placeholderText height-35 f-14" placeholder="$">
-                                </div>
-                                <div class="col-md-2">
-                                    <label for="">Education Level</label>
-                                    <input type="text" name="education_level1" value="{{ $webContent->education_level }}" id="education_level1" class="form-control placeholderText height-35 f-14" placeholder="Education Level">
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6 style="margin-top: 40px;">Geographic Location :</h6>
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="">Country</label>
-                                    <input type="text" name="country1" id="country1" value="{{ $webContent->country }}" class="form-control placeholderText height-35 f-14" placeholder="Type your country">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="">City</label>
-                                    <input type="text" name="city1" id="city1" value="{{ $webContent->city }}" class="form-control placeholderText height-35 f-14" placeholder="Type your city">
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6 style="margin-top: 40px;">Interests :</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <label for="">Write 1-2 lines about the interests and pain points of your target audience</label>
-                                    <textarea name="interest1" id="interest1" rows="5" class="form-control placeholderText">{!! $webContent->interest !!}</textarea>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6 style="margin-top: 40px;">Buying Habits</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="">How does your client's target audience make purchasing decisions?</label>
-                                            <textarea name="interest_buying_habit1" id="interest_buying_habit1" rows="5" class="form-control">{!! $webContent->buying_habit1 !!}</textarea>
-                                        </div>
-                                        <div class="col-md-4" style="margin-top: 20px;">
-                                            <label for="">Do they shop online or in-store?</label>
-                                            <textarea name="interest_buying_habit2" id="interest_buying_habit2" rows="5" class="form-control">{!! $webContent->buying_habit2 !!}</textarea>
-                                        </div>
-                                        <div class="col-md-4" style="margin-top: 20px;">
-                                            <label for="">What are their favorite brands?</label>
-                                            <textarea name="interest_buying_habit3" id="interest_buying_habit3" rows="5" class="form-control">{!! $webContent->buying_habit3 !!}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6 style="margin-top: 40px;">Thor Native Language</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <label for="">What is their native language?</label>
-                                    <input type="text" name="thor_native_language" id="thor_native_language" value="{{ $webContent->language }}" class="form-control placeholderText height-35 f-14" placeholder="Type your language">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group mt-2">
-                                        <h6>How many words do we need to do appropriates?</h6>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group mt-2">
-                                        <h6>How many words did the client pay for initially?</h6>
-                                    </div>
-                                </div>
-                                <div class="col-8">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group mt-2">
-                                        <h6>Did he confirm he will pay for any additional words if the need be?</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="d-flex mt-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
-                                            <label class="form-check-label mt-1 ml-2" for="yes_btn1">
-                                            Yes
-                                            </label>
-                                        </div>
-                                        <div class="form-check ml-3">
-                                            <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
-                                            <label class="form-check-label mt-1 ml-2" for="no_btn1">
-                                            No
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <h6>Do we have any layout we need to follow for the content?</h6>
-                                    </div>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="d-flex mt-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
-                                            <label class="form-check-label mt-1 ml-2" for="yes_btn2">
-                                            Yes
-                                            </label>
-                                        </div>
-                                        <div class="form-check ml-3">
-                                            <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
-                                            <label class="form-check-label mt-1 ml-2" for="no_btn2">
-                                            No
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3" style="display: none" id="website-link-form">
-                                <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
-                                    <div class="row mb-3">
-                                        <div class="col-md-4"></div>
-                                        <div class="col-md-8">
-                                            <div class="form-group" style="margin-left: 10%;">
-                                                <label class="form-check-label mb-1">Website link or Theme link:</label>
-                                                <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 append-buttons">
-                                    <div class="clearfix mt-4">
-                                        <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                        <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-md-4">
-                                    <h6 style="margin-top: 40px;">Pages List :</h6>
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="">Page name</label>
-                                                        <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="">Quantity</label>
-                                                    <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="">Approximate word</label>
-                                                    <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons" style="margin-top: 30px;">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6>Website Link & Niche:</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="url" name="website_link2" id="website_link2" value="{{ $sales_web_content->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" name="website_niche2" id="website_niche2" value="{{ $sales_web_content->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Deal Id</p>
                         </div>
-                        <!-- Website Link & Niche Ends Here -->
-                        <!-- Website Name/Business Name -->
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6>Website Name/Business Name:</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" name="website_name2" id="website_name2" value="{{ $sales_web_content->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
-                            </div>
+                        <div class="col-8">
+                            <p>{{$web_content->deal_id}}</p>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <textarea name="business_information2" id="business_information2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $sales_web_content->business_information !!}</textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="">Want to share file?</label>
-                                            <div class="mt-2 d-flex">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="share_file" value="1" id="share_file_info_yesBtn" {{ ($sales_web_content->share_file_info=="1")? "checked" : "" }}>
-                                                    <label class="form-check-label mt-1 ml-1" for="share_file_info_yesBtn">
-                                                        Yes
-                                                    </label>
-                                                </div>
-                                                <div class="form-check" style="margin-left: 10px;">
-                                                    <input class="form-check-input" type="radio" name="share_file" value="0" id="share_file_info_noBtn" {{ ($sales_web_content->share_file_info=="0")? "checked" : "" }}>
-                                                    <label class="form-check-label mt-1 ml-1" for="share_file_info_noBtn">
-                                                        No
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @if ($sales_web_content!=null && $sales_web_content->share_file_info==1)
-                                    @php
-                                        if (is_string($sales_web_content->folder_link) && is_array(json_decode($sales_web_content->folder_link, true))) {
-                                            $array = json_decode($sales_web_content->folder_link, true);
-                                            $folder_links = implode(', ', $array);
-                                        }
-                                        $folder_links_array = explode(', ', $folder_links);
-                                    @endphp
-                                    @foreach ($folder_links_array as $folder_link)
-                                    <div class="row mt-3" id="shareFolderLinkForm">
-                                        <div class="col-md-10 dynamic-folderLink" id="dynamic-folderLink-list-1">
-                                            <div class="row mb-3">
-                                                <div class="col-md-12">
-                                                    <input type="text" name="folder_link2[]" value="{{ $folder_link }}" id="folder_link2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2 append-buttons">
-                                            <div class="clearfix">
-                                                <button type="button" id="add-folder" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                                <button type="button" id="remove-folder" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                @else
-                                <div class="row mt-3" id="shareFolderLinkForm" style="display: none;">
-                                    <div class="col-md-10 dynamic-folderLink" id="dynamic-folderLink-list-1">
-                                        <div class="row mb-3">
-                                            <div class="col-md-12">
-                                                <input type="text" name="folder_link2[]" id="folder_link2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 append-buttons">
-                                        <div class="clearfix">
-                                            <button type="button" id="add-folder" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-folder" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endif
-                            </div>
+                        <div class="col-4">
+                            <p>Client Link</p>
                         </div>
-
-                        <!--Reference Blogs-->
-                        @php
-                            if (is_string($sales_web_content->reference_website) && is_array(json_decode($sales_web_content->reference_website, true))) {
-                                $array = json_decode($sales_web_content->reference_website, true);
-                                $reference_websites = implode(', ', $array);
-                            }
-                            $reference_websites_array = explode(', ', $reference_websites);
-                        @endphp
-                        <div class="row mt-3">
-                            <div class="col-md-10 dynamic-product" id="dynamic-product-list-1">
-                                @if ($reference_websites_array !=null)
-                                @foreach ($reference_websites_array as $item)
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <h6>Competitors/Reference Website:</h6>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group" style="margin-left: 90px;">
-                                            <input type="text" id="reference_website2" value="{{ $item }}" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website2[]"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Does your competitor's content match exactly to what you do?</label>
-                                            <div class="mt-2 d-flex">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="competitor_content2" value="1" id="competitor_content_yesBtn" {{ ($sales_web_content->competitor_content=="1")? "checked" : "" }}>
-                                                    <label class="form-check-label mt-1 ml-1" for="competitor_content_yesBtn">
-                                                        Yes
-                                                    </label>
-                                                </div>
-                                                <div class="form-check" style="margin-left: 10px;">
-                                                    <input class="form-check-input" type="radio" name="competitor_content2" value="0" id="competitor_content_noBtn" {{ ($sales_web_content->competitor_content=="0")? "checked" : "" }}>
-                                                    <label class="form-check-label mt-1 ml-1" for="competitor_content_noBtn">
-                                                        No
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endforeach
-                                @else
-                                <div class="row mb-3">
-                                    <div class="col-md-4">
-                                        <h6>Competitors/Reference Website:</h6>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group" style="margin-left: 90px;">
-                                            <input type="text" id="reference_website" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website2[]"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="">Does your competitor's content match exactly to what you do?</label>
-                                            <div class="mt-2 d-flex">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="competitor_content2" value="1" id="competitor_content_yesBtn" {{ ($sales_web_content->competitor_content=="1")? "checked" : "" }}>
-                                                    <label class="form-check-label mt-1 ml-1" for="competitor_content_yesBtn">
-                                                        Yes
-                                                    </label>
-                                                </div>
-                                                <div class="form-check" style="margin-left: 10px;">
-                                                    <input class="form-check-input" type="radio" name="competitor_content2" value="0" id="competitor_content_noBtn" {{ ($sales_web_content->competitor_content=="0")? "checked" : "" }}>
-                                                    <label class="form-check-label mt-1 ml-1" for="competitor_content_noBtn">
-                                                        No
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                @endif
-                                @if ($sales_web_content !=null && $sales_web_content->competitor_content==0)
-                                    @php
-                                        if (is_string($sales_web_content->description1) && is_array(json_decode($sales_web_content->description1, true))) {
-                                            $array = json_decode($sales_web_content->description1, true);
-                                            $description1 = implode(', ', $array);
-                                        }
-                                        $description1_array = explode(', ', $description1);
-
-                                        if (is_string($sales_web_content->description2) && is_array(json_decode($sales_web_content->description2, true))) {
-                                            $array = json_decode($sales_web_content->description2, true);
-                                            $description2 = implode(', ', $array);
-                                        }
-                                        $description2_array = explode(', ', $description2);
-
-                                        if (is_string($sales_web_content->description3) && is_array(json_decode($sales_web_content->description3, true))) {
-                                            $array = json_decode($sales_web_content->description3, true);
-                                            $description3 = implode(', ', $array);
-                                        }
-                                        $description3_array = explode(', ', $description3);
-                                    @endphp
-                                    @if ($description1_array || $description2_array || $description3_array)
-                                        <div class="row mt-3 mb-4" id="competitor_content_noForm">
-                                            <div class="col-md-4"></div>
-                                            <div class="col-md-8">
-                                                <div class="row" style="margin-left: 9%;">
-                                                    @foreach ($description1_array as $description1)
-                                                    <div class="col-md-4" style="margin-top: 23px;">
-                                                        <label class="form-label" for="">What are the major differences?</label>
-                                                        <textarea name="competitor_content_description1[]"  id="competitor_content_description1" rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description1 !!}</textarea>
-                                                    </div>
-                                                    @endforeach
-                                                    @foreach ($description2_array as $description2)
-                                                    <div class="col-md-4">
-                                                        <label class="form-label" for="">What are things that they do, and you don't?</label>
-                                                        <textarea name="competitor_content_description2[]" id="competitor_content_description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description2 !!}</textarea>
-                                                    </div>
-                                                    @endforeach
-                                                    @foreach ($description3_array as $description3)
-                                                    <div class="col-md-4">
-                                                        <label class="form-label" for="">What are things that they don't, and you do?</label>
-                                                        <textarea name="competitor_content_description3[]" id="competitor_content_description3" rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description3 !!}</textarea>
-                                                    </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @else
-                                        <div class="row mt-3 mb-4" id="competitor_content_noForm" style="display: none;">
-                                            <div class="col-md-4"></div>
-                                            <div class="col-md-8">
-                                                <div class="row" style="margin-left: 9%;">
-                                                    <div class="col-md-4" style="margin-top: 23px;">
-                                                        <label class="form-label" for="">What are the major differences?</label>
-                                                        <textarea name="competitor_content_description1[]" id="competitor_content_description1" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <label class="form-label" for="">What are things that they do, and you don't?</label>
-                                                        <textarea name="competitor_content_description2[]" id="competitor_content_description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class="form-label" for="">What are things that they don't, and you do?</label>
-                                                        <textarea name="competitor_content_description3[]" id="competitor_content_description3" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endif
-                            </div>
-                            <div class="col-md-2 append-buttons">
-                                <div class="clearfix">
-                                    <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                    <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                </div>
-                            </div>
+                        <div class="col-8">
+                            <p>{{$web_content->client_link}}</p>
                         </div>
-                        <!--Product Description-->
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6>Service/Product list:</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <input type="text" id="product_list1" value="{{ $sales_web_content->product_list }}" class="form-control placeholderText height-35 f-14" placeholder="Type your page or product name" name="product_list1"/>
-                                </div>
-                            </div>
+                        <div class="col-4">
+                            <p>Client Name</p>
                         </div>
-                        <!--Product list-->
-                        @php
-                            if (is_string($sales_web_content->page_name) && is_array(json_decode($sales_web_content->page_name, true))) {
-                                $array = json_decode($sales_web_content->page_name, true);
-                                $page_names = implode(', ', $array);
-                            }
-                            $page_name_array = explode(', ', $page_names);
-
-                            if (is_string($sales_web_content->quantity) && is_array(json_decode($sales_web_content->quantity, true))) {
-                                $array = json_decode($sales_web_content->quantity, true);
-                                $quantitys = implode(', ', $array);
-
-                            }
-                            $quantity_array = explode(', ', $quantitys);
-
-                            if (is_string($sales_web_content->approximate_word) && is_array(json_decode($sales_web_content->approximate_word, true))) {
-                                $array = json_decode($sales_web_content->approximate_word, true);
-                                $approximate_words = implode(', ', $array);
-                            }
-                            $approximate_word_array = explode(', ', $approximate_words);
-                        @endphp
-                        @if ($page_name_array !=null || $quantity_array !=null || $approximate_word_array !=null)
-                        <div class="row mt-4">
-                            <div class="col-md-11 dynamic-page" id="dynamic-page-list-1">
-                                <div class="row mb-4">
-                                    <div class="col-md-3" style="margin-top: 22px;">
-                                        <h6>Pages list:</h6>
-                                    </div>
-                                    @foreach ($page_name_array as $page_name)
-                                    <div class="col-md-3" style="margin-left: 11%">
-                                        <div class="form-group">
-                                            <label for="">Type Page name</label>
-                                            <input type="text" name="page_name1[]" value="{{ $page_name }}" id="page_name1" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                    @foreach ($quantity_array as $quantity)
-                                    <div class="col-md-2">
-                                        <label for="">Quantity</label>
-                                        <input type="number" name="quantity1[]" value="{{ $quantity }}" id="quantity1" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                    </div>
-                                    @endforeach
-                                    @foreach ($approximate_word_array as $approximate_word)
-                                    <div class="col-md-2">
-                                        <label for="">Approximate word count per page</label>
-                                        <input type="text" name="approximate_word1[]" value="{{ $approximate_word }}" id="approximate_word1" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                            <div class="col-md-1 append-buttons" style="margin-top: 22px;">
-                                <div class="clearfix">
-                                    <button type="button" id="add-page-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                    <button type="button" id="remove-page-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                </div>
-                            </div>
+                        <div class="col-8">
+                            <p>{{$deal->client_name}}</p>
                         </div>
-                        @else
-                        <div class="row mt-4">
-                            <div class="col-md-11 dynamic-page" id="dynamic-page-list-1">
-                                <div class="row mb-4">
-                                    <div class="col-md-3" style="margin-top: 22px;">
-                                        <h6>Pages list:</h6>
-                                    </div>
-                                    <div class="col-md-3" style="margin-left: 11%">
-                                        <div class="form-group">
-                                            <label for="">Type Page name</label>
-                                            <input type="text" name="page_name1[]" id="page_name1" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="">Quantity</label>
-                                        <input type="number" name="quantity1[]" id="quantity1" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label for="">Approximate word count per page</label>
-                                        <input type="text" name="approximate_word1[]" id="approximate_word1" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-1 append-buttons" style="margin-top: 22px;">
-                                <div class="clearfix">
-                                    <button type="button" id="add-page-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                    <button type="button" id="remove-page-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                </div>
-                            </div>
+                        <div class="col-4">
+                            <p>Project Name</p>
                         </div>
-                        @endif
-
-                        <!--Keywords-->
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6 style="margin-top: 40px;">Target Audience:</h6>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="">Gender</label>
-                                <select name="target_audience_gender" id="target_audience_gender" class="form-control height-35 f-14 placeholderText">
-                                    <option value="">--</option>
-                                    <option value="male" {{ ($sales_web_content->gender=="Male")? "selected" : "" }}>Male</option>
-                                    <option value="female" {{ ($sales_web_content->gender=="Female")? "selected" : "" }}>Female</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="">Age (Put a Range)</label>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <input type="number" name="target_audience_age1" value="{{ $sales_web_content->age1 }}" id="target_audience_age1" class="form-control placeholderText height-35 f-14" placeholder="18">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="number" name="target_audience_age2" value="{{ $sales_web_content->age2 }}" id="target_audience_age2" class="form-control placeholderText height-35 f-14" placeholder="25 ">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2">
-                                <label for="">Monthly Income (in USD)</label>
-                                <input type="text" name="monthly_income1" value="{{ $sales_web_content->monthly_income }}" id="monthly_income1" class="form-control placeholderText height-35 f-14" placeholder="$">
-                            </div>
-                            <div class="col-md-2">
-                                <label for="">Education Level</label>
-                                <input type="text" name="education_level1" value="{{ $sales_web_content->education_level }}" id="education_level1" class="form-control placeholderText height-35 f-14" placeholder="Education Level">
-                            </div>
+                        <div class="col-8">
+                            <p>{{$deal->project_name}}</p>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6 style="margin-top: 40px;">Geographic Location :</h6>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="">Country</label>
-                                <input type="text" name="country1" id="country1" value="{{ $sales_web_content->country }}" class="form-control placeholderText height-35 f-14" placeholder="Type your country">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="">City</label>
-                                <input type="text" name="city1" id="city1" value="{{ $sales_web_content->city }}" class="form-control placeholderText height-35 f-14" placeholder="Type your city">
-                            </div>
+                        <div class="col-4">
+                            <p>Service Type</p>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6 style="margin-top: 40px;">Interests :</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <label for="">Write 1-2 lines about the interests and pain points of your target audience</label>
-                                <textarea name="interest1" id="interest1" rows="5" class="form-control placeholderText">{!! $sales_web_content->interest !!}</textarea>
-                            </div>
+                        <div class="col-8">
+                            <p>{{$web_content->service_type}}</p>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6 style="margin-top: 40px;">Buying Habits</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label for="">How does your client's target audience make purchasing decisions?</label>
-                                        <textarea name="interest_buying_habit1" id="interest_buying_habit1" rows="5" class="form-control">{!! $sales_web_content->buying_habit1 !!}</textarea>
-                                    </div>
-                                    <div class="col-md-4" style="margin-top: 20px;">
-                                        <label for="">Do they shop online or in-store?</label>
-                                        <textarea name="interest_buying_habit2" id="interest_buying_habit2" rows="5" class="form-control">{!! $sales_web_content->buying_habit2 !!}</textarea>
-                                    </div>
-                                    <div class="col-md-4" style="margin-top: 20px;">
-                                        <label for="">What are their favorite brands?</label>
-                                        <textarea name="interest_buying_habit3" id="interest_buying_habit3" rows="5" class="form-control">{!! $sales_web_content->buying_habit3 !!}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6 style="margin-top: 40px;">Thor Native Language</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <label for="">What is their native language?</label>
-                                <input type="text" name="thor_native_language" id="thor_native_language" value="{{ $sales_web_content->language }}" class="form-control placeholderText height-35 f-14" placeholder="Type your language">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mt-2">
-                                    <h6>How many words do we need to do appropriates?</h6>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="form-group">
-                                    <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mt-2">
-                                    <h6>How many words did the client pay for initially?</h6>
-                                </div>
-                            </div>
-                            <div class="col-8">
-                                <div class="form-group">
-                                    <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group mt-2">
-                                    <h6>Did he confirm he will pay for any additional words if the need be?</h6>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="d-flex mt-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
-                                        <label class="form-check-label mt-1 ml-2" for="yes_btn1">
-                                        Yes
-                                        </label>
-                                    </div>
-                                    <div class="form-check ml-3">
-                                        <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
-                                        <label class="form-check-label mt-1 ml-2" for="no_btn1">
-                                        No
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <h6>Do we have any layout we need to follow for the content?</h6>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="d-flex mt-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
-                                        <label class="form-check-label mt-1 ml-2" for="yes_btn2">
-                                        Yes
-                                        </label>
-                                    </div>
-                                    <div class="form-check ml-3">
-                                        <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
-                                        <label class="form-check-label mt-1 ml-2" for="no_btn2">
-                                        No
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3" style="display: none" id="website-link-form">
-                            <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
-                                <div class="row mb-3">
-                                    <div class="col-md-4"></div>
-                                    <div class="col-md-8">
-                                        <div class="form-group" style="margin-left: 10%;">
-                                            <label class="form-check-label mb-1">Website link or Theme link:</label>
-                                            <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-2 append-buttons">
-                                <div class="clearfix mt-4">
-                                    <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                    <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-4">
-                                <h6 style="margin-top: 40px;">Pages List :</h6>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
-                                        <div class="row mb-3">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="">Page name</label>
-                                                    <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="">Quantity</label>
-                                                <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="">Approximate word</label>
-                                                <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2 append-buttons" style="margin-top: 30px;">
-                                        <div class="clearfix">
-                                            <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
-                                            <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn btn-primary mt-5 " id="pm_web_content_submit">Submit</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    @else
-        @if (Auth::user()->role_id == 7 || Auth::user()->role_id == 1)
-        <div class="row">
-            <div class="col-12">
-                <div class="card mb-2 mt-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Deal Id</p>
-                            </div>
-                            <div class="col-8">
-                                <p>{{$web_content->deal_id}}</p>
-                            </div>
-                            <div class="col-4">
-                                <p>Client Link</p>
-                            </div>
-                            <div class="col-8">
-                                <p>{{$web_content->client_link}}</p>
-                            </div>
-                            <div class="col-4">
-                                <p>Client Name</p>
-                            </div>
-                            <div class="col-8">
-                                <p>{{$deal->client_name}}</p>
-                            </div>
-                            <div class="col-4">
-                                <p>Project Name</p>
-                            </div>
-                            <div class="col-8">
-                                <p>{{$deal->project_name}}</p>
-                            </div>
-                            <div class="col-4">
-                                <p>Service Type</p>
-                            </div>
-                            <div class="col-8">
-                                <p>{{$web_content->service_type}}</p>
-                            </div>
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Website Link & Niche:</p>
                         </div>
-                    </div>
-                </div>
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Website Link & Niche:</p>
-                            </div>
-                            <div class="col-8">
-                                {{-- START WEBSITE LINK --}}
-                                <div id="website_link_container">
-                                    @if($sales_web_content != null)
-                                        <p>{{$sales_web_content->website_link}}</p>
-                                    @else
-                                        @if($web_content->website_link ?? null)
-                                            <button id="website_link_btn" type="button" style="background-color: #ffffff" onclick="toggleWebsiteLinkButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->website_link}}</button>
-                                        @else
-                                            <button type="button" id="website_link_btn" style="background-color: #ffffff" onclick="toggleWebsiteLinkButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                        @endif
-                                    @endif
-                                </div>
-
-                                <div id="website_link_form">
-                                    @if($web_content->website_link)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_website_link" style="display: none; margin-top: -10px;">
-                                            <input type="url" id="website_link" value="{{$web_content->website_link}}" name="website_link" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Enter website URL (https://asdasd.com)">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveWebsiteLinkBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
-                                        </div>
-                                        <span id="website_link_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_website_link" style="display: none; margin-top: -10px;">
-                                            <input type="url" id="website_link" name="website_link" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Enter website URL (https://asdasd.com)">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveWebsiteLinkBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
-                                        </div>
-                                        <span id="website_link_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
-
-
-                                {{-- START WEBSITE LINK --}}
-                                <div id="website_niche_container">
-                                    @if($sales_web_content && $sales_web_content->website_niche != null)
-                                        <p>{{$sales_web_content->website_niche}}</p>
-                                    @else
-                                        @if($web_content && $web_content->website_niche)
-                                            <button id="website_niche_btn" type="button" style="background-color: #ffffff" onclick="toggleWebsiteNicheButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->website_niche}}</button>
-                                        @else
-                                            <button type="button" id="website_niche_btn" style="background-color: #ffffff" onclick="toggleWebsiteNicheButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                        @endif
-                                    @endif
-                                </div>
-
-
-                                <div id="website_niche_form">
-                                    @if($web_content->website_niche)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_website_niche" style="display: none; margin-top: -10px;">
-                                            <input type="url" id="website_niche" value="{{$web_content->website_niche}}" name="website_niche" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveWebsiteNicheBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
-                                        </div>
-                                        <span id="website_niche_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_website_niche" style="display: none; margin-top: -10px;">
-                                            <input type="url" id="website_niche" name="website_niche" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveWebsiteNicheBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
-                                        </div>
-                                        <span id="website_niche_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Website Name/Business Name</p>
-                            </div>
-                            <div class="col-8">
-                                <div id="website_name_container">
-                                    @if($sales_web_content && $sales_web_content->website_name != null)
-                                    <p>{{$sales_web_content->website_name}}</p>
-                                    @else
-                                    @if($web_content && $web_content->website_name)
-                                    <button id="website_name_btn" type="button" style="background-color: #ffffff" onclick="toggleWebsiteNameButton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->website_name}}</button>
-                                    @else
-                                    <button type="button" id="website_name_btn" style="background-color: #ffffff" onclick="toggleWebsiteNameButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
-
-                                <div id="website_name_form">
-                                    @if($web_content->website_name)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_website_name" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="website_name" value="{{$web_content->website_name}}" name="website_name" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveWebsiteNameBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
-                                        </div>
-                                        <span id="website_name_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_website_name" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="website_name" name="website_name" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveWebsiteNameBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
-                                        </div>
-                                        <span id="website_name_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Business profile/Leaflet/Brochure/Any important information</p>
-                            </div>
-                            @if($sales_web_content && $sales_web_content->business_information != null)
-                            <div class="col-8">
-                                <p>{{$sales_web_content->business_information}}</p>
-                            </div>
-                            @else
-                            <div class="col-8" id="business_information_value" onclick="toggleBusinessInformationEdit()">
-                                <div id="business_information_container">
-                                    @if($web_content && $web_content->business_information)
-                                    <button id="business_information_btn" type="button" style="background-color: #ffffff"  data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->business_information}}</button>
-                                    @else
-                                    <button type="button" id="business_information_btn" style="background-color: #ffffff"  data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                </div>
-                            </div>
-                            @endif
-
-
-                            <div class="col-4">
-                                <p>Share File Info</p>
-                            </div>
-                            @if($sales_web_content !=null)
-                            <div class="col-8">
-                                @if($sales_web_content->share_file_info ==1)
-                                    <p>Yes</p>
+                        <div class="col-8">
+                            {{-- START WEBSITE LINK --}}
+                            <div id="website_link_container">
+                                @if($sales_web_content != null)
+                                    <p>{{$sales_web_content->website_link}}</p>
                                 @else
-                                    <p>No</p>
+                                    @if($web_content->website_link ?? null)
+                                        <button id="website_link_btn" type="button" style="background-color: #ffffff" onclick="toggleWebsiteLinkButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->website_link}}</button>
+                                    @else
+                                        <button type="button" id="website_link_btn" style="background-color: #ffffff" onclick="toggleWebsiteLinkButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                    @endif
                                 @endif
                             </div>
-                            @else
-                            <div class="col-8" id="business_information_value" onclick="toggleBusinessInformationEdit()">
-                                @if($web_content->share_file_info ==1)
-                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">Yes</p>
-                                @else
-                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">No</p>
+
+                            <div id="website_link_form">
+                                @if($web_content->website_link)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_website_link" style="display: none; margin-top: -10px;">
+                                        <input type="url" id="website_link" value="{{$web_content->website_link}}" name="website_link" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Enter website URL (https://asdasd.com)">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveWebsiteLinkBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <span id="website_link_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_website_link" style="display: none; margin-top: -10px;">
+                                        <input type="url" id="website_link" name="website_link" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Enter website URL (https://asdasd.com)">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveWebsiteLinkBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <span id="website_link_error" class="text-danger"></span><br>
+                                </form>
                                 @endif
                             </div>
-                            @endif
 
-                            @if(isset($sales_web_content) && $sales_web_content->share_file_info == 1)
+
+                            {{-- START WEBSITE LINK --}}
+                            <div id="website_niche_container">
+                                @if($sales_web_content && $sales_web_content->website_niche != null)
+                                    <p>{{$sales_web_content->website_niche}}</p>
+                                @else
+                                    @if($web_content && $web_content->website_niche)
+                                        <button id="website_niche_btn" type="button" style="background-color: #ffffff" onclick="toggleWebsiteNicheButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->website_niche}}</button>
+                                    @else
+                                        <button type="button" id="website_niche_btn" style="background-color: #ffffff" onclick="toggleWebsiteNicheButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                    @endif
+                                @endif
+                            </div>
+
+
+                            <div id="website_niche_form">
+                                @if($web_content->website_niche)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_website_niche" style="display: none; margin-top: -10px;">
+                                        <input type="url" id="website_niche" value="{{$web_content->website_niche}}" name="website_niche" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveWebsiteNicheBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <span id="website_niche_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_website_niche" style="display: none; margin-top: -10px;">
+                                        <input type="url" id="website_niche" name="website_niche" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveWebsiteNicheBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <span id="website_niche_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Website Name/Business Name</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="website_name_container">
+                                @if($sales_web_content && $sales_web_content->website_name != null)
+                                <p>{{$sales_web_content->website_name}}</p>
+                                @else
+                                @if($web_content && $web_content->website_name)
+                                <button id="website_name_btn" type="button" style="background-color: #ffffff" onclick="toggleWebsiteNameButton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->website_name}}</button>
+                                @else
+                                <button type="button" id="website_name_btn" style="background-color: #ffffff" onclick="toggleWebsiteNameButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
+                            </div>
+
+                            <div id="website_name_form">
+                                @if($web_content->website_name)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_website_name" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="website_name" value="{{$web_content->website_name}}" name="website_name" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveWebsiteNameBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <span id="website_name_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_website_name" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="website_name" name="website_name" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveWebsiteNameBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
+                                        </div>
+                                    </div>
+                                    <span id="website_name_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Business profile/Leaflet/Brochure/Any important information</p>
+                        </div>
+                        @if($sales_web_content && $sales_web_content->business_information != null)
+                        <div class="col-8">
+                            <p>{{$sales_web_content->business_information}}</p>
+                        </div>
+                        @else
+                        <div class="col-8" id="business_information_value" onclick="toggleBusinessInformationEdit()">
+                            <div id="business_information_container">
+                                @if($web_content && $web_content->business_information)
+                                <button id="business_information_btn" type="button" style="background-color: #ffffff"  data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->business_information}}</button>
+                                @else
+                                <button type="button" id="business_information_btn" style="background-color: #ffffff"  data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
+
+
+                        <div class="col-4">
+                            <p>Share File Info</p>
+                        </div>
+                        @if($sales_web_content !=null)
+                        <div class="col-8">
+                            @if($sales_web_content->share_file_info ==1)
+                                <p>Yes</p>
+                            @else
+                                <p>No</p>
+                            @endif
+                        </div>
+                        @else
+                        <div class="col-8" id="business_information_value" onclick="toggleBusinessInformationEdit()">
+                            @if($web_content->share_file_info ==1)
+                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">Yes</p>
+                            @else
+                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">No</p>
+                            @endif
+                        </div>
+                        @endif
+
+                        @if(isset($sales_web_content) && $sales_web_content->share_file_info == 1)
+                            <div class="col-4"></div>
+                            <div class="col-8">
+                                @php
+                                    if (is_string($sales_web_content->folder_link) && is_array(json_decode($sales_web_content->folder_link, true))) {
+                                        $array = json_decode($sales_web_content->folder_link, true);
+                                        $folder_links = implode(', ', $array);
+                                    }
+                                    else {
+                                        $folder_links = '';
+                                    }
+                                    $folder_links_array = explode(', ', $folder_links);
+                                @endphp
+
+                                @foreach($folder_links_array as $folder_link)
+                                    @if($folder_link)
+                                        <p>{{$folder_link}}</p>
+                                    @else
+                                        <p>--</p>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @else
+                            @if(isset($web_content) && $web_content->share_file_info == 1)
                                 <div class="col-4"></div>
-                                <div class="col-8">
+                                <div class="col-8" id="business_information_value" onclick="toggleBusinessInformationEdit()">
                                     @php
-                                        if (is_string($sales_web_content->folder_link) && is_array(json_decode($sales_web_content->folder_link, true))) {
-                                            $array = json_decode($sales_web_content->folder_link, true);
+                                        if (is_string($web_content->folder_link) && is_array(json_decode($web_content->folder_link, true))) {
+                                            $array = json_decode($web_content->folder_link, true);
                                             $folder_links = implode(', ', $array);
                                         }
                                         else {
@@ -1377,124 +263,142 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
 
                                     @foreach($folder_links_array as $folder_link)
                                         @if($folder_link)
-                                            <p>{{$folder_link}}</p>
-                                        @else
-                                            <p>--</p>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @else
-                                @if(isset($web_content) && $web_content->share_file_info == 1)
-                                    <div class="col-4"></div>
-                                    <div class="col-8" id="business_information_value" onclick="toggleBusinessInformationEdit()">
-                                        @php
-                                            if (is_string($web_content->folder_link) && is_array(json_decode($web_content->folder_link, true))) {
-                                                $array = json_decode($web_content->folder_link, true);
-                                                $folder_links = implode(', ', $array);
-                                            }
-                                            else {
-                                                $folder_links = '';
-                                            }
-                                            $folder_links_array = explode(', ', $folder_links);
-                                        @endphp
-
-                                        @foreach($folder_links_array as $folder_link)
-                                            @if($folder_link)
-                                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$folder_link}}</p>
-                                            @else
-                                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                @endif
-                            @endif
-                        </div>
-                        <div id="business_information_edit">
-                            <button type="button" style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#business_information_edit_modal"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
-                        </div>
-                        @include('service-type.modal.web-content.business_information_edit_modal')
-                    </div>
-                </div>
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Competitors/Reference Website</p>
-                            </div>
-                            @if($sales_web_content != null && $sales_web_content->reference_website != null)
-                                <div class="col-8">
-                                    @php
-                                        $reference_websites = '';
-
-                                        if (is_string($sales_web_content->reference_website) && is_array(json_decode($sales_web_content->reference_website, true))) {
-                                            $array = json_decode($sales_web_content->reference_website, true);
-                                            $reference_websites = implode(', ', $array);
-                                        }
-
-                                        $reference_websites_array = explode(', ', $reference_websites);
-                                    @endphp
-
-                                    @foreach($reference_websites_array as $reference_website)
-                                        @if($reference_website)
-                                            <p>{{$reference_website}}</p>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
-                                    @php
-                                        $reference_websites = '';
-
-                                        if (is_string($web_content->reference_website) && is_array(json_decode($web_content->reference_website, true))) {
-                                            $array = json_decode($web_content->reference_website, true);
-                                            $reference_websites = implode(', ', $array);
-                                        }
-
-                                        $reference_websites_array = explode(', ', $reference_websites);
-                                    @endphp
-
-                                    @foreach($reference_websites_array as $reference_website)
-                                        @if($reference_website)
-                                            <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$reference_website}}</p>
+                                            <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$folder_link}}</p>
                                         @else
                                             <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
                                         @endif
                                     @endforeach
                                 </div>
                             @endif
-
-                            <div class="col-4">
-                                <p>Does your competitor's content match exactly to what you do?</p>
-                            </div>
-
-                            @if($sales_web_content != null)
+                        @endif
+                    </div>
+                    <div id="business_information_edit">
+                        <button type="button" style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#business_information_edit_modal"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
+                    </div>
+                    @include('service-type.modal.web-content.business_information_edit_modal')
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Competitors/Reference Website</p>
+                        </div>
+                        @if($sales_web_content != null && $sales_web_content->reference_website != null)
                             <div class="col-8">
-                                @if($sales_web_content->competitor_content ==1)
-                                    <p>Yes</p>
-                                @else
-                                    <p>No</p>
-                                @endif
-                            </div>
-                            @else
-                            <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
-                                @if($web_content->competitor_content ==1)
-                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">Yes</p>
-                                @else
-                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">No</p>
-                                @endif
-                            </div>
-                            @endif
+                                @php
+                                    $reference_websites = '';
 
-                            @if (!is_null($sales_web_content) && $sales_web_content->competitor_content == 0)
+                                    if (is_string($sales_web_content->reference_website) && is_array(json_decode($sales_web_content->reference_website, true))) {
+                                        $array = json_decode($sales_web_content->reference_website, true);
+                                        $reference_websites = implode(', ', $array);
+                                    }
+
+                                    $reference_websites_array = explode(', ', $reference_websites);
+                                @endphp
+
+                                @foreach($reference_websites_array as $reference_website)
+                                    @if($reference_website)
+                                        <p>{{$reference_website}}</p>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
+                                @php
+                                    $reference_websites = '';
+
+                                    if (is_string($web_content->reference_website) && is_array(json_decode($web_content->reference_website, true))) {
+                                        $array = json_decode($web_content->reference_website, true);
+                                        $reference_websites = implode(', ', $array);
+                                    }
+
+                                    $reference_websites_array = explode(', ', $reference_websites);
+                                @endphp
+
+                                @foreach($reference_websites_array as $reference_website)
+                                    @if($reference_website)
+                                        <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$reference_website}}</p>
+                                    @else
+                                        <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @endif
+
+                        <div class="col-4">
+                            <p>Does your competitor's content match exactly to what you do?</p>
+                        </div>
+
+                        @if($sales_web_content != null)
+                        <div class="col-8">
+                            @if($sales_web_content->competitor_content ==1)
+                                <p>Yes</p>
+                            @else
+                                <p>No</p>
+                            @endif
+                        </div>
+                        @else
+                        <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
+                            @if($web_content->competitor_content ==1)
+                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">Yes</p>
+                            @else
+                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">No</p>
+                            @endif
+                        </div>
+                        @endif
+
+                        @if (!is_null($sales_web_content) && $sales_web_content->competitor_content == 0)
+                            <div class="col-4">
+                                <p>What are the major differences?</p>
+                            </div>
+                            <div class="col-8">
+                                @php
+                                    if (is_string($sales_web_content->description1) && is_array(json_decode($sales_web_content->description1, true))) {
+                                        $array = json_decode($sales_web_content->description1, true);
+                                        foreach ($array as $value) {
+                                            echo "<p>$value</p>";
+                                        }
+                                    }
+                                @endphp
+                            </div>
+                            <div class="col-4">
+                                <p>What are things that they do, and you don't?</p>
+                            </div>
+                            <div class="col-8">
+                                @php
+                                    if (is_string($sales_web_content->description2) && is_array(json_decode($sales_web_content->description2, true))) {
+                                        $array = json_decode($sales_web_content->description2, true);
+                                        foreach ($array as $value) {
+                                            echo "<p>$value</p>";
+                                        }
+                                    }
+                                @endphp
+                            </div>
+                            <div class="col-4">
+                                <p>What are things that they don't, and you do?</p>
+                            </div>
+                            <div class="col-8">
+                                @php
+                                    if (is_string($sales_web_content->description3) && is_array(json_decode($sales_web_content->description3, true))) {
+                                        $array = json_decode($sales_web_content->description3, true);
+                                        foreach ($array as $value) {
+                                            echo "<p>$value</p>";
+                                        }
+                                    }
+                                @endphp
+                            </div>
+                        @else
+                            @if (!is_null($web_content) && $web_content->competitor_content == 0)
                                 <div class="col-4">
                                     <p>What are the major differences?</p>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
                                     @php
-                                        if (is_string($sales_web_content->description1) && is_array(json_decode($sales_web_content->description1, true))) {
-                                            $array = json_decode($sales_web_content->description1, true);
+                                        if (is_string($web_content->description1) && is_array(json_decode($web_content->description1, true))) {
+                                            $array = json_decode($web_content->description1, true);
                                             foreach ($array as $value) {
-                                                echo "<p>$value</p>";
+                                                echo "<p data-toggle='tooltip' data-placement='top' title='Click to edit'>$value</p>";
                                             }
                                         }
                                     @endphp
@@ -1502,12 +406,12 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
                                 <div class="col-4">
                                     <p>What are things that they do, and you don't?</p>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
                                     @php
-                                        if (is_string($sales_web_content->description2) && is_array(json_decode($sales_web_content->description2, true))) {
-                                            $array = json_decode($sales_web_content->description2, true);
+                                        if (is_string($web_content->description2) && is_array(json_decode($web_content->description2, true))) {
+                                            $array = json_decode($web_content->description2, true);
                                             foreach ($array as $value) {
-                                                echo "<p>$value</p>";
+                                                echo "<p data-toggle='tooltip' data-placement='top' title='Click to edit'>$value</p>";
                                             }
                                         }
                                     @endphp
@@ -1515,664 +419,1181 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
                                 <div class="col-4">
                                     <p>What are things that they don't, and you do?</p>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
                                     @php
-                                        if (is_string($sales_web_content->description3) && is_array(json_decode($sales_web_content->description3, true))) {
-                                            $array = json_decode($sales_web_content->description3, true);
+                                        if (is_string($web_content->description3) && is_array(json_decode($web_content->description3, true))) {
+                                            $array = json_decode($web_content->description3, true);
                                             foreach ($array as $value) {
-                                                echo "<p>$value</p>";
+                                                echo "<p data-toggle='tooltip' data-placement='top' title='Click to edit'>$value</p>";
                                             }
                                         }
                                     @endphp
                                 </div>
-                            @else
-                                @if (!is_null($web_content) && $web_content->competitor_content == 0)
-                                    <div class="col-4">
-                                        <p>What are the major differences?</p>
-                                    </div>
-                                    <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
-                                        @php
-                                            if (is_string($web_content->description1) && is_array(json_decode($web_content->description1, true))) {
-                                                $array = json_decode($web_content->description1, true);
-                                                foreach ($array as $value) {
-                                                    echo "<p data-toggle='tooltip' data-placement='top' title='Click to edit'>$value</p>";
-                                                }
-                                            }
-                                        @endphp
-                                    </div>
-                                    <div class="col-4">
-                                        <p>What are things that they do, and you don't?</p>
-                                    </div>
-                                    <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
-                                        @php
-                                            if (is_string($web_content->description2) && is_array(json_decode($web_content->description2, true))) {
-                                                $array = json_decode($web_content->description2, true);
-                                                foreach ($array as $value) {
-                                                    echo "<p data-toggle='tooltip' data-placement='top' title='Click to edit'>$value</p>";
-                                                }
-                                            }
-                                        @endphp
-                                    </div>
-                                    <div class="col-4">
-                                        <p>What are things that they don't, and you do?</p>
-                                    </div>
-                                    <div class="col-8" id="reference_website_value" onclick="togglerefeRenceWebsiteEdit()">
-                                        @php
-                                            if (is_string($web_content->description3) && is_array(json_decode($web_content->description3, true))) {
-                                                $array = json_decode($web_content->description3, true);
-                                                foreach ($array as $value) {
-                                                    echo "<p data-toggle='tooltip' data-placement='top' title='Click to edit'>$value</p>";
-                                                }
-                                            }
-                                        @endphp
-                                    </div>
+                            @endif
+                        @endif
+                    </div>
+                    <div  id="reference_website_edit">
+                        <button type="button" style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#reference_website_edit_modal"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
+                    </div>
+                    @include('service-type.modal.web-content.reference_website_edit_modal')
+                </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Service/Product list</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="product_list_container">
+                                @if($sales_web_content && $sales_web_content->product_list != null)
+                                <p>{{$sales_web_content->product_list}}</p>
+                                @else
+                                @if($web_content && $web_content->product_list)
+                                <button id="product_list_btn" type="button" style="background-color: #ffffff" onclick="toggleProductListButton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->product_list}}</button>
+                                @else
+                                <button type="button" id="product_list_btn" style="background-color: #ffffff" onclick="toggleProductListButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
                                 @endif
-                            @endif
-                        </div>
-                        <div  id="reference_website_edit">
-                            <button type="button" style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#reference_website_edit_modal"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
-                        </div>
-                        @include('service-type.modal.web-content.reference_website_edit_modal')
-                    </div>
-                </div>
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Service/Product list</p>
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="product_list_container">
-                                    @if($sales_web_content && $sales_web_content->product_list != null)
-                                    <p>{{$sales_web_content->product_list}}</p>
-                                    @else
-                                    @if($web_content && $web_content->product_list)
-                                    <button id="product_list_btn" type="button" style="background-color: #ffffff" onclick="toggleProductListButton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->product_list}}</button>
-                                    @else
-                                    <button type="button" id="product_list_btn" style="background-color: #ffffff" onclick="toggleProductListButton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="product_list_form">
-                                    @if($web_content->product_list)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_product_list" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="product_list" value="{{$web_content->product_list}}" name="product_list" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveProductListBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="product_list_form">
+                                @if($web_content->product_list)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_product_list" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="product_list" value="{{$web_content->product_list}}" name="product_list" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveProductListBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="product_list_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_product_list" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="product_list" name="product_list" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveProductListBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="product_list_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_product_list" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="product_list" name="product_list" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveProductListBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="product_list_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="product_list_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h6 class="card-title mb-3">Pages List</h6>
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Type Page name</p>
-                            </div>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Pages List</h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Type Page name</p>
+                        </div>
 
-                            @if($sales_web_content != null && $sales_web_content->page_name != null)
-                                <div class="col-8">
-
-                                    @php
-                                        $page_names = '';
-
-                                        if (is_string($sales_web_content->page_name) && is_array(json_decode($sales_web_content->page_name, true))) {
-                                            $array = json_decode($sales_web_content->page_name, true);
-                                            $page_names = implode(', ', $array);
-                                        }
-
-                                        $page_names_array = explode(', ', $page_names);
-                                    @endphp
-
-                                    @foreach($page_names_array as $page_name)
-                                        @if($page_name)
-                                            <p>{{$page_name}}</p>
-                                        @else
-                                            <p>--</p>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="col-8" id="page_list_value" onclick="togglePageListEdit()">
-
-                                    @php
-                                        $page_names = '';
-
-                                        if (is_string($web_content->page_name) && is_array(json_decode($web_content->page_name, true))) {
-                                            $array = json_decode($web_content->page_name, true);
-                                            $page_names = implode(', ', $array);
-                                        }
-
-                                        $page_names_array = explode(', ', $page_names);
-                                    @endphp
-
-                                    @foreach($page_names_array as $page_name)
-                                        @if($page_name)
-                                            <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$page_name}}</p>
-                                        @else
-                                            <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
-                                        @endif
-                                    @endforeach
-                                </div>
-                            @endif
-
-
-                            <div class="col-4">
-                                <p>Quantity</p>
-                            </div>
-                            @if($sales_web_content != null && $sales_web_content->quantity != null)
+                        @if($sales_web_content != null && $sales_web_content->page_name != null)
                             <div class="col-8">
+
                                 @php
-                                    $quantitys = '';
+                                    $page_names = '';
 
-                                    if (is_string($sales_web_content->quantity) && is_array(json_decode($sales_web_content->quantity, true))) {
-                                        $array = json_decode($sales_web_content->quantity, true);
-                                        $quantitys = implode(', ', $array);
+                                    if (is_string($sales_web_content->page_name) && is_array(json_decode($sales_web_content->page_name, true))) {
+                                        $array = json_decode($sales_web_content->page_name, true);
+                                        $page_names = implode(', ', $array);
                                     }
 
-                                    $quantitys_array = explode(', ', $quantitys);
+                                    $page_names_array = explode(', ', $page_names);
                                 @endphp
 
-                                @foreach($quantitys_array as $quantity)
-                                    @if($quantity)
-                                        <p>{{$quantity}}</p>
+                                @foreach($page_names_array as $page_name)
+                                    @if($page_name)
+                                        <p>{{$page_name}}</p>
                                     @else
                                         <p>--</p>
                                     @endif
                                 @endforeach
                             </div>
-                            @else
+                        @else
                             <div class="col-8" id="page_list_value" onclick="togglePageListEdit()">
-                                @php
-                                    $quantitys = '';
 
-                                    if (is_string($web_content->quantity) && is_array(json_decode($web_content->quantity, true))) {
-                                        $array = json_decode($web_content->quantity, true);
-                                        $quantitys = implode(', ', $array);
+                                @php
+                                    $page_names = '';
+
+                                    if (is_string($web_content->page_name) && is_array(json_decode($web_content->page_name, true))) {
+                                        $array = json_decode($web_content->page_name, true);
+                                        $page_names = implode(', ', $array);
                                     }
 
-                                    $quantitys_array = explode(', ', $quantitys);
+                                    $page_names_array = explode(', ', $page_names);
                                 @endphp
 
-                                @foreach($quantitys_array as $quantity)
-                                    @if($quantity)
-                                        <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$quantity}}</p>
+                                @foreach($page_names_array as $page_name)
+                                    @if($page_name)
+                                        <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$page_name}}</p>
                                     @else
                                         <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
                                     @endif
                                 @endforeach
                             </div>
-                            @endif
+                        @endif
 
-                            <div class="col-4">
-                                <p>Approximate word count per page</p>
-                            </div>
-                            @if($sales_web_content != null && $sales_web_content->approximate_word != null)
-                            <div class="col-8">
 
-                                @php
-                                    $approximate_words = '';
-
-                                    if (is_string($sales_web_content->approximate_word) && is_array(json_decode($sales_web_content->approximate_word, true))) {
-                                        $array = json_decode($sales_web_content->approximate_word, true);
-                                        $approximate_words = implode(', ', $array);
-                                    }
-
-                                    $approximate_words_array = explode(', ', $approximate_words);
-                                @endphp
-
-                                @foreach($approximate_words_array as $approximate_word)
-                                    @if($approximate_word)
-                                        <p>{{$approximate_word}}</p>
-                                    @else
-                                        <p>--</p>
-                                    @endif
-                                @endforeach
-                            </div>
-                            @else
-                            <div class="col-8" id="page_list_value" onclick="togglePageListEdit()">
-
-                                @php
-                                    $approximate_words = '';
-
-                                    if (is_string($web_content->approximate_word) && is_array(json_decode($web_content->approximate_word, true))) {
-                                        $array = json_decode($web_content->approximate_word, true);
-                                        $approximate_words = implode(', ', $array);
-                                    }
-
-                                    $approximate_words_array = explode(', ', $approximate_words);
-                                @endphp
-
-                                @foreach($approximate_words_array as $approximate_word)
-                                    @if($approximate_word)
-                                        <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$approximate_word}}</p>
-                                    @else
-                                        <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
-                                    @endif
-                                @endforeach
-                            </div>
-                            @endif
+                        <div class="col-4">
+                            <p>Quantity</p>
                         </div>
-                        <div id="page_list_edit">
-                            <button type="button"style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#pageListEditModal{{$web_content->id}}"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
-                        </div>
-                        @include('service-type.modal.web-content.page_list_edit_modal')
-                    </div>
-                </div>
+                        @if($sales_web_content != null && $sales_web_content->quantity != null)
+                        <div class="col-8">
+                            @php
+                                $quantitys = '';
 
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h6 class="card-title mb-3">Demographic Information</h6>
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Gender</p>
-                            </div>
-                            @if($sales_web_content && $sales_web_content->gender != null)
-                            <div class="col-8">
-                                <p>{{$sales_web_content->gender}}</p>
-                            </div>
-                            @else
-                            <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
-                                <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->gender}}</p>
-                            </div>
-                            @endif
-                            <div class="col-4">
-                                <p>Age</p>
-                            </div>
-                            @if ($sales_web_content && $sales_web_content->age1 && $sales_web_content->age2 != null)
-                            <div class="col-8">
-                                @if ($sales_web_content->age1 && $sales_web_content->age2)
-                                    <button id="age1_age2_btn" type="button" style="background-color: #ffffff">{{$sales_web_content->age1}} - {{$sales_web_content->age2}}</button>
+                                if (is_string($sales_web_content->quantity) && is_array(json_decode($sales_web_content->quantity, true))) {
+                                    $array = json_decode($sales_web_content->quantity, true);
+                                    $quantitys = implode(', ', $array);
+                                }
+
+                                $quantitys_array = explode(', ', $quantitys);
+                            @endphp
+
+                            @foreach($quantitys_array as $quantity)
+                                @if($quantity)
+                                    <p>{{$quantity}}</p>
                                 @else
-                                    <button type="button" id="age1_age2_btn" style="background-color: #ffffff">--</button>
+                                    <p>--</p>
+                                @endif
+                            @endforeach
+                        </div>
+                        @else
+                        <div class="col-8" id="page_list_value" onclick="togglePageListEdit()">
+                            @php
+                                $quantitys = '';
+
+                                if (is_string($web_content->quantity) && is_array(json_decode($web_content->quantity, true))) {
+                                    $array = json_decode($web_content->quantity, true);
+                                    $quantitys = implode(', ', $array);
+                                }
+
+                                $quantitys_array = explode(', ', $quantitys);
+                            @endphp
+
+                            @foreach($quantitys_array as $quantity)
+                                @if($quantity)
+                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$quantity}}</p>
+                                @else
+                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
+                                @endif
+                            @endforeach
+                        </div>
+                        @endif
+
+                        <div class="col-4">
+                            <p>Approximate word count per page</p>
+                        </div>
+                        @if($sales_web_content != null && $sales_web_content->approximate_word != null)
+                        <div class="col-8">
+
+                            @php
+                                $approximate_words = '';
+
+                                if (is_string($sales_web_content->approximate_word) && is_array(json_decode($sales_web_content->approximate_word, true))) {
+                                    $array = json_decode($sales_web_content->approximate_word, true);
+                                    $approximate_words = implode(', ', $array);
+                                }
+
+                                $approximate_words_array = explode(', ', $approximate_words);
+                            @endphp
+
+                            @foreach($approximate_words_array as $approximate_word)
+                                @if($approximate_word)
+                                    <p>{{$approximate_word}}</p>
+                                @else
+                                    <p>--</p>
+                                @endif
+                            @endforeach
+                        </div>
+                        @else
+                        <div class="col-8" id="page_list_value" onclick="togglePageListEdit()">
+
+                            @php
+                                $approximate_words = '';
+
+                                if (is_string($web_content->approximate_word) && is_array(json_decode($web_content->approximate_word, true))) {
+                                    $array = json_decode($web_content->approximate_word, true);
+                                    $approximate_words = implode(', ', $array);
+                                }
+
+                                $approximate_words_array = explode(', ', $approximate_words);
+                            @endphp
+
+                            @foreach($approximate_words_array as $approximate_word)
+                                @if($approximate_word)
+                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$approximate_word}}</p>
+                                @else
+                                    <p data-toggle="tooltip" data-placement="top" title="Click to edit">--</p>
+                                @endif
+                            @endforeach
+                        </div>
+                        @endif
+                    </div>
+                    <div id="page_list_edit">
+                        <button type="button"style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#pageListEditModal{{$web_content->id}}"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
+                    </div>
+                    @include('service-type.modal.web-content.page_list_edit_modal')
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Demographic Information</h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Gender</p>
+                        </div>
+                        @if($sales_web_content && $sales_web_content->gender != null)
+                        <div class="col-8">
+                            <p>{{$sales_web_content->gender}}</p>
+                        </div>
+                        @else
+                        <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
+                            <p data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->gender}}</p>
+                        </div>
+                        @endif
+                        <div class="col-4">
+                            <p>Age</p>
+                        </div>
+                        @if ($sales_web_content && $sales_web_content->age1 && $sales_web_content->age2 != null)
+                        <div class="col-8">
+                            @if ($sales_web_content->age1 && $sales_web_content->age2)
+                                <button id="age1_age2_btn" type="button" style="background-color: #ffffff">{{$sales_web_content->age1}} - {{$sales_web_content->age2}}</button>
+                            @else
+                                <button type="button" id="age1_age2_btn" style="background-color: #ffffff">--</button>
+                            @endif
+                        </div>
+                        @else
+                        <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
+                            @if ($web_content && $web_content->age1 && $web_content->age2)
+                                <button id="age1_age2_btn" type="button" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->age1}} - {{$web_content->age2}}</button>
+                            @else
+                                <button type="button" id="age1_age2_btn" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                            @endif
+                        </div>
+                        @endif
+                        <div class="col-4">
+                            <p>Monthly Income</p>
+                        </div>
+                        @if($sales_web_content && $sales_web_content->monthly_income != null)
+                        <div class="col-8">
+                           <p>{{$sales_web_content->monthly_income}}</p>
+                        </div>
+                        @else
+                        <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
+                            <div id="monthly_income_container">
+                                @if($web_content && $web_content->monthly_income)
+                                <button id="monthly_income_btn" type="button" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->monthly_income}}$</button>
+                                @else
+                                <button type="button" id="monthly_income_btn" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
                                 @endif
                             </div>
-                            @else
-                            <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
-                                @if ($web_content && $web_content->age1 && $web_content->age2)
-                                    <button id="age1_age2_btn" type="button" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">{{$web_content->age1}} - {{$web_content->age2}}</button>
+                        </div>
+                        @endif
+                        <div class="col-4">
+                            <p>Education Level</p>
+                        </div>
+                        @if($sales_web_content && $sales_web_content->education_level != null)
+                        <div class="col-8">
+                            <p>{{$sales_web_content->education_level}}</p>
+                        </div>
+                        @else
+                        <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
+                            <div id="education_level_container">
+                                @if($web_content && $web_content->education_level)
+                                <button id="education_level_btn" type="button" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->education_level}}</button>
                                 @else
-                                    <button type="button" id="age1_age2_btn" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                <button type="button" id="education_level_btn" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
                                 @endif
                             </div>
-                            @endif
-                            <div class="col-4">
-                                <p>Monthly Income</p>
-                            </div>
-                            @if($sales_web_content && $sales_web_content->monthly_income != null)
-                            <div class="col-8">
-                            <p>{{$sales_web_content->monthly_income}}</p>
-                            </div>
-                            @else
-                            <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
-                                <div id="monthly_income_container">
-                                    @if($web_content && $web_content->monthly_income)
-                                    <button id="monthly_income_btn" type="button" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->monthly_income}}$</button>
-                                    @else
-                                    <button type="button" id="monthly_income_btn" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                </div>
-                            </div>
-                            @endif
-                            <div class="col-4">
-                                <p>Education Level</p>
-                            </div>
-                            @if($sales_web_content && $sales_web_content->education_level != null)
-                            <div class="col-8">
-                                <p>{{$sales_web_content->education_level}}</p>
-                            </div>
-                            @else
-                            <div class="col-8" id="demogaphic_info_value" onclick="toggleDemographicInformationEdit()">
-                                <div id="education_level_container">
-                                    @if($web_content && $web_content->education_level)
-                                    <button id="education_level_btn" type="button" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->education_level}}</button>
-                                    @else
-                                    <button type="button" id="education_level_btn" style="background-color: #ffffff" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                </div>
-                            </div>
-                            @endif
                         </div>
-                        <div id="demogaphic_info_edit">
-                            <button type="button" style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#demogaphic_info_edit_modal"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
-                        </div>
-                        @include('service-type.modal.web-content.demogaphic_info_edit_modal')
+                        @endif
                     </div>
+                    <div id="demogaphic_info_edit">
+                        <button type="button" style="background-color: #ffffff; position: absolute; top: 35px; right: 20px;" class="d-flex justify-content-end ml-auto btn btn-secondary" data-toggle="modal" data-target="#demogaphic_info_edit_modal"><i class="fa fa-edit" style="font-size: 16px;"></i></button>
+                    </div>
+                    @include('service-type.modal.web-content.demogaphic_info_edit_modal')
                 </div>
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h6 class="card-title mb-3">Geographic Location</h6>
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Country</p>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Geographic Location</h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Country</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="country_container">
+                                @if($sales_web_content && $sales_web_content->country != null)
+                                <p>{{$sales_web_content->country}}</p>
+                                @else
+                                @if($web_content && $web_content->country)
+                                <button id="country_btn" type="button" style="background-color: #ffffff" onclick="togglecountryBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->country}}</button>
+                                @else
+                                <button type="button" id="country_btn" style="background-color: #ffffff" onclick="togglecountryBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="country_container">
-                                    @if($sales_web_content && $sales_web_content->country != null)
-                                    <p>{{$sales_web_content->country}}</p>
-                                    @else
-                                    @if($web_content && $web_content->country)
-                                    <button id="country_btn" type="button" style="background-color: #ffffff" onclick="togglecountryBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->country}}</button>
-                                    @else
-                                    <button type="button" id="country_btn" style="background-color: #ffffff" onclick="togglecountryBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="country_form">
-                                    @if($web_content->country)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_country" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="country" value="{{$web_content->country}}" name="country" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your country">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary savecountryBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="country_form">
+                                @if($web_content->country)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_country" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="country" value="{{$web_content->country}}" name="country" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your country">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary savecountryBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="country_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_country" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="country" value="{{$web_content->country}}" name="country" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your country">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary savecountryBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="country_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_country" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="country" value="{{$web_content->country}}" name="country" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your country">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary savecountryBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="country_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="country_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
-                            <div class="col-4">
-                                <p>City</p>
+                        </div>
+                        <div class="col-4">
+                            <p>City</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="city_container">
+                                @if($sales_web_content && $sales_web_content->city != null)
+                                <p>{{$sales_web_content->city}}</p>
+                                @else
+                                @if($web_content && $web_content->city)
+                                <button id="city_btn" type="button" style="background-color: #ffffff" onclick="togglecityBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->city}}</button>
+                                @else
+                                <button type="button" id="city_btn" style="background-color: #ffffff" onclick="togglecityBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="city_container">
-                                    @if($sales_web_content && $sales_web_content->city != null)
-                                    <p>{{$sales_web_content->city}}</p>
-                                    @else
-                                    @if($web_content && $web_content->city)
-                                    <button id="city_btn" type="button" style="background-color: #ffffff" onclick="togglecityBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->city}}</button>
-                                    @else
-                                    <button type="button" id="city_btn" style="background-color: #ffffff" onclick="togglecityBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="city_form">
-                                    @if($web_content->city)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_city" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="city" value="{{$web_content->city}}" name="city" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your city">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary savecityBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="city_form">
+                                @if($web_content->city)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_city" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="city" value="{{$web_content->city}}" name="city" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your city">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary savecityBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="city_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_city" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="city" value="{{$web_content->city}}" name="city" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your city">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary savecityBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="city_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_city" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="city" value="{{$web_content->city}}" name="city" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type your city">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary savecityBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="city_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="city_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h6 class="card-title mb-3">Interests</h6>
-                        <div class="row">
-                            <div class="col-4">
-                                <p>Write 1-2 lines about the interests and pain points of your target audience</p>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Interests</h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>Write 1-2 lines about the interests and pain points of your target audience</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="interest_container">
+                                @if($sales_web_content && $sales_web_content->interest != null)
+                                <p>{{$sales_web_content->interest}}</p>
+                                @else
+                                @if($web_content && $web_content->interest)
+                                <button id="interest_btn" type="button" class="text-left" style="background-color: #ffffff " onclick="toggleinterestBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->interest}}</button>
+                                @else
+                                <button type="button" id="interest_btn" class="text-left" style="background-color: #ffffff" onclick="toggleinterestBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="interest_container">
-                                    @if($sales_web_content && $sales_web_content->interest != null)
-                                    <p>{{$sales_web_content->interest}}</p>
-                                    @else
-                                    @if($web_content && $web_content->interest)
-                                    <button id="interest_btn" type="button" class="text-left" style="background-color: #ffffff " onclick="toggleinterestBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->interest}}</button>
-                                    @else
-                                    <button type="button" id="interest_btn" class="text-left" style="background-color: #ffffff" onclick="toggleinterestBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="interest_form">
-                                    @if($web_content->interest)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_interest" style="display: none; margin-top: -10px;">
-                                            <textarea name="interest" class="form-control" id="interest" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->interest!!}</textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveinterestBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="interest_form">
+                                @if($web_content->interest)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_interest" style="display: none; margin-top: -10px;">
+                                        <textarea name="interest" class="form-control" id="interest" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->interest!!}</textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveinterestBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="interest_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_interest" style="display: none; margin-top: -10px;">
-                                            <textarea name="interest" class="form-control" id="interest" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveinterestBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="interest_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_interest" style="display: none; margin-top: -10px;">
+                                        <textarea name="interest" class="form-control" id="interest" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveinterestBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="interest_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="interest_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <h6 class="card-title mb-3">Buying Habits</h6>
-                        <div class="row">
-                            <div class="col-4">
-                                <p>How does your client's target audience make purchasing decisions?</p>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Buying Habits</h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>How does your client's target audience make purchasing decisions?</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="buying_habit1_container">
+                                @if($sales_web_content && $sales_web_content->buying_habit1 != null)
+                                <p>{{$sales_web_content->buying_habit1}}</p>
+                                @else
+                                @if($web_content && $web_content->buying_habit1)
+                                <button id="buying_habit1_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit1Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->buying_habit1}}</button>
+                                @else
+                                <button type="button" id="buying_habit1_btn" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit1Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="buying_habit1_container">
-                                    @if($sales_web_content && $sales_web_content->buying_habit1 != null)
-                                    <p>{{$sales_web_content->buying_habit1}}</p>
-                                    @else
-                                    @if($web_content && $web_content->buying_habit1)
-                                    <button id="buying_habit1_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit1Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->buying_habit1}}</button>
-                                    @else
-                                    <button type="button" id="buying_habit1_btn" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit1Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="buying_habit1_form">
-                                    @if($web_content->buying_habit1)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_buying_habit1" style="display: none; margin-top: -10px;">
-                                            <textarea name="buying_habit1" class="form-control" id="buying_habit1" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->buying_habit1!!}</textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveBuying_habit1Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="buying_habit1_form">
+                                @if($web_content->buying_habit1)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_buying_habit1" style="display: none; margin-top: -10px;">
+                                        <textarea name="buying_habit1" class="form-control" id="buying_habit1" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->buying_habit1!!}</textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveBuying_habit1Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="buying_habit1_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_buying_habit1" style="display: none; margin-top: -10px;">
-                                            <textarea name="buying_habit1" class="form-control" id="buying_habit1" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveBuying_habit1Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="buying_habit1_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_buying_habit1" style="display: none; margin-top: -10px;">
+                                        <textarea name="buying_habit1" class="form-control" id="buying_habit1" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveBuying_habit1Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="buying_habit1_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="buying_habit1_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
-                            <div class="col-4">
-                                <p>Do they shop online or in-store?</p>
+                        </div>
+                        <div class="col-4">
+                            <p>Do they shop online or in-store?</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="buying_habit2_container">
+                                @if($sales_web_content && $sales_web_content->buying_habit2 != null)
+                                <p>{{$sales_web_content->buying_habit2}}</p>
+                                @else
+                                @if($web_content && $web_content->buying_habit2)
+                                <button id="buying_habit2_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit2Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->buying_habit2}}</button>
+                                @else
+                                <button type="button" id="buying_habit2_btn" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit2Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="buying_habit2_container">
-                                    @if($sales_web_content && $sales_web_content->buying_habit2 != null)
-                                    <p>{{$sales_web_content->buying_habit2}}</p>
-                                    @else
-                                    @if($web_content && $web_content->buying_habit2)
-                                    <button id="buying_habit2_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit2Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->buying_habit2}}</button>
-                                    @else
-                                    <button type="button" id="buying_habit2_btn" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit2Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="buying_habit2_form">
-                                    @if($web_content->buying_habit2)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_buying_habit2" style="display: none; margin-top: -10px;">
-                                            <textarea name="buying_habit2" class="form-control" id="buying_habit2" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->buying_habit2!!}</textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveBuying_habit2Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="buying_habit2_form">
+                                @if($web_content->buying_habit2)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_buying_habit2" style="display: none; margin-top: -10px;">
+                                        <textarea name="buying_habit2" class="form-control" id="buying_habit2" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->buying_habit2!!}</textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveBuying_habit2Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="buying_habit2_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_buying_habit2" style="display: none; margin-top: -10px;">
-                                            <textarea name="buying_habit2" class="form-control" id="buying_habit2" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveBuying_habit2Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="buying_habit2_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_buying_habit2" style="display: none; margin-top: -10px;">
+                                        <textarea name="buying_habit2" class="form-control" id="buying_habit2" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveBuying_habit2Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="buying_habit2_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="buying_habit2_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
-                            <div class="col-4">
-                                <p>What are their favorite brands?</p>
+                        </div>
+                        <div class="col-4">
+                            <p>What are their favorite brands?</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="buying_habit3_container">
+                                @if($sales_web_content && $sales_web_content->buying_habit3 != null)
+                                <p>{{$sales_web_content->buying_habit3}}</p>
+                                @else
+                                @if($web_content && $web_content->buying_habit3)
+                                <button id="buying_habit3_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit3Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->buying_habit3}}</button>
+                                @else
+                                <button type="button" id="buying_habit3_btn" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit3Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="buying_habit3_container">
-                                    @if($sales_web_content && $sales_web_content->buying_habit3 != null)
-                                    <p>{{$sales_web_content->buying_habit3}}</p>
-                                    @else
-                                    @if($web_content && $web_content->buying_habit3)
-                                    <button id="buying_habit3_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit3Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->buying_habit3}}</button>
-                                    @else
-                                    <button type="button" id="buying_habit3_btn" class="text-left" style="background-color: #ffffff" onclick="togglebuying_habit3Btton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="buying_habit3_form">
-                                    @if($web_content->buying_habit3)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_buying_habit3" style="display: none; margin-top: -10px;">
-                                            <textarea name="buying_habit3" class="form-control" id="buying_habit3" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->buying_habit3!!}</textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveBuying_habit3Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="buying_habit3_form">
+                                @if($web_content->buying_habit3)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_buying_habit3" style="display: none; margin-top: -10px;">
+                                        <textarea name="buying_habit3" class="form-control" id="buying_habit3" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton">{!!$web_content->buying_habit3!!}</textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveBuying_habit3Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="buying_habit3_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_buying_habit3" style="display: none; margin-top: -10px;">
-                                            <textarea name="buying_habit3" class="form-control" id="buying_habit3" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveBuying_habit3Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="buying_habit3_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_buying_habit3" style="display: none; margin-top: -10px;">
+                                        <textarea name="buying_habit3" class="form-control" id="buying_habit3" cols="3" rows="3" aria-label="Recipient's username" aria-describedby="saveButton"></textarea>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveBuying_habit3Btn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="buying_habit3_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="buying_habit3_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h6 class="card-title">Thor Native Language</h6>
-                        <div class="row">
-                            <div class="col-4">
-                                <p>What is their native language?</p>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Thor Native Language</h6>
+                    <div class="row">
+                        <div class="col-4">
+                            <p>What is their native language?</p>
+                        </div>
+                        <div class="col-8">
+                            <div id="language_container">
+                                @if($sales_web_content && $sales_web_content->language != null)
+                                <p>{{$sales_web_content->language}}</p>
+                                @else
+                                @if($web_content && $web_content->language)
+                                <button id="language_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="toggleLanguageBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->language}}</button>
+                                @else
+                                <button type="button" id="language_btn" class="text-left" style="background-color: #ffffff" onclick="toggleLanguageBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
+                                @endif
+                                @endif
                             </div>
-                            <div class="col-8">
-                                <div id="language_container">
-                                    @if($sales_web_content && $sales_web_content->language != null)
-                                    <p>{{$sales_web_content->language}}</p>
-                                    @else
-                                    @if($web_content && $web_content->language)
-                                    <button id="language_btn" type="button" class="text-left" style="background-color: #ffffff" onclick="toggleLanguageBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit"> {{$web_content->language}}</button>
-                                    @else
-                                    <button type="button" id="language_btn" class="text-left" style="background-color: #ffffff" onclick="toggleLanguageBtton()" data-toggle="tooltip" data-placement="top" title="Click to edit">--</button>
-                                    @endif
-                                    @endif
-                                </div>
 
-                                <div id="language_form">
-                                    @if($web_content->language)
-                                    <form action="" method="post">
-                                        @csrf
-                                        <div class="input-group" id="input_language" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="language" value="{{$web_content->language}}" name="language" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveLanguageBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                            <div id="language_form">
+                                @if($web_content->language)
+                                <form action="" method="post">
+                                    @csrf
+                                    <div class="input-group" id="input_language" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="language" value="{{$web_content->language}}" name="language" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveLanguageBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="language_error" class="text-danger"></span><br>
-                                        @else
-                                        <div class="input-group" id="input_language" style="display: none; margin-top: -10px;">
-                                            <input type="text" id="language" name="language" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary saveLanguageBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
-                                            </div>
+                                    </div>
+                                    <span id="language_error" class="text-danger"></span><br>
+                                    @else
+                                    <div class="input-group" id="input_language" style="display: none; margin-top: -10px;">
+                                        <input type="text" id="language" name="language" class="form-control height-35 f-14" aria-label="Recipient's username" aria-describedby="saveButton" placeholder="Type Your Business/Website Name">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary saveLanguageBtn" type="button" id="saveButton" data-id="{{$web_content->id}}"><i class="fa-solid fa-check"></i></button>
                                         </div>
-                                        <span id="language_error" class="text-danger"></span><br>
-                                    </form>
-                                    @endif
-                                </div>
+                                    </div>
+                                    <span id="language_error" class="text-danger"></span><br>
+                                </form>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        @endif
-        @if ($sales_web_content !=null && $sales_web_content->status == 'submitted')
-            @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card mb-5 mt-3" style="border: none">
-                            <h4 class="text-center my-3">Fields Needed to be Filled by Project Manager ({{ $pm->name }})</h4>
-                            <div class="card-body">
-                                <form action="" method="post" id="pm_form">
-                                    @csrf
-                                    <input type="hidden" name="sales_web_content_id" id="sales_web_content_id" value="{{ $sales_web_content->id }}">
-                                    <input type="hidden" name="deal_id" id="deal_id" value="{{ $sales_web_content->deal_id }}">
-                                    <input type="hidden" name="milestone_id" id="milestone_id" value="{{ $sales_web_content->milestone_id }}">
+    </div>
+    @endif
+    @if ($sales_web_content !=null && $sales_web_content->status == 'submitted')
+        @if (Auth::user()->role_id == 4 || Auth::user()->role_id == 1)
+            <div class="row">
+                <div class="col-12">
+                    <div class="card mb-5 mt-3" style="border: none">
+                        <h4 class="text-center my-3">Fields Needed to be Filled by Project Manager ({{ $pm->name }})</h4>
+                        <div class="card-body">
+                            <form action="" method="post" id="pm_form">
+                                @csrf
+                                <input type="hidden" name="sales_web_content_id" id="sales_web_content_id" value="{{ $sales_web_content->id }}">
+                                <input type="hidden" name="deal_id" id="deal_id" value="{{ $sales_web_content->deal_id }}">
+                                <input type="hidden" name="milestone_id" id="milestone_id" value="{{ $sales_web_content->milestone_id }}">
+                                @if ($webContent !=null && $webContent->submitted_by ==4)
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6>Website Link & Niche:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="url" name="website_link2" id="website_link2" value="{{ $webContent->website_link }}" class="form-control placeholderText height-35 f-14" placeholder="https://asdasd.com or https://www.asdasd.com">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="text" name="website_niche2" id="website_niche2" value="{{ $webContent->website_niche }}" class="form-control placeholderText height-35 f-14" placeholder="Write Your Niche (Pet Care, Digital Marketing)">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Website Link & Niche Ends Here -->
+                                    <!-- Website Name/Business Name -->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6>Website Name/Business Name:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" name="website_name2" id="website_name2" value="{{ $webContent->website_name }}" class="form-control placeholderText height-35 f-14" placeholder="Type Your Business/Website Name">
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6>Business profile/Leaflet/Brochure/Any important information:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <textarea name="business_information2" id="business_information2" cols="3" rows="3" class="form-control placeholderText" placeholder="Put some details about your company here!">{!! $webContent->business_information !!}</textarea>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="">Want to share file?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="share_file" value="1" id="share_file_info_yesBtn" {{ ($webContent->share_file_info=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_info_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="share_file" value="0" id="share_file_info_noBtn" {{ ($webContent->share_file_info=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="share_file_info_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if ($webContent!=null && $webContent->share_file_info==1)
+                                                @php
+                                                    if (is_string($webContent->folder_link) && is_array(json_decode($webContent->folder_link, true))) {
+                                                        $array = json_decode($webContent->folder_link, true);
+                                                        $folder_links = implode(', ', $array);
+                                                    }
+                                                    $folder_links_array = explode(', ', $folder_links);
+                                                @endphp
+                                                @foreach ($folder_links_array as $folder_link)
+                                                <div class="row mt-3" id="shareFolderLinkForm">
+                                                    <div class="col-md-10 dynamic-folderLink" id="dynamic-folderLink-list-1">
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-12">
+                                                                <input type="text" name="folder_link2[]" value="{{ $folder_link }}" id="folder_link2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 append-buttons">
+                                                        <div class="clearfix">
+                                                            <button type="button" id="add-folder" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                            <button type="button" id="remove-folder" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            @else
+                                            <div class="row mt-3" id="shareFolderLinkForm" style="display: none;">
+                                                <div class="col-md-10 dynamic-folderLink" id="dynamic-folderLink-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-12">
+                                                            <input type="text" name="folder_link2[]" id="folder_link2" class="form-control placeholderText height-35 f-14" placeholder="Enter google doc or sheet file or drive folder link here">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-folder" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-folder" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <!--Reference Blogs-->
+                                    @php
+                                        if (is_string($webContent->reference_website) && is_array(json_decode($webContent->reference_website, true))) {
+                                            $array = json_decode($webContent->reference_website, true);
+                                            $reference_websites = implode(', ', $array);
+                                        }
+                                        $reference_websites_array = explode(', ', $reference_websites);
+                                    @endphp
+                                    <div class="row mt-3">
+                                        <div class="col-md-10 dynamic-product" id="dynamic-product-list-1">
+                                            @if ($reference_websites_array !=null)
+                                            @foreach ($reference_websites_array as $item)
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <h6>Competitors/Reference Website:</h6>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group" style="margin-left: 90px;">
+                                                        <input type="text" id="reference_website2" value="{{ $item }}" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website2[]"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Does your competitor's content match exactly to what you do?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="competitor_content2" value="1" id="competitor_content_yesBtn" {{ ($webContent->competitor_content=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="competitor_content_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="competitor_content2" value="0" id="competitor_content_noBtn" {{ ($webContent->competitor_content=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="competitor_content_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endforeach
+                                            @else
+                                            <div class="row mb-3">
+                                                <div class="col-md-4">
+                                                    <h6>Competitors/Reference Website:</h6>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group" style="margin-left: 90px;">
+                                                        <input type="text" id="reference_website" class="form-control placeholderText height-35 f-14" placeholder="Type your reference website" name="reference_website2[]"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label for="">Does your competitor's content match exactly to what you do?</label>
+                                                        <div class="mt-2 d-flex">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="competitor_content2" value="1" id="competitor_content_yesBtn" {{ ($webContent->competitor_content=="1")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="competitor_content_yesBtn">
+                                                                    Yes
+                                                                </label>
+                                                            </div>
+                                                            <div class="form-check" style="margin-left: 10px;">
+                                                                <input class="form-check-input" type="radio" name="competitor_content2" value="0" id="competitor_content_noBtn" {{ ($webContent->competitor_content=="0")? "checked" : "" }}>
+                                                                <label class="form-check-label mt-1 ml-1" for="competitor_content_noBtn">
+                                                                    No
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
+                                            @if ($webContent !=null && $webContent->competitor_content==0)
+                                                @php
+                                                    if (is_string($webContent->description1) && is_array(json_decode($webContent->description1, true))) {
+                                                        $array = json_decode($webContent->description1, true);
+                                                        $description1 = implode(', ', $array);
+                                                    }
+                                                    $description1_array = explode(', ', $description1);
+
+                                                    if (is_string($webContent->description2) && is_array(json_decode($webContent->description2, true))) {
+                                                        $array = json_decode($webContent->description2, true);
+                                                        $description2 = implode(', ', $array);
+                                                    }
+                                                    $description2_array = explode(', ', $description2);
+
+                                                    if (is_string($webContent->description3) && is_array(json_decode($webContent->description3, true))) {
+                                                        $array = json_decode($webContent->description3, true);
+                                                        $description3 = implode(', ', $array);
+                                                    }
+                                                    $description3_array = explode(', ', $description3);
+                                                @endphp
+                                                @if ($description1_array || $description2_array || $description3_array)
+                                                    <div class="row mt-3 mb-4" id="competitor_content_noForm">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-8">
+                                                            <div class="row" style="margin-left: 9%;">
+                                                                @foreach ($description1_array as $description1)
+                                                                <div class="col-md-4" style="margin-top: 23px;">
+                                                                    <label class="form-label" for="">What are the major differences?</label>
+                                                                    <textarea name="competitor_content_description1[]"  id="competitor_content_description1" rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description1 !!}</textarea>
+                                                                </div>
+                                                                @endforeach
+                                                                @foreach ($description2_array as $description2)
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="">What are things that they do, and you don't?</label>
+                                                                    <textarea name="competitor_content_description2[]" id="competitor_content_description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description2 !!}</textarea>
+                                                                </div>
+                                                                @endforeach
+                                                                @foreach ($description3_array as $description3)
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="">What are things that they don't, and you do?</label>
+                                                                    <textarea name="competitor_content_description3[]" id="competitor_content_description3" rows="3" class="form-control placeholderText" placeholder="Type your input here">{!! $description3 !!}</textarea>
+                                                                </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="row mt-3 mb-4" id="competitor_content_noForm" style="display: none;">
+                                                        <div class="col-md-4"></div>
+                                                        <div class="col-md-8">
+                                                            <div class="row" style="margin-left: 9%;">
+                                                                <div class="col-md-4" style="margin-top: 23px;">
+                                                                    <label class="form-label" for="">What are the major differences?</label>
+                                                                    <textarea name="competitor_content_description1[]" id="competitor_content_description1" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                                                </div>
+
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="">What are things that they do, and you don't?</label>
+                                                                    <textarea name="competitor_content_description2[]" id="competitor_content_description2"  rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <label class="form-label" for="">What are things that they don't, and you do?</label>
+                                                                    <textarea name="competitor_content_description3[]" id="competitor_content_description3" rows="3" class="form-control placeholderText" placeholder="Type your input here"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix">
+                                                <button type="button" id="add-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Product Description-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6>Service/Product list:</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <input type="text" id="product_list1" value="{{ $webContent->product_list }}" class="form-control placeholderText height-35 f-14" placeholder="Type your page or product name" name="product_list1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Product list-->
+                                    @php
+                                        if (is_string($webContent->page_name) && is_array(json_decode($webContent->page_name, true))) {
+                                            $array = json_decode($webContent->page_name, true);
+                                            $page_names = implode(', ', $array);
+                                        }
+                                        $page_name_array = explode(', ', $page_names);
+
+                                        if (is_string($webContent->quantitys) && is_array(json_decode($webContent->quantitys, true))) {
+                                            $array = json_decode($webContent->quantitys, true);
+                                            $quantitys = implode(', ', $array);
+                                        }
+                                        $quantity_array = explode(', ', $quantitys);
+
+                                        if (is_string($webContent->approximate_word) && is_array(json_decode($webContent->approximate_word, true))) {
+                                            $array = json_decode($webContent->approximate_word, true);
+                                            $approximate_words = implode(', ', $array);
+                                        }
+                                        $approximate_word_array = explode(', ', $approximate_words);
+                                    @endphp
+                                    @if ($page_name_array !=null || $quantity_array !=null || $approximate_word_array !=null)
+                                    <div class="row mt-4">
+                                        <div class="col-md-11 dynamic-page" id="dynamic-page-list-1">
+                                            <div class="row mb-4">
+                                                <div class="col-md-3" style="margin-top: 22px;">
+                                                    <h6>Pages list:</h6>
+                                                </div>
+                                                @foreach ($page_name_array as $page_name)
+                                                <div class="col-md-3" style="margin-left: 11%">
+                                                    <div class="form-group">
+                                                        <label for="">Type Page name</label>
+                                                        <input type="text" name="page_name1[]" value="{{ $page_name }}" id="page_name1" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                                @foreach ($quantity_array as $quantity)
+                                                <div class="col-md-2">
+                                                    <label for="">Quantity</label>
+                                                    <input type="number" name="quantity1[]" value="{{ $quantity }}" id="quantity1" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                </div>
+                                                @endforeach
+                                                @foreach ($approximate_word_array as $approximate_word)
+                                                <div class="col-md-2">
+                                                    <label for="">Approximate word count per page</label>
+                                                    <input type="text" name="approximate_word1[]" value="{{ $approximate_word }}" id="approximate_word1" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 append-buttons" style="margin-top: 22px;">
+                                            <div class="clearfix">
+                                                <button type="button" id="add-page-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-page-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="row mt-4">
+                                        <div class="col-md-11 dynamic-page" id="dynamic-page-list-1">
+                                            <div class="row mb-4">
+                                                <div class="col-md-3" style="margin-top: 22px;">
+                                                    <h6>Pages list:</h6>
+                                                </div>
+                                                <div class="col-md-3" style="margin-left: 11%">
+                                                    <div class="form-group">
+                                                        <label for="">Type Page name</label>
+                                                        <input type="text" name="page_name1[]" id="page_name1" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="">Quantity</label>
+                                                    <input type="number" name="quantity1[]" id="quantity1" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <label for="">Approximate word count per page</label>
+                                                    <input type="text" name="approximate_word1[]" id="approximate_word1" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1 append-buttons" style="margin-top: 22px;">
+                                            <div class="clearfix">
+                                                <button type="button" id="add-page-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-page-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                    <!--Keywords-->
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Target Audience:</h6>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="">Gender</label>
+                                            <select name="target_audience_gender" id="target_audience_gender" class="form-control height-35 f-14 placeholderText">
+                                                <option value="">--</option>
+                                                <option value="male" {{ ($webContent->gender=="Male")? "selected" : "" }}>Male</option>
+                                                <option value="female" {{ ($webContent->gender=="Female")? "selected" : "" }}>Female</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="">Age (Put a Range)</label>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="number" name="target_audience_age1" value="{{ $webContent->age1 }}" id="target_audience_age1" class="form-control placeholderText height-35 f-14" placeholder="18">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <input type="number" name="target_audience_age2" value="{{ $webContent->age2 }}" id="target_audience_age2" class="form-control placeholderText height-35 f-14" placeholder="25 ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="">Monthly Income (in USD)</label>
+                                            <input type="text" name="monthly_income1" value="{{ $webContent->monthly_income }}" id="monthly_income1" class="form-control placeholderText height-35 f-14" placeholder="$">
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label for="">Education Level</label>
+                                            <input type="text" name="education_level1" value="{{ $webContent->education_level }}" id="education_level1" class="form-control placeholderText height-35 f-14" placeholder="Education Level">
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Geographic Location :</h6>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">Country</label>
+                                            <input type="text" name="country1" id="country1" value="{{ $webContent->country }}" class="form-control placeholderText height-35 f-14" placeholder="Type your country">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="">City</label>
+                                            <input type="text" name="city1" id="city1" value="{{ $webContent->city }}" class="form-control placeholderText height-35 f-14" placeholder="Type your city">
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Interests :</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label for="">Write 1-2 lines about the interests and pain points of your target audience</label>
+                                            <textarea name="interest1" id="interest1" rows="5" class="form-control placeholderText">{!! $webContent->interest !!}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Buying Habits</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label for="">How does your client's target audience make purchasing decisions?</label>
+                                                    <textarea name="interest_buying_habit1" id="interest_buying_habit1" rows="5" class="form-control">{!! $webContent->buying_habit1 !!}</textarea>
+                                                </div>
+                                                <div class="col-md-4" style="margin-top: 20px;">
+                                                    <label for="">Do they shop online or in-store?</label>
+                                                    <textarea name="interest_buying_habit2" id="interest_buying_habit2" rows="5" class="form-control">{!! $webContent->buying_habit2 !!}</textarea>
+                                                </div>
+                                                <div class="col-md-4" style="margin-top: 20px;">
+                                                    <label for="">What are their favorite brands?</label>
+                                                    <textarea name="interest_buying_habit3" id="interest_buying_habit3" rows="5" class="form-control">{!! $webContent->buying_habit3 !!}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Thor Native Language</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label for="">What is their native language?</label>
+                                            <input type="text" name="thor_native_language" id="thor_native_language" value="{{ $webContent->language }}" class="form-control placeholderText height-35 f-14" placeholder="Type your language">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words do we need to do appropriates?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_appropriate" name="word_appropriate">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>How many words did the client pay for initially?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-8">
+                                            <div class="form-group">
+                                                <input type="text" class="form-control height-35 f-14" id="word_client_initially" name="word_client_initially">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group mt-2">
+                                                <h6>Did he confirm he will pay for any additional words if the need be?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="1" id="yes_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn1">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="additional_word" value="0" id="no_btn1">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn1">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <h6>Do we have any layout we need to follow for the content?</h6>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="d-flex mt-2">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="1" id="yes_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="yes_btn2">
+                                                    Yes
+                                                    </label>
+                                                </div>
+                                                <div class="form-check ml-3">
+                                                    <input class="form-check-input" type="radio" name="layout_content" value="0" id="no_btn2">
+                                                    <label class="form-check-label mt-1 ml-2" for="no_btn2">
+                                                    No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3" style="display: none" id="website-link-form">
+                                        <div class="col-md-10 dynamic-website-link" id="dynamic-website-link-list-1">
+                                            <div class="row mb-3">
+                                                <div class="col-md-4"></div>
+                                                <div class="col-md-8">
+                                                    <div class="form-group" style="margin-left: 10%;">
+                                                        <label class="form-check-label mb-1">Website link or Theme link:</label>
+                                                        <input type="url" id="website_link" class="form-control placeholderText height-35 f-14" placeholder="Enter website link or theme link" name="website_link[]"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 append-buttons">
+                                            <div class="clearfix mt-4">
+                                                <button type="button" id="add-website-link-button" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                <button type="button" id="remove-website-link-button" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <h6 style="margin-top: 40px;">Pages List :</h6>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-md-10 dynamic-pages" id="dynamic-pages-list-1">
+                                                    <div class="row mb-3">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="">Page name</label>
+                                                                <input type="text" name="page_name_2[]" id="page_name_2" class="form-control placeholderText height-35 f-14" placeholder="Type page name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Quantity</label>
+                                                            <input type="number" name="quantity_2[]" id="quantity_2" class="form-control placeholderText height-35 f-14" placeholder="Type page quantity">
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <label for="">Approximate word</label>
+                                                            <input type="text" name="approximate_word_2[]" id="approximate_word_2" class="form-control placeholderText height-35 f-14" placeholder="Approximate word count per page">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2 append-buttons" style="margin-top: 30px;">
+                                                    <div class="clearfix">
+                                                        <button type="button" id="add-pages" class="btn btn-primary float-left text-uppercase shadow-sm"><i class="fa fa-plus fa-fw"></i></button>
+                                                        <button type="button" id="remove-pages" class="btn btn-secondary float-left text-uppercase ml-1" disabled="disabled"><i class="fa fa-minus fa-fw"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
                                     <div class="row mt-3">
                                         <div class="col-md-4">
                                             <h6>Website Link & Niche:</h6>
@@ -2435,16 +1856,18 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
                                     </div>
                                     <!--Product list-->
                                     @php
+                                        $page_names = '';
+                                        $quantitys = '';
+                                        $approximate_words = '';
                                         if (is_string($sales_web_content->page_name) && is_array(json_decode($sales_web_content->page_name, true))) {
                                             $array = json_decode($sales_web_content->page_name, true);
                                             $page_names = implode(', ', $array);
                                         }
                                         $page_name_array = explode(', ', $page_names);
 
-                                        if (is_string($sales_web_content->quantity) && is_array(json_decode($sales_web_content->quantity, true))) {
-                                            $array = json_decode($sales_web_content->quantity, true);
+                                        if (is_string($sales_web_content->quantitys) && is_array(json_decode($sales_web_content->quantitys, true))) {
+                                            $array = json_decode($sales_web_content->quantitys, true);
                                             $quantitys = implode(', ', $array);
-
                                         }
                                         $quantity_array = explode(', ', $quantitys);
 
@@ -2730,15 +2153,15 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-primary mt-5 " id="pm_web_content_submit">Submit</button>
-                                    </div>
-                                </form>
-                            </div>
+                                @endif
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary mt-5 " id="pm_web_content_submit">Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
         @endif
     @endif
 </div>
@@ -3086,6 +2509,7 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
             for (var i = 0; i < approximate_word.length; i++) {
                 approximate_word_values.push(approximate_word[i].value);
             }
+
             var data= {
                 '_token': "{{ csrf_token() }}",
                 'website_link2': document.getElementById("website_link2").value,
@@ -3126,9 +2550,6 @@ $webContent = \App\Models\WebContent::where('id',$web_content->id)->first();
                 'sales_web_content_id': document.getElementById("sales_web_content_id").value,
                 'deal_id': document.getElementById("deal_id").value,
                 'milestone_id': document.getElementById("milestone_id").value,
-                @if ($webContent !=null && $webContent->submitted_by ==4)
-                'submitted_by': {{ $webContent->submitted_by }},
-                @endif
             }
             $.ajaxSetup({
             headers: {

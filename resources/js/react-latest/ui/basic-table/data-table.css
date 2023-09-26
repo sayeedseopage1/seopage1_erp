@@ -113,3 +113,10 @@ sp1_tasks_tr:nth-child(even) {
 .sp1-data-table-sort-btn {
     background-color: transparent;
 }
+
+
+.cnx__table_pagination_btn{
+    background-color: #ffffff;
+    color: #777;
+    border-color: #cecece;
+}

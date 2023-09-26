@@ -4750,4 +4750,40 @@ class TaskController extends AccountBaseController
             'status' => 200
         ]);
     }
+
+    public function checkInProgressTask($id)
+    {
+        // $tasks= Task::select('tasks.id')
+        // ->leftjoin('task_users','task_users.task_id','tasks.id')
+        // ->leftJoin('sub_tasks','sub_tasks.task_id','tasks.id')
+        // ->leftJoin('tasks as subtasks','subtasks.subtask_id','sub_tasks.id')
+        // ->where('task_users.user_id',$id)
+        // ->where('subtasks.board_column_id',8)
+        // ->where('tasks.board_column_id',2)
+        // ->get();
+    //     $tasks = Task::select('tasks.id')
+    // ->leftJoin('task_users', 'task_users.task_id', 'tasks.id')
+    // ->leftJoin('sub_tasks', 'sub_tasks.task_id', 'tasks.id')
+    // ->leftJoin('tasks as subtasks', 'subtasks.subtask_id', 'sub_tasks.id')
+    // ->where('task_users.user_id', $id)
+    // ->where('tasks.board_column_id', 2)
+    // ->where(function ($query) {
+    //     $query->where('subtasks.board_column_id', 8);
+              
+    // })
+    // ->get();
+    $tasks = Subtask::select('tasks.id')
+    ->leftJoin('tasks', 'tasks.id', 'sub_tasks.task_id')
+    ->leftJoin('tasks as subtasks', 'subtasks.subtask_id', 'sub_tasks.id')
+    ->leftJoin('task_users', 'task_users.task_id', 'tasks.id')
+    ->where('task_users.user_id', $id)
+    ->where('tasks.board_column_id', 2)
+    ->where('subtasks.board_column_id', 8)
+    
+    ->get();
+
+
+
+        dd($tasks);
+    }
 }

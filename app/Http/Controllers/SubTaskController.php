@@ -403,6 +403,15 @@ class SubTaskController extends AccountBaseController
         $task_type->task_type_other= $request->task_type_other;
         $task_type->page_type_name= $request->page_type_name;
         $task_type->existing_design_link = $request->existing_design_link;
+        if($request->number_of_pages == null)
+        {
+            $task_type->number_of_pages= 1;
+
+        }else 
+        {
+            $task_type->number_of_pages= $request->number_of_pages;
+
+        }
         $task_type->number_of_pages= $request->number_of_pages;
         $task_type->save();
 

@@ -186,6 +186,7 @@ use App\Http\Controllers\QualifiedSalesController;
 use App\Http\Controllers\PendingActionController;
 use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
+use App\Http\Controllers\CrossDeptWork;
 use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
@@ -805,6 +806,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-subtasks', [TaskController::class, 'get_subtasks'])->name('get-subtasks');
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
+    Route::get('tasks/get-inprogress-tasks/{id}', [TaskController::class, 'checkInProgressTask']);
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
     ->where('any', '^(?!api\/)[\/\w\.-]*')
@@ -1266,6 +1268,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
+
+    Route::resource('cross-dept-work',CrossDeptWork::class);
+    Route::get('view-web-content',[CrossDeptWork::class,'adminViewWebContent'])->name('adminViewWebContent');
+    Route::get('view-blog-article',[CrossDeptWork::class,'adminViewBlogArticle'])->name('adminViewBlogArticle');
+    Route::get('view-product-description',[CrossDeptWork::class,'adminViewProductDescription'])->name('adminViewProductDescription');
+    Route::get('view-product-category',[CrossDeptWork::class,'adminViewProductCategory'])->name('adminViewProductCategory');
+    Route::get('view-basic-seo',[CrossDeptWork::class,'adminViewBasicSEO'])->name('adminViewBasicSEO');
 
     Route::get('revision/{any?}', [RevisionController::class, 'index'])->where('any', '.*');
     Route::resource('revision',RevisionController::class);
