@@ -317,7 +317,7 @@ class PortfolioController extends AccountBaseController
         
                 if ($plugin_name) {
                     $query->where('plugin_name', $plugin_name)
-                      //  ->orWhere('plugin_name', $plugin_id);
+                        ->orWhere('plugin_name', $plugin_id);
                 }
  
             })->paginate($page_size);
