@@ -1209,12 +1209,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                             <p>{{$working_environment->frontend_password}}</p>
 
                         </div>
-                        <div class="col">
-                            <h4>Login Url</h4>
-                            <br>
-                            <p>{{$working_environment->login_url}}</p>
-
-                        </div>
+                       
                         <div class="col">
                             <h4>Login Url</h4>
                             <br>
