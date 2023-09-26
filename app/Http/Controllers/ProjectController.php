@@ -740,6 +740,13 @@ class ProjectController extends AccountBaseController
         $dispute->save();
         $project = Project::find($dispute->project_id);
         $project->status = 'canceled';
+        $project_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
+        foreach ($project_milestones as $milestone) {
+            $milestone_update= ProjectMilestone::find($milestone->id);
+            $milestone_update->status ='canceled';
+            $milestone_update->save();
+            # code...
+        }
         $project->save();
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
