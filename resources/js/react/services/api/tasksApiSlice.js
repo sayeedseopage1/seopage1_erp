@@ -59,7 +59,8 @@ const taskApiSlice = apiSlice.injectEndpoints({
 
         
         getTaskTypeData: build.query({
-            query: () => `/account/tasks-type`
+            query: () => `/account/tasks-type`,
+            providesTags: ["TASK_TYPE_STATUS_DATA"]
         }),
 
         updateTasktypeAuthStatus: build.mutation({
@@ -72,7 +73,8 @@ const taskApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 }
-            })
+            }),
+            invalidatesTags: ["TASK_TYPE_STATUS_DATA"]
         })
         
     })

@@ -4726,13 +4726,16 @@ class TaskController extends AccountBaseController
     }
 
     public function taskTypeAuthorization(Request $request, $id){
+ 
         if($request->status=='approved'){
             $taskType = TaskType::find($id);
             $taskType->authorization_status = 1;
+            $taskType->comment = $request->comment;
             $taskType->save();
         }else{ 
             $taskType = TaskType::find($id);
             $taskType->authorization_status = 2;
+            $taskType->comment = $request->comment;
             $taskType->save();
         }
 
@@ -4741,7 +4744,6 @@ class TaskController extends AccountBaseController
             'status'=>200
         ]);
     }
-
     public function get_today_tasks($id)
     {
         $startDate= '2023-08-01';

@@ -12,6 +12,8 @@ import Tabbar from "../components/Tabbar";
 import { TaskTableColumns } from "../components/TaskTableColumns";
 import TasksTable from "../components/TasksTable";
 import { User } from "../../utils/user-details";
+import CKEditorComponent from "../../ckeditor";
+import Loader from "../components/Loader";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -23,6 +25,7 @@ const Tasks = () => {
     const [showAuthorizationModal, setShowAuthorizationModal] = React.useState(false);
     const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false); 
     const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
+    const [comment, setComment] = React.useState('');
 
     // api function
     const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
@@ -52,7 +55,7 @@ const Tasks = () => {
 
 
     // fetch table data
-    const fetchTasksTypeData = async (e) => {
+    const fetchTasksTypeData = async () => {
         try{
             const res = await getTaskTypeData().unwrap();
             setTasksType(res.data);
@@ -67,10 +70,10 @@ const Tasks = () => {
     const handleUpdateTaskTypeAuthorizationStatus = async (e, type, task_type_id) => {
         e.preventDefault();
         try{
-            const res = await updateTasktypeAuthStatus({status: type, task_type_id });
+            const res = await updateTasktypeAuthStatus({status: type, task_type_id, comment }).unwrap();
+            console.log(res)
             if(res){
                 setTasksType(prev => _.map(prev, d => d.id === task_type_id ? {...prev, authorization_status: res.authorization_status} : prev ))
-                await fetchTasksTypeData();
                 setActiveModalTaskTypeData(null);
                 close();
             }
@@ -259,7 +262,7 @@ const Tasks = () => {
 
 
             {/* Flyover */}
-            <Modal isOpen={showAuthorizationModal && activeModalTaskTypeData}> 
+            <Modal isOpen={showAuthorizationModal && (activeModalTaskTypeData !== null ? true : false)}> 
                     <div className="sp1_modal-content-wrapper">
                         <div className="sp1_modal-panel sp1_task_auth_modal ">
                             {/* header */}
@@ -285,19 +288,38 @@ const Tasks = () => {
                                 </ul>   
 
 
+                                
+                                <div className="form-group py-3">
+                                    <label className="font-weight-bold"> Comment: <sup>*</sup>  </label>
+                                `    <div className="ck-editor-holder stop-timer-options">
+                                        <CKEditorComponent
+                                            onChange={(e, editor) => {
+                                                const d = editor.getData();
+                                                setComment(d);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+
+
                                 <div className="w-100 mt-3">
                                     <div className="w-fit d-flex align-items-center ml-auto" style={{gap: '10px'}}>
                                         {
+                                            isLoading ? 
+                                              <span className="badge badge-light py-2 px-2 f-14 ml-auto"> 
+                                                <Loader />
+                                                </span>
+                                            :
                                             activeModalTaskTypeData?.authorization_status  === 0 ?
                                             <React.Fragment>
                                                 <Button 
                                                     onClick={(e) => handleUpdateTaskTypeAuthorizationStatus(e, 'approved', activeModalTaskTypeData?.id)}
-                                                    variant="success" 
+                                                    variant="success"  
                                                     className="ml-auto"
                                                 >Authorize</Button>
                                                 <Button 
                                                     onClick={(e) => handleUpdateTaskTypeAuthorizationStatus(e, 'denied', activeModalTaskTypeData?.id)}
-                                                    variant="danger"
+                                                    variant="danger" 
                                                 >Deny</Button>
                                             </React.Fragment>:
                                             <div>
