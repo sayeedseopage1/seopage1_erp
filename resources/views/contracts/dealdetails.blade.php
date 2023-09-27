@@ -705,6 +705,27 @@
                             </div>
                           </div>
 
+                          @php
+                              $user = \App\Models\User::where('id',$deal->added_by)->first();
+                          @endphp
+                          @if ($user->role_id==4)
+                            <div class="row">
+                                <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="project_summary">Project General Guidelines
+                                    <span style="color:red;">*</span><svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Project General Guidelines" data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
+                                            <path fill="currentColor" d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path>
+                                        </svg></label>
+                                    <textarea name="project_summary" class="form-control" id="project_summary" rows="3">{!!old('project_summary')!!}</textarea>
+                                    <script>
+                                        CKEDITOR.replace('project_summary');
+                                    </script>
+                                    <label id="projectSummaryError" class="error text-danger" for="project_summary"></label>
+                                </div>
+                                </div>
+                            </div>
+                          @endif
+
                           <br>
                           <div class="d-flex justify-content-center">
                               <button class="btn btn-primary" type="submit" id="createDeal" ><span class="btn-txt">Complete Deal Creation</span></button>
@@ -959,6 +980,9 @@
             var description7 = CKEDITOR.instances.description7Text.getData();
             var description8 = CKEDITOR.instances.description8Text.getData();
             var description9 = CKEDITOR.instances.description9Text.getData();
+            @if ($user->role_id==4)
+                var project_summary = CKEDITOR.instances.project_summary.getData();
+            @endif
             var message_links = document.getElementsByName("message_link[]");
             var message_links_values = [];
             for (var i = 0; i < message_links.length; i++) {
@@ -985,6 +1009,9 @@
                 'description7': description7,
                 'description8': description8,
                 'description9': description9,
+                @if ($user->role_id==4)
+                'project_summary': project_summary,
+                @endif
                 'id': '{{$deal->id}}',
                 'pm_id': '{{Auth::user()->role_id}}',
             }
@@ -1087,6 +1114,11 @@
                     }else{
                         $('#description9Error').text('');
                     }
+                    if(error.responseJSON.errors.project_summary){
+                        $('#projectSummaryError').text(error.responseJSON.errors.project_summary);
+                    }else{
+                        $('#projectSummaryError').text('');
+                    }
                     if (error.responseJSON.errors && error.responseJSON.errors.deal_category) {
                         $('#deal_category_error').text(error.responseJSON.errors.deal_category);
                     } else {
@@ -1126,6 +1158,9 @@
             var description7 = CKEDITOR.instances.description7Text.getData();
             var description8 = CKEDITOR.instances.description8Text.getData();
             var description9 = CKEDITOR.instances.description9Text.getData();
+            @if ($user->role_id==4)
+                var project_summary = CKEDITOR.instances.project_summary.getData();
+            @endif
             var message_links = document.getElementsByName("message_link[]");
             var message_links_values = [];
             for (var i = 0; i < message_links.length; i++) {
@@ -1159,6 +1194,9 @@
                 'description7': description7,
                 'description8': description8,
                 'description9': description9,
+                @if ($user->role_id==4)
+                'project_summary': project_summary,
+                @endif
                 'id': '{{$deal->id}}',
             }
             // console.log(data);
@@ -1299,6 +1337,11 @@
                         $('#description9Error').text(error.responseJSON.errors.description9);
                     }else{
                         $('#description9Error').text('');
+                    }
+                    if(error.responseJSON.errors.project_summary){
+                        $('#projectSummaryError').text(error.responseJSON.errors.project_summary);
+                    }else{
+                        $('#projectSummaryError').text('');
                     }
                     if (error.responseJSON.errors && error.responseJSON.errors.deal_category) {
                         $('#deal_category_error').text(error.responseJSON.errors.deal_category);

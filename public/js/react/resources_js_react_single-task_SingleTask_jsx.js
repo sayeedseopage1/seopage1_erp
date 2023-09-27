@@ -7615,7 +7615,7 @@ var SubTaskSection = function SubTaskSection(_ref) {
               res = _context.sent;
               if (res.status === 400) {
                 react_toastify__WEBPACK_IMPORTED_MODULE_14__.toast.error(res === null || res === void 0 ? void 0 : res.message, {
-                  position: 'top-center'
+                  theme: 'colored'
                 });
               } else {
                 setIsTaskModalOpen(!isTaskModalOpen);

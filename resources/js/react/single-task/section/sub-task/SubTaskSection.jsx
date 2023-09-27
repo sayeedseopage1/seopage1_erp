@@ -40,7 +40,7 @@ const SubTaskSection = ({status}) => {
         try{
             const res = await getInProgressTaskStatus(`/${auth?.getId()}`).unwrap();
             if(res.status === 400){
-                toast.error(res?.message, {position: 'top-center'})
+                toast.error(res?.message, {theme: 'colored'})
             }else{
                 setIsTaskModalOpen(!isTaskModalOpen);
             }

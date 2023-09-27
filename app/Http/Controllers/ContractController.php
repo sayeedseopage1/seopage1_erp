@@ -1034,6 +1034,7 @@ class ContractController extends AccountBaseController
                 'description9' => 'required',
                 'deal_category' => 'required',
                 'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
+                'project_summary' => $request->has('project_summary') ? 'required' : '',
 
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1049,6 +1050,7 @@ class ContractController extends AccountBaseController
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
+                'project_summary.required' => 'This field is required!',
             ]);
         } else {
             $validated = $request->validate([
@@ -1071,6 +1073,7 @@ class ContractController extends AccountBaseController
                 'description9' => 'required',
                 'deal_category' => 'required',
                 'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
+                'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'estimated_hour_task.required' => 'This field is required!',
@@ -1091,6 +1094,7 @@ class ContractController extends AccountBaseController
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_Category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
+                'project_summary.required' => 'This field is required!',
             ]);
         }
         //dd("hello");
@@ -1181,6 +1185,7 @@ class ContractController extends AccountBaseController
             $project->project_budget = ($request->amount) / $currency->exchange_rate;
             $project->due = $deal->amount;
             $project->currency_id = 1;
+            $project->project_summary = $request->project_summary;
             $project->save();
            
             if ($deal->project_type == 'hourly') {
@@ -1536,6 +1541,7 @@ class ContractController extends AccountBaseController
                 'description9' => 'required',
                 'deal_category' => 'required',
                 'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
+                'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'deadline.required' => 'Please select project deadline from Freelancer.com!',
@@ -1550,6 +1556,7 @@ class ContractController extends AccountBaseController
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
+                'project_summary.required' => 'This field is required!',
             ]);
         } else {
             $validated = $request->validate([
@@ -1572,6 +1579,7 @@ class ContractController extends AccountBaseController
                 'description9' => 'required',
                 'deal_category' => 'required',
                 'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
+                'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
                 'estimated_hour_task.required' => 'This field is required!',
@@ -1592,6 +1600,7 @@ class ContractController extends AccountBaseController
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
                 'cms_id.required' => 'This field is required!',
+                'project_summary.required' => 'This field is required!',
             ]);
         }
         //      dd("hello");
@@ -1679,6 +1688,7 @@ class ContractController extends AccountBaseController
             $project->project_budget = ($request->amount) / $currency->exchange_rate;
             $project->due = $deal->amount;
             $project->currency_id = 1;
+            $project->project_summary = $request->project_summary;
             $project->save();
 
             if ($deal->project_type == 'hourly') {
