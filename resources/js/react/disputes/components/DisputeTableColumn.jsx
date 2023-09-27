@@ -6,6 +6,7 @@ import Avatar from '../../global/Avatar';
 import _ from 'lodash';
 import AnsQuestion from './AnsQuestion';
 import { User } from '../../utils/user-details';
+import Popover from '../../global/Popover';
 
 
 
@@ -134,7 +135,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <a href={`/account/clinets/${project_manager?.id}`}>{project_manager?.name}</a>
+                    <a href={`/account/employees/${project_manager?.id}`}>{project_manager?.name}</a>
                 </div>
             )
         }
@@ -255,8 +256,52 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original; 
             const winner = data?.winner;
+            const raised_against = data?.raised_against;
+            const raised_by = data?.raised_by; 
 
-            if(data?.status && !winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> Partially Responsible </span>; 
+            if(data?.status && !winner) return (
+                <Popover>
+                    <Popover.Button>
+                        <span className='badge badge-primary font-weight-bold text-white f-12'> Partially Responsible </span>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className='revision_popover_panel'>
+                            <div className="row">
+                                <div className="col"> 
+                                    <div className='partially_responsible_person'>
+                                        <Avatar
+                                            src={raised_against?.image ? `/user-uploads/avatar/${raised_against?.image}`: null}
+                                            alt={raised_against?.name}
+                                            name={raised_against?.name}
+                                            type='circle'
+                                            width={48}
+                                            height={48}
+                                        />
+
+                                        <h6>{raised_against?.name}</h6>
+                                        <h3>{data?.raised_against_percent}%</h3>
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    <div className='partially_responsible_person'>
+                                        <Avatar
+                                            src={raised_by?.image ? `/user-uploads/avatar/${raised_by?.image}`: null}
+                                            alt={raised_by?.name}
+                                            name={raised_by?.name}
+                                            type='circle'
+                                            width={48}
+                                            height={48}
+                                        />
+                                        <h6>{raised_by?.name}</h6>
+                                        <h3>{data?.raised_by_percent}%</h3> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Popover.Panel>
+                </Popover>
+            ); 
             if(!winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> No Decision Yet </span>;
             return (
                 <div className='person_rander'>

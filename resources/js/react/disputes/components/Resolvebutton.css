@@ -171,3 +171,19 @@ button.remove-question-btn:hover{
     color: var(--header_color);
 }
 
+
+.revision_popover_panel{
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+    /* width: clamp(255px, 100%, 350px); */
+}
+
+.partially_responsible_person{
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}

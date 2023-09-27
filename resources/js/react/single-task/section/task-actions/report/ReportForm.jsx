@@ -6,19 +6,9 @@ import SubmitButton from "../../../components/SubmitButton";
 import CKEditorComponent from "../../../../ckeditor";
 import UserSelectionList from "../stop-timer/options/UserSelectionList";
 import { useCreateReportMutation } from "../../../../services/api/SingleTaskPageApi";
+import { User } from "../../../../utils/user-details";
 
-const reports = [
-    {
-        id: 1,
-        name: "Project Manager/Lead Developer Is Making Me Do Their Work Without Top Managements’ Authorization",
-        info: "Your report will be kept private and management won't disclose your name to anyone including the project manager and lead developer!",
-    },
-    {
-        id: 2,
-        name: "Need Further Clarification From Lead Developer/Project Manager",
-        info: '',
-    },
-];
+
 
 const ReportForm = ({close, task, onSuccess}) => {
     const [reason, setReason] = useState(null);
@@ -26,7 +16,7 @@ const ReportForm = ({close, task, onSuccess}) => {
     const [comment, setComment] = useState("");
     const [previousNotedIssue, setPreviousNotedIssue] = useState("");
     const [error, setError]  = useState("");
-
+    const auth = new User(window.Laravel.user);
 
     const [createReport, {isLoading}] = useCreateReportMutation(); 
 
@@ -98,6 +88,21 @@ const ReportForm = ({close, task, onSuccess}) => {
         }
     }
 
+    // get user 
+    const users = auth?.getRoleId() === 6 ? [4, 8] : [4, 6]
+    const reports = [
+        {
+            id: 1,
+            name: `Project Manager /Team Lead ${auth.getRoleId() === 6 ? '' : '/ Lead Developer'} Is Making Me Do Their Work Without Top Managements’ Authorization`,
+            info: "Your report will be kept private and management won't disclose your name to anyone including the project manager and lead developer!",
+        },
+        {
+            id: 2,
+            name: "Need Further Clarification From Lead Developer/Project Manager",
+            info: '',
+        },
+    ];
+
     return (
         <React.Fragment>
             <form className="px-3"> 
@@ -150,7 +155,7 @@ const ReportForm = ({close, task, onSuccess}) => {
                         Responsible Person
                     </label>
                     <div className="position-relative w-100 mb-3">
-                        <UserSelectionList person={person} setPerson={setPerson} roles={[4, 6]} />
+                        <UserSelectionList person={person} setPerson={setPerson} roles={users} />
                     </div>
                     {error?.person && <div className="f-14" style={{color:'red'}}>{error?.person}</div>}
                 </div>

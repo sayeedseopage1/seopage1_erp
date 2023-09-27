@@ -83,7 +83,10 @@ const ReportTableModal = ({reports = [], task, search, tableName='sp1-table', is
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <div className="sp1_ck_content" dangerouslySetInnerHTML={{__html: data?.comment}}  />
+          <div 
+            className="sp1_ck_content" 
+            dangerouslySetInnerHTML={{__html: data?.comment}}
+          />
         )
       }
     },

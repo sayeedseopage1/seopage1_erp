@@ -807,6 +807,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-tasks', [TaskController::class, 'get_tasks'])->name('get-tasks');
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     Route::post('tasks/daily-submissions', [TaskController::class, 'storeDailySubmission']);
+    Route::get('tasks/daily-submissions/{id}', [TaskController::class, 'getDailySubmission']);
     Route::get('tasks/get-inprogress-tasks/{id}', [TaskController::class, 'checkInProgressTask']);
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     Route::get('tasks/{any?}', [TaskController::class, 'index'])

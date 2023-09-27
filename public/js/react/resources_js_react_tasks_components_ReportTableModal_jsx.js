@@ -47,11 +47,11 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     isOpen = _React$useState2[0],
     setIsOpen = _React$useState2[1];
-  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     search = _React$useState4[0],
     setSearch = _React$useState4[1];
-  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(''),
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(""),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     comment = _React$useState6[0],
     setComment = _React$useState6[1];
@@ -66,7 +66,7 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
   var close = function close() {
     return setIsOpen(false);
   };
-  var isDev = lodash__WEBPACK_IMPORTED_MODULE_6___default().includes([5], (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.role_id);
+  var isTopManagement = lodash__WEBPACK_IMPORTED_MODULE_6___default().includes([1], (_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : (_window$Laravel$user = _window$Laravel.user) === null || _window$Laravel$user === void 0 ? void 0 : _window$Laravel$user.role_id);
   var onSubmit = function onSubmit(type) {
     var data = {
       status: type,
@@ -80,8 +80,8 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
             id: row === null || row === void 0 ? void 0 : row.id,
             status: type
           }));
-          var body = document.getElementById('body');
-          body.style.cursor = 'default';
+          var body = document.getElementById("body");
+          body.style.cursor = "default";
           close();
         }
       });
@@ -91,20 +91,20 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
     var data = editor.getData();
     setComment(data);
   };
-  var variant = (row === null || row === void 0 ? void 0 : row.status) === 'approved' ? 'success' : 'tertiary';
-  var title = (row === null || row === void 0 ? void 0 : row.status) === 'approved' ? 'Resoved' : (row === null || row === void 0 ? void 0 : row.status) === 'pending' ? 'Resove' : lodash__WEBPACK_IMPORTED_MODULE_6___default().startCase(row === null || row === void 0 ? void 0 : row.status);
-  var badge = (row === null || row === void 0 ? void 0 : row.status) === 'pending' ? 'badge-primary' : (row === null || row === void 0 ? void 0 : row.status) === 'approved' ? 'badge-success' : 'badge-warning';
+  var variant = (row === null || row === void 0 ? void 0 : row.status) === "approved" ? "success" : "tertiary";
+  var title = (row === null || row === void 0 ? void 0 : row.status) === "approved" ? "Resoved" : (row === null || row === void 0 ? void 0 : row.status) === "pending" ? "Resove" : lodash__WEBPACK_IMPORTED_MODULE_6___default().startCase(row === null || row === void 0 ? void 0 : row.status);
+  var badge = (row === null || row === void 0 ? void 0 : row.status) === "pending" ? "badge-primary" : (row === null || row === void 0 ? void 0 : row.status) === "approved" ? "badge-success" : "badge-warning";
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-    children: [isDev && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+    children: [!isTopManagement && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
       className: "badge ".concat(badge),
       children: row === null || row === void 0 ? void 0 : row.status
-    }), !isDev && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    }), isTopManagement && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
         onClick: function onClick() {
-          return (row === null || row === void 0 ? void 0 : row.status) === 'pending' && handleModal();
+          return (row === null || row === void 0 ? void 0 : row.status) === "pending" && handleModal();
         },
         variant: variant,
-        className: (row === null || row === void 0 ? void 0 : row.status) === 'denied' ? 'sp1_tasks_tbl_report_btn' : '',
+        className: (row === null || row === void 0 ? void 0 : row.status) === "denied" ? "sp1_tasks_tbl_report_btn" : "",
         children: title
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -142,20 +142,20 @@ var ReportResoveButton = function ReportResoveButton(_ref) {
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                     className: "ml-auto d-flex align-items-center w-fit",
                     style: {
-                      gap: '10px'
+                      gap: "10px"
                     },
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_SubmitButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
                       variant: "success",
                       title: "Approve & Close",
                       onClick: function onClick() {
-                        return onSubmit('approved');
+                        return onSubmit("approved");
                       },
                       isLoading: isLoading,
                       className: "ml-auto mr-2"
                     }), !isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_SubmitButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
                       title: "Deny & Close",
                       onClick: function onClick() {
-                        return onSubmit('denied');
+                        return onSubmit("denied");
                       },
                       isLoading: isLoading,
                       className: "deny_button"

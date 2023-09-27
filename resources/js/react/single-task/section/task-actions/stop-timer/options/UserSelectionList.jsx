@@ -88,8 +88,9 @@ const UserSelectionList = ({ person, setPerson, filter, roles=[] }) => {
                                             height={24}
                                             className="rounded-circle"
                                         />
+                                        
                                         {selected}
-                                        <span className="w-100">{user?.name}</span>
+                                        <span className="w-100">{user?.name} <span className="badge badge-success">{user?.employee_detail?.designation?.name}</span></span>
 
                                         {selected && <span className="ml-auto"> <i className="fa-solid fa-check text-white" /> </span> }
                                     </div>

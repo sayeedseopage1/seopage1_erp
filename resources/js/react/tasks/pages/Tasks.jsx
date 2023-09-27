@@ -11,6 +11,7 @@ import SearchBox from "../components/Searchbox";
 import Tabbar from "../components/Tabbar";
 import { TaskTableColumns } from "../components/TaskTableColumns";
 import TasksTable from "../components/TasksTable";
+import { User } from "../../utils/user-details";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -25,7 +26,7 @@ const Tasks = () => {
 
     // api function
     const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
-   
+    const auth = new User(window.Laravel.user);
 
     const onFilter = (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
@@ -37,7 +38,6 @@ const Tasks = () => {
             .unwrap()
             .then(res => {
                 const data = _.orderBy(res?.tasks, 'due_date', 'desc');
-                console.log(data)
                 dispatch(storeTasks({tasks: data}))
             })
             .catch(err => console.log(err))
@@ -112,6 +112,7 @@ const Tasks = () => {
                         search={search}
                         reportPermission={[6, 5, 1, 8]}
                         tableColumns={TaskTableColumns}
+                        hideColumns={auth?.getRoleId() !== 6 ? ["action"] : [] }
                     />
                 </div>
             </div>

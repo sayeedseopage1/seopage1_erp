@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\BasicSeoDataTable;
+use App\DataTables\BlogArticleDataTable;
+use App\DataTables\ProductCategoryCollectionDataTable;
+use App\DataTables\ProductDescriptionDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\BasicSeo;
 use App\Models\BlogArticle;
 use App\Models\ProductCategoryCollection;
 use App\Models\ProductDescription;
 use App\Models\WebContent;
+use App\DataTables\WebContentDataTable;
 use Illuminate\Http\Request;
 
 class CrossDeptWork extends AccountBaseController
@@ -28,30 +33,30 @@ class CrossDeptWork extends AccountBaseController
         return view('service-type.cross-dept.general_view',$this->data);
     }
 
-    public function adminViewWebContent(){
+    public function adminViewWebContent(WebContentDataTable $dataTable){
         $this->pageTitle = 'Web Content';
-        $this->web_contents = WebContent::all();
-        return view('service-type.cross-dept.admin_web_content',$this->data);
+        $this->web_content = WebContent::orderBy('id','asc')->get();
+        return $dataTable->render('service-type.cross-dept.admin_web_content',$this->data);
     }
-    public function adminViewBlogArticle(){
+    public function adminViewBlogArticle(BlogArticleDataTable $dataTable){
         $this->pageTitle = 'Blog Article';
-        $this->blog_articles = BlogArticle::all();
-        return view('service-type.cross-dept.admin_blog_article',$this->data);
+        $this->blog_articles = BlogArticle::orderBy('id','asc')->get();
+        return $dataTable->render('service-type.cross-dept.admin_blog_article',$this->data);
     }
-    public function adminViewProductDescription(){
+    public function adminViewProductDescription(ProductDescriptionDataTable $dataTable){
         $this->pageTitle = 'Product Description';
-        $this->product_descriptions = ProductDescription::all();
-        return view('service-type.cross-dept.admin_product_description',$this->data);
+        $this->product_descriptions = ProductDescription::orderBy('id','asc')->get();
+        return $dataTable->render('service-type.cross-dept.admin_product_description',$this->data);
     }
-    public function adminViewProductCategory(){
+    public function adminViewProductCategory(ProductCategoryCollectionDataTable $dataTable){
         $this->pageTitle = 'Product Category';
-        $this->product_categories = ProductCategoryCollection::all();
-        return view('service-type.cross-dept.admin_product_category',$this->data);
+        $this->product_categories = ProductCategoryCollection::orderBy('id','asc')->get();
+        return $dataTable->render('service-type.cross-dept.admin_product_category',$this->data);
     }
-    public function adminViewBasicSEO(){
+    public function adminViewBasicSEO(BasicSeoDataTable $dataTable){
         $this->pageTitle = 'Basic SEO';
-        $this->basic_seo = BasicSeo::all();
-        return view('service-type.cross-dept.admin_basic_seo',$this->data);
+        $this->basic_seo = BasicSeo::orderBy('id','asc')->get();
+        return $dataTable->render('service-type.cross-dept.admin_basic_seo',$this->data);
     }
 
     /**

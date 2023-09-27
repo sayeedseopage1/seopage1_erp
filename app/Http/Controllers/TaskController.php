@@ -76,6 +76,7 @@ use App\Models\DeveloperStopTimer;
 use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
+use App\Models\DailySubmission;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -4737,7 +4738,7 @@ class TaskController extends AccountBaseController
     {
         $startDate= '2023-08-01';
         $endDate= '2023-08-31';
-        $tasks = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','projects.id as projectId',
+        $tasks = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
          
@@ -4747,6 +4748,8 @@ class TaskController extends AccountBaseController
         ->join('projects','projects.id','tasks.project_id')
         ->join('users as clients','clients.id','projects.client_id')
         ->join('users as developers','developers.id','project_time_logs.user_id')
+        ->leftJoin('task_types','task_types.task_id','tasks.id')
+        ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
         ->whereBetween('project_time_logs.created_at', [$startDate, $endDate])
         ->groupBy('tasks.id')
@@ -4799,6 +4802,65 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
-        dd($request);
+        $daily_submission= new DailySubmission();
+      
+        if ($request->file('file') != null) {
+            foreach ($request->file('file') as $att) {
+                $task_submit = new TaskSubmission();
+                $filename = null;
+                if ($att) {
+                    $filename = time() . $att->getClientOriginalName();
+
+                    Storage::disk('public')->putFileAs(
+                        'DailySubmission/',
+                        $att,
+                        $filename
+                    );
+                }
+                $daily_submission->attachments = $filename;
+                
+               
+            }
+        }
+        $daily_submission->user_id =$request->user_id;
+        $daily_submission->task_id =$request->task_id;
+        $daily_submission->project_id =$request->project_id;
+        $daily_submission->client_id =$request->client_id;
+        $daily_submission->task_heading =$request->task_heading;
+        $daily_submission->client_name =$request->client_name;
+        $daily_submission->comment =$request->comment;
+        $daily_submission->link_name =$request->link_name;
+        $daily_submission->section_name =$request->section_name;
+        $daily_submission->hours_spent =$request->hours_spent;
+        $daily_submission->status =1;
+        $daily_submission->mark_as_complete =$request->mark_as_complete;
+
+        $daily_submission->save();
+        return response()->json([
+            'message'=>'Daily submission submitted successfully',
+            'status'=>200,
+            'submission_status'=>$daily_submission->status,
+            'mark_as_complete'=>$daily_submission->mark_as_complete,
+
+        ]);
+
+     
+    }
+    public function getDailySubmission($id)
+    {
+        $daily_submissions = DailySubmission::select('daily_submissions.*','daily_submissions.created_at as submission_creation_date','users.id as developer_id',
+        'users.name as developer_name','users.image as developer_avatar','working_environments.site_url as site_url','working_environments.frontend_password'
+        )
+        ->leftJoin('tasks','tasks.id','daily_submissions.task_id')
+        ->leftJoin('working_environments','working_environments.project_id','tasks.project_id')
+        ->leftJoin('users','users.id','daily_submissions.user_id')
+        ->where('tasks.id',$id)
+        ->get();
+        return response()->json([
+            'daily_submissions'=> $daily_submissions,
+            'status'=>200,
+
+        ]);
+       
     }
 }

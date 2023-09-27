@@ -8,12 +8,14 @@ import SearchBox from "../components/Searchbox";
 import { useLazyGetAllSubtaskQuery } from "../../services/api/tasksApiSlice";
 import { storeSubTasks } from "../../services/features/tasksSlice";
 import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
+import { User } from "../../utils/user-details";
 
 const Subtasks = () => {
     const {tasks} = useSelector(s => s.tasks)
     const dispatch = useDispatch(); 
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
+    const auth = new User(window.Laravel.user);
 
     const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
 
@@ -58,6 +60,7 @@ const Subtasks = () => {
                         search={search}
                         reportPermission = {[1,8,5]}
                         tableColumns={SubTasksTableColumns}
+                        hideColumns={auth?.getRoleId() !== 5 ? ["action"] : [] }
                     />
                 </div>
             </div>
