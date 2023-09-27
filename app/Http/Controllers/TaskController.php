@@ -4464,8 +4464,16 @@ class TaskController extends AccountBaseController
             $revision-> dispute_status = true;
             if($query->winner){
                 $responsible_person = $query->raised_against != $query->winner ? $query->raised_against : $query->raised_by;
-                $responsible_person_role = User::find($responsible_person)->role_id == null ? 3 : '';
-                $revision-> final_responsible_person = $this->role[$responsible_person_role];
+                $responsible_person_role = User::find($responsible_person)->role_id;
+                if($responsible_person_role == null)
+                {
+                    $revision-> final_responsible_person = 'C';
+
+                }else 
+                {
+                    $revision-> final_responsible_person = $this->role[$responsible_person_role];
+                }
+               
             } 
             $revision->save();
 
