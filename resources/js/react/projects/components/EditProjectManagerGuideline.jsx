@@ -958,12 +958,13 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                     <Button onClick={close} variant="tertiary" className="mr-2">
                                         Close
                                     </Button>
-                                    
+                                   {edit &&  
                                     <SubmitButton
                                         title="Submit"
                                         onClick={handleSubmit}
                                         isLoading={isLoading}
                                     />
+                                   }
                                 </div>
                             </div>
                         </div>

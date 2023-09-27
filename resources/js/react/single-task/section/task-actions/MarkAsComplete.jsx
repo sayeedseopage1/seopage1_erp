@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import FileUploader from "../../../file-upload/FileUploader";
@@ -9,8 +9,9 @@ import SubmitButton from "../../components/SubmitButton";
 import { useDispatch } from "react-redux";
 import { setTaskStatus } from "../../../services/features/subTaskSlice";
 import Loader from "../../components/Loader";
-import {toast} from 'react-toastify'
- 
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const MarkAsComplete = ({task, auth}) => {
     // form data
@@ -20,7 +21,8 @@ const MarkAsComplete = ({task, auth}) => {
     const [files, setFiles] = useState([]);
     const [comment, setComment] = useState('');
     const [commentErr, setCommentErr] = useState('');
-    const [showAlert, setShowAlert] = useState();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [markAsComplete, {isLoading: isSubmitting}] = useMarkAsCompleteMutation();
     const [ checkSubTaskState, {isFetching} ] = useLazyCheckSubTaskStateQuery();
@@ -30,13 +32,20 @@ const MarkAsComplete = ({task, auth}) => {
 
     // toggle
     const toggle = () => {
-        if (auth.getRoleId() === 6) {
-            checkSubTaskState(task?.id)
-            .unwrap()
-            .then(res => {
-                if(res.status === 'true' || res.status === true){
-                      
-                    const htmlContent =  <div className="__tostar_modal">
+        navigate(`${location.pathname}?modal=complete-task`);
+    };
+
+
+    useEffect(()=>{
+        const url = new URLSearchParams(location.search);
+        
+        if (url.get('modal')==='complete-task') {
+            if (auth.getRoleId() === 6) {
+                checkSubTaskState(task?.id)
+                .unwrap()
+                .then(res => {
+                    if(res.status === 'true' || res.status === true){
+                        const htmlContent =  <div className="__tostar_modal">
                         <strong>You can't complete this task because you have some pending subtask?</strong>
                         <ul className="py-1">
                             {res.subtasks.map((el, idx) => 
@@ -57,20 +66,24 @@ const MarkAsComplete = ({task, auth}) => {
                         position: 'top-center', 
                         icon: false,
                     });
-                }else {
-                    setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
-                } 
-            }) 
-        } else {
-            setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
+                    }else {
+                        setMarkAsCompleteModalIsOpen(true);
+                    } 
+                }) 
+            } else {
+                setMarkAsCompleteModalIsOpen(true);
+            };
+
         }
-    };
+        else{
+            setMarkAsCompleteModalIsOpen(false);
+        }
 
-
+    },[location])
 
     // close
     const close = () => {
-        setMarkAsCompleteModalIsOpen(false);
+        navigate(`${location.pathname}`);
     };
 
     // handle editor change
@@ -300,7 +313,6 @@ const MarkAsComplete = ({task, auth}) => {
                 </div>
                 </div>
             </Modal>
- 
         </>
     );
 };

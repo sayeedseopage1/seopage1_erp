@@ -9334,6 +9334,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
 /* harmony import */ var _components_Loader__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../components/Loader */ "./resources/js/react/single-task/components/Loader.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -9346,6 +9347,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -9386,10 +9389,8 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     _useState10 = _slicedToArray(_useState9, 2),
     commentErr = _useState10[0],
     setCommentErr = _useState10[1];
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(),
-    _useState12 = _slicedToArray(_useState11, 2),
-    showAlert = _useState12[0],
-    setShowAlert = _useState12[1];
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useLocation)();
   var _useMarkAsCompleteMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_5__.useMarkAsCompleteMutation)(),
     _useMarkAsCompleteMut2 = _slicedToArray(_useMarkAsCompleteMut, 2),
     markAsComplete = _useMarkAsCompleteMut2[0],
@@ -9398,55 +9399,64 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     _useLazyCheckSubTaskS2 = _slicedToArray(_useLazyCheckSubTaskS, 2),
     checkSubTaskState = _useLazyCheckSubTaskS2[0],
     isFetching = _useLazyCheckSubTaskS2[1].isFetching;
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState14 = _slicedToArray(_useState13, 2),
-    markAsCompleteModaIsOpen = _useState14[0],
-    setMarkAsCompleteModalIsOpen = _useState14[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+    _useState12 = _slicedToArray(_useState11, 2),
+    markAsCompleteModaIsOpen = _useState12[0],
+    setMarkAsCompleteModalIsOpen = _useState12[1];
 
   // toggle
   var toggle = function toggle() {
-    if (auth.getRoleId() === 6) {
-      checkSubTaskState(task === null || task === void 0 ? void 0 : task.id).unwrap().then(function (res) {
-        if (res.status === 'true' || res.status === true) {
-          var htmlContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
-            className: "__tostar_modal",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("strong", {
-              children: "You can't complete this task because you have some pending subtask?"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("ul", {
-              className: "py-1",
-              children: res.subtasks.map(function (el, idx) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("li", {
-                  style: {
-                    listStyle: 'unset',
-                    fontSize: '13px'
-                  },
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
-                    href: "/accounts/tasks/".concat(el.id),
-                    children: [idx + 1, ". ", el.heading]
-                  }), " (", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
-                    href: "/account/clients/".concat(el.clientId),
-                    children: el.client_name
-                  }), ")"]
-                }, el.id);
-              })
-            })]
-          });
-          react_toastify__WEBPACK_IMPORTED_MODULE_11__.toast.warn(htmlContent, {
-            position: 'top-center',
-            icon: false
-          });
-        } else {
-          setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
-        }
-      });
-    } else {
-      setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
-    }
+    navigate("".concat(location.pathname, "?modal=complete-task"));
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var url = new URLSearchParams(location.search);
+    if (url.get('modal') === 'complete-task') {
+      if (auth.getRoleId() === 6) {
+        checkSubTaskState(task === null || task === void 0 ? void 0 : task.id).unwrap().then(function (res) {
+          if (res.status === 'true' || res.status === true) {
+            var htmlContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
+              className: "__tostar_modal",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("strong", {
+                children: "You can't complete this task because you have some pending subtask?"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("ul", {
+                className: "py-1",
+                children: res.subtasks.map(function (el, idx) {
+                  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("li", {
+                    style: {
+                      listStyle: 'unset',
+                      fontSize: '13px'
+                    },
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
+                      href: "/account/tasks/".concat(el.id),
+                      children: [idx + 1, ". ", el.heading]
+                    }), " (", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
+                      href: "/account/clients/".concat(el.clientId),
+                      children: el.client_name
+                    }), ")"]
+                  }, el.id);
+                })
+              })]
+            });
+            react_toastify__WEBPACK_IMPORTED_MODULE_11__.toast.warn(htmlContent, {
+              position: 'top-center',
+              icon: false
+            });
+          } else {
+            setMarkAsCompleteModalIsOpen(true);
+          }
+        });
+      } else {
+        setMarkAsCompleteModalIsOpen(true);
+      }
+      ;
+    } else {
+      setMarkAsCompleteModalIsOpen(false);
+    }
+  }, [location]);
 
   // close
   var close = function close() {
-    setMarkAsCompleteModalIsOpen(false);
+    navigate("".concat(location.pathname));
   };
 
   // handle editor change
