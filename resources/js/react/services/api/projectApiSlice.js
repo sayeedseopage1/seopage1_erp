@@ -17,6 +17,20 @@ const projectApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: ["PMGUIDELINE"]
         }),
         
+        updateProjectGuideline: build.mutation({
+            query: (data) => ({
+                url: `/task-guideline-update/${data.id}`,
+                method: "PUT",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },   
+            }), 
+            invalidatesTags: ["PMGUIDELINE"]
+        }),
+        
         checkPMTaskGuideline: build.query({
             query: (projectId) => `/account/tasks/check-pm-taskguideline/${projectId}`,
             providesTags: ["PMGUIDELINE"]
@@ -42,6 +56,7 @@ const projectApiSlice = apiSlice.injectEndpoints({
 
 export const { 
      useStoreProjectGuidelineMutation,
+     useUpdateProjectGuidelineMutation,
      useLazyCheckPMTaskGuidelineQuery,
      useCheckPMTaskGuidelineQuery,
      useGetMilestoneDetailsQuery,

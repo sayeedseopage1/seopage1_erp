@@ -12,6 +12,8 @@ import demo from './demo.json'
 import Person from './Person';
 import ReportResoveButton from './ReportResolveButton';
 import ReportTableLoder from './loader/ReportTableLoder';
+import EmptyTable from '../../global/EmptyTable';
+import _ from 'lodash';
 
 
 // columns model
@@ -144,40 +146,43 @@ const ReportTableModal = ({reports = [], task, search, tableName='sp1-table', is
   })
 
   return (
-      <div className='sp1_tasks_table_wrapper sp1_tasks_report_table_wrapper'>
-        <table className='sp1_tasks_table sp1_tasks_report_table'>
-          <thead className="sp1_tasks_thead">
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className='sp1_tasks_tr'>
-                {headerGroup.headers.map(header => {
-                  return <DragableColumnHeader key={header.id} header={header} table={table} className="sp1_tasks_report_th"/> 
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody className='sp1_tasks_tbody'> 
-            {isLoading && <ReportTableLoder />}
-            {!isLoading && table.getRowModel().rows.map(row => {
-              return (
-                <tr
-                  className='sp1_tasks_tr'
-                    key={row.id}
-                  > 
-                  {row.getVisibleCells().map(cell => { 
-                    return (
-                      <td key={cell.id} className='px-2 sp1_tasks_td sp1_tasks_report_td'>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )} 
-                      </td>
-                    )
+      <div className='sp1_tasks_table_wrapper sp1_tasks_report_table_wrapper'> 
+        
+          <table className='sp1_tasks_table sp1_tasks_report_table'>
+            <thead className="sp1_tasks_thead">
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id} className='sp1_tasks_tr'>
+                  {headerGroup.headers.map(header => {
+                    return <DragableColumnHeader key={header.id} header={header} table={table} className="sp1_tasks_report_th"/> 
                   })}
                 </tr>
-              )
-            })} 
-          </tbody>
-      </table>
+              ))}
+            </thead>
+            <tbody className='sp1_tasks_tbody'> 
+              {isLoading && <ReportTableLoder />}
+              {!isLoading && table.getRowModel().rows.map(row => {
+                return (
+                  <tr
+                    className='sp1_tasks_tr'
+                      key={row.id}
+                    > 
+                    {row.getVisibleCells().map(cell => { 
+                      return (
+                        <td key={cell.id} className='px-2 sp1_tasks_td sp1_tasks_report_td'>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )} 
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })} 
+            </tbody>
+          </table> 
+        
+          {!isLoading && _.size(data) === 0 && <EmptyTable />}
     </div>
   )
 }

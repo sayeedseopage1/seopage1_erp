@@ -42049,6 +42049,1225 @@ var AssginedToSelection = function AssginedToSelection(_ref) {
 
 /***/ }),
 
+/***/ "./resources/js/react/projects/components/EditProjectManagerGuideline.jsx":
+/*!********************************************************************************!*\
+  !*** ./resources/js/react/projects/components/EditProjectManagerGuideline.jsx ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
+/* harmony import */ var _services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/api/projectApiSlice */ "./resources/js/react/services/api/projectApiSlice.js");
+/* harmony import */ var _tasks_components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../tasks/components/Button */ "./resources/js/react/tasks/components/Button.jsx");
+/* harmony import */ var _tasks_components_Modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../tasks/components/Modal */ "./resources/js/react/tasks/components/Modal.jsx");
+/* harmony import */ var _tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../tasks/components/SubmitButton */ "./resources/js/react/tasks/components/SubmitButton.jsx");
+/* harmony import */ var _tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../tasks/components/form/Input */ "./resources/js/react/tasks/components/form/Input.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+
+
+var EditProjectManagerGuideline = function EditProjectManagerGuideline(_ref) {
+  var isOpen = _ref.isOpen,
+    close = _ref.close,
+    data = _ref.data,
+    openTaskForm = _ref.openTaskForm,
+    projectId = _ref.projectId;
+  var _React$useState = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    themeDetails = _React$useState2[0],
+    setThemeDetails = _React$useState2[1];
+  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_1___default().useState('no'),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    themeName = _React$useState4[0],
+    setThemeName = _React$useState4[1];
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(""),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    themeUrl = _React$useState6[0],
+    setThemeUrl = _React$useState6[1];
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_1___default().useState('no'),
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    designDetials = _React$useState8[0],
+    setDesignDetails = _React$useState8[1];
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_1___default().useState('--'),
+    _React$useState10 = _slicedToArray(_React$useState9, 2),
+    designFileType = _React$useState10[0],
+    setDesignFileType = _React$useState10[1];
+  var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState12 = _slicedToArray(_React$useState11, 2),
+    xDOrFigmaFile = _React$useState12[0],
+    setXDorFigmaFile = _React$useState12[1];
+  var _React$useState13 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState14 = _slicedToArray(_React$useState13, 2),
+    photoshopReferenceURL = _React$useState14[0],
+    setPhotoshopReferenceURL = _React$useState14[1];
+  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([{
+      id: 'lgqsz',
+      url: ''
+    }]),
+    _React$useState16 = _slicedToArray(_React$useState15, 2),
+    designRefURL = _React$useState16[0],
+    setDesignRefURL = _React$useState16[1];
+  var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState18 = _slicedToArray(_React$useState17, 2),
+    designRefDescription = _React$useState18[0],
+    setDesignRefDescription = _React$useState18[1];
+  var _React$useState19 = react__WEBPACK_IMPORTED_MODULE_1___default().useState('no'),
+    _React$useState20 = _slicedToArray(_React$useState19, 2),
+    plugin = _React$useState20[0],
+    setPlugin = _React$useState20[1];
+  var _React$useState21 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState22 = _slicedToArray(_React$useState21, 2),
+    pluginName = _React$useState22[0],
+    setPluginName = _React$useState22[1];
+  var _React$useState23 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState24 = _slicedToArray(_React$useState23, 2),
+    pluginURL = _React$useState24[0],
+    setPluginURL = _React$useState24[1];
+  var _React$useState25 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState26 = _slicedToArray(_React$useState25, 2),
+    pluginGoogleDrive = _React$useState26[0],
+    setPluginGoogleDrive = _React$useState26[1];
+  var _React$useState27 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState28 = _slicedToArray(_React$useState27, 2),
+    pluginDescription = _React$useState28[0],
+    setPluginDescription = _React$useState28[1];
+  var _React$useState29 = react__WEBPACK_IMPORTED_MODULE_1___default().useState('no'),
+    _React$useState30 = _slicedToArray(_React$useState29, 2),
+    colorSchema = _React$useState30[0],
+    setColorSchema = _React$useState30[1];
+  var _React$useState31 = react__WEBPACK_IMPORTED_MODULE_1___default().useState("#1D82F5"),
+    _React$useState32 = _slicedToArray(_React$useState31, 2),
+    primaryColor = _React$useState32[0],
+    setPrimaryColor = _React$useState32[1];
+  var _React$useState33 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(''),
+    _React$useState34 = _slicedToArray(_React$useState33, 2),
+    primaryColorDescription = _React$useState34[0],
+    setPrimaryColorDescription = _React$useState34[1];
+  var _React$useState35 = react__WEBPACK_IMPORTED_MODULE_1___default().useState([{
+      id: 'egqsz',
+      color: '#1D82F5',
+      description: ''
+    }]),
+    _React$useState36 = _slicedToArray(_React$useState35, 2),
+    secondaryColors = _React$useState36[0],
+    setSecondaryColors = _React$useState36[1];
+  var _React$useState37 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
+    _React$useState38 = _slicedToArray(_React$useState37, 2),
+    error = _React$useState38[0],
+    setError = _React$useState38[1];
+  var _useUpdateProjectGuid = (0,_services_api_projectApiSlice__WEBPACK_IMPORTED_MODULE_3__.useUpdateProjectGuidelineMutation)(),
+    _useUpdateProjectGuid2 = _slicedToArray(_useUpdateProjectGuid, 2),
+    updateProjectGuideline = _useUpdateProjectGuid2[0],
+    isLoading = _useUpdateProjectGuid2[1].isLoading;
+  var _React$useState39 = react__WEBPACK_IMPORTED_MODULE_1___default().useState({
+      theme_details: false,
+      design_details: false,
+      color_schema: false,
+      plugin_research: false
+    }),
+    _React$useState40 = _slicedToArray(_React$useState39, 2),
+    edit = _React$useState40[0],
+    setEdit = _React$useState40[1];
+
+  //   handle input change
+  var _onChange = function onChange(e, setState) {
+    setState(e.target.value);
+  };
+
+  // add secondary color
+  var addSecondaryColor = function addSecondaryColor(e) {
+    e.stopPropagation();
+    setSecondaryColors(function (prev) {
+      return [].concat(_toConsumableArray(prev), [{
+        id: (Math.random() + 1).toString(36).substring(7),
+        color: '#1D82F5',
+        description: ''
+      }]);
+    });
+  };
+
+  // handle secondary color change 
+  var handleSecondaryColorChange = function handleSecondaryColorChange(e, id) {
+    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
+      return item.id === id ? {
+        id: id,
+        color: e.target.value,
+        description: ''
+      } : item;
+    });
+    setSecondaryColors(_toConsumableArray(newColors));
+  };
+
+  // handle secondary color description change
+  var handleSecondaryColorDescriptionChange = function handleSecondaryColorDescriptionChange(e, editor, id) {
+    var text = editor.getData();
+    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
+      return item.id === id ? _objectSpread(_objectSpread({}, item), {}, {
+        description: text
+      }) : item;
+    });
+    setSecondaryColors(_toConsumableArray(newColors));
+  };
+
+  // remove secondary color
+  var removeSecondaryColor = function removeSecondaryColor(e, id) {
+    var newColors = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(secondaryColors, function (item) {
+      return item.id !== id;
+    });
+    setSecondaryColors(_toConsumableArray(newColors));
+  };
+
+  // add new ref url instance
+  var addDesignRefURL = function addDesignRefURL(e) {
+    e.stopPropagation();
+    setDesignRefURL(function (prev) {
+      return [].concat(_toConsumableArray(prev), [{
+        id: (Math.random() + 1).toString(36).substring(7),
+        url: ''
+      }]);
+    });
+  };
+
+  // handle on chagne ref url
+  var handleRefUrlChange = function handleRefUrlChange(e, id) {
+    var newRef = lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
+      return item.id === id ? {
+        id: id,
+        url: e.target.value
+      } : item;
+    });
+    setDesignRefURL(_toConsumableArray(newRef));
+  };
+
+  // remove design ref
+  var removeDesignRef = function removeDesignRef(e, id) {
+    e.stopPropagation();
+    var newRef = lodash__WEBPACK_IMPORTED_MODULE_0___default().filter(designRefURL, function (item) {
+      return item.id !== id;
+    });
+    setDesignRefURL(_toConsumableArray(newRef));
+  };
+  var themeDetailsAuthorized = function themeDetailsAuthorized() {
+    return (data === null || data === void 0 ? void 0 : data.theme_details) === 1 || lodash__WEBPACK_IMPORTED_MODULE_0___default().findIndex(data === null || data === void 0 ? void 0 : data.pm_task_guideline_authorization, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().replace(lodash__WEBPACK_IMPORTED_MODULE_0___default().lowerCase(d.name), /\s+/g, '_') === 'theme_details';
+    }) === -1;
+  };
+  var designDetailsAuthorized = function designDetailsAuthorized() {
+    return (data === null || data === void 0 ? void 0 : data.design_details) === 1 || lodash__WEBPACK_IMPORTED_MODULE_0___default().findIndex(data === null || data === void 0 ? void 0 : data.pm_task_guideline_authorization, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().replace(lodash__WEBPACK_IMPORTED_MODULE_0___default().lowerCase(d.name), /\s+/g, '_') === 'design_details';
+    }) === -1;
+  };
+  var colorSchemaAuthorized = function colorSchemaAuthorized() {
+    return (data === null || data === void 0 ? void 0 : data.color_schema) === 1 || lodash__WEBPACK_IMPORTED_MODULE_0___default().findIndex(data === null || data === void 0 ? void 0 : data.pm_task_guideline_authorization, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().replace(lodash__WEBPACK_IMPORTED_MODULE_0___default().lowerCase(d.name), /\s+/g, '_') === 'color_schema';
+    }) === -1;
+  };
+  var pluginResearchAuthorized = function pluginResearchAuthorized() {
+    return (data === null || data === void 0 ? void 0 : data.plugin_research) === 1 || lodash__WEBPACK_IMPORTED_MODULE_0___default().findIndex(data === null || data === void 0 ? void 0 : data.pm_task_guideline_authorization, function (d) {
+      return lodash__WEBPACK_IMPORTED_MODULE_0___default().replace(lodash__WEBPACK_IMPORTED_MODULE_0___default().lowerCase(d.name), /\s+/g, '_') === 'plugin_research';
+    }) === -1;
+  };
+
+  // validation
+  var isValide = function isValide() {
+    var count = 0;
+    var err = new Object();
+    function isURL(value) {
+      var urlRegex = /^(?:ftp|http|https):\/\/(?:www\.)?[^\s]+$/;
+      return typeof value === 'string' && urlRegex.test(value);
+    }
+    if (!themeDetailsAuthorized()) {
+      // theme details validation
+      if (themeDetails === '') {
+        err.themeDetails = 'You Need to Select An Option';
+        count++;
+      }
+      if (themeDetails === 'yes') {
+        if (themeName === '') {
+          err.themeName = "You Have to Provide a Theme Name!", count++;
+        }
+        if (themeUrl === '') {
+          err.themeUrl = "You Have to Provide a Theme URL";
+          count++;
+        } else if (!isURL(themeUrl)) {
+          err.themeUrl = "Provided Value Must Be an URL!";
+          count++;
+        }
+      }
+    }
+
+    // design details
+    if (!designDetailsAuthorized) {
+      if (designDetials === '') {
+        err.designDetials = 'You Need to Select An Option';
+        count++;
+      }
+      if (designDetials === 'yes') {
+        if (designFileType === '' || designFileType === '--') {
+          err.designFileType = 'Select a Design Reference Type';
+          count++;
+        } else {
+          if (designFileType === 'XD/Figma') {
+            if (xDOrFigmaFile === '') {
+              err.xdFigma = "You Have to Provide Reference Link!";
+              count++;
+            } else if (!isURL(xDOrFigmaFile)) {
+              err.xdFigma = "Provided Value Must Be an URL!";
+              count++;
+            }
+          } else if (designFileType === 'Photoshop') {
+            if (photoshopReferenceURL === '') {
+              err.photoshop = "You Have to Provide Reference Link!";
+              count++;
+            } else if (!isURL(photoshopReferenceURL)) {
+              err.photoshop = "Provided Value Must Be an URL!";
+              count++;
+            }
+          } else if (designFileType === 'The Reference Site That Has to Be Clone') {
+            lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
+              if (item.url === '') {
+                err.designRef = "You Have to Provide Reference Link!";
+                count++;
+              } else if (!isURL(item.url)) {
+                err.designRef = "Provided Value Must Be an URL!";
+                count++;
+              }
+            });
+            if (designRefDescription === '') {
+              err.designRefDescripton = "You have to Provide Instruction!";
+              count++;
+            }
+          }
+        }
+      }
+    }
+
+    // color schema
+
+    if (!colorSchemaAuthorized()) {
+      if (colorSchema === '') {
+        err.colorSchema = 'You Need to Select An Option';
+        count++;
+      }
+      if (colorSchema === 'yes') {
+        if (primaryColorDescription === '') {
+          err.pColorDesc = "You Have to Provide This Field!";
+          count++;
+        }
+        lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
+          if (item.description === '') {
+            err.sDescription = "You Have to Provide This Field!";
+            count++;
+          }
+        });
+      }
+    }
+
+    // plugin 
+    if (!pluginResearchAuthorized()) {
+      if (plugin === '') {
+        err.plugin = 'You Need to Select An Option';
+        count++;
+      }
+      if (plugin === 'yes') {
+        if (pluginName === '') {
+          err.pluginName = "You Have to Provide Plugin Name";
+          count++;
+        }
+        if (pluginURL === '') {
+          err.pluginURL = "You Have to Provide Plugin URL";
+          count++;
+        } else if (!isURL(pluginURL)) {
+          err.pluginURL = "Provided Value Must Be an URL!";
+          count++;
+        }
+        if (pluginGoogleDrive === '') {
+          err.pluginGoogleDrive = "You Have to Provide Plugin Google Drive URL";
+          count++;
+        } else if (!isURL(pluginGoogleDrive)) {
+          err.pluginGoogleDrive = "Provided Value Must Be an URL!";
+          count++;
+        }
+        if (pluginDescription === '') {
+          err.pluginDescription = "You Have to Provide Instruction of This Plugin!";
+          count++;
+        }
+      }
+    }
+    setError(_objectSpread({}, err));
+    return !count;
+  };
+
+  // handle submti
+  var handleSubmit = function handleSubmit(e) {
+    var _data$pm_task_guideli;
+    e.preventDefault();
+    var formData = {
+      project_id: data === null || data === void 0 ? void 0 : data.project_id,
+      id: data === null || data === void 0 ? void 0 : (_data$pm_task_guideli = data.pm_task_guideline_authorization[0]) === null || _data$pm_task_guideli === void 0 ? void 0 : _data$pm_task_guideli.task_guideline_id,
+      pm_task_guideline_authorization: data === null || data === void 0 ? void 0 : data.pm_task_guideline_authorization
+    };
+    if (!themeDetailsAuthorized()) {
+      formData = _objectSpread(_objectSpread({}, formData), {}, {
+        project_id: projectId,
+        theme_details: themeDetails === "yes" ? 1 : 0,
+        theme_name: themeName,
+        theme_url: themeUrl
+      });
+    }
+    if (!designDetailsAuthorized()) {
+      formData = _objectSpread(_objectSpread({}, formData), {}, {
+        design_details: designDetials === 'yes' ? 1 : 0,
+        design: designFileType === '--' ? null : designFileType,
+        xd_url: xDOrFigmaFile,
+        drive_url: photoshopReferenceURL,
+        reference_link: lodash__WEBPACK_IMPORTED_MODULE_0___default().compact(lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
+          return item.url;
+        })),
+        instruction: designRefDescription
+      });
+    }
+    if (!pluginResearchAuthorized()) {
+      formData = _objectSpread(_objectSpread({}, formData), {}, {
+        plugin_research: plugin === "yes" ? 1 : 0,
+        plugin_name: pluginName,
+        plugin_url: pluginURL,
+        google_drive_link: pluginGoogleDrive,
+        instruction_plugin: pluginDescription
+      });
+    }
+    if (!colorSchemaAuthorized()) {
+      formData = _objectSpread(_objectSpread({}, formData), {}, {
+        color_schema: colorSchema === "yes" ? 1 : 0,
+        primary_color: primaryColor,
+        primary_color_description: primaryColorDescription,
+        color: lodash__WEBPACK_IMPORTED_MODULE_0___default().compact(lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
+          return item.color;
+        })),
+        color_description: lodash__WEBPACK_IMPORTED_MODULE_0___default().compact(lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item) {
+          return item.description;
+        }))
+      });
+    }
+    if (isValide()) {
+      updateProjectGuideline(formData).unwrap().then(function (res) {
+        // openTaskForm();
+        close();
+      })["catch"](function (err) {
+        return console.log(err);
+      });
+    }
+  };
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isOpen: isOpen,
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        className: "sp1_modal-content-wrapper",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          className: "sp1_modal-panel sp1_task_create_modal_panel w-100",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            className: "sp1_modal-head",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+              className: "sp1_modal-title",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("strong", {
+                children: "Provide Design Reference"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              onClick: close,
+              "aria-label": "ModalClose",
+              variant: "tertiary",
+              className: "sp1_modal-close",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+                className: "fa-solid fa-xmark"
+              })
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+            className: "sp1_modal-body sp1_task_create_modal_body",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+              className: "d-flex align-items-center justify-content-center",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h5", {
+                children: "Provide Design Reference"
+              })
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+              className: "py-4 px-3",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                  className: "form-group",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                    htmlFor: "",
+                    className: "font-weight-bold",
+                    style: {
+                      color: "#808080"
+                    },
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                      className: "mr-1",
+                      children: "1. Theme Details"
+                    }), themeDetailsAuthorized() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                      className: "badge badge-success mr-1",
+                      children: " Approved "
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                        className: "badge badge-danger mr-1",
+                        children: " Rejected "
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                        onClick: function onClick() {
+                          return setEdit(function (prev) {
+                            return _objectSpread(_objectSpread({}, prev), {}, {
+                              theme_details: true
+                            });
+                          });
+                        },
+                        className: "badge badge-secondary",
+                        children: "Edit"
+                      })]
+                    })]
+                  }), (edit === null || edit === void 0 ? void 0 : edit.theme_details) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "d-block pl-3",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-check form-check-inline",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                          type: "radio",
+                          name: "theme_details",
+                          className: "form-check-input",
+                          id: "themeDetailsYes",
+                          value: "yes",
+                          onChange: function onChange(e) {
+                            return _onChange(e, setThemeDetails);
+                          }
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                          className: "form-check-label",
+                          htmlFor: "themeDetailsYes",
+                          children: "Yes"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-check form-check-inline",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                          type: "radio",
+                          name: "theme_details",
+                          className: "form-check-input",
+                          id: "themeDetailsNo",
+                          value: "no",
+                          onChange: function onChange(e) {
+                            return _onChange(e, setThemeDetails);
+                          }
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                          className: "form-check-label",
+                          htmlFor: "themeDetailsNo",
+                          children: "No"
+                        })]
+                      }), (error === null || error === void 0 ? void 0 : error.themeDetails) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "",
+                        style: {
+                          color: 'red'
+                        },
+                        children: [" ", error === null || error === void 0 ? void 0 : error.themeDetails, " "]
+                      })]
+                    }), themeDetails === "yes" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      className: "mx-3",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "row",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                          className: "col-12 col-md-6",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                            label: "Theme Name",
+                            placeholder: "Write Theme Name",
+                            value: themeName,
+                            onChange: function onChange(e) {
+                              return _onChange(e, setThemeName);
+                            },
+                            error: error === null || error === void 0 ? void 0 : error.themeName
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                          className: "col-12 col-md-6",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                            label: "Theme URL",
+                            placeholder: "Enter Theme URL",
+                            value: themeUrl,
+                            onChange: function onChange(e) {
+                              return _onChange(e, setThemeUrl);
+                            },
+                            error: error === null || error === void 0 ? void 0 : error.themeUrl
+                          })
+                        })]
+                      })
+                    })]
+                  })]
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                  className: "form-group",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                    htmlFor: "",
+                    className: "font-weight-bold",
+                    style: {
+                      color: "#808080"
+                    },
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                      className: "mr-1",
+                      children: "2. Design Details "
+                    }), designDetailsAuthorized() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                      className: "badge badge-success mr-1",
+                      children: " Approved "
+                    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                        className: "badge badge-danger mr-1",
+                        children: " Rejected "
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                        onClick: function onClick() {
+                          return setEdit(function (prev) {
+                            return _objectSpread(_objectSpread({}, prev), {}, {
+                              design_details: true
+                            });
+                          });
+                        },
+                        className: "badge badge-secondary",
+                        children: "Edit"
+                      })]
+                    })]
+                  }), (edit === null || edit === void 0 ? void 0 : edit.design_details) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "d-block pl-3",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-check form-check-inline",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                          type: "radio",
+                          name: "design_details",
+                          className: "form-check-input",
+                          id: "designDetailsYes",
+                          value: "yes",
+                          onChange: function onChange(e) {
+                            setXDorFigmaFile('');
+                            setPhotoshopReferenceURL('');
+                            setDesignRefURL([{
+                              id: 'lgqsz',
+                              url: ''
+                            }]);
+                            _onChange(e, setDesignDetails);
+                          }
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                          className: "form-check-label",
+                          htmlFor: "designDetailsYes",
+                          children: "Yes"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-check form-check-inline",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                          type: "radio",
+                          name: "design_details",
+                          className: "form-check-input",
+                          id: "designDetailsNo",
+                          value: "no",
+                          onChange: function onChange(e) {
+                            setXDorFigmaFile('');
+                            setPhotoshopReferenceURL('');
+                            setDesignRefURL([{
+                              id: 'lgqsz',
+                              url: ''
+                            }]);
+                            _onChange(e, setDesignDetails);
+                          }
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                          className: "form-check-label",
+                          htmlFor: "designDetailsNo",
+                          children: "No"
+                        })]
+                      }), (error === null || error === void 0 ? void 0 : error.designDetials) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "",
+                        style: {
+                          color: 'red'
+                        },
+                        children: [" ", error === null || error === void 0 ? void 0 : error.designDetials, " "]
+                      })]
+                    }), designDetials === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      className: "px-3",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-group mt-2",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                          htmlFor: "exampleFormControlSelect1",
+                          children: ["Select Design Reference Type", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
+                            children: "*"
+                          })]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("select", {
+                          className: "form-control py-2",
+                          value: designFileType,
+                          onChange: function onChange(e) {
+                            setXDorFigmaFile('');
+                            setPhotoshopReferenceURL('');
+                            setDesignRefURL([{
+                              id: 'lgqsz',
+                              url: ''
+                            }]);
+                            _onChange(e, setDesignFileType);
+                          },
+                          id: "exampleFormControlSelect1",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("option", {
+                            value: "--",
+                            disabled: true,
+                            children: "--"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("option", {
+                            value: "XD/Figma",
+                            children: "XD/Figma"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("option", {
+                            value: "Photoshop",
+                            children: "Photoshop"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("option", {
+                            value: "The Reference Site That Has to Be Clone",
+                            children: "The Reference Site That Has To Be Clone"
+                          })]
+                        }), (error === null || error === void 0 ? void 0 : error.designFileType) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                          className: "",
+                          style: {
+                            color: 'red'
+                          },
+                          children: [" ", error === null || error === void 0 ? void 0 : error.designFileType, " "]
+                        })]
+                      })
+                    }), designFileType === 'XD/Figma' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      className: "px-3",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                        className: "form-group",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                          label: "XD/Figma File URL",
+                          error: error === null || error === void 0 ? void 0 : error.xdFigma,
+                          placeholder: "Provide the XD/Figma File URL",
+                          required: true,
+                          value: xDOrFigmaFile,
+                          onChange: function onChange(e) {
+                            return _onChange(e, setXDorFigmaFile);
+                          }
+                        })
+                      })
+                    }), designFileType === 'Photoshop' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      className: "px-3",
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                        className: "form-group",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                          label: "Input Google Drive File / Folder URL",
+                          placeholder: "Input Google Drive File / Folder URL",
+                          required: true,
+                          error: error === null || error === void 0 ? void 0 : error.photoshop,
+                          value: photoshopReferenceURL,
+                          onChange: function onChange(e) {
+                            return _onChange(e, setPhotoshopReferenceURL);
+                          }
+                        })
+                      })
+                    }), designFileType === 'The Reference Site That Has to Be Clone' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "mx-3 p-3",
+                      style: {
+                        background: '#F9F9F9',
+                        borderRadius: '10px'
+                      },
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-group",
+                        children: [lodash__WEBPACK_IMPORTED_MODULE_0___default().map(designRefURL, function (item) {
+                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                            className: "multipleInputItem",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                              label: "Reference URL",
+                              placeholder: "Reference URL",
+                              required: true,
+                              error: error === null || error === void 0 ? void 0 : error.designRef,
+                              value: item.url,
+                              onChange: function onChange(e) {
+                                return handleRefUrlChange(e, item.id);
+                              }
+                            }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(designRefURL) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                              "aria-label": "RemoveLink",
+                              onClick: function onClick(e) {
+                                return removeDesignRef(e, item.id);
+                              },
+                              type: "button",
+                              className: "multipleInputItemButton",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+                                className: "fa-solid fa-trash-can"
+                              })
+                            })]
+                          }, item.id);
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                          type: "button",
+                          onClick: addDesignRefURL,
+                          className: "bg-transparent text-primary hover-underline",
+                          children: "+ Another Reference URL"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-group",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                          htmlFor: "ckeditor",
+                          children: ["Add Instraction", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
+                            children: "*"
+                          })]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                          className: "ck-editor-holder",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                            onChange: function onChange(e, editor) {
+                              return setDesignRefDescription(editor.getData());
+                            }
+                          })
+                        }), (error === null || error === void 0 ? void 0 : error.designRefDescripton) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                          className: "",
+                          style: {
+                            color: 'red'
+                          },
+                          children: [" ", error === null || error === void 0 ? void 0 : error.designRefDescripton, " "]
+                        })]
+                      })]
+                    })]
+                  })]
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                  htmlFor: "",
+                  className: "font-weight-bold",
+                  style: {
+                    color: "#808080"
+                  },
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                    className: "mr-1",
+                    children: "3. Color Schema"
+                  }), colorSchemaAuthorized() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                    className: "badge badge-success mr-1",
+                    children: " Approved "
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                      className: "badge badge-danger mr-1",
+                      children: " Rejected "
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                      onClick: function onClick() {
+                        return setEdit(function (prev) {
+                          return _objectSpread(_objectSpread({}, prev), {}, {
+                            color_schema: true
+                          });
+                        });
+                      },
+                      className: "badge badge-secondary",
+                      children: "Edit"
+                    })]
+                  })]
+                }), (edit === null || edit === void 0 ? void 0 : edit.color_schema) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                    className: "d-block pl-3",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "form-check form-check-inline",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                        type: "radio",
+                        name: "color_schema",
+                        className: "form-check-input",
+                        id: "colorSchemaYes",
+                        value: "yes",
+                        onChange: function onChange(e) {
+                          return _onChange(e, setColorSchema);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                        className: "form-check-label",
+                        htmlFor: "colorSchemaYes",
+                        children: "Yes"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "form-check form-check-inline",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                        type: "radio",
+                        name: "color_schema",
+                        className: "form-check-input",
+                        id: "colorSchemaNo",
+                        value: "no",
+                        onChange: function onChange(e) {
+                          return _onChange(e, setColorSchema);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                        className: "form-check-label",
+                        htmlFor: "colorSchemaNo",
+                        children: "No"
+                      })]
+                    }), (error === null || error === void 0 ? void 0 : error.colorSchema) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "",
+                      style: {
+                        color: 'red'
+                      },
+                      children: [" ", error === null || error === void 0 ? void 0 : error.colorSchema, " "]
+                    })]
+                  }), colorSchema === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      className: "mt-3 mx-3 p-3",
+                      style: {
+                        background: '#F9F9F9',
+                        borderRadius: '10px'
+                      },
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-group",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                          htmlFor: "",
+                          className: "mb-2",
+                          style: {
+                            fontWeight: 600,
+                            color: "#777"
+                          },
+                          children: ["1. Primary Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
+                            children: "*"
+                          }), " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                          className: "form-group px-2",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                            htmlFor: "",
+                            children: "Choose Color:"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                            className: "input-group mb-3 col-12 col-md-6",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                              type: "text",
+                              className: "form-control",
+                              placeholder: "Recipient's username",
+                              "aria-label": "Recipient's username",
+                              "aria-describedby": "basic-addon2",
+                              value: primaryColor,
+                              onChange: function onChange(e) {
+                                return _onChange(e, setPrimaryColor);
+                              }
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                              className: "input-group-append",
+                              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                                className: "input-group-text px-1 border-0",
+                                id: "basic-addon2",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                                  type: "color",
+                                  value: primaryColor,
+                                  onChange: function onChange(e) {
+                                    return _onChange(e, setPrimaryColor);
+                                  },
+                                  style: {
+                                    width: '32px',
+                                    border: 'none'
+                                  }
+                                })
+                              })
+                            })]
+                          })]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                          className: "form-group pl-2",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                            htmlFor: "",
+                            children: ["Where Should Developer Use this Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
+                              children: "*"
+                            })]
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                            className: "ck-editor-holder",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                              onChange: function onChange(e, editor) {
+                                return setPrimaryColorDescription(editor.getData());
+                              }
+                            })
+                          }), (error === null || error === void 0 ? void 0 : error.pColorDesc) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                            className: "",
+                            style: {
+                              color: 'red'
+                            },
+                            children: [" ", error === null || error === void 0 ? void 0 : error.pColorDesc, " "]
+                          })]
+                        })]
+                      })
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                      className: "mt-3 mx-3 p-3",
+                      style: {
+                        background: '#F9F9F9',
+                        borderRadius: '10px'
+                      },
+                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                        className: "form-group",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                          htmlFor: "",
+                          className: "mb-2",
+                          style: {
+                            fontWeight: 600,
+                            color: "#777"
+                          },
+                          children: ["2. Secondary Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
+                            children: "*"
+                          }), " "]
+                        }), lodash__WEBPACK_IMPORTED_MODULE_0___default().map(secondaryColors, function (item, index) {
+                          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                            className: "p-3",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                              className: "form-group",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                                htmlFor: "",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("b", {
+                                  children: [index + 1, "."]
+                                }), " Choose Color:"]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                                className: "d-flex align-items-center",
+                                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                                  className: "input-group mb-3 pl-3 col-10 col-md-6",
+                                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                                    type: "text",
+                                    className: "form-control",
+                                    placeholder: "Recipient's username",
+                                    "aria-label": "Recipient's username",
+                                    "aria-describedby": "basic-addon2",
+                                    value: item.color,
+                                    onChange: function onChange(e) {
+                                      return handleSecondaryColorChange(e, item.id);
+                                    }
+                                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                                    className: "input-group-append",
+                                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                                      className: "input-group-text px-1 border-0",
+                                      id: "basic-addon2",
+                                      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                                        type: "color",
+                                        value: item.color,
+                                        onChange: function onChange(e) {
+                                          return handleSecondaryColorChange(e, item.id);
+                                        },
+                                        style: {
+                                          width: '32px',
+                                          border: 'none'
+                                        }
+                                      })
+                                    })
+                                  })]
+                                }), lodash__WEBPACK_IMPORTED_MODULE_0___default().size(secondaryColors) > 1 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                                  "aria-label": "remove",
+                                  onClick: function onClick(e) {
+                                    return removeSecondaryColor(e, item.id);
+                                  },
+                                  className: "py-2 px-3 ml-auto rounded color_remove_btn",
+                                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+                                    className: "fa-solid fa-trash-can"
+                                  })
+                                })]
+                              })]
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                              className: "form-group pl-3",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                                htmlFor: "",
+                                children: ["Where Should Developer Use this Color ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
+                                  children: "*"
+                                })]
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                                className: "ck-editor-holder",
+                                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                                  onChange: function onChange(e, editor) {
+                                    return handleSecondaryColorDescriptionChange(e, editor, item.id);
+                                  }
+                                })
+                              }), (error === null || error === void 0 ? void 0 : error.sDescription) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                                className: "",
+                                style: {
+                                  color: 'red'
+                                },
+                                children: [" ", error === null || error === void 0 ? void 0 : error.sDescription, " "]
+                              })]
+                            })]
+                          }, item.id);
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                          className: "d-flex align-items-center px-3",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                            type: "button",
+                            onClick: addSecondaryColor,
+                            className: "bg-transparent text-primary hover-underline ml-auto",
+                            children: "+ Another Color"
+                          })
+                        })]
+                      })
+                    })]
+                  })]
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "form-group",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
+                  htmlFor: "",
+                  className: "font-weight-bold",
+                  style: {
+                    color: "#808080"
+                  },
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                    className: "mr-1",
+                    children: "4. Plugin Research"
+                  }), pluginResearchAuthorized() ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                    className: "badge badge-success mr-1",
+                    children: " Approved "
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+                      className: "badge badge-danger mr-1",
+                      children: " Rejected "
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("button", {
+                      onClick: function onClick() {
+                        return setEdit(function (prev) {
+                          return _objectSpread(_objectSpread({}, prev), {}, {
+                            plugin_research: true
+                          });
+                        });
+                      },
+                      className: "badge badge-secondary",
+                      children: "Edit"
+                    })]
+                  })]
+                }), edit.plugin_research && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                    className: "d-block pl-3",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "form-check form-check-inline",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                        type: "radio",
+                        name: "plugin",
+                        className: "form-check-input",
+                        id: "pluginYes",
+                        value: "yes",
+                        onChange: function onChange(e) {
+                          return _onChange(e, setPlugin);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                        className: "form-check-label",
+                        htmlFor: "pluginYes",
+                        children: "Yes"
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "form-check form-check-inline",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
+                        type: "radio",
+                        name: "plugin",
+                        className: "form-check-input",
+                        id: "pluginNo",
+                        value: "no",
+                        onChange: function onChange(e) {
+                          return _onChange(e, setPlugin);
+                        }
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                        className: "form-check-label",
+                        htmlFor: "pluginNo",
+                        children: "No"
+                      })]
+                    }), (error === null || error === void 0 ? void 0 : error.plugin) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "",
+                      style: {
+                        color: 'red'
+                      },
+                      children: [" ", error === null || error === void 0 ? void 0 : error.plugin, " "]
+                    })]
+                  }), plugin === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                    className: "mt-3 mx-3 p-3",
+                    style: {
+                      background: '#F9F9F9',
+                      borderRadius: '10px'
+                    },
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                      className: "row",
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                        className: "col-12 col-md-4",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                          label: "Plugin Name",
+                          required: true,
+                          placeholder: "Enter Plugin Name",
+                          value: pluginName,
+                          onChange: function onChange(e) {
+                            return _onChange(e, setPluginName);
+                          },
+                          error: error === null || error === void 0 ? void 0 : error.pluginName
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                        className: "col-12 col-md-4",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                          label: "Plugin URL",
+                          required: true,
+                          placeholder: "Enter Plugin URL",
+                          error: error === null || error === void 0 ? void 0 : error.pluginURL,
+                          value: pluginURL,
+                          onChange: function onChange(e) {
+                            return _onChange(e, setPluginURL);
+                          }
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                        className: "col-12 col-md-4",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_form_Input__WEBPACK_IMPORTED_MODULE_7__["default"], {
+                          label: "Share Google Drive Link",
+                          required: true,
+                          error: error === null || error === void 0 ? void 0 : error.pluginGoogleDrive,
+                          placeholder: "Share Google Drive Link",
+                          value: pluginGoogleDrive,
+                          onChange: function onChange(e) {
+                            return _onChange(e, setPluginGoogleDrive);
+                          }
+                        })
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                        className: "col-12",
+                        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                          className: "form-group",
+                          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
+                            htmlFor: "",
+                            children: "Write Instruction for Using This Plugin"
+                          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+                            className: "ck-editor-holder",
+                            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+                              onChange: function onChange(e, editor) {
+                                return setPluginDescription(editor.getData());
+                              }
+                            })
+                          }), (error === null || error === void 0 ? void 0 : error.pluginDescription) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                            className: "",
+                            style: {
+                              color: 'red'
+                            },
+                            children: [" ", error === null || error === void 0 ? void 0 : error.pluginDescription, " "]
+                          })]
+                        })
+                      })]
+                    })
+                  })]
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+                className: "d-flex align-items-center justify-content-end",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+                  onClick: close,
+                  variant: "tertiary",
+                  className: "mr-2",
+                  children: "Close"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+                  title: "Submit",
+                  onClick: handleSubmit,
+                  isLoading: isLoading
+                })]
+              })]
+            })]
+          })]
+        })
+      })
+    })
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditProjectManagerGuideline);
+
+/***/ }),
+
 /***/ "./resources/js/react/projects/components/JqueryDateRangePicker.jsx":
 /*!**************************************************************************!*\
   !*** ./resources/js/react/projects/components/JqueryDateRangePicker.jsx ***!
@@ -43625,7 +44844,9 @@ var ProjectTableColumns = [{
   cell: function cell(_ref20) {
     var row = _ref20.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
-    return;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_tasks_components_ReportButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      row: data
+    });
   }
 }, {
   id: 'action',
@@ -43634,13 +44855,13 @@ var ProjectTableColumns = [{
     var row = _ref21.row,
       table = _ref21.table;
     var data = row === null || row === void 0 ? void 0 : row.original;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(EditTask, {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(Menu, {
       row: data,
       table: table
     });
   }
 }];
-var EditTask = function EditTask(_ref22) {
+var Menu = function Menu(_ref22) {
   var row = _ref22.row,
     table = _ref22.table;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_10___default().useState(false),
@@ -45808,7 +47029,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var _hooks_useProject__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../hooks/useProject */ "./resources/js/react/hooks/useProject.jsx");
 /* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
 /* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
@@ -45824,7 +47045,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_ProjectTasksFilterBar__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/ProjectTasksFilterBar */ "./resources/js/react/projects/components/ProjectTasksFilterBar.jsx");
 /* harmony import */ var _components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../components/SubtaskTableColumns */ "./resources/js/react/projects/components/SubtaskTableColumns.jsx");
 /* harmony import */ var _components_TaskCreationForm__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../components/TaskCreationForm */ "./resources/js/react/projects/components/TaskCreationForm.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _components_EditProjectManagerGuideline__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../components/EditProjectManagerGuideline */ "./resources/js/react/projects/components/EditProjectManagerGuideline.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, "catch": function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -45859,8 +47082,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var ProjectTasks = function ProjectTasks() {
-  var _window, _window$Laravel;
+  var _window, _window$Laravel, _showProjectGuideline;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useSelector)(function (s) {
       return s.tasks;
     }),
@@ -45898,21 +47123,26 @@ var ProjectTasks = function ProjectTasks() {
     _React$useState14 = _slicedToArray(_React$useState13, 2),
     showProjectGuidelineForm = _React$useState14[0],
     setShowProjectGuidelineForm = _React$useState14[1];
-  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
+  var _React$useState15 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(null),
     _React$useState16 = _slicedToArray(_React$useState15, 2),
-    hasPMGuideline = _React$useState16[0],
-    setHasPMGuideline = _React$useState16[1];
+    showProjectGuidelineEditForm = _React$useState16[0],
+    setShowProjectGuidelineEditForm = _React$useState16[1];
+  var _React$useState17 = react__WEBPACK_IMPORTED_MODULE_1___default().useState(false),
+    _React$useState18 = _slicedToArray(_React$useState17, 2),
+    hasPMGuideline = _React$useState18[0],
+    setHasPMGuideline = _React$useState18[1];
   var _useLazyGetAllSubtask = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_4__.useLazyGetAllSubtaskQuery)(),
     _useLazyGetAllSubtask2 = _slicedToArray(_useLazyGetAllSubtask, 2),
     getAllSubtask = _useLazyGetAllSubtask2[0],
     subtaskFetching = _useLazyGetAllSubtask2[1].isFetching;
-  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_19__.useParams)();
+  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_21__.useParams)();
   var _useProject = (0,_hooks_useProject__WEBPACK_IMPORTED_MODULE_3__.useProject)(),
     isDeliverable = _useProject.isDeliverable,
     getProjectGuidelineStaus = _useProject.getProjectGuidelineStaus,
-    projectDeliverableStatusIsLoading = _useProject.projectDeliverableStatusIsLoading,
+    isTaskGuidelineAuthorized = _useProject.isTaskGuidelineAuthorized,
     projectGuidelineStatusIsLoading = _useProject.projectGuidelineStatusIsLoading,
-    isTaskGuidelineAuthorized = _useProject.isTaskGuidelineAuthorized;
+    pmTaskGuidelineStatusIsFetching = _useProject.pmTaskGuidelineStatusIsFetching,
+    projectDeliverableStatusIsLoading = _useProject.projectDeliverableStatusIsLoading;
   var projectId = params === null || params === void 0 ? void 0 : params.projectId;
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_11__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
 
@@ -45972,7 +47202,7 @@ var ProjectTasks = function ProjectTasks() {
   // hanlde task add form
   var handleTaskAddForm = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var deliverable, guideline, isAuthorized;
+      var deliverable, guideline, projectGuidelineStatus;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -45997,8 +47227,17 @@ var ProjectTasks = function ProjectTasks() {
               _context.next = 11;
               return isTaskGuidelineAuthorized(projectId);
             case 11:
-              isAuthorized = _context.sent;
-              isAuthorized && setShowTaskCreationForm(true);
+              projectGuidelineStatus = _context.sent;
+              if (projectGuidelineStatus && lodash__WEBPACK_IMPORTED_MODULE_0___default().size(projectGuidelineStatus.pm_task_guideline_authorization) > 0 && projectGuidelineStatus.is_allow) {
+                setShowTaskCreationForm(true);
+              } else {
+                react_toastify__WEBPACK_IMPORTED_MODULE_18__.toast.warn(projectGuidelineStatus.message, {
+                  position: 'bottom-right'
+                });
+                setShowProjectGuidelineEditForm(_objectSpread(_objectSpread({}, projectGuidelineStatus), {}, {
+                  open: true
+                }));
+              }
               _context.next = 16;
               break;
             case 15:
@@ -46016,8 +47255,8 @@ var ProjectTasks = function ProjectTasks() {
   }();
   var isFetching = subtaskFetching || taskFetching;
   var singleTask = lodash__WEBPACK_IMPORTED_MODULE_0___default().head(tasks);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_TaskCreationForm__WEBPACK_IMPORTED_MODULE_17__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_TaskCreationForm__WEBPACK_IMPORTED_MODULE_17__["default"], {
       isOpen: showTaskCreationForm,
       close: function close() {
         return setShowTaskCreationForm(false);
@@ -46026,7 +47265,7 @@ var ProjectTasks = function ProjectTasks() {
       onSuccess: function onSuccess() {
         return onFilter({});
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ProjectManagerGuideline__WEBPACK_IMPORTED_MODULE_13__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_ProjectManagerGuideline__WEBPACK_IMPORTED_MODULE_13__["default"], {
       projectId: params.projectId,
       isOpen: showProjectGuidelineForm,
       openTaskForm: function openTaskForm() {
@@ -46035,38 +47274,48 @@ var ProjectTasks = function ProjectTasks() {
       close: function close() {
         return setShowProjectGuidelineForm(false);
       }
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+    }), (showProjectGuidelineEditForm === null || showProjectGuidelineEditForm === void 0 ? void 0 : showProjectGuidelineEditForm.open) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_EditProjectManagerGuideline__WEBPACK_IMPORTED_MODULE_19__["default"], {
+      projectId: params.projectId,
+      isOpen: (_showProjectGuideline = showProjectGuidelineEditForm === null || showProjectGuidelineEditForm === void 0 ? void 0 : showProjectGuidelineEditForm.open) !== null && _showProjectGuideline !== void 0 ? _showProjectGuideline : false,
+      data: showProjectGuidelineEditForm,
+      openTaskForm: function openTaskForm() {
+        return setShowTaskCreationForm(true);
+      },
+      close: function close() {
+        return setShowProjectGuidelineEditForm(null);
+      }
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
       className: "sp1_tlr_container",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
         className: "sp1_tlr_tbl_container pt-1",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
           className: "sp1_table-navbar",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
             className: "d-flex align-items-center flex-wrap",
             style: {
               gap: "10px"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"], {
               className: "",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Toggle, {
                 icon: false,
                 className: "sp1_table_tab--dd-toggle",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("i", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("i", {
                   className: "fa-solid fa-table"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("span", {
                   children: [" ", tableType, " "]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("i", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("i", {
                   className: "fa-solid fa-chevron-down f-12"
                 })]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Menu, {
                 className: "sp1_table_tab--dd-menu",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
                   onClick: function onClick() {
                     return setTableType("Tasks");
                   },
                   className: "sp1_table_tab--dd-item ".concat(tableType === "Tasks" && "active"),
                   children: "Tasks"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_Dropdown__WEBPACK_IMPORTED_MODULE_6__["default"].Item, {
                   onClick: function onClick() {
                     return setTableType("Subtasks");
                   },
@@ -46074,82 +47323,82 @@ var ProjectTasks = function ProjectTasks() {
                   children: "Subtasks"
                 })]
               })]
-            }), !isFetching && tableType.toLowerCase() === "tasks" && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 4], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            }), !isFetching && tableType.toLowerCase() === "tasks" && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([1, 4], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_SubmitButton__WEBPACK_IMPORTED_MODULE_8__["default"], {
               onClick: handleTaskAddForm,
-              isLoading: projectDeliverableStatusIsLoading || projectGuidelineStatusIsLoading,
+              isLoading: projectDeliverableStatusIsLoading || projectGuidelineStatusIsLoading || pmTaskGuidelineStatusIsFetching,
               children: "+ Add Task"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
             className: "sp1_table_tab",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_ProjectTasksFilterBar__WEBPACK_IMPORTED_MODULE_15__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_ProjectTasksFilterBar__WEBPACK_IMPORTED_MODULE_15__["default"], {
               onFilter: onFilter,
               page: tableType.toLowerCase()
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_12__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_components_JqueryDateRangePicker__WEBPACK_IMPORTED_MODULE_12__["default"], {
               startDate: startDate,
               endDate: endDate,
               setEndDate: setEndDate,
               setStartDate: setStartDate
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
               className: "",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_tasks_components_Searchbox__WEBPACK_IMPORTED_MODULE_7__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_Searchbox__WEBPACK_IMPORTED_MODULE_7__["default"], {
                 value: search,
                 onChange: setSearch,
                 className: "mb-1"
               })
             })]
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "d-flex w-100 align-items-center justify-content-center flex-wrap",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
             className: "d-flex align-items-center justify-content-center border p-2",
             style: {
               gap: "10px",
               width: "fit-content"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("span", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
                 style: {
                   color: "#5c5e60"
                 },
                 children: "Project Manager:"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("a", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
                 href: "/account/employee/".concat(singleTask === null || singleTask === void 0 ? void 0 : singleTask.project_manager_id),
                 className: "text-success hover-underline",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("strong", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("strong", {
                   children: singleTask === null || singleTask === void 0 ? void 0 : singleTask.pm_id_name
                 })
               }), ","]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("span", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
                 style: {
                   color: "#5c5e60"
                 },
                 children: "Client:"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("a", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
                 href: "/account/clients/".concat(singleTask === null || singleTask === void 0 ? void 0 : singleTask.client_id),
                 className: "text-success hover-underline",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("strong", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("strong", {
                   children: singleTask === null || singleTask === void 0 ? void 0 : singleTask.client_name
                 })
               })]
             })]
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
           className: "mt-3",
-          children: tableType.toLowerCase() === "tasks" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_tasks_components_TasksTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          children: tableType.toLowerCase() === "tasks" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_TasksTable__WEBPACK_IMPORTED_MODULE_10__["default"], {
             isLoading: isFetching,
             filter: filter,
             tableName: "projectTasksTable",
             search: search,
-            reportPermission: [5, 1, 8],
+            reportPermission: [6, 5, 1, 8],
             hideColumns: ["project", "client", "project_manager"],
             tableColumns: _components_ProjectTaskTableColumns__WEBPACK_IMPORTED_MODULE_14__.ProjectTableColumns
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_tasks_components_SubtaskTable__WEBPACK_IMPORTED_MODULE_9__["default"], {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_tasks_components_SubtaskTable__WEBPACK_IMPORTED_MODULE_9__["default"], {
             isLoading: isFetching,
             filter: filter,
             tableName: "projectSubTasksTable",
             search: search,
-            reportPermission: [5, 1, 8],
+            reportPermission: [6, 5, 1, 8],
             hideColumns: ["project", "client", "project_manager"],
             tableColumns: _components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_16__.SubTasksTableColumns
           })
@@ -46976,7 +48225,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useLazyGetMilestoneDetailsQuery": () => (/* binding */ useLazyGetMilestoneDetailsQuery),
 /* harmony export */   "useLazyGetProjectDeliverableStatusQuery": () => (/* binding */ useLazyGetProjectDeliverableStatusQuery),
 /* harmony export */   "useLazyGetProjectManagerTaskGuidelineStatusQuery": () => (/* binding */ useLazyGetProjectManagerTaskGuidelineStatusQuery),
-/* harmony export */   "useStoreProjectGuidelineMutation": () => (/* binding */ useStoreProjectGuidelineMutation)
+/* harmony export */   "useStoreProjectGuidelineMutation": () => (/* binding */ useStoreProjectGuidelineMutation),
+/* harmony export */   "useUpdateProjectGuidelineMutation": () => (/* binding */ useUpdateProjectGuidelineMutation)
 /* harmony export */ });
 /* harmony import */ var _apiSlice__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./apiSlice */ "./resources/js/react/services/api/apiSlice.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
@@ -46991,6 +48241,18 @@ var projectApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndp
           return {
             url: "/account/task-guideline-store",
             method: "POST",
+            body: _objectSpread(_objectSpread({}, data), {}, {
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            })
+          };
+        },
+        invalidatesTags: ["PMGUIDELINE"]
+      }),
+      updateProjectGuideline: build.mutation({
+        query: function query(data) {
+          return {
+            url: "/task-guideline-update/".concat(data.id),
+            method: "PUT",
             body: _objectSpread(_objectSpread({}, data), {}, {
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
@@ -47025,6 +48287,7 @@ var projectApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.injectEndp
   }
 });
 var useStoreProjectGuidelineMutation = projectApiSlice.useStoreProjectGuidelineMutation,
+  useUpdateProjectGuidelineMutation = projectApiSlice.useUpdateProjectGuidelineMutation,
   useLazyCheckPMTaskGuidelineQuery = projectApiSlice.useLazyCheckPMTaskGuidelineQuery,
   useCheckPMTaskGuidelineQuery = projectApiSlice.useCheckPMTaskGuidelineQuery,
   useGetMilestoneDetailsQuery = projectApiSlice.useGetMilestoneDetailsQuery,
@@ -50381,7 +51644,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/api/tasksApiSlice */ "./resources/js/react/services/api/tasksApiSlice.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -50401,11 +51667,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var ReportTable = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().lazy(function () {
   return __webpack_require__.e(/*! import() */ "resources_js_react_tasks_components_ReportTableModal_jsx").then(__webpack_require__.bind(__webpack_require__, /*! ./ReportTableModal */ "./resources/js/react/tasks/components/ReportTableModal.jsx"));
 });
 var ReportButton = function ReportButton(_ref) {
-  var _row$subtasks_reports;
+  var _window, _window$Laravel, _row$subtasks_reports;
   var row = _ref.row;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_5__.useSelector)(function (s) {
       return s.tasks;
@@ -50420,6 +51688,7 @@ var ReportButton = function ReportButton(_ref) {
     search = _React$useState4[0],
     setSearch = _React$useState4[1];
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_5__.useDispatch)();
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User((_window = window) === null || _window === void 0 ? void 0 : (_window$Laravel = _window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
   var _useLazyGetTasksRepor = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_4__.useLazyGetTasksReportsQuery)(),
     _useLazyGetTasksRepor2 = _slicedToArray(_useLazyGetTasksRepor, 2),
     getTasksReports = _useLazyGetTasksRepor2[0],
@@ -50445,104 +51714,106 @@ var ReportButton = function ReportButton(_ref) {
     });
     setIsOpen(true);
   };
-  console.log({
-    row: row,
-    reports: reports
-  });
   var close = function close() {
     return setIsOpen(false);
   };
   var reportCount = row === null || row === void 0 ? void 0 : row.subtasks_reports_count;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-    children: [Number(reportCount) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("button", {
+  var reportsData = reports;
+  if ((auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 6 || (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 5) {
+    reportsData = lodash__WEBPACK_IMPORTED_MODULE_7___default().filter(reports, function (report) {
+      return (report === null || report === void 0 ? void 0 : report.report_issue_added_by) && Number(report.report_issue_added_by) === (auth === null || auth === void 0 ? void 0 : auth.getId());
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    children: [Number(reportCount) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("button", {
       onClick: handleModal,
       className: "sp1_tasks_tbl_report_btn",
       children: [(_row$subtasks_reports = row === null || row === void 0 ? void 0 : row.subtasks_reports_count) !== null && _row$subtasks_reports !== void 0 ? _row$subtasks_reports : 0, " Reports"]
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
       style: {
         color: '#9EA6B0'
       },
       children: "No Report"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         isOpen: isOpen,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "sp1_modal-content-wrapper",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "sp1_modal-panel sp1_task_report_modal",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "sp1_modal-head",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
                 className: "sp1_modal-title pl-2",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                   children: "Report Details"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
                 onClick: close,
                 "aria-label": "ModalClose",
                 variant: "tertiary",
                 className: "sp1_modal-close",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                   className: "fa-solid fa-xmark"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
               className: "sp1_modal-body py-3",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
                 className: "d-flex align-items-center justify-content-between flex-column",
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                   className: "text-left py-2 px-3",
                   style: {
                     background: '#fcfcfc',
                     border: '1px dashed #ccc'
                   },
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                       children: "Project:"
-                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
-                      href: "/account/tasks/".concat(row.project_id),
+                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                      href: "/account/projects/".concat(row.project_id),
                       children: row === null || row === void 0 ? void 0 : row.project_name
                     }), " "]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                       children: "Task Name:"
-                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
+                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
                       href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.id),
                       children: row === null || row === void 0 ? void 0 : row.heading
                     }), " "]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                       children: "Project Manager:"
-                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
-                      href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.project_manager_id),
+                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                      href: "/account/employees/".concat(row === null || row === void 0 ? void 0 : row.project_manager_id),
                       children: row === null || row === void 0 ? void 0 : row.pm_id_name
                     }), " "]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("strong", {
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
                       children: "Client:"
-                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("a", {
-                      href: "/account/tasks/".concat(row === null || row === void 0 ? void 0 : row.client_id),
+                    }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                      href: "/account/clients/".concat(row === null || row === void 0 ? void 0 : row.client_id),
                       children: row === null || row === void 0 ? void 0 : row.client_name
                     }), " "]
                   })]
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Suspense), {
-                  fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Suspense), {
+                  fallback: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
                     className: "py-3 d-flex align-items-center justify-content-center",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_3__["default"], {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_Loader__WEBPACK_IMPORTED_MODULE_3__["default"], {
                       title: "Loader..."
                     }), " "]
                   }),
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(ReportTable, {
-                    reports: _toConsumableArray(reports),
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(ReportTable, {
+                    reports: _toConsumableArray(reportsData),
                     search: search,
                     task: row,
                     isLoading: isFetching,
                     tableName: "TaskReportModalTable"
                   })
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {})]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {})]
             })]
           })
         })
@@ -52951,28 +54222,56 @@ var Tasks = function Tasks() {
   }();
 
   // update tasks-type authorization status
-  var handleUpdateTaskTypeAuthorizationStatus = function handleUpdateTaskTypeAuthorizationStatus(e, type, task_type_id) {
-    e.preventDefault();
-    try {
-      var res = updateTasktypeAuthStatus({
-        status: type,
-        task_type_id: task_type_id
-      });
-      if (res) {
-        setTasksType(function (prev) {
-          return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(prev, function (d) {
-            return d.id === task_type_id ? _objectSpread(_objectSpread({}, prev), {}, {
-              authorization_status: res.authorization_status
-            }) : prev;
-          });
-        });
-        setActiveModalTaskTypeData(null);
-        close();
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  var handleUpdateTaskTypeAuthorizationStatus = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e, type, task_type_id) {
+      var res;
+      return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              e.preventDefault();
+              _context2.prev = 1;
+              _context2.next = 4;
+              return updateTasktypeAuthStatus({
+                status: type,
+                task_type_id: task_type_id
+              });
+            case 4:
+              res = _context2.sent;
+              if (!res) {
+                _context2.next = 11;
+                break;
+              }
+              setTasksType(function (prev) {
+                return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(prev, function (d) {
+                  return d.id === task_type_id ? _objectSpread(_objectSpread({}, prev), {}, {
+                    authorization_status: res.authorization_status
+                  }) : prev;
+                });
+              });
+              _context2.next = 9;
+              return fetchTasksTypeData();
+            case 9:
+              setActiveModalTaskTypeData(null);
+              close();
+            case 11:
+              _context2.next = 16;
+              break;
+            case 13:
+              _context2.prev = 13;
+              _context2.t0 = _context2["catch"](1);
+              console.log(_context2.t0);
+            case 16:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[1, 13]]);
+    }));
+    return function handleUpdateTaskTypeAuthorizationStatus(_x2, _x3, _x4) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
   var closeTable = function closeTable() {
     return setShowAuthorizationTableModal(false);
   };

@@ -59,7 +59,7 @@ const SingleTaskPage = () => {
 
     const _taskStatus = new BoardColumn(taskStatus);
  
- 
+    
     return (
         <div className="postion-relative">
             
@@ -375,8 +375,7 @@ const SingleTaskPage = () => {
                                     { (task.isSubtask ? task?.parentTaskTimeLog : task?.totalTimeLog )|| "--"}
                                 </div>
                             </div>
-                        </div>
-
+                        </div> 
                         {/* comments */}
                         {task && task?.id && <SubmittedWork task={task} />}
                         <SubTaskSection status={taskStatus} />

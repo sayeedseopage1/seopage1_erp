@@ -64,12 +64,13 @@ const Tasks = () => {
     }
 
     // update tasks-type authorization status
-    const handleUpdateTaskTypeAuthorizationStatus = (e, type, task_type_id) => {
+    const handleUpdateTaskTypeAuthorizationStatus = async (e, type, task_type_id) => {
         e.preventDefault();
         try{
-            const res = updateTasktypeAuthStatus({status: type, task_type_id });
+            const res = await updateTasktypeAuthStatus({status: type, task_type_id });
             if(res){
                 setTasksType(prev => _.map(prev, d => d.id === task_type_id ? {...prev, authorization_status: res.authorization_status} : prev ))
+                await fetchTasksTypeData();
                 setActiveModalTaskTypeData(null);
                 close();
             }

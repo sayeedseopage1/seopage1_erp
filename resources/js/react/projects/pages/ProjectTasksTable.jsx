@@ -24,6 +24,8 @@ import { ProjectTableColumns } from "../components/ProjectTaskTableColumns";
 import ProjectTasksFilterBar from "../components/ProjectTasksFilterBar";
 import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 import TaskCreationForm from "../components/TaskCreationForm";
+import { toast } from "react-toastify";
+import EditProjectManagerGuideline from "../components/EditProjectManagerGuideline";
 
 const ProjectTasks = () => {
     const { tasks } = useSelector((s) => s.tasks);
@@ -38,6 +40,7 @@ const ProjectTasks = () => {
         React.useState(false);
     const [showProjectGuidelineForm, setShowProjectGuidelineForm] =
         React.useState(false);
+    const [showProjectGuidelineEditForm, setShowProjectGuidelineEditForm] = React.useState(null);
     const [hasPMGuideline, setHasPMGuideline] = React.useState(false);
     const [getAllSubtask, { isFetching: subtaskFetching }] =
         useLazyGetAllSubtaskQuery();
@@ -45,9 +48,10 @@ const ProjectTasks = () => {
     const {
         isDeliverable,
         getProjectGuidelineStaus,
-        projectDeliverableStatusIsLoading,
-        projectGuidelineStatusIsLoading,
         isTaskGuidelineAuthorized,
+        projectGuidelineStatusIsLoading,
+        pmTaskGuidelineStatusIsFetching,
+        projectDeliverableStatusIsLoading,
     } = useProject();
 
     const projectId = params?.projectId;
@@ -103,19 +107,28 @@ const ProjectTasks = () => {
     // hanlde task add form
     const handleTaskAddForm = async (e) => {
         e.preventDefault();
+        
         const deliverable = await isDeliverable(projectId); 
         if (deliverable) {
             const guideline = await getProjectGuidelineStaus(projectId);  
             if (guideline) { 
-                const isAuthorized = await isTaskGuidelineAuthorized(projectId);
-                isAuthorized && setShowTaskCreationForm(true); 
+                const projectGuidelineStatus = await isTaskGuidelineAuthorized(projectId);
+                if(projectGuidelineStatus && _.size(projectGuidelineStatus.pm_task_guideline_authorization) > 0 && projectGuidelineStatus.is_allow){
+                    setShowTaskCreationForm(true)
+                }else{ 
+                    toast.warn(projectGuidelineStatus.message, {
+                        position: 'bottom-right',
+                    });
+
+                    setShowProjectGuidelineEditForm({...projectGuidelineStatus, open: true}); 
+                } 
             } else setShowProjectGuidelineForm(true);
         }
     };
 
     const isFetching = subtaskFetching || taskFetching;
 
-    const singleTask = _.head(tasks);
+    const singleTask = _.head(tasks); 
 
     return (
         <React.Fragment>
@@ -133,6 +146,16 @@ const ProjectTasks = () => {
                 openTaskForm={() => setShowTaskCreationForm(true)}
                 close={() => setShowProjectGuidelineForm(false)}
             />
+
+            {showProjectGuidelineEditForm?.open &&  
+                <EditProjectManagerGuideline
+                    projectId={params.projectId}
+                    isOpen={showProjectGuidelineEditForm?.open ?? false}
+                    data={showProjectGuidelineEditForm}
+                    openTaskForm={() => setShowTaskCreationForm(true)}
+                    close={() => setShowProjectGuidelineEditForm(null)}
+                /> 
+            }
 
             {/* end task creation form */}
             <div className="sp1_tlr_container">
@@ -181,7 +204,8 @@ const ProjectTasks = () => {
                                         onClick={handleTaskAddForm}
                                         isLoading={
                                             projectDeliverableStatusIsLoading ||
-                                            projectGuidelineStatusIsLoading
+                                            projectGuidelineStatusIsLoading ||
+                                            pmTaskGuidelineStatusIsFetching
                                         }
                                     >
                                         + Add Task
@@ -251,7 +275,7 @@ const ProjectTasks = () => {
                                 filter={filter}
                                 tableName="projectTasksTable"
                                 search={search}
-                                reportPermission={[5, 1, 8]}
+                                reportPermission={[6, 5, 1, 8]}
                                 hideColumns={[
                                     "project",
                                     "client",
@@ -265,7 +289,7 @@ const ProjectTasks = () => {
                                 filter={filter}
                                 tableName="projectSubTasksTable"
                                 search={search}
-                                reportPermission={[5, 1, 8]}
+                                reportPermission={[6, 5, 1, 8]}
                                 hideColumns={[
                                     "project",
                                     "client",

@@ -5,6 +5,8 @@ import Loader from './Loader';
 import { useLazyGetTasksReportsQuery } from '../../services/api/tasksApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { storeReport } from '../../services/features/tasksSlice';
+import _ from 'lodash';
+import { User } from '../../utils/user-details';
 
 const ReportTable = React.lazy(() => import('./ReportTableModal'));
 
@@ -14,6 +16,7 @@ const ReportButton = ({row}) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [search, setSearch] = React.useState('');
   const dispatch = useDispatch();
+  const auth = new User(window?.Laravel?.user);
    
   const [
     getTasksReports,
@@ -39,10 +42,17 @@ const ReportButton = ({row}) => {
     setIsOpen(true);
   }
 
-  console.log({row, reports})
+ 
  
   const close = () => setIsOpen(false)
   const reportCount = row?.subtasks_reports_count;
+
+
+  let reportsData = reports;
+
+  if(auth?.getRoleId() === 6  || auth?.getRoleId() === 5){
+    reportsData = _.filter(reports, report => report?.report_issue_added_by && Number(report.report_issue_added_by) === auth?.getId())
+  }
 
   return (
     <div>
@@ -69,10 +79,10 @@ const ReportButton = ({row}) => {
                         <div className="sp1_modal-body py-3">
                             <div className='d-flex align-items-center justify-content-between flex-column'>
                                 <div className='text-left py-2 px-3' style={{background: '#fcfcfc', border: '1px dashed #ccc'}}>
-                                    <div><strong>Project:</strong> <a href={`/account/tasks/${row.project_id}`}>{row?.project_name}</a> </div>
+                                    <div><strong>Project:</strong> <a href={`/account/projects/${row.project_id}`}>{row?.project_name}</a> </div>
                                     <div><strong>Task Name:</strong> <a href={`/account/tasks/${row?.id}`}>{row?.heading}</a> </div>
-                                    <div><strong>Project Manager:</strong> <a href={`/account/tasks/${row?.project_manager_id}`}>{row?.pm_id_name}</a> </div>
-                                    <div><strong>Client:</strong> <a href={`/account/tasks/${row?.client_id}`}>{row?.client_name}</a> </div>
+                                    <div><strong>Project Manager:</strong> <a href={`/account/employees/${row?.project_manager_id}`}>{row?.pm_id_name}</a> </div>
+                                    <div><strong>Client:</strong> <a href={`/account/clients/${row?.client_id}`}>{row?.client_name}</a> </div>
                                 </div>
                             </div>
 
@@ -80,7 +90,7 @@ const ReportButton = ({row}) => {
                             <div>
                                 <React.Suspense fallback={<div className='py-3 d-flex align-items-center justify-content-center'><Loader title='Loader...'/> </div>}>
                                     <ReportTable
-                                        reports = {[...reports]}
+                                        reports = {[...reportsData]}
                                         search={search}
                                         task={row}
                                         isLoading={isFetching}

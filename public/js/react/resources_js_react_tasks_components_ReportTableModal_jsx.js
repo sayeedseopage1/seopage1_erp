@@ -184,8 +184,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/react-table/build/lib/index.mjs");
-/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/table-core/build/lib/index.mjs");
+/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/react-table/build/lib/index.mjs");
+/* harmony import */ var _tanstack_react_table__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @tanstack/react-table */ "./node_modules/@tanstack/table-core/build/lib/index.mjs");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _table_DragableColumnHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./table/DragableColumnHeader */ "./resources/js/react/tasks/components/table/DragableColumnHeader.jsx");
@@ -193,7 +193,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Person__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Person */ "./resources/js/react/tasks/components/Person.jsx");
 /* harmony import */ var _ReportResolveButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ReportResolveButton */ "./resources/js/react/tasks/components/ReportResolveButton.jsx");
 /* harmony import */ var _loader_ReportTableLoder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./loader/ReportTableLoder */ "./resources/js/react/tasks/components/loader/ReportTableLoder.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _global_EmptyTable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../global/EmptyTable */ "./resources/js/react/global/EmptyTable.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -204,6 +207,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -257,8 +262,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
       cell: function cell(_ref2) {
         var row = _ref2.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_3__["default"], {
             url: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.added_by),
             name: data === null || data === void 0 ? void 0 : data.report_issue_added_by,
             avatar: data === null || data === void 0 ? void 0 : data.report_issue_added_by_avatar
@@ -271,8 +276,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
       cell: function cell(_ref3) {
         var row = _ref3.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_3__["default"], {
             url: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.person),
             name: data === null || data === void 0 ? void 0 : data.responsible_person_name,
             avatar: data === null || data === void 0 ? void 0 : data.responsible_person_avatar
@@ -285,7 +290,7 @@ var ReportTableModal = function ReportTableModal(_ref) {
       cell: function cell(_ref4) {
         var row = _ref4.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
           children: data === null || data === void 0 ? void 0 : data.reason
         });
       }
@@ -295,7 +300,7 @@ var ReportTableModal = function ReportTableModal(_ref) {
       cell: function cell(_ref5) {
         var row = _ref5.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
           className: "sp1_ck_content",
           dangerouslySetInnerHTML: {
             __html: data === null || data === void 0 ? void 0 : data.comment
@@ -308,7 +313,7 @@ var ReportTableModal = function ReportTableModal(_ref) {
       cell: function cell(_ref6) {
         var row = _ref6.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
           children: data === null || data === void 0 ? void 0 : data.previousNotedIssue
         });
       }
@@ -318,7 +323,7 @@ var ReportTableModal = function ReportTableModal(_ref) {
       cell: function cell(_ref7) {
         var row = _ref7.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_ReportResolveButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ReportResolveButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
           row: data
         });
       }
@@ -329,12 +334,12 @@ var ReportTableModal = function ReportTableModal(_ref) {
   var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(_toConsumableArray(defaultColumns)),
     _React$useState8 = _slicedToArray(_React$useState7, 1),
     columns = _React$useState8[0];
-  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(_.map(columns, 'id')),
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(lodash__WEBPACK_IMPORTED_MODULE_7___default().map(columns, 'id')),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
     columnOrder = _React$useState10[0],
     setColumnOrder = _React$useState10[1];
   var resetColumnsOrder = function resetColumnsOrder() {
-    return setColumnOrder(_.map(columns, 'id'));
+    return setColumnOrder(lodash__WEBPACK_IMPORTED_MODULE_7___default().map(columns, 'id'));
   };
   var pagination = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return {
@@ -345,7 +350,7 @@ var ReportTableModal = function ReportTableModal(_ref) {
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     setData(_toConsumableArray(reports));
   }, [reports]);
-  var table = (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_7__.useReactTable)({
+  var table = (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_9__.useReactTable)({
     data: data,
     columns: columns,
     state: {
@@ -358,22 +363,22 @@ var ReportTableModal = function ReportTableModal(_ref) {
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     onColumnOrderChange: setColumnOrder,
-    getCoreRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_8__.getCoreRowModel)(),
-    getPaginationRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_8__.getPaginationRowModel)(),
-    getFilteredRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_8__.getFilteredRowModel)(),
-    getSortedRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_8__.getSortedRowModel)()
+    getCoreRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_10__.getCoreRowModel)(),
+    getPaginationRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_10__.getPaginationRowModel)(),
+    getFilteredRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_10__.getFilteredRowModel)(),
+    getSortedRowModel: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_10__.getSortedRowModel)()
   });
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
     className: "sp1_tasks_table_wrapper sp1_tasks_report_table_wrapper",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("table", {
       className: "sp1_tasks_table sp1_tasks_report_table",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("thead", {
         className: "sp1_tasks_thead",
         children: table.getHeaderGroups().map(function (headerGroup) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
             className: "sp1_tasks_tr",
             children: headerGroup.headers.map(function (header) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_table_DragableColumnHeader__WEBPACK_IMPORTED_MODULE_1__.DragableColumnHeader, {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_table_DragableColumnHeader__WEBPACK_IMPORTED_MODULE_1__.DragableColumnHeader, {
                 header: header,
                 table: table,
                 className: "sp1_tasks_report_th"
@@ -381,21 +386,21 @@ var ReportTableModal = function ReportTableModal(_ref) {
             })
           }, headerGroup.id);
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tbody", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("tbody", {
         className: "sp1_tasks_tbody",
-        children: [isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_loader_ReportTableLoder__WEBPACK_IMPORTED_MODULE_5__["default"], {}), !isLoading && table.getRowModel().rows.map(function (row) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tr", {
+        children: [isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_loader_ReportTableLoder__WEBPACK_IMPORTED_MODULE_5__["default"], {}), !isLoading && table.getRowModel().rows.map(function (row) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("tr", {
             className: "sp1_tasks_tr",
             children: row.getVisibleCells().map(function (cell) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("td", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("td", {
                 className: "px-2 sp1_tasks_td sp1_tasks_report_td",
-                children: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_7__.flexRender)(cell.column.columnDef.cell, cell.getContext())
+                children: (0,_tanstack_react_table__WEBPACK_IMPORTED_MODULE_9__.flexRender)(cell.column.columnDef.cell, cell.getContext())
               }, cell.id);
             })
           }, row.id);
         })]
       })]
-    })
+    }), !isLoading && lodash__WEBPACK_IMPORTED_MODULE_7___default().size(data) === 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_global_EmptyTable__WEBPACK_IMPORTED_MODULE_6__["default"], {})]
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ReportTableModal);
@@ -486,6 +491,13 @@ function ReportTableLoder() {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
           width: "80px",
           height: "13px",
+          className: "mb-1"
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+        className: "sp1_tasks_td",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_1__.Placeholder, {
+          width: "80px",
+          height: "20px",
           className: "mb-1"
         })
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {

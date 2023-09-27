@@ -374,7 +374,7 @@ export const ProjectTableColumns = [
       header: 'Report',
       cell: ({row}) => {
         const data = row?.original;
-        return 
+        return <ReportButton row={data} />
       }
     }, 
     {
@@ -383,14 +383,14 @@ export const ProjectTableColumns = [
       cell: ({row, table}) => {
         const data = row?.original;
         return(
-          <EditTask row={data} table={table} />
+          <Menu row={data} table={table} />
         )
       }
     },   
   ]
 
   
-  const EditTask = ({row, table}) => { 
+  const Menu = ({row, table}) => { 
     const [isOpen, setIsOpen] = React.useState(false);
     const close= () => setIsOpen(false); 
 

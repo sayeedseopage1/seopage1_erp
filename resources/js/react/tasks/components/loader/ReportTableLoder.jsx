@@ -36,6 +36,9 @@ export default function ReportTableLoder(){
                 <td className="sp1_tasks_td">
                     <Placeholder width="80px" height="20px" className="mb-1"/> 
                 </td>
+                <td className="sp1_tasks_td">
+                    <Placeholder width="80px" height="20px" className="mb-1"/> 
+                </td>
             </tr>
         ))
     )
