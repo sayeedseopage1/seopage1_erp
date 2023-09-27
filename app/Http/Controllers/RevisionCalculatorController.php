@@ -673,7 +673,7 @@ public function ClientIssue(Request $request, $id)
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
       
-   dd($data);
+   //dd($data);
     
    
    // dd($data);
