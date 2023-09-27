@@ -41,7 +41,7 @@ const ClientIssuesTable = () => {
             
             console.log(res)
             const arr = [];
-            _.forEach(res.client_isuess, d => {
+            _.forEach(res.client_issues, d => {
                 arr.push({
                     ...d,
                     uid: Math.random().toString(36).substr(2, 5)

@@ -57,6 +57,17 @@ export const disputeTableColumn = [
         }
     },
     {
+        id: 'status',
+        header: 'Status',
+        draggable: true,
+        cell: ({row}) => {
+            const data = row.original;
+            if(data?.status){
+               return <span className='badge badge-success font-weight-bold f-12'> Resolved </span>
+            }else return <span className='badge badge-warning font-weight-bold text-white f-12'> Pending </span>
+        } 
+    },
+    {
         id: 'project',
         header: 'Project',
         draggable: true,
@@ -237,17 +248,6 @@ export const disputeTableColumn = [
             )
         }
     }, 
-    {
-        id: 'status',
-        header: 'Status',
-        draggable: true,
-        cell: ({row}) => {
-            const data = row.original;
-            if(data?.status){
-               return <span className='badge badge-success font-weight-bold f-12'> Resolved </span>
-            }else return <span className='badge badge-warning font-weight-bold text-white f-12'> Pending </span>
-        } 
-    },
     {
         id: 'Winner',
         header: 'Winner',

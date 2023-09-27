@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import Button from "../../components/Button";
 import FileUploader from "../../../file-upload/FileUploader";
@@ -44,7 +44,7 @@ const MarkAsComplete = ({task, auth}) => {
                                     key={el.id} 
                                     style={{listStyle: 'unset', fontSize: '13px'}}
                                 > 
-                                    <a href={`/accounts/tasks/${el.id}`}> 
+                                    <a href={`/account/tasks/${el.id}`}> 
                                        {idx + 1}. {el.heading} 
                                     </a> (<a href={`/account/clients/${el.clientId}`}>{el.client_name}</a>)
                                 </li>
@@ -65,6 +65,8 @@ const MarkAsComplete = ({task, auth}) => {
             setMarkAsCompleteModalIsOpen(!markAsCompleteModaIsOpen);
         }
     };
+
+
 
     // close
     const close = () => {

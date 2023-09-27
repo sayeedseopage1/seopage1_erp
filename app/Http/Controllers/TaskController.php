@@ -4725,7 +4725,7 @@ class TaskController extends AccountBaseController
         ]);
     }
 
-    public function taskTypeAuthorization(Request $request, $id){
+  public function taskTypeAuthorization(Request $request, $id){
  
         if($request->status=='approved'){
             $taskType = TaskType::find($id);
