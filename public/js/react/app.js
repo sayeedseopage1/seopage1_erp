@@ -28087,7 +28087,8 @@ var PMIssuesTableColumns = [{
   },
   row: function row(_ref) {
     var _row = _ref.row;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("a", {
+      href: "/accounts/projects/".concat(_row === null || _row === void 0 ? void 0 : _row.projectId),
       title: _row === null || _row === void 0 ? void 0 : _row.project_name,
       className: "singleline-ellipsis",
       children: [" ", _row === null || _row === void 0 ? void 0 : _row.project_name, " "]
@@ -28111,7 +28112,8 @@ var PMIssuesTableColumns = [{
     var search = table.state.search;
     var client_name = _row2 === null || _row2 === void 0 ? void 0 : _row2.client_name;
     var isEqual = search ? _.includes(_.lowerCase(client_name), _.lowerCase(search)) : "";
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+      href: "/accounts/clients/".concat(_row2 === null || _row2 === void 0 ? void 0 : _row2.clientId),
       className: "singleline-ellipsis ".concat(isEqual ? "highlight" : ""),
       children: client_name
     });
@@ -28157,7 +28159,8 @@ var PMIssuesTableColumns = [{
     var search = table.state.search;
     var tv = _row4 === null || _row4 === void 0 ? void 0 : _row4.revision_raised_by_name;
     var isEqual = search ? _.includes(_.lowerCase(tv), _.lowerCase(search)) : "";
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("a", {
+      href: "/accounts/employees/".concat(_row4 === null || _row4 === void 0 ? void 0 : _row4.revision_raised_by_id),
       title: tv,
       className: "singleline-ellipsis ".concat(isEqual ? "highlight" : ""),
       children: tv
@@ -28198,7 +28201,7 @@ var PMIssuesTableColumns = [{
     var _row6 = _ref6.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx)("span", {
       className: "singleline-ellipsis",
-      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'N/A'
+      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'NO'
     });
   }
 }, {
@@ -28365,21 +28368,18 @@ var ProjectElaboration = function ProjectElaboration() {
             case 5:
               res = _context.sent;
               setData(res);
-              console.log({
-                res: res
-              });
-              _context.next = 13;
+              _context.next = 12;
               break;
-            case 10:
-              _context.prev = 10;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](2);
               console.log(_context.t0);
-            case 13:
+            case 12:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[2, 10]]);
+      }, _callee, null, [[2, 9]]);
     }))();
   }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -28850,19 +28850,18 @@ var RevisionCalculator = function RevisionCalculator() {
               case 6:
                 res = _context.sent;
                 setData(res);
-                console.log(res);
-                _context.next = 14;
+                _context.next = 13;
                 break;
-              case 11:
-                _context.prev = 11;
+              case 10:
+                _context.prev = 10;
                 _context.t0 = _context["catch"](3);
                 console.log(_context.t0);
-              case 14:
+              case 13:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[3, 11]]);
+        }, _callee, null, [[3, 10]]);
       }))();
     }
   }, [_startDate, _endDate]);
@@ -28942,7 +28941,8 @@ var revisionColumns = [{
   },
   row: function row(_ref) {
     var _row = _ref.row;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("abbr", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+      href: "/accounts/employees/".concat(_row.project_manager_id),
       title: _row === null || _row === void 0 ? void 0 : _row.project_manager_name,
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         className: "singleline-ellipsis",
@@ -29372,7 +29372,6 @@ var SalesIssuesTable = function SalesIssuesTable() {
       }, _callee, null, [[2, 11]]);
     }))();
   }, []);
-  console.log(data);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
     isOpen: true,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
@@ -29460,7 +29459,8 @@ var SalesIssuesTableColumns = [{
   },
   row: function row(_ref) {
     var _row = _ref.row;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("a", {
+      href: "/accounts/projects/".concat(_row === null || _row === void 0 ? void 0 : _row.ProjectId),
       className: "singleline-ellipsis",
       children: [" ", _row === null || _row === void 0 ? void 0 : _row.project_name, " "]
     });
@@ -29483,7 +29483,9 @@ var SalesIssuesTableColumns = [{
     var search = table.state.search;
     var client_name = _row2 === null || _row2 === void 0 ? void 0 : _row2.client_name;
     var isEqual = search ? _.includes(_.lowerCase(client_name), _.lowerCase(search)) : "";
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+      href: "/accounts/clients/".concat(_row2 === null || _row2 === void 0 ? void 0 : _row2.clientId),
+      title: client_name,
       className: "singleline-ellipsis ".concat(isEqual ? "highlight" : ""),
       children: client_name
     });
@@ -29577,7 +29579,7 @@ var SalesIssuesTableColumns = [{
     var _row6 = _ref6.row;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
       className: "singleline-ellipsis",
-      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'N/A'
+      children: _row6 !== null && _row6 !== void 0 && _row6.dispute_created ? 'YES' : 'NO'
     });
   }
 }, {
@@ -30412,7 +30414,6 @@ var TotalUnsolvedDisputeTable = function TotalUnsolvedDisputeTable() {
       }, _callee, null, [[2, 11]]);
     }))();
   }, []);
-  console.log(data);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_global_Modal__WEBPACK_IMPORTED_MODULE_2__["default"], {
     isOpen: true,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
@@ -47627,6 +47628,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useEditSubtaskMutation": () => (/* binding */ useEditSubtaskMutation),
 /* harmony export */   "useGetDeveloperTasksQuery": () => (/* binding */ useGetDeveloperTasksQuery),
 /* harmony export */   "useGetDisputesQuery": () => (/* binding */ useGetDisputesQuery),
+/* harmony export */   "useGetInProgressTaskStatusQuery": () => (/* binding */ useGetInProgressTaskStatusQuery),
 /* harmony export */   "useGetRevisionDetailsQuery": () => (/* binding */ useGetRevisionDetailsQuery),
 /* harmony export */   "useGetSubmittedTaskQuery": () => (/* binding */ useGetSubmittedTaskQuery),
 /* harmony export */   "useGetTaskDetailsQuery": () => (/* binding */ useGetTaskDetailsQuery),
@@ -47635,6 +47637,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "useLazyCheckSubTaskStateQuery": () => (/* binding */ useLazyCheckSubTaskStateQuery),
 /* harmony export */   "useLazyCheckSubTaskTimerQuery": () => (/* binding */ useLazyCheckSubTaskTimerQuery),
 /* harmony export */   "useLazyGetDisputesQuery": () => (/* binding */ useLazyGetDisputesQuery),
+/* harmony export */   "useLazyGetInProgressTaskStatusQuery": () => (/* binding */ useLazyGetInProgressTaskStatusQuery),
 /* harmony export */   "useLazyGetSubmittedTaskQuery": () => (/* binding */ useLazyGetSubmittedTaskQuery),
 /* harmony export */   "useLazyGetTaskDetailsQuery": () => (/* binding */ useLazyGetTaskDetailsQuery),
 /* harmony export */   "useLazyGetUserTrackTimeQuery": () => (/* binding */ useLazyGetUserTrackTimeQuery),
@@ -48060,6 +48063,12 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
             })
           };
         }
+      }),
+      // GET IN PROGRESS TASK STATUS
+      getInProgressTaskStatus: build.query({
+        query: function query(_query3) {
+          return "/account/tasks/get-inprogress-tasks".concat(_query3);
+        }
       })
     };
   }
@@ -48101,7 +48110,9 @@ var useGetTaskDetailsQuery = singleTaskPageApiSlice.useGetTaskDetailsQuery,
   useAskDisputeQuestionMutation = singleTaskPageApiSlice.useAskDisputeQuestionMutation,
   useAnswerDisputeQuestionMutation = singleTaskPageApiSlice.useAnswerDisputeQuestionMutation,
   useDisputeSubmitToAuthorizationMutation = singleTaskPageApiSlice.useDisputeSubmitToAuthorizationMutation,
-  useDisputeAnswerMakeAsReadMutation = singleTaskPageApiSlice.useDisputeAnswerMakeAsReadMutation;
+  useDisputeAnswerMakeAsReadMutation = singleTaskPageApiSlice.useDisputeAnswerMakeAsReadMutation,
+  useGetInProgressTaskStatusQuery = singleTaskPageApiSlice.useGetInProgressTaskStatusQuery,
+  useLazyGetInProgressTaskStatusQuery = singleTaskPageApiSlice.useLazyGetInProgressTaskStatusQuery;
 
 
 /***/ }),

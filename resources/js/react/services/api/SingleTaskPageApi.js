@@ -431,6 +431,12 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             })
         }),  
+
+
+        // GET IN PROGRESS TASK STATUS
+        getInProgressTaskStatus: build.query({
+            query: (query) => `/account/tasks/get-inprogress-tasks${query}`
+        }),
   
     }),
 });
@@ -473,5 +479,7 @@ export const {
     useAskDisputeQuestionMutation,
     useAnswerDisputeQuestionMutation,
     useDisputeSubmitToAuthorizationMutation,
-    useDisputeAnswerMakeAsReadMutation
+    useDisputeAnswerMakeAsReadMutation,
+    useGetInProgressTaskStatusQuery,
+    useLazyGetInProgressTaskStatusQuery
 } = singleTaskPageApiSlice;

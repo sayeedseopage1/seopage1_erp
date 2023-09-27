@@ -36,8 +36,6 @@ const ProjectElaboration = () => {
         try{
             let res = await projectElaborationData(`/${pm_id}?${queryString}`).unwrap();
             setData(res);
-            console.log({res})
-
         } catch(err){
             console.log(err)
         }

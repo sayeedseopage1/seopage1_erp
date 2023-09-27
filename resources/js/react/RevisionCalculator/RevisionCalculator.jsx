@@ -42,7 +42,6 @@ const RevisionCalculator = () => {
         try{
           let res = await getRevisionCalculatorData(`?${queryString}`).unwrap();
           setData(res);
-          console.log(res)
         }catch(err){
           console.log(err)
         }

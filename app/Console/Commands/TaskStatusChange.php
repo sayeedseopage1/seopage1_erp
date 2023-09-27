@@ -128,7 +128,7 @@ class TaskStatusChange extends Command
            }
 
            
-        $tasks= Task::where('board_column_id',9)->where('subtask_id',null)->get();
+        $tasks= Task::where('board_column_id',8)->where('subtask_id',null)->get();
         foreach($tasks as $task)
         {
             $current_date= Carbon::now();
@@ -136,12 +136,11 @@ class TaskStatusChange extends Command
             $hoursDifference = $current_date->diffInMinutes($task_date);
             $check_date= Carbon::parse($task->updated_at)->addMinutes(2160);
             $dayName = $task_date->format('l');
-           if($dayName != 'Saturday')
-           {
-            if($hoursDifference > 2160)
+           
+            if($hoursDifference > 1)
             {
                 $task_update= Task::find($task->id);
-                $task_update->board_column_id = 4;
+                $task_update->board_column_id = 9;
                 $task_update->save();
             $subtasks_tasks = Subtask::select('tasks.*')
             ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
@@ -149,7 +148,7 @@ class TaskStatusChange extends Command
             foreach($subtasks_tasks as $subtask)
             {
                 $subtask_update= Task::find($subtask->id);
-                $subtask_update->board_column_id = 4;
+                $subtask_update->board_column_id = 9;
                 $subtask_update->save();
 
             }
@@ -158,28 +157,7 @@ class TaskStatusChange extends Command
             }
 
 
-           }else {
-            if($hoursDifference > 3600)
-            {
-                $task_update= Task::find($task->id);
-                $task_update->board_column_id = 4;
-                $task_update->save();
-                $subtasks_tasks = Subtask::select('tasks.*')
-            ->leftJoin('tasks','tasks.subtask_id','sub_tasks.id')
-            ->where('sub_tasks.task_id',$task->id)->get();
-            foreach($subtasks_tasks as $subtask)
-            {
-                $subtask_update= Task::find($subtask->id);
-                $subtask_update->board_column_id = 4;
-                $subtask_update->save();
-
-            }
-
-
-            }
-
-
-           }
+           
            
            
            

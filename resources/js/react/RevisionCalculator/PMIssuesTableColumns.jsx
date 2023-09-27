@@ -7,7 +7,7 @@ export const PMIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <span title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </span> 
+        row: ({row}) => <a href={`/accounts/projects/${row?.projectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a> 
     },
     {
         id: "client_name",
@@ -25,9 +25,9 @@ export const PMIssuesTableColumns = [
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a href={`/accounts/clients/${row?.clientId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {client_name}
-                </span>
+                </a>
             );
         },
     },
@@ -67,9 +67,9 @@ export const PMIssuesTableColumns = [
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
             return (
-                <span title={tv} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a href={`/accounts/employees/${row?.revision_raised_by_id}`} title={tv} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {tv}
-                </span>
+                </a>
             );
         },
     },  
@@ -90,7 +90,7 @@ export const PMIssuesTableColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.dispute_created}`,
         row: ({row}) =>{
-            return <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'N/A'}</span>
+            return <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'NO'}</span>
         }
     },  
     {

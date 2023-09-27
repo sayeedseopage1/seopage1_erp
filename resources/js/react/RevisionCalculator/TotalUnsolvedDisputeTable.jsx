@@ -55,7 +55,6 @@ const TotalUnsolvedDisputeTable = () => {
     })()
   }, [])
 
-  console.log(data)
   
     return (
       <Modal isOpen={true}> 

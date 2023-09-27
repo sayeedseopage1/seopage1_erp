@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Placeholder } from '../global/Placeholder';
-import {convertTime} from '../utils/converTime'
+import { convertTime } from "../utils/converTime";
 
 
 
@@ -15,11 +15,11 @@ export const revisionColumns = [
         loader: () => <Placeholder />,
         row: ({row}) => {
             return(
-                <abbr title={row?.project_manager_name} >
+                <a href={`/accounts/employees/${row.project_manager_id}`} title={row?.project_manager_name} >
                     <span className="singleline-ellipsis"> 
                         {row?.project_manager_name} 
                     </span> 
-                </abbr>
+                </a>
             )
         }
     },

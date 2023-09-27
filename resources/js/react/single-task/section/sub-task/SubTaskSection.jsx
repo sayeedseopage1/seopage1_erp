@@ -5,6 +5,7 @@ import Button from "../../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import {
     useGetTaskDetailsQuery,
+    useLazyGetInProgressTaskStatusQuery,
     useLazyGetTaskDetailsQuery,
 } from "../../../services/api/SingleTaskPageApi";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +18,8 @@ import _ from "lodash";
 import { User } from "../../../utils/user-details";
 import { SingleTask } from '../../../utils/single-task';
 import { subTaskCreationPermision } from "../../permissions";
+import { toast } from "react-toastify";
+import Loader from "../../components/Loader";
 
 const SubTaskSection = ({status}) => {
     const { task, subTask } = useSelector((s) => s.subTask);
@@ -30,7 +33,25 @@ const SubTaskSection = ({status}) => {
     const {width} = useWindowSize();
     const auth = new User(window?.Laravel?.user);
 
-    const toggleAddButton = () => setIsTaskModalOpen(!isTaskModalOpen);
+    // check in progress task history 
+    const [getInProgressTaskStatus, { isFetching: inProgressTaskStatus }] = useLazyGetInProgressTaskStatusQuery();
+
+    const toggleAddButton = async () => {
+        try{
+            const res = await getInProgressTaskStatus(`/${auth?.getId()}`).unwrap();
+            if(res.status === 400){
+                toast.error(res?.message, {position: 'top-center'})
+            }else{
+                setIsTaskModalOpen(!isTaskModalOpen);
+            }
+ 
+        }catch(err){
+            console.log(err)
+        }
+
+        //setIsTaskModalOpen(!isTaskModalOpen);
+    }
+
     const closeAddModal = () => {
         setIsTaskModalOpen(false);
         setFormMode("add");
@@ -103,8 +124,6 @@ const SubTaskSection = ({status}) => {
             ref={setSubtaskModalToggleRef}
             style={{ zIndex: isTaskModalOpen ? "99" : "" }}
         >
-            
-
             {
                 width > 1200 ?
                 <React.Fragment>
@@ -179,22 +198,24 @@ const SubTaskSection = ({status}) => {
 
                {
                     subTaskCreationPermision({task: Task, auth, status}) && 
-                    <Button
-                    variant="tertiary"
-                    className="sp1_tark_add_item"
-                    aria-label="addButton"
-                    onClick={toggleAddButton}
-                >
-                    {isTaskModalOpen ? (
-                        <React.Fragment>
-                            <i className="fa-solid fa-xmark" style={{ fontSize: "12px" }} /> Close
-                        </React.Fragment>
-                    ) : (
-                        <React.Fragment>
-                            <i className="fa-solid fa-plus" style={{ fontSize: "12px" }} />  Sub Task
-                        </React.Fragment>
-                    )}
-                </Button>
+                        <Button
+                            variant="tertiary"
+                            className="sp1_tark_add_item"
+                            aria-label="addButton"
+                            onClick={toggleAddButton}
+                        >
+                            {isTaskModalOpen ? (
+                                <React.Fragment>
+                                    <i className="fa-solid fa-xmark" style={{ fontSize: "12px" }} /> Close
+                                </React.Fragment>
+                            ) : (
+                                <React.Fragment>
+                                    {inProgressTaskStatus ? 
+                                    <Loader title="Loading..." />
+                                    : <><i className="fa-solid fa-plus" style={{ fontSize: "12px" }} />  Sub Task</>}
+                                </React.Fragment>
+                            )}
+                        </Button>
                } 
             </div>
 

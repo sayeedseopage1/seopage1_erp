@@ -10,7 +10,7 @@ export const SalesIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <span className="singleline-ellipsis"> {row?.project_name} </span> 
+        row: ({row}) => <a href={`/accounts/projects/${row?.ProjectId}`} className="singleline-ellipsis"> {row?.project_name} </a> 
     },
     {
         id: "client_name",
@@ -28,9 +28,13 @@ export const SalesIssuesTableColumns = [
                 : "";
 
             return (
-                <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a 
+                    href={`/accounts/clients/${row?.clientId}`} 
+                    title={client_name} 
+                    className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`} 
+                >
                     {client_name}
-                </span>
+                </a>
             );
         },
     },
@@ -51,7 +55,7 @@ export const SalesIssuesTableColumns = [
             return (
                 <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {task_name}
-                </span>
+                </span> 
             );
         },
     },  
@@ -96,8 +100,7 @@ export const SalesIssuesTableColumns = [
                             {row?.reason_for_revision}
                         </div>
                     </Popover.Panel>
-                </Popover>
-                
+                </Popover> 
             )
         }
     },
@@ -108,7 +111,7 @@ export const SalesIssuesTableColumns = [
         sort: row => row?.dispute_created,
         rowSpan: 2,
         searchText: (row) => `${row?.dispute_created}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'N/A'}</span>
+        row: ({row}) => <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'NO'}</span>
     },  
     {
         id: 'total_comments',

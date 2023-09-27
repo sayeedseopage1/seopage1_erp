@@ -59,7 +59,7 @@ const SalesIssuesTable = () => {
     })()
   }, [])
 
-  console.log(data)
+
   
     return (
       <Modal isOpen={true}> 
