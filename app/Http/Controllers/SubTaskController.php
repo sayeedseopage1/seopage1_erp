@@ -70,7 +70,7 @@ class SubTaskController extends AccountBaseController
             'estimate_minutes' => 'required',
             'description' => 'required',
             'user_id' => 'required',
-            'user_id' => 'required',
+           
             'page_type' => 'required',
             'page_url' => 'required',
            

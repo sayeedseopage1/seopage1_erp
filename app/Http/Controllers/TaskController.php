@@ -3274,6 +3274,7 @@ class TaskController extends AccountBaseController
        $working_environment->login_url = $request->login_url;
        $working_environment->email = $request->email;
        $working_environment->password = $request->password;
+       $working_environment->frontend_password = $request->frontend_password;
        $working_environment->save();
        $task_id= Task::where('project_id',$working_environment->project_id)->first();
        return response()->json([
