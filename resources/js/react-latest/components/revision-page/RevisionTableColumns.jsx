@@ -24,13 +24,23 @@ export const RevisionTableColumns = [
             const data = row.row.original;
 
             return (
-                <a href={`/account/projects/${data?.project_id}`}>
-                    <abbr title={row.getValue()}>
-                        <span className="multiline-ellipsis">
-                            {row.getValue()}
-                        </span>
-                    </abbr>
-                </a>
+                <Popover>
+                    <Popover.Button>
+                        <a href={`/account/projects/${data?.project_id}`}> 
+                            <span className="multiline-ellipsis">
+                                {row.getValue()}
+                            </span> 
+                        </a>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className={styles.revision_popover_panel}>
+                            <a href={`/account/projects/${data?.project_id}`}> 
+                                {row.getValue()}
+                            </a>
+                        </div>
+                    </Popover.Panel>
+                </Popover> 
             );
         },
     },
@@ -64,10 +74,18 @@ export const RevisionTableColumns = [
         sortable: true,
         accessorFn: (row) => row.heading,
         cell: (row) => {
-            return (
-                <abbr title={row.getValue()}>
-                    <span className="multiline-ellipsis">{row.getValue()}</span>
-                </abbr>
+            return ( 
+                <Popover>
+                    <Popover.Button>
+                        <span className="multiline-ellipsis">{row.getValue()}</span>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className={styles.revision_popover_panel}>
+                            {row.getValue()}
+                        </div>
+                    </Popover.Panel>
+                </Popover>
             );
         },
     },

@@ -269,12 +269,13 @@ const close =async () => {
             try{ 
                 const res = await disputeSubmitToAuthorization(data).unwrap();
 
-                toast.warn(`Successfully sending request for approval!`);
+                toast.success(`Successfully sending request for approval!`);
                 updateDisputeById({
                     disputeId: row?.id,
                     data: _.head(res),
                 });
                 setRowData(_.head(res))
+                setResolveComment('');
             }catch(err){
                 console.log(err)
             }
@@ -297,12 +298,13 @@ const close =async () => {
             try{ 
                 const res = await disputeSubmitToAuthorization(data).unwrap();
                 
-                toast.warn(`The dispute has been successfully resolved`);
+                toast.success(`The dispute has been successfully resolved`);
                 updateDisputeById({
                     disputeId: row?.id,
                     data: _.head(res)
                 });
                 setRowData(_.head(res))
+                setResolveComment('');
             }catch(err){
                 console.log(err)
             }

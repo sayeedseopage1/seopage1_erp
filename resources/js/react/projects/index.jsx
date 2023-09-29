@@ -12,6 +12,7 @@ import '../tasks/table.css';
 import '../tasks/tasks.css';
 import './project.css';
 import ProjectTasks from './pages/ProjectTasksTable';
+import Toaster from '../global/Toaster';
  
 
 const Subtasks = React.lazy(() => import('../tasks/pages/Subtasks')) 
@@ -53,6 +54,7 @@ const DragLayer = () => {
 const Container = ({children}) => {
   return(
     <React.Fragment>
+      <Toaster />
       <DragLayer />
       <ProjectTasks />
     </React.Fragment>

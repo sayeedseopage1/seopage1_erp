@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 const Loader = ({ title = "Loading..." }) => {
     return (
         <div className="d-flex align-items-center">
@@ -15,5 +17,9 @@ const Loader = ({ title = "Loading..." }) => {
         </div>
     );
 };
+
+Loader.propTypes = {
+    title: PropTypes.string,
+}
 
 export default Loader;

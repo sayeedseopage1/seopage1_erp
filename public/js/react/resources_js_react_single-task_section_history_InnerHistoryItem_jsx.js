@@ -63,14 +63,14 @@ var InnerHistoryItem = function InnerHistoryItem(_ref) {
         children: [(history === null || history === void 0 ? void 0 : history.board_column) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
           className: "mr-2",
           style: {
-            background: history === null || history === void 0 ? void 0 : (_history$board_column = history.board_column) === null || _history$board_column === void 0 ? void 0 : _history$board_column.label_color,
-            color: (history === null || history === void 0 ? void 0 : (_history$board_column2 = history.board_column) === null || _history$board_column2 === void 0 ? void 0 : _history$board_column2.label_color) === '#FFE700' ? '#000000' : '#FFFFFF',
+            background: history === null || history === void 0 || (_history$board_column = history.board_column) === null || _history$board_column === void 0 ? void 0 : _history$board_column.label_color,
+            color: (history === null || history === void 0 || (_history$board_column2 = history.board_column) === null || _history$board_column2 === void 0 ? void 0 : _history$board_column2.label_color) === '#FFE700' ? '#000000' : '#FFFFFF',
             width: 'fit-content',
             padding: '2px 6px',
             borderRadius: '4px',
             fontSize: '14px'
           },
-          children: history === null || history === void 0 ? void 0 : (_history$board_column3 = history.board_column) === null || _history$board_column3 === void 0 ? void 0 : _history$board_column3.column_name
+          children: history === null || history === void 0 || (_history$board_column3 = history.board_column) === null || _history$board_column3 === void 0 ? void 0 : _history$board_column3.column_name
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
           className: "",
           style: {

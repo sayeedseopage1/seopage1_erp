@@ -1,0 +1,93 @@
+.person{
+    position: relative;
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+}
+
+.person > a.person_info{
+  flex: 1;
+}
+
+.profile_details{  
+    display: flex;
+    align-items: center;  
+    background: #fff; 
+    padding: 12px;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+    border: 1px solid rgb(0 0 0 / 10%);
+}
+ 
+.profile{
+    flex: 1;
+    padding-inline: 6px;
+}
+
+.profile p {
+    font-size: 17px;
+    font-weight: 500;
+    color: #424242;
+}
+
+.profile span{
+    font-size: 14px;
+    color: #777;
+}
+
+/* 
+.popper {
+    border-radius: 3px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    padding: 8px;
+    text-align: center;
+    background: #ffffff;
+    color: black;
+  }
+  .popper:after {
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: red;
+  }
+  .popper[data-popper-placement=top] {
+    margin-bottom: 10px;
+  }
+  .popper[data-popper-placement=top]:after { 
+
+    left: calc(50% - 10px);
+  }
+  .popper[data-popper-placement=bottom] {
+    margin-top: 10px;
+  }
+  .popper[data-popper-placement=bottom]:after {
+    border-top-width: 0;
+    border-bottom-color: #ffffff;
+    top: -10px;
+    left: calc(50% - 10px);
+  }
+  .popper[data-popper-placement=left] {
+    margin-right: 10px;
+  }
+  .popper[data-popper-placement=left]:after {
+    
+    top: calc(50% - 10px);
+    right: -10px;
+  }
+  .popper[data-popper-placement=right] {
+    margin-left: 10px;
+  }
+  .popper[data-popper-placement=right]:after {
+    border-left-width: 0;
+    border-right-color: #ffffff;
+    top: calc(50% - 10px);
+    left: -10px;
+  } */
+/* 
+
+  .arrow{
+    width: 10px;
+    height: 10px;
+    background-color: red;
+  } */

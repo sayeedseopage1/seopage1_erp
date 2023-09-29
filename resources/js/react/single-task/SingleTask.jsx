@@ -23,6 +23,8 @@ import { User } from "../utils/user-details";
 import GenarelLoader from "./components/loader/GenarelLoader";
 import PMGuideline from "./components/PMGuideline";
 import Toaster from '../global/Toaster'
+import DailySubmissionSection from "./section/daily-submission/DailySubmissionSection";
+
 
 const SingleTaskPage = () => {
     const { task:Task } = useSelector((s) => s.subTask);
@@ -379,6 +381,7 @@ const SingleTaskPage = () => {
                         {/* comments */}
                         {task && task?.id && <SubmittedWork task={task} />}
                         <SubTaskSection status={taskStatus} />
+                        {task && task?.id  && <DailySubmissionSection task={task} />}
                         {task && task?.id && <CommentSection task={task} isLoading={isFetching} /> }
                         <NoteSection />
                         <TimeLogSection />

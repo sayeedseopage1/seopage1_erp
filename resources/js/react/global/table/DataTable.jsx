@@ -23,7 +23,7 @@ const DataTable = ({
     filter,
     search,
     state,
-    isLoading,
+    isLoading = false,
     loader,
     classes,
     tableMaxHeight
@@ -124,7 +124,7 @@ const DataTable = ({
                     {!isLoading && table.getRowModel().rows.map(row => (
                         <tr key={row.id} className={`sp1-data-table-tr ${classes?.tr ?? ''}`}>
                             {row.getVisibleCells().map(cell => (
-                                <td key={cell.id} className={`sp1-data-table-td ${classes?.td}`}>
+                                <td key={cell.id} className={`sp1-data-table-td ${classes?.td ?? ''} sp1_data_table_td--${cell.column.id}`}>
                                     {
                                         flexRender(
                                             cell.column.columnDef.cell,
@@ -161,5 +161,6 @@ const DataTable = ({
    </div>
   )
 }
+    
 
 export default DataTable

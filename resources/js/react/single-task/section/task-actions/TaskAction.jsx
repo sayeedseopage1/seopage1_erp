@@ -19,6 +19,7 @@ import ReportControl from "./report/Report";
 import { User } from "../../../utils/user-details";
 import _ from "lodash";
 import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
+import DailySubmissionControl from './DailySubmissionControl'
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
@@ -61,6 +62,9 @@ const TaskAction = ({ task, status }) => {
             markAsCompletedButtonPermission({ task, status, loggedUser }) ? (
                 <MarkAsComplete task={task} auth={loggedUser} />
             ) : null}
+
+             {/* daily submission control */}
+             <DailySubmissionControl />
 
             {/* develop */}
             {approveButtonPermission({ task, status, loggedUser }) ? (

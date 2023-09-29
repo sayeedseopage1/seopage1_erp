@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import styles from "./button.module.css";
+import Loader from "./Loader";
 
 const Button = ({
     children,
@@ -9,6 +10,8 @@ const Button = ({
     variant = "primary",
     size = "sm",
     onClick,
+    isLoading = false,
+    loaderTitle = "Loading...",
     ...props
 }) => {
     const variantClass = {
@@ -35,12 +38,12 @@ const Button = ({
     return (
         <button
             type="button"
-            className={classes}
-            disabled={disabled}
+            className={isLoading ? `${styles.cnx__btn} ${styles.cnx__btn_loading}` :classes}
+            disabled={disabled || isLoading}
             onClick={handleOnClick}
             {...props}
         >
-            {children}
+            {isLoading ? <Loader title={loaderTitle} /> : children}
         </button>
     );
 };
@@ -62,6 +65,8 @@ Button.propTypes = {
     size: PropTypes.oneOf(["sm", "md", "lg"]),
     onClick: PropTypes.func,
     href: PropTypes.string,
+    isLoading: PropTypes.bool,
+    loaderTitle: PropTypes.string,
 };
 
 export default Button;

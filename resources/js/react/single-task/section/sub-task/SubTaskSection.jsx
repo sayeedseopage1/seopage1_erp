@@ -37,19 +37,19 @@ const SubTaskSection = ({status}) => {
     const [getInProgressTaskStatus, { isFetching: inProgressTaskStatus }] = useLazyGetInProgressTaskStatusQuery();
 
     const toggleAddButton = async () => {
-        try{
-            const res = await getInProgressTaskStatus(`/${auth?.getId()}`).unwrap();
-            if(res.status === 400){
-                toast.error(res?.message, {theme: 'colored'})
-            }else{
-                setIsTaskModalOpen(!isTaskModalOpen);
-            }
+        // try{
+        //     const res = await getInProgressTaskStatus(`/${auth?.getId()}`).unwrap();
+        //     if(res.status === 400){
+        //         toast.error(res?.message, {theme: 'colored'})
+        //     }else{
+        //         setIsTaskModalOpen(!isTaskModalOpen);
+        //     }
  
-        }catch(err){
-            console.log(err)
-        }
+        // }catch(err){
+        //     console.log(err)
+        // }
 
-        //setIsTaskModalOpen(!isTaskModalOpen);
+        setIsTaskModalOpen(!isTaskModalOpen);
     }
 
     const closeAddModal = () => {
