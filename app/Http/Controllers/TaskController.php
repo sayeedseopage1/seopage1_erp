@@ -3255,14 +3255,14 @@ class TaskController extends AccountBaseController
            $pm_task_guideline_update->google_drive_link = $request->google_drive_link;
            $pm_task_guideline_update->instruction_plugin = $request->instruction_plugin;
        }
-       $authorization_count = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline_update->project_id)->whereIn('status',[0,1])->count();
+       $authorization_count = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline_update->project_id)->whereIn('status',[0,2])->count();
        if($authorization_count == 0)
        {
         $pm_task_guideline_update->status = 1;
 
        }else 
        {
-        $pm_task_guideline_update->status = 2;
+        $pm_task_guideline_update->status = 0;
 
        }
       
