@@ -6,6 +6,7 @@ import Button from "../../tasks/components/Button";
 import Modal from "../../tasks/components/Modal";
 import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
+import { toast } from "react-toastify";
 
 const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projectId }) => {
     const [themeDetails, setThemeDetails] = React.useState("");
@@ -142,6 +143,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
                 return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 1) {
+                return <span className="badge badge-success"> Approved </span> 
             }
         }
     }  
@@ -158,6 +161,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
                 return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 1) {
+                return <span className="badge badge-success"> Approved </span> 
             }
         }
     }  
@@ -175,6 +180,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
                 return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 1) {
+                return <span className="badge badge-success"> Approved </span> 
             }
         }
     }  
@@ -191,6 +198,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
                 return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 1) {
+                return <span className="badge badge-success"> Approved </span> 
             }
         }
     }  
@@ -208,7 +217,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             return typeof value === 'string' && urlRegex.test(value);
           }
 
-          if(!themeDetailsAuthorized()){
+          if(!themeDetailsAuthorized() && edit.theme_details){
             // theme details validation
             if(themeDetails === ''){
                 err.themeDetails = 'You Need to Select An Option';
@@ -233,7 +242,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         
 
         // design details
-       if(!designDetailsAuthorized){
+       if(!designDetailsAuthorized && edit.design_details){
         if(designDetials === ''){
             err.designDetials = 'You Need to Select An Option';
             count++;
@@ -282,7 +291,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
         // color schema
         
-        if(!colorSchemaAuthorized()){
+        if(!colorSchemaAuthorized() && edit.color_schema){
             if(colorSchema === ''){
                 err.colorSchema = 'You Need to Select An Option';
                 count++;
@@ -305,7 +314,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
         
         // plugin 
-        if(!pluginResearchAuthorized()){
+        if(!pluginResearchAuthorized() && edit.plugin_research){
             if(plugin === ''){
                 err.plugin = 'You Need to Select An Option';
                 count++;
@@ -345,7 +354,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
 
     // handle submti
-    const handleSubmit = (e) => {
+    const handleSubmit =  async (e) => {
         e.preventDefault();
         let formData = {
             project_id: data?.project_id,
@@ -353,7 +362,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             pm_task_guideline_authorization: data?.pm_task_guideline_authorization
         };
 
-        if(!themeDetailsAuthorized()){
+        if(!themeDetailsAuthorized() && edit.theme_details){
             formData = {
                 ...formData,
                 project_id: projectId,
@@ -363,7 +372,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             }
         }
 
-        if(!designDetailsAuthorized()){
+        if(!designDetailsAuthorized() && edit.design_details){
             formData = {
                 ...formData,
                 design_details: designDetials === 'yes' ? 1 : 0,
@@ -375,7 +384,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             }
         } 
         
-        if(!pluginResearchAuthorized()){
+        if(!pluginResearchAuthorized() && edit.plugin_research){
             formData = { 
                 ...formData,
                 plugin_research: plugin === "yes" ? 1 : 0,
@@ -387,7 +396,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             }
         }
 
-        if(!colorSchemaAuthorized()){
+        if(!colorSchemaAuthorized() && edit.color_schema){
             formData = {
                 ...formData, 
                 color_schema: colorSchema === "yes" ? 1 : 0, 
@@ -400,10 +409,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
 
         if(isValide()){
-            updateProjectGuideline(formData).unwrap()
-            .then(res => {
-                // openTaskForm();
-                
+            await updateProjectGuideline(formData)
+            .unwrap()
+            .then(res => { 
+                console.log(res)
                 toast.success('Task Guideline Update Successfully');
                 close();
             })
@@ -493,6 +502,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                             name="theme_details"
                                                             className="form-check-input"
                                                             id="themeDetailsNo"
+                                                            defaultChecked={true}
                                                             value="no"
                                                             onChange={(e) =>
                                                                 onChange( e, setThemeDetails )
@@ -598,6 +608,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                             className="form-check-input"
                                                             id="designDetailsNo"
                                                             value="no"
+                                                            defaultChecked={true}
                                                             onChange={(e) =>{
                                                                 setXDorFigmaFile('');
                                                                 setPhotoshopReferenceURL('');
@@ -774,6 +785,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                     className="form-check-input"
                                                     id="colorSchemaNo"
                                                     value="no"
+                                                    defaultChecked={true}
                                                     onChange={(e) =>
                                                         onChange(e, setColorSchema)
                                                     }
@@ -955,6 +967,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                         className="form-check-input"
                                                         id="pluginNo"
                                                         value="no"
+                                                        defaultChecked={true}
                                                         onChange={(e) =>
                                                             onChange(e, setPlugin)
                                                         }
