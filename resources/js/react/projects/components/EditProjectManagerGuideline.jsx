@@ -128,6 +128,65 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research') === -1;
     }  
 
+    //
+     
+    const themeDetailsAuthorizedStatus = () => { 
+        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details'); 
+        
+        if(data?.theme_details === 1) {
+            return <span className="badge badge-success"> Approved </span>
+        }else if(index !== -1){
+            const d = data?.pm_task_guideline_authorization[index];
+            let status = d.status;
+            if(Number(status) === 2){
+                return <span className="badge badge-warning"> Rejected </span>
+            }else return <span className="badge badge-warning"> Panding </span> 
+        }
+    }  
+
+    const designDetailsAuthorizedStatus = () => { 
+        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'design_details')
+        
+        if(data?.design_details === 1) {
+            return <span className="badge badge-success"> Approved </span>
+        }else if(index !== -1){
+            const d = data?.pm_task_guideline_authorization[index];
+            let status = d.status;
+            if(Number(status) === 2){
+                return <span className="badge badge-warning"> Rejected </span>
+            }else return <span className="badge badge-warning"> Panding </span> 
+        }
+    }  
+ 
+    
+    const colorSchemaAuthorizedStatus = () => { 
+        const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'color_schema')
+        
+        if(data?.color_schema === 1) {
+            return <span className="badge badge-success"> Approved </span>
+        }else if(index !== -1){
+            const d = data?.pm_task_guideline_authorization[index];
+            let status = d.status;
+            if(Number(status) === 2){
+                return <span className="badge badge-warning"> Rejected </span>
+            }else return <span className="badge badge-warning"> Panding </span> 
+        }
+    }  
+ 
+    const pluginResearchAuthorizedStatus = () => { 
+        const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research')
+        
+        if(data?.plugin_research === 1) {
+            return <span className="badge badge-success"> Approved </span>
+        }else if(index !== -1){
+            const d = data?.pm_task_guideline_authorization[index];
+            let status = d.status;
+            if(Number(status) === 2){
+                return <span className="badge badge-warning"> Rejected </span>
+            }else return <span className="badge badge-warning"> Panding </span> 
+        }
+    }  
+ 
 
     
 
@@ -336,6 +395,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             updateProjectGuideline(formData).unwrap()
             .then(res => {
                 // openTaskForm();
+                
+                toast.success('Task Guideline Update Successfully');
                 close();
             })
             .catch(err => console.log(err));
@@ -385,10 +446,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             {themeDetailsAuthorized() ? 
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
-                                                    <span className="badge badge-danger mr-1"> Rejected </span>
+                                                    {themeDetailsAuthorizedStatus()}
                                                     <button
                                                         onClick={() => setEdit(prev => ({...prev, theme_details: true}))}
-                                                        className="badge badge-secondary" 
+                                                        className="badge badge-secondary ml-1" 
                                                     >
                                                         Edit
                                                     </button>
@@ -486,10 +547,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             {designDetailsAuthorized() ? 
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
-                                                    <span className="badge badge-danger mr-1"> Rejected </span>
+                                                   {designDetailsAuthorizedStatus()} 
                                                     <button 
                                                         onClick={() => setEdit(prev => ({...prev, design_details: true}))}
-                                                        className="badge badge-secondary" 
+                                                        className="badge badge-secondary ml-1"  
                                                     >
                                                         Edit
                                                     </button>
@@ -666,10 +727,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             {colorSchemaAuthorized() ? 
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
-                                                    <span className="badge badge-danger mr-1"> Rejected </span>
+                                                    {colorSchemaAuthorizedStatus()}
                                                     <button
                                                         onClick={() => setEdit(prev => ({...prev, color_schema: true}))}
-                                                        className="badge badge-secondary" 
+                                                        className="badge badge-secondary ml-1" 
                                                     >
                                                         Edit
                                                     </button>
@@ -847,10 +908,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             {pluginResearchAuthorized() ? 
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
-                                                    <span className="badge badge-danger mr-1"> Rejected </span>
+                                                    {pluginResearchAuthorizedStatus()}
                                                     <button 
                                                         onClick={() => setEdit(prev => ({...prev, plugin_research: true}))}
-                                                        className="badge badge-secondary" 
+                                                        className="badge badge-secondary ml-1" 
                                                     >
                                                         Edit
                                                     </button>
@@ -960,7 +1021,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                     </Button>
                                    {!_.isEmpty(_.pickBy(edit, Boolean)) &&  
                                     <SubmitButton
-                                        title="Submit"
+                                        title="Update"
                                         onClick={handleSubmit}
                                         isLoading={isLoading}
                                     />

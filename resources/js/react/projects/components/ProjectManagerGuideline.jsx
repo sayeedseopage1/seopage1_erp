@@ -6,6 +6,7 @@ import Button from "../../tasks/components/Button";
 import Modal from "../../tasks/components/Modal";
 import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
+import { toast } from "react-toastify";
 
 const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => {
     const [themeDetails, setThemeDetails] = React.useState("");
@@ -268,6 +269,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
             storeProjectGuideline(data).unwrap()
             .then(res => {
                 // openTaskForm();
+                toast.success('Task Guideline Store Successfully');
                 close();
             })
             .catch(err => console.log(err));

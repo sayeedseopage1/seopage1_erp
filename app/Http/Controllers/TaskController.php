@@ -3298,7 +3298,7 @@ class TaskController extends AccountBaseController
        }
        $pm_task_guideline_authorization->save();
        $pm_task_guideline = PmTaskGuideline::where('project_id',$pm_task_guideline_authorization->project_id)->first();
-       $pm_task_guideline->status = 2;
+       $pm_task_guideline->status = 0;
        $pm_task_guideline->save();
        $status_get = PMTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',1)->count();
        return response()->json([
