@@ -3136,36 +3136,74 @@ class TaskController extends AccountBaseController
            $name4 = 'Plugin Research';
 
            if($data['theme_details']==0){
-               $pm_task_guideline_authorization = new PmTaskGuidelineAuthorization();
+               $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                $pm_task_guideline_authorization->project_id = $data['project_id'];
                $pm_task_guideline_authorization->name = $name1;
                $pm_task_guideline_authorization->status = 0;
                $pm_task_guideline_authorization->save();
+           }else 
+           {
+            $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+            $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+            $pm_task_guideline_authorization->project_id = $data['project_id'];
+            $pm_task_guideline_authorization->name = $name1;
+            $pm_task_guideline_authorization->status = 1;
+            $pm_task_guideline_authorization->save();
+
+
            }
            if($data['design_details']==0){
-               $pm_task_guideline_authorization = new PmTaskGuidelineAuthorization();
+               $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                $pm_task_guideline_authorization->project_id = $data['project_id'];
                $pm_task_guideline_authorization->name = $name2;
                $pm_task_guideline_authorization->status = 0;
                $pm_task_guideline_authorization->save();
+           }else 
+           {
+            $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+               $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+               $pm_task_guideline_authorization->project_id = $data['project_id'];
+               $pm_task_guideline_authorization->name = $name2;
+               $pm_task_guideline_authorization->status = 1;
+               $pm_task_guideline_authorization->save();
+
            }
            if($data['color_schema']==0){
-               $pm_task_guideline_authorization = new PmTaskGuidelineAuthorization();
+               $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                $pm_task_guideline_authorization->project_id = $data['project_id'];
                $pm_task_guideline_authorization->name = $name3;
                $pm_task_guideline_authorization->status = 0;
                $pm_task_guideline_authorization->save();
+           }else 
+           {
+            $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+            $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+            $pm_task_guideline_authorization->project_id = $data['project_id'];
+            $pm_task_guideline_authorization->name = $name3;
+            $pm_task_guideline_authorization->status = 1;
+            $pm_task_guideline_authorization->save();
+
            }
            if($data['plugin_research']==0){
-               $pm_task_guideline_authorization = new PmTaskGuidelineAuthorization();
+               $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
                $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
                $pm_task_guideline_authorization->project_id = $data['project_id'];
                $pm_task_guideline_authorization->name = $name4;
                $pm_task_guideline_authorization->status = 0;
                $pm_task_guideline_authorization->save();
+           }else 
+           {
+            $pm_task_guideline_authorization = new PMTaskGuidelineAuthorization();
+            $pm_task_guideline_authorization->task_guideline_id = $pm_task_guideline->id;
+            $pm_task_guideline_authorization->project_id = $data['project_id'];
+            $pm_task_guideline_authorization->name = $name4;
+            $pm_task_guideline_authorization->status = 1;
+            $pm_task_guideline_authorization->save();
+
+
            }
 
        }
@@ -3217,20 +3255,30 @@ class TaskController extends AccountBaseController
            $pm_task_guideline_update->google_drive_link = $request->google_drive_link;
            $pm_task_guideline_update->instruction_plugin = $request->instruction_plugin;
        }
-       $pm_task_guideline_update->status = 1;
+       $authorization_count = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline_update->project_id)->whereIn('status',[0,1])->count();
+       if($authorization_count == 0)
+       {
+        $pm_task_guideline_update->status = 1;
+
+       }else 
+       {
+        $pm_task_guideline_update->status = 0;
+
+       }
+      
        $pm_task_guideline_update->save();
        return response()->json(['status'=>200]);
    }
 
    public function taskGuidelineApprovedAuthorization($id){
-       $pm_task_guideline_authorization = PmTaskGuidelineAuthorization::find($id);
+       $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::find($id);
 
        if ($pm_task_guideline_authorization->status == 0) {
            $pm_task_guideline_authorization->status = 1;
        }
        $pm_task_guideline_authorization->save();
 
-       $status_get = PmTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',2)->count();
+       $status_get = PMTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',2)->count();
        if($status_get == 0){
            $pm_task_guideline = PmTaskGuideline::where('project_id',$pm_task_guideline_authorization->project_id)->first();
            $pm_task_guideline->status = 1;
@@ -3244,7 +3292,7 @@ class TaskController extends AccountBaseController
        ]);
    }
    public function taskGuidelineDenyAuthorization($id){
-       $pm_task_guideline_authorization = PmTaskGuidelineAuthorization::find($id);
+       $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::find($id);
        if ($pm_task_guideline_authorization->status == 0) {
            $pm_task_guideline_authorization->status = 2;
        }
@@ -3252,7 +3300,7 @@ class TaskController extends AccountBaseController
        $pm_task_guideline = PmTaskGuideline::where('project_id',$pm_task_guideline_authorization->project_id)->first();
        $pm_task_guideline->status = 2;
        $pm_task_guideline->save();
-       $status_get = PmTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',1)->count();
+       $status_get = PMTaskGuidelineAuthorization::where('project_id', $pm_task_guideline_authorization->project_id)->where('status',0)->OrWhere('status',1)->count();
        return response()->json([
            'success' => 200,
            'count' => $status_get,
