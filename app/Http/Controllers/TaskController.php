@@ -3116,7 +3116,13 @@ class TaskController extends AccountBaseController
        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
            $pm_task_update->status = 0;
 
-       } else {
+       }elseif($data['theme_details'] == 2 || $data['design_details'] == 2 || $data['color_schema'] == 2 || $data['plugin_research'] == 2)
+       {
+        $pm_task_update->status = 0;
+
+       }
+       
+       else {
            $pm_task_update->status = 1;
        }
        $pm_task_update->save();
