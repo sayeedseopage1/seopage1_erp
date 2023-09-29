@@ -107,27 +107,28 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     }
 
     
-    const themeDetailsAuthorized = () => {  
-        return data?.theme_details === 1 || 
-        _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details') === -1;
-    }  
+    const themeDetailsAuthorized = () => {
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details');
 
-    const designDetailsAuthorized = () => {  
-        return data?.design_details === 1 || 
-        _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'design_details') === -1;
-    }  
+        return data?.theme_details === 1 || d.status === 1;
+    }
 
-    
-    const colorSchemaAuthorized = () => {  
-        return data?.color_schema === 1 || 
-        _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'color_schema') === -1;
-    }  
+    const designDetailsAuthorized = () => {
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'design_details');
+        return data?.design_details === 1 || d.status === 1;
+    }
 
-    
-    const pluginResearchAuthorized = () => {  
-        return data?.plugin_research === 1 || 
-        _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research') === -1;
-    }  
+
+    const colorSchemaAuthorized = () => {
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'color_schema');
+        return data?.color_schema === 1 || d.status === 1;
+    }
+
+
+    const pluginResearchAuthorized = () => {
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research');
+        return data?.plugin_research === 1 || d.status === 1;
+    }
 
     //
      

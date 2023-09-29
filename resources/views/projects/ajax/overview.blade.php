@@ -679,7 +679,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     $task_guideline_authorization = App\Models\PMTaskGuidelineAuthorization::where('project_id',$project->id)->first();
                     $status_count = App\Models\PMTaskGuidelineAuthorization::where('project_id', $project->id)->where('status',0)->count();
                 @endphp
-                @if ($task_guideline_authorization !== null && $status_count !=0)
+                @if (Auth::user()->role_id == 1 && $task_guideline_authorization !== null && $status_count !=0)
                 <div class="card mb-3" style="border:none">
                     <div class="py-3">
                         <div class="container">

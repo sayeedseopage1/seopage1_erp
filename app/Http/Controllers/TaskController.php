@@ -1752,82 +1752,7 @@ class TaskController extends AccountBaseController
         }
        
 
-        // save labels
-        // $task->labels()->sync($request->task_labels);
-        // dd($request->taskId);
-        // if (!is_null($request->taskId)) {
-
-        //     $taskExists = TaskFile::where('task_id', $request->taskId)->get();
-
-        //     if ($taskExists) {
-        //         foreach ($taskExists as $taskExist) {
-        //             $file = new TaskFile();
-        //             $file->user_id = $taskExist->user_id;
-        //             $file->task_id = $task->id;
-
-        //             if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id))) {
-        //                 File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id), 0775, true);
-        //             }
-
-        //             $fileName = Files::generateNewFileName($taskExist->filename);
-        //             copy(public_path(Files::UPLOAD_FOLDER . '/task-files/' . $taskExist->task_id . '/' . $taskExist->hashname), public_path(Files::UPLOAD_FOLDER . '/task-files/' . $task->id . '/' . $fileName));
-
-        //             $file->filename = $taskExist->filename;
-        //             $file->hashname = $fileName;
-        //             $file->size = $taskExist->size;
-        //             $file->save();
-
-        //             $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
-        //         }
-        //     }
-
-        //     $subTask = SubTask::with(['files'])->where('task_id', $request->taskId)->get();
-
-        //     if ($subTask) {
-        //         foreach ($subTask as $subTasks) {
-        //             $subTaskData = new SubTask();
-        //             $subTaskData->title = $subTasks->title;
-        //             $subTaskData->task_id = $task->id;
-        //             $subTaskData->description = str_replace('<p><br></p>', '', trim($subTasks->description));
-
-        //             if ($subTasks->start_date != '' && $subTasks->due_date != '') {
-        //                 $subTaskData->start_date = $subTasks->start_date;
-        //                 $subTaskData->due_date = $subTasks->due_date;
-        //             }
-
-
-        //             $subTaskData->assigned_to = $subTasks->assigned_to;
-
-        //             $subTaskData->save();
-
-        //             if ($subTasks->files) {
-        //                 foreach ($subTasks->files as $fileData) {
-        //                     $file = new SubTaskFile();
-        //                     $file->user_id = $fileData->user_id;
-        //                     $file->sub_task_id = $subTaskData->id;
-
-        //                     $fileName = Files::generateNewFileName($fileData->filename);
-
-        //                     if (!File::exists(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id))) {
-        //                         File::makeDirectory(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id), 0775, true);
-        //                     }
-
-        //                     copy(public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $fileData->sub_task_id . '/' . $fileData->hashname), public_path(Files::UPLOAD_FOLDER . '/' . SubTaskFile::FILE_PATH . '/' . $subTaskData->id . '/' . $fileName));
-
-        //                     $file->filename = $fileData->filename;
-        //                     $file->hashname = $fileName;
-        //                     $file->size = $fileData->size;
-        //                     $file->save();
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
-        // To add custom fields data
-        // if ($request->get('custom_fields_data')) {
-        //     $task->updateCustomFieldData($request->get('custom_fields_data'));
-        // }
+    
 
         // For gantt chart
         if ($request->page_name && !is_null($task->due_date) && $request->page_name == 'ganttChart') {
@@ -3232,6 +3157,10 @@ class TaskController extends AccountBaseController
            $pm_task_guideline_update->theme_details = $request->theme_details;
            $pm_task_guideline_update->theme_name = $request->theme_name;
            $pm_task_guideline_update->theme_url = $request->theme_url;
+            $authorization_update = PMTaskGuidelineAuthorization::where('task_guideline_id',$pm_task_guideline_update->id)->where('name','Theme Details')->first();
+            $authorization_update->status = 1;
+            $authorization_update->save(); 
+           
        }
        if($request->design_details==1){
            $pm_task_guideline_update->design_details = $request->design_details;
@@ -3240,6 +3169,10 @@ class TaskController extends AccountBaseController
            $pm_task_guideline_update->drive_url = $request->drive_url;
            $pm_task_guideline_update->reference_link = $reference_links;
            $pm_task_guideline_update->instruction = $request->instruction;
+           $authorization_update = PMTaskGuidelineAuthorization::where('task_guideline_id',$pm_task_guideline_update->id)->where('name','Design Details')->first();
+           $authorization_update->status = 1;
+           $authorization_update->save(); 
+          
        }
        if($request->color_schema==1){
            $pm_task_guideline_update->color_schema = $request->color_schema;
@@ -3247,6 +3180,10 @@ class TaskController extends AccountBaseController
            $pm_task_guideline_update->primary_color_description = $request->primary_color_description;
            $pm_task_guideline_update->color = $colors;
            $pm_task_guideline_update->color_description = $color_descriptions;
+           $authorization_update = PMTaskGuidelineAuthorization::where('task_guideline_id',$pm_task_guideline_update->id)->where('name','Color Schema')->first();
+           $authorization_update->status = 1;
+           $authorization_update->save(); 
+          
        }
        if($request->plugin_research==1){
            $pm_task_guideline_update->plugin_research = $request->plugin_research;
@@ -3254,6 +3191,10 @@ class TaskController extends AccountBaseController
            $pm_task_guideline_update->plugin_url = $request->plugin_url;
            $pm_task_guideline_update->google_drive_link = $request->google_drive_link;
            $pm_task_guideline_update->instruction_plugin = $request->instruction_plugin;
+           $authorization_update = PMTaskGuidelineAuthorization::where('task_guideline_id',$pm_task_guideline_update->id)->where('name','Plugin Research')->first();
+            $authorization_update->status = 1;
+            $authorization_update->save(); 
+           
        }
        $authorization_count = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline_update->project_id)->whereIn('status',[0,2])->count();
        if($authorization_count == 0)
@@ -3920,7 +3861,14 @@ class TaskController extends AccountBaseController
     public function DeveloperStopTask(Request $request)
     {
         $currentDateTime = Carbon::now();
-        $desiredTime = Carbon::createFromTime(16, 29, 0); // 4:29 PM
+        $desiredTime = Carbon::createFromTime(17, 00, 0); // 4:29 PM
+        $current_day = Carbon::now();
+        // dd($current_day->dayOfWeek);
+         $dayOfWeek = $current_day->dayOfWeek;
+         if ($dayOfWeek === Carbon::SATURDAY) {
+             // It's Monday
+             $desiredTime = Carbon::createFromTime(13, 00, 0);
+         } 
        // dd($desiredTime);
         
        
@@ -4011,7 +3959,7 @@ class TaskController extends AccountBaseController
             $target_time = 0; 
         }else 
         {
-            $target_time = 435; 
+            $target_time = 420; 
         }
         $current_time = Carbon::now();
            
