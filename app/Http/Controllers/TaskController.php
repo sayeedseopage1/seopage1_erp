@@ -4509,7 +4509,7 @@ class TaskController extends AccountBaseController
         $pm_task_guideline = PmTaskGuideline::where('project_id',$id)->first();
         if($pm_task_guideline != null)
         {
-            $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline->project_id)->where('status',0)->get();
+            $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline->project_id)->get();
             $already_submitted = $pm_task_guideline ? true : false;
     
             if($already_submitted && $pm_task_guideline->status ==1){
