@@ -3262,7 +3262,7 @@ class TaskController extends AccountBaseController
 
        }else 
        {
-        $pm_task_guideline_update->status = 0;
+        $pm_task_guideline_update->status = 2;
 
        }
       
