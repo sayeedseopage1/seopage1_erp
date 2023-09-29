@@ -140,7 +140,9 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             let status = d.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
-            }else return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 0){
+                return <span className="badge badge-warning"> Panding </span> 
+            }
         }
     }  
 
@@ -154,7 +156,9 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             let status = d.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
-            }else return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 0){
+                return <span className="badge badge-warning"> Panding </span> 
+            }
         }
     }  
  
@@ -169,7 +173,9 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             let status = d.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
-            }else return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 0){
+                return <span className="badge badge-warning"> Panding </span> 
+            }
         }
     }  
  
@@ -183,7 +189,9 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             let status = d.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
-            }else return <span className="badge badge-warning"> Panding </span> 
+            }else if(Number(status) === 0){
+                return <span className="badge badge-warning"> Panding </span> 
+            }
         }
     }  
  
