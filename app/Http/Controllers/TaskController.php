@@ -3120,6 +3120,7 @@ class TaskController extends AccountBaseController
            $pm_task_update->status = 1;
        }
        $pm_task_update->save();
+       $pm_task_guideline_authorization= '';
 
 
        if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
@@ -3163,7 +3164,9 @@ class TaskController extends AccountBaseController
 
        }
        $users = User::where('role_id',1)->get();
-       if($pm_task_guideline_authorization != null)
+       
+       $task_guideline_count = PmTaskGuideline::where('project_id',$data['project_id'])->where('status',0)->count();
+       if($pm_task_guideline_authorization != null && $task_guideline_count > 0)
        {
             foreach($users as $user){
                 Notification::send($user, new PmTaskGuidelineNotification($pm_task_guideline_authorization));
@@ -3334,9 +3337,10 @@ class TaskController extends AccountBaseController
 
             $parent_task_heading= Task::where('id',$task->parent_task_id)->select('heading')->first();
           //  dd($task,$parent_task);
-          $subtasks= SubTask::where('task_id',$task->id)->select('tasks.id as subtask_id','sub_tasks.title','taskboard_columns.*')
+          $subtasks= SubTask::where('task_id',$task->id)->select('tasks.id as subtask_id','sub_tasks.title','taskboard_columns.*', "users.name as assigned_to_name", 'users.id as assigned_to_id')
           ->join('tasks','tasks.subtask_id','sub_tasks.id')
           ->join('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+          ->join('users', 'users.id', 'sub_tasks.assigned_to')
           ->get();
          
           if($subtasks == null)
@@ -4503,24 +4507,35 @@ class TaskController extends AccountBaseController
     /************* TASK GUIDELINE AUTHORIZATION *************** */
     public function taskGuidelineAuthorization($id){
         $pm_task_guideline = PmTaskGuideline::where('project_id',$id)->first();
-        $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline->project_id)->where('status',2)->get();
-        $already_submitted = $pm_task_guideline ? true : false;
+        if($pm_task_guideline != null)
+        {
+            $pm_task_guideline_authorization = PMTaskGuidelineAuthorization::where('project_id',$pm_task_guideline->project_id)->where('status',2)->get();
+            $already_submitted = $pm_task_guideline ? true : false;
+    
+            if($already_submitted && $pm_task_guideline->status ==1){
+               $is_allow = true;
+            }else $is_allow = false;
+    
+            return response()->json([
+                "theme_details" => $pm_task_guideline->theme_details,
+                "pm_task_guideline_authorization" => $pm_task_guideline_authorization,
+                "design_details" => $pm_task_guideline->design_details,
+                "color_schema" => $pm_task_guideline->color_schema,
+                "plugin_research" => $pm_task_guideline->plugin_research,
+                "status_code" => 200,
+                "is_allow" => $is_allow,
+                "is_submitted_already" => $already_submitted,
+                "message" => $already_submitted ? 'Please wait until tasks guideline is authorized' : ''
+            ], 200);
 
-        if($already_submitted && $pm_task_guideline->status ==1){
-           $is_allow = true;
-        }else $is_allow = false;
-
-        return response()->json([
-            "theme_details" => $pm_task_guideline->theme_details,
-            "pm_task_guideline_authorization" => $pm_task_guideline_authorization,
-            "design_details" => $pm_task_guideline->design_details,
-            "color_schema" => $pm_task_guideline->color_schema,
-            "plugin_research" => $pm_task_guideline->plugin_research,
-            "status_code" => 200,
-            "is_allow" => $is_allow,
-            "is_submitted_already" => $already_submitted,
-            "message" => $already_submitted ? 'Please wait until tasks guideline is authorized' : ''
-        ], 200);
+        }else 
+        {
+            return response()->json([
+                "status_code" => 200,
+                "is_allow" => true,
+            ], 200);
+        }
+       
     }
     
  

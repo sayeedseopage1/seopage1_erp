@@ -110,10 +110,11 @@ const ProjectTasks = () => {
         
         const deliverable = await isDeliverable(projectId); 
         if (deliverable) {
-            const guideline = await getProjectGuidelineStaus(projectId);  
+            const guideline = await getProjectGuidelineStaus(projectId); 
             if (guideline) { 
                 const projectGuidelineStatus = await isTaskGuidelineAuthorized(projectId);
-                if(projectGuidelineStatus && _.size(projectGuidelineStatus.pm_task_guideline_authorization) > 0 && projectGuidelineStatus.is_allow){
+               if(projectGuidelineStatus){
+                if(projectGuidelineStatus.is_allow){
                     setShowTaskCreationForm(true)
                 }else{ 
                     toast.warn(projectGuidelineStatus.message, {
@@ -122,6 +123,7 @@ const ProjectTasks = () => {
 
                     setShowProjectGuidelineEditForm({...projectGuidelineStatus, open: true}); 
                 } 
+               }
             } else setShowProjectGuidelineForm(true);
         }
     };
@@ -129,7 +131,7 @@ const ProjectTasks = () => {
     const isFetching = subtaskFetching || taskFetching;
 
     const singleTask = _.head(tasks); 
-
+    
     return (
         <React.Fragment>
             {/* task creation form */}
@@ -236,7 +238,9 @@ const ProjectTasks = () => {
                         </div>
                     </div>
                     {/* table nav bar */}
-                    <div className="d-flex w-100 align-items-center justify-content-center flex-wrap">
+                    {
+                        auth?.getRoleId() === 1 &&
+                        <div className="d-flex w-100 align-items-center justify-content-center flex-wrap">
                         <div
                             className="d-flex align-items-center justify-content-center border p-2"
                             style={{ gap: "10px", width: "fit-content" }}
@@ -267,6 +271,7 @@ const ProjectTasks = () => {
                             </span>
                         </div>
                     </div>
+                    }
 
                     <div className="mt-3">
                         {tableType.toLowerCase() === "tasks" ? (

@@ -5,6 +5,7 @@ import {
     useLazyGetProjectDeliverableStatusQuery,
     useLazyGetProjectManagerTaskGuidelineStatusQuery,
 } from "../services/api/projectApiSlice";
+import { toast } from "react-toastify";
 
 export const useProject = () => {
     const { tasks, subtasks } = useSelector((s) => s.tasks);
@@ -47,19 +48,14 @@ export const useProject = () => {
     const isTaskGuidelineAuthorized = async (projectId) => {
         try{
             const res = await getProjectManagerTaskGuidelineStatus(projectId).unwrap();
-            console.log(res)
-            if(res && res.is_allow){
-                return true;
-            }
+            return res; 
 
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: res.message,
-                showConfirmButton: true,
-            });
-
-            return false;
+            // Swal.fire({
+            //     position: "center",
+            //     icon: "error",
+            //     title: res.message,
+            //     showConfirmButton: true,
+            // }); 
             
         }catch(error){
             console.log(error)

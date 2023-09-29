@@ -30,7 +30,7 @@
                 <input type="hidden" name="project_id" value="{{$project->id}}">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeBtn">Close</button>
-                    <button type="Submit" id="authorizationBtn" class="btn btn-primary mx-3" >Authorization</button>
+                    <button type="Submit" id="authorizationBtn" class="btn btn-primary mx-3" >Authorize</button>
                     <button type="Submit" id="denyBtn" class="btn btn-success" value="denyAuthorization">Deny</button>
                 </div>
             </form>

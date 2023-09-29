@@ -958,7 +958,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                     <Button onClick={close} variant="tertiary" className="mr-2">
                                         Close
                                     </Button>
-                                   {edit &&  
+                                   {!_.isEmpty(_.pickBy(edit, Boolean)) &&  
                                     <SubmitButton
                                         title="Submit"
                                         onClick={handleSubmit}

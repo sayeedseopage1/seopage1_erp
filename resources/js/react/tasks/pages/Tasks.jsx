@@ -71,7 +71,7 @@ const Tasks = () => {
         e.preventDefault();
         try{
             const res = await updateTasktypeAuthStatus({status: type, task_type_id, comment }).unwrap();
-            console.log(res)
+            // console.log(res)
             if(res){
                 setTasksType(prev => _.map(prev, d => d.id === task_type_id ? {...prev, authorization_status: res.authorization_status} : prev ))
                 setActiveModalTaskTypeData(null);
@@ -291,7 +291,7 @@ const Tasks = () => {
                                 
                                 <div className="form-group py-3">
                                     <label className="font-weight-bold"> Comment: <sup>*</sup>  </label>
-                                `    <div className="ck-editor-holder stop-timer-options">
+                                    <div className="ck-editor-holder stop-timer-options">
                                         <CKEditorComponent
                                             onChange={(e, editor) => {
                                                 const d = editor.getData();

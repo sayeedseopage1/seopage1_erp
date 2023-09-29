@@ -9754,11 +9754,11 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var options = [{
-  id: 'LDRx10',
+  id: "LDRx10",
   revision: "I overlooked a few things while checking",
   isDeniable: true
 }, {
-  id: 'LDRx11',
+  id: "LDRx11",
   revision: "I couldn't understand a few things in the instruction",
   isDeniable: false
 }];
@@ -9819,7 +9819,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
         id: id,
         subtask_id: id,
         comment: data,
-        acknowledgement_id: (_reason$id = reason === null || reason === void 0 ? void 0 : reason.id) !== null && _reason$id !== void 0 ? _reason$id : ''
+        acknowledgement_id: (_reason$id = reason === null || reason === void 0 ? void 0 : reason.id) !== null && _reason$id !== void 0 ? _reason$id : ""
       });
     } else {
       var _reason$id2;
@@ -9827,7 +9827,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
         id: id,
         subtask_id: id,
         comment: data,
-        acknowledgement_id: (_reason$id2 = reason === null || reason === void 0 ? void 0 : reason.id) !== null && _reason$id2 !== void 0 ? _reason$id2 : ''
+        acknowledgement_id: (_reason$id2 = reason === null || reason === void 0 ? void 0 : reason.id) !== null && _reason$id2 !== void 0 ? _reason$id2 : ""
       };
     }
     setComments(_toConsumableArray(_comments));
@@ -9843,14 +9843,14 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
     if (lodash__WEBPACK_IMPORTED_MODULE_4___default().size(task === null || task === void 0 ? void 0 : task.subtask) > 0) {
       if (subtasks.length === 0) {
         errorCount++;
-        setSubtaskError('You need to selecd at least one sub task to continue.');
+        setSubtaskError("You need to selecd at least one sub task to continue.");
       }
       if (comments.length === 0 || comments.length !== subtasks.length) {
         errorCount++;
         setCommentError(true);
       }
       comments === null || comments === void 0 ? void 0 : comments.map(function (comment) {
-        if ((comment === null || comment === void 0 ? void 0 : comment.comment) === '') {
+        if ((comment === null || comment === void 0 ? void 0 : comment.comment) === "") {
           errorCount++;
           setCommentError(true);
         }
@@ -9877,10 +9877,6 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
     e.preventDefault();
     onBack();
   };
-  console.log({
-    revision: revision,
-    type: type
-  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("form", {
       action: "",
@@ -9961,7 +9957,7 @@ var AssigneeRevisionToDev = function AssigneeRevisionToDev(_ref) {
                 children: ["Write Your Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("sup", {
                   className: "font-weight-bold f-16",
                   children: "*"
-                }), ": "]
+                }), ":", " "]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "ck-editor-holder",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -9992,10 +9988,10 @@ var NextAndContinueButton = function NextAndContinueButton(_ref2) {
   var onClick = _ref2.onClick,
     isLoading = _ref2.isLoading;
   if (!isLoading) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "ml-auto",
       onClick: onClick,
-      children: " Continue"
+      children: [" ", "Continue"]
     });
   } else {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -10029,13 +10025,13 @@ var SubtaskSelectionMenu = function SubtaskSelectionMenu(_ref3) {
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           className: "w-100 mr-auto text-left d-flex flex-wrap align-items-center",
           style: {
-            gap: '6px'
+            gap: "6px"
           },
           children: (subTasks === null || subTasks === void 0 ? void 0 : subTasks.length) > 0 ? subTasks.map(function (s) {
             return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("span", {
               className: "badge badge-light",
               style: {
-                fontSize: '13px'
+                fontSize: "13px"
               },
               children: [" ", s === null || s === void 0 ? void 0 : s.title, " "]
             }, s.subtask_id);
@@ -10059,8 +10055,11 @@ var SubtaskSelectionMenu = function SubtaskSelectionMenu(_ref3) {
             children: function children(_ref5) {
               var selected = _ref5.selected;
               return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-                  children: s.title
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                  children: [s.title, " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                    className: "badge badge-success",
+                    children: s.assigned_to_name
+                  })]
                 }), selected && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                   children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
                     className: "fa-solid fa-check"
@@ -12051,9 +12050,8 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
       }, '');
     }
   };
-  console.log({
-    task: task
-  });
+
+  //   console.log({task})
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",

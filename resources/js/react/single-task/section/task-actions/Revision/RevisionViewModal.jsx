@@ -76,7 +76,7 @@ const RevisionViewModal = ({task, close}) => {
     }
   }
 
-  console.log({task})
+//   console.log({task})
   return (
     <React.Fragment> 
         <div

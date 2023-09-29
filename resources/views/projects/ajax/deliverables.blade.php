@@ -200,7 +200,7 @@
             @endif
             @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
 
-                <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorization</button>
+                <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
                 @include('projects.modals.deliverablefinalauthorizationacceptmodal')
             @endif
             

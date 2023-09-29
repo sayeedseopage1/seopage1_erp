@@ -861,72 +861,64 @@ $project->members->pluck('user_id')->toArray(); @endphp
             <!-- BUDGET VS SPENT END -->
         </div> --}}
         @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
-            <div class="row mb-4">
-                @php
-                    $web_content = \App\Models\WebContent::where('deal_id',$project->deal_id)->get();
-                    $blog_article = \App\Models\BlogArticle::where('deal_id',$project->deal_id)->get();
-                    $product_description = \App\Models\ProductDescription::where('deal_id',$project->deal_id)->get();
-                    $product_category = \App\Models\ProductCategoryCollection::where('deal_id',$project->deal_id)->get();
-                    $basic_seo = \App\Models\BasicSeo::where('deal_id',$project->deal_id)->get();
-                @endphp
-                <div class="col-12">
-                    <x-cards.data>
-                        <h3 class="mb-3">Cross Departmental Work</h3>
-                        <div class="row {{ $projectBudgetPermission == 'all' ? 'row' : '' }}">
-                            <div class="col-2">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <h4>Web Content</h4>
-                                        @if($web_content !=null)
-                                            <a href="{{route('viewWebContent',$project->deal_id)}}">( {{count($web_content)}} )</a>
-                                        @endif
+            @php
+                $web_content = \App\Models\WebContent::where('deal_id',$project->deal_id)->get();
+                $blog_article = \App\Models\BlogArticle::where('deal_id',$project->deal_id)->get();
+                $product_description = \App\Models\ProductDescription::where('deal_id',$project->deal_id)->get();
+                $product_category = \App\Models\ProductCategoryCollection::where('deal_id',$project->deal_id)->get();
+                $basic_seo = \App\Models\BasicSeo::where('deal_id',$project->deal_id)->get();
+            @endphp
+            @if(count($web_content) > 0 || count($blog_article) > 0 || count($product_description) > 0 || count($product_category) > 0 || count($basic_seo) > 0)
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <x-cards.data>
+                            <h3 class="mb-3">Cross Departmental Work</h3>
+                            <div class="row {{ $projectBudgetPermission == 'all' ? 'row' : '' }}">
+                                <div class="col-2">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h4>Web Content</h4>
+                                                <a href="{{route('viewWebContent',$project->deal_id)}}">( {{count($web_content)}} )</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h4>Blog/Article</h4>
+                                            <a href="{{route('viewBlogArticle',$project->deal_id)}}">( {{count($blog_article)}} )</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h4>Product Description</h4>
+                                            <a href="{{route('viewProductDescription',$project->deal_id)}}">( {{count($product_description)}} )</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h4>Product Category/Collection Pages</h4>
+                                            <a href="{{route('viewProductCategoryCollection',$project->deal_id)}}">( {{count($product_category)}} )</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h4>Basic SEO</h4>
+                                            <a href="{{route('viewBasicSEO',$project->deal_id)}}">( {{count($basic_seo)}} )</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-2">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <h4>Blog/Article</h4>
-                                        @if($blog_article !=null)
-                                        <a href="{{route('viewBlogArticle',$project->deal_id)}}">( {{count($blog_article)}} )</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <h4>Product Description</h4>
-                                        @if($product_description !=null)
-                                        <a href="{{route('viewProductDescription',$project->deal_id)}}">( {{count($product_description)}} )</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <h4>Product Category/Collection Pages</h4>
-                                        @if($product_category !=null)
-                                        <a href="{{route('viewProductCategoryCollection',$project->deal_id)}}">( {{count($product_category)}} )</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="card">
-                                    <div class="card-body text-center">
-                                        <h4>Basic SEO</h4>
-                                        @if($basic_seo !=null)
-                                        <a href="{{route('viewBasicSEO',$project->deal_id)}}">( {{count($basic_seo)}} )</a>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </x-cards.data>
+                        </x-cards.data>
+                    </div>
                 </div>
-            </div>
+            @endif
         @endif
        <!-- View Only PM -->
         @php
