@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLessTrackModal, setTaskStatus, setTimerStatus } from "../../../services/features/subTaskSlice";
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -28,6 +29,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const dispatch = useDispatch(); 
     const dayjs = new CompareDate(); 
     const loggedUser = new User(window?.Laravel?.user);
+    const navigate = useNavigate();
 
 
     const timerStatus = task?.ranningTimer?.status;
@@ -160,7 +162,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     /*********** End of Start Timer control ***************/
 
     // stop timer
-    const stopTimer = () => {
+    const stopTimer = () => { 
+        navigate(`/account/tasks/${task?.id}?modal=daily-submission`); 
         stopTimerApi({ timeId: timerId })
             .unwrap()
             .then((res) => {
@@ -192,11 +195,11 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         .then(res => { 
             if(res){
                 let currentTime = dayjs.dayjs(res.current_time);
-                let target = currentTime.set('hour', 16).set('minute', 30).set('second', 0);
+                let target = currentTime.set('hour', 17).set('minutl', 0).set('second', 0);
                 const isSaturday = currentTime.day() === 6;
 
                 if(isSaturday){
-                    target = currentTime.set('hour', 12).set('minute', 30).set('second', 0);
+                    target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
                 }
 
                 let check = dayjs.dayjs(currentTime).isBefore(target);

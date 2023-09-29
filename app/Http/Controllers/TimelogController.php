@@ -8,6 +8,7 @@ use App\Helper\Reply;
 use App\Http\Requests\TimeLogs\StartTimer;
 use App\Http\Requests\TimeLogs\StoreTimeLog;
 use App\Http\Requests\TimeLogs\UpdateTimeLog;
+use App\Models\DailySubmission;
 use App\Models\Project;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
@@ -398,13 +399,14 @@ class TimelogController extends AccountBaseController
                 ->sum('total_minutes');
              //   dd($totalMinutes);
                $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
+               $daily_submission = DailySubmission::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
               // dd($acknowledgement);
               
            // dd()
            //dd($acknowledgement);
            //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
           // $date= $acknowledgement->created_at;
-            if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null) 
+            if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null && $daily_submission == null) 
             {
               // dd("regular day");
               
@@ -413,7 +415,7 @@ class TimelogController extends AccountBaseController
                     'error' => 'Developer did not submit the acknowledgement form'
                 ], 400);
            
-            }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null)
+            }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null && $daily_submission == null)
             {
               // dd("regular day");
               

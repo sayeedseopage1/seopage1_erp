@@ -4763,8 +4763,8 @@ class TaskController extends AccountBaseController
     }
     public function get_today_tasks($id)
     {
-        $startDate= '2023-08-01';
-        $endDate= '2023-08-31';
+        $startDate= Carbon::today();
+        $endDate= Carbon::today();
         $tasks = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',

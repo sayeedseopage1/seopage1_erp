@@ -1,5 +1,4 @@
 import React from "react";
-import Button from "../../components/Button";
 import TimerControl from "./TimerControl";
 import MarkAsComplete from "./MarkAsComplete";
 import {
@@ -13,13 +12,12 @@ import {
 import RevisionControl from "./Revision/RevisionControl";
 import RevisionViewControl from "./Revision/RevisionViewControl";
 import ApproveTask from "./approve-task/ApproveTask";
-import TimeExtension from "./time-extension/TimeExtension";
 import ClientApproval from "./client-approval/ClientApproval";
 import ReportControl from "./report/Report";
 import { User } from "../../../utils/user-details";
 import _ from "lodash";
 import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
-import DailySubmissionControl from './DailySubmissionControl'
+import DailySubmissionControl from './DailySubmissionControl';
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
@@ -63,9 +61,7 @@ const TaskAction = ({ task, status }) => {
                 <MarkAsComplete task={task} auth={loggedUser} />
             ) : null}
 
-             {/* daily submission control */}
-             <DailySubmissionControl />
-
+            
             {/* develop */}
             {approveButtonPermission({ task, status, loggedUser }) ? (
                 <ApproveTask task={task} status={status} auth={loggedUser} />
@@ -84,6 +80,13 @@ const TaskAction = ({ task, status }) => {
             )}
             {/* <TimeExtension task={task} /> */}
             <ClientApproval task={task} status={status} auth={loggedUser} />
+                
+             {/* daily submission control */}
+             {_.includes([5, 8, 10], loggedUser?.getRoleId()) && (
+                <DailySubmissionControl />
+             )}
+
+
 
             {/*********** Report Control ***********/}
             {_.includes([6, 5, 8, 10], loggedUser?.getRoleId()) && (

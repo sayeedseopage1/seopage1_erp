@@ -20,13 +20,13 @@ const Modal = ({ children, isOpen, className }) => {
     }, []);
 
 
-    React.useEffect(() => {
-        if(isOpen){
-            document.body.classList.add('cnx_body-overflow-hidden')
-        }else{
-            document.body.classList.remove('cnx_body-overflow-hidden')
-        }
-    }, [isOpen]) 
+    // React.useEffect(() => {
+    //     if(isOpen){
+    //         document.body.classList.add('cnx_body-overflow-hidden')
+    //     }else{
+    //         document.body.classList.remove('cnx_body-overflow-hidden')
+    //     }
+    // }, [isOpen]) 
 
     if(!DOM) return;
  
