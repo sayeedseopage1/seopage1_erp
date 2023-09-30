@@ -93,12 +93,12 @@ const ReportForm = ({close, task, onSuccess}) => {
     const reports = [
         {
             id: 1,
-            name: `Project Manager /Team Lead ${auth.getRoleId() === 6 ? '' : '/ Lead Developer'} Is Making Me Do Their Work Without Top Managements’ Authorization`,
+            name: `Project Manager /Team Lead ${auth?.getRoleId() === 6 ? '' : '/ Lead Developer'} Is Making Me Do Their Work Without Top Managements’ Authorization`,
             info: "Your report will be kept private and management won't disclose your name to anyone including the project manager and lead developer!",
         },
         {
             id: 2,
-            name: "Need Further Clarification From Lead Developer/Project Manager",
+            name: `Need Further Clarification From ${auth?.getRoleId() === 6 ? 'Team Lead':'Lead Developer'} / Project Manager`,
             info: '',
         },
     ];
