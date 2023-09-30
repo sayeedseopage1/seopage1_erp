@@ -401,6 +401,22 @@ class TimelogController extends AccountBaseController
                $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
                $daily_submission = DailySubmission::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
               // dd($acknowledgement);
+              if($acknowledgement == null)
+              {
+                $acknowledgement_submitted = 'false';
+              }else 
+              {
+                $acknowledgement_submitted = 'true';
+
+              }
+              if($daily_submission  == null)
+              {
+                $daily_submission_submitted = 'false';
+              }else 
+              {
+                $daily_submission_submitted = 'true';
+
+              }
               
            // dd()
            //dd($acknowledgement);
@@ -412,6 +428,8 @@ class TimelogController extends AccountBaseController
               
                 return response()->json([
                     'date'=> $yesterdayDate->created_at,
+                    'acknowledgement_submitted' => $acknowledgement_submitted ,
+                    'daily_submission_submitted' =>$daily_submission_submitted,
                     'error' => 'Developer did not submit the acknowledgement form'
                 ], 400);
            
@@ -422,6 +440,8 @@ class TimelogController extends AccountBaseController
               // dd("Saturday");
                return response()->json([
                     'date'=> $yesterdayDate->created_at,
+                    'acknowledgement_submitted' => $acknowledgement_submitted ,
+                    'daily_submission_submitted' =>$daily_submission_submitted,
                    'error' => 'Developer did not submit the acknowledgement form'
                ], 400);
            

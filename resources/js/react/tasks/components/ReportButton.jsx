@@ -34,6 +34,7 @@ const ReportButton = ({row}) => {
     .unwrap()
     .then(res => {
         if(res.status === 200){
+            console.log(res.tasks)
             dispatch(storeReport( {reports: [...res?.tasks]}))
         }
     })
@@ -48,11 +49,12 @@ const ReportButton = ({row}) => {
   const reportCount = row?.subtasks_reports_count;
 
 
-  let reportsData = reports;
+  let reportsData = reports; 
 
   if(auth?.getRoleId() === 6  || auth?.getRoleId() === 5){
-    reportsData = _.filter(reports, report => report?.report_issue_added_by && Number(report.report_issue_added_by) === auth?.getId())
+    reportsData = _.filter(reports, report => report?.added_by && Number(report.added_by) === auth?.getId())
   }
+  
 
   return (
     <div>
