@@ -21,7 +21,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         id: 10,
         column_name: "Hide completed task",
     });
-    const [dateType, setDateType] = React.useState("Due Date");
+    const [dateType, setDateType] = React.useState("Created Date");
 
     const { width } = useWindowSize();
 

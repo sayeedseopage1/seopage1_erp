@@ -3,6 +3,8 @@ import Input from "../../components/form/Input";
 import Button from "../../components/Button";
 import { useWorkingEnvironmentMutation } from "../../../services/api/SingleTaskPageApi";
 import SubmitButton from "../../components/SubmitButton";
+import { checkIsURL } from "../../../utils/check-is-url";
+import { toast } from "react-toastify";
 
 const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
     const [siteUrl, setSiteUrl] = useState("");
@@ -13,6 +15,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
         setSiteLoginCredentialUserNameOrEmail,
     ] = useState("");
     const [password, setPassword] = useState("");
+    const [err, setErr] = useState(null);
 
 
     const [ workingEnvironment, {isLoading}] = useWorkingEnvironmentMutation();
@@ -24,8 +27,48 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
         setState(e.target.value);
     };
 
+    const isValid = () => {
+        let count = 0;     
+        const error = new Object();
 
-    const handleSubmit = (e) => {
+        if(!siteUrl){
+           count++;
+           error.siteUrl = "You have to provide Working/Staging Site's URL" 
+        }else if(!checkIsURL(siteUrl)){
+            count++;
+            error.siteUrl = "Please enter a valid URL";
+            toast.warn("Please enter a valid Working/Staging Site's URL", {position: 'top-right'})
+        }
+        
+        if(!loginUrl){
+            count++;
+            error.loginUrl = "You have to provide Working/Staging Site's Admin Panel URL" 
+         }else if(!checkIsURL(loginUrl)){
+             count++;
+             error.loginUrl = "Please enter a valid URL";
+             toast.warn("Please enter a valid Working/Staging Site's Admin Panel URL", {position: 'top-right'})
+         }
+
+         if(!siteLoginCredentialUserNameOrEmail){
+            count++;
+            error.username = "You have to provide Working/Staging Site's Admin Username/Email"
+         }
+
+         if(!password){
+            count++;
+            error.password = "You have to provide Working/Staging Site's Admin Password"
+         }
+
+         if(!frontendPassword){
+            count++;
+            error.frontendPassword = "You have to provide Working/Staging Site's Frontend Password"
+         }
+         
+        setErr(error);  
+        return !count;
+    }
+
+    const handleSubmit = async (e) => {
         const data = {
             project_id: task?.projectId,
             site_url: siteUrl,
@@ -34,12 +77,20 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
             password: password,
             frontend_password: frontendPassword
         }
-
-        workingEnvironment(data).unwrap().then(res => {
-            close(),
-            onSubmit();
-        })
-
+ 
+        if(isValid()){ 
+            try{
+                await workingEnvironment(data).unwrap().then(res => {
+                    toast.success('Working environment store successfully', {position: 'top-right'});
+                    onSubmit();
+                    close();
+                })
+            }catch(err){
+                console.log(err)
+            }
+        }else{
+            toast.error('Please provide all required fields', {position: 'top-right'});
+        }
     };
 
     return (
@@ -54,6 +105,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                         name="stie_url"
                         required={true}
                         value={siteUrl}
+                        error={err?.siteUrl}
                         onChange={(e) => handleChange(e, setSiteUrl)}
                     />
                 </div>
@@ -67,6 +119,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                         name="frontend-end-password"
                         required={true}
                         value={frontendPassword}
+                        error={err?.frontendPassword}
                         onChange={(e) => handleChange(e, setFrontendPassword)}
                     />
                 </div>
@@ -82,6 +135,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                         name="login_url"
                         required={true}
                         value={loginUrl}
+                        error={err?.loginUrl}
                         onChange={(e) => handleChange(e, setLoginUrl)}
                     />
                 </div>
@@ -95,6 +149,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                         name="site-login-credential"
                         required={true}
                         value={siteLoginCredentialUserNameOrEmail}
+                        error={err?.username}
                         onChange={(e) =>
                             handleChange(
                                 e,
@@ -106,7 +161,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
 
                 <div className="col-12 col-md-3">
                    <div className="h-100 d-md-flex align-items-end">
-                    <Input
+                        <Input
                             id="password"
                             label="Password"
                             type="text"
@@ -115,6 +170,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                             className="mt-md-auto"
                             required={true}
                             value={password}
+                            error={err?.password}
                             onChange={(e) => handleChange(e, setPassword)}
                         />
                     </div> 

@@ -254,211 +254,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                         </p>
                     </div>
                     <!-- PROGRESS END DATE END -->
-                    <!-- See Task Guideline Start -->
-                    @php
-                    $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->first();
-                    @endphp
-                    <div class="mt-4">
-                        @if($task_guideline !=null)
-                        <button type="button" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">See Task Guideline</button>
-                        @endif
-                    </div>
-                    <!-- See Task Guideline End -->
                 </x-cards.data>
-            </div>
-            <!--Task Guideline Modal -->
-            <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="taskGuidelineModalLabel">Parent Task Guideline</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            @php
-                                $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->orderBy('id','desc')->first();
-                            @endphp
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex">
-                                    <h6>Provide Theme Details :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">
-                                            @if($task_guideline->theme_details ==1)
-                                                Yes
-                                            @else
-                                                No
-                                            @endif
-                                        </p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6 d-flex">
-                                    <h6>Theme Name :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->theme_name}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                                <div class="col-md-6 d-flex">
-                                    <h6>Theme Url :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->theme_url}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex">
-                                    <h6>Design :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->design}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6 d-flex">
-                                    <h6 for="">Input XD/Figma URL :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->xd_url}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                                <div class="col-md-6 d-flex">
-                                    <h6>Input Google Drive File/Folder URL :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->drive_url}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex">
-                                    <h6>Reference Site Link :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">
-                                            @if ($task_guideline != null && !empty($task_guideline->reference_link))
-                                                @php
-                                                    $referenceLinks = is_array($task_guideline->reference_link) ? $task_guideline->reference_link : json_decode($task_guideline->reference_link, true);
-                                                @endphp
-
-                                                @foreach ($referenceLinks as $reference_link)
-                                                    <a target="_blank" href="{{ $reference_link }}">{{ $reference_link }}</a>
-                                                    <br>
-                                                @endforeach
-                                            @else
-                                                -- No reference links available --
-                                            @endif
-                                        </p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <h6>Instruction :</h6>
-                                    @if($task_guideline != null )
-                                        <span>{!! $task_guideline->instruction !!}</span>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex">
-                                    <h6>Color Schema :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{implode(',  ',json_decode($task_guideline->color))}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <h6>Developers Use This Color:</h6>
-                                    @if($task_guideline != null && !empty($task_guideline->color_description))
-                                        @php
-                                            $colorDescriptions = is_array($task_guideline->color_description) ? $task_guideline->color_description : json_decode($task_guideline->color_description, true);
-                                        @endphp
-
-                                        @foreach($colorDescriptions as $color_description)
-                                            <p class="ml-2">{{ $color_description }}</p>
-                                        @endforeach
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12 d-flex">
-                                    <h6>Plugin Research :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">
-                                            @if($task_guideline->plugin_research ==1)
-                                                Yes
-                                            @else
-                                                No
-                                            @endif
-                                        </p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-4 d-flex">
-                                    <h6>Plugin Name :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->plugin_name}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                                <div class="col-md-4 d-flex">
-                                    <h6>Plugin URL :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->plugin_url}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                                <div class="col-md-4 d-flex">
-                                    <h6>Google Drive Link :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->google_drive_link}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <h6>Instructions for Using This Plugin :</h6>
-                                    @if($task_guideline != null)
-                                        <p class="ml-2">{{$task_guideline->instruction_plugin}}</p>
-                                    @else
-                                        <p class="ml-2">--</p>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <!-- PROJECT PROGRESS END -->
             <!-- CLIENT START -->
@@ -694,6 +490,8 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 </div>
                 @endif
                 <!--End Top Management Pm Task Guideline Autonraization-->
+
+                
 
                 <?php
                 $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->first();
@@ -1154,6 +952,42 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <!-- BUDGET VS SPENT END -->
             </div>
         @endif
+        @php
+            $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->first();
+            $working_environment= App\Models\WorkingEnvironment::where('project_id',$project->id)->first();
+        @endphp
+        <div class="row mb-4">
+            @if ($task_guideline !=null)
+                <div class="col-md-6">
+                    <div class="card" style="border:none">
+                        <div class="py-3">
+                            <div class="container">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-md-6">
+                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#taskGuidelineModal">PM Task Guideline</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            @if($working_environment != null)
+                <div class="col-md-6">
+                    <div class="card" style="border:none">
+                        <div class="py-3">
+                            <div class="container">
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-md-6">
+                                    <button type="button" style="width: 100%" class="btn-secondary rounded f-15" data-toggle="modal" data-target="#workingEnvModal">Working Environment</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+        </div>
         <?php
             $deal= App\Models\Deal::where('id',$project->deal_id)->first(); ?>
         <div class="row mb-4" >
@@ -1173,58 +1007,268 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
-        @php
-            $working_environment= App\Models\WorkingEnvironment::where('project_id',$project->id)->first();
-        @endphp
-        @if($working_environment != null)
-        <div class="row mb-4" >
-            <!-- BUDGET VS SPENT START -->
-            <div class="col-md-12">
-                <x-cards.data>
-                    <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
-                       
-                        <div class="col">
-                            <h3>Working Environment</h3>
-                            <br>
-                            
-
+        <!--Task Guideline Modal -->
+        @if($task_guideline !=null)
+            <div class="modal fade" id="taskGuidelineModal" tabindex="-1" aria-labelledby="taskGuidelineModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="taskGuidelineModalLabel">Parent Task Guideline</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="col">
-                            <h4>Site Url</h4>
-                            <br>
-                            <p>{{$working_environment->site_url}}</p>
+                        <div class="modal-body">
+                            @php
+                                $task_guideline = \App\Models\PmTaskGuideline::where('project_id',$project->id)->orderBy('id','desc')->first();
+                            @endphp
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Provide Theme Details :</h6>
+                                    @if($task_guideline->theme_details != null)
+                                        <p class="ml-2">
+                                            @if($task_guideline->theme_details ==1)
+                                                Yes
+                                            @else
+                                                No
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
+                                    <h6>Theme Name :</h6>
+                                    @if($task_guideline->theme_name != null)
+                                        <p class="ml-2">{{$task_guideline->theme_name}}</p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <h6>Theme Url :</h6>
+                                    @if($task_guideline->theme_url != null)
+                                    <a href="{{$task_guideline->theme_url}}" target="_blanck" class="ml-2">{{$task_guideline->theme_url}}</a>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Design :</h6>
+                                    @if($task_guideline->design != null)
+                                        <p class="ml-2">{{$task_guideline->design}}</p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
+                                    <h6 for="">Input XD/Figma URL :</h6>
+                                    @if($task_guideline->xd_url != null)
+                                        <a href="{{$task_guideline->xd_url}}" target="_blanck" class="ml-2">{{$task_guideline->xd_url}}</a>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-6 d-flex">
+                                    <h6>Input Google Drive File/Folder URL :</h6>
+                                    @if($task_guideline->drive_url != null)
+                                        <a href="{{$task_guideline->drive_url}}" target="_blanck" class="ml-2">{{$task_guideline->drive_url}}</a>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                            <div class="col-md-12 d-flex">
+                                    <h6>Reference Site Link :</h6>
+                                    @if($task_guideline->reference_link != '[]')
+                                            <p class="ml-2">
+                                            @if ($task_guideline != null && !empty($task_guideline->reference_link))
+                                                @php
+                                                    $referenceLinks = is_array($task_guideline->reference_link) ? $task_guideline->reference_link : json_decode($task_guideline->reference_link, true);
+                                                @endphp
 
+                                                @foreach ($referenceLinks as $reference_link)
+                                                    <a target="_blank" href="{{ $reference_link }}">{{ $reference_link }}</a>
+                                                    <br>
+                                                @endforeach
+                                            @else
+                                                -- No reference links available --
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h6>Instruction :</h6>
+                                    @if($task_guideline->instruction != null )
+                                        <span>{!! $task_guideline->instruction !!}</span>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Color Schema :</h6>
+                                    @if($task_guideline->color != null)
+                                        <p class="ml-2">{{implode(',  ',json_decode($task_guideline->color))}}</p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h6>Developers Use This Color:</h6>
+                                    @if($task_guideline->color_description != '[]')
+                                        @if($task_guideline != null && !empty($task_guideline->color_description))
+                                            @php
+                                                $colorDescriptions = is_array($task_guideline->color_description) ? $task_guideline->color_description : json_decode($task_guideline->color_description, true);
+                                            @endphp
+
+                                            @foreach($colorDescriptions as $color_description)
+                                                <p class="ml-2">{{ $color_description }}</p>
+                                            @endforeach
+                                        @else
+                                            <p class="ml-2">Not Shared</p>
+                                        @endif
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12 d-flex">
+                                    <h6>Plugin Research :</h6>
+                                    @if($task_guideline->plugin_research != null)
+                                        <p class="ml-2">
+                                            @if($task_guideline->plugin_research ==1)
+                                                Yes
+                                            @else
+                                                No
+                                            @endif
+                                        </p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4 d-flex">
+                                    <h6>Plugin Name :</h6>
+                                    @if($task_guideline->plugin_name != null)
+                                        <p class="ml-2">{{$task_guideline->plugin_name}}</p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 d-flex">
+                                    <h6>Plugin URL :</h6>
+                                    @if($task_guideline->plugin_url != null)
+                                    <a href="{{$task_guideline->plugin_url}}" target="_blanck" class="ml-2">{{$task_guideline->plugin_url}}</a>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 d-flex">
+                                    <h6>Google Drive Link :</h6>
+                                    @if($task_guideline->google_drive_link != null)
+                                        <a href="{{$task_guideline->google_drive_link}}" target="_blanck" class="ml-2">{{$task_guideline->google_drive_link}}</a>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <h6>Instructions for Using This Plugin :</h6>
+                                    @if($task_guideline->instruction_plugin != null)
+                                    <a href="{{$task_guideline->instruction_plugin}}" target="_blanck" class="ml-2">{{$task_guideline->instruction_plugin}}</a>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
-                        <div class="col">
-                            <h4>Frontend Password</h4>
-                            <br>
-                            <p>{{$working_environment->frontend_password}}</p>
-
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
-                       
-                        <div class="col">
-                            <h4>Login Url</h4>
-                            <br>
-                            <p>{{$working_environment->login_url}}</p>
-
-                        </div>
-                        <div class="col">
-                            <h4>Email</h4>
-                            <br>
-                            <p>{{$working_environment->email}}</p>
-
-                        </div>
-                        <div class="col">
-                            <h4>Password</h4>
-                            <br>
-                            <p>{{$working_environment->password}}</p>
-
-                        </div>
-
                     </div>
-                </x-cards.data>
+                </div>
             </div>
-            <!-- BUDGET VS SPENT END -->
+            @endif
+        <!--Task Guideline Modal -->
+        @if($working_environment !=null)
+        <div class="modal fade" id="workingEnvModal" tabindex="-1" aria-labelledby="workingEnvModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="workingEnvModalLabel">Working Environment</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6 d-flex">
+                                <h6>Site Url :</h6>
+                                @if($working_environment->site_url != null)
+                                <a href="{{$working_environment->site_url}}" target="_blanck" class="ml-2">{{$working_environment->site_url}}</a>
+                                @else
+                                    <p class="ml-2">Not Shared</p>
+                                @endif
+                            </div>
+                            <div class="col-md-6 d-flex">
+                                <h6>Frontend Password :</h6>
+                                @if($working_environment->frontend_password != null)
+                                    <p class="ml-2">{{$working_environment->frontend_password}}</p>
+                                @else
+                                    <p class="ml-2">Not Shared</p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4 d-flex">
+                                <h6 for="">Login Url :</h6>
+                                @if($working_environment->login_url != null)
+                                <a href="{{$working_environment->login_url}}" target="_blanck" class="ml-2">{{$working_environment->login_url}}</a>
+                                @else
+                                    <p class="ml-2">Not Shared</p>
+                                @endif
+                            </div>
+                            <div class="col-md-4 d-flex">
+                                <h6>Email :</h6>
+                                @if($working_environment->email != null)
+                                    <p class="ml-2">{{$working_environment->email}}</p>
+                                @else
+                                    <p class="ml-2">Not Shared</p>
+                                @endif
+                            </div>
+                            <div class="col-md-4 d-flex">
+                                <h6>Password :</h6>
+                                @if($working_environment->password != null)
+                                    <p class="ml-2">{{$working_environment->password}}</p>
+                                @else
+                                    <p class="ml-2">Not Shared</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
         @endif
         <div class="row mb-4" >

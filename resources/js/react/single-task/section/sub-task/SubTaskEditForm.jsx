@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { storeSubTasks } from '../../../services/features/subTaskSlice'
 import { CompareDate } from '../../../utils/dateController'
+import { toast } from 'react-toastify'
 
 const dayjs = new CompareDate();
 
@@ -87,6 +88,9 @@ React.useEffect(() => {
             setEstimateTimeHour(res.estimate_hours);
             setEstimateTimeMin(res.estimate_minutes);
             setAttachedFiles(res.files);
+
+
+            toast.success('Task update successfully');
         }
     }).catch((err) => {
         console.log(err)

@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Toaster = () => {
   return (
         <ToastContainer 
-          position="bottom-right"
+          position="top-right"
           autoClose={5000} 
           newestOnTop
         /> 

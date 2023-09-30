@@ -39,3 +39,10 @@ toggle.forEach(element => {
         });
     }) 
 });
+
+
+
+const numberInput = document.querySelector("input[type='number']")
+numberInput.addEventListener('mousewheel', function(){
+   this.blur(); 
+})
