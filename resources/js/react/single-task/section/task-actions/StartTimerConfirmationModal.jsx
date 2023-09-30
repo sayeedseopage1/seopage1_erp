@@ -55,7 +55,7 @@ const StartTimerConfirmationModal = ({isOpen, onConfirm}) => {
                 <p>If for any reason, project manager needs your help for any of those things, he will have to create a separate task for each of them and those tasks have to be authorized by the top management mandatorily. Report immediately if you are asked to do any of these and if it wasn’t authorized by top management. You should see a text like “Authorized by top management” on the right side of the task title if it was authorized.</p>
                 
                 <p> In case, you don’t report, the extra time taken for these will be considered as your lacking (as they will remain unaccountable) and you will receive negative performance score.”</p>
-
+                */}
                 <div className='d-flex align-items-center'>
                      <Button 
                         onClick={onConfirm} 
@@ -64,7 +64,7 @@ const StartTimerConfirmationModal = ({isOpen, onConfirm}) => {
                       > 
                         Yes, I Fully Understand This {!buttonVisible && `(${countDown})`}
                       </Button> 
-                </div> */}
+                </div> 
            </div>
         </div>
     </Modal>

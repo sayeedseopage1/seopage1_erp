@@ -3288,8 +3288,14 @@ class TaskController extends AccountBaseController
         if ($request->mode == 'basic') {
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
-
-                 'sub_tasks.task_id as parent_task_id',
+                'task_types.page_type',
+                'task_types.page_name',
+                'task_types.page_url',
+                'task_types.task_type_other',
+                'task_types.page_type_name',
+                'task_types.existing_design_link',
+                'task_types.number_of_pages',
+                'sub_tasks.task_id as parent_task_id',
                 //'tasks.title as parent_task_title',
 
                 'projects.id as project_id',
@@ -3304,6 +3310,7 @@ class TaskController extends AccountBaseController
             ])
                 ->join('projects', 'tasks.project_id', 'projects.id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
+                ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
             //    / ->leftJoin('tasks', 'sub_tasks.task_id', 'tasks.id')
                 ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->where('tasks.id', $id)
@@ -5016,5 +5023,15 @@ class TaskController extends AccountBaseController
         ]);
 
        
+    }
+    public function PrimaryPageAuthorization()
+    {
+        $task_types = TaskType::where('authorization_status',0)->count();
+        return response()->json([
+            'task_types'=> $task_types,
+            'status'=>200,
+
+        ]);
+        
     }
 }

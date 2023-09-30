@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLazyGetTaskTypeDataQuery, useLazyGetTasksQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
+import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetTaskTypeDataQuery, useLazyGetTasksQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
 import { storeTasks } from "../../services/features/tasksSlice";
 import Button from "../components/Button";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
@@ -29,6 +29,7 @@ const Tasks = () => {
 
     // api function
     const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
+    const { data: unAuthorizedType } = useCheckUnAuthorizedTaskTypeQuery();
     const auth = new User(window.Laravel.user);
 
     const onFilter = (filter) => {
@@ -104,7 +105,7 @@ const Tasks = () => {
                                 onClick={fetchTasksTypeData}
                                 className="sp1_tlr_tab active mr-auto ml-2 mb-2 text-white"
                             > 
-                                {tasksTypeDataIsFetching ? 'Loading...' : 'Authorize'} 
+                                {tasksTypeDataIsFetching ? 'Loading...' : <> Authorize <span className="badge badge-light">{unAuthorizedType?.task_types}</span> </>} 
                             </Button>   
                         }
                         

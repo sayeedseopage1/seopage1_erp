@@ -442,6 +442,17 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         developerCanCompleteTask: build.query({
             query:(taskId) => `/account/developer/tracked-time-this-task/${taskId}`,
             providesTags: ["ENABLE_MARKASCOMPLETE"]
+        }),
+
+        // developerInprogressTask: build.query({
+        //     query: (userId) => `/accounts/developer/in-progress-tasks/${userId}`, 
+        //     providesTags
+        // })
+
+        // CHECK IN-PROGRESS TASKS
+        developerInProgressTask: build.query({
+            query: (userId) => `/account/developer/in-progress-tasks/${userId}`,
+            providesTags: ["USER_IN_PROGRESS_TASKS"]
         })
   
     }),
@@ -489,5 +500,7 @@ export const {
     useGetInProgressTaskStatusQuery,
     useLazyGetInProgressTaskStatusQuery,
     useDeveloperCanCompleteTaskQuery,
-    useLazyDeveloperCanCompleteTaskQuery
+    useLazyDeveloperCanCompleteTaskQuery,
+    useDeveloperInProgressTaskQuery
+
 } = singleTaskPageApiSlice;

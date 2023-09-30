@@ -26,8 +26,11 @@ const TodaysUpdateModalTable = () => {
                 </thead>
 
                 <tbody className={`sp1_tlr_tbody`}>
+                    {/* {
+                        (isLoading ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] : data?.data).filter((d) => !d.daily_submission_status).map((d, i) => <TodaysUpdateModalTableRow data={d} key={i} index={i} open={open} setOpen={setOpen} loading={isLoading} />)
+                    } */}
                     {
-                        (isLoading?[0,1,2,3,4,5,6,7,8,9]:data?.data).filter((d)=>!d.daily_submission_status).map((d,i) => <TodaysUpdateModalTableRow data={d} key={i} index={i} open={open} setOpen={setOpen} loading={isLoading} />)
+                        (isLoading ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] : data?.data).map((d, i) => <TodaysUpdateModalTableRow data={d} key={i} index={i} open={open} setOpen={setOpen} loading={isLoading} />)
                     }
                 </tbody>
             </table>

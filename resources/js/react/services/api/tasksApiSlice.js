@@ -75,7 +75,12 @@ const taskApiSlice = apiSlice.injectEndpoints({
                 }
             }),
             invalidatesTags: ["TASK_TYPE_STATUS_DATA"]
+        }),
+
+        checkUnAuthorizedTaskType: build.query({
+            query: () => `/account/developer/primary-page-authorization-count`,
         })
+
         
     })
 }) ;
@@ -96,5 +101,6 @@ export const {
      useUpdateTaskMutation,
      useLazyGetTaskTypeDataQuery,
      useUpdateTasktypeAuthStatusMutation,
+     useCheckUnAuthorizedTaskTypeQuery
 } = taskApiSlice;
 

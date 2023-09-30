@@ -14,7 +14,8 @@ export const apiSlice = createApi({
             "PMGUIDELINE", 
             "DAILY_SUBMISSION_STATUS", 
             "TASK_TYPE_STATUS_DATA",
-            "ENABLE_MARKASCOMPLETE"
+            "ENABLE_MARKASCOMPLETE",
+            "USER_IN_PROGRESS_TASKS"
     ],
     endpoints: () => ({}),
 });

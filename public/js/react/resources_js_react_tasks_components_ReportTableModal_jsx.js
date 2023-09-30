@@ -226,7 +226,7 @@ var ReportTableModal = function ReportTableModal(_ref) {
     task = _ref.task,
     search = _ref.search,
     _ref$tableName = _ref.tableName,
-    tableName = _ref$tableName === void 0 ? 'sp1-table' : _ref$tableName,
+    tableName = _ref$tableName === void 0 ? "sp1-table" : _ref$tableName,
     _ref$isLoading = _ref.isLoading,
     isLoading = _ref$isLoading === void 0 ? true : _ref$isLoading;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState(_toConsumableArray(reports)),
@@ -247,18 +247,18 @@ var ReportTableModal = function ReportTableModal(_ref) {
     pageSize = _React$useState6$.pageSize,
     setPagination = _React$useState6[1];
 
-  // 
+  //
   var defaultColumns = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return [{
-      id: 'serial_no',
-      header: 'Serial No.',
-      accessorKey: 'id',
+      id: "serial_no",
+      header: "Serial No.",
+      accessorKey: "id",
       cell: function cell(info) {
         return info.getValue();
       }
     }, {
-      id: 'report_issuer',
-      header: 'Report Issuer',
+      id: "report_issuer",
+      header: "Report Issuer",
       cell: function cell(_ref2) {
         var row = _ref2.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
@@ -271,8 +271,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
         });
       }
     }, {
-      id: 'accountable_individual',
-      header: 'Accountable Individual',
+      id: "accountable_individual",
+      header: "Accountable Individual",
       cell: function cell(_ref3) {
         var row = _ref3.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
@@ -285,8 +285,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
         });
       }
     }, {
-      id: 'report_reason',
-      header: 'Report Reason',
+      id: "report_reason",
+      header: "Report Reason",
       cell: function cell(_ref4) {
         var row = _ref4.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
@@ -295,8 +295,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
         });
       }
     }, {
-      id: 'report_reason_details',
-      header: 'Report Reason Details',
+      id: "report_reason_details",
+      header: "Report Reason Details",
       cell: function cell(_ref5) {
         var row = _ref5.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
@@ -308,8 +308,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
         });
       }
     }, {
-      id: 'pre_reported',
-      header: 'Previously Reported',
+      id: "pre_reported",
+      header: "Previously Reported",
       cell: function cell(_ref6) {
         var row = _ref6.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
@@ -318,8 +318,8 @@ var ReportTableModal = function ReportTableModal(_ref) {
         });
       }
     }, {
-      id: 'action',
-      header: 'Action',
+      id: "action",
+      header: "Action",
       cell: function cell(_ref7) {
         var row = _ref7.row;
         var data = row === null || row === void 0 ? void 0 : row.original;
@@ -334,12 +334,12 @@ var ReportTableModal = function ReportTableModal(_ref) {
   var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(_toConsumableArray(defaultColumns)),
     _React$useState8 = _slicedToArray(_React$useState7, 1),
     columns = _React$useState8[0];
-  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(lodash__WEBPACK_IMPORTED_MODULE_7___default().map(columns, 'id')),
+  var _React$useState9 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(lodash__WEBPACK_IMPORTED_MODULE_7___default().map(columns, "id")),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
     columnOrder = _React$useState10[0],
     setColumnOrder = _React$useState10[1];
   var resetColumnsOrder = function resetColumnsOrder() {
-    return setColumnOrder(lodash__WEBPACK_IMPORTED_MODULE_7___default().map(columns, 'id'));
+    return setColumnOrder(lodash__WEBPACK_IMPORTED_MODULE_7___default().map(columns, "id"));
   };
   var pagination = react__WEBPACK_IMPORTED_MODULE_0___default().useMemo(function () {
     return {

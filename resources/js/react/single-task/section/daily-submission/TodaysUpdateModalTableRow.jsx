@@ -98,19 +98,19 @@ const TodaysUpdateModalTableRow = ({ data, index, open, setOpen, loading }) => {
         <>
             <tr
                 className={`sp1_tlr_tr ${open === index && 'openRow_bg'}`}
-                style={{
-                    backgroundColor: `${data.daily_submission_status ? 'lightgreen' : 'white'}`
-                }}
+                // style={{
+                //     backgroundColor: `${data.daily_submission_status ? 'lightgreen' : 'white'}`
+                // }}
             >
 
                 <td className={`sp1_tlr_td`} style={{ minWidth: '50px' }}>{loading ? <Placeholder /> : index + 1}</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data?.task_title}</td>
-                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : `
-                    ${data?.page_url ?
-                        <a href={data.page_url} target="_blank">{data?.page_url}</a>
+                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : 
+                    data?.page_url ?
+                        <a href={data.page_url} title={data.page_url} target="_blank">View Link</a>
                         :
-                        'No Link attached'}
-                `}</td>
+                        'No Link attached'
+                }</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : convertTime(data.total_time_spent)}</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data.client_name}</td>
                 <td className={`sp1_tlr_td`}>

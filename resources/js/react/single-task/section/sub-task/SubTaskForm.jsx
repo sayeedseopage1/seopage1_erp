@@ -40,7 +40,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
-    const [assignedTo, setAssignedTo] = useState("");
+    const [assignedTo, setAssignedTo] = useState(null);
     const [taskObserver, setTaskObserver] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("To Do");
@@ -121,6 +121,11 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
         if(!assignedTo){
             error.assignedTo = "You have to select an user";
+            count++;
+        }
+
+        if(assignedTo && assignedTo?.isOverloaded){ 
+            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.name} has more than 10 Submittable tasks.`)
             count++;
         }
 
@@ -315,6 +320,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         }
     }, [])
 
+    console.log({assignedTo})
     return (
         <>
             <div className="sp1-subtask-form --modal-panel">
@@ -501,6 +507,10 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                         {err?.assignedTo}
                                     </div>
                                 )}
+
+                                {assignedTo?.isOverloaded && <div style={{ color: "red" }}> 
+                                        {`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.name} has more than 10 Submittable tasks.`}
+                                    </div>}
                             </div>
                             {/* 
                     <div className="col-6">
@@ -769,14 +779,14 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                     </label>
                                     <div className="d-flex align-items-center">
                                         <input
-                                            type="Number"
+                                            type="number"
                                             className="form-control height-35 f-14 mr-2"
                                             value={estimateTimeHour}
                                             onChange={(e) =>handleChange( e,setEstimateTimeHour)}
                                         />{" "}
                                         hrs
                                         <input
-                                            type="Number"
+                                            type="number"
                                             className="form-control height-35 f-14 mr-2 ml-2"
                                             value={estimateTimeMin}
                                             onChange={(e) =>

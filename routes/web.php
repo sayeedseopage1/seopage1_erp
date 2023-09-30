@@ -1266,12 +1266,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
     Route::get('/developer/tracked-time-this-task/{id}',[TaskController::class,'checkTaskTrackTime']);
     Route::get('/developer/in-progress-tasks/{id}',[TaskController::class,'DeveloperInprogressTask']);
-    Route::get('/developer/check-editable-task/{id}',[TaskController::class,' checkEditableTask']);
-    Route::get('/developer/check-editable-subtask/{id}',[TaskController::class,' checkEditableSubTask']);
+    Route::get('/developer/check-editable-task/{id}',[TaskController::class,'checkEditableTask']);
+    Route::get('/developer/check-editable-subtask/{id}',[TaskController::class,'checkEditableSubTask']);
+    Route::get('/developer/primary-page-authorization-count/',[TaskController::class,'PrimaryPageAuthorization']);
    
    
-    
-    
 
     Route::get('/tasks-type',[TaskController::class,'getTasksType']);
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);

@@ -18,6 +18,7 @@ import { User } from "../../../utils/user-details";
 import _ from "lodash";
 import { useDeveloperCanCompleteTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
 import DailySubmissionControl from './DailySubmissionControl';
+import SubtaskCreationControl from "./SubtaskCreationControl";
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
@@ -93,34 +94,46 @@ const TaskAction = ({ task, status }) => {
 
 
 
-            {/*********** Report Control ***********/}
-            {_.includes([6, 5, 8, 10], loggedUser?.getRoleId()) && (
-                <ReportControl task={task} />
-            )}
+            {/* right side button container */}
+            <div style={{display:'inline-flex',marginLeft:'auto',gap:'0 10px'}}>
 
-            {taskEditPermision({ task, status, auth: loggedUser }) && (
-                <a
-                    href="#"
-                    onClick={onModalEditButtonClick}
-                    className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"
-                >
-                    {isFetching ? (
-                        <div
-                            className="spinner-border text-dark ml-2"
-                            role="status"
-                            style={{
-                                width: "16px",
-                                height: "16px",
-                                border: "0.14em solid rgb(255, 255, 255)",
-                                borderRightColor: "transparent",
-                            }}
-                        />
-                    ) : (
-                        <i className="fa-regular fa-pen-to-square"></i>
-                    )}
-                    <span className="ml-1 mr-2">Edit</span>
-                </a>
-            )}
+                {/* Subtask creation guideline */}
+                <SubtaskCreationControl />
+
+
+                {/*********** Report Control ***********/}
+                {_.includes([6, 5, 8, 10], loggedUser?.getRoleId()) && (
+                    <ReportControl task={task} />
+                )}
+
+
+                {taskEditPermision({ task, status, auth: loggedUser }) && (
+                    <a
+                        href="#"
+                        onClick={onModalEditButtonClick}
+                        className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"
+                        style={{
+                            marginLeft: 'none'
+                        }}
+                    >
+                        {isFetching ? (
+                            <div
+                                className="spinner-border text-dark ml-2"
+                                role="status"
+                                style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "0.14em solid rgb(255, 255, 255)",
+                                    borderRightColor: "transparent",
+                                }}
+                            />
+                        ) : (
+                            <i className="fa-regular fa-pen-to-square"></i>
+                        )}
+                        <span className="ml-1 mr-2">Edit</span>
+                    </a>
+                )}
+            </div>
 
             {/* {{-- 3 dot --}} */}
             {/* <button type="button" className="d-flex align-items-center btn btn-sm btn-outline-dark mr-2 border-0 ml-auto">
