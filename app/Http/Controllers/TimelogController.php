@@ -422,7 +422,7 @@ class TimelogController extends AccountBaseController
            //dd($acknowledgement);
            //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
           // $date= $acknowledgement->created_at;
-            if($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null && $daily_submission == null) 
+            if($day != 'Saturday' && $totalMinutes < 420 && $acknowledgement == null && $daily_submission == null) 
             {
               // dd("regular day");
               

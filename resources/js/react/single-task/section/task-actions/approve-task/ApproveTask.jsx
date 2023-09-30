@@ -1,26 +1,25 @@
-import React, {useState} from 'react'
-import Button from '../../../components/Button'
-import Modal from '../../../components/Modal';
-import { Rating } from '@smastrom/react-rating'
-import '@smastrom/react-rating/style.css'
-import CKEditorComponent from '../../../../ckeditor/index'
-import {HiOutlineSelector} from 'react-icons/hi'
-import { useApproveSubmittedTaskMutation, useGetSubmittedTaskQuery } from '../../../../services/api/SingleTaskPageApi';
-import SubmitButton from '../../../components/SubmitButton';
-import { useDispatch } from 'react-redux';
-import { setTaskStatus } from '../../../../services/features/subTaskSlice';
-import { useEffect } from 'react';
+import { Rating } from '@smastrom/react-rating';
+import '@smastrom/react-rating/style.css';
 import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { HiOutlineSelector } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import CKEditorComponent from '../../../../ckeditor/index';
 import FileUploader from '../../../../file-upload/FileUploader';
 import { Placeholder } from '../../../../global/Placeholder';
-import {useSingleTask} from '../../../../hooks/useSingleTask';
+import { useSingleTask } from '../../../../hooks/useSingleTask';
+import { useApproveSubmittedTaskMutation, useGetSubmittedTaskQuery } from '../../../../services/api/SingleTaskPageApi';
+import Button from '../../../components/Button';
+import Modal from '../../../components/Modal';
+import SubmitButton from '../../../components/SubmitButton';
 
 const ApproveTask = ({task, status, auth}) => {
   const dispatch = useDispatch();
   const [showApproveForm, setShowApproveForm] = useState(false);
-  const [completedWithInDeadline, setCompletedWithInDeadline] = useState(0);
-  const [submittedStar, setSubmittedStar] = useState(0);
-  const [fullfilledStar, setFullfilledStar] = useState(0);
+  const [completedWithInDeadline, setCompletedWithInDeadline] = useState(1);
+  const [submittedStar, setSubmittedStar] = useState(1);
+  const [fullfilledStar, setFullfilledStar] = useState(1);
   const [comment, setComment] = useState('');
 
   const [oldSubmittion, setOldSubmittion] = useState([]);
@@ -30,6 +29,9 @@ const ApproveTask = ({task, status, auth}) => {
   const { data: getSubmittedTask, isFetching  } = useGetSubmittedTaskQuery(task?.id);
 
   const { approveTask,  approveTaskLoadingStatus } = useSingleTask();
+
+  const [err, setErr] = useState(null);
+
  
  useEffect(() => {
     if(getSubmittedTask){
@@ -52,6 +54,20 @@ const ApproveTask = ({task, status, auth}) => {
     setComment(data);
   }
 
+
+  const isValid = () =>{
+    let count = 0;
+    const error = new Object();
+
+    if(!comment){
+        error.comment = "Please add a comment!"
+        count ++;
+    }
+
+    setErr(error);
+    return !count;
+  }
+
   // submit 
   const handleOnSubmit = async (e) =>{
     e.preventDefault();
@@ -62,10 +78,14 @@ const ApproveTask = ({task, status, auth}) => {
         comment,
         task_id: task?.id,
         user_id: auth?.getId()
-    }
+    }   
 
-    const cb = () => setShowApproveForm(false);
-    await approveTask(data, cb );  
+    if(isValid()){ 
+        const cb = () => setShowApproveForm(false);
+        await approveTask(data, cb ); 
+    }else{
+        toast.warn("Please add a comment!");
+    }
   }
 
   return (
@@ -125,85 +145,87 @@ const ApproveTask = ({task, status, auth}) => {
                         }
                         <SubmittedWorkCard data={latestSubmittion} latest={true} isLoading={isFetching} />
                     </div>
-
-                    <div className="mt-4 px-3">
-                        <form action="">
-                            <div className="form-group">
-                                <label htmlFor="" className='font-weight-bold'>Is This Task Completed Within Deadline?<sup className='f-16'>*</sup></label>
-                                <div className=''>
-                                    <Rating
-                                        style={{ maxWidth: 120 }}
-                                        value={completedWithInDeadline}
-                                        onChange={setCompletedWithInDeadline}
-                                        radius='small'
-                                    />
+                    {
+                        !isFetching && 
+                        <div className="mt-4 px-3">
+                            <form action="">
+                                <div className="form-group">
+                                    <label htmlFor="" className='font-weight-bold'>Is This Task Completed Within Deadline?<sup className='f-16'>*</sup></label>
+                                    <div className=''>
+                                        <Rating
+                                            style={{ maxWidth: 120 }}
+                                            value={completedWithInDeadline}
+                                            onChange={setCompletedWithInDeadline}
+                                            radius='small'
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="" className='font-weight-bold'>How Beautifully The Task Is Submitted?<sup className='f-16'>*</sup></label>
-                                <div className=''>
-                                    <Rating
-                                        style={{ maxWidth: 120 }}
-                                        value={submittedStar}
-                                        onChange={setSubmittedStar}
-                                        radius='small'
-                                    />
+    
+                                <div className="form-group">
+                                    <label htmlFor="" className='font-weight-bold'>How Beautifully The Task Is Submitted?<sup className='f-16'>*</sup></label>
+                                    <div className=''>
+                                        <Rating
+                                            style={{ maxWidth: 120 }}
+                                            value={submittedStar}
+                                            onChange={setSubmittedStar}
+                                            radius='small'
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-
-
-                            <div className="form-group">
-                                <label htmlFor="" className='font-weight-bold'>
-                                    How Perfectly The Task Requirements Are Fullfilled?<sup className='f-16'>*</sup>
-                                </label>
-                                <div className=''>
-                                    <Rating
-                                        style={{ maxWidth: 120 }}
-                                        value={fullfilledStar}
-                                        onChange={setFullfilledStar}
-                                        radius='small'
-                                    />
+    
+    
+                                <div className="form-group">
+                                    <label htmlFor="" className='font-weight-bold'>
+                                        How Perfectly The Task Requirements Are Fullfilled?<sup className='f-16'>*</sup>
+                                    </label>
+                                    <div className=''>
+                                        <Rating
+                                            style={{ maxWidth: 120 }}
+                                            value={fullfilledStar}
+                                            onChange={setFullfilledStar}
+                                            radius='small'
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="" className='font-weight-bold'>
-                                    Any Recommendations For Developer?<sup className='f-16'>*</sup>
-                                </label>
-                                <div className='ck-editor-holder'>
-                                    <CKEditorComponent onChange={onWriteOnEditor} />
+    
+                                <div className="form-group">
+                                    <label htmlFor="" className='font-weight-bold'>
+                                        Any Recommendations For Developer?<sup className='f-16'>*</sup>
+                                    </label>
+                                    <div className='ck-editor-holder'>
+                                        <CKEditorComponent onChange={onWriteOnEditor} />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className="mt-3 d-flex align-items-center">
-                                <Button onClick={close} variant="tertiary" className="ml-auto mr-2">
-                                   Close 
-                                </Button>
-
-                                {/* {!isLoading ? (
-                                    <React.Fragment>
-                                        <Button onClick={handleOnSubmit}>Approve</Button>
-                                    </React.Fragment>
-                                ) : (
-                                    <React.Fragment>
-                                        <Button className="cursor-processing">
-                                            <div
-                                                className="spinner-border text-white"
-                                                role="status"
-                                                style={{
-                                                    width: "18px",
-                                                    height: "18px",
-                                                }}
-                                            />{" "}
-                                            Processing...
-                                        </Button>
-                                    </React.Fragment>
-                                )} */}
-                                <SubmitButton onClick={handleOnSubmit} title="Approve" isLoading={approveTaskLoadingStatus} />
-                            </div>
-                        </form>
-                    </div>
+    
+                                <div className="mt-3 d-flex align-items-center">
+                                    <Button onClick={close} variant="tertiary" className="ml-auto mr-2">
+                                       Close 
+                                    </Button>
+    
+                                    {/* {!isLoading ? (
+                                        <React.Fragment>
+                                            <Button onClick={handleOnSubmit}>Approve</Button>
+                                        </React.Fragment>
+                                    ) : (
+                                        <React.Fragment>
+                                            <Button className="cursor-processing">
+                                                <div
+                                                    className="spinner-border text-white"
+                                                    role="status"
+                                                    style={{
+                                                        width: "18px",
+                                                        height: "18px",
+                                                    }}
+                                                />{" "}
+                                                Processing...
+                                            </Button>
+                                        </React.Fragment>
+                                    )} */}
+                                    <SubmitButton onClick={handleOnSubmit} title="Approve" isLoading={approveTaskLoadingStatus} />
+                                </div>
+                            </form>
+                        </div>
+                    }
                     
                 </div>
             </div>

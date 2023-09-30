@@ -432,20 +432,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             })
         }),  
 
-      
-        // sales revision response
-        saleRevisionAction: build.mutation({
-            query: (data) => ({
-                url: `/account/tasks/sales-response-on-revision`,
-                method: "PUT",
-                body: {
-                    ...data,
-                    _token: document
-                        .querySelector("meta[name='csrf-token']")
-                        .getAttribute("content"),
-                },
-            })
-        }) 
+    
         
     }),
 });
@@ -489,5 +476,4 @@ export const {
     useAnswerDisputeQuestionMutation,
     useDisputeSubmitToAuthorizationMutation,
     useDisputeAnswerMakeAsReadMutation,
-    useSaleRevisionActionMutation,
 } = singleTaskPageApiSlice;

@@ -1265,6 +1265,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/developer/tracked-time-today/{id}',[TaskController::class,'DeveloperTrackedTime'])->name('developer-tracked-time');
     Route::post('/developer/stop-tasks-timer',[TaskController::class,'DeveloperStopTask'])->name('developer-stop-task');
     Route::get('/developer/tracked-time-this-task/{id}',[TaskController::class,'checkTaskTrackTime']);
+    Route::get('/developer/in-progress-tasks/{id}',[TaskController::class,'DeveloperInprogressTask']);
+    
     
 
     Route::get('/tasks-type',[TaskController::class,'getTasksType']);

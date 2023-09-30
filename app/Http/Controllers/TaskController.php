@@ -4951,4 +4951,31 @@ class TaskController extends AccountBaseController
 
         }
     }
+
+    public function DeveloperInprogressTask($id)
+    {
+        $tasks = Task::select('tasks.id')
+            ->leftJoin('task_users','task_users.task_id','tasks.id')
+            ->where('task_users.user_id',$id)
+            ->where('tasks.board_column_id',3)
+            ->count();
+        if($tasks > 10)
+        {
+            return response()->json([
+                'message'=> 'error',
+                'status'=>400,
+    
+            ]);
+
+        }else 
+        {
+            return response()->json([
+                'message'=> 'success',
+                'status'=>200,
+    
+            ]);
+
+        }
+
+    }
 }

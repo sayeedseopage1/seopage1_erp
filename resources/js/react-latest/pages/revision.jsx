@@ -7,16 +7,20 @@ import useSWR from "swr";
 import DataTable from "../ui/basic-table/DataTable";
 import Toaster from "../ui/Toaster";
 import Filterbar from "../components/filterbar/Filterbar";
+import { useGetRevisionsQuery } from "../services/api/revisionApiSlice";
 
 const Revision = () => {
     const auth = new User(window.Laravel.user);
 
-    // get data
-    const { data, error, isLoading } = useSWR(
-        `/account/tasks/revisions`,
-        (url) => axios.get(url).then((res) => res.data)
-    );
+    const {data, isFetching, isLoading} = useGetRevisionsQuery();
 
+    // // get data
+    // const { data, error, isLoading } = useSWR(
+    //     `/account/tasks/revisions`,
+    //     (url) => axios.get(url).then((res) => res.data)
+    // );
+
+     
 
     return (
         <section className={styles.revision_section_container}>
@@ -32,6 +36,7 @@ const Revision = () => {
                     isLoading={isLoading}
                     tableName="revisionTableColumns"
                     tableColumns={[...RevisionTableColumns]}
+                    state={{isFetching}}
                     // hideColumns={auth?.getRoleId() === 1 ? ['action']: []}
                 />
             </div>

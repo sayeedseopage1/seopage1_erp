@@ -85,6 +85,7 @@ const Tasks = () => {
     const closeTable = () => setShowAuthorizationTableModal(false);
     const close = () => setShowAuthorizationModal(false);
 
+   
 
     return (
         <React.Fragment>
@@ -97,12 +98,15 @@ const Tasks = () => {
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar/>
 
-                        <Button 
-                            onClick={fetchTasksTypeData}
-                            className="sp1_tlr_tab active mr-auto ml-2 mb-2 text-white"
-                        > 
-                           {tasksTypeDataIsFetching ? 'Loading...' : 'Authorize'} 
-                        </Button> 
+                        {
+                            _.includes([1, 8], auth?.getRoleId()) && 
+                            <Button 
+                                onClick={fetchTasksTypeData}
+                                className="sp1_tlr_tab active mr-auto ml-2 mb-2 text-white"
+                            > 
+                                {tasksTypeDataIsFetching ? 'Loading...' : 'Authorize'} 
+                            </Button>   
+                        }
                         
                         <div className="mb-2" style={{maxWidth: '300px'}}>
                             <SearchBox value={search} onChange={setSearch} />
@@ -121,7 +125,7 @@ const Tasks = () => {
                 </div>
             </div>
 
-            <Modal isOpen={showAuthorizationTableModal}> 
+                <Modal isOpen={showAuthorizationTableModal}> 
                     <div className="sp1_modal-content-wrapper">
                         <div className="sp1_modal-panel sp1_task_auth_modal_table ">
                             {/* header */}

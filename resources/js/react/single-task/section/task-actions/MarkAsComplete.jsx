@@ -1,16 +1,17 @@
-import React, { useState } from "react";
-import Modal from "../../components/Modal";
-import Button from "../../components/Button";
-import FileUploader from "../../../file-upload/FileUploader";
-import CKEditorComponent from "../../../ckeditor/index";
-import { useLazyCheckSubTaskStateQuery, useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
 import _ from "lodash";
-import SubmitButton from "../../components/SubmitButton";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Loader from "../../components/Loader";
-import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import CKEditorComponent from "../../../ckeditor/index";
+import FileUploader from "../../../file-upload/FileUploader";
+import { useLazyCheckSubTaskStateQuery, useMarkAsCompleteMutation } from "../../../services/api/SingleTaskPageApi";
+import Button from "../../components/Button";
+import Loader from "../../components/Loader";
+import Modal from "../../components/Modal";
+import SubmitButton from "../../components/SubmitButton";
+
+import { checkIsURL } from '../../../utils/check-is-url';
 
 const MarkAsComplete = ({task, auth}) => {
     // form data
@@ -34,10 +35,9 @@ const MarkAsComplete = ({task, auth}) => {
     const toggle = () => {
         navigate(`${location.pathname}?modal=complete-task`);
     };
+
+    const [err, setErr] = useState(null);
  
-
-
-
 
     useEffect(()=>{
         const url = new URLSearchParams(location.search);
@@ -115,10 +115,23 @@ const MarkAsComplete = ({task, auth}) => {
         let valid = true;
         if(!_.size(links) || links[0] === ''){
             setLinkErr('You must provide at least one link to your work');
+            toast.warn('You must provide at least one link to your work');
             valid = false;
         }
+
+        if(_.size(links)){
+            _.forEach(links, link => {
+                if(!checkIsURL(link)){
+                    toast.warn('Please provide a valid url');
+                    setLinkErr('Please provide a valid url');
+                    valid = false;
+                }
+            })
+        }
+
         if(comment === ''){
             setCommentErr("Please describe what you've done !");
+            toast.warn("Please describe what you've done!");
             valid = false;
         }
 
