@@ -30,7 +30,7 @@ return new class extends Migration
             $table->longText('dev_comment')->nullable();
             $table->longText('pm_comment')->nullable();
             $table->string('additional_status')->nullable();
-            $table->longText('additional_deny_comment ')->nullable();
+            $table->longText('additional_deny_comment')->nullable();
             $table->double('additional_amount')->default(0);
             $table->longText('deny_reason')->nullable();
             $table->integer('is_deniable')->default(0);
@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('dispute_between')->nullable();
             $table->integer('client_pm_dispute')->default(0);
             $table->integer('dispute_status')->default(0);
-            $table->string('final_responsible_person ')->nullable();
+            $table->string('final_responsible_person')->nullable();
             $table->integer('dispute_id')->nullable();
             $table->timestamps();
         });
