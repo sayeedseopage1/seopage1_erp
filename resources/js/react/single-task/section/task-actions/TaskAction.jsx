@@ -66,7 +66,7 @@ const TaskAction = ({ task, status }) => {
                 <MarkAsComplete task={task} auth={loggedUser} />
             ) : null}
 
-            
+ 
             {/* develop */}
             {approveButtonPermission({ task, status, loggedUser }) ? (
                 <ApproveTask task={task} status={status} auth={loggedUser} />

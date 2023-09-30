@@ -1,29 +1,29 @@
-import * as React from "react"; 
-import Accordion from "./components/Accordion";
-import Guideline from "./components/Guideline";
-import RevisionText from "./components/RevisionText";
-import CommentSection from "./section/comments/CommentsSection";
-import SubTaskSection from "./section/sub-task/SubTaskSection";
-import NoteSection from "./section/notes/NoteSection";
-import SubmittedWork from "./section/submitted-work/SubmittedWork";
-import TimeLogSection from "./section/time-logs/TimeLogSection";
-import HistorySection from "./section/history/historySection";
-import RevisionSection from "./section/revisions/RevisionSection";
-import { useParams } from "react-router-dom";
-import { useGetTaskDetailsQuery, useGetTaskStatusQuery } from "../services/api/SingleTaskPageApi";
-import _ from "lodash";
 import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
+import _ from "lodash";
+import * as React from "react";
 import { useEffect } from "react";
-import { setWorkingEnvironmentStatus, storeTask } from "../services/features/subTaskSlice";
-import TaskAction from "./section/task-actions/TaskAction";
-import Loading from "./components/Loading";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import Toaster from '../global/Toaster';
+import { useGetTaskDetailsQuery, useGetTaskStatusQuery } from "../services/api/SingleTaskPageApi";
+import { storeTask } from "../services/features/subTaskSlice";
 import { BoardColumn, SingleTask } from "../utils/single-task";
 import { User } from "../utils/user-details";
-import GenarelLoader from "./components/loader/GenarelLoader";
+import Accordion from "./components/Accordion";
+import Guideline from "./components/Guideline";
+import Loading from "./components/Loading";
 import PMGuideline from "./components/PMGuideline";
-import Toaster from '../global/Toaster'
+import RevisionText from "./components/RevisionText";
+import GenarelLoader from "./components/loader/GenarelLoader";
+import CommentSection from "./section/comments/CommentsSection";
 import DailySubmissionSection from "./section/daily-submission/DailySubmissionSection";
+import HistorySection from "./section/history/historySection";
+import NoteSection from "./section/notes/NoteSection";
+import RevisionSection from "./section/revisions/RevisionSection";
+import SubTaskSection from "./section/sub-task/SubTaskSection";
+import SubmittedWork from "./section/submitted-work/SubmittedWork";
+import TaskAction from "./section/task-actions/TaskAction";
+import TimeLogSection from "./section/time-logs/TimeLogSection";
 
 
 const SingleTaskPage = () => {
@@ -33,6 +33,7 @@ const SingleTaskPage = () => {
     const { data, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`, { refetchOnMountOrArgChange: true});
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
  
+  
  
     useEffect(() => {
         if (data) {
@@ -63,8 +64,7 @@ const SingleTaskPage = () => {
  
     
     return (
-        <div className="postion-relative">
-            
+        <div className="postion-relative"> 
             <div className={`f-16 mb-3 ${loadingClass}`}>
                 <span> <strong>Task: </strong> </span>
                 <a href={`/account/tasks/${task?.id}`}>{task?.getSubtaskTitle()}</a>

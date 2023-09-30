@@ -4962,6 +4962,7 @@ class TaskController extends AccountBaseController
         if($tasks > 10)
         {
             return response()->json([
+                'tasks'=> $tasks,
                 'message'=> 'error',
                 'status'=>400,
     
@@ -4970,6 +4971,7 @@ class TaskController extends AccountBaseController
         }else 
         {
             return response()->json([
+                'tasks'=> $tasks,
                 'message'=> 'success',
                 'status'=>200,
     
@@ -4977,5 +4979,42 @@ class TaskController extends AccountBaseController
 
         }
 
+    }
+    public function checkEditableTask($id)
+    {
+        $subtasks= Subtask::select('tasks.*')
+        ->join('tasks','tasks.subtask_id','sub_tasks.id')
+        ->where('sub_tasks.task_id',$id)
+        ->get();
+        foreach($subtasks as $task)
+        {
+            $task_hours_logged= Task::select('tasks.*')->leftJoin('project_time_logs', 'project_time_logs.task_id', 'tasks.id')
+            ->where('task_id',$task->id)
+            ->sum('project_time_logs.total_minutes'); 
+        $task->hours_logged = $task_hours_logged; 
+
+        }
+        return response()->json([
+            'task'=> $subtasks,
+            'status'=>200,
+
+        ]);
+
+       
+    }
+    public function checkEditableSubTask($id)
+    {
+        $subtasks= ProjectTimeLog::select('tasks.*')
+        ->join('tasks','tasks.id','project_time_logs.task_id')
+        ->where('tasks.id',$id)
+        ->sum('project_time_logs.total_minutes');
+     
+        return response()->json([
+            'task'=> $subtasks,
+            'status'=>200,
+
+        ]);
+
+       
     }
 }
