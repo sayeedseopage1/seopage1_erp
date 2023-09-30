@@ -3628,14 +3628,46 @@ class TaskController extends AccountBaseController
 
             return response()->json($data);
         } elseif ($request->mode == 'task_history') {
-            $data = TaskHistory::with('user')->where('task_id', $id)->get();
-            foreach ($data as $item) {
-                $item->lang = __('modules.tasks.' . $item->details) . ' ' . $item->user->name;
-                $created_at = $item->created_at;
-                $item->formatted_created_at = $created_at;
-            }
+            $subtask_check = Task::where('id',$id)->first();
+            if ($subtask_check->subtask_id != null) {
+                $data = TaskHistory::with('user')->where('task_id', $id)->get();
+                foreach ($data as $item) {
+                    $item->lang = __('modules.tasks.' . $item->details) . ' ' . $item->user->name;
+                    $created_at = $item->created_at;
+                    $item->formatted_created_at = $created_at;
+                }
+    
+                return response()->json($data);
+            }else 
+            {
+                $subtasks = SubTask::select('tasks.id')
+                ->join('tasks','tasks.subtask_id','sub_tasks.id')
+               
+                ->where('sub_tasks.task_id',$id)->get();
 
-            return response()->json($data);
+                foreach($subtasks as $subtask)
+                {
+                    $data1 = TaskHistory::with('user')->where('task_id', $id)->get();
+                    foreach ($data1 as $item1) {
+                        $item1->lang = __('modules.tasks.' . $item1->details) . ' ' . $item1->user->name;
+                        $created_at = $item1->created_at;
+                        $item1->formatted_created_at = $created_at;
+                    }
+
+                    $data2 = TaskHistory::with('user')->where('task_id', $subtask->id)->get();
+                foreach ($data2 as $item2) {
+                    $item2->lang = __('modules.tasks.' . $item2->details) . ' ' . $item2->user->name;
+                    $created_at = $item2->created_at;
+                    $item2->formatted_created_at = $created_at;
+                }
+                $data = $data1->concat($data2);
+
+                return response()->json($data);
+
+
+                }
+            }
+            
         } elseif ($request->mode == 'task_approve') {
             $data = TaskApprove::where('task_id', $id)->latest()->first();
 
@@ -4893,5 +4925,30 @@ class TaskController extends AccountBaseController
 
         ]);
        
+    }
+    public function checkTaskTrackTime($id)
+    {
+        $project_time_logs = ProjectTimeLog::select('project_time_logs.*')
+        ->join('tasks','tasks.id','project_time_logs.task_id')
+        ->where('tasks.subtask_id','!=',null)
+        ->where('project_time_logs.task_id',$id)
+        ->sum('project_time_logs.total_minutes');
+        if($project_time_logs > 0)
+        {
+            return response()->json([
+                'message'=> 'Developer can complete this task',
+                'status'=>200,
+    
+            ]);
+
+        }else 
+        {
+            return response()->json([
+                'message'=> 'Developer cannot complete this task',
+                'status'=>400,
+    
+            ]);
+
+        }
     }
 }

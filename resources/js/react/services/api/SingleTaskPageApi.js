@@ -97,7 +97,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ['TASK_STATUS', 'ENABLE_MARKASCOMPLETE']
         }),
 
         // subtask status
@@ -126,7 +126,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             
-            invalidatesTags: ['TASK_STATUS']
+            invalidatesTags: ['TASK_STATUS', 'ENABLE_MARKASCOMPLETE']
         }),
 
         /**
@@ -437,6 +437,12 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         getInProgressTaskStatus: build.query({
             query: (query) => `/account/tasks/get-inprogress-tasks${query}`
         }),
+
+        // GET DEVELOPER TIME TRACK
+        developerCanCompleteTask: build.query({
+            query:(taskId) => `/account/developer/tracked-time-this-task/${taskId}`,
+            providesTags: ["ENABLE_MARKASCOMPLETE"]
+        })
   
     }),
 });
@@ -481,5 +487,7 @@ export const {
     useDisputeSubmitToAuthorizationMutation,
     useDisputeAnswerMakeAsReadMutation,
     useGetInProgressTaskStatusQuery,
-    useLazyGetInProgressTaskStatusQuery
+    useLazyGetInProgressTaskStatusQuery,
+    useDeveloperCanCompleteTaskQuery,
+    useLazyDeveloperCanCompleteTaskQuery
 } = singleTaskPageApiSlice;

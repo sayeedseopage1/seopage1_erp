@@ -7,7 +7,6 @@ import { useLazyCheckSubTaskStateQuery, useMarkAsCompleteMutation } from "../../
 import _ from "lodash";
 import SubmitButton from "../../components/SubmitButton";
 import { useDispatch } from "react-redux";
-import { setTaskStatus } from "../../../services/features/subTaskSlice";
 import Loader from "../../components/Loader";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -26,14 +25,18 @@ const MarkAsComplete = ({task, auth}) => {
 
     const [markAsComplete, {isLoading: isSubmitting}] = useMarkAsCompleteMutation();
     const [ checkSubTaskState, {isFetching} ] = useLazyCheckSubTaskStateQuery();
-
+   
     const [markAsCompleteModaIsOpen, setMarkAsCompleteModalIsOpen] =
         useState(false);
+  
 
     // toggle
     const toggle = () => {
         navigate(`${location.pathname}?modal=complete-task`);
     };
+ 
+
+
 
 
     useEffect(()=>{

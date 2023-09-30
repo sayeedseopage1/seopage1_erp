@@ -5,13 +5,12 @@ import {
     useLazyGetTaskDetailsQuery,
     useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
-    useStopTimerApiMutation,
+    useStopTimerApiMutation
 } from "../../../services/api/SingleTaskPageApi";
 import { CompareDate } from "../../../utils/dateController";
 import _ from "lodash";
-import StopTimerControl from "./StopTimerControl";
-import { useDispatch, useSelector } from "react-redux";
-import { setLessTrackModal, setTaskStatus, setTimerStatus } from "../../../services/features/subTaskSlice";
+import { useDispatch } from "react-redux";
+import { setLessTrackModal, setTaskStatus } from "../../../services/features/subTaskSlice";
 import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +33,9 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     const timerStatus = task?.ranningTimer?.status;
     const taskRunning = useMemo(() => timerStatus, [timerStatus])
+
+
+
     // check timer is already running
     useEffect(() => {
         if (taskRunning === "running") {
@@ -163,7 +165,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     // stop timer
     const stopTimer = () => { 
-        navigate(`/account/tasks/${task?.id}?modal=daily-submission`); 
+        navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`); 
         stopTimerApi({ timeId: timerId })
             .unwrap()
             .then((res) => {

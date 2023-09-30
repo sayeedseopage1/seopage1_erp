@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 const DailySubmissionControl = () => {
     const [todaysUpdateModalisOpen, setTodaysUpdateModalisOpen] =
-        useState(false); 
+        useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const url = new URLSearchParams(location.search);
@@ -22,16 +22,19 @@ const DailySubmissionControl = () => {
     // console.log(location);
 
     const close = () => {
-        Swal.fire({
-            icon: "warning",
-            title: "If you don't submit the daily submission, you won't be able to start any task on next day.",
-        });
+        if(url.get('trigger') === 'stop-button'){
+            Swal.fire({
+                icon: "warning",
+                title: "If you don't submit the daily submission, you won't be able to start any task on next day.",
+                showConfirmButton: true,
+            });
+        }
+
         navigate(`${location.pathname}`);
         setTodaysUpdateModalisOpen(false);
     };
-    const open = () => navigate(`${location.pathname}?modal=daily-submission`) ;
- 
-  
+    const open = () => navigate(`${location.pathname}?modal=daily-submission`);
+
     return (
         <div>
             <Button
@@ -64,6 +67,11 @@ const DailySubmissionControl = () => {
                             className="sp1_mark-as--modal-body px-3"
                             style={{ overflow: "visible" }}
                         >
+                            <div className="alert alert-warning text-center">
+                                If you don't submit the daily submission, you
+                                won't be able to start any task on next day.
+                            </div>
+
                             {isOpen && <TodaysUpdateModalTable />}
                             <div className="mt-3 d-flex align-items-center">
                                 <Button

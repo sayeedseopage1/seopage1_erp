@@ -16,7 +16,7 @@ import ClientApproval from "./client-approval/ClientApproval";
 import ReportControl from "./report/Report";
 import { User } from "../../../utils/user-details";
 import _ from "lodash";
-import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
+import { useDeveloperCanCompleteTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
 import DailySubmissionControl from './DailySubmissionControl';
 
 const TaskAction = ({ task, status }) => {
@@ -24,6 +24,11 @@ const TaskAction = ({ task, status }) => {
     const [timerStart, setTimerStart] = React.useState(false);
 
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
+      
+    const {  data: checkMarkAsCompleteEnableStatus, isLoading: isLoadingCompleteCheck } = useDeveloperCanCompleteTaskQuery(task?.id, {skip: !task.id}); 
+    const ENABLE_MARKASCOMPLETE_BUTTON = task && (task?.isSubtask ? checkMarkAsCompleteEnableStatus?.message === "Developer can complete this task" : true);
+
+
 
     const onModalEditButtonClick = (e) => {
         e.preventDefault();
@@ -56,8 +61,8 @@ const TaskAction = ({ task, status }) => {
                     auth={loggedUser}
                 />
             ) : null}
-            {!timerStart &&
-            markAsCompletedButtonPermission({ task, status, loggedUser }) ? (
+            {!timerStart && !isLoadingCompleteCheck &&
+            ENABLE_MARKASCOMPLETE_BUTTON && markAsCompletedButtonPermission({ task, status, loggedUser }) ? (
                 <MarkAsComplete task={task} auth={loggedUser} />
             ) : null}
 

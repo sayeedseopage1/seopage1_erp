@@ -399,7 +399,7 @@ class TimelogController extends AccountBaseController
                 ->sum('total_minutes');
              //   dd($totalMinutes);
                $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
-               $daily_submission = DailySubmission::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
+               $daily_submission = DailySubmission::where('user_id',Auth::id())->where('task_id',$request->task_id)->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
               // dd($acknowledgement);
               if($acknowledgement == null)
               {
