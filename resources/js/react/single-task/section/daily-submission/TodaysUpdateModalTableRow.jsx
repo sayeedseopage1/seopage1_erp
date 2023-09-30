@@ -104,10 +104,10 @@ const TodaysUpdateModalTableRow = ({ data, index, open, setOpen, loading }) => {
             >
 
                 <td className={`sp1_tlr_td`} style={{ minWidth: '50px' }}>{loading ? <Placeholder /> : index + 1}</td>
-                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data.task_title}</td>
+                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data?.task_title}</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : `
-                    ${data.page_url ?
-                        <a href={data.page_url} target="_blank">{data.page_url}</a>
+                    ${data?.page_url ?
+                        <a href={data.page_url} target="_blank">{data?.page_url}</a>
                         :
                         'No Link attached'}
                 `}</td>
