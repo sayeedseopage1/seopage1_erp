@@ -24,7 +24,8 @@ return new class extends Migration
             $table->string('existing_design_link')->nullable();
           
             $table->integer('number_of_pages')->nullable();
-
+            $table->integer('task_id')->default(1);
+            $table->longText('comment');
             $table->timestamps();
         });
     }
