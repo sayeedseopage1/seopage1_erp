@@ -278,7 +278,7 @@ const close =async () => {
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
  
   const handleSubmitForAuthorization = async () =>{ 
-        if(!winner || winner === null || winner === undefined || !finishedPartial || finishedPartial === false){
+        if(!winner && !finishedPartial){
             return toast.warn('Please select a person!');
         }
 
