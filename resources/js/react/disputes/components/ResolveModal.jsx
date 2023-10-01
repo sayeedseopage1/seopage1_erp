@@ -259,7 +259,10 @@ const close =async () => {
 
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
  
-  const handleSubmitForAuthorization = async () =>{
+  const handleSubmitForAuthorization = async () =>{ 
+        if(!winner || !finishedPartial){
+            return toast.warn('Please select a person!');
+        }
 
         if(finishedPartial &&  ((raisedByPercent + raisedAgainstPercent) !== 100 || raisedAgainstPercent > 0 || raisedByPercent > 0)){
             return toast.warn("Both parties' percentages must add up to 100% (e.g., 15% & 85%), and each party's percentage must be greater than 1%");
