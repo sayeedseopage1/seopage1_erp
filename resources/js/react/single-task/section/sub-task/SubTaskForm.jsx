@@ -182,11 +182,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                     error.pageTypeName = "You have to select an option"
                     count++;
                 }
-                if(!pageTypePriority){
-                    error.pageTypePriority = "You have to Select page type";
-                    count++;
-                }
-    
+                
                 if(!numberOfPage){
                     error.numberOfPage= "The minimum required number is 1"
                     count++;
@@ -700,56 +696,57 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                     {
                                         pageType === "Cloning Existing Design" ? 
                                             <>
-                                                    <div className="col-12 col-md-6">
-                                                <Input
-                                                    id="page_type_name"
-                                                    label="Page type name"
-                                                    type="text"
-                                                    placeholder="Enter page type name..."
-                                                    name="pageTypeName"
-                                                    required={true}
-                                                    value={pageTypeName}
-                                                    error={err?.pageTypeName || required_error?.page_type?.[0]}
-                                                    onChange={(e) => handleChange(e, setPageTypeName)}
-                                                />
-                                            </div>
-                                            <div className="col-12 col-md-6">
-                                            <Listbox value={pageTypePriority} onChange={setPageTypePriority}>
-                                                <div className="form-group position-relative my-3">
-                                                    <label htmlFor=""> Page Type <sup>*</sup> </label>
-                                                        <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100"> 
-                                                        <span className="singleline-ellipsis pr-3">
-                                                            {pageTypePriority ?? "--"}
-                                                        </span>
-                                                        
-                                                        <div className='__icon'>
-                                                            <i className="fa-solid fa-sort"></i>
-                                                        </div>
-                                                    </Listbox.Button>
-                                                    <Listbox.Options  className="sp1-select-options">
-                                                        {[
-                                                            "Primary Page Development",
-                                                            "Secondary Page Development",
-                                                        ]?.map((s, i) => (
-                                                            <Listbox.Option 
-                                                                key={i}
-                                                                className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
-                                                                value={s}
-                                                            >
-                                                                {({selected}) => (
-                                                                    <>
-                                                                    {s}     
-
-                                                                    {selected ? <i className="fa-solid fa-check ml-2" />: ''}
-                                                                    </>
-                                                                )}
+                                                {/* <div className="col-12 col-md-6">
+                                                    <Input
+                                                        id="page_type_name"
+                                                        label="Page type name"
+                                                        type="text"
+                                                        placeholder="Enter page type name..."
+                                                        name="pageTypeName"
+                                                        required={true}
+                                                        value={pageTypeName}
+                                                    
+                                                        onChange={(e) => handleChange(e, setPageTypeName)}
+                                                    />
+                                                </div> */}
+                                                <div className="col-12 col-md-6">
+                                                    <Listbox value={pageTypeName} onChange={setPageTypeName}>
+                                                        <div className="form-group position-relative my-3">
+                                                            <label htmlFor=""> Page Type Name <sup>*</sup> </label>
+                                                                <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100"> 
+                                                                <span className="singleline-ellipsis pr-3">
+                                                                    {pageTypeName ?? "--"}
+                                                                </span>
                                                                 
-                                                            </Listbox.Option>
-                                                        ))}
-                                                    </Listbox.Options>
+                                                                <div className='__icon'>
+                                                                    <i className="fa-solid fa-sort"></i>
+                                                                </div>
+                                                            </Listbox.Button>
+                                                            <Listbox.Options  className="sp1-select-options">
+                                                                {[
+                                                                    "Primary Page Development",
+                                                                    "Secondary Page Development",
+                                                                ]?.map((s, i) => (
+                                                                    <Listbox.Option 
+                                                                        key={i}
+                                                                        className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                                        value={s}
+                                                                    >
+                                                                        {({selected}) => (
+                                                                            <>
+                                                                            {s}     
+
+                                                                            {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                                            </>
+                                                                        )}
+                                                                        
+                                                                    </Listbox.Option>
+                                                                ))}
+                                                            </Listbox.Options>
+                                                        </div>
+                                                    </Listbox>
+                                                    {err?.pageTypeName || required_error?.page_type?.[0]}
                                                 </div>
-                                            </Listbox>
-                                            </div>
                                             </> 
                                             
                                             : 

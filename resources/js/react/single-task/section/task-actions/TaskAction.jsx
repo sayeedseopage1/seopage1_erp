@@ -98,7 +98,7 @@ const TaskAction = ({ task, status }) => {
             <div style={{display:'inline-flex',marginLeft:'auto',gap:'0 10px'}}>
 
                 {/* Subtask creation guideline */}
-                {_.includes([6], loggedUser?.getRoleId()) &&  <SubtaskCreationControl />}
+                {_.includes([6], loggedUser?.getRoleId()) &&  <SubtaskCreationControl />} 
 
 
                 {/*********** Report Control ***********/}
