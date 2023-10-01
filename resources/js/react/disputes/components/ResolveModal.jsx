@@ -176,6 +176,13 @@ React.useEffect(() => {
         raised_by: window?.Laravel?.user.id,
         dispute_id: row?.id
     }
+
+    _.forEach(data.questions, q => {
+        if(q.question || !q.question_for){
+            return toast.success("Please add a question!");
+        }
+    });
+
     try{
         const res = await askDisputeQuestion(data).unwrap();
         updateDisputeConversation({disputeId:row?.id, conversations: res?.data});
@@ -199,17 +206,22 @@ React.useEffect(() => {
 //   handle answer questions
   const [answerDisputeQuestion, {isLoading: answering}] = useAnswerDisputeQuestionMutation();
   
-  const handleSubmitAnswer = async () => {  
-
-    forEach(questions, question => {
-        if(question.question_for === auth?.getId() && !question.replies){
-            toast.warn('Please answer all question!');
-            return;
+  const handleSubmitAnswer = async () => { 
+    let err = new Object();
+    let ques = _.filter(questions, question => question.question_for === auth?.getId() && !question.replies);
+    forEach(ques, question => {
+        if(question.question_for === auth?.getId() && !question.replies){ 
+            err.error = true;
+            return toast.warn('Please answer all question!');
         }
     }) 
+
+    if(err?.error) {
+        return ;
+    }
      
     try{
-        const res = await answerDisputeQuestion({questions: questions}).unwrap();
+        const res = await answerDisputeQuestion({questions: ques}).unwrap();
         updateDisputeConversation({disputeId:row?.id, conversations: res?.data})
 
         if(_.includes([1, 8], auth?.getRoleId())){
