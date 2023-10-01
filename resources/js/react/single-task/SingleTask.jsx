@@ -212,9 +212,47 @@ const SingleTaskPage = () => {
                                                 Task Category :{" "}
                                             </div>
                                             <div className="sp1_st-list-item-value">
-                                                {task?.category?.name}
+                                                {task?.category?.name  ?? '--'}
                                             </div>
                                         </div>
+
+                                        {/* task type */}
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">
+                                            Task Type:{" "}
+                                        </div>
+                                        <div className="sp1_st-list-item-value">
+                                            {task?.taskType ?? '--'}
+                                        </div>
+                                    </div>
+
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">
+                                            Page Type:{" "}
+                                        </div>
+                                        <div className="sp1_st-list-item-value">
+                                            {task?.pageType ?? '--'}
+                                        </div>
+                                    </div>
+
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">
+                                            Page Name:{" "}
+                                        </div>
+                                        <div className="sp1_st-list-item-value">
+                                            {task?.pageName ?? '--'}
+                                        </div>
+                                    </div>
+
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">
+                                            Page Url:{" "}
+                                        </div>
+                                        <div className="sp1_st-list-item-value">
+                                            {task?.pageUrl ?? '--'}
+                                        </div>
+                                    </div>                                    
+                                         
                                 </div>
                             </div>
 

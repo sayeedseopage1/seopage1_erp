@@ -3482,6 +3482,7 @@ class TaskController extends AccountBaseController
                     'id' => $row->id,
                     'name' => $row->name,
                     'image_url' => $row->image_url,
+                    'gender' => $row->gender,
                     'developer_status' => $developer_status,
                 ];
             });

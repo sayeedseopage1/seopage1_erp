@@ -2762,11 +2762,18 @@ class TaskController extends AccountBaseController
         // }
         // dd($task_revision);
         $task_revision->save();
- 
 
+        $clientRevisionCount = TaskRevision::where('acknowledgement_id', 'CPRx06')
+                                -> where('task_id', $task_revision->id)
+                                ->count();
+
+        if($clientRevisionCount >= 5){ 
+            $task_revision->dispute_created = true; 
+            $task_revision->save();
+        }
         // CREATE DISPUTE
-        if($request->dispute_create){
-            $this->create_dispute($task_revision, $request);
+        if($task_revision->dispute_created ){
+            $this->create_dispute($task_revision);
         }
  
         return response()->json([

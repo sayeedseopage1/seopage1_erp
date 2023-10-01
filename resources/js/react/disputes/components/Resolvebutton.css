@@ -1,4 +1,4 @@
-.resolve-btn {
+.resolve-btn{
     padding: 0px 4px;
     border-radius: 4px;
     border: 1px solid transparent;
@@ -6,33 +6,33 @@
     color: white;
     background-color: rgb(235, 43, 43);
     font-weight: bold;
-}
+} 
 
-.resolve-btn:hover {
+.resolve-btn:hover{
     background: rgb(254, 14, 14);
     /* border: 1px solid #c4c4c4; */
 }
 
-.resolve-btn.solved {
-    color: #fff;
+.resolve-btn.solved{
+    color: #fff; 
     background-color: rgb(0, 163, 54);
     border: 1px solid rgb(0, 163, 54);
-}
+} 
 
-a.badge.badge-info:hover {
+a.badge.badge-info:hover{
     color: #fff !important;
 }
 
-a.nav-link.badge {
+a.nav-link.badge{ 
     font-size: 12px;
     letter-spacing: 0.12px;
 }
 
-a.nav-link.badge:hover {
+a.nav-link.badge:hover{
     color: #fff !important;
 }
 
-span.divider-text {
+span.divider-text{ 
     position: absolute;
     top: 50%;
     left: 50%;
@@ -48,51 +48,54 @@ table.dispute-preview-table{
    border-collapse: collapse;
 } */
 
-table.dispute-preview-table tr td {
-    vertical-align: top;
-    text-align: justify;
-    white-space: wrap;
-    word-wrap: break-word !important;
-    word-break: break-all !important;
-    /* border: 1px solid #d3d3d3;
+table.dispute-preview-table tr td{
+   vertical-align: top;
+   text-align: justify;
+   white-space: wrap;
+   /* border: 1px solid #d3d3d3;
    border-collapse: collapse;
    padding: 10px; */
 }
 
-table.dispute-preview-table tr td:first-child {
+table.dispute-preview-table tr td:first-child{
     width: 120px;
     min-width: 120px;
     vertical-align: top;
-    text-align: right;
+    text-align: right; 
     color: #7a808f;
+    white-space: pre-wrap;
 }
 
-table.dispute-preview-table tr td.vertical-center {
+table.dispute-preview-table tr td.vertical-center{
     vertical-align: middle;
 }
 
-.toggle-light {
-    background-color: #e9ecef;
+
+.toggle-light{
+    background-color: #E9ECEF;
 }
 
-.dispute-QA li {
+.dispute-QA li{
     list-style: decimal;
 }
 
-.question-by {
+
+.question-by{
     color: #818181;
 }
 
-.question-by a {
+.question-by a{
     font-weight: 500;
     color: #818181;
 }
 
-.question-by a:hover {
+.question-by a:hover{
     text-decoration: underline;
 }
 
-button.remove-question-btn {
+
+
+button.remove-question-btn{
     padding: 4px 10px;
     color: #c6c6c6;
     background-color: transparent;
@@ -100,63 +103,65 @@ button.remove-question-btn {
     border-radius: 6px;
 }
 
-button.remove-question-btn:hover {
+button.remove-question-btn:hover{
     color: #ff0000;
     background-color: #ffe6e6;
 }
 
 /* new update tooltip message */
-.dispute-status-tooltip {
+.dispute-status-tooltip{
     position: relative;
 }
 
-.dispute-tooltip {
+.dispute-tooltip{  
     background-color: #1d82f5;
     z-index: 1;
     border-radius: 6px;
     /* border: 1px solid #41c7e2; */
     box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
-
+    
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
 
-.dispute-notif-arrow {
-    overflow: hidden;
+
+.dispute-notif-arrow{
+    overflow: hidden;  
     width: 12px;
     height: 10px;
 }
 
-.dispute-notif-arrow::before {
+.dispute-notif-arrow::before{
     position: absolute;
     width: 10px;
     height: 10px;
     background-color: rgb(29, 130, 245);
-    content: "";
+    content: '';
     /* border: 1px solid #41c7e2; */
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-    transform-origin: center;
+    transform-origin: center; 
     top: -7px;
     left: 1px;
 }
 
-.dispute-tooltip-content {
+
+.dispute-tooltip-content{
     font-size: 10px;
     padding: 1px 6px;
     color: white;
 }
 
-.person_rander {
+.person_rander{
     width: 120px;
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.dispute-edit-btn {
+.dispute-edit-btn{
     position: absolute;
     top: 0;
     right: 10px;
@@ -164,11 +169,12 @@ button.remove-question-btn:hover {
     background-color: transparent;
 }
 
-.dispute-edit-btn:hover {
+.dispute-edit-btn:hover{
     color: var(--header_color);
 }
 
-.revision_popover_panel {
+
+.revision_popover_panel{
     padding: 1rem;
     border-radius: 8px;
     background-color: #fff;
@@ -176,7 +182,7 @@ button.remove-question-btn:hover {
     /* width: clamp(255px, 100%, 350px); */
 }
 
-.partially_responsible_person {
+.partially_responsible_person{
     display: -ms-flexbox;
     display: flex;
     align-items: center;

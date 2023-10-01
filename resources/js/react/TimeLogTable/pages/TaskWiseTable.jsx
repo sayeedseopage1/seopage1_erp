@@ -21,7 +21,7 @@ const TaskWiseLogReport = () => {
     // handle data
     const handleData = (data, currentPage, perPageData) => {
         const paginated = paginate(data, currentPage, perPageData);
-        const grouped = groupBy(paginated, 'project_id');
+        const grouped = groupBy(paginated, 'task_id');
         const sorted = Object.entries(grouped).sort(([keyA], [keyB]) => keyB - keyA);
         setRenderData([...sorted]);
     }
@@ -32,7 +32,7 @@ const TaskWiseLogReport = () => {
         .unwrap()
         .then(res => {
             setCurrentPage(1);
-            const sortedData = orderBy(res?.data, ["project_id"], ["desc"]);
+            const sortedData = orderBy(res?.data, ["task_id"], ["desc"]);
             handleData(sortedData, 1, perPageData);
             setData(sortedData);
             const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));

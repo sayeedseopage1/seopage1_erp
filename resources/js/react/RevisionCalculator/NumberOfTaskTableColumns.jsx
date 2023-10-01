@@ -1,3 +1,6 @@
+import { convertTime } from '../utils/converTime';
+
+
 export const NumberOfTaskTableColumns = [ 
     
     {
@@ -92,7 +95,7 @@ export const NumberOfTaskTableColumns = [
 
             return (
                 <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {hs}
+                    {convertTime(hs)}
                 </span>
             );
         },

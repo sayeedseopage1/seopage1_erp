@@ -453,7 +453,18 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         developerInProgressTask: build.query({
             query: (userId) => `/account/developer/in-progress-tasks/${userId}`,
             providesTags: ["USER_IN_PROGRESS_TASKS"]
+        }),
+
+        // CHECK EDITABLE TASK
+        checkEditableTask: build.query({
+            query: (taskId) => `/account/developer/check-editable-task/${taskId}`,
+        }),
+
+        // CHECK EDITABLE SubTASK
+        checkEditableSubTask: build.query({
+            query: (subTaskId) => `/account/developer/check-editable-subtask/${subTaskId}`,
         })
+
   
     }),
 });
@@ -501,6 +512,8 @@ export const {
     useLazyGetInProgressTaskStatusQuery,
     useDeveloperCanCompleteTaskQuery,
     useLazyDeveloperCanCompleteTaskQuery,
-    useDeveloperInProgressTaskQuery
+    useDeveloperInProgressTaskQuery,
+    useCheckEditableSubTaskQuery,
+    useCheckEditableTaskQuery
 
 } = singleTaskPageApiSlice;

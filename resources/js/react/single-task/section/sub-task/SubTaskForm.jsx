@@ -25,7 +25,7 @@ import { User } from "../../../utils/user-details";
 import { Listbox } from "@headlessui/react";
 import LeadConfirmationModal from "./LeadConfirmationModal";
 import { checkIsURL } from "../../../utils/check-is-url";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; 
 
 const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -125,7 +125,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         }
 
         if(assignedTo && assignedTo?.isOverloaded){ 
-            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.name} has more than 10 Submittable tasks.`)
+            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 10 Submittable tasks.`)
             count++;
         }
 
@@ -180,6 +180,10 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
             if(_.toLower(pageType) === _.toLower('Cloning Existing Design')){
                 if(!pageTypeName){
                     error.pageTypeName = "You have to select an option"
+                    count++;
+                }
+                if(!pageTypePriority){
+                    error.pageTypePriority = "You have to Select page type";
                     count++;
                 }
     
@@ -252,39 +256,60 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
             fd.append("file[]", file);
         });
 
-       
-        if(isValid()){
-            await createSubtask(fd)
-            .unwrap()
-            .then((res) => {
-                if (res?.status === "success") {
-                    let _subtask = [
-                        ...subTask,
-                        { id: res?.sub_task?.id, title: res?.sub_task?.title },
-                    ];
-                    dispatch(storeSubTasks(_subtask));
-                    close();
 
-                    Swal.fire({
-                        position: "center",
-                        icon: "success",
-                        title: res.message,
-                        showConfirmButton: false,
-                        timer: 2500,
-                    });
-                }
-            })
-            .catch((err) => {
-                if (err?.status === 422) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: "Please fillup all required fields",
-                        showConfirmButton: true,
-                    });
-                }
-            });
+        const submit = async () => { 
+            if(isValid()){ 
+                await createSubtask(fd)
+                .unwrap()
+                .then((res) => {
+                    if (res?.status === "success") {
+                        let _subtask = [
+                            ...subTask,
+                            { id: res?.sub_task?.id, title: res?.sub_task?.title },
+                        ];
+                        dispatch(storeSubTasks(_subtask));
+                        close();
+    
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: res.message,
+                            showConfirmButton: false,
+                            timer: 2500,
+                        });
+                    }
+                })
+                .catch((err) => {
+                    if (err?.status === 422) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Please fillup all required fields",
+                            showConfirmButton: true,
+                        });
+                    }
+                });
+            }
         }
+
+        if(pageTypePriority === "Primary Page Development"){ 
+            Swal.fire({
+                icon: 'info',
+                html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
+                showCloseButton: true, 
+                showCancelButton: true,
+            }).then((res => {
+                if(res.isConfirmed){
+                    submit();
+                }
+            }))
+        }else{
+            submit()
+        }
+
+        return;
+       
+        
     };
 
     React.useEffect(() => {
@@ -509,7 +534,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 )}
 
                                 {assignedTo?.isOverloaded && <div style={{ color: "red" }}> 
-                                        {`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.name} has more than 10 Submittable tasks.`}
+                                        {`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 10 Submittable tasks.`}
                                     </div>}
                             </div>
                             {/* 
@@ -674,7 +699,8 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 <React.Fragment>
                                     {
                                         pageType === "Cloning Existing Design" ? 
-                                            <div className="col-12 col-md-6">
+                                            <>
+                                                    <div className="col-12 col-md-6">
                                                 <Input
                                                     id="page_type_name"
                                                     label="Page type name"
@@ -686,8 +712,49 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                                     error={err?.pageTypeName || required_error?.page_type?.[0]}
                                                     onChange={(e) => handleChange(e, setPageTypeName)}
                                                 />
-                                            </div>: 
+                                            </div>
+                                            <div className="col-12 col-md-6">
+                                            <Listbox value={pageTypePriority} onChange={setPageTypePriority}>
+                                                <div className="form-group position-relative my-3">
+                                                    <label htmlFor=""> Page Type <sup>*</sup> </label>
+                                                        <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100"> 
+                                                        <span className="singleline-ellipsis pr-3">
+                                                            {pageTypePriority ?? "--"}
+                                                        </span>
+                                                        
+                                                        <div className='__icon'>
+                                                            <i className="fa-solid fa-sort"></i>
+                                                        </div>
+                                                    </Listbox.Button>
+                                                    <Listbox.Options  className="sp1-select-options">
+                                                        {[
+                                                            "Primary Page Development",
+                                                            "Secondary Page Development",
+                                                        ]?.map((s, i) => (
+                                                            <Listbox.Option 
+                                                                key={i}
+                                                                className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
+                                                                value={s}
+                                                            >
+                                                                {({selected}) => (
+                                                                    <>
+                                                                    {s}     
+
+                                                                    {selected ? <i className="fa-solid fa-check ml-2" />: ''}
+                                                                    </>
+                                                                )}
+                                                                
+                                                            </Listbox.Option>
+                                                        ))}
+                                                    </Listbox.Options>
+                                                </div>
+                                            </Listbox>
+                                            </div>
+                                            </> 
+                                            
+                                            : 
                                             <>
+                                                
                                                 <div className="col-12 col-md-6">
                                                     <Input
                                                         id="page_name"
@@ -723,7 +790,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
 
                                     {
-                                        pageType=== "Cloning Existing Desgin"?
+                                        pageType=== "Cloning Existing Design"?
                                         <>
                                             <div className="col-12 col-md-6">
                                                 <Input
@@ -782,6 +849,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                             type="number"
                                             className="form-control height-35 f-14 mr-2"
                                             value={estimateTimeHour}
+                                            onWheel={e => e.currentTarget.blur()}
                                             onChange={(e) =>handleChange( e,setEstimateTimeHour)}
                                         />{" "}
                                         hrs
@@ -789,6 +857,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                             type="number"
                                             className="form-control height-35 f-14 mr-2 ml-2"
                                             value={estimateTimeMin}
+                                            onWheel={e => e.currentTarget.blur()}
                                             onChange={(e) =>
                                                 handleChange(
                                                     e,

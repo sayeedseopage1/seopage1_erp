@@ -4,35 +4,43 @@ import { setLessTrackModal } from "../../../../services/features/subTaskSlice";
 import Modal from "../../../components/Modal";
 import Loader from "../../../components/Loader";
 
-const StopTimerConfrimationPopUp  = React.lazy(() => import('./StopTimerConfrimationPopUp'));
+const StopTimerConfrimationPopUp = React.lazy(() =>
+    import("./StopTimerConfrimationPopUp")
+);
 
-const LessTrackTimerModal = ({stopTimer, startTimer}) => {
-    const { task, lessTrackModal, lessTrackModalFor} = useSelector((s) => s.subTask);
+const LessTrackTimerModal = ({ stopTimer, startTimer }) => {
+    const { task, lessTrackModal, lessTrackModalFor } = useSelector(
+        (s) => s.subTask
+    );
     const dispatch = useDispatch();
 
     const close = () => {
-        dispatch(setLessTrackModal({show: false, type: ''}))
-    }
+        dispatch(setLessTrackModal({ show: false, type: "" }));
+    };
 
     // temprarily stop timer now
     const stopTimerTemprorily = () => {
-        if(lessTrackModalFor === 'STOP_TIMER'){
+        if (lessTrackModalFor === "STOP_TIMER") {
             stopTimer();
         }
 
-        if(lessTrackModalFor === 'START_TIMER'){
-            startTimer()
+        if (lessTrackModalFor === "START_TIMER") {
+            startTimer();
         }
 
         close();
-    } 
+    };
     // lessTrackModal
     return (
         <Modal isOpen={lessTrackModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
-                <React.Suspense fallback={<div className="sp1_single_task--modal-panel">
-                    <Loader />
-                </div>}>
+                <React.Suspense
+                    fallback={
+                        <div className="sp1_single_task--modal-panel">
+                            <Loader />
+                        </div>
+                    }
+                >
                     <StopTimerConfrimationPopUp
                         handleTemporarilyStopTimer={stopTimerTemprorily}
                         close={close}

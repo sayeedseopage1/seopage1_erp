@@ -33,7 +33,8 @@ const Input = ({
             value={value}
             defaultValue={defaultValue}
             onChange={onChange}
-            readOnly={readOnly} 
+            readOnly={readOnly}
+            onWheel={e => e.currentTarget.blur()}
             {...rest}
         />
 

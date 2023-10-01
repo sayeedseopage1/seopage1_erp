@@ -203,6 +203,10 @@ export class SingleTask {
         this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
         this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision));
         this.taskSubTask = task?.taskSubTask;
+        this.taskType = task?.task_type;
+        this.pageType = task?.page_type;
+        this.pageName = task?.page_name;
+        this.pageUrl = task?.page_url;
     }
 
     isLeadDeveloperAbleToSubmit () {

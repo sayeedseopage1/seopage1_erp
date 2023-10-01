@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { forEach } from 'lodash';
 import React from 'react'
 import './Resolvebutton.css';
 import Modal from '../../global/Modal';
@@ -109,8 +109,12 @@ const ResolveModal = ({state}) => {
 
   
 // DEFAULT INITIAL
-React.useEffect(() => { 
-    setConversations(row?.conversations);
+React.useEffect(() => {  
+    if(_.includes([1, 8], auth?.getRoleId())){
+        setConversations(row?.conversations);
+    }else{
+        setConversations(_.filter(row?.conversations, d=> d.question_for === auth?.getId()));
+    }
 
     dispatch({
         type:"INIT_QUESTIONS", 
@@ -175,12 +179,17 @@ React.useEffect(() => {
     try{
         const res = await askDisputeQuestion(data).unwrap();
         updateDisputeConversation({disputeId:row?.id, conversations: res?.data});
-        setConversations(res?.data); 
+        if(_.includes([1, 8], auth?.getRoleId())){
+            setConversations(res?.data);
+        }else{
+            setConversations(_.filter(res?.data, d=> d.question_for === auth?.getId()));
+        }  
         dispatch({
             type:"INIT_QUESTIONS", 
             data: _.filter(res.data, d => d.replies ? false : true)
         }); 
         addQuestion();
+        toast.success("Question's successfully added.")
 
     }catch(err){
         console.log(err)
@@ -190,12 +199,26 @@ React.useEffect(() => {
 //   handle answer questions
   const [answerDisputeQuestion, {isLoading: answering}] = useAnswerDisputeQuestionMutation();
   
-  const handleSubmitAnswer = async () => { 
+  const handleSubmitAnswer = async () => {  
+
+    forEach(questions, question => {
+        if(question.question_for === auth?.getId() && !question.replies){
+            toast.warn('Please answer all question!');
+            return;
+        }
+    }) 
+     
     try{
         const res = await answerDisputeQuestion({questions: questions}).unwrap();
         updateDisputeConversation({disputeId:row?.id, conversations: res?.data})
-        setConversations(res?.data);
+
+        if(_.includes([1, 8], auth?.getRoleId())){
+            setConversations(res?.data);
+        }else{
+            setConversations(_.filter(res?.data, d=> d.question_for === auth?.getId()));
+        }
         dispatch({type:"INIT_QUESTIONS", data: _.filter(res?.data, d => d.replies ? false : true)}); 
+        toast.success("Answer's successfully added.")
     }catch(err){
         console.log(err);
     } 
@@ -237,6 +260,14 @@ const close =async () => {
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
  
   const handleSubmitForAuthorization = async () =>{
+
+        if(finishedPartial &&  ((raisedByPercent + raisedAgainstPercent) !== 100 || raisedAgainstPercent > 0 || raisedByPercent > 0)){
+            return toast.warn("Both parties' percentages must add up to 100% (e.g., 15% & 85%), and each party's percentage must be greater than 1%");
+        }
+
+        if(!resolveComment){
+            return toast.warn('Write and comment...');
+        }
         // check all question is answered or expand already 24hour
         let error = false; 
         _.forEach(conversations, conv => {
@@ -269,7 +300,7 @@ const close =async () => {
             try{ 
                 const res = await disputeSubmitToAuthorization(data).unwrap();
 
-                toast.success(`Successfully sending request for approval!`);
+                toast.success(`Approval request successfully send!`);
                 updateDisputeById({
                     disputeId: row?.id,
                     data: _.head(res),
@@ -312,7 +343,7 @@ const close =async () => {
   }
 
 //   Filter Questions 
-  const filterQuestion = (questions, userid) => _.filter(questions, conv => conv.question_for === userid);  
+  const filterQuestion = (questions, userid) => _.filter(questions, conv => conv.question_for === userid  );  
 
   const task = row?.task?.parent_task ?? row?.task; 
   const resolved = row?.status; 
@@ -462,12 +493,13 @@ const close =async () => {
                                                 <td className='py-2'>Explanation:</td>
                                                 <td className='px-3 py-2'>
                                                     <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.sale_comment }} />
+                                                    
                                                 </td>
                                             </tr>
 
                                             {_.size(filterQuestion(conversations, row?.sales_person?.id)) ? 
                                                 <tr>
-                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='py-2' >Submitted Answer:</td>
                                                     <td className='px-3 py-2'> 
                                                         <div className='d-flex flex-column' style={{gap: '16px'}}>
                                                             {_.map(_.filter(filterQuestion(conversations, row?.sales_person?.id), f => _.includes([1,8], auth?.getRoleId()) ? true :f.replies), (conv, index) => {
@@ -566,7 +598,7 @@ const close =async () => {
 
                                             {_.size(filterQuestion(conversations, row?.project_manager?.id)) ? 
                                                 <tr>
-                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='py-2' >Submitted Answer:</td>
                                                     <td className='px-3 py-2'> 
                                                         <div className='d-flex flex-column' style={{gap: '16px'}}>
                                                             {_.map(_.filter(filterQuestion(conversations, row?.project_manager?.id), f => _.includes([1,8], auth?.getRoleId()) ? true :f.replies), (conv, index) => {
@@ -665,7 +697,7 @@ const close =async () => {
 
                                             {_.size(filterQuestion(conversations, row?.task?.lead_developer?.id)) ? 
                                                 <tr>
-                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='py-2' >Submitted Answer:</td>
                                                     <td className='px-3 py-2'> 
                                                         <div className='d-flex flex-column' style={{gap: '16px'}}>
                                                             {_.map(_.filter(filterQuestion(conversations, row?.task?.lead_developer?.id), f => _.includes([1,8], auth?.getRoleId()) ? true :f.replies), (conv, index) => {
@@ -763,7 +795,7 @@ const close =async () => {
 
                                             {_.size(filterQuestion(conversations, row?.task?.developer?.id)) ? 
                                                 <tr>
-                                                    <td className='py-2'>Submitted Answer:</td>
+                                                    <td className='py-2' >Submitted Answer:</td>
                                                     <td className='px-3 py-2'> 
                                                         <div className='d-flex flex-column' style={{gap: '16px'}}>
                                                             {_.map(
@@ -1133,6 +1165,7 @@ const close =async () => {
                                                                             value={raisedByPercent}
                                                                             style={{minWidth: '80px'}}
                                                                             onChange={e=>setRaisedByPercent(e.target.value)}
+                                                                            onWheel={e => e.currentTarget.blur()}
                                                                         />
                                                                         <div className="input-group-append">
                                                                             <span className="input-group-text">%</span>
@@ -1152,6 +1185,7 @@ const close =async () => {
                                                                             value={raisedAgainstPercent}
                                                                             style={{minWidth: '80px'}}
                                                                             onChange={e=>setRaisedAgainstPercent(e.target.value)}
+                                                                            onWheel={e => e.currentTarget.blur()}
                                                                         />
                                                                         <div className="input-group-append">
                                                                             <span className="input-group-text">%</span>
@@ -1171,7 +1205,7 @@ const close =async () => {
                                                                     className='form-control p-2 f-14'
                                                                     value={resolveComment}
                                                                     onChange={(e) => setResolveComment(e.target.value)}
-                                                                    placeholder='Explain why you select partial!'
+                                                                    placeholder={`${finishedPartial ?  'Explain why you select partial!' : winner?.name ? `Describe why are choosing ${winner?.name}`: 'Write a comment here...'}`}
                                                                 />
                                                             </td>
                                                         </tr>
@@ -1453,6 +1487,7 @@ const close =async () => {
                                                                                 value={raisedByPercent}
                                                                                 style={{minWidth: '80px'}}
                                                                                 onChange={e=>setRaisedByPercent(e.target.value)}
+                                                                                onWheel={e => e.currentTarget.blur()}
                                                                             />
                                                                             <div className="input-group-append">
                                                                                 <span className="input-group-text">%</span>
@@ -1472,6 +1507,7 @@ const close =async () => {
                                                                                 value={raisedAgainstPercent}
                                                                                 style={{minWidth: '80px'}}
                                                                                 onChange={e=>setRaisedAgainstPercent(e.target.value)}
+                                                                                onWheel={e => e.currentTarget.blur()}
                                                                             />
                                                                             <div className="input-group-append">
                                                                                 <span className="input-group-text">%</span>

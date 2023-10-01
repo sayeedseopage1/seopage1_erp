@@ -371,13 +371,15 @@ const estimateError= (err) =>{
                             <label htmlFor="" className='f-14 text-dark-gray'>Set Estimate Time <sup className='f-14'> * </sup></label>
                             <div className="d-flex align-items-center">
                                 <input 
-                                    type='Number'
+                                    type='number'
+                                    onWheel={e => e.currentTarget.blur()}
                                     className="form-control height-35 f-14 mr-2" 
                                     value={estimateTimeHour} 
                                     onChange={(e) => handleChange(e, setEstimateTimeHour)}
                                 /> hrs
                                 <input 
-                                    type='Number'
+                                    type='number'
+                                    onWheel={e => e.currentTarget.blur()}
                                     className="form-control height-35 f-14 mr-2 ml-2" 
                                     value={estimateTimeMin}
                                     onChange={e => handleChange(e, setEstimateTimeMin)}

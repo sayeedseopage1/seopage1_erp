@@ -26,9 +26,13 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
 
     const {data: trackTime, isFetching} = useGetUserTrackTimeQuery(loggedUser?.getId());
 
+    console.log(trackTime)
+
+     
+
     React.useEffect(() => {
         if(!isFetching && trackTime){
-            let m = Math.abs(435 - trackTime?.tracked_times); 
+            let m = Math.abs(trackTime.target_time - trackTime?.tracked_times); 
             let h = Math.floor(m/60);
             m = m%60;
 
@@ -87,7 +91,8 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
             )}
 
             { lessTrackModalFor=="START_TIMER" || (lessTrackModalFor==="STOP_TIMER" && closingToday) ? ( 
-                <div className="sp1_single_task--modal-body p-3">
+            
+                <div className="sp1_single_task--modal-body sp1_single_task-modal-body-options p-3">
                     {/* show track time */}
                     <div className="alert alert-warning">
                         {isFetching ? <React.Fragment>
@@ -96,7 +101,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                             <Placeholder width="60%" height={14} />
                         </React.Fragment> :
                         <React.Fragment>
-                            Your tracked time for today is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> 7 hours </span> and <span className="font-weight-bold"> 15 minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less. 
+                            Your tracked time for <span className="font-weight-bold">{trackTime?.current_time === 'Today'? 'today': dayjs(trackTime?.current_time).format('MMM DD, YYYY')}</span> is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> {trackTime?.target_time/ 60} hours </span> and <span className="font-weight-bold"> {trackTime?.target_time % 60} minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less. 
                         </React.Fragment> 
                         }
                     </div>
@@ -107,7 +112,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                     <div className="sp1_stop-button-confirmation-option">
                         <h6>Why is that?</h6>
                         {isFetching ? <React.Fragment>
-                            <div className="confirmation--options" style={{width: 250}}>
+                            <div className="confirmation--options" style={{width: 350}}>
                                 <Placeholder width="80%" height={14} className="mb-1" />
                                 <Placeholder width="80%" height={14} className="mb-1" />
                                 <Placeholder width="60%" height={14} className="mb-1" />

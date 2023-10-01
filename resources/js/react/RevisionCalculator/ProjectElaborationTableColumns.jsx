@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { convertTime } from "../utils/converTime";
 
 export const ProjectElaborationTableColumns = [
     {
@@ -152,7 +153,7 @@ export const ProjectElaborationTableColumns = [
 
             return (
                 <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {hs}
+                    {convertTime(hs)}
                 </span>
             );
         },

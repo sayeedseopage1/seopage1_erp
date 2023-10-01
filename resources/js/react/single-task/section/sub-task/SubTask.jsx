@@ -1,6 +1,6 @@
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
+import { useCheckEditableSubTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
 import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import Button from "../../components/Button";
@@ -16,7 +16,9 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
     const _task = new SingleTask(task); 
 
     const [checkSubTaskTimer, {isFetching}] = useLazyCheckSubTaskTimerQuery()
- 
+      // check task edit
+        const { data } = useCheckEditableSubTaskQuery(subTask?.id, {skip: subTask?.id});
+        const isEditable = data?.task === 0;
 
     const toggle = (e) => {
       e.preventDefault();
@@ -84,7 +86,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                     <i className="fa-regular fa-eye"></i>
                 </div>
                 {
-                    hasEditPermission() && <div 
+                    isEditable && hasEditPermission() && <div 
                         onClick={onEdit}
                         className="mr-2 py-2 sp1_task_righ_action_btn"
                         style={{cursor: 'pointer'}}
@@ -135,7 +137,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                     Revision
                                 </Button> */}
 
-                                {hasEditPermission() && <a href="#" onClick={onModalEditButtonClick} className="border text-dark mr-2 py-1 px-2">
+                                {isEditable && hasEditPermission() && <a href="#" onClick={onModalEditButtonClick} className="border text-dark mr-2 py-1 px-2">
                                     {isFetching ?  <div
                                         className="spinner-border text-dark ml-2"
                                         role="status"
@@ -164,7 +166,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                         <div className="sp1_subtask_offsetcanvas--body">
                             <PreviewSubtask
                                 parentTask={task}
-                                subTask={subTask}
+                                subTask={subTask} 
                             />
                         </div>
                     </div>
