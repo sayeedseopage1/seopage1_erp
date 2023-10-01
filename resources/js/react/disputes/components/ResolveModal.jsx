@@ -177,8 +177,12 @@ React.useEffect(() => {
         dispute_id: row?.id
     }
 
-    _.forEach(data.questions, q => {
-        if(q.question){
+    if(!data?.questions){
+        return toast.warn("Please add a question!");
+    }
+
+    _.forEach(data?.questions, q => {
+        if(!q.question){
             return toast.warn("Please add a question!");
         }else if (!q.question_for){
             return toast.warn("Please select a person!");
