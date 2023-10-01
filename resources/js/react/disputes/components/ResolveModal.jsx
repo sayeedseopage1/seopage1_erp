@@ -178,8 +178,10 @@ React.useEffect(() => {
     }
 
     _.forEach(data.questions, q => {
-        if(q.question || !q.question_for){
-            return toast.success("Please add a question!");
+        if(q.question){
+            return toast.warn("Please add a question!");
+        }else if (!q.question_for){
+            return toast.warn("Please select a person!");
         }
     });
 
@@ -208,9 +210,9 @@ React.useEffect(() => {
   
   const handleSubmitAnswer = async () => { 
     let err = new Object();
-    let ques = _.filter(questions, question => question.question_for === auth?.getId() && !question.replies);
+    let ques = _.filter(questions, question => question.question_for === auth?.getId());
     forEach(ques, question => {
-        if(question.question_for === auth?.getId() && !question.replies){ 
+        if(!question.replies){ 
             err.error = true;
             return toast.warn('Please answer all question!');
         }
