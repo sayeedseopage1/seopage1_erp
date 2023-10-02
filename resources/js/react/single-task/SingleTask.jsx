@@ -17,7 +17,7 @@ import RevisionText from "./components/RevisionText";
 import GenarelLoader from "./components/loader/GenarelLoader";
 import CommentSection from "./section/comments/CommentsSection";
 import DailySubmissionSection from "./section/daily-submission/DailySubmissionSection";
-import HistorySection from "./section/history/historySection";
+import HistorySection from "./section/history/HistorySection";
 import NoteSection from "./section/notes/NoteSection";
 import RevisionSection from "./section/revisions/RevisionSection";
 import SubTaskSection from "./section/sub-task/SubTaskSection";
