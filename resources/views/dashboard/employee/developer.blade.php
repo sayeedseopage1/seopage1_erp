@@ -1535,7 +1535,7 @@
                                             </ul>
 
                                         </div>
-                                        <div class="col-sm-12 pt-3 text-right">
+                                      {{--  <div class="col-sm-12 pt-3 text-right">
                                             @if ($editTimelogPermission == 'all' || ($editTimelogPermission == 'added' && $myActiveTimer->added_by == user()->id) || ($editTimelogPermission == 'owned' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id)) || ($editTimelogPermission == 'both' && (($myActiveTimer->project && $myActiveTimer->project->client_id == user()->id) || $myActiveTimer->user_id == user()->id || $myActiveTimer->added_by == user()->id)))
                                                 @if (is_null($myActiveTimer->activeBreak))
                                                     <x-forms.button-secondary icon="pause-circle"
@@ -1550,7 +1550,7 @@
                                                         @lang('modules.timeLogs.resumeTimer')</x-forms.button-primary>
                                                 @endif
                                             @endif
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 </x-cards.data>
                             </div>
