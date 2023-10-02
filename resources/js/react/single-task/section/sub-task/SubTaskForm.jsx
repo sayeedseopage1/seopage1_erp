@@ -868,7 +868,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                     <div style={{ color: "red" }}>
                                         {estimateError(required_error)}
                                     </div>
-                                    <div style={{ color: "#9A9FA7" }}>
+                                    <div style={{ color: "#F73B12" }}>
                                     Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>
                                 </div>
