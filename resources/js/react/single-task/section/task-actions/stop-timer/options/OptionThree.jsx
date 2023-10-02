@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import LeaveExplainationOption from "./LeaveexplanationOption";
+import LeaveExplainationOption from "./LeaveExplanationOption";
 import LateExplainationOption from "./LateExplanationOption";
 import LeavingEarlyExplainationOption from "./LeavingEarlyExplainationOption";
 import Button from "../../../../components/Button";
