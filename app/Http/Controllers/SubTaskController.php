@@ -107,7 +107,7 @@ class SubTaskController extends AccountBaseController
         $total_parent_tasks_minutes= $parent_task_minutes + $check_estimation->estimate_minutes;
         $sub_tasks_hours= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('subtasks.task_id',$request->task_id)
             ->sum('estimate_hours');
-         $sub_tasks_minutes= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('subtasks.task_id',$request->task_id)
+         $sub_tasks_minutes= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('sub_tasks.task_id',$request->task_id)
             ->sum('estimate_minutes');
 
         $total_subtasks_minutes = $sub_tasks_hours+$sub_tasks_minutes;
