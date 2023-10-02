@@ -8,7 +8,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import {store} from '../services/store';
 import Loading from './components/Loading';
-import Tasks from './pages/tasks';
+import Tasks from './pages/Tasks';
 import { useMouse } from 'react-use';
 // const SingleTask = React.lazy(() => import('../single-task/SingleTask'));
 const Subtasks = React.lazy(() => import('./pages/Subtasks'));
