@@ -7,7 +7,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import { useMouse } from 'react-use';
 import { store } from '../services/store';
 import Loading from '../tasks/components/Loading';
-import Tasks from '../tasks/pages/tasks';
+import Tasks from '../tasks/pages/Tasks';
 import '../tasks/table.css';
 import '../tasks/tasks.css';
 import './project.css';
