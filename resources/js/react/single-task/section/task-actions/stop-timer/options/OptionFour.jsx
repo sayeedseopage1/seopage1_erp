@@ -99,7 +99,11 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             errCount++;
         }
 
-        if(!isOutsideERP && !project){
+        // if(!isOutsideERP && !project){
+        //     err.project = "You have to pick an option.";
+        //     errCount++;
+        // }
+        if(activeProjectDropdown && !project){
             err.project = "You have to pick an option.";
             errCount++;
         }
