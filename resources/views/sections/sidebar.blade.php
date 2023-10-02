@@ -296,11 +296,13 @@
                                     <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
                                 @endif
                             @endif
+                               @if(Auth::user()->role_id == 1)         
                             @if (in_array('timelogs', user_modules()) &&
                                     $sidebarUserPermissions['view_timelogs'] != 5 &&
                                     $sidebarUserPermissions['view_timelogs'] != 'none')
                                 <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
                             @endif
+                                    @endif
                            
                                 <x-sub-menu-item :link="route('disputes.index')" :text="__('Disputes')" />
                           
