@@ -103,10 +103,19 @@ class SubTaskController extends AccountBaseController
         }
 
         $check_estimation = Task::where('id', $request->task_id)->first();
+        $parent_task_minutes = $check_estimation->estimate_hours * 60;
+        $total_parent_tasks_minutes= $parent_task_minutes + $check_estimation->estimate_minutes;
+        $sub_tasks_hours= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('subtasks.task_id',$request->task_id)
+            ->sum('estimate_hours');
+         $sub_tasks_minutes= Subtask::join('tasks','tasks.subtask_id','sub_tasks.id')->where('subtasks.task_id',$request->task_id)
+            ->sum('estimate_minutes');
+
+        $total_subtasks_minutes = $sub_tasks_hours+$sub_tasks_minutes;
+        
         $hours = $request->estimate_hours * 60;
         $minutes = $request->estimate_minutes;
         $total_minutes = $hours + $minutes;
-        if ($check_estimation->estimate_time_left_minutes - $total_minutes < 0) {
+        if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 1) {
 
             return response()->json([
                 "message" => "The given data was invalid.",
