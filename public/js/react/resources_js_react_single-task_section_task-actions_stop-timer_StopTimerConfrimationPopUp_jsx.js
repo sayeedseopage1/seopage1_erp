@@ -205,7 +205,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
     trackTime = _useGetUserTrackTimeQ.data,
     isFetching = _useGetUserTrackTimeQ.isFetching;
 
-
+  // console.log(trackTime)
 
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (!isFetching && trackTime) {

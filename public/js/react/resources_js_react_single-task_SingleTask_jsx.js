@@ -832,6 +832,21 @@ var SingleTaskPage = function SingleTaskPage() {
                   })]
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                   className: "sp1_st-list-item",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                    className: "sp1_st-list-item-head",
+                    children: "Project : "
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                    className: "sp1_st-list-item-value",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
+                      className: "dot-color bg-danger mr-2"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
+                      href: "/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId),
+                      className: "text-dark text-hover-underline",
+                      children: task === null || task === void 0 ? void 0 : task.clientName
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "sp1_st-list-item",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                     className: "sp1_st-list-item-head",
                     children: ["Milestone :", " "]
@@ -8480,11 +8495,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
       var _task$category, _task$boardColumn;
-<<<<<<< HEAD
-      var _startDate, _dueDate, fd, submit;
-=======
       var _startDate, _dueDate, fd, submit, primaryPageConfirmation, response, _error, checkViolationWord, alert;
->>>>>>> f8900c55d ('update_violated_word_checking')
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -8567,24 +8578,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return _ref3.apply(this, arguments);
               };
             }();
-<<<<<<< HEAD
-            if (pageTypePriority === "Primary Page Development") {
-              Swal.fire({
-                icon: 'info',
-                html: "<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>",
-                showCloseButton: true,
-                showCancelButton: true
-              }).then(function (res) {
-                if (res.isConfirmed) {
-                  submit();
-                }
-              });
-            } else {
-              submit();
-            }
-            return _context2.abrupt("return");
-          case 33:
-=======
             primaryPageConfirmation = function primaryPageConfirmation() {
               if (pageTypePriority === "Primary Page Development") {
                 Swal.fire({
@@ -8642,7 +8635,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
               primaryPageConfirmation();
             }
           case 36:
->>>>>>> f8900c55d ('update_violated_word_checking')
           case "end":
             return _context2.stop();
         }
