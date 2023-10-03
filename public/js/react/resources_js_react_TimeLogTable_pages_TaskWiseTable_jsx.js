@@ -1909,7 +1909,7 @@ var TaskWiseLogReport = function TaskWiseLogReport() {
   // handle data
   var handleData = function handleData(data, currentPage, perPageData) {
     var paginated = (0,_utils_paginate__WEBPACK_IMPORTED_MODULE_2__.paginate)(data, currentPage, perPageData);
-    var grouped = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.groupBy)(paginated, 'project_id');
+    var grouped = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.groupBy)(paginated, 'task_id');
     var sorted = Object.entries(grouped).sort(function (_ref, _ref2) {
       var _ref3 = _slicedToArray(_ref, 1),
         keyA = _ref3[0];
@@ -1924,7 +1924,7 @@ var TaskWiseLogReport = function TaskWiseLogReport() {
   var handleFetchData = function handleFetchData(filter) {
     getTaskWiseData(filter).unwrap().then(function (res) {
       setCurrentPage(1);
-      var sortedData = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.orderBy)(res === null || res === void 0 ? void 0 : res.data, ["project_id"], ["desc"]);
+      var sortedData = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.orderBy)(res === null || res === void 0 ? void 0 : res.data, ["task_id"], ["desc"]);
       handleData(sortedData, 1, perPageData);
       setData(sortedData);
       var totalTrackTime = _.sumBy(sortedData, function (d) {

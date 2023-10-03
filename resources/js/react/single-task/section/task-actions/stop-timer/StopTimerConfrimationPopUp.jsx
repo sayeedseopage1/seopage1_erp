@@ -26,7 +26,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
 
     const {data: trackTime, isFetching} = useGetUserTrackTimeQuery(loggedUser?.getId());
 
-    console.log(trackTime)
+    // console.log(trackTime)
 
      
 

@@ -368,7 +368,7 @@ class TimelogController extends AccountBaseController
     public function startTimer(Request $request)
     {
        
-       // DB::beginTransaction();
+    //DB::beginTransaction();
      $userID = Auth::id(); // Replace with the actual user ID
 
      $yesterdayDate = ProjectTimeLog::where('user_id', $userID)
@@ -387,6 +387,7 @@ class TimelogController extends AccountBaseController
  // Check if the query returned any result
         if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
         {
+           
             if ($yesterdayDate && $today_timelog_count < 1  ) {
                 // $yesterdayDate is an object, so you need to access the "created_at" property
                 $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $yesterdayDate->created_at);
@@ -398,23 +399,34 @@ class TimelogController extends AccountBaseController
                 ->whereDate('created_at', $yesterdayDate->created_at)
                 ->sum('total_minutes');
              //   dd($totalMinutes);
-               $acknowledgement = DeveloperStopTimer::where('user_id',Auth::id())->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
-               $daily_submission = DailySubmission::where('user_id',Auth::id())->where('task_id',$request->task_id)->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
-              // dd($acknowledgement);
+             $acknowledgement = DeveloperStopTimer::where('user_id', Auth::user()->id)
+             ->where(function ($query) use ($yesterdayDate) {
+                 $query->whereDate('created_at', $yesterdayDate->created_at)
+                       ->orWhereDate('created_at', Carbon::today());
+             })
+             ->first();
+            //    $daily_submission = DailySubmission::where('user_id',Auth::user()->id)->where('task_id',$request->task_id)->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
+               $daily_submission = DailySubmission::where('user_id', Auth::user()->id)->where('task_id',$request->task_id)
+    ->where(function ($query) use ($yesterdayDate) {
+        $query->whereDate('created_at', $yesterdayDate->created_at)
+              ->orWhereDate('created_at', Carbon::today());
+    })
+    ->first();
+    //dd($daily_submission);
               if($acknowledgement == null)
               {
-                $acknowledgement_submitted = 'false';
+                $acknowledgement_submitted = false;
               }else 
               {
-                $acknowledgement_submitted = 'true';
+                $acknowledgement_submitted = true;
 
               }
               if($daily_submission  == null)
               {
-                $daily_submission_submitted = 'false';
+                $daily_submission_submitted = false;
               }else 
               {
-                $daily_submission_submitted = 'true';
+                $daily_submission_submitted = true;
 
               }
               
@@ -422,18 +434,18 @@ class TimelogController extends AccountBaseController
            //dd($acknowledgement);
            //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
           // $date= $acknowledgement->created_at;
-            if($day != 'Saturday' && $totalMinutes < 420 && $acknowledgement == null && $daily_submission == null) 
+            if($day != 'Saturday' && $totalMinutes < 420 && $acknowledgement == null ) 
             {
               // dd("regular day");
               
                 return response()->json([
                     'date'=> $yesterdayDate->created_at,
                     'acknowledgement_submitted' => $acknowledgement_submitted ,
-                    'daily_submission_submitted' =>$daily_submission_submitted,
+                  
                     'error' => 'Developer did not submit the acknowledgement form'
                 ], 400);
            
-            }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null && $daily_submission == null)
+            }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null )
             {
               // dd("regular day");
               
@@ -441,12 +453,41 @@ class TimelogController extends AccountBaseController
                return response()->json([
                     'date'=> $yesterdayDate->created_at,
                     'acknowledgement_submitted' => $acknowledgement_submitted ,
-                    'daily_submission_submitted' =>$daily_submission_submitted,
+                  
                    'error' => 'Developer did not submit the acknowledgement form'
                ], 400);
            
            
-            }else 
+            }elseif($day != 'Saturday' && $totalMinutes < 420 && $daily_submission == null )
+            {
+              // dd("regular day");
+              
+              // dd("Saturday");
+               return response()->json([
+                    'date'=> $yesterdayDate->created_at,
+                   
+                    'daily_submission_submitted' =>$daily_submission_submitted,
+                   'error' => 'Developer did not submit the daily submission data'
+               ], 400);
+           
+           
+            }elseif($day == 'Saturday' && $totalMinutes < 270 && $daily_submission == null )
+            {
+              // dd("regular day");
+              
+              // dd("Saturday");
+               return response()->json([
+                    'date'=> $yesterdayDate->created_at,
+                  
+                    'daily_submission_submitted' =>$daily_submission_submitted,
+                   'error' => 'Developer did not submit the daily submission data'
+               ], 400);
+           
+           
+            }
+            
+            
+            else 
             {
                $task_status= Task::find($request->task_id);
                $task_status->task_status="in progress";

@@ -4807,11 +4807,11 @@ class TaskController extends AccountBaseController
         $startDate= Carbon::today()->format('Y-m-d');
         $endDate= Carbon::today()->format('Y-m-d');
     //    / dd($startDate, $endDate);
-        $tasks = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+    $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
          
-        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'"), 0) as total_time_spent'),
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
@@ -4820,10 +4820,34 @@ class TaskController extends AccountBaseController
         ->leftJoin('task_types','task_types.task_id','tasks.id')
         ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
+       
         ->whereDate('project_time_logs.created_at',Carbon::today())
         
         ->groupBy('tasks.id')
         ->get();
+    if ($todayData->isEmpty()) {
+        $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+        'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
+        'developers.id as developer_id',
+         
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
+        )
+        ->join('tasks','tasks.id','project_time_logs.task_id')
+        ->join('projects','projects.id','tasks.project_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->join('users as developers','developers.id','project_time_logs.user_id')
+        ->leftJoin('task_types','task_types.task_id','tasks.id')
+        ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
+        ->where('project_time_logs.user_id',$id)
+        ->where('daily_submissions.task_id',null)
+        ->whereDate('project_time_logs.created_at',Carbon::yesterday())
+        
+        ->groupBy('tasks.id')
+        ->get();
+        $tasks = $yesterdayData;
+    } else {
+        $tasks = $todayData;
+    }
         // /dd($tasks );
         return response()->json([
             'data' => $tasks,
