@@ -204,9 +204,10 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
   var _useGetUserTrackTimeQ = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetUserTrackTimeQuery)(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()),
     trackTime = _useGetUserTrackTimeQ.data,
     isFetching = _useGetUserTrackTimeQ.isFetching;
+  console.log(trackTime);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (!isFetching && trackTime) {
-      var m = Math.abs(435 - (trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times));
+      var m = Math.abs(trackTime.target_time - (trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times));
       var h = Math.floor(m / 60);
       m = m % 60;
       setTrackHours(h);
@@ -269,7 +270,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
         })]
       })]
     }), lessTrackModalFor == "START_TIMER" || lessTrackModalFor === "STOP_TIMER" && closingToday ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
-      className: "sp1_single_task--modal-body p-3",
+      className: "sp1_single_task--modal-body sp1_single_task-modal-body-options p-3",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
         className: "alert alert-warning",
         children: isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -286,18 +287,21 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
             height: 14
           })]
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-          children: ["Your tracked time for today is ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
+          children: ["Your tracked time for ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+            className: "font-weight-bold",
+            children: (trackTime === null || trackTime === void 0 ? void 0 : trackTime.current_time) === 'Today' ? 'today' : dayjs__WEBPACK_IMPORTED_MODULE_11___default()(trackTime === null || trackTime === void 0 ? void 0 : trackTime.current_time).format('MMM DD, YYYY')
+          }), " is ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
             className: "font-weight-bold",
             children: [Math.floor((trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times) / 60), " hours"]
           }), " and ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
             className: "font-weight-bold",
             children: [Math.floor((trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times) % 60), " minutes."]
-          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("br", {}), " Your minimum tracked hours should have been ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+          }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("br", {}), " Your minimum tracked hours should have been ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
             className: "font-weight-bold",
-            children: " 7 hours "
-          }), " and ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
+            children: [" ", (trackTime === null || trackTime === void 0 ? void 0 : trackTime.target_time) / 60, " hours "]
+          }), " and ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
             className: "font-weight-bold",
-            children: " 15 minutes"
+            children: [" ", (trackTime === null || trackTime === void 0 ? void 0 : trackTime.target_time) % 60, " minutes"]
           }), ", ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("br", {}), "and it is ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
             className: "font-weight-bold text-danger",
             children: [" ", trackHours, " hours "]
@@ -314,7 +318,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
             className: "confirmation--options",
             style: {
-              width: 250
+              width: 350
             },
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_10__.Placeholder, {
               width: "80%",
@@ -880,9 +884,9 @@ var LateExplainationOption = function LateExplainationOption(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/single-task/section/task-actions/stop-timer/options/LeaveexplanationOption.jsx":
+/***/ "./resources/js/react/single-task/section/task-actions/stop-timer/options/LeaveExplanationOption.jsx":
 /*!***********************************************************************************************************!*\
-  !*** ./resources/js/react/single-task/section/task-actions/stop-timer/options/LeaveexplanationOption.jsx ***!
+  !*** ./resources/js/react/single-task/section/task-actions/stop-timer/options/LeaveExplanationOption.jsx ***!
   \***********************************************************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -1740,7 +1744,12 @@ var OptionFour = function OptionFour(_ref) {
       err.responsiblePerson = "Please select who is responsible!";
       errCount++;
     }
-    if (!isOutsideERP && !project) {
+
+    // if(!isOutsideERP && !project){
+    //     err.project = "You have to pick an option.";
+    //     errCount++;
+    // }
+    if (activeProjectDropdown && !project) {
       err.project = "You have to pick an option.";
       errCount++;
     }
@@ -2480,7 +2489,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _LeaveexplanationOption__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LeaveexplanationOption */ "./resources/js/react/single-task/section/task-actions/stop-timer/options/LeaveexplanationOption.jsx");
+/* harmony import */ var _LeaveExplanationOption__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LeaveExplanationOption */ "./resources/js/react/single-task/section/task-actions/stop-timer/options/LeaveExplanationOption.jsx");
 /* harmony import */ var _LateExplanationOption__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LateExplanationOption */ "./resources/js/react/single-task/section/task-actions/stop-timer/options/LateExplanationOption.jsx");
 /* harmony import */ var _LeavingEarlyExplainationOption__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./LeavingEarlyExplainationOption */ "./resources/js/react/single-task/section/task-actions/stop-timer/options/LeavingEarlyExplainationOption.jsx");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
@@ -2558,7 +2567,7 @@ var OptionThree = function OptionThree(_ref) {
         style: {
           gap: "10px"
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_LeaveexplanationOption__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_LeaveExplanationOption__WEBPACK_IMPORTED_MODULE_1__["default"], {
           id: "half-leave-option",
           onChecked: setSelectedOption,
           onSubmit: onSubmit,

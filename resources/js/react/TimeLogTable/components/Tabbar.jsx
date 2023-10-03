@@ -7,6 +7,7 @@ const Tabbar = () => {
        <NavLink to='/project-wise' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"} > Project Wise </NavLink>
        <NavLink to='/task-wise' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}> Task Wise </NavLink> 
        <NavLink to='/time-log-history' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}> Time Log History </NavLink> 
+       <NavLink to='/daily-submission' className={({isActive})=> isActive ? "sp1_tlr_tab active": "sp1_tlr_tab"}> Daily Submission </NavLink>
     </div>
   )
 }
