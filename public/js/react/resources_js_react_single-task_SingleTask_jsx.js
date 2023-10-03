@@ -834,13 +834,12 @@ var SingleTaskPage = function SingleTaskPage() {
                   className: "sp1_st-list-item",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
                     className: "sp1_st-list-item-head",
-                    children: "Project : "
+                    children: "Client : "
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                     className: "sp1_st-list-item-value",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                       className: "dot-color bg-danger mr-2"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
-                      href: "/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId),
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
                       className: "text-dark text-hover-underline",
                       children: task === null || task === void 0 ? void 0 : task.clientName
                     })]

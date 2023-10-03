@@ -55264,6 +55264,8 @@ var SingleTask = /*#__PURE__*/function () {
     this.workingEnvironment = task === null || task === void 0 ? void 0 : task.working_environment;
     this.workEnvData = task === null || task === void 0 ? void 0 : task.working_environment_data;
     this.hasProjectManagerGuideline = task !== null && task !== void 0 && task.pm_task_guideline ? true : false;
+    this.clientName = task === null || task === void 0 ? void 0 : task.client_name;
+    this.clientId = task === null || task === void 0 ? void 0 : task.clientId;
     this.PMTaskGuideline = new ProjectMangerGuideline(task === null || task === void 0 ? void 0 : task.pm_task_guideline);
     this.revisions = lodash__WEBPACK_IMPORTED_MODULE_2___default().map(lodash__WEBPACK_IMPORTED_MODULE_2___default().orderBy(task === null || task === void 0 ? void 0 : task.task_revisions, 'id', 'desc'), function (revision) {
       return new TaskRevision(revision);
