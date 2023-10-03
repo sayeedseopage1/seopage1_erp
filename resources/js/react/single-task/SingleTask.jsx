@@ -207,7 +207,10 @@ const SingleTaskPage = () => {
                                     </div>
 
                                     {/* category */}
-                                    <div className="sp1_st-list-item">
+                                    {
+                                        task?.isSubtask &&
+                                        <>
+                                         <div className="sp1_st-list-item">
                                             <div className="sp1_st-list-item-head">
                                                 Task Category :{" "}
                                             </div>
@@ -251,7 +254,9 @@ const SingleTaskPage = () => {
                                         <div className="sp1_st-list-item-value">
                                             {task?.pageUrl ?? '--'}
                                         </div>
-                                    </div>                                    
+                                    </div>   
+                                    </>
+                                    }
                                          
                                 </div>
                             </div>

@@ -463,6 +463,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // CHECK EDITABLE SubTASK
         checkEditableSubTask: build.query({
             query: (subTaskId) => `/account/developer/check-editable-subtask/${subTaskId}`,
+        }),
+
+        // CHECK RESTRICTED KEYS
+        checkRestrictedWords: build.mutation({
+            query: (projectId) => ({
+                url:  `/account/check-project-first-tasks/${projectId}`,
+                method: "GET",
+            })
         })
 
   
@@ -514,6 +522,7 @@ export const {
     useLazyDeveloperCanCompleteTaskQuery,
     useDeveloperInProgressTaskQuery,
     useCheckEditableSubTaskQuery,
-    useCheckEditableTaskQuery
+    useCheckEditableTaskQuery,
+    useCheckRestrictedWordsMutation,
 
 } = singleTaskPageApiSlice;
