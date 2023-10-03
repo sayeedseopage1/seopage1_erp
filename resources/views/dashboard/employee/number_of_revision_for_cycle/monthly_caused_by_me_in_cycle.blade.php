@@ -1,15 +1,15 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="monthlyCausedByOther{{count($caused_by_other_for_previous_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="monthlyCausedByMeInCycle{{count($caused_by_me_in_previous_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Caused By Other: {{ count($caused_by_other_for_previous_cycle) }}</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Caused By Me: {{ count($caused_by_me_in_previous_cycle) }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="monthlyCausedByOtherTable" class="display" style="width:100%">
+            <table id="monthlycausedByMeInCycleTable" class="display" style="width:100%">
                 <thead>
                     <tr>
                         <th scope="col">Sl No</th>
@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($caused_by_other_for_previous_cycle as $item)
+                    @foreach ($caused_by_me_in_previous_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $raisedBy = \App\Models\User::where('id',$item->added_by)->first();
@@ -112,7 +112,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthlyCausedByOtherTable',{
+      new DataTable('#monthlycausedByMeInCycleTable',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

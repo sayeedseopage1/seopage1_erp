@@ -1,29 +1,29 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="monthlyCausedByOther{{count($caused_by_other_for_previous_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="causedByMeInCycle{{count($caused_by_me_in_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Caused By Other: {{ count($caused_by_other_for_previous_cycle) }}</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Caused By Me: {{ count($caused_by_me_in_cycle) }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="monthlyCausedByOtherTable" class="display" style="width:100%">
+            <table id="causedByMeInCycleTable" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th scope="col">Sl No</th>
-                        <th scope="col">Revision date</th>
-                        <th scope="col">Project Name</th>
-                        <th scope="col">Client name</th>
-                        <th scope="col">Revision request raised by</th>
-                        <th scope="col">Reason for revision</th>
-                        <th scope="col">Disputed</th>
-                        <th scope="col">Verdict</th>
+                    <th scope="col">Sl No</th>
+                    <th scope="col">Revision date</th>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">Client name</th>
+                    <th scope="col">Revision request raised by</th>
+                    <th scope="col">Reason for revision</th>
+                    <th scope="col">Disputed</th>
+                    <th scope="col">Verdict</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($caused_by_other_for_previous_cycle as $item)
+                    @foreach ($caused_by_me_in_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $raisedBy = \App\Models\User::where('id',$item->added_by)->first();
@@ -112,7 +112,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthlyCausedByOtherTable',{
+      new DataTable('#causedByMeInCycleTable',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

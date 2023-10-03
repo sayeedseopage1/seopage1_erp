@@ -168,7 +168,7 @@ class RevisionCalculatorController extends AccountBaseController
         ->join('p_m_projects','p_m_projects.project_id','projects.id')
         ->join('users as clients','clients.id','projects.client_id')
         ->where('tasks.added_by',$id)
-        ->whereBetween('p_m_projects.created_at', [$startDate, $endDate])
+        ->whereBetween('projects.created_at', [$startDate, $endDate])
         ->where('projects.project_status','Accepted')
         ->get();
         return response()->json($total_projects, 200);
@@ -207,7 +207,7 @@ class RevisionCalculatorController extends AccountBaseController
        ->join('p_m_projects','p_m_projects.project_id','projects.id')
        ->join('users as clients','clients.id','projects.client_id')
        ->where('tasks.added_by',$id)
-       ->whereBetween('p_m_projects.created_at', [$startDate, $endDate])
+       ->whereBetween('tasks.created_at', [$startDate, $endDate])
        ->where('projects.project_status','Accepted')
        ->get();
        return response()->json($total_tasks, 200);
