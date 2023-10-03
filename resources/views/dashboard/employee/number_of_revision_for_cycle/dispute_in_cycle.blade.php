@@ -1,32 +1,35 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-<div class="modal fade" id="monthlyCausedByOther{{count($caused_by_other_for_previous_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="disputInCycle{{count($dispute_in_cycle)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Caused By Other: {{ count($caused_by_other_for_previous_cycle) }}</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Disputed: {{ count($dispute_in_cycle) }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-            <table id="monthlyCausedByOtherTable" class="display" style="width:100%">
+            <table id="disputeInCycleTable" class="display" style="width:100%">
                 <thead>
                     <tr>
-                        <th scope="col">Sl No</th>
-                        <th scope="col">Revision date</th>
-                        <th scope="col">Project Name</th>
-                        <th scope="col">Client name</th>
-                        <th scope="col">Revision request raised by</th>
-                        <th scope="col">Reason for revision</th>
-                        <th scope="col">Disputed</th>
-                        <th scope="col">Verdict</th>
+                    <th scope="col">Sl No</th>
+                    <th scope="col">Revision Date</th>
+                    <th scope="col">Project Name</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Revision Request Raised By</th>
+                    <th scope="col">Person Responsible For Revision</th>
+                    <th scope="col">Reason For Revision</th>
+                    <th scope="col">Dispute Start Date</th>
+                    <th scope="col">Resolved</th>
+                    <th scope="col">Verdict</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($caused_by_other_for_previous_cycle as $item)
+                    @foreach ($dispute_in_cycle as $item)
                         @php
                             $user = \App\Models\User::where('id',$item->client_id)->first();
                             $raisedBy = \App\Models\User::where('id',$item->added_by)->first();
+                            $personResponsible = \App\Models\User::where('id',$item->ld_id)->first();
                             if ($item->status==1) {
                                 $win = \App\Models\User::where('id',$item->winner)->first();
                             }
@@ -68,14 +71,27 @@
                                 </div>
                             </td>
                             <td>
-                                @if ($item->revision_reason)
-                                    <p>{{ $item->revision_reason }}</p>
-                                @else
-                                    <p>N/A</p>
-                                @endif
+                                <div class="d-flex align-items-center">
+                                    <div class="" style="width: 28px;">
+                                        <div style="width: 32px; height: 28px;">
+                                            @if ($personResponsible->image)
+                                                <img src="{{ asset('user-uploads/avatar/'.$personResponsible->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @else
+                                                <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('employees.show',$personResponsible->id) }}" class="pl-2 ">{{ $personResponsible->name }}</a>
+                                </div>
                             </td>
                             <td>
-                                @if ($item->dispute_created == 1)
+                                <p>{{ $item->revision_acknowledgement }}</p>
+                            </td>
+                            <td>
+                                <p>{{ $item->created_at }}</p>
+                            </td>
+                            <td>
+                                @if ($item->dispute_status == 1)
                                     <span class="badge badge-success">Yes</span>
                                 @else
                                     <span class="badge badge-danger">No</span>
@@ -112,7 +128,7 @@
   </div>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script>
-      new DataTable('#monthlyCausedByOtherTable',{
+      new DataTable('#disputeInCycleTable',{
         "dom": 't<"d-flex"l<"ml-auto"ip>><"clear">',
       });
   </script>

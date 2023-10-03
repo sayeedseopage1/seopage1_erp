@@ -348,8 +348,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/incentives/disbursed-amounts/disbursed-get', [IncentiveController::class, 'DisbursedAmount'])->name('disbursed-amount');
     Route::get('/incentives/held-amounts/held-get', [IncentiveController::class, 'HeldAmount'])->name('held-amount');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
-    
-   
+
+
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     /* Setting menu routes starts from here */
@@ -731,7 +731,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     /* TASKS */
     Route::get('tasks/task-timer-check/{id}', [TaskController::class, 'TaskTimeCheck']);
-    
+
     Route::get('tasks/get-task-status/{id}', [TaskController::class, 'GetTaskStatus']);
 
     Route::get('tasks/revisions', [TaskController::class, 'task_revisions']);
@@ -794,7 +794,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         }
     );
     //Route::resource('tasks', TaskController::class)->only([ 'show', 'create', 'store', 'edit', 'update', 'destroy']);
-    //pm task guidelines 
+    //pm task guidelines
     Route::get('tasks/add-tasks/project-deliverables/{id}', [TaskController::class, 'get_tasks_project_deliverable']);
     Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
     Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
@@ -814,14 +814,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     ->where('any', '^(?!api\/)[\/\w\.-]*')
     ->where('any', '^(?:(?!\d+).)*');
     Route::resource('tasks', TaskController::class)->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
-    
+
     Route::get('task-guideline/{project_id}', [TaskController::class, 'viewTaskGuideline'])->name('task-guideline');
     Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
     Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
-    
 
-    /******* TASK DISPUTE ******** */ 
+
+    /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
     Route::post('task-dispute-question', [TaskController::class, 'store_dispute_question'])->name('task-dispute-question');
     Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
@@ -1068,7 +1068,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('timelogs/approve_timelog', [TimelogController::class, 'approveTimelog'])->name('timelogs.approve_timelog');
     Route::resource('timelogs', TimelogController::class);
 
-    Route::resource('disputes', DisputeController::class); 
+    Route::resource('disputes', DisputeController::class);
     Route::any('revision-calculator/{any?}', [RevisionCalculatorController::class, 'index'])->where('any', '.*');
     Route::resource('revision-calculator', RevisionCalculatorController::class);
     Route::get('revision-calculator-data', [RevisionCalculatorController::class, 'getData']);
@@ -1269,12 +1269,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/developer/check-editable-task/{id}',[TaskController::class,'checkEditableTask']);
     Route::get('/developer/check-editable-subtask/{id}',[TaskController::class,'checkEditableSubTask']);
     Route::get('/developer/primary-page-authorization-count/',[TaskController::class,'PrimaryPageAuthorization']);
-   
-   
+
+
 
     Route::get('/tasks-type',[TaskController::class,'getTasksType']);
     Route::put('/tasks-type-authorization/{id}',[TaskController::class,'taskTypeAuthorization']);
-    
+
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
 
@@ -1290,7 +1290,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::resource('pm-payment-history',PmPaymentReleaseHistory::class);
     Route::post('pm-payment-history-filter-date',[PmPaymentReleaseHistory::class,'getMonthDate'])->name('getMonthDate');
-    
+
     //Portfolio Section
     Route::get('/portfolio/filter-menu', [PortfolioController::class, 'get_filter_data'])->name("filter-menu");
     Route::get('/portfolio/data', [PortfolioController::class, 'get_portfolio_data'])->name("/portfolio/data");
@@ -1299,7 +1299,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/portfolio/get-sub-category/{website_cat_id}', [PortfolioController::class, 'getSubCategory']);
     Route::get('/filter-cms-categories', [PortfolioController::class, 'filterCmsCategories'])->name('filter-cms-categories');
     Route::get('/filter-data/{dataId}', [PortfolioController::class, 'filterDataShow']);
-   
+
   //  Route::any('tasks/{any?}', [TaskController::class, 'home'])->where('any', '.*');
 });
 
