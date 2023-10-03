@@ -406,10 +406,12 @@ class TimelogController extends AccountBaseController
              })
              ->first();
             //    $daily_submission = DailySubmission::where('user_id',Auth::user()->id)->where('task_id',$request->task_id)->whereDate('created_at',$yesterdayDate->created_at)->orWhereDate('created_at',Carbon::today())->first();
-               $daily_submission = DailySubmission::where('user_id', Auth::user()->id)->where('task_id',$request->task_id)
+               $daily_submission = DailySubmission::where('user_id', Auth::user()->id)
     ->where(function ($query) use ($yesterdayDate) {
-        $query->whereDate('created_at', $yesterdayDate->created_at)
-              ->orWhereDate('created_at', Carbon::today());
+        $query->whereDate('created_at', Carbon::today())
+        
+        ->orWhereDate('created_at', $yesterdayDate->created_at);
+              
     })
     ->first();
     //dd($daily_submission);
