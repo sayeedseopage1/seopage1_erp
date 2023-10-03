@@ -103,6 +103,16 @@ const SingleTaskPage = () => {
                                     </div>
 
                                     <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">Project : </div>
+                                        <div className="sp1_st-list-item-value">
+                                            <span className="dot-color bg-danger mr-2" />
+                                            <a href={`/account/projects/${task?.projectId}`} className="text-dark text-hover-underline"> 
+                                                {task?.clientName} 
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div className="sp1_st-list-item">
                                         <div className="sp1_st-list-item-head">
                                             Milestone :{" "}
                                         </div>
