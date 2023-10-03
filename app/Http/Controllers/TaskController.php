@@ -5035,4 +5035,41 @@ class TaskController extends AccountBaseController
         ]);
         
     }
+    public function checkfirstTask($id)
+    {
+        $task_count= Task::where('project_id',$id)->count();
+        $project= PMProject::where('project_id',$id)->first();
+        $current_date= Carbon::now();
+        $project_date= Carbon::parse($project->created_at);
+        $daysDifference = $current_date->diffInDays($project_date);
+        if($task_count == 0)
+        {
+            return response()->json([
+                'message'=> 'You can create task',
+                'status'=>200,
+    
+            ]);
+
+
+        }elseif($daysDifference <= 5)
+        {
+            
+            return response()->json([
+                'message'=> 'You can create task',
+                'status'=>200,
+    
+            ]);
+
+
+        }else 
+        {
+            return response()->json([
+                'message'=> 'You cannot create task',
+                'status'=>400,
+    
+            ]);
+
+
+        }
+    }
 }
