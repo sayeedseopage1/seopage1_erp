@@ -3286,7 +3286,7 @@ class TaskController extends AccountBaseController
     public function task_json(Request $request, $id)
     {
         if ($request->mode == 'basic') {
-            $task = Task::with('users', 'createBy', 'boardColumn','clients.id as clientId','clients.name as client_name')->select([
+            $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
                 'task_types.page_name',
@@ -3301,7 +3301,8 @@ class TaskController extends AccountBaseController
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.project_summary',
-                'users as clients','clients.id','projects.client_id',
+                'clients.id as clientId','clients.name as client_name',
+              
                 
 
                 'project_milestones.id as milestone_id',
@@ -3310,6 +3311,7 @@ class TaskController extends AccountBaseController
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
                 ->join('projects', 'tasks.project_id', 'projects.id')
+                ->leftJoin('users as clients','clients.id','projects.client_id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
                 ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
             //    / ->leftJoin('tasks', 'sub_tasks.task_id', 'tasks.id')
