@@ -10,7 +10,7 @@ const WorkItem = ({data, toggle, modalRef, close, isLoading}) => {
   return (
     <div className="d-flex align-items-center justify-content-between sp1_tark_right_item">
         <div> 
-            <a className='hover-underline text-primary' href={`/account/tasks/132?preview-type=modal&subtask=${data?.task_id}`}> Task#{data?.task_id} </a>
+            <a className='hover-underline text-primary' href={`/account/tasks/${data?.task_id}`}> Task#{data?.task_id} </a>
             ({data?.submission_no}) submitted by <a className='hover-underline text-primary' href={`/account/employees/${data?.user_id}`}>{data?.name}</a> </div>
 
         <div>{dayjs(data?.submission_date).format('MMM DD, YYYY')}</div>

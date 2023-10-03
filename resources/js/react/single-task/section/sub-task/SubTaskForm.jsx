@@ -10,10 +10,11 @@ import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 
 import _ from "lodash";
 import {
+    useCheckRestrictedWordsMutation,
     useCreateSubtaskMutation,
     useLazyGetTaskDetailsQuery,
 } from "../../../services/api/SingleTaskPageApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setWorkingEnvironmentStatus, storeSubTasks } from "../../../services/features/subTaskSlice";
@@ -27,7 +28,7 @@ import LeadConfirmationModal from "./LeadConfirmationModal";
 import { checkIsURL } from "../../../utils/check-is-url";
 import { toast } from "react-toastify"; 
 
-const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
+const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
@@ -71,6 +72,17 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
     const [showForm, setShowForm] = React.useState(false); 
 
     const required_error = error?.status === 422 ? error?.data : null;
+    const [containViolation, setContainViolation] = React.useState(false);
+
+    const navigate = useNavigate();
+
+
+    const [
+        checkRestrictedWords,
+        {isLoading: checking}
+    ] = useCheckRestrictedWordsMutation();
+
+
     // handle change
     React.useEffect(() => {
         setMilestone(task?.milestoneTitle);
@@ -254,7 +266,8 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
 
 
         const submit = async () => { 
-            if(isValid()){ 
+            
+            if(isValid()){  
                 await createSubtask(fd)
                 .unwrap()
                 .then((res) => {
@@ -288,23 +301,67 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
             }
         }
 
-        if(pageTypePriority === "Primary Page Development"){ 
-            Swal.fire({
-                icon: 'info',
-                html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
-                showCloseButton: true, 
-                showCancelButton: true,
-            }).then((res => {
-                if(res.isConfirmed){
-                    submit();
-                }
-            }))
-        }else{
-            submit()
+        const primaryPageConfirmation = () => {
+            if(pageTypePriority === "Primary Page Development"){ 
+                Swal.fire({
+                    icon: 'info',
+                    html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
+                    showCloseButton: true, 
+                    showCancelButton: true,
+                }).then((res => {
+                    if(res.isConfirmed){
+                        submit();
+                    }
+                }))
+            }else{
+                submit()
+            }
         }
 
-        return;
-       
+        
+ 
+            // check violation words
+            const response = await checkRestrictedWords(task?.projectId).unwrap();
+            
+            if(response.status === 400){
+                const error = new Object();
+                const checkViolationWord = (text) => { 
+                    const violationWords = ["revision", "fix", "modify", "fixing", "revise", "edit"]; 
+                    const violationRegex = new RegExp(`\\b(${violationWords.join("|")})\\b`, "i");
+                    return violationRegex.test(_.toLower(text));
+                }
+
+                const alert = () => {
+                    Swal.fire({
+                        icon: 'error',
+                        html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p>Are you sure this is a new task and not a revision to any other existing tasks?</p> `,
+                        // showCloseButton: true,
+                        showConfirmButton: true, 
+                        showCancelButton: true,
+                    }).then((res => {
+                        if(res.isConfirmed){
+                            primaryPageConfirmation();
+                        } 
+                    }))
+                }
+ 
+                // check title
+                if(checkViolationWord(title)){
+                    setContainViolation(true);
+                    error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>` 
+                    
+                    alert();
+                }else if(checkViolationWord(description)){  // check description
+                    setContainViolation(true);
+                    error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
+                    
+                    alert();
+                } 
+ 
+                setErr(prev => ({...prev, ...error}))
+            }else{
+                primaryPageConfirmation();
+            } 
         
     };
 
@@ -341,7 +398,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
         }
     }, [])
 
-    console.log({assignedTo})
+    
     return (
         <>
             <div className="sp1-subtask-form --modal-panel">
@@ -874,6 +931,9 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 </div>
                             </div>
 
+
+                            
+
                             <div className="col-12">
                                 <div className="form-group my-3">
                                     <label htmlFor=""> Description </label>
@@ -898,6 +958,9 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                 />
                             </div>
 
+
+                           {/* {err?.violationWord ? <div className="alert alert-danger mt-2 w-100 text-center" dangerouslySetInnerHTML={{__html: err?.violationWord}} />: null} */}
+
                             <div className="col-12 mt-3 pb-3">
                                 <div className="d-flex align-items-center justify-content-end">
                                     <Button
@@ -908,7 +971,7 @@ const SubTaskForm = ({ close, isFirstSubtask = ture }) => {
                                         Cancel
                                     </Button>
 
-                                    {!isLoading ? (
+                                    {!isLoading && !checking ? (
                                         <Button onClick={handleSubmit}>
                                             <i className="fa-regular fa-paper-plane"></i>
                                             Create
