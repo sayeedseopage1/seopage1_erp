@@ -111,6 +111,18 @@ export const DailySubmissionTableColumn = [
         }
     },
     {
+        id: 'task_status',
+        header: 'Status',
+        className: '',
+        sorted: false,
+        group: false,
+        cell: ({row,className}) =>{
+            return <td className={`${className} sp1_tlr_td_border`}>
+                {row?.task_status}
+            </td>
+        }
+    },
+    {
         id: 'task_type',
         header: 'Task Type',
         className: '',

@@ -15,6 +15,7 @@ export default function get_submission_table_data(data_size = 20) {
       lead_developer: faker.person.fullName(),
       project: `demo project - ${i}`,
       task: `demo task - ${random_number*9}`,
+      task_status: faker.number.int({min:0, max:1})?'Completed':'Partial',
       task_type: `demo task type - ${random_number*10}`,
       page_type: `demo page type - ${i}`,
       page_link: faker.internet.url(),

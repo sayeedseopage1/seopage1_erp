@@ -31029,14 +31029,28 @@ var DailySubmissionTableColumn = [{
     });
   }
 }, {
-  id: 'task_type',
-  header: 'Task Type',
+  id: 'task_status',
+  header: 'Status',
   className: '',
   sorted: false,
   group: false,
   cell: function cell(_ref8) {
     var row = _ref8.row,
       className = _ref8.className;
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+      className: "".concat(className, " sp1_tlr_td_border"),
+      children: row === null || row === void 0 ? void 0 : row.task_status
+    });
+  }
+}, {
+  id: 'task_type',
+  header: 'Task Type',
+  className: '',
+  sorted: false,
+  group: false,
+  cell: function cell(_ref9) {
+    var row = _ref9.row,
+      className = _ref9.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.task_type
@@ -31048,9 +31062,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref9) {
-    var row = _ref9.row,
-      className = _ref9.className;
+  cell: function cell(_ref10) {
+    var row = _ref10.row,
+      className = _ref10.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.page_type
@@ -31062,9 +31076,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref10) {
-    var row = _ref10.row,
-      className = _ref10.className;
+  cell: function cell(_ref11) {
+    var row = _ref11.row,
+      className = _ref11.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.page_link
@@ -31076,9 +31090,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref11) {
-    var row = _ref11.row,
-      className = _ref11.className;
+  cell: function cell(_ref12) {
+    var row = _ref12.row,
+      className = _ref12.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.sections
@@ -31090,9 +31104,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref12) {
-    var row = _ref12.row,
-      className = _ref12.className;
+  cell: function cell(_ref13) {
+    var row = _ref13.row,
+      className = _ref13.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       title: row === null || row === void 0 ? void 0 : row.comment,
       className: "".concat(className, " sp1_tlr_td_border"),
@@ -31111,9 +31125,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref13) {
-    var row = _ref13.row,
-      className = _ref13.className;
+  cell: function cell(_ref14) {
+    var row = _ref14.row,
+      className = _ref14.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.total_time_spent
@@ -31125,9 +31139,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref14) {
-    var row = _ref14.row,
-      className = _ref14.className;
+  cell: function cell(_ref15) {
+    var row = _ref15.row,
+      className = _ref15.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.attachment_url
@@ -31139,9 +31153,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref15) {
-    var row = _ref15.row,
-      className = _ref15.className;
+  cell: function cell(_ref16) {
+    var row = _ref16.row,
+      className = _ref16.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.site
@@ -31153,9 +31167,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref16) {
-    var row = _ref16.row,
-      className = _ref16.className;
+  cell: function cell(_ref17) {
+    var row = _ref17.row,
+      className = _ref17.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.frontend_password
@@ -31167,9 +31181,9 @@ var DailySubmissionTableColumn = [{
   className: '',
   sorted: false,
   group: false,
-  cell: function cell(_ref17) {
-    var row = _ref17.row,
-      className = _ref17.className;
+  cell: function cell(_ref18) {
+    var row = _ref18.row,
+      className = _ref18.className;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "".concat(className, " sp1_tlr_td_border"),
       children: row === null || row === void 0 ? void 0 : row.report_submission_date
@@ -31666,6 +31680,10 @@ function get_submission_table_data() {
       lead_developer: _faker_js_faker__WEBPACK_IMPORTED_MODULE_0__.faker.person.fullName(),
       project: "demo project - ".concat(i),
       task: "demo task - ".concat(random_number * 9),
+      task_status: _faker_js_faker__WEBPACK_IMPORTED_MODULE_0__.faker.number["int"]({
+        min: 0,
+        max: 1
+      }) ? 'Completed' : 'Partial',
       task_type: "demo task type - ".concat(random_number * 10),
       page_type: "demo page type - ".concat(i),
       page_link: _faker_js_faker__WEBPACK_IMPORTED_MODULE_0__.faker.internet.url(),
