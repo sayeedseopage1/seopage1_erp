@@ -4866,13 +4866,24 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
-        $tasks = $yesterdayData;
-    } else {
-        $tasks = $todayData;
     }
+    if($request->date_type == 'today')
+    {
+        $tasks = $todayData;
+        $date= Carbon::now();
+    }else
+    {
+        $tasks = $yesterdayData;
+        $date= Carbon::yesterday();
+
+    }
+        // $tasks = $yesterdayData;
+    // } else {
+    //     $tasks = $todayData;
+    // }
         // /dd($tasks );
         return response()->json([
-            'date'=> $request->data_type,
+            'date'=> $date,
             'data' => $tasks,
             'status' => 200
         ]);
