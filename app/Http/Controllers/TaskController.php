@@ -4439,7 +4439,7 @@ class TaskController extends AccountBaseController
 
         return response()->json([
             'data' => $response_data,
-            "message"=>"Question added succesfully"
+            "message"=>"Question added successfully"
         ], 200);
     }
 

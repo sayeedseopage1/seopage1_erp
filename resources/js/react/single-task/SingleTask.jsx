@@ -65,13 +65,21 @@ const SingleTaskPage = () => {
     if(!task) return null;
     
     return (
-        <div className="postion-relative"> 
+        <div className="position-relative"> 
             <div className="mb-3">
                 <div className={`f-18 ${loadingClass}`}>
                     <span> <strong>Task: </strong> </span> 
-                    <a href={`/account/tasks/${task?.id}`} >{task?.getSubtaskTitle()}</a> 
-                </div>
-                {_.includes([1, 4, 6, 7, 8], loggedUser?.getRoleId()) && <a href={`/account/projects/${task.projectId}`} className="f-14">Go to project tasks page</a>}
+                    <a href={`/account/tasks/${task?.id}`} >{task?.getSubtaskTitle()}</a>
+                    {_.includes([1, 4, 6, 7, 8], loggedUser?.getRoleId()) && 
+                        <span className="ml-2">
+                            (
+                                <a href={`/account/projects/${task.projectId}`} className="f-14">
+                                    See All Tasks
+                                </a>
+                            )
+                        </span> 
+                    }
+                </div> 
             </div>
 
             <div className="row">
@@ -266,7 +274,9 @@ const SingleTaskPage = () => {
                                             Page Url:{" "}
                                         </div>
                                         <div className="sp1_st-list-item-value">
-                                            {task?.pageUrl ?? '--'}
+                                            {task?.pageUrl ? <a href={task?.pageUrl}>
+                                                ( view )
+                                            </a> : <span>--</span>}
                                         </div>
                                     </div>   
                                     </>
