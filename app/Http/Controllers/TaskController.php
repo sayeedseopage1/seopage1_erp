@@ -3303,8 +3303,8 @@ class TaskController extends AccountBaseController
                 'projects.project_summary',
 
                 'clients.id as clientId','clients.name as client_name',
-              
-                
+
+
 
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
@@ -4417,9 +4417,12 @@ class TaskController extends AccountBaseController
     // ADD QUESTION FOR DISPUTE
     // * @params id is dispute id;
     public function store_dispute_question(Request $request){
+
         $questions = $request->questions;
+        $dispute_id = $questions['0']['dispute_id'];
 
         foreach ($questions as $question) {
+
             $query = new TaskDisputeQuestion();
             $query->dispute_id = $question['dispute_id'];
             $query->raised_by = $question['raised_by'];
@@ -4427,6 +4430,10 @@ class TaskController extends AccountBaseController
             $query->question_for = $question['question_for'];
             $query->save();
        }
+
+       $revision_dispute = TaskRevisionDispute::find($dispute_id);
+       $revision_dispute->has_update = true;
+       $revision_dispute->save();
 
        $response_data = TaskDisputeQuestion::where('dispute_id', $request->dispute_id)->get();
 
@@ -4440,7 +4447,9 @@ class TaskController extends AccountBaseController
     // * @params id is dispute id;
     public function update_dispute_question_with_answer(Request $request){
         $questions = $request->questions;
+
         $dispute_id = $questions['0']['dispute_id'];
+
 
         // UPDATE ALL QUESTION WITH ANSWER
         foreach ($questions as $question) {
@@ -4457,20 +4466,27 @@ class TaskController extends AccountBaseController
        }
 
 
+       $revision_dispute = TaskRevisionDispute::find($dispute_id);
+       $revision_dispute->has_update = true;
+       $revision_dispute->save();
+
+
        $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
 
-       // REUTRN UPDATED QUESTION DATA
+       // RETURN UPDATED QUESTION DATA
        return response()->json([
         'data' => $response_data,
         'message' => 'Answer successfully submitted!'
        ], 200);
      }
 
-    // MAKE DISPUTE SUBMITTED ANSWERE SEEN
+    // MAKE DISPUTE SUBMITTED ANSWER SEEN
     public function update_dispute_answer_read_status(Request $request){
 
         $questions = $request->questions;
         $dispute_id = $questions['0']['dispute_id'];
+
+        $revision_dispute = TaskRevisionDispute::find($dispute_id);
 
         foreach ($questions as $question) {
             $id = $question['id'];
@@ -4478,6 +4494,9 @@ class TaskController extends AccountBaseController
             $query->replied_seen = true;
             $query->replied_date = Carbon::now();
             $query->save();
+
+            $revision_dispute->has_update = true;
+            $revision_dispute->save();
        }
 
        $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
@@ -4504,10 +4523,8 @@ class TaskController extends AccountBaseController
             $query->resolved_on = $query->resolved_on ?? Carbon::now();
             $query->authorize_on = Carbon::now();
             $query->status = true;
+            $query->has_update = true;
             $query->save();
-
-
-
 
 
             // change status on revision table
@@ -4541,6 +4558,7 @@ class TaskController extends AccountBaseController
             $query->raised_by_percent = $request->raised_by_percent;
             $query->resolved_by = $request->resolve_by;
             $query->resolved_on = Carbon::now();
+            $query->has_update = true;
             $query->save();
 
             $filter = [
@@ -4843,7 +4861,7 @@ class TaskController extends AccountBaseController
         ->leftJoin('task_types','task_types.task_id','tasks.id')
         ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
-     
+
         ->whereDate('project_time_logs.created_at',Carbon::yesterday())
 
         ->groupBy('tasks.id')

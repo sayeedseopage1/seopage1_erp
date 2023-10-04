@@ -127,7 +127,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 }
             })
             .catch((err) => {
-                console.log({err}) 
+                
                 if(err.status === 400){
                     if(err.data.acknowledgement_submitted === false){
                         Swal.fire({
@@ -154,7 +154,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                           }).then((result) => {
                             /* Read more about isConfirmed, isDenied below */
                             if (result.isConfirmed) {
-                                navigate(`?modal=daily-submission`)
+                                navigate(`?modal=daily-submission&date_type=last-date`)
                             } 
                           })
                      }
@@ -216,7 +216,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
         .then(res => { 
             if(res){
                 let currentTime = dayjs.dayjs(res.current_time);
-                let target = currentTime.set('hour', 17).set('minutl', 0).set('second', 0);
+                let target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
                 const isSaturday = currentTime.day() === 6;
 
                 if(isSaturday){
@@ -224,7 +224,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 }
 
                 let check = dayjs.dayjs(currentTime).isBefore(target);
-                let isDev = _.includes([5, 9 , 10], Number(auth.getRoleId()));
+                let isDev = _.includes([5, 9 , 10], Number(auth?.getRoleId()));
                 if(!check && isDev){
                     res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER', date: 'Today'})) : stopTimer()
                 }else{

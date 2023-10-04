@@ -3,10 +3,17 @@ import TodaysUpdateModalTableRow from "./TodaysUpdateModalTableRow";
 import style from "./styles/DailySubmission.module.css";
 import './styles/DataTable.css';
 import { useGetDailySubmissionQuery } from "../../../services/api/dailySubmissionApiSlice";
+import { useSearchParams } from "react-router-dom";
+import { User } from "../../../utils/user-details";
 
 const TodaysUpdateModalTable = () => {
-    const [open, setOpen] = useState(null);
-    const { data, isLoading } = useGetDailySubmissionQuery(window.Laravel?.user?.id);
+    const [open, setOpen] = useState(null); 
+    const [searchParams] = useSearchParams();
+    const date_type = searchParams.get('data_type');
+
+    const loggedUser = new User(window.Laravel?.user);
+ 
+    const { data, isLoading } = useGetDailySubmissionQuery(`${loggedUser?.id}?date_type=${date_type}`);
 
 
 

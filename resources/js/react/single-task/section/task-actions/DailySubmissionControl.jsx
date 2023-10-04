@@ -8,7 +8,8 @@ import SubmitButton from "../../components/SubmitButton";
 import TodaysUpdateModalTable from "../daily-submission/TodaysUpdateModalTable";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import Swal from "sweetalert2";
+import Swal from "sweetalert2"; 
+import dayjs from "dayjs";
 
 const DailySubmissionControl = () => {
     const [todaysUpdateModalisOpen, setTodaysUpdateModalisOpen] =
@@ -16,8 +17,12 @@ const DailySubmissionControl = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const url = new URLSearchParams(location.search);
+ 
 
-    const isOpen = url.get("modal") === "daily-submission";
+    const isOpen = url.get("modal") === "daily-submission"; 
+
+
+     
 
     // console.log(location);
 
@@ -33,7 +38,7 @@ const DailySubmissionControl = () => {
         navigate(`${location.pathname}`);
         setTodaysUpdateModalisOpen(false);
     };
-    const open = () => navigate(`${location.pathname}?modal=daily-submission`);
+    const open = () => navigate(`${location.pathname}?modal=daily-submission&data_type=today`);
 
     return (
         <div>

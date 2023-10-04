@@ -13,8 +13,6 @@ const SingleUserSubmissionTableDrawer = ({ isOpen, close, toggle, data, setModal
     const { width: deviceWidth } = useWindowSize();
     // useClickAway(ref, close);
 
-    console.log(data);
-
     const content = () => {
         return (
             <div ref={ref} className="sp1-subtask-form --modal-panel">

@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { Placeholder } from "../../../../global/Placeholder";
 import dayjs from "dayjs";
 import OptionSix from "./options/OptionSix";
+import { useNavigate } from "react-router-dom";
 
 const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     const { task, lessTrackModalFor, lessTrackDate } = useSelector(s => s.subTask)
@@ -18,7 +19,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     const [closingToday, setClosingToday] = React.useState(false); 
     const [trackHours, setTrackHours] = React.useState('');
     const [trackMinutes, setTrackMinutes] = React.useState('');
-    const loggedUser = new User(window?.Laravel?.user);
+    const loggedUser = new User(window?.Laravel?.user); 
 
     const [ storeStopTrackTimer, {
         isLoading: isSubmitting
@@ -28,6 +29,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
 
     // console.log(trackTime)
 
+    const navigate = useNavigate();
      
 
     React.useEffect(() => {
@@ -49,7 +51,10 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
             handleTemporarilyStopTimer();
         })
         .catch(err => console.log(err))
-        .finally(() => close())
+        .finally(() => {
+            navigate(`?modal=daily-submission&data_type=today`);
+            close()
+        })
     }
 
     return (
