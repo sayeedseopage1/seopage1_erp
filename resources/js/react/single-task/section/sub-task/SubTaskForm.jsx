@@ -334,7 +334,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                 const alert = () => {
                     Swal.fire({
                         icon: 'error',
-                        html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p>Are you sure this is a new task and not a revision to any other existing tasks?</p> `,
+                        html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> `,
                         // showCloseButton: true,
                         showConfirmButton: true, 
                         showCancelButton: true,
@@ -354,8 +354,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                 }else if(checkViolationWord(description)){  // check description
                     setContainViolation(true);
                     error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
-                    
                     alert();
+                }else{
+                    primaryPageConfirmation(); 
                 } 
  
                 setErr(prev => ({...prev, ...error}))
