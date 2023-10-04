@@ -31517,9 +31517,6 @@ var Disputes = function Disputes() {
     getDisputes = _useLazyGetDisputesQu2[0],
     isFetching = _useLazyGetDisputesQu2[1].isFetching;
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User(window.Laravel.user);
-  console.log({
-    disputes: disputes
-  });
   var onFilter = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(filter) {
       var queryObject, queryString, res;
@@ -31539,6 +31536,13 @@ var Disputes = function Disputes() {
           case 7:
             res = _context.sent;
             if (res) {
+              // const data = _.filter(res, d=> {
+              //     if(filter.status === 'Pending'){
+              //         return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
+              //     }else if(filter.status === 'In Progress'){
+              //         return d.status === 0 && (_.size(d.conversations)!==0 || d.resolved_by)
+              //     }else return d.status === 1;
+              // })
               dispatch({
                 type: 'INIT_DISPUTE',
                 disputes: res
@@ -34070,15 +34074,6 @@ var Filterbar = function Filterbar(_ref) {
     return dateType;
   }, [dateType]);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    console.log({
-      start_date: start_date,
-      end_date: end_date,
-      _dispute_rasied_by: _dispute_rasied_by,
-      _client: _client,
-      _disputeRaisedAgainst: _disputeRaisedAgainst,
-      _pm: _pm,
-      _status: _status
-    });
     var filter = {
       start_date: start_date,
       end_date: end_date,
@@ -34086,7 +34081,7 @@ var Filterbar = function Filterbar(_ref) {
       client_id: _client === null || _client === void 0 ? void 0 : _client.id,
       dispute_raised_against: _disputeRaisedAgainst === null || _disputeRaisedAgainst === void 0 ? void 0 : _disputeRaisedAgainst.id,
       pm_id: _pm === null || _pm === void 0 ? void 0 : _pm.id,
-      status: _status === null || _status === void 0 ? void 0 : _status.id
+      status: _status === null || _status === void 0 ? void 0 : _status.column_name
     };
     onFilter(filter);
   }, [start_date, end_date, _dispute_rasied_by, _client, _disputeRaisedAgainst, _pm, _status]);
@@ -34121,7 +34116,10 @@ var Filterbar = function Filterbar(_ref) {
         state: pm,
         setState: setPm,
         roleIds: [4]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {})]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_StatusFilter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        state: status,
+        setState: setStatus
+      })]
     }), width < 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {
         className: "ml-auto"
@@ -34318,6 +34316,9 @@ var StatusFilter = function StatusFilter(_ref) {
   }, {
     id: 11,
     column_name: 'Pending'
+  }, {
+    id: 13,
+    column_name: 'In Progress'
   }, {
     id: 10,
     column_name: 'Resolved'

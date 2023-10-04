@@ -39,15 +39,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
 
     React.useEffect(() => {
-        console.log({
-            start_date,
-        end_date,
-        _dispute_rasied_by,
-        _client,
-        _disputeRaisedAgainst,
-        _pm,
-        _status,
-        })
+        
         const filter = {
             start_date,
             end_date,
@@ -55,7 +47,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             client_id: _client?.id,
             dispute_raised_against: _disputeRaisedAgainst?.id,
             pm_id: _pm?.id,
-            status: _status?.id, 
+            status: _status?.column_name, 
         };
 
         onFilter(filter);
@@ -115,7 +107,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     />
                     <HDivider /> 
 
-                    {/* <StatusFilter state={status} setState={setStatus} /> */}
+                    <StatusFilter state={status} setState={setStatus} />
                     {/* <HDivider />  */}
                 </React.Fragment>
             )}
