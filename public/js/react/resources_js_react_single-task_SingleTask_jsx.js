@@ -774,17 +774,25 @@ var SingleTaskPage = function SingleTaskPage() {
     });
   }
   var _taskStatus = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.BoardColumn(taskStatus);
+  if (!task) return null;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
     className: "postion-relative",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-      className: "f-16 mb-3 ".concat(loadingClass),
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("span", {
-        children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("strong", {
-          children: "Task: "
-        }), " "]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
-        href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
-        children: task === null || task === void 0 ? void 0 : task.getSubtaskTitle()
+      className: "mb-3",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+        className: "f-18 ".concat(loadingClass),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("span", {
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("strong", {
+            children: "Task: "
+          }), " "]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
+          href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
+          children: task === null || task === void 0 ? void 0 : task.getSubtaskTitle()
+        })]
+      }), lodash__WEBPACK_IMPORTED_MODULE_1___default().includes([1, 4, 6, 7, 8], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
+        href: "/account/projects/".concat(task.projectId),
+        className: "f-14",
+        children: "Go to project tasks page"
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
       className: "row",
@@ -811,7 +819,7 @@ var SingleTaskPage = function SingleTaskPage() {
                     className: "sp1_st-list-item-value",
                     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
                       href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.parentTaskId),
-                      className: "text-dark text-hover-underline",
+                      className: "text-hover-underline",
                       children: task === null || task === void 0 ? void 0 : task.parentTaskTitle
                     })
                   })]
@@ -826,7 +834,7 @@ var SingleTaskPage = function SingleTaskPage() {
                       className: "dot-color bg-danger mr-2"
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
                       href: "/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId),
-                      className: "text-dark text-hover-underline",
+                      className: "text-hover-underline",
                       children: task === null || task === void 0 ? void 0 : task.projectName
                     })]
                   })]
@@ -838,9 +846,8 @@ var SingleTaskPage = function SingleTaskPage() {
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                     className: "sp1_st-list-item-value",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                      className: "dot-color bg-danger mr-2"
+                      className: "dot-color bg-info mr-2"
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("span", {
-                      className: "text-dark text-hover-underline",
                       children: task === null || task === void 0 ? void 0 : task.clientName
                     })]
                   })]
@@ -880,7 +887,7 @@ var SingleTaskPage = function SingleTaskPage() {
                         className: "d-block f-14 font-weight-bold",
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
                           href: task === null || task === void 0 || (_task$assigneeTo3 = task.assigneeTo) === null || _task$assigneeTo3 === void 0 ? void 0 : _task$assigneeTo3.getUserLink(),
-                          className: "text-dark hover-underline",
+                          className: "hover-underline",
                           children: task === null || task === void 0 || (_task$assigneeTo4 = task.assigneeTo) === null || _task$assigneeTo4 === void 0 ? void 0 : _task$assigneeTo4.getName()
                         }), Number(task === null || task === void 0 || (_task$assigneeTo5 = task.assigneeTo) === null || _task$assigneeTo5 === void 0 ? void 0 : _task$assigneeTo5.getId()) === Number(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                           className: "rounded-pill bg-dark text-white px-1 ml-1",
@@ -923,7 +930,7 @@ var SingleTaskPage = function SingleTaskPage() {
                         className: "d-block f-14 font-weight-bold",
                         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
                           href: task === null || task === void 0 || (_task$assigneeBy3 = task.assigneeBy) === null || _task$assigneeBy3 === void 0 ? void 0 : _task$assigneeBy3.getUserLink(),
-                          className: "text-dark hover-underline",
+                          className: "hover-underline",
                           children: task === null || task === void 0 || (_task$assigneeBy4 = task.assigneeBy) === null || _task$assigneeBy4 === void 0 ? void 0 : _task$assigneeBy4.getName()
                         }), Number(task === null || task === void 0 || (_task$assigneeBy5 = task.assigneeBy) === null || _task$assigneeBy5 === void 0 ? void 0 : _task$assigneeBy5.getId()) === Number(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("sup", {
                           className: "rounded-pill bg-dark text-white px-1",
@@ -1159,7 +1166,7 @@ var SingleTaskPage = function SingleTaskPage() {
             })]
           }), task && (task === null || task === void 0 ? void 0 : task.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_section_submitted_work_SubmittedWork__WEBPACK_IMPORTED_MODULE_21__["default"], {
             task: task
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_section_sub_task_SubTaskSection__WEBPACK_IMPORTED_MODULE_20__["default"], {
+          }), !lodash__WEBPACK_IMPORTED_MODULE_1___default().includes([5, 9, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_section_sub_task_SubTaskSection__WEBPACK_IMPORTED_MODULE_20__["default"], {
             status: taskStatus
           }), task && (task === null || task === void 0 ? void 0 : task.id) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)(_section_daily_submission_DailySubmissionSection__WEBPACK_IMPORTED_MODULE_16__["default"], {
             task: task
