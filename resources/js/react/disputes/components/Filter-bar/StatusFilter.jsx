@@ -8,6 +8,7 @@ const StatusFilter = ({state, setState, selectionBoxClassName}) => {
   const status = [
     {id: 12, column_name: 'All'},
     {id: 11, column_name: 'Pending'},
+    {id: 13, column_name: 'In Progress'},
     {id: 10, column_name: 'Resolved'},
   ] ;
 

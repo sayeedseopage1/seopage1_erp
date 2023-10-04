@@ -62,9 +62,7 @@ const Disputes = () => {
     const [getDisputes, {isFetching}] = useLazyGetDisputesQuery();
     const auth = new User(window.Laravel.user);
       
-    console.log({disputes})
-
-    const onFilter = async (filter) => {
+     const onFilter = async (filter) => {
         let queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
         setFilters(queryObject);
@@ -73,6 +71,13 @@ const Disputes = () => {
             if(filter?.start_date && filter?.end_date){
                 const res = await getDisputes(`?${queryString}`).unwrap();  
                 if(res){  
+                    // const data = _.filter(res, d=> {
+                    //     if(filter.status === 'Pending'){
+                    //         return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
+                    //     }else if(filter.status === 'In Progress'){
+                    //         return d.status === 0 && (_.size(d.conversations)!==0 || d.resolved_by)
+                    //     }else return d.status === 1;
+                    // })
                     dispatch({type: 'INIT_DISPUTE', disputes: res});
                 }
             }

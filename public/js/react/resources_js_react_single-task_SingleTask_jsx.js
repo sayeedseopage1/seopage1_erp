@@ -4646,7 +4646,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
     formData.append('section_name', completedSection);
     formData.append('comment', taskDescription);
     formData.append('mark_as_complete', checked);
-    FormData.append('report_date', date);
+    formData.append('report_date', date);
     var _token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     formData.append("_token", _token);
     files.forEach(function (file) {
