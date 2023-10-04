@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->integer('task_id');
             $table->string('page_type')->nullable();
+            $table->string('task_type')->nullable();
             $table->string('page_name')->nullable();
             $table->string('page_url')->nullable();
             $table->string('task_type_other')->nullable();
             $table->string('page_type_name')->nullable();
             $table->string('existing_design_link')->nullable();
-          
             $table->integer('number_of_pages')->nullable();
             $table->integer('authorization_status')->default(1);
             $table->longText('comment');

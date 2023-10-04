@@ -14,7 +14,7 @@ const TaskWiseLogReport = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
-    const [trackedTime, setTractedTime] = useState(0);
+    const [trackedTime, setTrackedTime] = useState(0);
 
     const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
 
@@ -36,7 +36,7 @@ const TaskWiseLogReport = () => {
             handleData(sortedData, 1, perPageData);
             setData(sortedData);
             const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
-            setTractedTime(totalTrackTime);
+            setTrackedTime(totalTrackTime);
         })
     }
  

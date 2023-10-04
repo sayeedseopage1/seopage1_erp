@@ -374,7 +374,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
 
         // TASK DISPUTE
         getDisputes:build.query({
-            query: (query) => `/account/task-disputes${query}`
+            query: (query) => `/account/task-disputes${query}`,
+            providesTags: ['DISPUTES']
         }),
         
         // ASK DISPUTE QUESTION
@@ -388,7 +389,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            invalidatesTags: ["DISPUTES"]
         }),
 
         // ANSWER DISPUTE QUESTION
@@ -402,7 +404,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ["DISPUTES"]
         }),  
 
         // ANSWER DISPUTE QUESTION
@@ -416,7 +420,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ["DISPUTES"]
         }),  
         // ANSWER DISPUTE QUESTION
         disputeAnswerMakeAsRead: build.mutation({
@@ -429,7 +435,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ["DISPUTES"]
         }),  
 
 
@@ -463,6 +471,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // CHECK EDITABLE SubTASK
         checkEditableSubTask: build.query({
             query: (subTaskId) => `/account/developer/check-editable-subtask/${subTaskId}`,
+        }),
+
+        // CHECK RESTRICTED KEYS
+        checkRestrictedWords: build.mutation({
+            query: (projectId) => ({
+                url:  `/account/check-project-first-tasks/${projectId}`,
+                method: "GET",
+            })
         })
 
   
@@ -514,6 +530,7 @@ export const {
     useLazyDeveloperCanCompleteTaskQuery,
     useDeveloperInProgressTaskQuery,
     useCheckEditableSubTaskQuery,
-    useCheckEditableTaskQuery
+    useCheckEditableTaskQuery,
+    useCheckRestrictedWordsMutation,
 
 } = singleTaskPageApiSlice;

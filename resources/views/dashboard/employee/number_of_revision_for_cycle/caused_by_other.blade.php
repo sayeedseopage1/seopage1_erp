@@ -12,52 +12,94 @@
             <table id="causedByOtherTable" class="display" style="width:100%">
                 <thead>
                     <tr>
-                    <th scope="col">Sl No</th>
-                    <th scope="col">Project Name</th>
-                    <th scope="col">Task Hadding</th>
-                    <th scope="col">Revision By</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Creation Date</th>
+                        <th scope="col">Sl No</th>
+                        <th scope="col">Revision date</th>
+                        <th scope="col">Project Name</th>
+                        <th scope="col">Client name</th>
+                        <th scope="col">Revision request raised by</th>
+                        <th scope="col">Reason for revision</th>
+                        <th scope="col">Disputed</th>
+                        <th scope="col">Verdict</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($caused_by_other_for_cycle as $item)
                         @php
-                            $project = \App\Models\Project::where('id',$item->project_id)->first();
-                            $user = \App\Models\User::where('id',$item->added_by)->first();
+                            $user = \App\Models\User::where('id',$item->client_id)->first();
+                            $raisedBy = \App\Models\User::where('id',$item->added_by)->first();
+                            if ($item->status==1) {
+                                $win = \App\Models\User::where('id',$item->winner)->first();
+                            }
                         @endphp
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>
-                            <a href="{{ route('projects.show',$project->id) }}">{{ $project->project_name }}</a>
-                        </td>
-                        <td>
-                            <a href="{{ route('tasks.show',$item->task_id) }}">{{ $item->heading }}</a>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="" style="width: 28px;">
-                                    <div style="width: 32px; height: 28px;">
-                                        @if ($user->image)
-                                            <img src="{{ asset('user-uploads/avatar/'.$user->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
-                                        @else
-                                            <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
-                                        @endif
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>
+                                <p>{{ $item->revision_date }}</p>
+                            </td>
+                            <td>
+                                <a href="{{ route('projects.show',$item->project_id) }}">{{ $item->project_name }}</a>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="" style="width: 28px;">
+                                        <div style="width: 32px; height: 28px;">
+                                            @if ($user->image)
+                                                <img src="{{ asset('user-uploads/avatar/'.$user->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @else
+                                                <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @endif
+                                        </div>
                                     </div>
+                                    <a href="{{ route('employees.show',$user->id) }}" class="pl-2 ">{{ $user->name }}</a>
                                 </div>
-                                <a href="{{ route('employees.show',$user->id) }}" class="pl-2 ">{{ $user->name }}</a>
-                            </div>
-                        </td>
-                        <td>
-                            @if ($item->approval_status == 'accepted')
-                                <span class="badge badge-success">{{ $item->approval_status }}</span>
-                            @endif
-                            @if ($item->approval_status == 'pending')
-                                <span class="badge badge-info">{{ $item->approval_status }}</span>
-                            @endif
-                        </td>
-                        <td>{{ $item->created_at }}</td>
-                    </tr>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="" style="width: 28px;">
+                                        <div style="width: 32px; height: 28px;">
+                                            @if ($raisedBy->image)
+                                                <img src="{{ asset('user-uploads/avatar/'.$raisedBy->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @else
+                                                <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <a href="{{ route('employees.show',$raisedBy->id) }}" class="pl-2 ">{{ $raisedBy->name }}</a>
+                                </div>
+                            </td>
+                            <td>
+                                @if ($item->revision_reason)
+                                    <p>{{ $item->revision_reason }}</p>
+                                @else
+                                    <p>N/A</p>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($item->dispute_created == 1)
+                                    <span class="badge badge-success">Yes</span>
+                                @else
+                                    <span class="badge badge-danger">No</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if ($item->status==1)
+                                    <div class="d-flex align-items-center">
+                                        <div class="" style="width: 28px;">
+                                            <div style="width: 32px; height: 28px;">
+                                                @if ($win->image)
+                                                    <img src="{{ asset('user-uploads/avatar/'.$win->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                                @else
+                                                    <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('employees.show',$win->id) }}" class="pl-2 ">{{ $win->name }}</a>
+                                    </div>
+                                @else
+                                <p>--</p>
+                                @endif
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
