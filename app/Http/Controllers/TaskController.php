@@ -4957,6 +4957,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
+       
         $daily_submission= new DailySubmission();
 
         if ($request->file('file') != null) {
@@ -4988,6 +4989,7 @@ class TaskController extends AccountBaseController
         $daily_submission->section_name =$request->section_name;
         $daily_submission->hours_spent =$request->hours_spent;
         $daily_submission->status =1;
+        $daily_submission->report_date= $request->report_date;
         $daily_submission->mark_as_complete =$request->mark_as_complete;
 
         $daily_submission->save();
@@ -5024,7 +5026,7 @@ class TaskController extends AccountBaseController
             'employee.id as employee_id',
             'employee.name as employee_name',
             'employee.image as employee_image',
-            'daily_submissions.created_at as report_date',
+            'daily_submissions.report_date as report_date',
             'client.id as client_id',
             'client.name as client_name',
             'client.image as client_image',
