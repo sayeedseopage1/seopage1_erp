@@ -4829,7 +4829,7 @@ class TaskController extends AccountBaseController
         $startDate= Carbon::today()->format('Y-m-d');
         $endDate= Carbon::today()->format('Y-m-d');
     //    / dd($startDate, $endDate);
-    $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+    $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
@@ -4848,7 +4848,7 @@ class TaskController extends AccountBaseController
         ->groupBy('tasks.id')
         ->get();
     if ($todayData->isEmpty()) {
-        $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+        $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
@@ -4870,7 +4870,7 @@ class TaskController extends AccountBaseController
         {
             $user_data= User::where('id',$id)->first();
             $last_login= $user_data->last_login->format('Y-m-d');
-            $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+            $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
