@@ -3302,6 +3302,9 @@ class TaskController extends AccountBaseController
                 'projects.project_name',
                 'projects.project_summary',
 
+                'clients.id as clientId','clients.name as client_name',
+              
+                
 
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
@@ -3309,6 +3312,7 @@ class TaskController extends AccountBaseController
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
                 ->join('projects', 'tasks.project_id', 'projects.id')
+                ->leftJoin('users as clients','clients.id','projects.client_id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
                 ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
             //    / ->leftJoin('tasks', 'sub_tasks.task_id', 'tasks.id')
@@ -3902,7 +3906,7 @@ class TaskController extends AccountBaseController
     public function DeveloperStopTask(Request $request)
     {
         $currentDateTime = Carbon::now();
-        $desiredTime = Carbon::createFromTime(17, 00, 0); // 4:29 PM
+        $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
         $current_day = Carbon::now();
         // dd($current_day->dayOfWeek);
          $dayOfWeek = $current_day->dayOfWeek;

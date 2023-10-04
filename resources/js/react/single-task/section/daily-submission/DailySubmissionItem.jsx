@@ -8,7 +8,7 @@ const DailySubmissionItem = ({item, setModalData, modalData}) => {
     const { task } = useSelector((s) => s.subTask);
 
     const timeFormatter = (time='') =>{
-        console.log(time);
+        // console.log(time);
         const [year,month,date] = time.split(" ")[0].split("-");
         let month_name = '';
         switch (month) {

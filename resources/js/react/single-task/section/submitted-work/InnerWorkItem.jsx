@@ -9,7 +9,7 @@ const InnerWorkItem = ({data}) => {
         <div> 
             <a 
               className='hover-underline text-primary' 
-              href={`/account/tasks/132?preview-type=modal&subtask=${data?.task_id}`}
+              href={`/account/tasks/${data?.task_id}`}
             > 
               Task#{data?.task_id} 
             </a>
