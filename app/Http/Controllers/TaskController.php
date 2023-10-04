@@ -4824,7 +4824,7 @@ class TaskController extends AccountBaseController
             'status'=>200
         ]);
     }
-    public function get_today_tasks($id)
+    public function get_today_tasks(Request $request,$id)
     {
         $startDate= Carbon::today()->format('Y-m-d');
         $endDate= Carbon::today()->format('Y-m-d');
@@ -4872,6 +4872,7 @@ class TaskController extends AccountBaseController
     }
         // /dd($tasks );
         return response()->json([
+            'date'=> $request->data_type,
             'data' => $tasks,
             'status' => 200
         ]);
