@@ -20,20 +20,23 @@ trait DeveloperDashboard
     {
         if (request('mode') == 'today' && request()->ajax()) {
             $this->tasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->get();
-            $this->todayDeadLineTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('due_date', request('startDate'))->get();
+            $this->todayDeadLineTasks = Task::withoutGlobalScopes()
+            ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
+            ->where('task_users.user_id', $this->user->id)
+            ->where('due_date', request('startDate'))
+            ->get();
             $this->todayStartTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('start_date', request('startDate'))->get();
-
             $html = view('dashboard.ajax.developerdashboard.today', $this->data)->render();
 
             return Reply::dataOnly([
-                'status' => 'success', 
-                'html' => $html, 
+                'status' => 'success',
+                'html' => $html,
             ]);
         } elseif (request('mode') == 'month' && request()->ajax()) {
             $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
 
-            $startMonth = $date->startOfMonth()->addDays(20)->toDateString(); 
-            $endMonth = $date->startOfMonth()->addMonth(1)->addDays(19)->toDateString(); 
+            $startMonth = $date->startOfMonth()->addDays(20)->toDateString();
+            $endMonth = $date->startOfMonth()->addMonth(1)->addDays(19)->toDateString();
 
             $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*', 'task_approves.*')
             //->selectRaw('SUM(task_approves.rating + task_approves.rating2 + task_approves.rating3) / 3 as totalRating')
@@ -66,8 +69,8 @@ trait DeveloperDashboard
             $html = view('dashboard.ajax.developerdashboard.month', $this->data)->render();
 
             return Reply::dataOnly([
-                'status' => 'success', 
-                'html' => $html, 
+                'status' => 'success',
+                'html' => $html,
             ]);
         } elseif (request('mode') == 'general' && request()->ajax()) {
             $startDate  = (request('startDate') != '') ? Carbon::createFromFormat($this->global->date_format, request('startDate')) : now($this->global->timezone)->startOfMonth();
@@ -81,7 +84,7 @@ trait DeveloperDashboard
             ->where(DB::raw('DATE(start_date)'), '<', $endDate)
             ->groupBy('tasks.id')
             ->get();
-            
+
             $this->yearlyPositiveRating = 0;
             $this->yearlyNegativeRating = 0;
 
@@ -103,7 +106,7 @@ trait DeveloperDashboard
             $html = view('dashboard.ajax.developerdashboard.general', $this->data)->render();
 
             return Reply::dataOnly([
-                'status' => 'success', 
+                'status' => 'success',
                 'html' => $html,
             ]);
         } else {
@@ -156,7 +159,7 @@ trait DeveloperDashboard
                     ->get();
                 }
             }
-            
+
             if (request('start') && request('end') && !is_null($this->viewEventPermission) && $this->viewEventPermission != 'none') {
                 $eventData = array();
 
@@ -201,7 +204,7 @@ trait DeveloperDashboard
             $this->weekWiseTimelogBreak = ProjectTimeLogBreak::weekWiseTimelogBreak($this->weekStartDate->toDateString(), $this->weekEndDate->toDateString(), user()->id);
             $this->dateWiseTimelogs = ProjectTimeLog::dateWiseTimelogs(now()->toDateString(), user()->id);
             $this->dateWiseTimelogBreak = ProjectTimeLogBreak::dateWiseTimelogBreak(now()->toDateString(), user()->id);
-            
+
             $this->checkTodayLeave = Leave::where('status', 'approved')
             ->select('id')
             ->where('leave_date', now(global_setting()->timezone)->toDateString())
@@ -212,7 +215,7 @@ trait DeveloperDashboard
             $this->checkTodayHoliday = Holiday::where('date', $currentDate)->first();
 
             $this->event_filter = explode(',', user()->employeeDetails->calendar_view);
-            
+
             $this->tasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->get();
 
             $this->todayDeadLineTasks = Task::withoutGlobalScopes()->join('task_users', 'task_users.task_id', '=', 'tasks.id')->where('task_users.user_id', $this->user->id)->where('due_date', Carbon::today()->format('Y-m-d'))->get();
@@ -220,13 +223,13 @@ trait DeveloperDashboard
 
             $today = Carbon::today()->format('d');
             if ($today > 20) {
-                $startMonth = Carbon::now()->startOfMonth()->addDays(20)->toDateString(); 
-                $endMonth = Carbon::now()->startOfMonth()->addMonth(1)->addDays(19)->toDateString();  
+                $startMonth = Carbon::now()->startOfMonth()->addDays(20)->toDateString();
+                $endMonth = Carbon::now()->startOfMonth()->addMonth(1)->addDays(19)->toDateString();
             } else {
-                $startMonth = Carbon::now()->startOfMonth()->subMonths(1)->addDays(20)->toDateString(); 
-                $endMonth = Carbon::now()->startOfMonth()->addDays(19)->toDateString(); 
+                $startMonth = Carbon::now()->startOfMonth()->subMonths(1)->addDays(20)->toDateString();
+                $endMonth = Carbon::now()->startOfMonth()->addDays(19)->toDateString();
             }
-            
+
             $this->monthlyTasks = Task::withoutGlobalScopes()->select('tasks.*', 'task_approves.*')
             ->join('task_users', 'task_users.task_id', '=', 'tasks.id')
             ->join('task_approves', 'task_approves.task_id', '=', 'tasks.id')
@@ -279,10 +282,10 @@ trait DeveloperDashboard
 
             if (request()->ajax()) {
                 $html = view('dashboard.ajax.developerdashboard', $this->data)->render();
-                
+
                 return Reply::dataOnly([
-                    'status' => 'success', 
-                    'html' => $html, 
+                    'status' => 'success',
+                    'html' => $html,
                     'title' => $this->pageTitle
                 ]);
             } else {

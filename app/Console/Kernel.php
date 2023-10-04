@@ -85,11 +85,17 @@ class Kernel extends ConsoleKernel
         $schedule->command('monthly_project_refresh:monthly')->monthly()->timezone(config('app.cron_timezone'));
         // $schedule->command('duedate:daily')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('award_time_check:daily')->everyMinute();
-        $schedule->command('new_pm_check:daily')->everyMinute();
+        
         $schedule->command('deliverable_status_check:daily')->everyFiveMinutes();
         $schedule->command('daily:schedule')->everyMinute();
        
     }
+    Log::info('Cron job started.');
+// Your cron job logic here
+    Log::info('Cron job completed successfully.');
+    Log::error();
+// Your cron job logic here
+    Log::error('Cron Failed.');
 
     /**
      * Register the commands for the application.
