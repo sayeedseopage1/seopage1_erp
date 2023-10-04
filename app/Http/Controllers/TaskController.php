@@ -4993,6 +4993,7 @@ class TaskController extends AccountBaseController
             'daily_submissions.attachments as attachments',
             'working_environments.site_url as site_url',
             'working_environments.frontend_password as frontend_password',
+            'daily_submissions.created_at as report_submission_date',
             )
             ->join('tasks','tasks.id','=','daily_submissions.task_id')
             ->join('task_types','tasks.id','=','task_types.task_id')
