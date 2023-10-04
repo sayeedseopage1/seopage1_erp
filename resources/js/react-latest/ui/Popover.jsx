@@ -12,7 +12,7 @@ const usePopover = () => React.useContext(PopoverCtx);
 
 // popover Panel
 
-const Panel = ({ children, className, placement="bottom-start", ...props }) => {
+const Panel = ({ children, className, placement = "bottom-start", ...props }) => {
     const {
         isVisible,
         refElement,
@@ -23,7 +23,7 @@ const Panel = ({ children, className, placement="bottom-start", ...props }) => {
     } = usePopover();
 
 
-    
+
     // generate random id for dropdown menu
     const [dom, setDom] = useState(null);
 
@@ -34,35 +34,35 @@ const Panel = ({ children, className, placement="bottom-start", ...props }) => {
         const el = document.createElement("div");
         el.setAttribute('id', 'sp1_popover');
         // el.style.position = 'absolute';
-        const body = document.querySelector('body'); 
-        if(isVisible){
-            body.appendChild(el); 
+        const body = document.querySelector('body');
+        if (isVisible) {
+            body.appendChild(el);
             setDom(el);
-        }else{
-            let element = body.querySelector(`#sp1_popover`); 
-            if(element){
+        } else {
+            let element = body.querySelector(`#sp1_popover`);
+            if (element) {
                 body.removeChild(element);
             }
         }
-        
+
     }, [isVisible])
 
 
-    const { styles, attributes} = usePopper(refElement, popperElement, {
-        placement, 
+    const { styles, attributes } = usePopper(refElement, popperElement, {
+        placement,
     })
 
-    if(!dom) return null;
+    if (!dom) return null;
 
     const element = isVisible && (
         <div
             ref={setPopperElement}
-            style={{...styles.popper, zIndex: 999, width: 'fit-content', paddingTop: '10px'}}
+            style={{ ...styles.popper, zIndex: 999, width: 'fit-content', paddingTop: '10px' }}
             {...attributes.popper}
         >
             <AnimatePresence>
                 {isVisible && (
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
@@ -70,7 +70,7 @@ const Panel = ({ children, className, placement="bottom-start", ...props }) => {
                         {_.isFunction(children) ? children({ isVisible }) : children}
                     </motion.div>
                 )}
-            </AnimatePresence>            
+            </AnimatePresence>
         </div>
     )
 
@@ -114,7 +114,7 @@ const Popover = ({ children }) => {
                 setArrowElement,
             }}
         >
-            <div onMouseLeave={() => setIsVisible(false)}>{ children }</div>
+            <div onMouseLeave={() => setIsVisible(false)}>{children}</div>
         </PopoverCtx.Provider>
     );
 };
