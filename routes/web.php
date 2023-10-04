@@ -191,6 +191,7 @@ use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
+use App\Http\Controllers\IssuedTaskReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
