@@ -6,6 +6,7 @@
 
 /public/js/app.js.map
 .env
+/public/js/react
 #vendor
 /public/js/app.js
 

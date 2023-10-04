@@ -2331,6 +2331,8 @@ class ProjectController extends AccountBaseController
 
 
         $memberIds = $this->project->members->pluck('user_id')->toArray();
+      
+       
         abort_403(!($this->viewPermission == 'all'
             || $this->project->public
             || $this->viewProjectMemberPermission == 'all'

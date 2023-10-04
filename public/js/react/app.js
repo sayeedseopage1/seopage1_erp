@@ -34077,7 +34077,8 @@ var reducer = function reducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
   switch (action.type) {
     case 'INIT_DISPUTE':
-      return state = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(action.disputes, ['status', 'id'], ['asc', 'desc']);
+      var sortedData = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(action.disputes, ['status', 'dispute_updated_at'], ['asc', 'desc']);
+      return sortedData;
     case 'UPDATE_DISPUTE_CONVERSATION':
       return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(state, function (d) {
         if (d.id === action.disputeId) {
@@ -34148,6 +34149,13 @@ var Disputes = function Disputes() {
           case 7:
             res = _context.sent;
             if (res) {
+              // const data = _.filter(res, d=> {
+              //     if(filter.status === 'Pending'){
+              //         return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
+              //     }else if(filter.status === 'In Progress'){
+              //         return d.status === 0 && (_.size(d.conversations)!==0 || d.resolved_by)
+              //     }else return d.status === 1;
+              // })
               dispatch({
                 type: 'INIT_DISPUTE',
                 disputes: res
@@ -36679,15 +36687,6 @@ var Filterbar = function Filterbar(_ref) {
     return dateType;
   }, [dateType]);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    console.log({
-      start_date: start_date,
-      end_date: end_date,
-      _dispute_rasied_by: _dispute_rasied_by,
-      _client: _client,
-      _disputeRaisedAgainst: _disputeRaisedAgainst,
-      _pm: _pm,
-      _status: _status
-    });
     var filter = {
       start_date: start_date,
       end_date: end_date,
@@ -36695,7 +36694,7 @@ var Filterbar = function Filterbar(_ref) {
       client_id: _client === null || _client === void 0 ? void 0 : _client.id,
       dispute_raised_against: _disputeRaisedAgainst === null || _disputeRaisedAgainst === void 0 ? void 0 : _disputeRaisedAgainst.id,
       pm_id: _pm === null || _pm === void 0 ? void 0 : _pm.id,
-      status: _status === null || _status === void 0 ? void 0 : _status.id
+      status: _status === null || _status === void 0 ? void 0 : _status.column_name
     };
     onFilter(filter);
   }, [start_date, end_date, _dispute_rasied_by, _client, _disputeRaisedAgainst, _pm, _status]);
@@ -36730,7 +36729,10 @@ var Filterbar = function Filterbar(_ref) {
         state: pm,
         setState: setPm,
         roleIds: [4]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {})]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_StatusFilter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        state: status,
+        setState: setStatus
+      })]
     }), width < 1400 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(HDivider, {
         className: "ml-auto"
@@ -36927,6 +36929,9 @@ var StatusFilter = function StatusFilter(_ref) {
   }, {
     id: 11,
     column_name: 'Pending'
+  }, {
+    id: 13,
+    column_name: 'In Progress'
   }, {
     id: 10,
     column_name: 'Resolved'
@@ -50349,6 +50354,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   useAskDisputeQuestionMutation: () => (/* binding */ useAskDisputeQuestionMutation),
 /* harmony export */   useCheckEditableSubTaskQuery: () => (/* binding */ useCheckEditableSubTaskQuery),
 /* harmony export */   useCheckEditableTaskQuery: () => (/* binding */ useCheckEditableTaskQuery),
+/* harmony export */   useCheckRestrictedWordsMutation: () => (/* binding */ useCheckRestrictedWordsMutation),
 /* harmony export */   useCheckSubTaskTimerQuery: () => (/* binding */ useCheckSubTaskTimerQuery),
 /* harmony export */   useConfirmClientApprovalMutation: () => (/* binding */ useConfirmClientApprovalMutation),
 /* harmony export */   useCrateNoteMutation: () => (/* binding */ useCrateNoteMutation),
@@ -50754,7 +50760,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
       getDisputes: build.query({
         query: function query(_query2) {
           return "/account/task-disputes".concat(_query2);
-        }
+        },
+        providesTags: ['DISPUTES']
       }),
       // ASK DISPUTE QUESTION
       askDisputeQuestion: build.mutation({
@@ -50766,7 +50773,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // ANSWER DISPUTE QUESTION
       answerDisputeQuestion: build.mutation({
@@ -50778,7 +50786,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // ANSWER DISPUTE QUESTION
       disputeSubmitToAuthorization: build.mutation({
@@ -50790,7 +50799,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // ANSWER DISPUTE QUESTION
       disputeAnswerMakeAsRead: build.mutation({
@@ -50802,7 +50812,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // GET IN PROGRESS TASK STATUS
       getInProgressTaskStatus: build.query({
@@ -50839,6 +50850,15 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
       checkEditableSubTask: build.query({
         query: function query(subTaskId) {
           return "/account/developer/check-editable-subtask/".concat(subTaskId);
+        }
+      }),
+      // CHECK RESTRICTED KEYS
+      checkRestrictedWords: build.mutation({
+        query: function query(projectId) {
+          return {
+            url: "/account/check-project-first-tasks/".concat(projectId),
+            method: "GET"
+          };
         }
       })
     };
@@ -50888,7 +50908,8 @@ var useGetTaskDetailsQuery = singleTaskPageApiSlice.useGetTaskDetailsQuery,
   useLazyDeveloperCanCompleteTaskQuery = singleTaskPageApiSlice.useLazyDeveloperCanCompleteTaskQuery,
   useDeveloperInProgressTaskQuery = singleTaskPageApiSlice.useDeveloperInProgressTaskQuery,
   useCheckEditableSubTaskQuery = singleTaskPageApiSlice.useCheckEditableSubTaskQuery,
-  useCheckEditableTaskQuery = singleTaskPageApiSlice.useCheckEditableTaskQuery;
+  useCheckEditableTaskQuery = singleTaskPageApiSlice.useCheckEditableTaskQuery,
+  useCheckRestrictedWordsMutation = singleTaskPageApiSlice.useCheckRestrictedWordsMutation;
 
 
 /***/ }),
@@ -50913,7 +50934,7 @@ var apiSlice = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.crea
     baseUrl: '/'
   }),
   keepUnusedDataFor: 60,
-  tagTypes: ['points_page_filter_options', 'TASK_STATUS', 'TASKS', 'TASKSREPORT', "PMGUIDELINE", "DAILY_SUBMISSION_STATUS", "TASK_TYPE_STATUS_DATA", "ENABLE_MARKASCOMPLETE", "USER_IN_PROGRESS_TASKS"],
+  tagTypes: ['points_page_filter_options', 'TASK_STATUS', 'TASKS', 'TASKSREPORT', "PMGUIDELINE", "DAILY_SUBMISSION_STATUS", "TASK_TYPE_STATUS_DATA", "ENABLE_MARKASCOMPLETE", "USER_IN_PROGRESS_TASKS", "DISPUTES"],
   endpoints: function endpoints() {
     return {};
   }
@@ -57886,6 +57907,8 @@ var SingleTask = /*#__PURE__*/function () {
     this.workingEnvironment = task === null || task === void 0 ? void 0 : task.working_environment;
     this.workEnvData = task === null || task === void 0 ? void 0 : task.working_environment_data;
     this.hasProjectManagerGuideline = task !== null && task !== void 0 && task.pm_task_guideline ? true : false;
+    this.clientName = task === null || task === void 0 ? void 0 : task.client_name;
+    this.clientId = task === null || task === void 0 ? void 0 : task.clientId;
     this.PMTaskGuideline = new ProjectMangerGuideline(task === null || task === void 0 ? void 0 : task.pm_task_guideline);
     this.revisions = lodash__WEBPACK_IMPORTED_MODULE_2___default().map(lodash__WEBPACK_IMPORTED_MODULE_2___default().orderBy(task === null || task === void 0 ? void 0 : task.task_revisions, 'id', 'desc'), function (revision) {
       return new TaskRevision(revision);

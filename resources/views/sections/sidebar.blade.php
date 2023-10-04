@@ -149,7 +149,7 @@
                             @if (Auth::user()->role_id == 1)
                                 <a class="f-14 text-lightest" href="{{ route('dashboard.pm_performance') }}" title="PM Performance">PM Performance</a>
                             @endif
-                            
+
                         </div>
                     </x-menu-item>
                 @else
@@ -296,16 +296,16 @@
                                     <x-sub-menu-item :link="route('tasks.index')" :text="__('app.menu.tasks')" />
                                 @endif
                             @endif
-                               @if(Auth::user()->role_id == 1)         
+                               @if(Auth::user()->role_id == 1)
                             @if (in_array('timelogs', user_modules()) &&
                                     $sidebarUserPermissions['view_timelogs'] != 5 &&
                                     $sidebarUserPermissions['view_timelogs'] != 'none')
                                 <x-sub-menu-item :link="route('timelogs.index')" :text="__('app.menu.timeLogs')" />
                             @endif
                                     @endif
-                           
+
                                 <x-sub-menu-item :link="route('disputes.index')" :text="__('Disputes')" />
-                          
+
                             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                                 <x-sub-menu-item :link="route('revision-calculator.index')" :text="__('Revision Calculator')" />
                             @endif
@@ -397,7 +397,7 @@
                         </a>
                 </li>
                 @endif
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 4 || Auth::user()->role_id == 8)
                 <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('PM Payment History')" :count="$unreadMessagesCount"
                              :link="route('pm-payment-history.index')">
                     <x-slot name="iconPath">
@@ -409,7 +409,7 @@
                 <x-menu-item class="policy-menu" icon="chat-left-text" :text="__('Policy')" :count="$unreadMessagesCount"
                              :link="route('policy.index')">
                     <x-slot name="iconPath">
-                       
+
                         <path d="M 11.824219 0.21875 C 11.722656 0.0820312 11.5625 0 11.390625 0 L 2.277344 0 C 1.394531 0 0.675781 0.714844 0.675781 1.601562 L 0.675781 14.398438 C 0.675781 15.285156 1.394531 16 2.277344 16 L 13.71875 16 C 14.601562 16 15.320312 15.285156 15.320312 14.398438 L 15.320312 5.199219 C 15.320312 5.085938 15.285156 4.976562 15.21875 4.886719 Z M 11.121094 1.066406 L 14.253906 5.375 L 14.253906 14.398438 C 14.253906 14.695312 14.015625 14.933594 13.71875 14.933594 L 2.277344 14.933594 C 1.984375 14.933594 1.742188 14.695312 1.742188 14.398438 L 1.742188 1.601562 C 1.742188 1.304688 1.984375 1.066406 2.277344 1.066406 Z M 11.121094 1.066406 "></path>
                         <path d="M 3.246094 4.460938 L 8 4.460938 C 8.292969 4.460938 8.53125 4.222656 8.53125 3.925781 C 8.53125 3.632812 8.292969 3.394531 8 3.394531 L 3.246094 3.394531 C 2.953125 3.394531 2.714844 3.632812 2.714844 3.925781 C 2.714844 4.222656 2.953125 4.460938 3.246094 4.460938 Z M 3.246094 4.460938 "></path>
                         <path d="M 14.785156 5.429688 L 11.925781 5.429688 L 11.925781 0.535156 C 11.925781 0.238281 11.6875 0 11.390625 0 C 11.097656 0 10.859375 0.238281 10.859375 0.535156 L 10.859375 5.964844 C 10.859375 6.257812 11.097656 6.496094 11.390625 6.496094 L 14.785156 6.496094 C 15.082031 6.496094 15.320312 6.257812 15.320312 5.964844 C 15.320312 5.667969 15.082031 5.429688 14.785156 5.429688 Z M 14.785156 5.429688 "></path>

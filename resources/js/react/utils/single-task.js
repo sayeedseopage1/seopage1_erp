@@ -200,6 +200,8 @@ export class SingleTask {
         this.workingEnvironment = task?.working_environment;
         this.workEnvData = task?.working_environment_data;
         this.hasProjectManagerGuideline = task?.pm_task_guideline ? true : false;
+        this.clientName = task?.client_name;
+        this.clientId = task?.clientId;
         this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
         this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision));
         this.taskSubTask = task?.taskSubTask;

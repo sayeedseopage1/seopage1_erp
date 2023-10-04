@@ -561,4 +561,8 @@
   text-decoration: underline;
 }
 
+.ck.ck-powered-by {
+  display: none !important;
+}
+
 /*# sourceMappingURL=ck-editor.css.map*/

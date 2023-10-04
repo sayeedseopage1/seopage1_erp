@@ -61,13 +61,25 @@ const SingleTaskPage = () => {
     }
 
     const _taskStatus = new BoardColumn(taskStatus);
- 
+
+    if(!task) return null;
     
     return (
-        <div className="postion-relative"> 
-            <div className={`f-16 mb-3 ${loadingClass}`}>
-                <span> <strong>Task: </strong> </span>
-                <a href={`/account/tasks/${task?.id}`}>{task?.getSubtaskTitle()}</a>
+        <div className="position-relative"> 
+            <div className="mb-3">
+                <div className={`f-18 ${loadingClass}`}>
+                    <span> <strong>Task: </strong> </span> 
+                    <a href={`/account/tasks/${task?.id}`} >{task?.getSubtaskTitle()}</a>
+                    {_.includes([1, 4, 6, 7, 8], loggedUser?.getRoleId()) && 
+                        <span className="ml-2">
+                            (
+                                <a href={`/account/projects/${task.projectId}`} className="f-14">
+                                    See All Tasks
+                                </a>
+                            )
+                        </span> 
+                    }
+                </div> 
             </div>
 
             <div className="row">
@@ -84,7 +96,7 @@ const SingleTaskPage = () => {
                                         <div className="sp1_st-list-item">
                                             <div className="sp1_st-list-item-head"> Parent Task: </div>
                                             <div className="sp1_st-list-item-value">
-                                                <a href={`/account/tasks/${task?.parentTaskId}`} className="text-dark text-hover-underline">
+                                                <a href={`/account/tasks/${task?.parentTaskId}`} className="text-hover-underline">
                                                     {task?.parentTaskTitle}
                                                 </a>
                                             </div>
@@ -96,9 +108,19 @@ const SingleTaskPage = () => {
                                         <div className="sp1_st-list-item-head">Project : </div>
                                         <div className="sp1_st-list-item-value">
                                             <span className="dot-color bg-danger mr-2" />
-                                            <a href={`/account/projects/${task?.projectId}`} className="text-dark text-hover-underline"> 
+                                            <a href={`/account/projects/${task?.projectId}`} className="text-hover-underline"> 
                                                 {task?.projectName} 
                                             </a>
+                                        </div>
+                                    </div>
+
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">Client : </div>
+                                        <div className="sp1_st-list-item-value">
+                                            <span className="dot-color bg-info mr-2" />
+                                            <span> 
+                                                {task?.clientName} 
+                                            </span>
                                         </div>
                                     </div>
 
@@ -112,7 +134,7 @@ const SingleTaskPage = () => {
                                         </div>
                                     </div>
 
-                                    {/* asignee to */}
+                                    {/* assignee to */}
                                     <div className="sp1_st-list-item">
                                         <div className="sp1_st-list-item-head">
                                             Assigned To :{" "}
@@ -131,7 +153,7 @@ const SingleTaskPage = () => {
                                                 <span
                                                     className={`d-block f-14 font-weight-bold`}
                                                 >
-                                                    <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a> 
+                                                    <a href={task?.assigneeTo?.getUserLink()} className="hover-underline">{task?.assigneeTo?.getName()}</a> 
                                                     {Number(task?.assigneeTo?.getId()) ===
                                                         Number(loggedUser?.getId()) && (
                                                         <sup
@@ -171,7 +193,7 @@ const SingleTaskPage = () => {
                                                 >
                                                     <a 
                                                         href={task?.assigneeBy?.getUserLink()}
-                                                        className="text-dark hover-underline"
+                                                        className="hover-underline"
                                                     >
                                                         {task?.assigneeBy?.getName()}
                                                     </a>
@@ -207,7 +229,10 @@ const SingleTaskPage = () => {
                                     </div>
 
                                     {/* category */}
-                                    <div className="sp1_st-list-item">
+                                    {
+                                        task?.isSubtask &&
+                                        <>
+                                         <div className="sp1_st-list-item">
                                             <div className="sp1_st-list-item-head">
                                                 Task Category :{" "}
                                             </div>
@@ -249,9 +274,13 @@ const SingleTaskPage = () => {
                                             Page Url:{" "}
                                         </div>
                                         <div className="sp1_st-list-item-value">
-                                            {task?.pageUrl ?? '--'}
+                                            {task?.pageUrl ? <a href={task?.pageUrl}>
+                                                ( view )
+                                            </a> : <span>--</span>}
                                         </div>
-                                    </div>                                    
+                                    </div>   
+                                    </>
+                                    }
                                          
                                 </div>
                             </div>
@@ -418,7 +447,7 @@ const SingleTaskPage = () => {
                         </div> 
                         {/* comments */}
                         {task && task?.id && <SubmittedWork task={task} />}
-                        <SubTaskSection status={taskStatus} />
+                        {  !_.includes([5, 9, 10], loggedUser?.getRoleId()) && <SubTaskSection status={taskStatus} />}
                         {task && task?.id  && <DailySubmissionSection task={task} />}
                         {task && task?.id && <CommentSection task={task} isLoading={isFetching} /> }
                         <NoteSection />

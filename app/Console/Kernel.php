@@ -85,11 +85,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('monthly_project_refresh:monthly')->monthly()->timezone(config('app.cron_timezone'));
         // $schedule->command('duedate:daily')->daily()->timezone(config('app.cron_timezone'));
         $schedule->command('award_time_check:daily')->everyMinute();
-        $schedule->command('new_pm_check:daily')->everyMinute();
+        
         $schedule->command('deliverable_status_check:daily')->everyFiveMinutes();
         $schedule->command('daily:schedule')->everyMinute();
        
     }
+   
 
     /**
      * Register the commands for the application.
