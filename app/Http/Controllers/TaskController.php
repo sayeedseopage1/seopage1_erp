@@ -4843,7 +4843,7 @@ class TaskController extends AccountBaseController
         ->leftJoin('task_types','task_types.task_id','tasks.id')
         ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
-        ->where('daily_submissions.task_id',null)
+     
         ->whereDate('project_time_logs.created_at',Carbon::yesterday())
 
         ->groupBy('tasks.id')
