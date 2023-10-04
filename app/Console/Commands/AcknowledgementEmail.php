@@ -16,7 +16,7 @@ class AcknowledgementEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'acknowledgement_submission:daliy';
+    protected $signature = 'acknowledgement_submission:daily';
 
     /**
      * The console command description.
