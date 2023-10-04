@@ -45,6 +45,7 @@ const DailySubmission_Page = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
+        console.log(filter);
 
         // getTaskWiseData(filter)
         // .unwrap()
