@@ -34,6 +34,7 @@ const TimeLogHistory = () => {
     // handle fetch data
     const handleFetchData = (filter) => {
         if(auth?.getRoleId() !== 1) return;
+        if(auth) return;
         getTimeLogHistory(filter)
         .unwrap()
         .then(res => {

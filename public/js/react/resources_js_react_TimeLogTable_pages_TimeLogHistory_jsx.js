@@ -1744,6 +1744,7 @@ var TimeLogHistory = function TimeLogHistory() {
 
   // handle fetch data
   var handleFetchData = function handleFetchData(filter) {
+    if ((auth === null || auth === void 0 ? void 0 : auth.getRoleId()) !== 1) return;
     getTimeLogHistory(filter).unwrap().then(function (res) {
       var sortedData = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(res === null || res === void 0 ? void 0 : res.data, ["employee_id"], ["desc"]);
       handleData(sortedData, currentPage, perPageData);
