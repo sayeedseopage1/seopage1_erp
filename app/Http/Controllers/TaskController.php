@@ -4866,7 +4866,33 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
+        if($yesterdayData->isEmpty())
+        {
+            $user_data= User::where('id',$id)->first();
+            $last_login= $user_data->last_login->format('Y-m-d');
+            $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+        'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
+        'developers.id as developer_id',
+
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.$last_login.'" AND DATE(project_time_logs.end_time) <= "'.$last_login.'"), 0) as total_time_spent'),
+        )
+        ->join('tasks','tasks.id','project_time_logs.task_id')
+        ->join('projects','projects.id','tasks.project_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->join('users as developers','developers.id','project_time_logs.user_id')
+        ->leftJoin('task_types','task_types.task_id','tasks.id')
+        ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
+        ->where('project_time_logs.user_id',$id)
+
+        ->whereDate('project_time_logs.created_at',$last_login)
+
+        ->groupBy('tasks.id')
+        ->get();
+    
+    
+        }
     }
+   
     if($request->date_type == 'today')
     {
         $tasks = $todayData;
