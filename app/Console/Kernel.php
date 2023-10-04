@@ -90,12 +90,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('daily:schedule')->everyMinute();
        
     }
-    Log::info('Cron job started.');
-// Your cron job logic here
-    Log::info('Cron job completed successfully.');
-    Log::error();
-// Your cron job logic here
-    Log::error('Cron Failed.');
+   
 
     /**
      * Register the commands for the application.
