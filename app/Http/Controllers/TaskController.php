@@ -4417,6 +4417,7 @@ class TaskController extends AccountBaseController
     // * @params id is dispute id;
     public function store_dispute_question(Request $request){
         $questions = $request->questions;  
+        $dispute_id = $questions['0']['dispute_id'];
         
         foreach ($questions as $question) { 
             $query = new TaskDisputeQuestion();
@@ -4426,6 +4427,10 @@ class TaskController extends AccountBaseController
             $query->question_for = $question['question_for'];
             $query->save(); 
        }
+       
+       $revision_dispute = TaskRevisionDispute::find($dispute_id);
+       $revision_dispute->has_update = true;
+       $revision_dispute->save();
 
        $response_data = TaskDisputeQuestion::where('dispute_id', $request->dispute_id)->get();
  
@@ -4439,7 +4444,7 @@ class TaskController extends AccountBaseController
     // * @params id is dispute id;
     public function update_dispute_question_with_answer(Request $request){
         $questions = $request->questions;
-        $dispute_id = $questions['0']['dispute_id'];
+        $dispute_id = $questions['0']['dispute_id']; 
          
         // UPDATE ALL QUESTION WITH ANSWER
         foreach ($questions as $question) {
@@ -4454,22 +4459,29 @@ class TaskController extends AccountBaseController
             $query->replied_date = Carbon::now();
             $query->save();
        }
+ 
+       
+       $revision_dispute = TaskRevisionDispute::find($dispute_id);
+       $revision_dispute->has_update = true;
+       $revision_dispute->save();
 
        
        $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
 
-       // REUTRN UPDATED QUESTION DATA
+       // RETURN UPDATED QUESTION DATA
        return response()->json([
         'data' => $response_data,
         'message' => 'Answer successfully submitted!' 
        ], 200);
      }
 
-    // MAKE DISPUTE SUBMITTED ANSWERE SEEN
+    // MAKE DISPUTE SUBMITTED ANSWER SEEN
     public function update_dispute_answer_read_status(Request $request){
          
         $questions = $request->questions;
         $dispute_id = $questions['0']['dispute_id'];
+
+        $revision_dispute = TaskRevisionDispute::find($dispute_id);
 
         foreach ($questions as $question) {
             $id = $question['id']; 
@@ -4477,6 +4489,9 @@ class TaskController extends AccountBaseController
             $query->replied_seen = true;
             $query->replied_date = Carbon::now();
             $query->save();
+
+            $revision_dispute->has_update = true;
+            $revision_dispute->save();
        }
 
        $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
@@ -4503,7 +4518,10 @@ class TaskController extends AccountBaseController
             $query->resolved_on = $query->resolved_on ?? Carbon::now();
             $query->authorize_on = Carbon::now();
             $query->status = true;
+            $query->has_update = true;
             $query->save();
+
+             
 
             
             
@@ -4540,6 +4558,7 @@ class TaskController extends AccountBaseController
             $query->raised_by_percent = $request->raised_by_percent;
             $query->resolved_by = $request->resolve_by; 
             $query->resolved_on = Carbon::now();
+            $query->has_update = true;
             $query->save();
             
             $filter = [ 

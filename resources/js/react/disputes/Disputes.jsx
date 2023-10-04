@@ -13,14 +13,20 @@ import ResolveModal from "./components/ResolveModal";
 const reducer = (state=[], action) => {
     switch(action.type){
         case 'INIT_DISPUTE':
-            return state = _.orderBy(action.disputes, ['status', 'id'], ['asc','desc']);
+            const sortedData = _.orderBy(
+                action.disputes, 
+                [
+                    'status',
+                    'dispute_updated_at'
+                ], 
+                ['asc', 'desc']
+            );
+
+            return sortedData;
         case 'UPDATE_DISPUTE_CONVERSATION':
             return _.map(state, d => {
                 if(d.id === action.disputeId){
-                    return {
-                        ...d,
-                        conversations: action.conversations
-                    }
+                    return { ...d,  conversations: action.conversations  }
                 }
                 return d;
             });
@@ -56,6 +62,7 @@ const Disputes = () => {
     const [getDisputes, {isFetching}] = useLazyGetDisputesQuery();
     const auth = new User(window.Laravel.user);
       
+    console.log({disputes})
 
     const onFilter = async (filter) => {
         let queryObject = _.pickBy(filter, Boolean);
@@ -65,7 +72,7 @@ const Disputes = () => {
         try{
             if(filter?.start_date && filter?.end_date){
                 const res = await getDisputes(`?${queryString}`).unwrap();  
-                if(res){ 
+                if(res){  
                     dispatch({type: 'INIT_DISPUTE', disputes: res});
                 }
             }

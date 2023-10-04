@@ -629,13 +629,13 @@ var dailySubmissionApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.in
     return {
       getDailySubmission: build.query({
         query: function query(id) {
-          return "account/tasks/get-today-tasks/".concat(id);
+          return "/account/tasks/get-today-tasks/".concat(id);
         },
         providesTags: ["DAILY_SUBMISSION_STATUS"]
       }),
       getDailyTasksSubmission: build.query({
         query: function query(task_id) {
-          return "account/tasks/daily-submissions/".concat(task_id);
+          return "/account/tasks/daily-submissions/".concat(task_id);
         },
         providesTags: ["DAILY_SUBMISSION_STATUS"]
       }),
@@ -3976,17 +3976,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_icons_ai__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-icons/ai */ "./node_modules/react-icons/ai/index.esm.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
@@ -3998,62 +3995,12 @@ var DailySubmissionItem = function DailySubmissionItem(_ref) {
     setModalData = _ref.setModalData,
     modalData = _ref.modalData;
   // const [show,setShow] = useState(false);
-  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_1__.useSelector)(function (s) {
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useSelector)(function (s) {
       return s.subTask;
     }),
     task = _useSelector.task;
-  var timeFormatter = function timeFormatter() {
-    var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-    // console.log(time);
-    var _time$split$0$split = time.split(" ")[0].split("-"),
-      _time$split$0$split2 = _slicedToArray(_time$split$0$split, 3),
-      year = _time$split$0$split2[0],
-      month = _time$split$0$split2[1],
-      date = _time$split$0$split2[2];
-    var month_name = '';
-    switch (month) {
-      case '01':
-        month_name = "Jan";
-        break;
-      case '02':
-        month_name = "Feb";
-        break;
-      case '03':
-        month_name = "Mar";
-        break;
-      case '04':
-        month_name = "Apr";
-        break;
-      case '05':
-        month_name = "May";
-        break;
-      case '06':
-        month_name = "Jun";
-        break;
-      case '07':
-        month_name = "Jul";
-        break;
-      case '08':
-        month_name = "Aug";
-        break;
-      case '09':
-        month_name = "Sep";
-        break;
-      case '10':
-        month_name = "Oct";
-        break;
-      case '11':
-        month_name = "Nov";
-        break;
-      case '12':
-        month_name = "Dec";
-        break;
-      default:
-        break;
-    }
-    return "".concat(month_name, " ").concat(date, ", ").concat(year);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+  if (!item) return null;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
     onClick: function onClick() {
       setModalData(function (prev) {
         if ((prev === null || prev === void 0 ? void 0 : prev.id) === item.id) {
@@ -4069,34 +4016,34 @@ var DailySubmissionItem = function DailySubmissionItem(_ref) {
       margin: '0 auto',
       cursor: 'pointer'
     },
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
         minWidth: '100px',
         textAlign: 'left'
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
         className: "singleline-ellipsis",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
           className: "text-primary",
           children: ["Task#", task.id]
-        }), ' submitted by ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+        }), ' submitted by ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
           className: "text-primary",
           children: item.developer_name
         })]
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
         minWidth: '100px'
       },
-      children: timeFormatter(item.submission_creation_date)
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+      children: dayjs__WEBPACK_IMPORTED_MODULE_0___default()(item.submission_creation_date).format('MMM DD, YYYY')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
         minWidth: '50px'
       },
-      children: (modalData === null || modalData === void 0 ? void 0 : modalData.id) === item.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_3__.AiFillEyeInvisible, {
+      children: (modalData === null || modalData === void 0 ? void 0 : modalData.id) === item.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_4__.AiFillEyeInvisible, {
         style: {
           height: '20px',
           width: '20px',
@@ -4106,7 +4053,7 @@ var DailySubmissionItem = function DailySubmissionItem(_ref) {
         //     setModalData(null);
         //     // setShow(false);
         // }} 
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_3__.AiFillEye, {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_4__.AiFillEye, {
         style: {
           height: '20px',
           width: '20px',
@@ -4421,7 +4368,6 @@ var SingleUserSubmissionTableDrawer = function SingleUserSubmissionTableDrawer(_
     deviceWidth = _useWindowSize.width;
   // useClickAway(ref, close);
 
-  console.log(data);
   var content = function content() {
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       ref: ref,
@@ -4483,7 +4429,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _styles_DailySubmission_module_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./styles/DailySubmission.module.css */ "./resources/js/react/single-task/section/daily-submission/styles/DailySubmission.module.css");
 /* harmony import */ var _styles_DataTable_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./styles/DataTable.css */ "./resources/js/react/single-task/section/daily-submission/styles/DataTable.css");
 /* harmony import */ var _services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/api/dailySubmissionApiSlice */ "./resources/js/react/services/api/dailySubmissionApiSlice.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -4497,44 +4445,51 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
   var _window$Laravel;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     open = _useState2[0],
     setOpen = _useState2[1];
-  var _useGetDailySubmissio = (0,_services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_4__.useGetDailySubmissionQuery)((_window$Laravel = window.Laravel) === null || _window$Laravel === void 0 || (_window$Laravel = _window$Laravel.user) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.id),
+  var _useSearchParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useSearchParams)(),
+    _useSearchParams2 = _slicedToArray(_useSearchParams, 1),
+    searchParams = _useSearchParams2[0];
+  var date_type = searchParams.get('data_type');
+  var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User((_window$Laravel = window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
+  var _useGetDailySubmissio = (0,_services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_4__.useGetDailySubmissionQuery)("".concat(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.id, "?date_type=").concat(date_type)),
     data = _useGetDailySubmissio.data,
     isLoading = _useGetDailySubmissio.isLoading;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     className: "sp1_tlr_tbl_wrapper",
     style: {
       overflow: 'auto'
     },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("table", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
       className: "sp1_tlr_table",
       style: {
         minWidth: '0'
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("thead", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("tr", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
           className: "",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             children: "SL No."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             children: "Task Name"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             children: "Page Link"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             children: "Total Time Spend on This Task Today"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             children: "Client Name"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("th", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             style: {
               width: '10rem'
@@ -4542,10 +4497,10 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
             children: "Action"
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("tbody", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("tbody", {
         className: "sp1_tlr_tbody",
         children: (isLoading ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] : data === null || data === void 0 ? void 0 : data.data).map(function (d, i) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_TodaysUpdateModalTableRow__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TodaysUpdateModalTableRow__WEBPACK_IMPORTED_MODULE_1__["default"], {
             data: d,
             index: i,
             open: open,
@@ -11159,10 +11114,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
 /* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
 /* harmony import */ var _daily_submission_TodaysUpdateModalTable__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../daily-submission/TodaysUpdateModalTable */ "./resources/js/react/single-task/section/daily-submission/TodaysUpdateModalTable.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -11182,13 +11139,14 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var DailySubmissionControl = function DailySubmissionControl() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
     todaysUpdateModalisOpen = _useState2[0],
     setTodaysUpdateModalisOpen = _useState2[1];
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useNavigate)();
-  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useLocation)();
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useLocation)();
   var url = new URLSearchParams(location.search);
   var isOpen = url.get("modal") === "daily-submission";
 
@@ -11206,53 +11164,53 @@ var DailySubmissionControl = function DailySubmissionControl() {
     setTodaysUpdateModalisOpen(false);
   };
   var open = function open() {
-    return navigate("".concat(location.pathname, "?modal=daily-submission"));
+    return navigate("".concat(location.pathname, "?modal=daily-submission&data_type=today"));
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
       variant: "tertiary"
       // onClick={toggle}
       ,
       onClick: open,
       className: "d-flex align-items-center btn-outline-dark text-dark",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
         className: "d-inline ml-1",
         children: " Submit Today's Update "
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
       isOpen: isOpen,
       className: "sp1_mark-as--modal ",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "sp1_single_task--modal-panerl-wrapper",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "sp1_mark-as--modal-panel",
           style: {
             overflow: "visible",
             maxWidth: "70rem"
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "sp1_mark-as--modal-heading",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
               className: "mb-0",
               children: "Submit Today's Update"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
               "aria-label": "closeModal",
               onClick: close,
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                 className: "fa-solid fa-xmark"
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "sp1_mark-as--modal-body px-3",
             style: {
               overflow: "visible"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "alert alert-warning text-center",
               children: "If you don't submit the daily submission, you won't be able to start any task on next day."
-            }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_daily_submission_TodaysUpdateModalTable__WEBPACK_IMPORTED_MODULE_6__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+            }), isOpen && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_daily_submission_TodaysUpdateModalTable__WEBPACK_IMPORTED_MODULE_6__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "mt-3 d-flex align-items-center",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_4__["default"], {
                 variant: "tertiary",
                 className: "ml-auto mr-2",
                 onClick: close,
@@ -14648,9 +14606,6 @@ var TimerControl = function TimerControl(_ref) {
         });
       }
     })["catch"](function (err) {
-      console.log({
-        err: err
-      });
       if (err.status === 400) {
         if (err.data.acknowledgement_submitted === false) {
           Swal.fire({
@@ -14680,7 +14635,7 @@ var TimerControl = function TimerControl(_ref) {
           }).then(function (result) {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-              navigate("?modal=daily-submission");
+              navigate("?modal=daily-submission&date_type=last-date");
             }
           });
         }
@@ -14733,13 +14688,13 @@ var TimerControl = function TimerControl(_ref) {
     getUserTrackTime(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()).unwrap().then(function (res) {
       if (res) {
         var currentTime = dayjs.dayjs(res.current_time);
-        var target = currentTime.set('hour', 17).set('minutl', 0).set('second', 0);
+        var target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
         var isSaturday = currentTime.day() === 6;
         if (isSaturday) {
           target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
         }
         var check = dayjs.dayjs(currentTime).isBefore(target);
-        var isDev = lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([5, 9, 10], Number(auth.getRoleId()));
+        var isDev = lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([5, 9, 10], Number(auth === null || auth === void 0 ? void 0 : auth.getRoleId()));
         if (!check && isDev) {
           res.tracked_times < res.target_time ? dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__.setLessTrackModal)({
             show: true,

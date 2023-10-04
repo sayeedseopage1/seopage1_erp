@@ -374,7 +374,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
 
         // TASK DISPUTE
         getDisputes:build.query({
-            query: (query) => `/account/task-disputes${query}`
+            query: (query) => `/account/task-disputes${query}`,
+            providesTags: ['DISPUTES']
         }),
         
         // ASK DISPUTE QUESTION
@@ -388,7 +389,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            invalidatesTags: ["DISPUTES"]
         }),
 
         // ANSWER DISPUTE QUESTION
@@ -402,7 +404,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ["DISPUTES"]
         }),  
 
         // ANSWER DISPUTE QUESTION
@@ -416,7 +420,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ["DISPUTES"]
         }),  
         // ANSWER DISPUTE QUESTION
         disputeAnswerMakeAsRead: build.mutation({
@@ -429,7 +435,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            
+            invalidatesTags: ["DISPUTES"]
         }),  
 
 

@@ -31464,7 +31464,8 @@ var reducer = function reducer() {
   var action = arguments.length > 1 ? arguments[1] : undefined;
   switch (action.type) {
     case 'INIT_DISPUTE':
-      return state = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(action.disputes, ['status', 'id'], ['asc', 'desc']);
+      var sortedData = lodash__WEBPACK_IMPORTED_MODULE_0___default().orderBy(action.disputes, ['status', 'dispute_updated_at'], ['asc', 'desc']);
+      return sortedData;
     case 'UPDATE_DISPUTE_CONVERSATION':
       return lodash__WEBPACK_IMPORTED_MODULE_0___default().map(state, function (d) {
         if (d.id === action.disputeId) {
@@ -31516,6 +31517,9 @@ var Disputes = function Disputes() {
     getDisputes = _useLazyGetDisputesQu2[0],
     isFetching = _useLazyGetDisputesQu2[1].isFetching;
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User(window.Laravel.user);
+  console.log({
+    disputes: disputes
+  });
   var onFilter = /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(filter) {
       var queryObject, queryString, res;
@@ -48142,7 +48146,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
       getDisputes: build.query({
         query: function query(_query2) {
           return "/account/task-disputes".concat(_query2);
-        }
+        },
+        providesTags: ['DISPUTES']
       }),
       // ASK DISPUTE QUESTION
       askDisputeQuestion: build.mutation({
@@ -48154,7 +48159,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // ANSWER DISPUTE QUESTION
       answerDisputeQuestion: build.mutation({
@@ -48166,7 +48172,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // ANSWER DISPUTE QUESTION
       disputeSubmitToAuthorization: build.mutation({
@@ -48178,7 +48185,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // ANSWER DISPUTE QUESTION
       disputeAnswerMakeAsRead: build.mutation({
@@ -48190,7 +48198,8 @@ var singleTaskPageApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inj
               _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
             })
           };
-        }
+        },
+        invalidatesTags: ["DISPUTES"]
       }),
       // GET IN PROGRESS TASK STATUS
       getInProgressTaskStatus: build.query({
@@ -48311,7 +48320,7 @@ var apiSlice = (0,_reduxjs_toolkit_query_react__WEBPACK_IMPORTED_MODULE_0__.crea
     baseUrl: '/'
   }),
   keepUnusedDataFor: 60,
-  tagTypes: ['points_page_filter_options', 'TASK_STATUS', 'TASKS', 'TASKSREPORT', "PMGUIDELINE", "DAILY_SUBMISSION_STATUS", "TASK_TYPE_STATUS_DATA", "ENABLE_MARKASCOMPLETE", "USER_IN_PROGRESS_TASKS"],
+  tagTypes: ['points_page_filter_options', 'TASK_STATUS', 'TASKS', 'TASKSREPORT', "PMGUIDELINE", "DAILY_SUBMISSION_STATUS", "TASK_TYPE_STATUS_DATA", "ENABLE_MARKASCOMPLETE", "USER_IN_PROGRESS_TASKS", "DISPUTES"],
   endpoints: function endpoints() {
     return {};
   }

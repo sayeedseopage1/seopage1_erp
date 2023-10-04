@@ -15,7 +15,8 @@ export const apiSlice = createApi({
             "DAILY_SUBMISSION_STATUS", 
             "TASK_TYPE_STATUS_DATA",
             "ENABLE_MARKASCOMPLETE",
-            "USER_IN_PROGRESS_TASKS"
+            "USER_IN_PROGRESS_TASKS",
+            "DISPUTES"
     ],
     endpoints: () => ({}),
 });

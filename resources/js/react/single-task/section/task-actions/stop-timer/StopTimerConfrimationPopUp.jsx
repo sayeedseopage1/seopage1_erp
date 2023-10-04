@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { Placeholder } from "../../../../global/Placeholder";
 import dayjs from "dayjs";
 import OptionSix from "./options/OptionSix";
+import { useNavigate } from "react-router-dom";
 
 const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     const { task, lessTrackModalFor, lessTrackDate } = useSelector(s => s.subTask)
@@ -18,7 +19,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     const [closingToday, setClosingToday] = React.useState(false); 
     const [trackHours, setTrackHours] = React.useState('');
     const [trackMinutes, setTrackMinutes] = React.useState('');
-    const loggedUser = new User(window?.Laravel?.user);
+    const loggedUser = new User(window?.Laravel?.user); 
 
     const [ storeStopTrackTimer, {
         isLoading: isSubmitting
@@ -28,6 +29,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
 
     // console.log(trackTime)
 
+    const navigate = useNavigate();
      
 
     React.useEffect(() => {
@@ -49,7 +51,10 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
             handleTemporarilyStopTimer();
         })
         .catch(err => console.log(err))
-        .finally(() => close())
+        .finally(() => {
+            navigate(`?modal=daily-submission&data_type=today`);
+            close()
+        })
     }
 
     return (
@@ -101,7 +106,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                             <Placeholder width="60%" height={14} />
                         </React.Fragment> :
                         <React.Fragment>
-                            Your tracked time for <span className="font-weight-bold">{trackTime?.current_time === 'Today'? 'today': dayjs(trackTime?.current_time).format('MMM DD, YYYY')}</span> is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> {trackTime?.target_time/ 60} hours </span> and <span className="font-weight-bold"> {trackTime?.target_time % 60} minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less. 
+                            Your tracked time for <span className="font-weight-bold">{lessTrackDate}</span> is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> {trackTime?.target_time/ 60} hours </span> and <span className="font-weight-bold"> {trackTime?.target_time % 60} minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less. 
                         </React.Fragment> 
                         }
                     </div>
