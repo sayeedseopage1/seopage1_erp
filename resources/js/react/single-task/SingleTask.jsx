@@ -65,16 +65,20 @@ const SingleTaskPage = () => {
     if(!task) return null;
     
     return (
-        <div className="postion-relative"> 
+        <div className="position-relative"> 
             <div className="mb-3">
                 <div className={`f-18 ${loadingClass}`}>
                     <span> <strong>Task: </strong> </span> 
                     <a href={`/account/tasks/${task?.id}`} >{task?.getSubtaskTitle()}</a>
-                    ({_.includes([1, 4, 6, 7, 8], loggedUser?.getRoleId()) && 
-                        <a href={`/account/projects/${task.projectId}`} className="f-14 ml-2">
-                           See All Tasks
-                        </a>
-                    })
+                    {_.includes([1, 4, 6, 7, 8], loggedUser?.getRoleId()) && 
+                        <span className="ml-2">
+                            (
+                                <a href={`/account/projects/${task.projectId}`} className="f-14">
+                                    See All Tasks
+                                </a>
+                            )
+                        </span> 
+                    }
                 </div> 
             </div>
 

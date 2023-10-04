@@ -1900,7 +1900,7 @@ var TaskWiseLogReport = function TaskWiseLogReport() {
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
     _useState12 = _slicedToArray(_useState11, 2),
     trackedTime = _useState12[0],
-    setTractedTime = _useState12[1];
+    setTrackedTime = _useState12[1];
   var _useGetTaskWiseDataMu = (0,_services_api_timeLogTableApiSlice__WEBPACK_IMPORTED_MODULE_1__.useGetTaskWiseDataMutation)(),
     _useGetTaskWiseDataMu2 = _slicedToArray(_useGetTaskWiseDataMu, 2),
     getTaskWiseData = _useGetTaskWiseDataMu2[0],
@@ -1930,7 +1930,7 @@ var TaskWiseLogReport = function TaskWiseLogReport() {
       var totalTrackTime = _.sumBy(sortedData, function (d) {
         return Number(d.total_minutes);
       });
-      setTractedTime(totalTrackTime);
+      setTrackedTime(totalTrackTime);
     });
   };
 

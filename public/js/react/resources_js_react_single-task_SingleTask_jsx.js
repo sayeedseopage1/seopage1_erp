@@ -776,7 +776,7 @@ var SingleTaskPage = function SingleTaskPage() {
   var _taskStatus = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.BoardColumn(taskStatus);
   if (!task) return null;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
-    className: "postion-relative",
+    className: "position-relative",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
       className: "mb-3",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
@@ -788,11 +788,14 @@ var SingleTaskPage = function SingleTaskPage() {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
           href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
           children: task === null || task === void 0 ? void 0 : task.getSubtaskTitle()
-        }), "(", lodash__WEBPACK_IMPORTED_MODULE_1___default().includes([1, 4, 6, 7, 8], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
-          href: "/account/projects/".concat(task.projectId),
-          className: "f-14 ml-2",
-          children: "See All Tasks"
-        }), ")"]
+        }), lodash__WEBPACK_IMPORTED_MODULE_1___default().includes([1, 4, 6, 7, 8], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("span", {
+          className: "ml-2",
+          children: ["(", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
+            href: "/account/projects/".concat(task.projectId),
+            className: "f-14",
+            children: "See All Tasks"
+          }), ")"]
+        })]
       })
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
       className: "row",
@@ -4017,22 +4020,22 @@ var DailySubmissionItem = function DailySubmissionItem(_ref) {
     },
     className: "sp1_tlr_tr",
     style: {
-      verticalAlign: 'middle',
-      margin: '0 auto',
-      cursor: 'pointer'
+      verticalAlign: "middle",
+      margin: "0 auto",
+      cursor: "pointer"
     },
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
-        minWidth: '100px',
-        textAlign: 'left'
+        minWidth: "100px",
+        textAlign: "left"
       },
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
         className: "singleline-ellipsis",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("span", {
           className: "text-primary",
           children: ["Task#", task.id]
-        }), ' submitted by ', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        }), " submitted by ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
           className: "text-primary",
           children: item.developer_name
         })]
@@ -4040,39 +4043,30 @@ var DailySubmissionItem = function DailySubmissionItem(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
-        minWidth: '100px'
+        minWidth: "100px"
       },
-      children: dayjs__WEBPACK_IMPORTED_MODULE_0___default()(item.submission_creation_date).format('MMM DD, YYYY')
+      children: dayjs__WEBPACK_IMPORTED_MODULE_0___default()(item.submission_creation_date).format("MMM DD, YYYY")
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: "sp1_tlr_td",
       style: {
-        minWidth: '50px'
+        minWidth: "50px"
       },
       children: (modalData === null || modalData === void 0 ? void 0 : modalData.id) === item.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_4__.AiFillEyeInvisible, {
         style: {
-          height: '20px',
-          width: '20px',
-          cursor: 'pointer'
+          height: "20px",
+          width: "20px",
+          cursor: "pointer"
         }
-        // onClick={()=>{
-        //     setModalData(null);
-        //     // setShow(false);
-        // }} 
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(react_icons_ai__WEBPACK_IMPORTED_MODULE_4__.AiFillEye, {
         style: {
-          height: '20px',
-          width: '20px',
-          cursor: 'pointer'
+          height: "20px",
+          width: "20px",
+          cursor: "pointer"
         }
-        // onClick={()=>{
-        //     setModalData(item);
-        //     // setShow(true);
-        // }}
       })
     })]
   });
 };
-
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (DailySubmissionItem);
 
 /***/ }),
@@ -4461,7 +4455,7 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
   var _useSearchParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_7__.useSearchParams)(),
     _useSearchParams2 = _slicedToArray(_useSearchParams, 1),
     searchParams = _useSearchParams2[0];
-  var date_type = searchParams.get('data_type');
+  var date_type = searchParams.get("data_type");
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User((_window$Laravel = window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
   var _useGetDailySubmissio = (0,_services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_4__.useGetDailySubmissionQuery)("".concat(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.id, "?date_type=").concat(date_type)),
     data = _useGetDailySubmissio.data,
@@ -4469,12 +4463,12 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     className: "sp1_tlr_tbl_wrapper",
     style: {
-      overflow: 'auto'
+      overflow: "auto"
     },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("table", {
       className: "sp1_tlr_table",
       style: {
-        minWidth: '0'
+        minWidth: "0"
       },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("thead", {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("tr", {
@@ -4497,7 +4491,7 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("th", {
             className: "sp1_tlr_th",
             style: {
-              width: '10rem'
+              width: "10rem"
             },
             children: "Action"
           })]
@@ -4507,6 +4501,7 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
         children: (isLoading ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] : data === null || data === void 0 ? void 0 : data.data).map(function (d, i) {
           return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_TodaysUpdateModalTableRow__WEBPACK_IMPORTED_MODULE_1__["default"], {
             data: d,
+            date: data === null || data === void 0 ? void 0 : data.date,
             index: i,
             open: open,
             setOpen: setOpen,
@@ -4533,19 +4528,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _styles_DailySubmission_module_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./styles/DailySubmission.module.css */ "./resources/js/react/single-task/section/daily-submission/styles/DailySubmission.module.css");
-/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
-/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
-/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
-/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/converTime */ "./resources/js/react/utils/converTime.js");
-/* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
-/* harmony import */ var _UI_form_Cheeckbox__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../UI/form/Cheeckbox */ "./resources/js/react/UI/form/Cheeckbox.jsx");
-/* harmony import */ var _services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../services/api/dailySubmissionApiSlice */ "./resources/js/react/services/api/dailySubmissionApiSlice.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
+/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
+/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
+/* harmony import */ var _utils_converTime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../utils/converTime */ "./resources/js/react/utils/converTime.js");
+/* harmony import */ var _global_Placeholder__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../global/Placeholder */ "./resources/js/react/global/Placeholder.jsx");
+/* harmony import */ var _UI_form_Cheeckbox__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../UI/form/Cheeckbox */ "./resources/js/react/UI/form/Cheeckbox.jsx");
+/* harmony import */ var _services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/api/dailySubmissionApiSlice */ "./resources/js/react/services/api/dailySubmissionApiSlice.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -4566,16 +4559,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-
 var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
   var data = _ref.data,
+    date = _ref.date,
     index = _ref.index,
     open = _ref.open,
     setOpen = _ref.setOpen,
     loading = _ref.loading;
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useNavigate)();
-  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_12__.useLocation)();
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useNavigate)();
+  var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useLocation)();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
     _useState2 = _slicedToArray(_useState, 2),
     attachmentLink = _useState2[0],
@@ -4599,7 +4591,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
     _useState12 = _slicedToArray(_useState11, 2),
     completedSection = _useState12[0],
     setCompletedSection = _useState12[1];
-  var _useSubmitDailySubmis = (0,_services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_9__.useSubmitDailySubmissionMutation)(),
+  var _useSubmitDailySubmis = (0,_services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_7__.useSubmitDailySubmissionMutation)(),
     _useSubmitDailySubmis2 = _slicedToArray(_useSubmitDailySubmis, 2),
     submitDailySubmission = _useSubmitDailySubmis2[0],
     isSubmitting = _useSubmitDailySubmis2[1].isLoading;
@@ -4654,6 +4646,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
     formData.append('section_name', completedSection);
     formData.append('comment', taskDescription);
     formData.append('mark_as_complete', checked);
+    FormData.append('report_date', date);
     var _token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
     formData.append("_token", _token);
     files.forEach(function (file) {
@@ -4664,7 +4657,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
       if (res.mark_as_complete === "true" || res.mark_as_complete === true) {
         navigate("".concat(location.pathname, "?modal=complete-task"));
       }
-      var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_10___default().mixin({
+      var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_8___default().mixin({
         toast: true,
         position: 'top-end',
         showConfirmButton: false,
@@ -4680,39 +4673,39 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
       return console.log(err);
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("tr", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("tr", {
       className: "sp1_tlr_tr ".concat(open === index && 'openRow_bg')
       // style={{
       //     backgroundColor: `${data.daily_submission_status ? 'lightgreen' : 'white'}`
       // }}
       ,
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
         style: {
           minWidth: '50px'
         },
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_7__.Placeholder, {}) : index + 1
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : index + 1
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_7__.Placeholder, {}) : data === null || data === void 0 ? void 0 : data.task_title
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : data === null || data === void 0 ? void 0 : data.task_title
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_7__.Placeholder, {}) : data !== null && data !== void 0 && data.page_url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("a", {
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : data !== null && data !== void 0 && data.page_url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
           href: data.page_url,
           title: data.page_url,
           target: "_blank",
           children: "View Link"
         }) : 'No Link attached'
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_7__.Placeholder, {}) : (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_6__.convertTime)(data.total_time_spent)
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_4__.convertTime)(data.total_time_spent)
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_7__.Placeholder, {}) : data.client_name
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : data.client_name
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         className: "sp1_tlr_td",
-        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_7__.Placeholder, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("button", {
+        children: loading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_global_Placeholder__WEBPACK_IMPORTED_MODULE_5__.Placeholder, {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("button", {
           onClick: function onClick() {
             if (data.daily_submission_status) {
               return;
@@ -4729,23 +4722,23 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
           children: data.daily_submission_status ? 'Submitted' : 'Click To Submit'
         })
       })]
-    }), open === index && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("tr", {
+    }), open === index && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("tr", {
       className: "",
       style: {
         border: "solid gray 1px",
         borderTop: "none"
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("td", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("td", {
         colSpan: 6,
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("form", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("form", {
           className: "from_body openRow_bg",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "form-group",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("label", {
               htmlFor: "sectionName",
-              children: ["Completed Section Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("sup", {
+              children: ["Completed Section Name ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("sup", {
                 children: "*"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 className: "ml-2",
                 "data-toggle": "tooltip",
                 "data-placement": "top",
@@ -4754,11 +4747,11 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
                 style: {
                   cursor: "pointer"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                   className: "fa-regular fa-circle-question"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("input", {
               value: completedSection,
               type: "text",
               id: "sectionName",
@@ -4774,17 +4767,17 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
               onChange: function onChange(e) {
                 return setCompletedSection(e.target.value);
               }
-            }), completedSectionError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("small", {
+            }), completedSectionError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("small", {
               className: "form-text text-danger",
               children: completedSectionError
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "form-group",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("label", {
               htmlFor: "sectionName",
-              children: ["Screenshots/Screen records of the sections ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("sup", {
+              children: ["Screenshots/Screen records of the sections ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("sup", {
                 children: "*"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 className: "ml-2",
                 "data-toggle": "tooltip",
                 "data-placement": "top",
@@ -4793,11 +4786,11 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
                 style: {
                   cursor: "pointer"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                   className: "fa-regular fa-circle-question"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("input", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("input", {
               value: attachmentLink,
               type: "text",
               id: "sectionName",
@@ -4813,15 +4806,15 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
               onChange: function onChange(e) {
                 return setAttachmentLink(e.target.value);
               }
-            }), attachmentLinkError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("small", {
+            }), attachmentLinkError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("small", {
               className: "form-text text-danger",
               children: attachmentLinkError
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "form-group",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("label", {
               htmlFor: "exampleFormControlInput1",
-              children: ["Attachments", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+              children: ["Attachments", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 className: "ml-2",
                 "data-toggle": "tooltip",
                 "data-placement": "top",
@@ -4830,20 +4823,20 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
                 style: {
                   cursor: "pointer"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                   className: "fa-regular fa-circle-question"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_1__["default"], {
               files: files,
               setFiles: setFiles,
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"].Input, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"].SelectedFiles, {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_1__["default"].Input, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_1__["default"].SelectedFiles, {
                 children: function children(_ref2) {
                   var _Array$from;
                   var previews = _ref2.previews,
                     onDelete = _ref2.onDelete;
                   return (_Array$from = Array.from(previews)) === null || _Array$from === void 0 ? void 0 : _Array$from.map(function (p, i) {
-                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"].Preview, {
+                    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_1__["default"].Preview, {
                       id: i,
                       fileName: p.name,
                       previewUrl: p.preview,
@@ -4854,17 +4847,17 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
                 }
               })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
             className: "form-group",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("label", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("label", {
               htmlFor: "exampleFormControlInput2",
               style: {
                 maxWidth: '95%'
               },
-              children: ["Describe which sections you have worked on today ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("sup", {
+              children: ["Describe which sections you have worked on today ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("sup", {
                 className: "text-danger",
                 children: "*"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("span", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
                 className: "ml-2",
                 "data-toggle": "tooltip",
                 "data-placement": "top",
@@ -4873,29 +4866,29 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
                 style: {
                   cursor: "pointer"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("i", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
                   className: "fa-regular fa-circle-question"
                 })
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "sp1_st_write_comment_editor",
               style: {
                 minHeight: "100px"
               },
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
                 value: taskDescription,
                 onChange: function onChange(e, editor) {
                   var data = editor.getData();
                   setTaskDescription(data);
                 }
               })
-            }), taskDescriptionError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("small", {
+            }), taskDescriptionError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("small", {
               className: "form-text text-danger",
               children: taskDescriptionError
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
             className: "form-group",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_UI_form_Cheeckbox__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_UI_form_Cheeckbox__WEBPACK_IMPORTED_MODULE_6__["default"], {
               checked: checked,
               onChange: function onChange(e) {
                 return setChecked(e.target.checked);
@@ -4903,12 +4896,12 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
               label: 'Mark as Complete',
               className: "user-select-none"
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
             className: "mt-3 d-flex align-items-center",
             style: {
               gap: '5px'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_4__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
               onClick: handleSubmit,
               isLoading: isSubmitting,
               title: "Submit"
