@@ -3303,8 +3303,8 @@ class TaskController extends AccountBaseController
                 'projects.project_summary',
 
                 'clients.id as clientId','clients.name as client_name',
-              
-                
+
+
 
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
@@ -4960,6 +4960,55 @@ class TaskController extends AccountBaseController
             'status'=>200,
 
         ]);
+
+    }
+    public function allDailySubmission(){
+
+        $dailySubmission = DailySubmission::select(
+            'employee.id as employee_id',
+            'employee.name as employee_name',
+            'employee.image as employee_image',
+            'daily_submissions.created_at as report_date',
+            'client.id as client_id',
+            'client.name as client_name',
+            'client.image as client_image',
+            'projects.id as project_id',
+            'projects.project_name as project_name',
+            'tasks.id as task_id',
+            'tasks.heading as task_name',
+            'tasks.status as task_status',
+            'pm.id as pm_id',
+            'pm.name as pm_name',
+            'pm.image as pm_image',
+            'ld.id as ld_id',
+            'ld.name as ld_name',
+            'ld.image as ld_image',
+            'task_types.id as page_type_id',
+            'task_types.task_type as task_type',
+            'task_types.page_type as page_type',
+            'task_types.page_url as page_link',
+            'daily_submissions.section_name as section',
+            'daily_submissions.comment as comment',
+            'daily_submissions.hours_spent as total_time_spent',
+            'daily_submissions.attachments as attachments',
+            'working_environments.site_url as site_url',
+            'working_environments.frontend_password as frontend_password',
+            )
+            ->join('tasks','tasks.id','=','daily_submissions.task_id')
+            ->join('task_types','tasks.id','=','task_types.task_id')
+            ->join('users as employee','employee.id','=','daily_submissions.user_id')
+            ->join('users as client','client.id','=','daily_submissions.client_id')
+            ->join('projects','projects.id','=','daily_submissions.project_id')
+            ->join('project_members','projects.id','=','project_members.project_id')
+            ->leftJoin('users as pm','pm.id','=','projects.pm_id')
+            ->leftJoin('users as ld','ld.id','=','project_members.lead_developer_id')
+            ->join('working_environments','projects.id','=','working_environments.project_id')
+            ->get();
+
+            return response()->json([
+                'dailySubmission'=> $dailySubmission,
+                'status'=>200,
+            ]);
 
     }
     public function checkTaskTrackTime($id)
