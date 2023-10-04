@@ -195,9 +195,9 @@ export const TaskReportDataTableColumn = [
         sorted: false,
         draggable:true,
         group: false,
-        cell: ({className}) => {
+        cell: ({row:{original},className}) => {
           return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              <ResolveActionBtn />
+              <ResolveActionBtn data={original}/>
           </div>
         }
     },
