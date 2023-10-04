@@ -808,6 +808,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/get-today-tasks/{id}', [TaskController::class, 'get_today_tasks']);
     Route::post('tasks/daily-submissions', [TaskController::class, 'storeDailySubmission']);
     Route::get('tasks/daily-submissions/{id}', [TaskController::class, 'getDailySubmission']);
+    Route::get('tasks/all-daily-submissions', [TaskController::class, 'allDailySubmission']);
     Route::get('tasks/get-inprogress-tasks/{id}', [TaskController::class, 'checkInProgressTask']);
     Route::get('tasks/get-tasks-subtasks/{id}', [TaskController::class, 'get_task_subtask'])->name('get-task-subtasks');
     Route::get('tasks/{any?}', [TaskController::class, 'index'])
@@ -1271,8 +1272,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/developer/primary-page-authorization-count/',[TaskController::class,'PrimaryPageAuthorization']);
 
     Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
-    
-   
+
+
 
 
     Route::get('/tasks-type',[TaskController::class,'getTasksType']);

@@ -54,7 +54,7 @@ class SubTaskController extends AccountBaseController
 // DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
-       
+
         $startDate = $task->start_date->format($setting->date_format);
         $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';
         $task_title = Task::where('project_id', $task->project_id)
@@ -80,7 +80,7 @@ class SubTaskController extends AccountBaseController
         if ($request->end_date == "Invalid Date") {
             return response($validator->errors(), 422);
         };
-       
+
 
         $dueDateRule = 'required|date_format:"' . $setting->date_format . '"|after_or_equal:' . $startDate;
 
@@ -96,7 +96,7 @@ class SubTaskController extends AccountBaseController
 
         $rules['due_date'] = !is_null(request()->start_date) ? ($dueDateRule . '|after_or_equal:' . Carbon::createFromFormat($setting->date_format, request()->start_date)->format($setting->date_format)) : $dueDateRule;
 
-       
+
 
         if ($validator->fails()) {
             return response($validator->errors(), 422);
@@ -111,7 +111,7 @@ class SubTaskController extends AccountBaseController
             ->sum('tasks.estimate_minutes');
 
         $total_subtasks_minutes = $sub_tasks_hours+$sub_tasks_minutes;
-        
+
         $hours = $request->estimate_hours * 60;
         $minutes = $request->estimate_minutes;
         $total_minutes = $hours + $minutes;
@@ -190,6 +190,7 @@ class SubTaskController extends AccountBaseController
         $task_type = new TaskType();
         $task_type->task_id= $task_s->id;
         $task_type->page_type= $request->page_type;
+        $task_type->task_type= $request->task_type;
         if($request->page_type == 'Primary Page Development')
         {
             $task_type->authorization_status= 0;
@@ -203,7 +204,7 @@ class SubTaskController extends AccountBaseController
         $task_type->number_of_pages= $request->number_of_pages;
         $task_type->save();
        // dd($task_type);
-        
+
 
         $authorization_action = new AuthorizationAction();
         $authorization_action->model_name = $task_s->getMorphClass();
@@ -228,7 +229,7 @@ class SubTaskController extends AccountBaseController
             $task_authorization->save();
 
         }
-      
+
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;
         // $task_user->user_id= $request->user_id ? $request->user_id : null;
@@ -403,6 +404,7 @@ class SubTaskController extends AccountBaseController
         $task_type = new TaskType();
         $task_type->task_id= $task_s->id;
         $task_type->page_type= $request->page_type;
+        $task_type->task_type= $request->task_type;
         $task_type->page_name= $request->page_name;
         $task_type->page_url= $request->page_url;
         $task_type->task_type_other= $request->task_type_other;
@@ -412,7 +414,7 @@ class SubTaskController extends AccountBaseController
         {
             $task_type->number_of_pages= 1;
 
-        }else 
+        }else
         {
             $task_type->number_of_pages= $request->number_of_pages;
 
