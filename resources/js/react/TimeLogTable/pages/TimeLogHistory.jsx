@@ -33,11 +33,14 @@ const TimeLogHistory = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
-        if(auth?.getRoleId() !== 1) return;
+        
         getTimeLogHistory(filter)
         .unwrap()
         .then(res => {
-            const sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
+            let sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
+            if(auth?.getRoleId() !== 1){
+                sortedData = [];
+            }
             handleData(sortedData, currentPage, perPageData);
             // setData(sortedData);
             dispatch(storeData({data: sortedData}));

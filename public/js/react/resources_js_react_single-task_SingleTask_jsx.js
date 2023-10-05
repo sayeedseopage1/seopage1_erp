@@ -791,7 +791,7 @@ var SingleTaskPage = function SingleTaskPage() {
         }), lodash__WEBPACK_IMPORTED_MODULE_1___default().includes([1, 4, 6, 7, 8], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("span", {
           className: "ml-2",
           children: ["(", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("a", {
-            href: "/account/projects/".concat(task.projectId),
+            href: "/account/projects/".concat(task.projectId, "?tab=tasks"),
             className: "f-14",
             children: "See All Tasks"
           }), ")"]
