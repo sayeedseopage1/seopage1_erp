@@ -1,11 +1,27 @@
 import { useEffect, useState } from 'react';
 import Button from '../../ui/Button';
-import { useLocation, useSearchParams } from 'react-router-dom';
 import Modal from '../../ui/Modal';
-import ResolveActionModalContent from './ResolveActionModalContent';
+import CKEditorComponent from '../../ui/ckeditor';
 
 const ResolveActionBtn = ({ data }) => {
   const [modalData, setModalData] = useState(null);
+  const [text, setText] = useState('');
+
+
+  // resolve handler function
+  const handleResolve = () =>{
+
+    close();
+    setText('');
+  }
+
+
+  // deny handler function
+  const handleDeny = () =>{
+
+    close();
+    setText('');
+  }
 
   const close = () => {
     setModalData(null);
@@ -51,8 +67,16 @@ const ResolveActionBtn = ({ data }) => {
                   won't be able to start any task on next day.
                 </div> */}
 
-                {modalData && < ResolveActionModalContent close={close} />}
-                <div className="mt-3 d-flex align-items-center">
+                <CKEditorComponent
+                  onChange={(e, editor) => setText(editor.getData())}
+                  placeholder='Write your comment here!' />
+
+                <div className="mt-3 d-flex justify-content-between align-items-center">
+                  <section style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem' }}>
+                    <Button variant="success" disabled={!text} isLoading={false} onClick={handleResolve}>Resolve Report</Button>
+                    <Button variant="danger" onClick={handleDeny} >Deny Report</Button>
+                  </section>
+                  
                   <Button
                     variant="tertiary"
                     className="ml-auto mr-2"
@@ -65,7 +89,7 @@ const ResolveActionBtn = ({ data }) => {
             </div>
           </div>
         </Modal>
-        }
+      }
     </div>
   );
 };

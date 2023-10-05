@@ -6,13 +6,16 @@ import { TaskReportDataTableColumn } from './TaskReportDataTableColumn';
 const TaskReportDataTable = () => {
 
   return (
-    <div className='p-5'>
-      <DataTable
-        tableData={[...taskReportTableData()]}
-        tableColumns={TaskReportDataTableColumn}
-        isLoading={false}
-        tableName='task-report-table'
-      />
+    <div className='sp1_tlr_container' style={{border:'solid transparent'}}>
+
+      <section className="sp1_tlr_tbl_container">
+        <DataTable
+          tableData={[...taskReportTableData()]}
+          tableColumns={TaskReportDataTableColumn}
+          isLoading={false}
+          tableName='task-report-table'
+        />
+      </section>
     </div>
   );
 };

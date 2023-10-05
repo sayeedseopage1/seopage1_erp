@@ -923,7 +923,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ui_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/Button */ "./resources/js/react-latest/ui/Button.jsx");
 /* harmony import */ var _ui_Modal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ui/Modal */ "./resources/js/react-latest/ui/Modal.jsx");
-/* harmony import */ var _ResolveActionModalContent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ResolveActionModalContent */ "./resources/js/react-latest/components/task-report-page/ResolveActionModalContent.jsx");
+/* harmony import */ var _ui_ckeditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../ui/ckeditor */ "./resources/js/react-latest/ui/ckeditor/index.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -937,13 +937,28 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
 var ResolveActionBtn = function ResolveActionBtn(_ref) {
   var data = _ref.data;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     modalData = _useState2[0],
     setModalData = _useState2[1];
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+    _useState4 = _slicedToArray(_useState3, 2),
+    text = _useState4[0],
+    setText = _useState4[1];
+
+  // resolve handler function
+  var handleResolve = function handleResolve() {
+    close();
+    setText('');
+  };
+
+  // deny handler function
+  var handleDeny = function handleDeny() {
+    close();
+    setText('');
+  };
   var close = function close() {
     setModalData(null);
   };
@@ -990,16 +1005,36 @@ var ResolveActionBtn = function ResolveActionBtn(_ref) {
             style: {
               overflow: "visible"
             },
-            children: [modalData && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ResolveActionModalContent__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              close: close
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-              className: "mt-3 d-flex align-items-center",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_ckeditor__WEBPACK_IMPORTED_MODULE_3__["default"], {
+              onChange: function onChange(e, editor) {
+                return setText(editor.getData());
+              },
+              placeholder: "Write your comment here!"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+              className: "mt-3 d-flex justify-content-between align-items-center",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("section", {
+                style: {
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '1rem'
+                },
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  variant: "success",
+                  disabled: !text,
+                  isLoading: false,
+                  onClick: handleResolve,
+                  children: "Resolve Report"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+                  variant: "danger",
+                  onClick: handleDeny,
+                  children: "Deny Report"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
                 variant: "tertiary",
                 className: "ml-auto mr-2",
                 onClick: close,
                 children: "Close"
-              })
+              })]
             })]
           })]
         })
@@ -1008,81 +1043,6 @@ var ResolveActionBtn = function ResolveActionBtn(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ResolveActionBtn);
-
-/***/ }),
-
-/***/ "./resources/js/react-latest/components/task-report-page/ResolveActionModalContent.jsx":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/react-latest/components/task-report-page/ResolveActionModalContent.jsx ***!
-  \*********************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ui_ckeditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../ui/ckeditor */ "./resources/js/react-latest/ui/ckeditor/index.jsx");
-/* harmony import */ var _ui_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../ui/Button */ "./resources/js/react-latest/ui/Button.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-
-
-
-
-var ResolveActionModalContent = function ResolveActionModalContent(_ref) {
-  var close = _ref.close;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
-    _useState2 = _slicedToArray(_useState, 2),
-    text = _useState2[0],
-    setText = _useState2[1];
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    console.log(text);
-  }, [text]);
-  var handleResolve = function handleResolve() {
-    close();
-    setText('');
-  };
-  var handleDeny = function handleDeny() {
-    close();
-    setText('');
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ui_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      onChange: function onChange(e, editor) {
-        return setText(editor.getData());
-      },
-      placeholder: "Write your comment here!"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("section", {
-      style: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '1rem'
-      },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ui_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        variant: "success",
-        disabled: !text,
-        isLoading: false,
-        onClick: handleResolve,
-        children: "Resolve Report"
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_ui_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        variant: "danger",
-        onClick: handleDeny,
-        children: "Deny Report"
-      })]
-    })]
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ResolveActionModalContent);
 
 /***/ }),
 
@@ -1116,12 +1076,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var TaskReportDataTable = function TaskReportDataTable() {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    className: "p-5",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_basic_table_DataTable__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      tableData: _toConsumableArray((0,_fake_data_task_report_page_data__WEBPACK_IMPORTED_MODULE_2__.taskReportTableData)()),
-      tableColumns: _TaskReportDataTableColumn__WEBPACK_IMPORTED_MODULE_3__.TaskReportDataTableColumn,
-      isLoading: false,
-      tableName: "task-report-table"
+    className: "sp1_tlr_container",
+    style: {
+      border: 'solid transparent'
+    },
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("section", {
+      className: "sp1_tlr_tbl_container",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ui_basic_table_DataTable__WEBPACK_IMPORTED_MODULE_1__["default"], {
+        tableData: _toConsumableArray((0,_fake_data_task_report_page_data__WEBPACK_IMPORTED_MODULE_2__.taskReportTableData)()),
+        tableColumns: _TaskReportDataTableColumn__WEBPACK_IMPORTED_MODULE_3__.TaskReportDataTableColumn,
+        isLoading: false,
+        tableName: "task-report-table"
+      })
     })
   });
 };
