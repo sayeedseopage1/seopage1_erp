@@ -38,8 +38,10 @@ const DailySubmission_Page = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
+        const searchParams = new URLSearchParams(filter).toString();
+        console.log(searchParams);
         setCurrentPage(1);
-        getAllDailySubmission()
+        getAllDailySubmission(searchParams)
             .unwrap()
             .then(({dailySubmission})=>{
                 const newData = dailySubmission.map((data,i)=>({...data,unique_id:i}));

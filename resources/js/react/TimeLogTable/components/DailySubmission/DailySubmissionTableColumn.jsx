@@ -126,12 +126,9 @@ export const DailySubmissionTableColumn = [
         header: 'Project',
         className: '',
         sorted: false,
-        group: true,
+        group: false,
         cell: ({ row, col, className, rowSpan }) => {
-            return <td
-                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${rowSpan ? "sp1_tlr_td_hover-disable" : ""}`}
-                rowSpan={rowSpan}
-            >
+            return <td className={`${className} sp1_tlr_td_border`}>
                 {row?.project_name}
             </td>
         }
@@ -141,12 +138,9 @@ export const DailySubmissionTableColumn = [
         header: 'Task',
         className: '',
         sorted: false,
-        group: true,
-        cell: ({ row, col, className, rowSpan }) => {
-            return <td
-                className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${rowSpan ? "sp1_tlr_td_hover-disable" : ""}`}
-                rowSpan={rowSpan}
-            >
+        group: false,
+        cell: ({ row, className }) => {
+            return <td className={`${className} sp1_tlr_td_border`}>
                 {row?.task_name}
             </td>
         }
@@ -159,7 +153,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                <span class="badge" style={{ backgroundColor: row?.status_color, color: 'white' }}>{row?.status_name}</span>
+                <span className="badge" style={{ backgroundColor: row?.status_color, color: 'white' }}>{row?.status_name}</span>
             </td>
         }
     },
@@ -287,7 +281,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.frontend_password}
+                {row?.frontend_password || 'No password added'}
             </td>
         }
     },
