@@ -5052,6 +5052,7 @@ class TaskController extends AccountBaseController
             'working_environments.site_url as site_url',
             'working_environments.frontend_password as frontend_password',
             'daily_submissions.created_at as report_submission_date',
+            DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = employee.id AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
             )
             ->join('tasks','tasks.id','=','daily_submissions.task_id')
             ->join('task_types','tasks.id','=','task_types.task_id')
@@ -5060,7 +5061,7 @@ class TaskController extends AccountBaseController
             ->join('projects','projects.id','=','daily_submissions.project_id')
             ->join('project_members','projects.id','=','project_members.project_id')
             ->leftJoin('users as pm','pm.id','=','projects.pm_id')
-            ->leftJoin('users as ld','ld.id','=','project_members.lead_developer_id')
+            ->leftJoin('users as ld','ld.id','=','tasks.added_by')
             ->join('working_environments','projects.id','=','working_environments.project_id')
             ->get();
 

@@ -73,7 +73,7 @@ const SingleTaskPage = () => {
                     {_.includes([1, 4, 6, 7, 8], loggedUser?.getRoleId()) && 
                         <span className="ml-2">
                             (
-                                <a href={`/account/projects/${task.projectId}`} className="f-14">
+                                <a href={`/account/projects/${task.projectId}?tab=tasks`} className="f-14">
                                     See All Tasks
                                 </a>
                             )
