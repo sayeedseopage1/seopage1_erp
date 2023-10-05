@@ -3935,6 +3935,7 @@ class TaskController extends AccountBaseController
             $stop_time->transition_hours= $request->transition_hours;
             $stop_time->transition_minutes= $request->transition_minutes;
             $stop_time->date= $request->date;
+            $stop_time->client= $request->client;
             $stop_time->save();
             $task= Task::where('id',$request->task_id)->first();
             if($task->subtask_id == null)
@@ -5069,15 +5070,16 @@ class TaskController extends AccountBaseController
             ->leftJoin('working_environments','projects.id','=','working_environments.project_id')
             ->groupBy('daily_submissions.task_id','daily_submissions.created_at')
             ->get();
-        //   / dd($dailySubmission);
-            foreach($dailySubmission as $item)
-            {
-                $project_time_logs = ProjectTimeLog::where('task_id',$item->task_id)
-                ->whereDate('created_at',$item->created_at)
-                ->sum('total_minutes');
-            $item->total_time_spent = $project_time_logs;
+       
+            // foreach($dailySubmission as $item)
+            // {
+            //     $project_time_logs = ProjectTimeLog::where('task_id',$item->task_id)
+            //     ->whereDate('created_at',$item->created_at)
+            //     ->sum('total_minutes');
+            // $item->total_time_spent = $project_time_logs;
 
-            }
+            // }
+            //  dd($dailySubmission);
 
             return response()->json([
                 'dailySubmission'=> $dailySubmission,

@@ -18,8 +18,8 @@ const LessTrackTimerModal = ({ stopTimer, startTimer }) => {
         dispatch(setLessTrackModal({ show: false, type: "" }));
     };
 
-    // temprarily stop timer now
-    const stopTimerTemprorily = () => {
+    // temporarily stop timer now
+    const stopTimerTemporarily = () => {
         if (lessTrackModalFor === "STOP_TIMER") {
             stopTimer();
         }
@@ -42,7 +42,7 @@ const LessTrackTimerModal = ({ stopTimer, startTimer }) => {
                     }
                 >
                     <StopTimerConfrimationPopUp
-                        handleTemporarilyStopTimer={stopTimerTemprorily}
+                        handleTemporarilyStopTimer={stopTimerTemporarily}
                         close={close}
                     />
                 </React.Suspense>
