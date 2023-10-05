@@ -2,6 +2,7 @@ import dayjs from "dayjs"
 import UserRender from "../UserRender"
 import { convertTime } from "../../../utils/converTime"
 import Popover from "../../../../react-latest/ui/Popover";
+import "../data-table.css";
 
 
 export const DailySubmissionTableColumn = [
@@ -123,14 +124,14 @@ export const DailySubmissionTableColumn = [
         }
     },
     {
-        id: 'task_status',
+        id: 'status_name',
         header: 'Status',
         className: '',
         sorted: false,
         group: false,
         cell: ({ row, className }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.task_status}
+                <span class="badge" style={{backgroundColor:row?.status_color,color:'white'}}>{row?.status_name}</span>
             </td>
         }
     },
@@ -169,7 +170,7 @@ export const DailySubmissionTableColumn = [
                 {
                     row?.page_link ?
                         <a className="text-primary font-weight-bold" href={row?.page_link} target="_blank">View Link</a> :
-                        <span className="text-danger font-weight-bold">No Attachments</span>
+                        <span className="text-danger font-weight-bold">N/A</span>
                 }
             </td>
         }
@@ -245,7 +246,7 @@ export const DailySubmissionTableColumn = [
                 {
                     row?.site_url ?
                         <a className="text-primary font-weight-bold" href={row?.site_url} target="_blank">View Link</a> :
-                        <span className="text-danger font-weight-bold">No Attachments</span>
+                        <span className="text-danger font-weight-bold">N/A</span>
                 }
             </td>
         }
