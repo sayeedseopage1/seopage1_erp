@@ -2303,6 +2303,16 @@ class ProjectController extends AccountBaseController
      */
     public function show($id)
     {
+        if(Auth::user()->role_id == 4)
+        {
+            $project_id= Project::where('pm_id',Auth::id())->where('id',$id)->first();
+            if($project_id == null )
+            {
+                abort(403);
+            };
+
+        }
+       
         $this->viewPermission = user()->permission('view_projects');
         $viewFilePermission = user()->permission('view_project_files');
         $viewMilestonePermission = user()->permission('view_project_milestones');
