@@ -29,7 +29,7 @@ const DailySubmissionWiseTableLoader = () => {
   return (
     <React.Fragment>
       {_.times(4, index => (
-        <React.Fragment key={index} className="sp1_tlr_tr">
+        <React.Fragment key={index}>
           <tr className="sp1_tlr_tr">
             <td className="sp1_tlr_td" rowSpan={3}> <PersonLoader /> </td>
             <td className="sp1_tlr_td" rowSpan={3}> <Placeholder /> </td>

@@ -39,7 +39,7 @@ const DailySubmission_Page = () => {
     // handle fetch data
     const handleFetchData = (filter) => {
         const searchParams = new URLSearchParams(filter).toString();
-        // console.log(searchParams);
+        console.log(searchParams);
         setCurrentPage(1);
         getAllDailySubmission(searchParams)
             .unwrap()
