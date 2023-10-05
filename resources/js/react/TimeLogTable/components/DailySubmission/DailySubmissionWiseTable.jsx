@@ -40,23 +40,26 @@ const DailySubmissionWiseTable = ({
         const rows = [];
         if (data) {
             for (const [key, value] of data) {
+                // console.log({key,value});
                 value?.map((item, index) => {
+                    // console.log('row-item',{item});
                     const className =
                         value.length === index + 1
                             ? "sp1_tlr_td f-14 sp1_tlr_td_border"
                             : "sp1_tlr_td f-14";
                     rows.push(
-                            <tr className="sp1_tlr_tr" key={item.id}>
+                            <tr className="sp1_tlr_tr" key={item?.unique_id}>
                                 {
                                     _.map(_columns, (col,i) => {
+                                        // console.log('col-item',{col});
                                         if (col.group) {
                                             return index === 0 && (
-                                                <React.Fragment key={`col-${i}`}>
+                                                <React.Fragment key={col?.id}>
                                                     {col.cell({ row: item, rowSpan: _.size(value) })}
                                                 </React.Fragment>
                                             );
                                         } else {
-                                            return <React.Fragment key={`col-${i}`}>
+                                            return <React.Fragment key={col?.id}>
                                                 {col.cell({ row: item, className: `${className} sp1_drag_col_${col?.id}` })}
                                             </React.Fragment>
                                         }
@@ -83,9 +86,10 @@ const DailySubmissionWiseTable = ({
                         <thead className="sp1_tlr_thead">
                             <tr className="sp1_tlr_tr">
                                 {_.map(_columns, (column,index) => {
+                                    // console.log({column});
                                     return (
                                         <TableDragAbleHeader
-                                            key={index}
+                                            key={column?.id}
                                             className="sp1_tlr_th"
                                             column={column}
                                             columns={_columns}

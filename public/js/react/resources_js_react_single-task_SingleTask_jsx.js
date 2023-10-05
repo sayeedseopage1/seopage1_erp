@@ -617,8 +617,10 @@ var useSingleTask = function useSingleTask() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useGetAllDailySubmissionQuery: () => (/* binding */ useGetAllDailySubmissionQuery),
 /* harmony export */   useGetDailySubmissionQuery: () => (/* binding */ useGetDailySubmissionQuery),
 /* harmony export */   useGetDailyTasksSubmissionQuery: () => (/* binding */ useGetDailyTasksSubmissionQuery),
+/* harmony export */   useLazyGetAllDailySubmissionQuery: () => (/* binding */ useLazyGetAllDailySubmissionQuery),
 /* harmony export */   useLazyGetDailySubmissionQuery: () => (/* binding */ useLazyGetDailySubmissionQuery),
 /* harmony export */   useSubmitDailySubmissionMutation: () => (/* binding */ useSubmitDailySubmissionMutation)
 /* harmony export */ });
@@ -647,7 +649,13 @@ var dailySubmissionApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.in
             body: data
           };
         },
-        invalidatesTags: ['DAILY_SUBMISSION_STATUS']
+        invalidatesTags: ["DAILY_SUBMISSION_STATUS"]
+      }),
+      getAllDailySubmission: build.query({
+        query: function query() {
+          return "/account/tasks/all-daily-submissions";
+        },
+        providesTags: ["ALL_DAILY_SUBMISSION_STATUS"]
       })
     };
   }
@@ -655,7 +663,9 @@ var dailySubmissionApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.in
 var useGetDailySubmissionQuery = dailySubmissionApiSlice.useGetDailySubmissionQuery,
   useLazyGetDailySubmissionQuery = dailySubmissionApiSlice.useLazyGetDailySubmissionQuery,
   useGetDailyTasksSubmissionQuery = dailySubmissionApiSlice.useGetDailyTasksSubmissionQuery,
-  useSubmitDailySubmissionMutation = dailySubmissionApiSlice.useSubmitDailySubmissionMutation;
+  useSubmitDailySubmissionMutation = dailySubmissionApiSlice.useSubmitDailySubmissionMutation,
+  useGetAllDailySubmissionQuery = dailySubmissionApiSlice.useGetAllDailySubmissionQuery,
+  useLazyGetAllDailySubmissionQuery = dailySubmissionApiSlice.useLazyGetAllDailySubmissionQuery;
 
 
 /***/ }),
