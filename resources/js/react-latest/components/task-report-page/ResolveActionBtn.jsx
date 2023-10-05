@@ -2,28 +2,16 @@ import { useEffect, useState } from 'react';
 import Button from '../../ui/Button';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import Modal from '../../ui/Modal';
+import ResolveActionModalContent from './ResolveActionModalContent';
 
 const ResolveActionBtn = ({ data }) => {
-  const [resolveActionModalIsOpen, setResolveActionModalIsOpen] = useState(false);
-  const [searchParam, setSearchParam] = useSearchParams();
   const [modalData, setModalData] = useState(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    if (searchParam.has('modal')) {
-      setResolveActionModalIsOpen(true);
-    } else {
-      setResolveActionModalIsOpen(false);
-    }
-  }, [location])
 
   const close = () => {
     setModalData(null);
-    setSearchParam({});
   };
   const open = () => {
     setModalData(data);
-    setSearchParam(prev => ({ ...prev, modal: 'task-report-resolve' }));
   };
 
   return (
@@ -38,7 +26,7 @@ const ResolveActionBtn = ({ data }) => {
       </Button>
 
       {data.report_no === modalData?.report_no &&
-        <Modal isOpen={resolveActionModalIsOpen} className="sp1_mark-as--modal " closeModal={close}>
+        <Modal isOpen={true} className="sp1_mark-as--modal " closeModal={close}>
           <div className="sp1_single_task--modal-panerl-wrapper">
             <div
               className="sp1_mark-as--modal-panel"
@@ -58,12 +46,12 @@ const ResolveActionBtn = ({ data }) => {
                 className="sp1_mark-as--modal-body px-3"
                 style={{ overflow: "visible" }}
               >
-                <div className="alert alert-warning text-center">
+                {/* <div className="alert alert-warning text-center">
                   If you don't submit the daily submission, you
                   won't be able to start any task on next day.
-                </div>
+                </div> */}
 
-                {modalData && < div />}
+                {modalData && < ResolveActionModalContent close={close} />}
                 <div className="mt-3 d-flex align-items-center">
                   <Button
                     variant="tertiary"
