@@ -5067,7 +5067,7 @@ class TaskController extends AccountBaseController
             ->leftJoin('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
             
             ->leftJoin('working_environments','projects.id','=','working_environments.project_id')
-            ->groupBy('daily_submissions.task_id')
+            ->groupBy('daily_submissions.task_id','daily_submissions.created_at')
             ->get();
         //   / dd($dailySubmission);
             foreach($dailySubmission as $item)
