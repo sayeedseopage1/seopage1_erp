@@ -129,7 +129,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, col, className, rowSpan }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.project_name}
+                <a className="text-primary font-weight-bold" href={`/account/projects/${row?.project_id}`} target="_blank">{row?.project_name}</a>
             </td>
         }
     },
@@ -141,7 +141,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.task_name}
+                <a className="text-primary font-weight-bold" href={`/account/tasks/${row?.task_id}`} target="_blank">{row?.task_name}</a>
             </td>
         }
     },
