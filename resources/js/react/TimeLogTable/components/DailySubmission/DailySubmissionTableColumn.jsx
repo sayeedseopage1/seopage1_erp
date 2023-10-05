@@ -1,8 +1,8 @@
 import dayjs from "dayjs"
-import UserRender from "../UserRender"
 import { convertTime } from "../../../utils/converTime"
 import Popover from "../../../../react-latest/ui/Popover";
 import "../data-table.css";
+import UserRender from "../UserRender";
 
 
 export const DailySubmissionTableColumn = [
@@ -18,7 +18,14 @@ export const DailySubmissionTableColumn = [
                 className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${rowSpan ? "sp1_tlr_td_hover-disable" : ""}`}
                 rowSpan={rowSpan}
             >
-                <a className="text-primary font-weight-bold" href={`/account/employees/${row?.employee_id}`}>{row?.employee_name}</a>
+                <UserRender
+                    name={row?.employee_name}
+                    profileUrl={`/account/employees/${row?.employee_id}`}
+                    image={row?.employee_image}
+                    role=""
+                    roleLink={''}
+                    id={row?.employee_id}
+                />
             </td>
         }
     },
@@ -53,7 +60,14 @@ export const DailySubmissionTableColumn = [
             return <td
                 className={`${className} sp1_tlr_td_border`}
             >
-                <a className="text-primary font-weight-bold" href={`/account/clients/${row?.client_id}`}>{row?.client_name}</a>
+                <UserRender
+                    name={row?.client_name}
+                    profileUrl={`/account/clients/${row?.client_id}`}
+                    image={row?.client_image}
+                    role="Client"
+                    roleLink={''}
+                    id={row?.client_id}
+                />
             </td>
         }
     },
@@ -70,7 +84,14 @@ export const DailySubmissionTableColumn = [
             >
                 {
                     row?.pm_name ?
-                        <a className="text-primary font-weight-bold" href={`/account/employees/${row?.pm_id}`}>{row?.pm_name}</a> :
+                        <UserRender
+                            name={row?.pm_name}
+                            profileUrl={`/account/employees/${row?.pm_id}`}
+                            image={row?.pm_image}
+                            role="Project Manager"
+                            roleLink={''}
+                            id={row?.pm_id}
+                        /> :
                         '--'
                 }
             </td>
@@ -87,7 +108,14 @@ export const DailySubmissionTableColumn = [
             return <td className={`${className} sp1_tlr_td_border`}>
                 {
                     row?.ld_name ?
-                        <a className="text-primary font-weight-bold" href={`/account/employees/${row?.ld_id}`}>{row?.ld_name}</a> :
+                        <UserRender
+                            name={row?.ld_name}
+                            profileUrl={`/account/employees/${row?.ld_id}`}
+                            image={row?.ld_image}
+                            role="Lead Developer"
+                            roleLink={''}
+                            id={row?.ld_id}
+                        /> :
                         '--'
                 }
             </td>
@@ -131,7 +159,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                <span class="badge" style={{backgroundColor:row?.status_color,color:'white'}}>{row?.status_name}</span>
+                <span class="badge" style={{ backgroundColor: row?.status_color, color: 'white' }}>{row?.status_name}</span>
             </td>
         }
     },
