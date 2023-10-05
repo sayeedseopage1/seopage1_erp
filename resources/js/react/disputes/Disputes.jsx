@@ -70,15 +70,17 @@ const Disputes = () => {
         try{
             if(filter?.start_date && filter?.end_date){
                 const res = await getDisputes(`?${queryString}`).unwrap();  
-                if(res){  
-                    // const data = _.filter(res, d=> {
-                    //     if(filter.status === 'Pending'){
-                    //         return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
-                    //     }else if(filter.status === 'In Progress'){
-                    //         return d.status === 0 && (_.size(d.conversations)!==0 || d.resolved_by)
-                    //     }else return d.status === 1;
-                    // })
-                    dispatch({type: 'INIT_DISPUTE', disputes: res});
+                if(res){   
+                    const data = _.filter(res, d=> {
+                        if(filter.status === 'Pending'){
+                            return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
+                        }else if(filter.status === 'In Progress'){
+                            return d.status === 0 && (_.size(d.conversations)!==0 || d.resolved_by)
+                        }else if(filter.status === 'Resolved'){
+                            return d.status === 1
+                        }else return d;
+                    })
+                    dispatch({type: 'INIT_DISPUTE', disputes: data});
                 }
             }
         }catch(err){
