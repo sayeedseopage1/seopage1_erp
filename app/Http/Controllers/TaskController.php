@@ -4833,7 +4833,7 @@ class TaskController extends AccountBaseController
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
-        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
@@ -4852,7 +4852,7 @@ class TaskController extends AccountBaseController
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
-        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
@@ -4874,7 +4874,7 @@ class TaskController extends AccountBaseController
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
-        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.$last_login.'" AND DATE(project_time_logs.end_time) <= "'.$last_login.'"), 0) as total_time_spent'),
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$last_login.'" AND DATE(project_time_logs.end_time) <= "'.$last_login.'"), 0) as total_time_spent'),
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
@@ -4957,6 +4957,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
+       
         $daily_submission= new DailySubmission();
 
         if ($request->file('file') != null) {
@@ -4988,6 +4989,7 @@ class TaskController extends AccountBaseController
         $daily_submission->section_name =$request->section_name;
         $daily_submission->hours_spent =$request->hours_spent;
         $daily_submission->status =1;
+        $daily_submission->report_date= $request->report_date;
         $daily_submission->mark_as_complete =$request->mark_as_complete;
 
         $daily_submission->save();
@@ -5016,6 +5018,56 @@ class TaskController extends AccountBaseController
             'status'=>200,
 
         ]);
+
+    }
+    public function allDailySubmission(){
+
+        $dailySubmission = DailySubmission::select(
+            'employee.id as employee_id',
+            'employee.name as employee_name',
+            'employee.image as employee_image',
+            'daily_submissions.report_date as report_date',
+            'client.id as client_id',
+            'client.name as client_name',
+            'client.image as client_image',
+            'projects.id as project_id',
+            'projects.project_name as project_name',
+            'tasks.id as task_id',
+            'tasks.heading as task_name',
+            'tasks.status as task_status',
+            'pm.id as pm_id',
+            'pm.name as pm_name',
+            'pm.image as pm_image',
+            'ld.id as ld_id',
+            'ld.name as ld_name',
+            'ld.image as ld_image',
+            'task_types.id as page_type_id',
+            'task_types.task_type as task_type',
+            'task_types.page_type as page_type',
+            'task_types.page_url as page_link',
+            'daily_submissions.section_name as section',
+            'daily_submissions.comment as comment',
+            'daily_submissions.hours_spent as total_time_spent',
+            'daily_submissions.attachments as attachments',
+            'working_environments.site_url as site_url',
+            'working_environments.frontend_password as frontend_password',
+            'daily_submissions.created_at as report_submission_date',
+            )
+            ->join('tasks','tasks.id','=','daily_submissions.task_id')
+            ->join('task_types','tasks.id','=','task_types.task_id')
+            ->join('users as employee','employee.id','=','daily_submissions.user_id')
+            ->join('users as client','client.id','=','daily_submissions.client_id')
+            ->join('projects','projects.id','=','daily_submissions.project_id')
+            ->join('project_members','projects.id','=','project_members.project_id')
+            ->leftJoin('users as pm','pm.id','=','projects.pm_id')
+            ->leftJoin('users as ld','ld.id','=','project_members.lead_developer_id')
+            ->join('working_environments','projects.id','=','working_environments.project_id')
+            ->get();
+
+            return response()->json([
+                'dailySubmission'=> $dailySubmission,
+                'status'=>200,
+            ]);
 
     }
     public function checkTaskTrackTime($id)

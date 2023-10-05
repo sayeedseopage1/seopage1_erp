@@ -735,7 +735,11 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 
 
 var SingleTaskPage = function SingleTaskPage() {
+<<<<<<< HEAD
   var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
+=======
+  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$pageUrl, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
+>>>>>>> origin/nafis
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -966,6 +970,7 @@ var SingleTaskPage = function SingleTaskPage() {
                   })]
                 }), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.Fragment, {
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+<<<<<<< HEAD
                     className: "sp1_st-list-item",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
                       className: "sp1_st-list-item-head",
@@ -1015,6 +1020,49 @@ var SingleTaskPage = function SingleTaskPage() {
                         children: "--"
                       })
                     })]
+=======
+                    className: "sp1_st-list-item-head",
+                    children: ["Task Category :", " "]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                    className: "sp1_st-list-item-value",
+                    children: (_task$category$name = task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.name) !== null && _task$category$name !== void 0 ? _task$category$name : '--'
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "sp1_st-list-item",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                    className: "sp1_st-list-item-head",
+                    children: ["Task Type:", " "]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                    className: "sp1_st-list-item-value",
+                    children: (_task$taskType = task === null || task === void 0 ? void 0 : task.taskType) !== null && _task$taskType !== void 0 ? _task$taskType : '--'
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "sp1_st-list-item",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                    className: "sp1_st-list-item-head",
+                    children: ["Page Type:", " "]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                    className: "sp1_st-list-item-value",
+                    children: (_task$pageType = task === null || task === void 0 ? void 0 : task.pageType) !== null && _task$pageType !== void 0 ? _task$pageType : '--'
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "sp1_st-list-item",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                    className: "sp1_st-list-item-head",
+                    children: ["Page Name:", " "]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                    className: "sp1_st-list-item-value",
+                    children: (_task$pageName = task === null || task === void 0 ? void 0 : task.pageName) !== null && _task$pageName !== void 0 ? _task$pageName : '--'
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                  className: "sp1_st-list-item",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsxs)("div", {
+                    className: "sp1_st-list-item-head",
+                    children: ["Page Url:", " "]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_24__.jsx)("div", {
+                    className: "sp1_st-list-item-value",
+                    children: (_task$pageUrl = task === null || task === void 0 ? void 0 : task.pageUrl) !== null && _task$pageUrl !== void 0 ? _task$pageUrl : '--'
+>>>>>>> origin/nafis
                   })]
                 })]
               })
@@ -8454,7 +8502,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
   var handleSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(e) {
       var _task$category, _task$boardColumn;
+<<<<<<< HEAD
       var _startDate, _dueDate, fd, submit, primaryPageConfirmation, response, _error, checkViolationWord, alert;
+=======
+      var _startDate, _dueDate, fd, submit;
+>>>>>>> origin/nafis
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -8537,6 +8589,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
                 return _ref3.apply(this, arguments);
               };
             }();
+<<<<<<< HEAD
             primaryPageConfirmation = function primaryPageConfirmation() {
               if (pageTypePriority === "Primary Page Development") {
                 Swal.fire({
@@ -8596,6 +8649,24 @@ var SubTaskForm = function SubTaskForm(_ref) {
               primaryPageConfirmation();
             }
           case 36:
+=======
+            if (pageTypePriority === "Primary Page Development") {
+              Swal.fire({
+                icon: 'info',
+                html: "<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>",
+                showCloseButton: true,
+                showCancelButton: true
+              }).then(function (res) {
+                if (res.isConfirmed) {
+                  submit();
+                }
+              });
+            } else {
+              submit();
+            }
+            return _context2.abrupt("return");
+          case 33:
+>>>>>>> origin/nafis
           case "end":
             return _context2.stop();
         }

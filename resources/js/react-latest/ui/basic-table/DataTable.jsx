@@ -125,7 +125,7 @@ const DataTable = ({
                     {!isLoading && table.getRowModel().rows.map(row => (
                         <tr key={row.id} className={`sp1-data-table-tr ${classes?.tr ?? ''}`}>
                             {row.getVisibleCells().map(cell => (
-                                <td key={cell.id} className={`sp1-data-table-td ${classes?.td}`}>
+                                <td key={cell.id} className={`sp1-data-table-td ${classes?.td ?? ''} sp1_data_table_td--${cell.column.id}`}>
                                     {
                                         flexRender(
                                             cell.column.columnDef.cell,
@@ -150,6 +150,7 @@ const DataTable = ({
         <TablePagination
                 currentPage = {pageIndex + 1} 
                 perpageRow= {pageSize}
+                pageDataStorageName={`${tableName}_per_page_data`}
                 onPageSize = {(size) => table.setPageSize(size)}
                 onPaginate = {(page) => table.setPageIndex(page - 1)}
                 totalEntry= {table.getPageCount() * pageSize}

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Pagination from './Pagination'
+import { useLocalStorage } from 'react-use';
 
 const TableFooter = ({
   onPaginate,
@@ -9,10 +10,17 @@ const TableFooter = ({
   totalEntry,
   
 }) => {
-
+  const [value,setValue] = useLocalStorage('daily-submission-table-per-page-data');
   const showingFrom = (currentPage - 1) * perpageData;
   let showingTo = showingFrom + perpageData;
   if(showingTo > totalEntry) showingTo = totalEntry;
+
+  useEffect(()=>{
+    handlePerPageData(value);
+    if (!value) {
+      setValue(10);
+    }
+  },[value])
 
   return (
     <div className="cnx__table_footer mt-3">
@@ -20,7 +28,8 @@ const TableFooter = ({
             <span>Show</span>
             <select
                 className="py-1 border rounded-sm"
-                onChange={(e) => handlePerPageData(Number(e.target.value))}
+                value={value}
+                onChange={(e) => setValue(Number(e.target.value))}
             >
                 <option value="10">10</option>
                 <option value="20">20</option>

@@ -1,7 +1,10 @@
 import * as React from "react";
 import Button from "../Button";
+import { useLocalStorage } from "react-use";
+import { useEffect } from "react";
 
 const TablePagination = ({
+    pageDataStorageName,
     currentPage = 1,
     perpageRow = 10,
     onPaginate,
@@ -13,6 +16,7 @@ const TablePagination = ({
     totalPages,
     onPageSize,
 }) => {
+    const [storedValue,setStoredValue] = useLocalStorage(pageDataStorageName);
     const [renderButtons, setRenderButtons] = React.useState([]);
     // const [totalPages, setTotalPages] = React.useState(1);
 
@@ -27,6 +31,14 @@ const TablePagination = ({
 
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [entryChagne, rowNumber])
+
+    useEffect(()=>{
+        if (storedValue) {
+            onPageSize(storedValue);
+        }else{
+            setStoredValue(10);
+        }
+    },[storedValue])
 
     // render buttons
     const handleRenderButtons = React.useCallback(() => {
@@ -68,7 +80,8 @@ const TablePagination = ({
                 <span>Show</span>
                 <select
                     className="py-1 border rounded-sm"
-                    onChange={(e) => onPageSize(Number(e.target.value))}
+                    value={storedValue}
+                    onChange={(e) => setStoredValue(Number(e.target.value))}
                 >
                     <option value="10">10</option>
                     <option value="20">20</option>
