@@ -4,6 +4,8 @@ import TableFooter from '../TableFooter';
 import TableDragAbleHeader from '../DragHeader';
 import { useEffect } from 'react';
 import '../data-table.css';
+import { Placeholder } from '../../../global/Placeholder';
+import DailySubmissionWiseTableLoader from './DailySubmissionWiseTableLoader';
 
 const DailySubmissionWiseTable = ({
     data,
@@ -106,7 +108,7 @@ const DailySubmissionWiseTable = ({
                         </thead>
                         <tbody className="sp1_tlr_tbody">
                             {!isLoading && renderRow(data)}
-                            {/* {isLoading && <TaskWiseTimeLogTableLoader />} */}
+                            {isLoading && <DailySubmissionWiseTableLoader />}
                         </tbody>
                     </table>
                 </div>
