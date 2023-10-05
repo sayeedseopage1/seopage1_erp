@@ -4,13 +4,16 @@ import DailySubmissionItem from "./DailySubmissionItem";
 import SingleUserSubmissionTableDrawer from "./SingleUserSubmissionTableDrawer";
 import { useGetDailyTasksSubmissionQuery } from "../../../services/api/dailySubmissionApiSlice";
 
+
 const DailySubmissionSection = ({ task }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalTableIsOpen, setModalTableIsOpen] = useState(false);
   const [modalRefButton, setModalRefButton] = useState(null);
   const [singleUserSubmissionTableDrawerRef, setSingleUserSubmissionTableDrawerRef] = useState(null);
   const [modalData, setModalData] = useState(null);
-   const { data, isLoading } = useGetDailyTasksSubmissionQuery(task?.id);
+
+
+  const { data, isLoading } = useGetDailyTasksSubmissionQuery(task?.id);
     // control modal
   const toggle = () => setIsOpen(prev => !prev);
   const close = () => setIsOpen(false);

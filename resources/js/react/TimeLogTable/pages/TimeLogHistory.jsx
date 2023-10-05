@@ -10,6 +10,7 @@ import TimeLogHistoryTableFilterBar from "../components/TimeLogHistoryFilterBar"
 import TimeLogHistoryTable from "../components/TimeLogHistoryTable";
 import '../components/data-table.css';
 import '../styles/time-log-history.css';
+import { User } from "../../utils/user-details";
 
 const TimeLogHistory = () => {
     // const [data, setData] = useState([]);
@@ -19,6 +20,7 @@ const TimeLogHistory = () => {
     const [renderData, setRenderData] = useState([]);
     const [sortConfig, setSortConfig] = useState([]);
     const dispatch = useDispatch();
+    const auth = new User(window?.Laravel?.user);
 
     const [getTimeLogHistory, {isLoading}] = useGetTimeLogHistoryMutation();
     
@@ -31,10 +33,14 @@ const TimeLogHistory = () => {
 
     // handle fetch data
     const handleFetchData = (filter) => {
+        
         getTimeLogHistory(filter)
         .unwrap()
         .then(res => {
-            const sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
+            let sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
+            if(auth?.getRoleId() !== 1){
+                sortedData = [];
+            }
             handleData(sortedData, currentPage, perPageData);
             // setData(sortedData);
             dispatch(storeData({data: sortedData}));

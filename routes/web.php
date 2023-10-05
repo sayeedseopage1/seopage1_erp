@@ -191,6 +191,7 @@ use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
+use App\Http\Controllers\IssuedTaskReportController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -1281,6 +1282,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
+    Route::resource('task-report-issues', IssuedTaskReportController::class);
 
     Route::resource('cross-dept-work',CrossDeptWork::class);
     Route::get('view-web-content',[CrossDeptWork::class,'adminViewWebContent'])->name('adminViewWebContent');

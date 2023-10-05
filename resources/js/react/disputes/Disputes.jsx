@@ -13,14 +13,20 @@ import ResolveModal from "./components/ResolveModal";
 const reducer = (state=[], action) => {
     switch(action.type){
         case 'INIT_DISPUTE':
-            return state = _.orderBy(action.disputes, ['status', 'id'], ['asc','desc']);
+            const sortedData = _.orderBy(
+                action.disputes, 
+                [
+                    'status',
+                    'dispute_updated_at'
+                ], 
+                ['asc', 'desc']
+            );
+
+            return sortedData;
         case 'UPDATE_DISPUTE_CONVERSATION':
             return _.map(state, d => {
                 if(d.id === action.disputeId){
-                    return {
-                        ...d,
-                        conversations: action.conversations
-                    }
+                    return { ...d,  conversations: action.conversations  }
                 }
                 return d;
             });
@@ -56,8 +62,7 @@ const Disputes = () => {
     const [getDisputes, {isFetching}] = useLazyGetDisputesQuery();
     const auth = new User(window.Laravel.user);
       
-
-    const onFilter = async (filter) => {
+     const onFilter = async (filter) => {
         let queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
         setFilters(queryObject);
@@ -65,8 +70,17 @@ const Disputes = () => {
         try{
             if(filter?.start_date && filter?.end_date){
                 const res = await getDisputes(`?${queryString}`).unwrap();  
-                if(res){ 
-                    dispatch({type: 'INIT_DISPUTE', disputes: res});
+                if(res){   
+                    const data = _.filter(res, d=> {
+                        if(filter.status === 'Pending'){
+                            return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
+                        }else if(filter.status === 'In Progress'){
+                            return d.status === 0 && (_.size(d.conversations)!==0 || d.resolved_by)
+                        }else if(filter.status === 'Resolved'){
+                            return d.status === 1
+                        }else return d;
+                    })
+                    dispatch({type: 'INIT_DISPUTE', disputes: data});
                 }
             }
         }catch(err){

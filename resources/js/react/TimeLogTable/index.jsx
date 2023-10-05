@@ -14,6 +14,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ContextProvider from './context/ContextProvider';
 import PageLoader from './components/PageLoader';
+import DailySubmission_Page from './pages/DailySubmission_Page';
 
 const EmployeeWiseTimeLogTable = lazy(() => import('./pages/EmployeeWiseTimeLogTable'));
 const ProjectWiseTimeLog = lazy(() => import('./pages/ProjectWiseTimeLog'));
@@ -53,6 +54,11 @@ if (timeLogTableContainer) {
                                     <Route path='/time-log-history' element={
                                         <React.Suspense fallback={<PageLoader />}>
                                             <TimeLogHistory />
+                                        </React.Suspense>
+                                    } />
+                                    <Route path="/daily-submission" element={
+                                        <React.Suspense fallback={<PageLoader />}>
+                                            <DailySubmission_Page />
                                         </React.Suspense>
                                     } />
                                 </Route>

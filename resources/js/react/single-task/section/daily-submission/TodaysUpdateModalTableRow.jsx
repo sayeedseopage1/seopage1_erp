@@ -1,10 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import style from "./styles/DailySubmission.module.css";
 import FileUploader from "../../../file-upload/FileUploader";
 import CKEditorComponent from "../../../ckeditor";
 import SubmitButton from "../../components/SubmitButton";
-import Button from "../../components/Button";
 import { convertTime } from "../../../utils/converTime";
 import { Placeholder } from "../../../global/Placeholder";
 import Checkbox from "../../../UI/form/Cheeckbox";
@@ -12,7 +10,7 @@ import { useSubmitDailySubmissionMutation } from "../../../services/api/dailySub
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const TodaysUpdateModalTableRow = ({ data, index, open, setOpen, loading }) => {
+const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [attachmentLink, setAttachmentLink] = useState('');
@@ -47,6 +45,7 @@ const TodaysUpdateModalTableRow = ({ data, index, open, setOpen, loading }) => {
         return valid;
     }
 
+
     // daily update submission function
     const handleSubmit = () => {
         if (!isValid()) {
@@ -64,6 +63,7 @@ const TodaysUpdateModalTableRow = ({ data, index, open, setOpen, loading }) => {
         formData.append('section_name', completedSection);
         formData.append('comment', taskDescription);
         formData.append('mark_as_complete', checked);
+        formData.append('report_date', date);
         const _token = document.querySelector("meta[name='csrf-token']").getAttribute("content");
         formData.append("_token", _token);
         files.forEach((file) => formData.append('file[]', file))

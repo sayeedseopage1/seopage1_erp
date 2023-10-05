@@ -52,7 +52,7 @@ class AcknowledgementNotification extends Notification
        ;
        $header= '';
       $body= '<p>
-        '.count($this->dev_stop_timer) .' Developers Couldn`t meet their minimum daily tracking limit yesterday('.Carbon::yesterday().') '.'Please check more details below:'.
+        '.count($this->dev_stop_timer) .' Developers Couldn`t meet their minimum daily tracking limit yesterday ('.Carbon::yesterday()->format('Y-m-d').') '.'Please check more details below:'.
      '</p>'
      ;
      $content = '';

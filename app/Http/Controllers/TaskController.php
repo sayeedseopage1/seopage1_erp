@@ -4417,9 +4417,12 @@ class TaskController extends AccountBaseController
     // ADD QUESTION FOR DISPUTE
     // * @params id is dispute id;
     public function store_dispute_question(Request $request){
+
         $questions = $request->questions;
+        $dispute_id = $questions['0']['dispute_id'];
 
         foreach ($questions as $question) {
+
             $query = new TaskDisputeQuestion();
             $query->dispute_id = $question['dispute_id'];
             $query->raised_by = $question['raised_by'];
@@ -4428,11 +4431,15 @@ class TaskController extends AccountBaseController
             $query->save();
        }
 
+       $revision_dispute = TaskRevisionDispute::find($dispute_id);
+       $revision_dispute->has_update = true;
+       $revision_dispute->save();
+
        $response_data = TaskDisputeQuestion::where('dispute_id', $request->dispute_id)->get();
 
         return response()->json([
             'data' => $response_data,
-            "message"=>"Question added succesfully"
+            "message"=>"Question added successfully"
         ], 200);
     }
 
@@ -4440,7 +4447,9 @@ class TaskController extends AccountBaseController
     // * @params id is dispute id;
     public function update_dispute_question_with_answer(Request $request){
         $questions = $request->questions;
+
         $dispute_id = $questions['0']['dispute_id'];
+
 
         // UPDATE ALL QUESTION WITH ANSWER
         foreach ($questions as $question) {
@@ -4457,20 +4466,27 @@ class TaskController extends AccountBaseController
        }
 
 
+       $revision_dispute = TaskRevisionDispute::find($dispute_id);
+       $revision_dispute->has_update = true;
+       $revision_dispute->save();
+
+
        $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
 
-       // REUTRN UPDATED QUESTION DATA
+       // RETURN UPDATED QUESTION DATA
        return response()->json([
         'data' => $response_data,
         'message' => 'Answer successfully submitted!'
        ], 200);
      }
 
-    // MAKE DISPUTE SUBMITTED ANSWERE SEEN
+    // MAKE DISPUTE SUBMITTED ANSWER SEEN
     public function update_dispute_answer_read_status(Request $request){
 
         $questions = $request->questions;
         $dispute_id = $questions['0']['dispute_id'];
+
+        $revision_dispute = TaskRevisionDispute::find($dispute_id);
 
         foreach ($questions as $question) {
             $id = $question['id'];
@@ -4478,6 +4494,9 @@ class TaskController extends AccountBaseController
             $query->replied_seen = true;
             $query->replied_date = Carbon::now();
             $query->save();
+
+            $revision_dispute->has_update = true;
+            $revision_dispute->save();
        }
 
        $response_data = TaskDisputeQuestion::where('dispute_id', $dispute_id)->get();
@@ -4504,10 +4523,8 @@ class TaskController extends AccountBaseController
             $query->resolved_on = $query->resolved_on ?? Carbon::now();
             $query->authorize_on = Carbon::now();
             $query->status = true;
+            $query->has_update = true;
             $query->save();
-
-
-
 
 
             // change status on revision table
@@ -4541,6 +4558,7 @@ class TaskController extends AccountBaseController
             $query->raised_by_percent = $request->raised_by_percent;
             $query->resolved_by = $request->resolve_by;
             $query->resolved_on = Carbon::now();
+            $query->has_update = true;
             $query->save();
 
             $filter = [
@@ -4806,16 +4824,16 @@ class TaskController extends AccountBaseController
             'status'=>200
         ]);
     }
-    public function get_today_tasks($id)
+    public function get_today_tasks(Request $request,$id)
     {
         $startDate= Carbon::today()->format('Y-m-d');
         $endDate= Carbon::today()->format('Y-m-d');
     //    / dd($startDate, $endDate);
-    $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+    $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
-        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
@@ -4830,11 +4848,11 @@ class TaskController extends AccountBaseController
         ->groupBy('tasks.id')
         ->get();
     if ($todayData->isEmpty()) {
-        $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','daily_submissions.status as daily_submission_status','projects.id as projectId',
+        $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
 
-        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
         )
         ->join('tasks','tasks.id','project_time_logs.task_id')
         ->join('projects','projects.id','tasks.project_id')
@@ -4843,17 +4861,55 @@ class TaskController extends AccountBaseController
         ->leftJoin('task_types','task_types.task_id','tasks.id')
         ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
-        ->where('daily_submissions.task_id',null)
+
         ->whereDate('project_time_logs.created_at',Carbon::yesterday())
 
         ->groupBy('tasks.id')
         ->get();
-        $tasks = $yesterdayData;
-    } else {
-        $tasks = $todayData;
+        if($yesterdayData->isEmpty())
+        {
+            $user_data= User::where('id',$id)->first();
+            $last_login= $user_data->last_login->format('Y-m-d');
+            $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
+        'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
+        'developers.id as developer_id',
+
+        DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$last_login.'" AND DATE(project_time_logs.end_time) <= "'.$last_login.'"), 0) as total_time_spent'),
+        )
+        ->join('tasks','tasks.id','project_time_logs.task_id')
+        ->join('projects','projects.id','tasks.project_id')
+        ->join('users as clients','clients.id','projects.client_id')
+        ->join('users as developers','developers.id','project_time_logs.user_id')
+        ->leftJoin('task_types','task_types.task_id','tasks.id')
+        ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
+        ->where('project_time_logs.user_id',$id)
+
+        ->whereDate('project_time_logs.created_at',$last_login)
+
+        ->groupBy('tasks.id')
+        ->get();
+    
+    
+        }
     }
+   
+    if($request->date_type == 'today')
+    {
+        $tasks = $todayData;
+        $date= Carbon::now();
+    }else
+    {
+        $tasks = $yesterdayData;
+        $date= Carbon::yesterday();
+
+    }
+        // $tasks = $yesterdayData;
+    // } else {
+    //     $tasks = $todayData;
+    // }
         // /dd($tasks );
         return response()->json([
+            'date'=> $date,
             'data' => $tasks,
             'status' => 200
         ]);
@@ -4901,6 +4957,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
+       
         $daily_submission= new DailySubmission();
 
         if ($request->file('file') != null) {
@@ -4932,6 +4989,7 @@ class TaskController extends AccountBaseController
         $daily_submission->section_name =$request->section_name;
         $daily_submission->hours_spent =$request->hours_spent;
         $daily_submission->status =1;
+        $daily_submission->report_date= $request->report_date;
         $daily_submission->mark_as_complete =$request->mark_as_complete;
 
         $daily_submission->save();
@@ -4968,7 +5026,7 @@ class TaskController extends AccountBaseController
             'employee.id as employee_id',
             'employee.name as employee_name',
             'employee.image as employee_image',
-            'daily_submissions.created_at as report_date',
+            'daily_submissions.report_date as report_date',
             'client.id as client_id',
             'client.name as client_name',
             'client.image as client_image',
