@@ -24,7 +24,7 @@ const dailySubmissionApiSlice = apiSlice.injectEndpoints({
         }),
 
         getAllDailySubmission: build.query({
-            query: ()=>`/account/tasks/all-daily-submissions`,
+            query: (searchParam)=>`/account/tasks/all-daily-submissions?${searchParam}`,
             providesTags: ["ALL_DAILY_SUBMISSION_STATUS"],
         })
     })
