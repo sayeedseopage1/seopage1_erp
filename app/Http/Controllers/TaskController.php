@@ -5052,7 +5052,9 @@ class TaskController extends AccountBaseController
             'working_environments.site_url as site_url',
             'working_environments.frontend_password as frontend_password',
             'daily_submissions.created_at as report_submission_date',
-            DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = employee.id AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
+            'taskboard_columns.column_name as status_name',
+            'taskboard_columns.label_color as status_color'
+           // DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.task_id = tasks.id  AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
             )
             ->join('tasks','tasks.id','=','daily_submissions.task_id')
             ->join('task_types','tasks.id','=','task_types.task_id')
@@ -5062,8 +5064,20 @@ class TaskController extends AccountBaseController
             ->join('project_members','projects.id','=','project_members.project_id')
             ->leftJoin('users as pm','pm.id','=','projects.pm_id')
             ->leftJoin('users as ld','ld.id','=','tasks.added_by')
-            ->join('working_environments','projects.id','=','working_environments.project_id')
+            ->leftJoin('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+            
+            ->leftJoin('working_environments','projects.id','=','working_environments.project_id')
+            ->groupBy('daily_submissions.task_id')
             ->get();
+        //   / dd($dailySubmission);
+            foreach($dailySubmission as $item)
+            {
+                $project_time_logs = ProjectTimeLog::where('task_id',$item->task_id)
+                ->whereDate('created_at',$item->created_at)
+                ->sum('total_minutes');
+            $item->total_time_spent = $project_time_logs;
+
+            }
 
             return response()->json([
                 'dailySubmission'=> $dailySubmission,
