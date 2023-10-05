@@ -1,23 +1,23 @@
 import dayjs from "dayjs"
 import UserRender from "../UserRender"
 import { convertTime } from "../../../utils/converTime"
+import Popover from "../../../../react-latest/ui/Popover";
 
-let i = 0;
 
 export const DailySubmissionTableColumn = [
     {
-        id: 'employee',
+        id: 'employee_name',
         header: 'Employee',
         className: '',
         group: true,
         sorted: false,
-        sortAccessor: 'employee',
+        sortAccessor: 'employee_name',
         cell:  ({row, col, rowSpan}) => {
             return <td
                 className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                 rowSpan={rowSpan}
             >
-                {row?.employee}
+                {row?.employee_name}
             </td>
         } 
     },
@@ -27,61 +27,66 @@ export const DailySubmissionTableColumn = [
         className: '',
         group: true,
         sorted: false,
-        sortAccessor: 'employee',
+        sortAccessor: 'report_date',
         cell:  ({row, col, rowSpan}) => {
             return <td
                 className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
                 rowSpan={rowSpan}
             >
-                {row?.employee}
+                {
+                    row?.report_date?
+                    dayjs(row?.report_date).format('DD-MMM-YYYY h:mm:ss A'):
+                    dayjs(row?.report_submission_date).format('DD-MMM-YYYY h:mm:ss A')
+                
+                }
             </td>
         } 
     },
     {
-        id: 'client',
+        id: 'client_name',
         header: 'Client',
         className: '',
         group: false,
         sorted: false,
-        sortAccessor: 'client',
+        sortAccessor: 'client_name',
         cell:  ({row, col, rowSpan,className}) => {
             return <td
             className={`${className} sp1_tlr_td_border`}
             >
-              {row?.client}
+              {row?.client_name}
             </td>
         } 
     },
     {
-        id: 'project_manager',
+        id: 'pm_name',
         header: 'Project Manager',
         className: '',
         sorted: true,
         group: false,
-        sortAccessor: 'project_manager', 
+        sortAccessor: 'pm_name', 
         cell: ({row, col, className, rowSpan}) => {
             return <td
             className={`${className} sp1_tlr_td_border`}
             >
-                {row?.project_manager}
+                {row?.pm_name || '--'}
             </td>
         }
         
     },
     {
-        id: 'lead_developer',
+        id: 'ld_name',
         header: 'Lead Developer',
         className: '',
         sorted: false,
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.lead_developer}
+                {row?.ld_name || '--'}
             </td>
         }
     },
     {
-        id: 'project',
+        id: 'project_name',
         header: 'Project',
         className: '',
         sorted: false,
@@ -91,12 +96,12 @@ export const DailySubmissionTableColumn = [
             className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
             rowSpan={rowSpan}
         >
-                {row?.project}
+                {row?.project_name}
             </td>
         }
     },
     {
-        id: 'task',
+        id: 'task_name',
         header: 'Task',
         className: '',
         sorted: false,
@@ -106,7 +111,7 @@ export const DailySubmissionTableColumn = [
             className={`sp1_tlr_td sp1_tlr_td_border sp1_drag_col_${col?.id} sp1_tlr_td_marged ${ rowSpan? "sp1_tlr_td_hover-disable": ""}`}
             rowSpan={rowSpan}
         >
-                {row?.task}
+                {row?.task_name}
             </td>
         }
     },
@@ -130,7 +135,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.task_type}
+                {row?.task_type || '--'}
             </td>
         }
     },
@@ -142,7 +147,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.page_type}
+                {row?.page_type || '--'}
             </td>
         }
     },
@@ -154,19 +159,23 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.page_link}
+                {
+                    row?.page_link?
+                    <a className="text-primary font-weight-bold" href={row?.page_link} target="_blank">View Link</a>:
+                    <span className="text-danger font-weight-bold">No Attachments</span>
+                }
             </td>
         }
     },
     {
-        id: 'sections',
+        id: 'section',
         header: 'Sections',
         className: '',
         sorted: false,
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.sections}
+                {row?.section}
             </td>
         }
     },
@@ -177,10 +186,16 @@ export const DailySubmissionTableColumn = [
         sorted: false,
         group: false,
         cell: ({row, className}) =>{
-            return <td title={row?.comment} className={`${className} sp1_tlr_td_border`}>
-                <div className="singleline-ellipsis" style={{minWidth:'20rem'}}>
-                {row?.comment}
-                </div>
+            return <td className={`${className} sp1_tlr_td_border`}>
+                <Popover>
+                    <Popover.Button>
+                        <span className='font-weight-bold singleline-ellipsis' dangerouslySetInnerHTML={{__html:row?.comment}}/>
+                    </Popover.Button>
+
+                    <Popover.Panel>
+                        <div className='revision_popover_panel' dangerouslySetInnerHTML={{__html:row?.comment}}/>
+                    </Popover.Panel>
+              </Popover>
             </td>
         }
     },
@@ -192,31 +207,39 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.total_time_spent}
+                {convertTime(row?.total_time_spent)}
             </td>
         }
     },
     {
-        id: 'attachment_url',
+        id: 'attachments',
         header: 'Screenshots/Screen records of the sections',
         className: '',
         sorted: false,
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.attachment_url}
+                {
+                    row?.attachments?
+                    <a className="text-primary font-weight-bold" href={row?.attachments} target="_blank">View Link</a>:
+                    <span className="text-danger font-weight-bold">No Attachments</span>
+                }
             </td>
         }
     },
     {
-        id: 'site',
+        id: 'site_url',
         header: `Working/Staging Site's URL`,
         className: '',
         sorted: false,
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.site}
+                {
+                    row?.site_url?
+                    <a className="text-primary font-weight-bold" href={row?.site_url} target="_blank">View Link</a>:
+                    <span className="text-danger font-weight-bold">No Attachments</span>
+                }
             </td>
         }
     },
@@ -240,7 +263,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({row, className}) =>{
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.report_submission_date}
+                {dayjs(row?.report_submission_date).format('DD-MMM-YYYY h:mm:ss A')}
             </td>
         }
     },

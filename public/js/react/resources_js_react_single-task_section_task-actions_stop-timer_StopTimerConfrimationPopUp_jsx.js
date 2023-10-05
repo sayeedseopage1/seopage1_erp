@@ -206,14 +206,10 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
   var _useGetUserTrackTimeQ = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetUserTrackTimeQuery)(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()),
     trackTime = _useGetUserTrackTimeQ.data,
     isFetching = _useGetUserTrackTimeQ.isFetching;
-<<<<<<< HEAD
 
   // console.log(trackTime)
 
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_14__.useNavigate)();
-=======
-  console.log(trackTime);
->>>>>>> origin/nafis
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (!isFetching && trackTime) {
       var m = Math.abs(trackTime.target_time - (trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times));
@@ -299,11 +295,7 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
           children: ["Your tracked time for ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("span", {
             className: "font-weight-bold",
-<<<<<<< HEAD
             children: lessTrackDate
-=======
-            children: (trackTime === null || trackTime === void 0 ? void 0 : trackTime.current_time) === 'Today' ? 'today' : dayjs__WEBPACK_IMPORTED_MODULE_11___default()(trackTime === null || trackTime === void 0 ? void 0 : trackTime.current_time).format('MMM DD, YYYY')
->>>>>>> origin/nafis
           }), " is ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("span", {
             className: "font-weight-bold",
             children: [Math.floor((trackTime === null || trackTime === void 0 ? void 0 : trackTime.tracked_times) / 60), " hours"]
