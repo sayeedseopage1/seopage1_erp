@@ -31,7 +31,7 @@ const DailySubmission_Page = () => {
     const handleData = (data, currentPage, perPageData) => {
         // console.log('handleData',{data,currentPage,perPageData});
         const paginated = paginate(data, currentPage, perPageData);
-        const grouped = groupBy(paginated, 'task_id');
+        const grouped = groupBy(paginated, 'employee_name');
         const sorted = Object.entries(grouped).sort(([keyA], [keyB]) => keyB - keyA);
         setRenderData([...sorted]);
     }
@@ -43,7 +43,7 @@ const DailySubmission_Page = () => {
             .unwrap()
             .then(({dailySubmission})=>{
                 const newData = dailySubmission.map((data,i)=>({...data,unique_id:i}));
-                const sortedData = orderBy(newData, ["task_id"],["desc"]);
+                const sortedData = orderBy(newData, ["employee_name"],["desc"]);
                 // console.log('handleFetchData',{filter,sortedData,data:newData});
                 handleData(sortedData, 1, perPageData);
                 setData(sortedData);

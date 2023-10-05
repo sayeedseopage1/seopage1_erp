@@ -6,7 +6,7 @@ const UserRender = ({ image, name, role, id, profileUrl, roleLink }) => {
             {image ? (
                 <img
                     src={`/user-uploads/avatar/${image}`}
-                    alt={name}
+                    alt={''}
                     className="rounded-circle "
                     style={{ width: 32, height: 32 }}
                 />

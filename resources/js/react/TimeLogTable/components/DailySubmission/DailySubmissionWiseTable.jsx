@@ -3,6 +3,7 @@ import { useLocalStorage } from 'react-use';
 import TableFooter from '../TableFooter';
 import TableDragAbleHeader from '../DragHeader';
 import { useEffect } from 'react';
+import '../data-table.css';
 
 const DailySubmissionWiseTable = ({
     data,
