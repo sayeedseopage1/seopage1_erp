@@ -104,7 +104,7 @@ const ProjectTasks = () => {
         }
     }, [start_date, end_date, tableType]);
 
-    // hanlde task add form
+    // handle task add form
     const handleTaskAddForm = async (e) => {
         e.preventDefault();
         

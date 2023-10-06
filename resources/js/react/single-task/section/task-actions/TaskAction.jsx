@@ -88,7 +88,7 @@ const TaskAction = ({ task, status }) => {
             <ClientApproval task={task} status={status} auth={loggedUser} />
                 
              {/* daily submission control */}
-             {_.includes([5, 8, 10], loggedUser?.getRoleId()) && (
+             {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
                 <DailySubmissionControl />
              )}
 
@@ -98,11 +98,11 @@ const TaskAction = ({ task, status }) => {
             <div style={{display:'inline-flex',marginLeft:'auto',gap:'0 10px'}}>
 
                 {/* Subtask creation guideline */}
-                {_.includes([6], loggedUser?.getRoleId()) &&  <SubtaskCreationControl />} 
+                {_.includes([6, 4, 1], loggedUser?.getRoleId()) &&  <SubtaskCreationControl />} 
 
 
                 {/*********** Report Control ***********/}
-                {_.includes([6, 5, 8, 10], loggedUser?.getRoleId()) && (
+                {_.includes([6, 5, 9, 10], loggedUser?.getRoleId()) && (
                     <ReportControl task={task} />
                 )}
 

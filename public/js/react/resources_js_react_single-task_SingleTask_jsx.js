@@ -3013,7 +3013,7 @@ function taskEditPermision(_ref8) {
   }
 
   // if task assign to 
-  if ((assignedUser === null || assignedUser === void 0 ? void 0 : assignedUser.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) && (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 4 || (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) {
+  if ((assignedUser === null || assignedUser === void 0 ? void 0 : assignedUser.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) || (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) {
     assigneePermission = true;
   }
   return statusPermission && assigneePermission;
@@ -8409,10 +8409,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
     }
     if (!startDate) {
       error.startDate = 'You have to select a start date';
-      count++;
-    }
-    if (!dueDate) {
-      error.dueDate = 'You have to select a due date';
       count++;
     }
     if (!dueDate) {
@@ -14465,13 +14461,13 @@ var TaskAction = function TaskAction(_ref) {
       task: task,
       status: status,
       auth: loggedUser
-    }), lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([5, 8, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_DailySubmissionControl__WEBPACK_IMPORTED_MODULE_12__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+    }), lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([5, 9, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_DailySubmissionControl__WEBPACK_IMPORTED_MODULE_12__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
       style: {
         display: 'inline-flex',
         marginLeft: 'auto',
         gap: '0 10px'
       },
-      children: [lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_13__["default"], {}), lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 5, 8, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      children: [lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 4, 1], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_13__["default"], {}), lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 5, 9, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_8__["default"], {
         task: task
       }), (0,_permissions__WEBPACK_IMPORTED_MODULE_3__.taskEditPermision)({
         task: task,
@@ -15792,8 +15788,8 @@ var LessTrackTimerModal = function LessTrackTimerModal(_ref) {
     }));
   };
 
-  // temprarily stop timer now
-  var stopTimerTemprorily = function stopTimerTemprorily() {
+  // temporarily stop timer now
+  var stopTimerTemporarily = function stopTimerTemporarily() {
     if (lessTrackModalFor === "STOP_TIMER") {
       stopTimer();
     }
@@ -15814,7 +15810,7 @@ var LessTrackTimerModal = function LessTrackTimerModal(_ref) {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Loader__WEBPACK_IMPORTED_MODULE_4__["default"], {})
         }),
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(StopTimerConfrimationPopUp, {
-          handleTemporarilyStopTimer: stopTimerTemprorily,
+          handleTemporarilyStopTimer: stopTimerTemporarily,
           close: close
         })
       })

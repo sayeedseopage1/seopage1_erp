@@ -126,8 +126,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     });
                 }
             })
-            .catch((err) => {
-                
+            .catch((err) => { 
                 if(err.status === 400){
                     if(err.data.acknowledgement_submitted === false){
                         Swal.fire({
@@ -139,7 +138,11 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                           }).then((result) => {
                             /* Read more about isConfirmed, isDenied below */
                             if (result.isConfirmed) {
-                                dispatch(setLessTrackModal({show: true, type: 'START_TIMER', date: dayjs.dayjs(err?.data?.date).format("MMM DD, YYYY")}))
+                                dispatch(setLessTrackModal({
+                                    show: true, 
+                                    type: 'START_TIMER', 
+                                    date: dayjs.dayjs(err?.data?.date).format("MMM DD, YYYY"),
+                                }))
                             } 
                           })
                      }

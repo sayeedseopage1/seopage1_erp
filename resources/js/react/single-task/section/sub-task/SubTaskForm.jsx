@@ -121,10 +121,6 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
             count++;
         }
 
-        if(!dueDate){
-            error.dueDate = 'You have to select a due date';
-            count++;
-        }
 
         if(!taskCategory){
             error.taskCategory = "You have to select task category";

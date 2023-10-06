@@ -25,9 +25,12 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
         isLoading: isSubmitting
     }] = useStoreStopTrackTimerMutation();
 
-    const {data: trackTime, isFetching} = useGetUserTrackTimeQuery(loggedUser?.getId());
+    const {
+        data: trackTime, 
+        isFetching
+    } = useGetUserTrackTimeQuery(`${loggedUser?.getId()}?date=${dayjs(lessTrackDate).format('YYYY-MM-DD')}`);
 
-    // console.log(trackTime)
+ 
 
     const navigate = useNavigate();
      
