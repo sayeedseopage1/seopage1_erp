@@ -60,6 +60,11 @@ class HourlyDealNotification extends Notification
                     '<ul>' .
                     '<li class="py-1"><strong>' . __('Deal Name') . ': ' . $deal->project_name . '</strong></li>' .
                     '<li class="py-1"><strong>' . __('Deal Type') . ': <span style="color:green">' . $deal->project_type . '</span></strong></li>'.
+                    '<li class="py-1"><strong>' . __('Estimated hours for the first set of tasks') . ': ' . $deal->estimated_hour_task . '</strong></li>' .
+                    '<li class="py-1"><strong>' . __('Hourly Rate') . ': ' . $deal->hourly_rate . '</strong></li>' .
+                    '<li class="py-1"><strong>' . __('Did the confirm hubstaff tracking') . ': ' . ($deal->hubstaff_tracking == 1 ? 'Yes' : 'No') . '</strong></li>'.
+                    '<li class="py-1"><strong>' . __('How many hours need to be tracked in the first 24 hours') . ': ' . $deal->tracked_hours . '</strong></li>' .
+                    '<li class="py-1"><strong>' . __('How many hours need to be tracked on the 2nd day i.e. between 25th-48th hours') . ': ' . $deal->second_day_tracked_hours . '</strong></li>' .
                     '<li class="py-1"><strong>' . __('Created On') . ': ' . $deal->created_at->format('Y-m-d') . ' at ' . $deal->created_at->format('h:i:s A') . '</strong></li>' .
                     '<li class="py-1"><strong>' . __('Client Name') . ': ' . $client->user_name . '</strong></li><br>';
 
@@ -72,6 +77,17 @@ class HourlyDealNotification extends Notification
                     '<li class="py-1"><strong>' . __('Sales Executive') . ': ' . $deal->user->email . '</strong></li>' .
                     '</ul><hr>' .
 
+                    '<div>' .
+                    '<h5 style="color: blue; font-size:16px;">Is the amount of work he expects per hour realistic</h5>' .
+                    '<p style="color: black; font-size:14px;">' . $deal->expect_amount . '</p>' .
+                    '</div>'.
+                    '<div>' .
+                    '<h5 style="color: blue; font-size:16px;">Does the client have any certain amount of hours on mind for the first set of tasks</h5>' .
+                    '<p style="color: black; font-size:14px;">' . $deal->certain_amount_hour . '</p>' .
+                    '</div>'.
+                    '<h5 style="color: blue; font-size:16px;">For how long the project may continue</h5>' .
+                    '<p style="color: black; font-size:14px;">' . $deal->long_project . '</p>' .
+                    '</div>'.
                     '<div>' .
                     '<h5 style="color: blue; font-size:16px;">Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h5>' .
                     '<p style="color: black; font-size:14px;">' . $deal->description2 . '</p>' .
