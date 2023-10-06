@@ -131,8 +131,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
                     <HDivider />
-                    <DateTypeFilter state={dateType} setState={setDateType} />
-                    <HDivider />
+                    {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
+                    {/* <HDivider /> */}
                 </React.Fragment>
             )}
 

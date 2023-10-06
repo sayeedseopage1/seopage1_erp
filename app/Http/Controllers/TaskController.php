@@ -5117,21 +5117,21 @@ class TaskController extends AccountBaseController
                 }
 
             }
-            // if (!is_null($projectId)) {
-            //     $dailySubmission = $dailySubmission->where('daily_submissions.project_id', $projectId);
-            // }
-            // // if (!is_null($assignee_to)) {
-            // //     $dailySubmission = $dailySubmission->where('task_users.user_id', $assignee_to);
-            // // }
+            if (!is_null($projectId)) {
+                $dailySubmission = $dailySubmission->where('daily_submissions.project_id', $projectId);
+            }
+            if (!is_null($employeeId)) {
+                $dailySubmission = $dailySubmission->where('daily_submissions.user_id', $employeeId);
+            }
             // // if (!is_null($assignee_by)) {
             // //     $dailySubmission = $dailySubmission->where('tasks.added_by', $assignee_by);
             // // }
-            // if (!is_null($pmId)) {
-            //     $dailySubmission = $dailySubmission->where('projects.pm_id', $pmId);
-            // }
-            // if (!is_null($clientId)) {
-            //     $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
-            // }
+            if (!is_null($pmId)) {
+                $dailySubmission = $dailySubmission->where('projects.pm_id', $pmId);
+            }
+            if (!is_null($clientId)) {
+                $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
+            }
             $dailySubmission = $dailySubmission->get();
 
 

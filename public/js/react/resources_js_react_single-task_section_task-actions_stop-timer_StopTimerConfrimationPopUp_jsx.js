@@ -203,12 +203,9 @@ var StopTimerConfrimationPopUp = function StopTimerConfrimationPopUp(_ref) {
     _useStoreStopTrackTim2 = _slicedToArray(_useStoreStopTrackTim, 2),
     storeStopTrackTimer = _useStoreStopTrackTim2[0],
     isSubmitting = _useStoreStopTrackTim2[1].isLoading;
-  var _useGetUserTrackTimeQ = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetUserTrackTimeQuery)(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()),
+  var _useGetUserTrackTimeQ = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_7__.useGetUserTrackTimeQuery)("".concat(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId(), "?date=").concat(dayjs__WEBPACK_IMPORTED_MODULE_11___default()(lessTrackDate).format('YYYY-MM-DD'))),
     trackTime = _useGetUserTrackTimeQ.data,
     isFetching = _useGetUserTrackTimeQ.isFetching;
-
-  // console.log(trackTime)
-
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_14__.useNavigate)();
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     if (!isFetching && trackTime) {
@@ -1751,7 +1748,7 @@ var OptionFour = function OptionFour(_ref) {
       err.reason = "Please selected responsible person/system!";
       errCount++;
     }
-    if (activeResponsiblePersonDropdown && !person) {
+    if (activeResponsiblePersonDropdown && !person && !client) {
       err.responsiblePerson = "Please select who is responsible!";
       errCount++;
     }
@@ -1784,6 +1781,7 @@ var OptionFour = function OptionFour(_ref) {
       responsible_person_id: (_person$id = person === null || person === void 0 ? void 0 : person.id) !== null && _person$id !== void 0 ? _person$id : null,
       related_to_any_project: project ? "yes" : "no",
       project_id: project ? project.id : project,
+      responsible: responsible,
       client: client
     };
     if (isVaild()) {
