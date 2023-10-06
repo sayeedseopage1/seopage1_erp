@@ -5,8 +5,8 @@ import Filterbar from '../components/task-report-page/Filter-bar/Filterbar';
 
 const TaskReport = () => {
 
-  const handleFilter = (filter)=>{
-    console.log(filter);
+  const handleFilter = (filter, status)=>{
+    console.log({filter,status});
   }
 
 

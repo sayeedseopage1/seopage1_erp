@@ -11,11 +11,11 @@ const StatusFilter = ({state, setState, selectionBoxClassName}) => {
 //   const {data, isFetching} = useGetBoardColoumnListQuery();
 
   const status = [
-    {id: "1_ts_r_1", column_name: 'All'},
-    {id: "1_ts_r_2", column_name: 'Pending'},
-    {id: "1_ts_r_3", column_name: 'Resolved'},
-    {id: "1_ts_r_4", column_name: 'Accepted & Resolved'},
-    {id: "1_ts_r_5", column_name: 'Denied & Resolved'},
+    {id: "1_ts_r_1", column_name: 'All', title: 'all'},
+    {id: "1_ts_r_2", column_name: 'Pending', title: 'pending'},
+    {id: "1_ts_r_3", column_name: 'Resolved', title: 'resolved'},
+    {id: "1_ts_r_4", column_name: 'Accepted & Resolved', title: 'approved'},
+    {id: "1_ts_r_5", column_name: 'Denied & Resolved', title: 'denied'},
   ];
 
   return (

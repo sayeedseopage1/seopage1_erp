@@ -19,10 +19,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [client, setClient] = React.useState(null);
     const [reportIssuer, setReportIssuer] = React.useState(null);
     const [accountableIndividual, setAccountableIndividual] = React.useState(null);
-    const [status, setStatus] = React.useState({
-        id: 10,
-        column_name: "Hide completed task",
-    });
+    const [status, setStatus] = React.useState({id: "1_ts_r_1", column_name: 'All', title: 'all'});
     const [dateType, setDateType] = React.useState("Created Date");
     const [selectedProject, setSelectedProject] = React.useState(null);
     const { data: getProjectsOptions, isFetching } = useGetProjectsOptionsQuery('');
@@ -53,11 +50,11 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             project_id: _selectedProject ? _selectedProject.id : null,
             report_issuer_id: _reportIssuer?.id,
             accountable_individual_id: _accountableIndividual?.id,
-            status: _status?.id,
+            // status: _status?.id,
             // date_filter_by,
         };
 
-        onFilter(filter);
+        onFilter(filter, _status);
     }, [
         start_date,
         end_date,
@@ -118,9 +115,9 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     {/* Report Issuer */}
                     <UserFilter
                         title="Report Issuer"
-                        state={reportIssuer} // lead developer state is used to represent report issuer
+                        state={reportIssuer}
                         setState={setReportIssuer}
-                        roleIds={null}
+                        roleIds={[5, 6]}
                     />
 
 
@@ -131,30 +128,12 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         title="Accountable Individual"
                         state={accountableIndividual}
                         setState={setAccountableIndividual}
-                        roleIds={null}
+                        roleIds={[4,6,8]}
                     />
 
 
                     <HDivider />
 
-
-                    {/* {page === "subtasks" ? (
-                        <UserFilter
-                            title="Assigned To"
-                            state={developer}
-                            setState={setDeveloper}
-                            roleIds={[5]}
-                        />
-                    ) : (
-                        <UserFilter
-                            title="Assigned To"
-                            state={developer}
-                            setState={setDeveloper}
-                            roleIds={[4, 6, 9, 10]}
-                        />
-                    )}
-
-                    <HDivider /> */}
 
                     {/* status */}
                     <StatusFilter
@@ -164,8 +143,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     
                     
                     <HDivider />
-                    {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
-                    {/* <HDivider /> */}
+                    
                 </React.Fragment>
             )}
 
@@ -184,8 +162,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                         {isOpen && (
                             <FilterSidebar
-                                developer={developer}
-                                setDeveloper={setDeveloper}
+                                // developer={developer}
+                                // setDeveloper={setDeveloper}
                                 client={client}
                                 setClient={setClient}
                                 reportIssuer={reportIssuer}
@@ -194,12 +172,11 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                                 setAccountableIndividual={setAccountableIndividual}
                                 status={status}
                                 setStatus={setStatus}
-                                search={search}
-                                setSearch={setSearch}
-                                dateType={dateType}
-                                setDateType={setDateType}
+                                selectedProject={selectedProject}
+                                handleProjectFilter={handleProjectFilter}
+                                getProjectsOptions={getProjectsOptions}
+                                isFetching={isFetching}
                                 close={() => setIsOpen(false)}
-                                isDev={isDev}
                             />
                         )}
                     </div>
