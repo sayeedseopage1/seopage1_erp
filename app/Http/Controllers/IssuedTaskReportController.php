@@ -83,4 +83,8 @@ class IssuedTaskReportController extends AccountBaseController
     {
         //
     }
+
+    public function getTaskReport(){
+        dd('asdsd');
+    }
 }
