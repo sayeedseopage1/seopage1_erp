@@ -6,7 +6,7 @@ import { TaskReportDataTableColumn } from './TaskReportDataTableColumn';
 const TaskReportDataTable = () => {
 
   return (
-    <div className='sp1_tlr_container' style={{border:'solid transparent'}}>
+    <div className='sp1_tlr_container'>
 
       <section className="sp1_tlr_tbl_container">
         <DataTable
