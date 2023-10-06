@@ -41,7 +41,7 @@ const ResolveActionBtn = ({ data }) => {
         <span className="d-inline ml-1"> Resolve </span>
       </Button>
 
-      {data.report_no === modalData?.report_no &&
+      {data.id === modalData?.id &&
         <Modal isOpen={true} className="sp1_mark-as--modal " closeModal={close}>
           <div className="sp1_single_task--modal-panerl-wrapper">
             <div
@@ -50,7 +50,7 @@ const ResolveActionBtn = ({ data }) => {
             >
               {/* heading bar */}
               <div className="sp1_mark-as--modal-heading">
-                <h6 className="mb-0">Resolve or Deny Report : {modalData?.report_no}</h6>
+                <h6 className="mb-0">Resolve or Deny Report : {modalData?.id}</h6>
 
                 <Button aria-label="closeModal" onClick={close}>
                   <i className="fa-solid fa-xmark" />
