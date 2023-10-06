@@ -63,6 +63,8 @@ use App\Models\BlogArticle;
 use App\Models\ProductCategoryCollection;
 use App\Models\ProductDescription;
 use App\Models\WebContent;
+use App\Notifications\HourlyDealNotification;
+use App\Notifications\WonDealNotification;
 
 class ContractController extends AccountBaseController
 {
@@ -261,7 +263,7 @@ class ContractController extends AccountBaseController
         $deal->project_name = $request->project_name;
         $deal->currency_id = 1;
         $deal->actual_amount =  $request->amount;
-      
+
         $currency = Currency::where('id', $request->original_currency_id)->first();
         //dd($currency);
         $deal->award_time = $aw_dt;
@@ -862,7 +864,7 @@ class ContractController extends AccountBaseController
             $milestone->actual_cost =  $request->cost;
             $project = Project::where('id', $request->project_id)->first();
             $deal = Deal::where('id', $project->deal_id)->first();
-            
+
             //dd($deal);
             $milestone->original_currency_id = $deal->original_currency_id;
             $currency = Currency::where('id', $deal->original_currency_id)->first();
@@ -873,14 +875,14 @@ class ContractController extends AccountBaseController
             //     $deal->settled_milestone_amount= $deal->settled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
             //     $milestone->active_status= 1;
 
-            // }else 
+            // }else
             // {
             //     $deal->unsettled_milestone_amount= $deal->unsettled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
             //     $milestone->active_status= 0;
 
             // }
             // $deal->save();
-            
+
             $milestone->summary = $request->summary;
             $milestone->currency_id = 1;
 
@@ -943,7 +945,7 @@ class ContractController extends AccountBaseController
         $projectmilestone = ProjectMilestone::where('id', $id)->first();
         $project_id = Project::where('id', $projectmilestone->project_id)->first();
         $deal = Deal::where('id', $project_id->deal_id)->first();
-       
+
         $milestone_amount = ProjectMilestone::where('project_id', $project_id->id)->sum('actual_cost');
         $updated_amount = $milestone_amount - $projectmilestone->actual_cost;
         $check = ($deal->actual_amount) - ($updated_amount);
@@ -970,7 +972,7 @@ class ContractController extends AccountBaseController
                 $milestone->actual_cost =  $request->cost;
                 $project = Project::where('id', $milestone->project_id)->first();
                 $deal = Deal::where('id', $project->deal_id)->first();
-               
+
                 //dd($deal);
                 $milestone->original_currency_id = $deal->original_currency_id;
                 $currency = Currency::where('id', $deal->original_currency_id)->first();
@@ -979,12 +981,12 @@ class ContractController extends AccountBaseController
                 // if($milestone->milestone_type == 'Client Created this Milestone')
                 // {
                 //     $deal->settled_milestone_amount= $deal->settled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
-                
-    
-                // }else 
+
+
+                // }else
                 // {
                 //     $deal->settled_milestone_amount= $deal->unsettled_milestone_amount+ (($request->cost) / $currency->exchange_rate);
-    
+
                 // }
                 // $deal->save();
                 $milestone->summary = $request->summary;
@@ -1017,6 +1019,7 @@ class ContractController extends AccountBaseController
     public function storedealDetails(Request $request)
     {
        // dd($request);
+    //    DB::beginTransaction();
         $deal_hourly_checked = Deal::where('id', $request->id)->first();
         if ($deal_hourly_checked->project_type != 'hourly') {
             $validated = $request->validate([
@@ -1147,7 +1150,7 @@ class ContractController extends AccountBaseController
                     $value = $value  . $link . ' <br> ';
                 }
             }
-          
+
             $deal->cms_id = $item[0];
             $deal->cms_name = $item[1];
             $deal->deal_category = $request->deal_category;
@@ -1171,7 +1174,7 @@ class ContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
-            
+
             $deal->save();
            // dd($deal);
             $project_id = Project::where('deal_id', $request->id)->first();
@@ -1187,7 +1190,7 @@ class ContractController extends AccountBaseController
             $project->currency_id = 1;
             $project->project_summary = $request->project_summary;
             $project->save();
-           
+
             if ($deal->project_type == 'hourly') {
                 // dd("true");
                 $milestone = new ProjectMilestone();
@@ -1235,7 +1238,7 @@ class ContractController extends AccountBaseController
             $client->email = $request->client_email;
             $client->name = $request->client_name;
             $client->save();
-          
+
             $lead_developer_id = RoleUser::where('role_id', 6)->get();
             //dd($lead_developer_id);
             foreach ($lead_developer_id as $lead) {
@@ -1364,14 +1367,14 @@ class ContractController extends AccountBaseController
 
 
             $deal_pm_id = Deal::where('id', $request->id)->first();
-           
+
             $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
 
             $project_admin_update = Project::find($project_id->id);
             $project_admin_update->added_by = $project_id->pm_id;
             $project_admin_update->project_admin = $project_id->pm_id;
             $project_admin_update->save();
-           
+
 
             //qualified sales start from here
             $qualified_sale = new QualifiedSale();
@@ -1396,7 +1399,7 @@ class ContractController extends AccountBaseController
             $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
             $qualified_sale->save();
-            
+
 
 
 
@@ -1412,7 +1415,10 @@ class ContractController extends AccountBaseController
                 'redirectUrl' => route('contracts.show', $deal_pm_id->id)
             ]);
             if ($deal->project_type == 'fixed') {
-                Mail::to($user->email)->send(new WonDealMail($project_id));
+                $user = User::where('id', $deal_pm_id->pm_id)->first();
+                Notification::send($user, new WonDealNotification($deal));
+            }else{
+                Notification::send($user, new HourlyDealNotification($deal));
             }
            // dd("skdlkasmd ");
 
@@ -1420,11 +1426,16 @@ class ContractController extends AccountBaseController
 
             //  Mail::to($test->email)->send(new WonDealMail($project));
             if ($deal->project_type == 'fixed') {
-            $users = User::where('role_id', 1)->get();
-            foreach ($users as $usr) {
-                Mail::to($usr->email)->send(new WonDealMail($project_id));
+                $users = User::where('role_id', 1)->get();
+                foreach ($users as $usr) {
+                    Notification::send($usr, new WonDealNotification($deal));
+                }
+            }else{
+                $users = User::where('role_id', 1)->get();
+                foreach ($users as $usr) {
+                    Notification::send($usr, new HourlyDealNotification($deal));
+                }
             }
-        }
             // $check_new_pm= User::where('id',$deal->pm_id)->first();
             // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
             // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
@@ -1454,7 +1465,7 @@ class ContractController extends AccountBaseController
             $deal = Deal::find($deal->id);
             $deal->authorization_status = 2;
             $deal->save();
-          
+
             $sender = User::where('id', Auth::id())->first();
 
 
@@ -1506,10 +1517,10 @@ class ContractController extends AccountBaseController
                 $project_member->added_by = Auth::id();
                 $project_member->project_id = $project->id;
                 $project_member->save();
-            } 
+            }
           //  dd("asd asl d");
 
-            
+
             DB::commit();
             // all good
         } catch (\Exception $e) {
@@ -1889,8 +1900,10 @@ class ContractController extends AccountBaseController
 
 
                 if ($deal->project_type == 'fixed') {
-                $user = User::where('id', $deal_pm_id->pm_id)->first();
-                Mail::to($user->email)->send(new WonDealMail($project_id));
+                    $user = User::where('id', $deal_pm_id->pm_id)->first();
+                    Notification::send($user, new WonDealNotification($deal));
+                }else{
+                    Notification::send($user, new HourlyDealNotification($deal));
                 }
                 $users = User::where('role_id', 8)->get();
 
@@ -2690,7 +2703,7 @@ public function storeClientDeal(Request $request){
 
 
     $deal_client = Deal::find($deal->id);
-    
+
     $deal_client->client_id = $user->id;
     // $deal->submission_status= 'Submitted';
 
