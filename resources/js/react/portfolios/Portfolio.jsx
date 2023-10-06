@@ -10,7 +10,7 @@ import { Placeholder } from '../global/Placeholder';
 
  
 
-const Protfolio = () => {
+const Portfolio = () => {
   const [portfolio, setPortfolio] = useState(null); 
   const [cms, setCms] = useState(null);
   const [cmsSearch, setCmsSearch] = useState(''); 
@@ -411,7 +411,7 @@ const Protfolio = () => {
     ) 
 }
 
-export default Protfolio
+export default Portfolio
 
 
 const ItemLoader = () => {

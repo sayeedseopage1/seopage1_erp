@@ -182,7 +182,7 @@ export function taskEditPermision({task, status, auth}){
 
     // if task assign to 
     if(
-        (assignedUser?.getId() === auth?.getId() &&  auth?.getRoleId() === 4) || 
+        (assignedUser?.getId() === auth?.getId() ) || 
         auth?.getRoleId() === 1
     ){
         assigneePermission = true;

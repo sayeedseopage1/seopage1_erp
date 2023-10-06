@@ -10,7 +10,7 @@ import { useStoreProjectTaskMutation } from "../../services/api/tasksApiSlice";
 import DatePickerComponent from "../../single-task/section/comments/DatePicker";
 import PrioritySelection from "../../single-task/section/sub-task/PrioritySelection";
 import TaskCategorySelectionBox from "../../single-task/section/sub-task/TaskCategorySelectionBox";
-import Button from "../../tasks/components/Button";
+import Button from "../../global/Button";
 import Modal from "../../tasks/components/Modal";
 import Input from "../../tasks/components/form/Input";
 import { convertTime } from '../../utils/converTime';
@@ -18,6 +18,8 @@ import { CompareDate } from "../../utils/dateController";
 import { SingleTask } from "../../utils/single-task";
 import { User } from "../../utils/user-details";
 import AssginedToSelection from "./AssignedToSelection";
+import Loader from "../../tasks/components/Loader";
+import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementModal";
 
 const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const {
@@ -42,6 +44,9 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const [files, setFiles] = React.useState([]);
     
     const [formError, setFormError] = React.useState(null);
+
+    // ui
+    const [visibleAcknowledgementModal, setVisibleAcknowledgementModal] = React.useState(false);
 
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
@@ -72,17 +77,22 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     };
 
     // check validation 
-    const isValid = () => {
+    const isValid = () => { 
         let err = new Object();
         let errCount = 0;
 
-        if(title === ''){
-            err.title = "This field is required!",
+        if(!title){
+            err.title = 'The title field is required';
             errCount++;
         }
 
-        if(taskCategory === ''){
-            err.taskCategory = "Select a category";
+        if(!startDate){
+            err.startDate = 'You have to select a start date';
+            errCount++;
+        }
+
+        if(!taskCategory){
+            err.taskCategory = "You have to select task category";
             errCount++;
         }
 
@@ -91,18 +101,16 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        if(!startDate){
-            err.startDate = "Start date is required";
-            errCount++;
-        }
+        
 
         if(!dueDate){
-            err.dueDate = "Due date is required",
+            err.dueDate = 'You have to select a due date';
             errCount++;
         }
 
+
         if(!assignedTo?.id){
-            err.assignedTo = "Select a user.";
+            err.assignedTo = "You have to select an user";
             errCount++;
         }
 
@@ -128,9 +136,8 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     }
 
 
-    // handle sumition
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    // handle confirmation
+    const handleAcknowledgementConfirmation = (data) => {
         const _startDate = startDate ? dayjs.dayjs(startDate).format("DD-MM-YYYY") : '';
         const _dueDate = dueDate ? dayjs.dayjs(dueDate).format("DD-MM-YYYY") : '';
 
@@ -148,7 +155,9 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         fd.append("deliverable_id", milestone?.deliverable_type ?? '');
         fd.append("milestone_id", milestone?.id ?? ''); 
         fd.append("user_id", assignedTo?.id ?? '');
-
+        fd.append('acknowledgement', data.acknowledgement);
+        fd.append('sub_acknowledgement', data.subAcknowledgement);
+        fd.append('need_authorization', data.authorization);
         
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
@@ -161,11 +170,8 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
-        for (const pair of fd.entries()) {
-          console.log(`${pair[0]} :, ${pair[1]}`);
-        }
- 
-        if(isValid()){
+
+        if(isValid()){ 
             storeProjectTask(fd)
             .unwrap()
             .then((res) => { 
@@ -185,7 +191,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                     Swal.fire({
                         position: "center",
                         icon: "error",
-                        title: "Please fillup all required fields",
+                        title: "Please fill up all required fields",
                         showConfirmButton: true,
                     });
                 }
@@ -194,10 +200,17 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please fillup all required fields",
+                title: "Please fill up all required fields",
                 showConfirmButton: true,
             });
         }
+    }
+
+
+    // handle submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setVisibleAcknowledgementModal(true);
     };
 
     React.useEffect(() => {
@@ -225,6 +238,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
     return (
         <Modal isOpen={isOpen}>
+            <React.Fragment>
             <div className="sp1_modal-content-wrapper">
                 <div className="sp1_modal-panel sp1_task_create_modal_panel w-100">
                     {/* header */}
@@ -304,16 +318,20 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             Milestone <sup>*</sup>
                                         </label>
                                         <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                            {milestone?.milestone_title ?? '--'}
-                                            <div className='__icon'>
-                                                <i className="fa-solid fa-sort"></i>
-                                            </div>
+                                            {milestoneDataIsFetching ? <Loader title="Loading..."/> : 
+                                                <>
+                                                    <span className="singleline-ellipsis" style={{width: '95%'}}>{milestone?.milestone_title ?? '--'}</span>
+                                                    <div className='__icon'>
+                                                        <i className="fa-solid fa-sort"></i>
+                                                    </div>
+                                                </>
+                                            }
                                         </Listbox.Button>
                                         <Listbox.Options  className="sp1-select-options">
                                             {_.map(projectInfo?.milestones, (milestone) => (
                                                 <Listbox.Option 
                                                     key={milestone.id}
-                                                    className={({ active, selected }) => `sp1-select-option ${ (active || selected) ? 'active' : ''}`}
+                                                    className={({ active, selected }) => `sp1-select-option selected ${ (active || selected) ? 'active' : ''}`}
                                                     value={milestone}
                                                 > 
                                                     {milestone?.milestone_title}  
@@ -450,7 +468,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     </label>
                                     <div className="d-flex align-items-center">
                                         <input
-                                            type="Number"
+                                            type="number"
                                             className="form-control height-35 f-14 mr-2"
                                             value={estimateTimeHour}
                                             onChange={(e) =>
@@ -462,10 +480,11 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         />{" "}
                                         hrs
                                         <input
-                                            type="Number"
+                                            type="number"
                                             min={0}
                                             className="form-control height-35 f-14 mr-2 ml-2"
                                             value={estimateTimeMin}
+                                            onWheel={e => e.currentTarget.blur()}
                                             onChange={(e) =>
                                                 handleChange(
                                                     e,
@@ -477,7 +496,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     </div>
 
 
-                                    <div style={{ color: "var(--header_color)" }}>
+                                    <div style={{ color: "#F01F0A" }}>
                                         Estimation time can't exceed{" "} 
                                         {convertTime(Number(projectInfo?.minutes_left) > 0 ? Number(projectInfo?.minutes_left) : 0)}
                                     </div>
@@ -524,26 +543,12 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         onClick={close}
                                     >
                                         Cancel
-                                    </Button>
-
-                                    {!isLoading ? (
-                                        <Button onClick={handleSubmit}>
-                                            <i className="fa-regular fa-paper-plane"></i>
-                                            Create
-                                        </Button>
-                                    ) : (
-                                        <Button className="cursor-processing">
-                                            <div
-                                                className="spinner-border text-white"
-                                                role="status"
-                                                style={{
-                                                    width: "18px",
-                                                    height: "18px",
-                                                }}
-                                            ></div>
-                                            Processing...
-                                        </Button>
-                                    )}
+                                    </Button>  
+                                     
+                                    <Button isLoading={isLoading} onClick={handleSubmit}>
+                                        <i className="fa-regular fa-paper-plane"></i>
+                                        Create
+                                    </Button> 
                                 </div>
                             </div>
                         </div>
@@ -551,6 +556,15 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                     {/* end body */}
                 </div>
             </div>
+
+
+            <ProjectManagerAcknowledgementModal
+                isOpen={visibleAcknowledgementModal}
+                onClose={() => setVisibleAcknowledgementModal(false)}
+                onConfirm={handleAcknowledgementConfirmation}
+                isLoading={isLoading}
+            />
+            </React.Fragment>
         </Modal>
     );
 };

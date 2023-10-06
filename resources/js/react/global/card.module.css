@@ -1,0 +1,43 @@
+.card {
+    height: fit-content;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.card_header {
+    width: 100%;
+    padding: 6px 10px 6px 16px;
+    display: flex;
+    align-items: center;
+    background-color: #e7e7e7;
+    justify-content: space-between;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom: 1px solid #d6d6d6;
+}
+
+.card_header .card_close_btn {
+    background-color: transparent;
+    border: none;
+}
+
+.card_header .card_close_btn:hover {
+    background: #dddddd;
+}
+
+.card_body {
+    min-width: 320px;
+    height: fit-content;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 10px 16px;
+}
+
+.card_footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    padding: 16px;
+    gap: 10px;
+}

@@ -1,4 +1,3 @@
-import _ from "lodash";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import { User } from "../../../../../utils/user-details";
@@ -9,12 +8,14 @@ const UserSelectionList = lazy(() => import("./UserSelectionList"));
 const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
     // form data
     const [person, setPerson] = useState(null);
+    const [client, setClient] = useState("");
     const [project, setProject] = useState(null);
+    const [responsible, setResponsible] = useState('');
     const [task, setTask] = useState(null);
     const [isSystemGlitch, setIsSystemGlitch] = useState(undefined);
     const [isOutsideERP, setIsOutsideERP] = useState(undefined);
     const [comment, setComment] = useState("");
-    const [duratonStart, setDurationStart] = useState("08:00 AM");
+    const [durationStart, setDurationStart] = useState("08:00 AM");
     const [durationEnd, setDurationEnd] = useState("05:00 PM");
     // end form data
 
@@ -33,8 +34,8 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
         // start time
         window
             .$("#timepicker1")
-            .timepicker("setTime", duratonStart)
-            .on("changeTime.timepicker", function (e) {
+            .timepicker("setTime", durationStart)
+            .on("changeTime.timepicker", function (e) { 
                 setDurationStart(e.target.value);
             });
 
@@ -94,7 +95,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             errCount++;
         }
 
-        if(activeResponsiblePersonDropdown && !person){
+        if(activeResponsiblePersonDropdown &&  !person && !client){
             err.responsiblePerson = "Please select who is responsible!";
             errCount++;
         }
@@ -118,7 +119,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
 
         const data = {
             reason_for_less_tracked_hours_a_day_task: "I couldn't log hours.",
-            durations: JSON.stringify([{id: 'de2sew', start: duratonStart, end: durationEnd}]),
+            durations: JSON.stringify([{id: 'de2sew', start: durationStart, end: durationEnd}]),
             comment,
             responsible_person: isSystemGlitch ? 'Systems technical glitch' :
                     isOutsideERP ? 'Outside ERP Project' :
@@ -126,9 +127,10 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             responsible_person_id: person?.id ?? null,
             related_to_any_project: project ? "yes" : "no",
             project_id: project ? project.id : project,
+            responsible,
+            client: client,
         };
-        
-
+          
         if(isVaild()){ 
             onSubmit(data);
         }else{
@@ -186,7 +188,10 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                         id="due-to-myself"
                                         value="Due to myself"
                                         name="responsive-person"
-                                        onChange={handleResponsiblePersonMySelf}
+                                        onChange={e => {
+                                            handleResponsiblePersonMySelf(e);
+                                            setResponsible(e.target.value);
+                                        }}
                                     />{" "}
                                     Due to myself
                                 </label>
@@ -204,6 +209,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                             setPerson(null);
                                             setIsSystemGlitch(false);
                                             setIsOutsideERP(false);
+                                            setResponsible(e.target.value)
                                         }}
                                     />{" "}
                                     Due to another person
@@ -220,6 +226,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                             setIsOutsideERP(false);
                                             setActiveResponsiblePersonDropdown(false);
                                             setPerson(null);
+                                            setResponsible(e.target.value)
                                         }}
                                     />{" "}
                                     Systems technical glitch
@@ -239,6 +246,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                                 e.target.checked
                                             );
                                             setPerson(null);
+                                            setResponsible(e.target.value)
                                         }}
                                     />{" "}
                                     Outside ERP project
@@ -260,11 +268,20 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
                                         </div>
                                     }
                                 >
-                                    <UserSelectionList
-                                        person={person}
-                                        setPerson={setPerson}
-                                        filter={isOutsideERP ? 'client' : ''}
-                                    />
+                                    {
+                                        isOutsideERP ? 
+                                            <input
+                                                value={client}
+                                                onChange={e => setClient(e.target.value)}
+                                                className="w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center justify-content-between"
+                                            />
+                                        :
+                                        <UserSelectionList
+                                            person={person}
+                                            setPerson={setPerson}
+                                            filter=""
+                                        />
+                                    }
                                 </Suspense> 
                                 {error?.responsiblePerson && <div className="f-14" style={{color:'red'}}>{error?.responsiblePerson}</div>}
                             </>
