@@ -2055,10 +2055,10 @@ class ProjectController extends AccountBaseController
              $authorization_action->title = 'Project Challenge Authorization';
              $authorization_action->authorization_for = 62;
              $authorization_action->save();
-            //  $users = User::where('role_id', 1)->get();
-            //  foreach ($users as $user) {
-            //      Notification::send($user, new ProjectReviewNotification($project));
-            //  }
+             $users = User::where('role_id', 1)->get();
+             foreach ($users as $user) {
+                 Notification::send($user, new ProjectReviewNotification($project));
+             }
          }
 
 
@@ -2088,7 +2088,7 @@ class ProjectController extends AccountBaseController
             // $authorization_action->authorization_for = 1;
             // $authorization_action->save();
             //end authorization action here
-
+            $users = User::where('role_id', 1)->get();
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
