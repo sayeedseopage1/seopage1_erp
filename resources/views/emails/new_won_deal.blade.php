@@ -15,7 +15,7 @@
 
 </head>
 <body>
-  
+
 <?php
   $user= App\Models\User::where('id',$data->pm_id)->first();
   $deal= App\Models\Deal::where('id',$data->deal_id)->first();
@@ -64,7 +64,7 @@
                    <h5>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix,
                      Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h5>
                    <p>{!!$deal->description2!!}</p>
-               </div>
+                    </div>
                <div class="newarea">
                 <h5> Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency. It should include home, about, his services in one page, blog, and contact. The look and feel should be better than the references.)</h5>
                 <p>{!!$deal->description3!!}</p>
