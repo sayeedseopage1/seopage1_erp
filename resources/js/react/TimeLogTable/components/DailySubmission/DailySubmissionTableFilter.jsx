@@ -79,7 +79,7 @@ export default function DailySubmissionTableFilter ({onFilter}){
                 employee_id: _selectedEmployeeId,
                 pm_id: _selectedPMId,
                 client_id: _selectedClientId,   
-                status: _status,
+                // status: _status,
                 project_id: _selectedProject ? _selectedProject.id : null
             })
         }
@@ -189,13 +189,13 @@ export default function DailySubmissionTableFilter ({onFilter}){
             onSelect={handleProjectFilter}
         />
     
-        <FilterItem
+        {/* <FilterItem
             title="Status"
             items = {["finished", "canceled", "in progress", "partially finished", "under review"]}
             selected={status}
             isLoading={false}
             onSelect={handleStatusFilter}
-        />
+        /> */}
 
 
 
