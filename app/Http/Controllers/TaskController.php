@@ -3976,7 +3976,7 @@ class TaskController extends AccountBaseController
         if($request->date != null)
         {
 
-            $currentDate = Carbon::parse($request->date);
+            $currentDate = $request->date;
 
         }else
         {
