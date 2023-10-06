@@ -3969,21 +3969,21 @@ class TaskController extends AccountBaseController
     }
     public function DeveloperTrackedTime(Request $request,$id)
     {
-        
+
         $userID = Auth::id(); // Replace with the actual user ID
 
         //$currentDate = Carbon::now()->toDateString();
         if($request->date != null)
         {
-           
+
             $currentDate = Carbon::parse($request->date);
 
-        }else 
+        }else
         {
             $currentDate = Carbon::now()->toDateString();
 
         }
-      
+
 
         $totalMinutes = DB::table('project_time_logs')
             ->where('user_id', $userID)
@@ -4885,7 +4885,7 @@ class TaskController extends AccountBaseController
             $user_data= User::where('id',$id)->first();
             $project_time_log_date = ProjectTimeLog::where('user_id',$id)->orderBy('id','desc')->first();
             $last_login= $project_time_log_date->updated_at;
-      
+
 // Check if the last login date is today's date
 
             $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
@@ -4907,12 +4907,12 @@ class TaskController extends AccountBaseController
         ->groupBy('tasks.id')
         ->get();
       // dd($yesterdayData);
-        
-    
-    
+
+
+
         }
     }
-   
+
     if($request->date_type == 'today')
     {
        // dd("today");
@@ -4980,7 +4980,7 @@ class TaskController extends AccountBaseController
     public function storeDailySubmission(Request $request)
     {
        // dd($request);
-       
+
         $daily_submission= new DailySubmission();
 
         if ($request->file('file') != null) {
@@ -5096,11 +5096,11 @@ class TaskController extends AccountBaseController
             ->leftJoin('users as pm','pm.id','=','projects.pm_id')
             ->leftJoin('users as ld','ld.id','=','tasks.added_by')
             ->leftJoin('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
-            
+
             ->leftJoin('working_environments','projects.id','=','working_environments.project_id')
             ->groupBy('daily_submissions.task_id')
             ;
-           
+
             if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
             {
 
@@ -5133,12 +5133,12 @@ class TaskController extends AccountBaseController
             //     $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
             // }
             $dailySubmission = $dailySubmission->get();
-           
 
 
 
 
-       
+
+
             // foreach($dailySubmission as $item)
             // {
             //     $project_time_logs = ProjectTimeLog::where('task_id',$item->task_id)
