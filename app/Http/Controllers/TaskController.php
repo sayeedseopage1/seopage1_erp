@@ -3967,13 +3967,23 @@ class TaskController extends AccountBaseController
             ]);
 
     }
-    public function DeveloperTrackedTime($id)
+    public function DeveloperTrackedTime(Request $request,$id)
     {
+        
         $userID = Auth::id(); // Replace with the actual user ID
 
         //$currentDate = Carbon::now()->toDateString();
-        $currentDate = Carbon::now()->toDateString();
+        if($request->date != null)
+        {
+           
+            $currentDate = Carbon::parse($request->date);
 
+        }else 
+        {
+            $currentDate = Carbon::now()->toDateString();
+
+        }
+      
 
         $totalMinutes = DB::table('project_time_logs')
             ->where('user_id', $userID)
