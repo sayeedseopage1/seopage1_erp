@@ -4827,6 +4827,7 @@ class TaskController extends AccountBaseController
     }
     public function get_today_tasks(Request $request,$id)
     {
+    //    / dd("smkdmaskdm");
         $startDate= Carbon::today()->format('Y-m-d');
         $endDate= Carbon::today()->format('Y-m-d');
     //    / dd($startDate, $endDate);
@@ -4867,10 +4868,16 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
+     //   dd($yesterdayData);
         if($yesterdayData->isEmpty())
         {
+          //  dd("nsnaslkdn");
             $user_data= User::where('id',$id)->first();
-            $last_login= $user_data->last_login->format('Y-m-d');
+            $project_time_log_date = ProjectTimeLog::where('user_id',$id)->orderBy('id','desc')->first();
+            $last_login= $project_time_log_date->updated_at;
+      
+// Check if the last login date is today's date
+
             $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
@@ -4889,6 +4896,8 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
+      // dd($yesterdayData);
+        
     
     
         }
@@ -4896,10 +4905,12 @@ class TaskController extends AccountBaseController
    
     if($request->date_type == 'today')
     {
+       // dd("today");
         $tasks = $todayData;
         $date= Carbon::now();
     }else
     {
+     //   dd("last_day");
         $tasks = $yesterdayData;
         $date= Carbon::yesterday();
 
@@ -5023,7 +5034,7 @@ class TaskController extends AccountBaseController
 
     }
     public function allDailySubmission(Request $request){
-       
+    // /   dd($request);
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
         $employeeId = $request->input('employee_id', null);
