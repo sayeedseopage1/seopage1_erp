@@ -189,7 +189,7 @@
                           <div class="row">
                               @if($deal->project_type !='hourly')
                               @if($deal->upsell_actual_amount == 0)
-                              
+
                                   <div class="col-md-3">
                                       <div class="form-group">
                                           <label for="amount" >Project Budget <span style="color:red;" class="mr-1">*</span><svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="This budget is automatically taken from deal. After negotiation stage, if the price changes, please change the price in this project budget field." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -199,16 +199,16 @@
                                           <label id="amountError" class="error text-danger" for="amount"></label>
                                       </div>
                                   </div>
-                                  @else 
-                                  
+                                  @else
+
                                         <input type="hidden" name="amount" value="{{$deal->actual_amount}}" class="form-control height-35 f-14" id="amount" placeholder="Enter project buget">
-                                       
+
                                     </div>
                                 </div>
 
 
                                   @endif
-                                
+
                                   @if($deal->upsell_actual_amount > 0)
                                   <div class="col-md-3">
                                     <div class="form-group">
@@ -728,7 +728,7 @@
 
                           <br>
                           <div class="d-flex justify-content-center">
-                              <button class="btn btn-primary" type="submit" id="createDeal" ><span class="btn-txt">Complete Deal Creation</span></button>
+                              <button class="btn btn-primary" type="submit" id="createDeal"><span class="btn-txt">Complete Deal Creation</span></button>
                           </div>
                         </form>
 
