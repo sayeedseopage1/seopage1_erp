@@ -2603,7 +2603,7 @@
                     if (todayOnlyDate > 15) {
                         monthDate = moment(monthDate).subtract(1, 'month');
                     } else {
-                        monthDate = moment(monthDate).subtract(2, 'month');
+                        monthDate = moment(monthDate).subtract(1, 'month');
                     }
                     $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                         moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
