@@ -6,6 +6,8 @@ import StatusFilter from "./StatusFilter";
 import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
+import ProjectFilterItem from "./ProjectFilter";
+import { useGetProjectsOptionsQuery } from "../../../../react/services/api/FilterBarOptionsApiSlice";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -15,13 +17,16 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [searchQuery, setSearchQuery] = React.useState("");
     const [developer, setDeveloper] = React.useState(null);
     const [client, setClient] = React.useState(null);
-    const [leadDeveloper, setLeadDeveloper] = React.useState(null);
-    const [pm, setPm] = React.useState(null);
+    const [reportIssuer, setReportIssuer] = React.useState(null);
+    const [accountableIndividual, setAccountableIndividual] = React.useState(null);
     const [status, setStatus] = React.useState({
         id: 10,
         column_name: "Hide completed task",
     });
     const [dateType, setDateType] = React.useState("Created Date");
+    const [selectedProject, setSelectedProject] = React.useState(null);
+    const { data: getProjectsOptions, isFetching } = useGetProjectsOptionsQuery('');
+
 
     const { width } = useWindowSize();
 
@@ -33,21 +38,23 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const _search = React.useMemo(() => search, [search]);
     const _developer = React.useMemo(() => developer, [developer]);
     const _client = React.useMemo(() => client, [client]);
-    const _leadDeveloper = React.useMemo(() => leadDeveloper, [leadDeveloper]);
-    const _pm = React.useMemo(() => pm, [pm]);
+    const _reportIssuer = React.useMemo(() => reportIssuer, [reportIssuer]);
+    const _accountableIndividual = React.useMemo(() => accountableIndividual, [accountableIndividual]);
     const _status = React.useMemo(() => status, [status]);
     const date_filter_by = React.useMemo(() => dateType, [dateType]);
+    const _selectedProject = React.useMemo(() => selectedProject, [selectedProject]);
 
     React.useEffect(() => {
         const filter = {
+            // assignee_to: _developer?.id,
             start_date,
             end_date,
-            assignee_to: _developer?.id,
             client_id: _client?.id,
-            report_issuer: _leadDeveloper?.id,
-            accountable_individual: _pm?.id,
+            project_id: _selectedProject ? _selectedProject.id : null,
+            report_issuer_id: _reportIssuer?.id,
+            accountable_individual_id: _accountableIndividual?.id,
             status: _status?.id,
-            date_filter_by,
+            // date_filter_by,
         };
 
         onFilter(filter);
@@ -56,11 +63,20 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         end_date,
         _developer,
         _client,
-        _leadDeveloper,
-        _pm,
+        _reportIssuer,
+        _accountableIndividual,
         _status,
         date_filter_by,
+        _selectedProject
     ]);
+
+    const handleProjectFilter = (e, data) => {
+        if(data){
+            setSelectedProject(data);
+        }else{
+            setSelectedProject(null)
+        }
+    }
 
     return (
         <div className="sp1_task_filter_bar">
@@ -75,6 +91,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
             {width > 1400 && (
                 <React.Fragment>
+
+                    {/* client filter */}
                     <UserFilter
                         title="Client"
                         state={client}
@@ -86,25 +104,33 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
 
                     {/* projects filter */}
+                    <ProjectFilterItem
+                        title="Projects"
+                        items={getProjectsOptions ? [...getProjectsOptions] : []}
+                        isLoading={isFetching}
+                        selected={selectedProject}
+                        onSelect={handleProjectFilter}
+                    />
 
 
                     <HDivider />
 
+                    {/* Report Issuer */}
                     <UserFilter
                         title="Report Issuer"
-                        state={leadDeveloper} // lead developer state is used to represent report issuer
-                        setState={setLeadDeveloper}
+                        state={reportIssuer} // lead developer state is used to represent report issuer
+                        setState={setReportIssuer}
                         roleIds={null}
                     />
-                    
+
 
                     <HDivider />
 
-
+                    {/* Accountable Individual */}
                     <UserFilter
                         title="Accountable Individual"
-                        state={pm} // pm state is used to represent accountable individual
-                        setState={setPm}
+                        state={accountableIndividual}
+                        setState={setAccountableIndividual}
                         roleIds={null}
                     />
 
@@ -112,7 +138,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     <HDivider />
 
 
-                    {page === "subtasks" ? (
+                    {/* {page === "subtasks" ? (
                         <UserFilter
                             title="Assigned To"
                             state={developer}
@@ -128,8 +154,15 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         />
                     )}
 
-                    <HDivider />
-                    <StatusFilter state={status} setState={setStatus} />
+                    <HDivider /> */}
+
+                    {/* status */}
+                    <StatusFilter
+                        state={status}
+                        setState={setStatus}
+                    />
+                    
+                    
                     <HDivider />
                     {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
                     {/* <HDivider /> */}
@@ -155,10 +188,10 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                                 setDeveloper={setDeveloper}
                                 client={client}
                                 setClient={setClient}
-                                leadDeveloper={leadDeveloper}
-                                setLeadDeveloper={setLeadDeveloper}
-                                pm={pm}
-                                setPm={setPm}
+                                reportIssuer={reportIssuer}
+                                setReportIssuer={setReportIssuer}
+                                accountableIndividual={accountableIndividual}
+                                setAccountableIndividual={setAccountableIndividual}
                                 status={status}
                                 setStatus={setStatus}
                                 search={search}
