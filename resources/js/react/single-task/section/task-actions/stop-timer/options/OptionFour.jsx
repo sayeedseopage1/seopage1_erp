@@ -95,7 +95,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             errCount++;
         }
 
-        if(activeResponsiblePersonDropdown && !person){
+        if(activeResponsiblePersonDropdown && ( !person || !client)){
             err.responsiblePerson = "Please select who is responsible!";
             errCount++;
         }

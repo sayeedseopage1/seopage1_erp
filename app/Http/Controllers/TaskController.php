@@ -4958,6 +4958,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
+       // dd($request);
        
         $daily_submission= new DailySubmission();
 
@@ -5021,8 +5022,16 @@ class TaskController extends AccountBaseController
         ]);
 
     }
-    public function allDailySubmission(){
-
+    public function allDailySubmission(Request $request){
+       
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $employeeId = $request->input('employee_id', null);
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+        $status = $request->input('status', null);
+        $projectId = $request->input('project_id', null);
+    //    / dd($startDate,$endDate);
         $dailySubmission = DailySubmission::select(
             'employee.id as employee_id',
             'employee.name as employee_name',
@@ -5068,8 +5077,46 @@ class TaskController extends AccountBaseController
             ->leftJoin('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
             
             ->leftJoin('working_environments','projects.id','=','working_environments.project_id')
-            ->groupBy('daily_submissions.task_id','daily_submissions.created_at')
-            ->get();
+            ->groupBy('daily_submissions.task_id')
+            ;
+           
+            if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+            {
+
+
+                $dailySubmission = $dailySubmission->whereDate('daily_submissions.report_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
+            }else
+            {
+                if (!is_null($startDate)) {
+                    $dailySubmission = $dailySubmission->whereDate('daily_submissions.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                }
+                if (!is_null($endDate)) {
+                    $dailySubmission = $dailySubmission->whereDate('daily_submissions.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                }
+
+            }
+            // if (!is_null($projectId)) {
+            //     $dailySubmission = $dailySubmission->where('daily_submissions.project_id', $projectId);
+            // }
+            // // if (!is_null($assignee_to)) {
+            // //     $dailySubmission = $dailySubmission->where('task_users.user_id', $assignee_to);
+            // // }
+            // // if (!is_null($assignee_by)) {
+            // //     $dailySubmission = $dailySubmission->where('tasks.added_by', $assignee_by);
+            // // }
+            // if (!is_null($pmId)) {
+            //     $dailySubmission = $dailySubmission->where('projects.pm_id', $pmId);
+            // }
+            // if (!is_null($clientId)) {
+            //     $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
+            // }
+            $dailySubmission = $dailySubmission->get();
+           
+
+
+
+
        
             // foreach($dailySubmission as $item)
             // {
@@ -5079,7 +5126,7 @@ class TaskController extends AccountBaseController
             // $item->total_time_spent = $project_time_logs;
 
             // }
-            //  dd($dailySubmission);
+        //    / dd($dailySubmission);
 
             return response()->json([
                 'dailySubmission'=> $dailySubmission,
