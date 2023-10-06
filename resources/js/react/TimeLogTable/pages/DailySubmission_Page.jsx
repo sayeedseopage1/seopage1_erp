@@ -84,11 +84,11 @@ const DailySubmission_Page = () => {
             <DailySubmissionTableFilter onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="mb-2"> <Tabbar /></div>
-                <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{ gap: '10px' }}>
+                {/* <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{ gap: '10px' }}>
                     <span className="mx-auto">
                         Total Tracked Time: <strong>{convertTime(trackedTime)}</strong>
                     </span>
-                </div>
+                </div> */}
 
                 <DailySubmissionWiseTable
                     data={isLoading?[]:renderData}
