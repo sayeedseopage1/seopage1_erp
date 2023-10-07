@@ -247,7 +247,7 @@ export const TaskReportDataTableColumn = [
             onClick={() => { }}
             className="d-flex align-items-center btn-outline-dark"
           >
-            <span className="d-inline ml-1"> Approved </span>
+            <span className="d-inline ml-1"> Accepted & Resolved </span>
           </Button>
         }
         {
@@ -257,7 +257,7 @@ export const TaskReportDataTableColumn = [
             onClick={() => { }}
             className="d-flex align-items-center btn-outline-dark"
           >
-            <span className="d-inline ml-1"> Denied </span>
+            <span className="d-inline ml-1"> Denied & Resolved </span>
           </Button>
         }
 
