@@ -2,33 +2,50 @@ import { useEffect, useState } from 'react';
 import Button from '../../ui/Button';
 import Modal from '../../ui/Modal';
 import CKEditorComponent from '../../ui/ckeditor';
+import { useSubmitTaskReportMutation } from '../../services/api/taskReportApiSlice';
+import { toast } from 'react-toastify';
+import { useContext } from 'react';
+import { RefetchContext } from '../../pages/task-report';
 
 const ResolveActionBtn = ({ data }) => {
   const [modalData, setModalData] = useState(null);
   const [text, setText] = useState('');
+  const [submitReport, { isLoading }] = useSubmitTaskReportMutation();
+  const [showError, setShowError] = useState(true);
+  const {setRefetch} = useContext(RefetchContext);
 
+  useEffect(() => {
+    if (text) {
+      setShowError(false);
+    } else {
+      setShowError(true);
+    }
+  }, [text]);
 
-  // resolve handler function
-  const handleResolve = () =>{
+  // submit handler function
+  const handleSubmit = (status) => {
+    let data = {
+      status: status,
+      report_id: modalData?.id,
+      admin_comment: text,
+    };
 
-    close();
-    setText('');
+    submitReport(data)
+      .unwrap()
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success(`Report ${status} successfully`, { theme: "dark" });
+          close();
+          setText('');
+          setRefetch(prev=>!prev);
+        }
+      });
+    // toast.success(`Report ${status} successfully`,{theme:"dark"});
+    // console.log(data);
   }
 
-
-  // deny handler function
-  const handleDeny = () =>{
-
-    close();
-    setText('');
-  }
-
-  const close = () => {
-    setModalData(null);
-  };
-  const open = () => {
-    setModalData(data);
-  };
+  const close = () => setModalData(null);
+  const open = () => setModalData(data);
 
   return (
     <div>
@@ -70,13 +87,19 @@ const ResolveActionBtn = ({ data }) => {
                 <CKEditorComponent
                   onChange={(e, editor) => setText(editor.getData())}
                   placeholder='Write your comment here!' />
+                {
+                  showError &&
+                  <div className="alert alert-danger" role="alert">
+                    Please write a comment
+                  </div>
 
+                }
                 <div className="mt-3 d-flex justify-content-between align-items-center">
                   <section style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem' }}>
-                    <Button variant="success" disabled={!text} isLoading={false} onClick={handleResolve}>Resolve Report</Button>
-                    <Button variant="danger" onClick={handleDeny} >Deny Report</Button>
+                    <Button variant="success" disabled={!text} isLoading={isLoading} onClick={() => handleSubmit("approved")}>Resolve Report</Button>
+                    <Button variant="danger" disabled={!text} isLoading={isLoading} onClick={() => handleSubmit("denied")}>Deny Report</Button>
                   </section>
-                  
+
                   <Button
                     variant="tertiary"
                     className="ml-auto mr-2"

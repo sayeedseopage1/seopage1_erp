@@ -6,12 +6,12 @@ const taskReportApi = apiSlice.injectEndpoints({
     // get task report
     getTaskReport: build.query({
       query: (filter) => `/account/get-task-report?${filter}`,
-      providesTags: ["TASK_REPORT"]
+      // providesTags: ["TASK_REPORT"]
     }),
 
     submitTaskReport: build.mutation({
       query: (data) => ({
-        url: ``,
+        url: `/account/tasks/report-issues/resolve`,
         method: 'POST',
         body: {
           ...data,
@@ -21,7 +21,7 @@ const taskReportApi = apiSlice.injectEndpoints({
         },
       }),
 
-      invalidatesTags: ["TASK_REPORT"]
+      // invalidatesTags: ["TASK_REPORT"]
     })
 
   }),
