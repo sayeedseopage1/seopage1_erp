@@ -162,19 +162,6 @@ export const TaskReportDataTableColumn = [
     }
   },
   {
-    id: 'taskId',
-    header: 'Report Task Name',
-    className: '',
-    sorted: false,
-    draggable: true,
-    group: false,
-    cell: ({ row: { original }, className }) => {
-      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
-        <a className="text-primary font-weight-bold" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
-      </div>
-    }
-  },
-  {
     id: 'report_reason',
     header: 'Report Reason',
     className: '',
@@ -254,7 +241,7 @@ export const TaskReportDataTableColumn = [
           <ResolveActionBtn data={original} />
         }
         {
-          original?.status !== "approved" && 
+          original?.status === "approved" && 
           <Button
             variant="success"
             onClick={() => { }}
@@ -264,7 +251,7 @@ export const TaskReportDataTableColumn = [
           </Button>
         }
         {
-          original?.status !== "denied" && 
+          original?.status === "denied" && 
           <Button
             variant="danger"
             onClick={() => { }}
