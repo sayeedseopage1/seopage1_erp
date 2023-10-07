@@ -1048,9 +1048,9 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                     @endif
                                 </div>
                                 <div class="col-md-6 d-flex">
-                                    <h6>Theme Url :</h6>
+                                    <h6>Theme Url : </h6>
                                     @if($task_guideline->theme_url != null)
-                                    <a href="{{$task_guideline->theme_url}}" target="_blanck" class="ml-2">{{$task_guideline->theme_url}}</a>
+                                    <a href="{{$task_guideline->theme_url}}" target="_blanck" class="ml-2">View On New Tab</a>
                                     @else
                                         <p class="ml-2">Not Shared</p>
                                     @endif
@@ -1070,7 +1070,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                 <div class="col-md-6 d-flex">
                                     <h6 for="">Input XD/Figma URL :</h6>
                                     @if($task_guideline->xd_url != null)
-                                        <a href="{{$task_guideline->xd_url}}" target="_blanck" class="ml-2">{{$task_guideline->xd_url}}</a>
+                                        <a href="{{$task_guideline->xd_url}}" target="_blanck" class="ml-2">View On New Tab</a>
                                     @else
                                         <p class="ml-2">Not Shared</p>
                                     @endif
@@ -1078,7 +1078,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                 <div class="col-md-6 d-flex">
                                     <h6>Input Google Drive File/Folder URL :</h6>
                                     @if($task_guideline->drive_url != null)
-                                        <a href="{{$task_guideline->drive_url}}" target="_blanck" class="ml-2">{{$task_guideline->drive_url}}</a>
+                                        <a href="{{$task_guideline->drive_url}}" target="_blanck" class="ml-2">View On New Tab</a>
                                     @else
                                         <p class="ml-2">Not Shared</p>
                                     @endif
@@ -1095,7 +1095,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                                 @endphp
 
                                                 @foreach ($referenceLinks as $reference_link)
-                                                    <a target="_blank" href="{{ $reference_link }}">{{ $reference_link }}</a>
+                                                    <a target="_blank" href="{{ $reference_link }}">View On New Tab</a>
                                                     <br>
                                                 @endforeach
                                             @else
@@ -1118,8 +1118,28 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                 </div>
                             </div>
                             <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
+                                    <h6>Primary Color :</h6>
+                                    @if($task_guideline->color != null)
+                                        <p class="ml-2">{{$task_guideline->primary_color}}</p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <div class="col-md-12 d-flex">
-                                    <h6>Color Schema :</h6>
+                                    <h6>Developers Use This Color :</h6>
+                                    @if($task_guideline->color != null)
+                                        <p class="ml-2">{!! $task_guideline->primary_color_description !!}</p>
+                                    @else
+                                        <p class="ml-2">Not Shared</p>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
+                                    <h6>Secondary Color :</h6>
                                     @if($task_guideline->color != null)
                                         <p class="ml-2">{{implode(',  ',json_decode($task_guideline->color))}}</p>
                                     @else
@@ -1137,7 +1157,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                             @endphp
 
                                             @foreach($colorDescriptions as $color_description)
-                                                <p class="ml-2">{{ $color_description }}</p>
+                                                <p class="ml-2">{!! $color_description !!}</p>
                                             @endforeach
                                         @else
                                             <p class="ml-2">Not Shared</p>
@@ -1164,7 +1184,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-md-4 d-flex">
+                                <div class="col-md-6 d-flex">
                                     <h6>Plugin Name :</h6>
                                     @if($task_guideline->plugin_name != null)
                                         <p class="ml-2">{{$task_guideline->plugin_name}}</p>
@@ -1172,18 +1192,20 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                         <p class="ml-2">Not Shared</p>
                                     @endif
                                 </div>
-                                <div class="col-md-4 d-flex">
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6 d-flex">
                                     <h6>Plugin URL :</h6>
                                     @if($task_guideline->plugin_url != null)
-                                    <a href="{{$task_guideline->plugin_url}}" target="_blanck" class="ml-2">{{$task_guideline->plugin_url}}</a>
+                                    <a href="{{$task_guideline->plugin_url}}" target="_blanck" class="ml-2">View On New Tab</a>
                                     @else
                                         <p class="ml-2">Not Shared</p>
                                     @endif
                                 </div>
-                                <div class="col-md-4 d-flex">
+                                <div class="col-md-6 d-flex">
                                     <h6>Google Drive Link :</h6>
                                     @if($task_guideline->google_drive_link != null)
-                                        <a href="{{$task_guideline->google_drive_link}}" target="_blanck" class="ml-2">{{$task_guideline->google_drive_link}}</a>
+                                        <a href="{{$task_guideline->google_drive_link}}" target="_blanck" class="ml-2">View On New Tab</a>
                                     @else
                                         <p class="ml-2">Not Shared</p>
                                     @endif
@@ -1193,7 +1215,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                 <div class="col-md-12">
                                     <h6>Instructions for Using This Plugin :</h6>
                                     @if($task_guideline->instruction_plugin != null)
-                                    <a href="{{$task_guideline->instruction_plugin}}" target="_blanck" class="ml-2">{{$task_guideline->instruction_plugin}}</a>
+                                        <p class="ml-2">{!! $task_guideline->instruction_plugin !!}</p>
                                     @else
                                         <p class="ml-2">Not Shared</p>
                                     @endif
@@ -1206,7 +1228,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                     </div>
                 </div>
             </div>
-            @endif
+        @endif
         <!--Task Guideline Modal -->
         @if($working_environment !=null)
         <div class="modal fade" id="workingEnvModal" tabindex="-1" aria-labelledby="workingEnvModalLabel" aria-hidden="true">

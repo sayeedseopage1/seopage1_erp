@@ -89,11 +89,7 @@ class CompletedProjectCheck extends Command
 
             }
 
-  
-            
-                 
-  
-  
+
           }
   
           $this->info('Project marks as completed');
