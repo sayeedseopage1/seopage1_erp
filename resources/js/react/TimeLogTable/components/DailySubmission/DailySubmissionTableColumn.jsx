@@ -281,7 +281,7 @@ export const DailySubmissionTableColumn = [
         group: false,
         cell: ({ row, className }) => {
             return <td className={`${className} sp1_tlr_td_border`}>
-                {row?.frontend_password || 'No password added'}
+                {row?.frontend_password || <span className="text-danger font-weight-bold">Not Provided</span>}
             </td>
         }
     },

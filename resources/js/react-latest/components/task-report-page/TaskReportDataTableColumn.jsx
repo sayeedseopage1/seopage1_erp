@@ -1,204 +1,267 @@
 import ResolveActionBtn from "./ResolveActionBtn";
 import Popover from '../../ui/Popover'
+import dayjs from "dayjs";
+import UserRender from "../../../react/TimeLogTable/components/UserRender";
+import Button from "../../ui/Button";
 
 export const TaskReportDataTableColumn = [
-    {
-        id: 'report_no',
-        header: 'Report No.',
-        className: '',
-        draggable:true,
-        group: false,
-        sorted: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'4rem'}}>
-              {original?.report_no}
-          </div>
-        } 
-    },
-    {
-        id: 'report_date',
-        header: 'Report Date',
-        className: '',
-        draggable:true,
-        group: false,
-        sorted: false,
-        sortAccessor: 'report_date',
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.report_date}
-          </div>
+  {
+    id: 'id',
+    header: 'Report No.',
+    className: '',
+    draggable: false,
+    group: false,
+    sorted: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '4rem' }}>
+        {original?.id}
+      </div>
+    }
+  },
+  {
+    id: 'report_date',
+    header: 'Report Date',
+    className: '',
+    draggable: true,
+    group: false,
+    sorted: false,
+    sortAccessor: 'report_date',
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {dayjs(original?.report_date).format('DD-MMM-YYYY')}
+      </div>
+    }
+  },
+  {
+    id: 'resolved_on',
+    header: 'Resolved On',
+    className: '',
+    draggable: true,
+    group: false,
+    sorted: false,
+    sortAccessor: 'resolved_on',
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {
+          original?.resolved_on ?
+            dayjs(original?.resolved_on).format('DD-MMM-YYYY') :
+            'Not Resolved Yet'
         }
-    },
-    {
-        id: 'resolve_on',
-        header: 'Resolve On',
-        className: '',
-        draggable:true,
-        group: false,
-        sorted: false,
-        sortAccessor: 'resolve_on',
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.resolve_on}
-          </div>
+      </div>
+    }
+  },
+  {
+    id: 'clientId',
+    header: 'Client',
+    className: '',
+    draggable: true,
+    group: false,
+    sorted: false,
+    sortAccessor: 'client',
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {
+          original?.clientId ?
+            <UserRender
+              name={original?.client_name}
+              profileUrl={`/account/clients/${original?.clientId}`}
+              image={original?.client_avatar}
+              role="Client"
+              roleLink={''}
+              id={original?.clientId}
+            /> :
+            '--'
         }
-    },
-    {
-        id: 'client',
-        header: 'Client',
-        className: '',
-        draggable:true,
-        group: false,
-        sorted: false,
-        sortAccessor: 'client',
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.client}
-          </div>
-        } 
-    },
-    {
-        id: 'project',
-        header: 'Project',
-        className: '',
-        sorted: true,
-        draggable:true,
-        group: false,
-        sortAccessor: '', 
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.project}
-          </div>
-        }
-        
-    },
-    {
-        id: 'task',
-        header: 'Task',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.task}
-          </div>
-        }
-    },
-    {
-        id: 'report_issuer',
-        header: 'Report Issuer',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.report_issuer}
-          </div>
-        }
-    },
-    {
-        id: 'accountable_individual',
-        header: 'Accountable Individual',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.accountable_individual}
-          </div>
-        }
-    },
-    {
-        id: 'report_task_name',
-        header: 'Report Task Name',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.report_task_name}
-          </div>
-        }
-    },
-    {
-        id: 'report_reason',
-        header: 'Report Reason',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
+      </div>
+    }
+  },
+  {
+    id: 'projectId',
+    header: 'Project',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    sortAccessor: '',
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        <Popover>
+          <Popover.Button>
+            <a className="text-primary font-weight-bold singleline-ellipsis" href={`/account/projects/${original?.projectId}`} target="_blank">{original?.project_name}</a>
+          </Popover.Button>
 
-          return(
-            <div style={{minWidth:'10rem'}}>
-              <Popover>
-                    <Popover.Button>
-                        <span className='font-weight-bold singleline-ellipsis'>{original?.report_reason}</span>
-                    </Popover.Button>
-
-                    <Popover.Panel>
-                        <div className='revision_popover_panel'>
-                        {original?.report_reason}
-                        </div>
-                    </Popover.Panel>
-              </Popover>
+          <Popover.Panel>
+            <div className="revision_popover_panel">
+              <a className="text-primary font-weight-bold" href={`/account/projects/${original?.projectId}`} target="_blank">{original?.project_name}</a>
             </div>
-          )
-        }
-    },
-    {
-        id: 'report_reason_details',
-        header: 'Report Reason Details',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return(
-            <div style={{minWidth:'10rem'}}>
-              <Popover>
-                    <Popover.Button>
-                        <span className='font-weight-bold singleline-ellipsis'>{original?.report_reason_details}</span>
-                    </Popover.Button>
+          </Popover.Panel>
+        </Popover>
+      </div>
+    }
 
-                    <Popover.Panel>
-                        <div className='revision_popover_panel'>
-                        {original?.report_reason_details}
-                        </div>
-                    </Popover.Panel>
-              </Popover>
-            </div>
-          )
+  },
+  {
+    id: 'taskId',
+    header: 'Task',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        <a className="text-primary font-weight-bold" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
+      </div>
+    }
+  },
+  {
+    id: 'report_issuer_id',
+    header: 'Report Issuer',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {
+          original?.report_issuer_id ?
+            <UserRender
+              name={original?.report_issuer_name}
+              profileUrl={`/account/employees/${original?.report_issuer_id}`}
+              image={original?.report_issuer_avatar}
+              role="Client"
+              roleLink={''}
+              id={original?.report_issuer_id}
+            /> :
+            '--'
         }
-    },
-    {
-        id: 'previously_reported',
-        header: 'Previously Reported',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              {original?.previously_reported}
-          </div>
+      </div>
+    }
+  },
+  {
+    id: 'accountable_name',
+    header: 'Accountable Individual',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {
+          original?.accountable_name ?
+            <UserRender
+              name={original?.accountable_name}
+              profileUrl={`/account/employees/${''}`}
+              image={original?.accountable_avatar}
+              role="Client"
+              roleLink={''}
+              id={original?.accountable_name}
+            /> :
+            '--'
         }
-    },
-    {
-        id: 'action',
-        header: 'Action',
-        className: '',
-        sorted: false,
-        draggable:true,
-        group: false,
-        cell: ({row:{original},className}) => {
-          return <div className={`${className}`} style={{minWidth:'5rem'}}>
-              <ResolveActionBtn data={original}/>
-          </div>
+      </div>
+    }
+  },
+  {
+    id: 'report_reason',
+    header: 'Report Reason',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+
+      return (
+        <div style={{ minWidth: '10rem' }}>
+          <Popover>
+            <Popover.Button>
+              <span className='font-weight-bold singleline-ellipsis'>{original?.report_reason}</span>
+            </Popover.Button>
+
+            <Popover.Panel>
+              <div className='revision_popover_panel'>
+                {original?.report_reason}
+              </div>
+            </Popover.Panel>
+          </Popover>
+        </div>
+      )
+    }
+  },
+  {
+    id: 'report_reason_details',
+    header: 'Report Reason Details',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return (
+        <div style={{ minWidth: '10rem' }}>
+          <Popover>
+            <Popover.Button>
+              <span className='font-weight-bold singleline-ellipsis'>
+                <span dangerouslySetInnerHTML={{ __html: original?.report_reason_details }} />
+              </span>
+            </Popover.Button>
+
+            <Popover.Panel>
+              <div className='revision_popover_panel'>
+                <div dangerouslySetInnerHTML={{ __html: original?.report_reason_details }} />
+              </div>
+            </Popover.Panel>
+          </Popover>
+        </div>
+      )
+    }
+  },
+  {
+    id: 'previousNotedIssue',
+    header: 'Previously Reported',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className} font-weight-bold`} style={{ minWidth: '5rem', textTransform: 'uppercase' }}>
+        {original?.previousNotedIssue}
+      </div>
+    }
+  },
+  {
+    id: 'action',
+    header: 'Action',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {
+          original?.status === "pending" &&
+          <ResolveActionBtn data={original} />
         }
-    },
+        {
+          original?.status === "approved" && 
+          <Button
+            variant="success"
+            onClick={() => { }}
+            className="d-flex align-items-center btn-outline-dark"
+          >
+            <span className="d-inline ml-1"> Accepted & Resolved </span>
+          </Button>
+        }
+        {
+          original?.status === "denied" && 
+          <Button
+            variant="danger"
+            onClick={() => { }}
+            className="d-flex align-items-center btn-outline-dark"
+          >
+            <span className="d-inline ml-1"> Denied & Resolved </span>
+          </Button>
+        }
+
+      </div>
+    }
+  },
 ]
