@@ -4,7 +4,7 @@ import { useLocalStorage } from 'react-use';
 import _ from 'lodash';
 import './data-table.css';
 import {
-    useReactTable, 
+    useReactTable,
     getCoreRowModel,
     getPaginationRowModel,
     getFilteredRowModel,
@@ -37,34 +37,34 @@ const DataTable = ({
   React.useEffect(() => {
     setData(tableData);
   }, [tableData])
- 
-  // use localstore
+
+  // use local store
   const [ value ] = useLocalStorage(tableName);
 
   //columns
   const defaultColumns = React.useMemo(() => [...tableColumns]);
   const [columns, setColumns] = React.useState([...defaultColumns]);
- 
+
   // prepare columns
   React.useEffect(() => {
     let cols = [...defaultColumns?.filter(f => !_.includes(hideColumns, f.id))]
     setColumns(cols);
   }, [])
 
- 
+
   // columns orders
   const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
- 
 
-  // if has table columns record on localstore 
-  // organize column orders 
+
+  // if has table columns record on localstore
+  // organize column orders
   React.useEffect(() => {
     if(value && value.columnOrder){
         setColumnOrder(value.columnOrder);
     }
   }, []);
 
-  // reset column 
+  // reset column
   const resetColumns = () =>  setColumnOrder(_.map(columns, 'id'));
 
   // pagination
@@ -93,11 +93,11 @@ const DataTable = ({
     getSortedRowModel: getSortedRowModel(),
   })
 
- 
+
 //   render table
   return (
    <div>
-        <div 
+        <div
             className={`table-container ${classes?.container ?? ''}`}
             style={{maxHeight: tableMaxHeight ?? 'calc( 100vh - 330px)'}}
         >
@@ -108,16 +108,16 @@ const DataTable = ({
                     {table.getHeaderGroups().map(headerGroup => (
                         <tr key={headerGroup.id} className={`sp1-data-table-tr ${classes?.tr ?? ''}`}>
                             {headerGroup.headers.map(header => (
-                                <DragableColumnHeader 
-                                    key={header.id} 
-                                    header={header} 
+                                <DragableColumnHeader
+                                    key={header.id}
+                                    header={header}
                                     table={table}
                                     className={classes?.th ?? ''}
                                 />
                             ))}
                         </tr>
                     ))}
-                </thead> 
+                </thead>
 
                 {/* table body */}
                 <tbody className={`sp1-data-table-body ${classes?.tbody ?? ''}`}>
@@ -132,22 +132,22 @@ const DataTable = ({
                                         )
                                     }
                                 </td>
-                            ))} 
+                            ))}
                         </tr>
                     ))}
 
-                    {isLoading && loader} 
+                    {isLoading && loader}
                 </tbody>
-            </table> 
+            </table>
 
             {(!isLoading && _.size(tableData)) === 0  ?
              <div>
                 <EmptyTable />
             </div> : null}
         </div>
-        
+
         <TablePagination
-                currentPage = {pageIndex + 1} 
+                currentPage = {pageIndex + 1}
                 perpageRow= {pageSize}
                 onPageSize = {(size) => table.setPageSize(size)}
                 onPaginate = {(page) => table.setPageIndex(page - 1)}
@@ -161,6 +161,6 @@ const DataTable = ({
    </div>
   )
 }
-    
+
 
 export default DataTable

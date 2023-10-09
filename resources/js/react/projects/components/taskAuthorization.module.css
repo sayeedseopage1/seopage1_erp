@@ -1,0 +1,36 @@
+.task_authorization{
+    font-family: Inter;
+}
+
+.authorize_task{
+    font-family: Inter;
+    font-weight: 500;
+    background: #199CDE !important;
+    color: #f9f9f9 !important;
+    border-color: #199CDE !important;
+}
+
+.authorize_task:hover{
+    font-family: Inter;
+    font-weight: 500;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    border-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+
+.modal_overlay{
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.card{
+    width: 800px;
+    font-family: Inter;
+}
+
+.card_head {
+    font-weight: 600;
+}

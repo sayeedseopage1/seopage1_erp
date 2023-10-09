@@ -20,8 +20,8 @@ const dayjs = new CompareDate();
 
 const  SubtTaskEditForm= ({close, editId}) => {
     const { task, subTask } = useSelector(s => s.subTask);
-    const dispatch = useDispatch(); 
- 
+    const dispatch = useDispatch();
+
 //   form data
   const [title, setTitle] = useState('');
   const [milestone, setMilestone] = useState('');
@@ -36,22 +36,19 @@ const  SubtTaskEditForm= ({close, editId}) => {
   const [status, setStatus] = useState('To Do');
   const [priority, setPriority] = useState('Medium');
   const [estimateTimeHour, setEstimateTimeHour ] = useState('');
-  const [estimateTimeMin, setEstimateTimeMin ] = useState(''); 
-  const [attachedFiles, setAttachedFiles] = useState([]); 
-  const [files, setFiles] = React.useState([]); 
+  const [estimateTimeMin, setEstimateTimeMin ] = useState('');
+  const [attachedFiles, setAttachedFiles] = useState([]);
+  const [files, setFiles] = React.useState([]);
 
-    const params = useParams(); 
+    const params = useParams();
 
 const [
     editSubtask,
-    { 
-        isLoading,
-        error, 
-    }
+    { isLoading, error }
 ] = useEditSubtaskMutation();
 
 const [
-    getTaskDetails, 
+    getTaskDetails,
     { data: edit, isFetching: editDataIsFetching}
 ] = useLazyGetTaskDetailsQuery();
 
@@ -61,28 +58,28 @@ const editSubTask = subTask.find(d => d.id === editId);
 
 const { data: estimation, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=estimation_time`);
 
- 
+
 const required_error = error?.status === 422 ? error?.data: null;
 
 
 // handle change
 React.useEffect(() => {
-    const formatedDate = (d) => { 
+    const formatedDate = (d) => {
         let day = dayjs.dayjs(d).toDate();
-        return day;  
+        return day;
     }
     getTaskDetails(`/${editId}/json?mode=sub_task_edit`).unwrap().then(res => {
-        if(res){ 
-            const assigneeTo = res?.users?.[0]; 
-             
+        if(res){
+            const assigneeTo = res?.users?.[0];
+
             setTitle(res.heading);
             setMilestone(res.milestone_title);
             setParentTask(task?.heading);
             setStateDate(formatedDate(res.start_date));
-            setDueDate(formatedDate(res.due_date)); 
+            setDueDate(formatedDate(res.due_date));
             setProject(res.project_name);
             setTaskCategory(res.task_category);
-            setAssignedTo(assigneeTo ? {id: assigneeTo?.id, name: assigneeTo?.name}: ''); 
+            setAssignedTo(assigneeTo ? {id: assigneeTo?.id, name: assigneeTo?.name}: '');
             setDescription(res.description);
             setPriority(_.startCase(res.priority));
             setEstimateTimeHour(res.estimate_hours);
@@ -90,14 +87,14 @@ React.useEffect(() => {
             setAttachedFiles(res.files);
 
 
-            toast.success('Task update successfully');
+
         }
     }).catch((err) => {
         console.log(err)
     } )
 }, [task, editId])
 
- 
+
 
 // handle onchange
 const handleChange = (e, setState) =>{
@@ -112,7 +109,7 @@ const handleSubmit = (e) => {
   const _startDate = dayjs.dayjs(startDate).format('DD-MM-YYYY');
   const _dueDate = dayjs.dayjs(dueDate).format('DD-MM-YYYY');
 
-  const fd = new FormData(); 
+  const fd = new FormData();
     fd.append('milestone_id', task?.milestone_id);
     fd.append('task_id', task?.id);
     fd.append('title', title);
@@ -128,24 +125,24 @@ const handleSubmit = (e) => {
     fd.append('estimate_minutes', estimateTimeMin);
     fd.append('image_url', null);
     fd.append('subTaskID', editSubTask?.subtask_id);
-    fd.append('addedFiles', null); 
+    fd.append('addedFiles', null);
     fd.append('_method', 'PUT');
     fd.append('_token', document.querySelector("meta[name='csrf-token']").getAttribute("content"));
     Array.from(files).forEach((file) => {
         fd.append('file[]', file);
     });
-   
+
     editSubtask({data: fd, id: editId}).unwrap().then(res => {
-            if(res?.status === 'success'){ 
-                
+            if(res?.status === 'success'){
+
                  let _subtask = [...subTask];
                  _subtask = _subtask?.map(s => {
                     if(Number(s?.id) === Number(res?.sub_task?.id)){
-                        return res?.sub_task 
+                        return res?.sub_task
                     }else return s;
                  })
-                 
-                dispatch(storeSubTasks(_subtask));  
+
+                dispatch(storeSubTasks(_subtask));
 
                 Swal.fire({
                     position: 'center',
@@ -153,7 +150,7 @@ const handleSubmit = (e) => {
                     title: res?.message,
                     showConfirmButton: false,
                     timer: 2500
-                }) 
+                })
 
                 close();
             }
@@ -162,9 +159,9 @@ const handleSubmit = (e) => {
             Swal.fire({
                 position: 'center',
                 icon: 'error',
-                title: "Please fillup all required fields",
-                showConfirmButton: true, 
-            })  
+                title: "Please fill out all required fields",
+                showConfirmButton: true,
+            })
         }
     })
 }
@@ -174,7 +171,7 @@ const [deleteUplaodedFile] = useDeleteUplaodedFileMutation();
 const handleFileDelete = (e, file) => {
     // delete
     deleteUplaodedFile(file?.id).unwrap();
-   
+
     // delete form ui
     let previousFile = [...attachedFiles];
     let index = previousFile?.indexOf(file);
@@ -192,12 +189,12 @@ React.useEffect(() => {
       }
 }, [isLoading, editDataIsFetching])
 
- 
+
 
 const handleEditorChange = (e, editor) => {
     const data = editor.getData();
     setDescription(data);
-} 
+}
 
 const estimateError= (err) =>{
     let errText = '';
@@ -207,35 +204,35 @@ const estimateError= (err) =>{
     if(minErr) errText += minErr;
     return errText;
 }
- 
+
   return (
-    <> 
+    <>
         <div className='sp1-subtask-form --modal-panel'>
-            <div className='sp1-subtask-form --modal-panel-header'> 
+            <div className='sp1-subtask-form --modal-panel-header'>
                  <h6>
                         Edit Sub Task
-                        {editDataIsFetching && <div 
-                            className="spinner-border text-dark ml-2" 
+                        {editDataIsFetching && <div
+                            className="spinner-border text-dark ml-2"
                             role="status"
                             style={{
                                 width: '16px',
                                 height: '16px',
                                 border: '0.14em solid rgba(0, 0, 0, .25)',
-                                borderRightColor: 'transparent' 
+                                borderRightColor: 'transparent'
                             }}
                         />}
-                </h6>  
+                </h6>
                 <Button
                     aria-label="close-modal"
                     className='_close-modal'
                     onClick={close}
                 >
                     <i className="fa-solid fa-xmark" />
-                </Button> 
+                </Button>
             </div>
 
             <div className="sp1-subtask-form --modal-panel-body position-relative">
-                {editDataIsFetching && 
+                {editDataIsFetching &&
                     <div className='w-100' style={{
                         width: '100%',
                         height: '100%',
@@ -247,10 +244,10 @@ const estimateError= (err) =>{
                 }
                 <div className='sp1-subtask-form --form row'>
                     <div className="col-6">
-                        <Input 
+                        <Input
                             id='title'
                             label="Title"
-                            type="text" 
+                            type="text"
                             placeholder='Enter a task title'
                             name='title'
                             required={true}
@@ -258,66 +255,66 @@ const estimateError= (err) =>{
                             error= {required_error?.title?.[0]}
                             onChange={e => handleChange(e, setTitle)}
                         />
-                    </div> 
+                    </div>
 
-                    <div className="col-6"> 
+                    <div className="col-6">
                         <div className="form-group my-3">
-                            <label  
-                                className={`f-14 text-dark-gray mb-1`} 
+                            <label
+                                className={`f-14 text-dark-gray mb-1`}
                                 data-label="true"
                             >
-                                Milestone 
+                                Milestone
                             </label>
-                            <input  
-                                className={`form-control height-35 f-14`} 
+                            <input
+                                className={`form-control height-35 f-14`}
                                 readOnly
                                 defaultValue={milestone}
                             />
                         </div>
-                    </div> 
+                    </div>
 
-                    <div className="col-6"> 
+                    <div className="col-6">
                         <div className="form-group my-3">
-                            <label  
-                                className={`f-14 text-dark-gray mb-1`} 
+                            <label
+                                className={`f-14 text-dark-gray mb-1`}
                                 data-label="true"
                             >
-                                Parent Task 
+                                Parent Task
                             </label>
-                            <input  
-                                className={`form-control height-35 f-14`} 
+                            <input
+                                className={`form-control height-35 f-14`}
                                 readOnly
                                 defaultValue={parentTask}
                             />
-                        </div> 
-                    </div> 
+                        </div>
+                    </div>
 
-                    <div className="col-6"> 
+                    <div className="col-6">
                         <div className="form-group my-3">
-                            <label  
-                                className={`f-14 text-dark-gray mb-1`} 
+                            <label
+                                className={`f-14 text-dark-gray mb-1`}
                                 data-label="true"
                             >
                                 Project
                             </label>
-                            <input  
-                                className={`form-control height-35 f-14`} 
+                            <input
+                                className={`form-control height-35 f-14`}
                                 readOnly
                                 defaultValue={project}
                             />
-                        </div> 
-                    </div> 
+                        </div>
+                    </div>
 
                     <div className="col-6">
                         <div className="form-group my-3">
                             <label htmlFor="">Start Date <sup className='f-14'>*</sup></label>
                             <div className="form-control height-35 f-14">
-                                <DatePicker 
+                                <DatePicker
                                     placeholderText={`Ex: ${dayjs.dayjs().format('DD-MM-YYYY')}`}
-                                    minDate={dayjs.dayjs(task?.start_date).toDate()} 
-                                    maxDate={dueDate || dayjs.dayjs(task?.due_date).toDate()} 
-                                    date={startDate} 
-                                    setDate={setStateDate} 
+                                    minDate={dayjs.dayjs(task?.start_date).toDate()}
+                                    maxDate={dueDate || dayjs.dayjs(task?.due_date).toDate()}
+                                    date={startDate}
+                                    setDate={setStateDate}
                                 />
                             </div>
                             {
@@ -327,16 +324,16 @@ const estimateError= (err) =>{
                         </div>
                     </div>
 
-                    <div className='col-6'> 
+                    <div className='col-6'>
                         <div className="form-group my-3">
                             <label htmlFor="">Due Date <sup className='f-14'>*</sup></label>
                             <div className="form-control height-35 f-14">
-                                <DatePicker 
+                                <DatePicker
                                     placeholderText={`Ex: ${dayjs.dayjs().format('DD-MM-YYYY')}`}
-                                    minDate={startDate || dayjs.dayjs(task?.start_date).toDate()} 
+                                    minDate={startDate || dayjs.dayjs(task?.start_date).toDate()}
                                     maxDate={dayjs.dayjs(task?.due_date).toDate()}
-                                    date={dueDate} 
-                                    setDate={setDueDate} 
+                                    date={dueDate}
+                                    setDate={setDueDate}
                                 />
                             </div>
                             {
@@ -353,11 +350,11 @@ const estimateError= (err) =>{
                     <div className="col-6">
                         <AssginedToSelection selected={assignedTo} onSelect={setAssignedTo} />
                     </div>
-{/* 
+{/*
                     <div className="col-6">
                         <TaskObserverSelection />
                     </div> */}
- 
+
                     {/* <div className="col-6">
                         <StatusSelection />
                     </div> */}
@@ -370,17 +367,17 @@ const estimateError= (err) =>{
                         <div className="form-group my-3">
                             <label htmlFor="" className='f-14 text-dark-gray'>Set Estimate Time <sup className='f-14'> * </sup></label>
                             <div className="d-flex align-items-center">
-                                <input 
+                                <input
                                     type='number'
                                     onWheel={e => e.currentTarget.blur()}
-                                    className="form-control height-35 f-14 mr-2" 
-                                    value={estimateTimeHour} 
+                                    className="form-control height-35 f-14 mr-2"
+                                    value={estimateTimeHour}
                                     onChange={(e) => handleChange(e, setEstimateTimeHour)}
                                 /> hrs
-                                <input 
+                                <input
                                     type='number'
                                     onWheel={e => e.currentTarget.blur()}
-                                    className="form-control height-35 f-14 mr-2 ml-2" 
+                                    className="form-control height-35 f-14 mr-2 ml-2"
                                     value={estimateTimeMin}
                                     onChange={e => handleChange(e, setEstimateTimeMin)}
                                 /> min
@@ -406,24 +403,24 @@ const estimateError= (err) =>{
 
 
                     <div className='col-12'>
-                        <UploadFilesInLine 
-                            onPreviousFileDelete={handleFileDelete} 
-                            previous={attachedFiles} 
-                            files={files} 
-                            setFiles={setFiles} 
+                        <UploadFilesInLine
+                            onPreviousFileDelete={handleFileDelete}
+                            previous={attachedFiles}
+                            files={files}
+                            setFiles={setFiles}
                         />
                     </div>
 
                     <div className="col-12 mt-3">
-                            
+
                         <div className="d-flex align-items-center justify-content-end">
                             <Button
                                 variant='secondary'
                                 className='mr-2'
                                 onClick={close}
-                            > 
+                            >
                                 Cancel
-                            </Button> 
+                            </Button>
 
                             {!isLoading ? (
                                 <Button onClick={handleSubmit}>
@@ -432,12 +429,12 @@ const estimateError= (err) =>{
                                 </Button>
                             ) : (
                             <Button className='cursor-processing'>
-                                <div 
-                                    className="spinner-border text-white" 
+                                <div
+                                    className="spinner-border text-white"
                                     role="status"
                                     style={{
                                         width: '18px',
-                                        height: '18px', 
+                                        height: '18px',
                                     }}
                                 >
                                 </div>

@@ -11,6 +11,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // get task details
         getTaskDetails: build.query({
             query: (query) => `/account/task${query}`,
+            providesTags: ["SUB_TASKS"]
         }),
 
         // create sub task
@@ -96,17 +97,17 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ['TASK_STATUS', 'ENABLE_MARKASCOMPLETE']
         }),
 
         // subtask status
 
         /**
-         * * user track time 
+         * * user track time
          *  @parma userId
          */
-       
+
         getUserTrackTime: build.query({
             query: (userId) => `/account/developer/tracked-time-today/${userId}`
         }),
@@ -125,14 +126,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ['TASK_STATUS', 'ENABLE_MARKASCOMPLETE']
         }),
 
         /**
          *  * When a develper tracked less then 7 hours a day
          *  * Developer need to explain the reasons of less tracking
-         *  * this explaination form submittion hook 
+         *  * this explaination form submittion hook
          */
         storeStopTrackTimer: build.mutation({
             query: (data) => ({
@@ -145,7 +146,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ['TASK_STATUS']
         }),
 
@@ -154,10 +155,10 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         /**
             * * Get developer's tasks
             * @param id This is User ID
-        */ 
+        */
 
         getDeveloperTasks: build.query({
-            query: (id) =>  `/account/tasks/get-developer-tasks/${id}` 
+            query: (id) =>  `/account/tasks/get-developer-tasks/${id}`
         }),
 
 
@@ -176,7 +177,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ['TASK_STATUS']
         }),
 
@@ -190,12 +191,12 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
-            
+
             invalidatesTags: ['TASK_STATUS']
         }),
 
         /**
-         *  * Get Task Submitted subtask 
+         *  * Get Task Submitted subtask
          * @param id  is TaskId
          */
         getSubmittedTask: build.query({
@@ -230,7 +231,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
 
         getRevisionDetails: build.query({
             query: (id) => `/account/tasks/get-task-revision/${id}`
-        }), 
+        }),
 
         /**
          *  * revision accept deny
@@ -247,12 +248,12 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ['TASK_STATUS']
         }),
 
         // * accept by lead developer
-        
+
 
         revisionAcceptOrDenyByLeadDeveloper: build.mutation({
             query: ({fdata, params}) => ({
@@ -265,14 +266,14 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ['TASK_STATUS']
         }),
-        
+
 
 
         /**
-         *  * submit for client approval 
+         *  * submit for client approval
          */
 
         submitForClientApproval: build.mutation({
@@ -284,13 +285,13 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                     _token: document
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
-                },    
+                },
             }),
             invalidatesTags: ['TASK_STATUS']
         }),
 
         /**
-         *  * submit for client approval 
+         *  * submit for client approval
          */
 
         confirmClientApproval: build.mutation({
@@ -302,13 +303,13 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                     _token: document
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
-                },    
+                },
             }),
             invalidatesTags: ['TASK_STATUS']
         }),
 
         /**
-         *  * submit for client approval 
+         *  * submit for client approval
          */
 
         storeClientRevisionTask: build.mutation({
@@ -320,7 +321,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                     _token: document
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
-                },    
+                },
             }),
             invalidatesTags: ['TASK_STATUS']
         }),
@@ -377,7 +378,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             query: (query) => `/account/task-disputes${query}`,
             providesTags: ['DISPUTES']
         }),
-        
+
         // ASK DISPUTE QUESTION
         askDisputeQuestion: build.mutation({
             query: (data) => ({
@@ -405,9 +406,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ["DISPUTES"]
-        }),  
+        }),
 
         // ANSWER DISPUTE QUESTION
         disputeSubmitToAuthorization: build.mutation({
@@ -421,9 +422,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ["DISPUTES"]
-        }),  
+        }),
         // ANSWER DISPUTE QUESTION
         disputeAnswerMakeAsRead: build.mutation({
             query: (data) => ({
@@ -436,9 +437,9 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            
+
             invalidatesTags: ["DISPUTES"]
-        }),  
+        }),
 
 
         // GET IN PROGRESS TASK STATUS
@@ -453,7 +454,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         }),
 
         // developerInprogressTask: build.query({
-        //     query: (userId) => `/accounts/developer/in-progress-tasks/${userId}`, 
+        //     query: (userId) => `/accounts/developer/in-progress-tasks/${userId}`,
         //     providesTags
         // })
 
@@ -481,7 +482,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             })
         })
 
-  
+
     }),
 });
 

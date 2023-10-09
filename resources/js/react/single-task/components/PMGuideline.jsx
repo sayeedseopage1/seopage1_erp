@@ -32,8 +32,7 @@ const ColorItem = ({color, desc}) => {
 }
 
 const PMGuideline = ({guideline}) => { 
- let colors = guideline?.color; 
-
+  
  const desginUrl = () => {
     if(guideline?.design){ 
     if(guideline?.design === 'XD/Figma'){ 
@@ -43,7 +42,7 @@ const PMGuideline = ({guideline}) => {
     }else if(_.replace(guideline?.design, /\s/g, '') === "TheReferenceSiteThatHastoBeClone"){ 
         const ref = JSON.parse(guideline?.reference_link); 
         return (
-            <ol style={{listStyle: 'numaric'}}>
+            <ol style={{listStyle: 'numeric'}}>
                 {_.size(ref) && _.map(ref, (r, i) => (
                     <li key={i+r} style={{listStyle: 'numaric'}}> <a href={r ?? '#'}> {r ?? ''} </a> </li>
                 ))}
@@ -51,13 +50,9 @@ const PMGuideline = ({guideline}) => {
         )
     }
     }
- } 
-
- console.log({guideline})
+ }  
   return (
-    <React.Fragment>
-        
-            
+    <React.Fragment> 
             <div className="px-3 py-3" style={{background: '#F7F8FA'}}>
                 {guideline?.theme_details && 
                     <div className='mb-3'>
@@ -75,7 +70,7 @@ const PMGuideline = ({guideline}) => {
                     <div className='mb-3'>
                         <div className='mb-2 f-16' style={{color: '#878E97'}}><strong>Design Details: </strong></div> 
                         <ul className='pl-2 ml-0'>
-                            <li><span className='font-weight-bold'>Desgin: </span> {guideline?.design}</li>
+                            <li><span className='font-weight-bold'>Design: </span> {guideline?.design}</li>
                             <li><span className='font-weight-bold'>Reference URL: </span> {desginUrl()}</li>
                             <li> 
                             <div className='font-weight-bold'>Instruction:</div>
@@ -114,7 +109,7 @@ const PMGuideline = ({guideline}) => {
                     <div className='mb-3'>
                     <div className='mb-2 f-16' style={{color: '#878E97'}}><strong>Plugin Research: </strong></div> 
                     <ul className='pl-2 ml-0'>
-                        <li><span className='font-weight-bold'>Plugin Name: </span> {guideline?.theme_name}</li>
+                        <li><span className='font-weight-bold'>Plugin Name: </span> {guideline?.plugin_name}</li>
 
                         <li><span className='font-weight-bold'>Plugin URL: </span> <a href={guideline?.plugin_url} className='hover-underline'>{guideline?.plugin_url}</a></li>
 
