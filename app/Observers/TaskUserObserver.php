@@ -10,7 +10,7 @@ class TaskUserObserver
 
     public function saved(TaskUser $taskUser)
     {
-       // dd($taskUser);
+    //    dd($taskUser);
         if (!isRunningInConsoleOrSeeding()) {
             if (user() && $taskUser->user_id != user()->id && is_null($taskUser->task->recurring_task_id)) {
                 event(new TaskEvent($taskUser->task, $taskUser->user, 'NewTask'));

@@ -1628,7 +1628,7 @@ class TaskController extends AccountBaseController
     public function StoreNewTask(Request $request)
     {
         // dd($request->all());
-       // DB::beginTransaction();
+    //    DB::beginTransaction();
         $setting = global_setting();
         $rules = [
             'heading' => 'required',
@@ -1750,6 +1750,7 @@ class TaskController extends AccountBaseController
                 //     'body' => 'Project managet assigned new task on you',
                 //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
                 // ]);
+
             } else {
                 // $assigned_to = User::find($request->user_id);
                 // if ($assigned_to->role_id == 6) {
@@ -1778,12 +1779,12 @@ class TaskController extends AccountBaseController
                 //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
                 // ]);
             }
-
         $users = User::where('role_id',1)->orWhere('role_id',8)->get();
             foreach($users as $user)
             {
                 Notification::send($user, new PendingParentTasksNotification($pending_parent_tasks));
             }
+
 
         }else{
 
