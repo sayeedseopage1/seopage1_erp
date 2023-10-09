@@ -23,7 +23,6 @@
                 <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Project Manager')</p>
                 <div class="select-status">
                     <select class="form-control select-picker" id="PmId" data-live-search="true" data-size="8">
-                        <option value="all">@lang('app.all')</option>
                         @if (Auth::user()->role_id==1 || Auth::user()->role_id==8)
                             @foreach ($project_managers as $project_manager)
                                 <option

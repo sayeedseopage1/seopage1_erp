@@ -799,6 +799,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/add-tasks/project-deliverables/{id}', [TaskController::class, 'get_tasks_project_deliverable']);
     Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
     Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
+    Route::get('tasks/pending-parent-tasks', [TaskController::class, 'PendingParentTasks']);
     Route::get('tasks/check-pm-taskguideline/{id}', [TaskController::class, 'CheckPmTaskGuideline']);
     Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
     Route::post('tasks/report-issues/resolve', [TaskController::class, 'resolve_report']);
@@ -1283,6 +1284,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::any('task/{id}/json', [TaskController::class, 'task_json'])->name('task.task_json');
     Route::resource('client-review', ClientReviewController::class);
     Route::resource('task-report-issues', IssuedTaskReportController::class);
+    Route::get('get-task-report',[IssuedTaskReportController::class,'getTaskReport']);
 
     Route::resource('cross-dept-work',CrossDeptWork::class);
     Route::get('view-web-content',[CrossDeptWork::class,'adminViewWebContent'])->name('adminViewWebContent');

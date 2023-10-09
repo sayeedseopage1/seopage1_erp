@@ -77,6 +77,7 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\PendingParentTasks;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -1672,10 +1673,105 @@ class TaskController extends AccountBaseController
             abort_403(!in_array($this->addPermission, ['all', 'added']));
         }
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
         $ganttTaskArray = [];
         $gantTaskLinkArray = [];
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        if($request->need_authorization=="true"){
+            $pending_parent_tasks = new PendingParentTasks();
+            $pending_parent_tasks->heading = $request->heading;
+            $pending_parent_tasks->description = $request->description;
+            $pending_parent_tasks->start_date = $request->start_date;
+            $pending_parent_tasks->due_date = $request->due_date;
+            $pending_parent_tasks->project_id = $request->project_id;
+            $pending_parent_tasks->category_id = $request->category_id;
+            $pending_parent_tasks->priority = $request->priority;
+            $pending_parent_tasks->board_column_id = $request->board_column_id;
+            $pending_parent_tasks->estimate_hours = $request->estimate_hours;
+            $pending_parent_tasks->estimate_minutes = $request->estimate_minutes;
+            $pending_parent_tasks->deliverable_id = $request->deliverable_id;
+            $pending_parent_tasks->milestone_id = $request->milestone_id;
+            $pending_parent_tasks->user_id = $request->user_id;
+            $pending_parent_tasks->acknowledgement = $request->acknowledgement;
+            $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
+            $pending_parent_tasks->need_authorization = $request->need_authorization;
+            $pending_parent_tasks->save();
+            if ($request->hasFile('file')) {
+
+                foreach ($request->file as $fileData) {
+                    $file = new TaskFile();
+                    $file->task_id = $pending_parent_tasks->id;
+
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $pending_parent_tasks->id);
+
+                    $file->user_id = $pending_parent_tasks->user_id;
+                    $file->filename = $fileData->getClientOriginalName();
+                    $file->hashname = $filename;
+                    $file->size = $fileData->getSize();
+                    $file->save();
+
+                    $this->logTaskActivity($pending_parent_tasks->id, $pending_parent_tasks->user_id, 'fileActivity', $pending_parent_tasks->board_column_id);
+                }
+            }
+
+            if (is_array($request->user_id)) {
+                // $assigned_to = User::find($request->user_id[0]);
+
+                // if ($assigned_to->role_id == 6) {
+                //     $authorization_action = new AuthorizationAction();
+                //     $authorization_action->model_name = $pending_parent_tasks->getMorphClass();
+                //     $authorization_action->model_id = $pending_parent_tasks->id;
+                //     $authorization_action->type = 'task_assigned_on_lead_developer';
+                //     $authorization_action->deal_id = $pending_parent_tasks->project->deal_id;
+                //     $authorization_action->project_id = $pending_parent_tasks->project_id;
+                //     $authorization_action->link = route('projects.show', $pending_parent_tasks->project->id) . '?tab=tasks';
+                //     $authorization_action->title = Auth::user()->name . ' assigned task on you';
+                //     $authorization_action->authorization_for = $assigned_to->id;
+                //     $authorization_action->save();
+                //     //authorization action end
+                // }
+                // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
+                // $this->logProjectActivity($project->id, $link);
+
+                // $this->triggerPusher('notification-channel', 'notification', [
+                //     'user_id' => $assigned_to->id,
+                //     'role_id' => $assigned_to->role_id,
+                //     'title' => 'You have new task',
+                //     'body' => 'Project managet assigned new task on you',
+                //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
+                // ]);
+            } else {
+                // $assigned_to = User::find($request->user_id);
+                // if ($assigned_to->role_id == 6) {
+
+                //     $authorization_action = new AuthorizationAction();
+                //     $authorization_action->model_name = $pending_parent_tasks->getMorphClass();
+                //     $authorization_action->model_id = $pending_parent_tasks->id;
+                //     $authorization_action->type = 'task_assigned_on_lead_developer';
+                //     $authorization_action->deal_id = $pending_parent_tasks->project->deal_id;
+                //     $authorization_action->project_id = $pending_parent_tasks->project_id;
+                //     $authorization_action->link = route('projects.show', $pending_parent_tasks->project_id) . '?tab=tasks';
+                //     $authorization_action->title = Auth::user()->name . ' assigned task on you';
+                //     $authorization_action->authorization_for = $assigned_to->id;
+                //     $authorization_action->save();
+                //     //authorization action end
+                // }
+                // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
+                // $this->logProjectActivity($project->id, $link);
+
+                // $this->triggerPusher('notification-channel', 'notification', [
+                //     'user_id' => $assigned_to->id,
+                //     'role_id' => $assigned_to->role_id,
+                //     'title' => 'You have new task',
+                //     'body' => 'Project managet assigned new task on you',
+                //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
+                // ]);
+            }
+
+        }else{
+
         $task = new Task();
         $task->heading = $request->heading;
 
@@ -1731,6 +1827,7 @@ class TaskController extends AccountBaseController
 
         $task->save();
 
+
         $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
         $task->saveQuietly();
         if ($request->hasFile('file')) {
@@ -1750,7 +1847,6 @@ class TaskController extends AccountBaseController
                 $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
             }
         }
-
 
 
 
@@ -1781,7 +1877,7 @@ class TaskController extends AccountBaseController
         }
 
 
-        DB::commit();
+        // DB::commit();
 
         if (request()->add_more == 'true') {
             unset($request->project_id);
@@ -1858,6 +1954,7 @@ class TaskController extends AccountBaseController
                 'redirectUrl' => route('tasks.show', $task->id)
             ]);
         }
+    }
         return response()->json([
             'status' => 200,
             'message'=> 'Task added successfully',
@@ -4888,11 +4985,11 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
-    
-    
+
+
         }
     }
-   
+
     if($request->date_type == 'today')
     {
         $tasks = $todayData;
@@ -4957,7 +5054,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
-       
+
         $daily_submission= new DailySubmission();
 
         if ($request->file('file') != null) {
@@ -5207,5 +5304,13 @@ class TaskController extends AccountBaseController
 
 
         }
+    }
+    public function PendingParentTasks(){
+        $pendingParentTasks = PendingParentTasks::all();
+
+        return response()->json([
+            'pendingParentTasks'=>$pendingParentTasks,
+            'status'=>200
+        ]);
     }
 }
