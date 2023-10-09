@@ -3,8 +3,8 @@ import styles from "./project-manager-acknowledgement.module.css";
 import Modal from "../../global/Modal";
 import Card from "../../global/Card";
 import Button from "../../global/Button";
-import _ from "lodash"; 
- 
+import _ from "lodash";
+
 
 const ProjectManagerAcknowledgementModal = ({
     onConfirm,
@@ -23,12 +23,12 @@ const ProjectManagerAcknowledgementModal = ({
 
     const handleSubChange = (e, data) => {
         setSubAcknowledgement(data);
-    }; 
+    };
 
     const handleOnConfirm = (e) => {
       e.preventDefault();
       setIsLoading(true);
-      console.log('submit')
+
       onConfirm({
         acknowledgement: acknowledgement.text,
         subAcknowledgement:visible ? subAcknowledgement?.text : '',
@@ -60,7 +60,7 @@ const ProjectManagerAcknowledgementModal = ({
                                     Research a theme as per the client's
                                     instructions.
                                 </li>
-                                <li> 
+                                <li>
                                     Research a plugin according to the client's
                                     overall direction.
                                 </li>
@@ -103,7 +103,7 @@ const ProjectManagerAcknowledgementModal = ({
                                 of the options below:
                             </div>
                             <div className={styles.form_group}>
-                                
+
                                 <div className={styles.radio_group}>
                                     <input
                                         type="radio"
@@ -118,11 +118,11 @@ const ProjectManagerAcknowledgementModal = ({
                                           authorization: false,
                                         })}}
                                     />
-                                    <label> 
+                                    <label>
                                         This is a routine task that falls within the responsibilities of the development team.
                                     </label>
-                                </div> 
-                                
+                                </div>
+
                                 <div className={styles.radio_group}>
                                     <input
                                         type="radio"
@@ -140,7 +140,7 @@ const ProjectManagerAcknowledgementModal = ({
                                     </label>
                                 </div>
 
-                                
+
                                   <div className="pl-3 mt-2">
                                       <div className={styles.radio_group}>
                                           <input
@@ -167,12 +167,12 @@ const ProjectManagerAcknowledgementModal = ({
                                                 authorization: true,
                                               })}
                                           />
-                                          <label> 
+                                          <label>
                                               I don't fully understand the client's instructions, and I believe developers can interpret them better.
                                           </label>
                                       </div>
                                   </div>
-                                
+
                             </div>
 
                         </Card.Body>

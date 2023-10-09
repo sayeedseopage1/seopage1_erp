@@ -3,13 +3,18 @@ import styles from "./card.module.css";
 import Button from "./Button";
 
 const Header = ({ className, children, onClose, ...props }) => {
+    const onClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+    }
     return (
         <div className={`${styles.card_header} ${className}`} {...props}>
             {children}
             <Button
                 type="button"
                 variant="tertiary"
-                onClick={onClose}
+                onClick={onClick}
                 className={styles.card_close_btn}
             >
                 <i className="fa-solid fa-xmark" />

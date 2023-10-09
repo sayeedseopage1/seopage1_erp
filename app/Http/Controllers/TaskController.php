@@ -78,6 +78,7 @@ use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
 use App\Models\PendingParentTasks;
+use App\Notifications\PendingParentTasksNotification;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -1717,6 +1718,11 @@ class TaskController extends AccountBaseController
                 }
             }
 
+            $task_user = new TaskUser();
+            $task_user->task_id = $pending_parent_tasks->id;
+            $task_user->user_id = $pending_parent_tasks->user_id;
+            $task_user->save();
+
             if (is_array($request->user_id)) {
                 // $assigned_to = User::find($request->user_id[0]);
 
@@ -1771,6 +1777,12 @@ class TaskController extends AccountBaseController
                 //     'body' => 'Project managet assigned new task on you',
                 //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
                 // ]);
+            }
+
+        $users = User::where('role_id',1)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+            {
+                Notification::send($user, new PendingParentTasksNotification($pending_parent_tasks));
             }
 
         }else{
@@ -5311,21 +5323,56 @@ class TaskController extends AccountBaseController
     public function PendingParentTasks(){
         $user = Auth::user();
         if($user->role_id==1 || $user->role_id==8){
-            $pendingParentTasks = PendingParentTasks::all();
-            dd($pendingParentTasks);
-        }else if($user->role_id == 4){
-            $pendingParentTasks = PendingParentTasks::where('added_by',$user->id)->get();
+            $pendingParentTasks = PendingParentTasks::select([
+                'pending_parent_tasks.*',
+                'projects.project_name',
+                'client.id as client_id',
+                'client.name as client_name',
+                'client.image as client_avatar',
+                'assignee_to.id as assignee_to_id',
+                'assignee_to.name as assignee_to_name',
+                'assignee_to.image as assignee_to_avatar',
+                'assignee_by.id as assignee_by_id',
+                'assignee_by.name as assignee_by_name',
+                'assignee_by.image as assignee_by_avatar',
+
+            ])
+            ->leftJoin('projects','pending_parent_tasks.project_id','=','projects.id')
+            ->leftJoin('users as client','projects.client_id','=','client.id')
+            ->leftJoin('users as assignee_to','pending_parent_tasks.user_id','=','assignee_to.id')
+            ->leftJoin('users as assignee_by','pending_parent_tasks.added_by','=','assignee_by.id')
+            ->get();
         }else{
-            return response()->json(["message" => "Permission denied"],403);
+            $pendingParentTasks = PendingParentTasks::select([
+                'pending_parent_tasks.*',
+                'projects.project_name',
+                'client.id as client_id',
+                'client.name as client_name',
+                'client.image as client_avatar',
+                'assignee_to.id as assignee_to_id',
+                'assignee_to.name as assignee_to_name',
+                'assignee_to.image as assignee_to_avatar',
+                'assignee_by.id as assignee_by_id',
+                'assignee_by.name as assignee_by_name',
+                'assignee_by.image as assignee_by_avatar',
+
+            ])
+            ->leftJoin('projects','pending_parent_tasks.project_id','=','projects.id')
+            ->leftJoin('users as client','projects.client_id','=','client.id')
+            ->leftJoin('users as assignee_to','pending_parent_tasks.user_id','=','assignee_to.id')
+            ->leftJoin('users as assignee_by','pending_parent_tasks.added_by','=','assignee_by.id')
+            ->where('pending_parent_tasks.added_by', $user->id)
+            ->get();
         }
 
         return response()->json([
-            'pendingParentTasks'=>$pendingParentTasks,
+            'data'=>$pendingParentTasks,
             'status'=>200
         ],200);
     }
 
-    public function AuthPendingParentTasks(Request $request){
+    public function AuthPendingParentTasks(Request $request, $id){
+        dd($request->all());
         if($request->status=='approved'){
             dd('adasd');
         }else{

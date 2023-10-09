@@ -20,6 +20,7 @@ import { User } from "../../utils/user-details";
 import AssginedToSelection from "./AssignedToSelection";
 import Loader from "../../tasks/components/Loader";
 import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementModal";
+import { toast } from "react-toastify";
 
 const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const {
@@ -31,18 +32,18 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     //   form data
     const [title, setTitle] = useState("");
     const [milestone, setMilestone] = useState(null);
-    const [startDate, setStateDate] = useState(null);
+    const [startDate, setStartDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
-    const [assignedTo, setAssignedTo] = useState(null); 
+    const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
     const [priority, setPriority] = useState("Medium");
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
-    
+
     const [formError, setFormError] = React.useState(null);
 
     // ui
@@ -53,11 +54,27 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
     const params = useParams();
     const [storeProjectTask, { isLoading, error }] = useStoreProjectTaskMutation()
-   
+
     const required_error = error?.status === 422 ? error?.data : null;
-    
+
     const [getMilestoneDetails, {data:projectInfo ,isFetching: milestoneDataIsFetching}] = useLazyGetMilestoneDetailsQuery();
- 
+
+
+
+    const clearForm = () => {
+        setTitle("");
+        setMilestone( null);
+        setTaskCategory("");
+        setProject("");
+        setStartDate(null);
+        setDueDate(null);
+        setAssignedTo(null)
+        setPriority(null);
+        setEstimateTimeHour(0);
+        setEstimateTimeMin(0);
+        setFiles([]);
+        setDescription("");
+    }
     // handle change
     React.useEffect(() => {
         if(isOpen){
@@ -65,9 +82,12 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             .then(res => {
                 let project = _.head(res?.milestones);
                 setProject(project?.project_name ?? '')
-            }) 
+            })
+        }else{
+            clearForm()
         }
     }, [isOpen]);
+
 
     // handle onchange
     const handleChange = (e, setState) => {
@@ -76,8 +96,8 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setState(value);
     };
 
-    // check validation 
-    const isValid = () => { 
+    // check validation
+    const isValid = () => {
         let err = new Object();
         let errCount = 0;
 
@@ -101,7 +121,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        
+
 
         if(!dueDate){
             err.dueDate = 'You have to select a due date';
@@ -118,21 +138,21 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             err.description = 'Write a Description';
             errCount++;
         }
- 
-        if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
-            err.estimateError = "Estimate time not less than 0";
-            errCount++;
-        }
 
-        if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
-            err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
-            errCount++;
-        }
+        // if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
+        //     err.estimateError = "Estimate time not less than 0";
+        //     errCount++;
+        // }
+
+        // if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
+        //     err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
+        //     errCount++;
+        // }
 
 
-        setFormError(err); 
+        setFormError(err);
         return !errCount;
-  
+
     }
 
 
@@ -143,7 +163,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
         const fd = new FormData();
         fd.append('heading', title ?? '');
-        fd.append('description', description ?? ''); 
+        fd.append('description', description ?? '');
         fd.append("start_date", _startDate ?? '');
         fd.append("due_date", _dueDate ?? '');
         fd.append("project_id", params?.projectId ?? '');
@@ -153,12 +173,12 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         fd.append("estimate_hours", estimateTimeHour ?? 0);
         fd.append("estimate_minutes", estimateTimeMin ?? 0);
         fd.append("deliverable_id", milestone?.deliverable_type ?? '');
-        fd.append("milestone_id", milestone?.id ?? ''); 
+        fd.append("milestone_id", milestone?.id ?? '');
         fd.append("user_id", assignedTo?.id ?? '');
         fd.append('acknowledgement', data.acknowledgement);
         fd.append('sub_acknowledgement', data.subAcknowledgement);
         fd.append('need_authorization', data.authorization);
-        
+
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -171,27 +191,19 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         );
 
 
-        if(isValid()){ 
+        if(isValid()){
             storeProjectTask(fd)
             .unwrap()
-            .then((res) => { 
+            .then((res) => {
+                toast.success("Task created successfully");
                 onSuccess();
-                close();
-
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: res.message,
-                    showConfirmButton: false,
-                    timer: 2500,
-                }); 
             })
             .catch((err) => {
                 if (err?.status === 422) {
                     Swal.fire({
                         position: "center",
                         icon: "error",
-                        title: "Please fill up all required fields",
+                        title: "Please fill out the all required fields",
                         showConfirmButton: true,
                     });
                 }
@@ -200,7 +212,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please fill up all required fields",
+                title: "Please fill out the all required fields",
                 showConfirmButton: true,
             });
         }
@@ -234,7 +246,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         if (hoursErr) errText += hoursErr;
         if (minErr) errText += minErr;
         return errText;
-    }; 
+    };
 
     return (
         <Modal isOpen={isOpen}>
@@ -274,7 +286,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     error={formError?.title}
                                     onChange={(e) => handleChange(e, setTitle)}
                                 />
-                            </div> 
+                            </div>
 
                             {/* Task Categories List */}
                             <div className="col-12 col-md-6">
@@ -284,7 +296,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     taskId={params?.projectId}
                                 />
                                 {formError?.taskCategory  && (
-                                    <div style={{ color: "red" }}> 
+                                    <div style={{ color: "red" }}>
                                         {formError?.taskCategory }
                                     </div>
                                 )}
@@ -308,7 +320,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                             </div>
 
                             {/* Project Milestone Selection Menu */}
-                            <div className="col-12 col-md-6"> 
+                            <div className="col-12 col-md-6">
                                 <Listbox value={milestone} onChange={setMilestone}>
                                     <div className="form-group position-relative my-3">
                                         <label
@@ -318,7 +330,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             Milestone <sup>*</sup>
                                         </label>
                                         <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                            {milestoneDataIsFetching ? <Loader title="Loading..."/> : 
+                                            {milestoneDataIsFetching ? <Loader title="Loading..."/> :
                                                 <>
                                                     <span className="singleline-ellipsis" style={{width: '95%'}}>{milestone?.milestone_title ?? '--'}</span>
                                                     <div className='__icon'>
@@ -329,23 +341,23 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         </Listbox.Button>
                                         <Listbox.Options  className="sp1-select-options">
                                             {_.map(projectInfo?.milestones, (milestone) => (
-                                                <Listbox.Option 
+                                                <Listbox.Option
                                                     key={milestone.id}
                                                     className={({ active, selected }) => `sp1-select-option selected ${ (active || selected) ? 'active' : ''}`}
                                                     value={milestone}
-                                                > 
-                                                    {milestone?.milestone_title}  
+                                                >
+                                                    {milestone?.milestone_title}
                                                 </Listbox.Option>
                                             ))}
                                         </Listbox.Options>
- 
+
                                         {formError?.milestone && (
-                                            <div style={{ color: "red" }}> 
+                                            <div style={{ color: "red" }}>
                                                 {formError?.milestone}
                                             </div>
                                         )}
                                     </div>
-                                </Listbox> 
+                                </Listbox>
                             </div>
 
                             {/* <div className="col-12 col-md-6">
@@ -377,7 +389,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             minDate={dayjs.dayjs().toDate()}
                                             maxDate={dueDate}
                                             date={startDate}
-                                            setDate={setStateDate}
+                                            setDate={setStartDate}
                                         />
                                     </div>
                                     {formError?.startDate && (
@@ -417,7 +429,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                             </div>
 
 
-                            {/* Project Deliverable */} 
+                            {/* Project Deliverable */}
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
@@ -439,14 +451,14 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
-                                /> 
-                                
+                                />
+
                                 {formError?.assignedTo && (
                                     <div style={{ color: "red" }}>
                                         {formError?.assignedTo}
                                     </div>
                                 )}
-                            </div> 
+                            </div>
 
                             {/* Priority */}
                             <div className="col-12 col-md-6">
@@ -497,11 +509,11 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
 
                                     <div style={{ color: "#F01F0A" }}>
-                                        Estimation time can't exceed{" "} 
+                                        Estimation time can't exceed{" "}
                                         {convertTime(Number(projectInfo?.minutes_left) > 0 ? Number(projectInfo?.minutes_left) : 0)}
                                     </div>
 
-                                    {formError?.estimateError &&  
+                                    {formError?.estimateError &&
                                         <div style={{ color: "red" }}>
                                             {formError?.estimateError}
                                         </div>
@@ -517,6 +529,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         style={{ minHeight: "100px" }}
                                     >
                                         <CKEditorComponent
+                                            data={description}
                                             onChange={handleEditorChange}
                                         />
                                     </div>
@@ -543,12 +556,12 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         onClick={close}
                                     >
                                         Cancel
-                                    </Button>  
-                                     
+                                    </Button>
+
                                     <Button isLoading={isLoading} onClick={handleSubmit}>
                                         <i className="fa-regular fa-paper-plane"></i>
                                         Create
-                                    </Button> 
+                                    </Button>
                                 </div>
                             </div>
                         </div>

@@ -7,7 +7,7 @@
   -ms-word-break: break-all;
   word-break: break-all;
 }
- 
+
 @keyframes glice {
     0% {
       background-position: -200px 0;
@@ -28,9 +28,9 @@
       opacity: 0.6;
     }
   }
-  
+
   .skeleton-loading {
-    width: fit-content; 
+    width: fit-content;
     padding: 3px ;
     color: transparent !important;
     background-color: #f0f0f0;
@@ -38,8 +38,8 @@
     background-size: 200px 100%;
     animation: glice 2s infinite linear, pulse 2s infinite;
   }
- 
-  
+
+
   .hover-underline:hover{
     text-decoration: underline;
   }
@@ -114,7 +114,7 @@
   justify-content: center;
 }
 
-.sp1_modal-body{ 
+.sp1_modal-body{
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
@@ -154,7 +154,7 @@ abbr{
   text-decoration: none !important;
   cursor: default !important;
 }
- 
+
 
 .whitespace-nowrap{
   white-space: nowrap !important;

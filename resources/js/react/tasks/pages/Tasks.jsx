@@ -14,16 +14,17 @@ import TasksTable from "../components/TasksTable";
 import { User } from "../../utils/user-details";
 import CKEditorComponent from "../../ckeditor";
 import Loader from "../components/Loader";
+import TaskAuthorization from "../../projects/components/TaskAuthorization";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
     const [tasksType, setTasksType] = React.useState([]);
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
     const [getTasks, {isFetching}] = useLazyGetTasksQuery();
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
     const [showAuthorizationModal, setShowAuthorizationModal] = React.useState(false);
-    const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false); 
+    const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false);
     const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
     const [comment, setComment] = React.useState('');
 
@@ -86,37 +87,41 @@ const Tasks = () => {
     const closeTable = () => setShowAuthorizationTableModal(false);
     const close = () => setShowAuthorizationModal(false);
 
-   
+
 
     return (
         <React.Fragment>
             <FilterContainer>
-                <Filterbar onFilter={onFilter} /> 
+                <Filterbar onFilter={onFilter} />
             </FilterContainer>
 
-            <div className="sp1_tlr_container"> 
+            <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar/>
 
                         {
-                            _.includes([1, 8], auth?.getRoleId()) && 
-                            <Button 
+                            _.includes([1, 8], auth?.getRoleId()) &&
+                            <Button
                                 onClick={fetchTasksTypeData}
-                                className="sp1_tlr_tab active mr-auto ml-2 mb-2 text-white"
-                            > 
-                                {tasksTypeDataIsFetching ? 'Loading...' : <> Authorize <span className="badge badge-light">{unAuthorizedType?.task_types}</span> </>} 
-                            </Button>   
+                                className="sp1_tlr_tab active ml-2 mb-2 text-white"
+                            >
+                                {tasksTypeDataIsFetching ? 'Loading...' : <> Authorize <span className="badge badge-light">{unAuthorizedType?.task_types}</span> </>}
+                            </Button>
                         }
-                        
+
+                        <div className="mr-auto ml-2 mb-2 ">
+                        <TaskAuthorization  />
+                        </div>
+
                         <div className="mb-2" style={{maxWidth: '300px'}}>
                             <SearchBox value={search} onChange={setSearch} />
                         </div>
                     </div>
-                     
-                    <TasksTable 
-                        isLoading={isFetching} 
-                        filter={filter} 
+
+                    <TasksTable
+                        isLoading={isFetching}
+                        filter={filter}
                         tableName="tasksTable"
                         search={search}
                         reportPermission={[6, 5, 1, 8]}
@@ -126,16 +131,16 @@ const Tasks = () => {
                 </div>
             </div>
 
-                <Modal isOpen={showAuthorizationTableModal}> 
+                <Modal isOpen={showAuthorizationTableModal}>
                     <div className="sp1_modal-content-wrapper">
                         <div className="sp1_modal-panel sp1_task_auth_modal_table ">
                             {/* header */}
                             <div className="sp1_modal-head">
                                 <div className="sp1_modal-title pl-2"><strong>Primary Page Development</strong></div>
-                                <Button 
-                                    onClick={closeTable} 
-                                    aria-label="ModalClose" 
-                                    variant='tertiary' 
+                                <Button
+                                    onClick={closeTable}
+                                    aria-label="ModalClose"
+                                    variant='tertiary'
                                     className='sp1_modal-close'
                                 >
                                     <i className='fa-solid fa-xmark'/>
@@ -164,9 +169,9 @@ const Tasks = () => {
                                         <tbody className="sp1_tasks_tbody">
                                             {_.map(tasksType, (data, index) => (
                                                 <tr className="sp1_tasks_tr" key={index}>
-                                                    <td className="sp1_tasks_td"> 
+                                                    <td className="sp1_tasks_td">
                                                         <span className="multiline-ellipsis">
-                                                            {data?.page_name} 
+                                                            {data?.page_name}
                                                         </span>
                                                     </td>
 
@@ -180,14 +185,14 @@ const Tasks = () => {
                                                     <td className="sp1_tasks_td ">
                                                        <abbr title={data?.task}>
                                                             <a href={`/account/tasks/${data?.task_id}`} className="multiline-ellipsis">
-                                                                {data?.task} 
+                                                                {data?.task}
                                                             </a>
                                                        </abbr>
                                                     </td>
                                                     <td className="sp1_tasks_td ">
                                                         <abbr title={data?.sub_task}>
                                                             <a href={`/account/tasks/${data?.sub_task_id}`} className="multiline-ellipsis">
-                                                                {data?.sub_task} 
+                                                                {data?.sub_task}
                                                             </a>
                                                         </abbr>
                                                     </td>
@@ -208,7 +213,7 @@ const Tasks = () => {
                                                     <td className="sp1_tasks_td ">
                                                         <abbr title={data?.project_name} >
                                                         <a href={`/account/tasks/${data?.project_id}`} className="multiline-ellipsis">
-                                                            {data?.project_name} 
+                                                            {data?.project_name}
                                                         </a>
                                                         </abbr>
                                                     </td>
@@ -224,29 +229,29 @@ const Tasks = () => {
                                                             {
                                                                 data?.authorization_status  === 0 ?
                                                                     <React.Fragment>
-                                                                        <Button 
+                                                                        <Button
                                                                             onClick={() => {
                                                                                 setShowAuthorizationModal(true);
                                                                                 setActiveModalTaskTypeData(data);
-                                                                            }} 
+                                                                            }}
                                                                             variant="success"
                                                                             className="font-weight-normal py-1"
                                                                         >
                                                                             Authorize
                                                                         </Button>
-                                                                        <Button 
+                                                                        <Button
                                                                             onClick={() => {
                                                                                 setShowAuthorizationModal(true);
                                                                                 setActiveModalTaskTypeData(data);
                                                                             }}
-                                                                            variant="danger" 
+                                                                            variant="danger"
                                                                             className="font-weight-normal py-1"
                                                                         >
                                                                             Deny
                                                                         </Button>
                                                                     </React.Fragment>
                                                                     :
-                                                                    <div> 
+                                                                    <div>
                                                                         {data?.authorization_status  === 1 && <span className="badge badge-success py-2 px-2">Approved</span>}
                                                                         {data?.authorization_status  === 2 && <span className="badge badge-danger py-2 px-2"> Denied </span>}
                                                                     </div>
@@ -255,19 +260,19 @@ const Tasks = () => {
                                                     </td>
                                                 </tr>
                                             ))}
-                                            
+
                                         </tbody>
-                                    </table> 
+                                    </table>
                                 </div>
                             </div>
                             {/* end body */}
-                        </div>  
+                        </div>
                     </div>
                 </Modal>
 
 
             {/* Flyover */}
-            <Modal isOpen={showAuthorizationModal && (activeModalTaskTypeData !== null ? true : false)}> 
+            <Modal isOpen={showAuthorizationModal && (activeModalTaskTypeData !== null ? true : false)}>
                     <div className="sp1_modal-content-wrapper">
                         <div className="sp1_modal-panel sp1_task_auth_modal ">
                             {/* header */}
@@ -282,18 +287,18 @@ const Tasks = () => {
                             {/* body */}
                             <div className="sp1_modal-body p-3">
                                 <ul className="sp1_modal_items px-3">
-                                  <li><b>Page name: </b> {activeModalTaskTypeData?.page_name}</li>  
-                                  <li><b>Page URL: </b> {activeModalTaskTypeData?.page_url}</li>  
-                                  <li><b>Task: </b> {activeModalTaskTypeData?.task}</li>  
-                                  <li><b>Sub-Task: </b> {activeModalTaskTypeData?.sub_task}</li>  
-                                  <li><b> Assigned By: </b> {activeModalTaskTypeData?.added_by_name}</li>  
-                                  <li><b> Assigned To: </b> {activeModalTaskTypeData?.assigned_to_name}</li>  
-                                  <li><b> Project: </b> {activeModalTaskTypeData?.project_name}</li>  
-                                  <li><b> Client: </b> {activeModalTaskTypeData?.client_name}</li>  
-                                </ul>   
+                                  <li><b>Page name: </b> {activeModalTaskTypeData?.page_name}</li>
+                                  <li><b>Page URL: </b> {activeModalTaskTypeData?.page_url}</li>
+                                  <li><b>Task: </b> {activeModalTaskTypeData?.task}</li>
+                                  <li><b>Sub-Task: </b> {activeModalTaskTypeData?.sub_task}</li>
+                                  <li><b> Assigned By: </b> {activeModalTaskTypeData?.added_by_name}</li>
+                                  <li><b> Assigned To: </b> {activeModalTaskTypeData?.assigned_to_name}</li>
+                                  <li><b> Project: </b> {activeModalTaskTypeData?.project_name}</li>
+                                  <li><b> Client: </b> {activeModalTaskTypeData?.client_name}</li>
+                                </ul>
 
 
-                                
+
                                 <div className="form-group py-3">
                                     <label className="font-weight-bold"> Comment: <sup>*</sup>  </label>
                                     <div className="ck-editor-holder stop-timer-options">
@@ -310,37 +315,37 @@ const Tasks = () => {
                                 <div className="w-100 mt-3">
                                     <div className="w-fit d-flex align-items-center ml-auto" style={{gap: '10px'}}>
                                         {
-                                            isLoading ? 
-                                              <span className="badge badge-light py-2 px-2 f-14 ml-auto"> 
+                                            isLoading ?
+                                              <span className="badge badge-light py-2 px-2 f-14 ml-auto">
                                                 <Loader />
                                                 </span>
                                             :
                                             activeModalTaskTypeData?.authorization_status  === 0 ?
                                             <React.Fragment>
-                                                <Button 
+                                                <Button
                                                     onClick={(e) => handleUpdateTaskTypeAuthorizationStatus(e, 'approved', activeModalTaskTypeData?.id)}
-                                                    variant="success"  
+                                                    variant="success"
                                                     className="ml-auto"
                                                 >Authorize</Button>
-                                                <Button 
+                                                <Button
                                                     onClick={(e) => handleUpdateTaskTypeAuthorizationStatus(e, 'denied', activeModalTaskTypeData?.id)}
-                                                    variant="danger" 
+                                                    variant="danger"
                                                 >Deny</Button>
                                             </React.Fragment>:
                                             <div>
                                                 {activeModalTaskTypeData?.authorization_status  === 1 && <span className="badge badge-success py-2 px-2 f-14">Approved</span>}
-                                                {activeModalTaskTypeData?.authorization_status  === 2 && <span className="badge badge-danger py-2 px-2 f-14"> Denied </span>} 
+                                                {activeModalTaskTypeData?.authorization_status  === 2 && <span className="badge badge-danger py-2 px-2 f-14"> Denied </span>}
                                             </div>
                                         }
-                                        
+
                                     </div>
-                                </div>            
+                                </div>
                             </div>
                             {/* end body */}
-                        </div>  
+                        </div>
                     </div>
                 </Modal>
-        </React.Fragment> 
+        </React.Fragment>
     );
 };
 

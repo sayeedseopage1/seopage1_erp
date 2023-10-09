@@ -1,11 +1,11 @@
-import { apiSlice } from "./apiSlice";            
+import { apiSlice } from "./apiSlice";
 
 
 const taskApiSlice = apiSlice.injectEndpoints({
     endpoints: (build) => ({
         getTasks: build.query({
-            query: (query) => `/account/tasks/get-tasks${query}`, 
-            providesTags: "TASKS"
+            query: (query) => `/account/tasks/get-tasks${query}`,
+            providesTags: ["TASKS"]
         }),
 
         // store task
@@ -24,12 +24,13 @@ const taskApiSlice = apiSlice.injectEndpoints({
             query: (data) => ({
                 url: '/account/new-task/edit',
                 method: 'POST',
-                body: data
+                body: data,
+                formData: true,
             }),
 
-            invalidatesTags: ["TASKS"]
+            invalidatesTags: ["TASKS","SUB_TASKS"]
         }),
-        
+
         getSubTasks: build.query({
             query:({taskId, query}) => `/account/tasks/get-tasks-subtasks/${taskId}?${query}`,
         }),
@@ -42,7 +43,7 @@ const taskApiSlice = apiSlice.injectEndpoints({
             query: ({taskId, type}) => `/account/tasks/${type === 'parent' ? 'get-parent-tasks': 'get-sub-tasks'}/report-issues/${taskId}`,
             providesTags: ["TASKSREPORT"]
         }),
- 
+
         resolveReport: build.mutation({
             query: (data) => ({
                 url: `/account/tasks/report-issues/resolve`,
@@ -52,12 +53,12 @@ const taskApiSlice = apiSlice.injectEndpoints({
                     _token: document
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
-                },   
-            }), 
+                },
+            }),
             invalidatesTags: ['TASKSREPORT']
         }),
 
-        
+
         getTaskTypeData: build.query({
             query: () => `/account/tasks-type`,
             providesTags: ["TASK_TYPE_STATUS_DATA"]
@@ -81,13 +82,13 @@ const taskApiSlice = apiSlice.injectEndpoints({
             query: () => `/account/developer/primary-page-authorization-count`,
         })
 
-        
+
     })
 }) ;
 
 
 
-export const { 
+export const {
      useGetTasksQuery,
      useLazyGetTasksQuery,
      useGetSubTasksQuery,
