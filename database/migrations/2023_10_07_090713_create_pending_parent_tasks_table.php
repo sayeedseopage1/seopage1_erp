@@ -31,8 +31,10 @@ return new class extends Migration
             $table->integer('added_by');
             $table->string('acknowledgement');
             $table->string('sub_acknowledgement');
-            $table->integer('need_authorization');
-            $table->integer('approval_status');
+            $table->longText('comment')->nullable();
+            $table->boolean('need_authorization')->default(0);
+            $table->boolean('approval_status')->nullable();
+            $table->integer('authorize_by')->nullable();
             $table->timestamps();
         });
     }

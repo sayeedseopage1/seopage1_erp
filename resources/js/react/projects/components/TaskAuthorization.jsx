@@ -5,17 +5,18 @@ import Button from '../../global/Button'
 import Modal from '../../global/Modal';
 import Card from '../../global/Card';
 import DataTable from '../../global/table/DataTable';
+import { useGetAuthorizeTasksQuery } from '../../services/api/projectApiSlice';
+import { AuthorizationColumns } from './TaskAuthorizationColumns';
+import _ from 'lodash';
 
 const TaskAuthorization = ({title}) => {
-  const [visible, setVisible] = useState();
+  const [visible, setVisible] = useState(false);
 
-
-  // get tasks
-
-
+  const {data, isFetching} = useGetAuthorizeTasksQuery('');
 
   const open = () => setVisible(true);
   const close = () => setVisible(false);
+
 
 
   return (
@@ -26,7 +27,7 @@ const TaskAuthorization = ({title}) => {
             className={styles.authorize_task}
         >
             <i className='fa-solid fa-hourglass-end' />
-            {title ?? 'Authorize Task'}
+            {title ?? 'Authorize Task'} <span className='badge badge-light'>{_.size(data?.data)}</span>
         </Button>
 
 
@@ -34,13 +35,13 @@ const TaskAuthorization = ({title}) => {
            <div className={styles.modal_overlay}>
             <Card className={styles.card}>
                     <Card.Head onClose={close} className={styles.card_head}>
-                        Authorize Task
+                        <span>Authorize Task </span>
                     </Card.Head>
 
                     <Card.Body className={styles.card_body}>
                         <DataTable
-                            tableData = {[]}
-                            tableColumns = {[]}
+                            tableData = {data?.data || []}
+                            tableColumns = {AuthorizationColumns}
                             tableName="authorize-task-table"
                             isLoading = {false}
                             // tableMaxHeight

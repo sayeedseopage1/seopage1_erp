@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react' 
+import React, {useState, useEffect} from 'react'
 import { projectElaborationData } from './faker';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './styles.module.css';
@@ -21,8 +21,8 @@ const PMIssuesTable = () => {
     const pm_id = searchParams.get('pm');
     const start_date = searchParams.get('start_date');
     const end_date = searchParams.get('end_date');
-    const filter = {pm_id, start_date, end_date} 
-    
+    const filter = {pm_id, start_date, end_date}
+
     const goBack = ()=> navigation(`/`);
 
     const [
@@ -30,9 +30,9 @@ const PMIssuesTable = () => {
         {isFetching}
     ] = useLazyGetRevisionCalculatorDataPmIssuesQuery();
 
-    
-  // fetch data 
-  useEffect(() => { 
+
+  // fetch data
+  useEffect(() => {
     ( async () => {
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
@@ -47,7 +47,7 @@ const PMIssuesTable = () => {
                 })
             })
 
-            setData(arr); 
+            setData(arr);
 
         } catch(err){
             console.log(err)
@@ -55,53 +55,53 @@ const PMIssuesTable = () => {
     })()
   }, [])
 
-  console.log(data)
-  
+
+
     return (
-      <Modal isOpen={true}> 
+      <Modal isOpen={true}>
           <div className="sp1_modal-content-wrapper">
               <div className={`sp1_modal-panel ${styles.modal_panel}`}>
                   {/* header */}
                   <div className={`sp1_modal-head ${styles.modal_title_bar}`}>
                       <div className="sp1_modal-title pl-2">Project Manager Issues</div>
-                      <Button 
-                        onClick={goBack} 
-                        aria-label="ModalClose" 
-                        variant='tertiary' 
+                      <Button
+                        onClick={goBack}
+                        aria-label="ModalClose"
+                        variant='tertiary'
                         className='sp1_modal-close'
                     >
                         <i className='fa-solid fa-xmark'/>
                       </Button>
                   </div>
                   {/* end header */}
-  
+
                   {/* body */}
                   <div className={`sp1_modal-body ${styles.modal_body}`}>
-  
+
                       <DataTable
-                          data={data} 
+                          data={data}
                           margeRow={true}
                           tableName='pmIssuesTableTable'
                           columns={PMIssuesTableColumns}
                           pageIndex={pageIndex}
                           perPageRow={nRows}
                           onPageChange={(value) => setPageIndex(value)}
-                          onPageRowChange={(n) => setNRows(n)} 
-                          total={data.length} 
+                          onPageRowChange={(n) => setNRows(n)}
+                          total={data.length}
                           isLoading={isFetching}
                           uniq_id='uid'
                           tableClass={styles.table}
                           groupBy={(data) => _.groupBy(data, d=>d.projectId)}
                           tableContainerClass={styles.tableContainer}
-                      />  
-  
+                      />
+
                   </div>
                   {/* end body */}
-              </div>  
+              </div>
           </div>
        </Modal>
     )
 }
-  
 
-export default PMIssuesTable 
+
+export default PMIssuesTable

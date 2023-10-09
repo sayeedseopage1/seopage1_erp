@@ -56,7 +56,7 @@ const DataTable = ({
   const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
 
 
-  // if has table columns record on localstore
+  // if has table columns record on local store
   // organize column orders
   React.useEffect(() => {
     if(value && value.columnOrder){

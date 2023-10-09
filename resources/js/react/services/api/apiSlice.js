@@ -17,7 +17,8 @@ export const apiSlice = createApi({
             "ENABLE_MARKASCOMPLETE",
             "USER_IN_PROGRESS_TASKS",
             "DISPUTES",
-            "SUB_TASKS"
+            "SUB_TASKS",
+            "AUTHORIZE_PARENT_TASK"
     ],
     endpoints: () => ({}),
 });

@@ -51,7 +51,16 @@ const projectApiSlice = apiSlice.injectEndpoints({
         }),
 
         getAuthorizeTasks: build.query({
-            query: () => '/account/tasks/pending-parent-tasks'
+            query: () => '/account/tasks/pending-parent-tasks',
+            providesTags: ["AUTHORIZE_PARENT_TASK"]
+        }),
+
+        updateAuthorizeTask: build.mutation({
+            query: (data) => ({
+                url: `/account/tasks/auth-pending-tasks/${data.id}?status=${data.status}`,
+                method: "GET",
+            }),
+            invalidatesTags: ["AUTHORIZE_PARENT_TASK"]
         })
     })
 }) ;
@@ -66,7 +75,8 @@ export const {
      useGetMilestoneDetailsQuery,
      useLazyGetMilestoneDetailsQuery,
      useLazyGetProjectDeliverableStatusQuery,
-     useLazyGetProjectManagerTaskGuidelineStatusQuery
-
+     useLazyGetProjectManagerTaskGuidelineStatusQuery,
+     useGetAuthorizeTasksQuery,
+     useUpdateAuthorizeTaskMutation,
 } = projectApiSlice;
 
