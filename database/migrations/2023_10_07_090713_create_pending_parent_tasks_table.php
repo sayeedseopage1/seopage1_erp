@@ -28,10 +28,10 @@ return new class extends Migration
             $table->string('deliverable_id');
             $table->integer('milestone_id');
             $table->integer('user_id');
+            $table->integer('added_by');
             $table->string('acknowledgement');
             $table->string('sub_acknowledgement');
             $table->integer('need_authorization');
-            $table->text('file');
             $table->integer('approval_status');
             $table->timestamps();
         });
