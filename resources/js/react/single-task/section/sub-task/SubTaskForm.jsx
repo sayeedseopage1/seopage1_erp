@@ -236,7 +236,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         fd.append("start_date", _startDate);
         fd.append("due_date", _dueDate);
         fd.append("project_id", task?.projectId);
-        fd.append("task_category_id", task?.category?.id);
+        fd.append("task_category_id", taskCategory.id);
         fd.append("user_id", assignedTo?.id);
         fd.append("description", description);
         fd.append("board_column_id", task?.boardColumn?.id);
@@ -263,6 +263,8 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
+
+
 
 
         const submit = async () => { 

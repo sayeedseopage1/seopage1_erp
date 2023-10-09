@@ -4002,6 +4002,7 @@ class TaskController extends AccountBaseController
             {
                 $tracked_times = $totalMinutes;
             }
+       // dd($tracked_times);
 
            // $target_time=  $dayOfWeek =
            $current_day = Carbon::now();
