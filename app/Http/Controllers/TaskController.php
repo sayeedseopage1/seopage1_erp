@@ -1626,6 +1626,7 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
+        // dd($request->all());
        // DB::beginTransaction();
         $setting = global_setting();
         $rules = [
@@ -1681,8 +1682,9 @@ class TaskController extends AccountBaseController
             $pending_parent_tasks = new PendingParentTasks();
             $pending_parent_tasks->heading = $request->heading;
             $pending_parent_tasks->description = $request->description;
-            $pending_parent_tasks->start_date = $request->start_date;
-            $pending_parent_tasks->due_date = $request->due_date;
+            $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+            $pending_parent_tasks->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+            $pending_parent_tasks->due_date = $dueDate;
             $pending_parent_tasks->project_id = $request->project_id;
             $pending_parent_tasks->category_id = $request->category_id;
             $pending_parent_tasks->priority = $request->priority;
@@ -1692,6 +1694,7 @@ class TaskController extends AccountBaseController
             $pending_parent_tasks->deliverable_id = $request->deliverable_id;
             $pending_parent_tasks->milestone_id = $request->milestone_id;
             $pending_parent_tasks->user_id = $request->user_id;
+            $pending_parent_tasks->added_by = Auth::user()->id;
             $pending_parent_tasks->acknowledgement = $request->acknowledgement;
             $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
             $pending_parent_tasks->need_authorization = $request->need_authorization;
@@ -5306,11 +5309,27 @@ class TaskController extends AccountBaseController
         }
     }
     public function PendingParentTasks(){
-        $pendingParentTasks = PendingParentTasks::all();
+        $user = Auth::user();
+        if($user->role_id==1 || $user->role_id==8){
+            $pendingParentTasks = PendingParentTasks::all();
+            dd($pendingParentTasks);
+        }else if($user->role_id == 4){
+            $pendingParentTasks = PendingParentTasks::where('added_by',$user->id)->get();
+        }else{
+            return response()->json(["message" => "Permission denied"],403);
+        }
 
         return response()->json([
             'pendingParentTasks'=>$pendingParentTasks,
             'status'=>200
-        ]);
+        ],200);
+    }
+
+    public function AuthPendingParentTasks(Request $request){
+        if($request->status=='approved'){
+            dd('adasd');
+        }else{
+            dd('deny');
+        }
     }
 }
