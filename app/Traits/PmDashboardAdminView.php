@@ -627,7 +627,7 @@ trait PmDashboardAdminView
          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
          ->where('projects.pm_id', $this->pm->id)
          ->where('projects.project_status', 'Accepted')
-         ->where('projects.status', 'in progress')
+        
          ->where('p_m_projects.delayed_status', 1)
          ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
@@ -657,7 +657,7 @@ trait PmDashboardAdminView
                  ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                  ->where('projects.pm_id', $this->pm->id)
                  ->where('projects.project_status', 'Accepted')
-                 ->where('projects.status', 'in progress')
+               
                  ->where('p_m_projects.delayed_status', 1)
                  ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
                  ->orderBy('projects.updated_at','desc')
@@ -1448,7 +1448,7 @@ trait PmDashboardAdminView
              ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
              ->where('projects.pm_id', $this->pm->id)
              ->where('projects.project_status', 'Accepted')
-             ->where('projects.status', 'in progress')
+             
              ->where('p_m_projects.delayed_status', 1)
              ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
              ->whereBetween('projects.updated_at', [$startMonth, $release_date])
@@ -1478,7 +1478,7 @@ trait PmDashboardAdminView
                      ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                      ->where('projects.pm_id', $this->pm->id)
                      ->where('projects.project_status', 'Accepted')
-                     ->where('projects.status', 'in progress')
+                    
                      ->where('p_m_projects.delayed_status', 1)
                      ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
                      ->orderBy('projects.updated_at','desc')
