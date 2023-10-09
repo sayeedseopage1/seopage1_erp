@@ -7,10 +7,12 @@ import dayjs from "dayjs";
 import Avatar from "../../global/Avatar";
 import { useUpdateAuthorizeTaskMutation } from "../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
+import QuestionAnswer from "./QuestionAnswer";
 
 const TaskAuthorizationForm = ({ data, table }) => {
     const [visible, setVisible] = useState(false);
     const [comment, setComment] = useState("");
+    const [hasQuestion, setHasQuestion] = useState(false);
     const [err, setErr] = useState(new Object());
 
     const open = () => setVisible(true);
@@ -24,6 +26,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
         const _data = {
             id: data.id,
             status: status,
+            comment
         };
 
         if (comment) {
@@ -159,7 +162,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                         <div className={styles.task_info__text}>
                                             <p>
-                                                {data.acknowledgement + " "}{" "}
+                                                {data.acknowledgement + " "}
                                                 <strong>
                                                     {data.sub_acknowledgement}
                                                 </strong>
@@ -167,50 +170,87 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-                                    <div className={styles.comment_field}>
-                                        <label className="task_info__label">
-                                            Comment:{" "}
-                                        </label>
-                                        <textarea
-                                            rows={6}
-                                            value={comment}
-                                            onChange={(e) =>
-                                                setComment(e.target.value)
-                                            }
-                                            placeholder="Write your comment here."
-                                        />
 
-                                        {err?.comment && (
-                                            <span className="text-danger">
-                                                <small>{err?.comment}</small>
-                                            </span>
-                                        )}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                           Has Question
+                                        </div>
+                                        <div className={styles.task_info__text}>
+                                           <label>
+                                                <input
+                                                    onChange={e => setHasQuestion(e.target.value)} value={true}
+                                                    type="radio"
+                                                    name="has_question"
+                                                /> Yes
+                                            </label>
+                                           <label>
+                                                <input
+                                                    onChange={e => setHasQuestion(e.target.value)}
+                                                    value={false}
+                                                    type="radio"
+                                                    defaultChecked={true}
+                                                    name="has_question"
+                                                /> No
+                                            </label>
+                                        </div>
                                     </div>
 
-                                    <div className={styles.button_group}>
-                                        {isLoading ? (
-                                            <Button isLoading={isLoading} variant="primary">
-                                                Loading
-                                            </Button>
-                                        ) : (
-                                            <>
-                                                <Button
-                                                    variant="danger"
-                                                   onClick={e => handleSubmission(e,true)}
-                                                >
-                                                    Deny
+
+
+                                    {
+                                        hasQuestion ?
+                                            <QuestionAnswer
+                                                data={data}
+                                            />
+                                        : <>
+                                        <div className={styles.comment_field}>
+                                            <label className="task_info__label">
+                                                Comment:
+                                            </label>
+                                            <textarea
+                                                rows={6}
+                                                value={comment}
+                                                onChange={(e) =>
+                                                    setComment(e.target.value)
+                                                }
+                                                placeholder="Write your comment here."
+                                            />
+
+                                            {err?.comment && (
+                                                <span className="text-danger">
+                                                    <small>{err?.comment}</small>
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div className={styles.button_group}>
+                                            {isLoading ? (
+                                                <Button isLoading={isLoading} variant="primary">
+                                                    Loading
                                                 </Button>
-                                                <Button
-                                                    variant="success"
-                                                    onClick={(e) =>
-                                                        handleSubmission(e,true)
-                                                    }
-                                                >
-                                                    Approve
-                                                </Button>
-                                            </>
-                                        )}
-                                    </div>
+                                            ) : (
+                                                <>
+                                                    <Button
+                                                        variant="danger"
+                                                    onClick={e => handleSubmission(e,false)}
+                                                    >
+                                                        Deny
+                                                    </Button>
+                                                    <Button
+                                                        variant="success"
+                                                        onClick={(e) =>
+                                                            handleSubmission(e,true)
+                                                        }
+                                                    >
+                                                        Approve
+                                                    </Button>
+                                                </>
+                                            )}
+                                        </div>
+                                        </>
+                                    }
                                 </div>
                             </Card.Body>
                         </Card>

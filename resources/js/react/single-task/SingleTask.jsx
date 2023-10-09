@@ -25,6 +25,7 @@ import SubmittedWork from "./section/submitted-work/SubmittedWork";
 import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
 import TaskEditForm from "./section/sub-task/TaskEditForm";
+import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
 
 
 const SingleTaskPage = () => {
@@ -459,7 +460,11 @@ const SingleTaskPage = () => {
                 </div>
             </div>
             <Toaster />
-            <TaskEditForm task={task} />
+            {
+                task.isSubtask ?
+                <SubTaskEditModal task={task} />:
+                <TaskEditForm task={task} />
+            }
         </div>
     );
 };

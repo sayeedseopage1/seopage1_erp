@@ -176,45 +176,43 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
 
 
     const handleSubmit = () => {
-        // check validation
+         //form data
+         const _startDate = dayjs.dayjs(startDate).format("DD-MM-YYYY");
+         const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
 
-        //form data
-        const _startDate = dayjs.dayjs(startDate).format("DD-MM-YYYY");
-        const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
+         const fd = new FormData();
+         fd.append("milestone_id", task?.milestoneID);
+         fd.append("task_id", task?.id);
+         fd.append("heading", title);
+         fd.append("start_date", _startDate);
+         fd.append("due_date", _dueDate);
+         fd.append("project_id", task?.projectId);
+         fd.append("category_id", taskCategory?.id);
+         fd.append("user_id", assignedTo?.id);
+         fd.append("description", description);
+         fd.append("board_column_id", task?.boardColumn.id);
+         fd.append("priority", _.lowerCase(priority));
+         fd.append("estimate_hours", estimateTimeHour);
+         fd.append("estimate_minutes", estimateTimeMin);
+         fd.append("deliverable_id", milestone?.deliverable_type ?? '');
+         fd.append("image_url", null);
+         fd.append("addedFiles", null);
+         fd.append("_method", "POST");
+         fd.append(
+             "_token",
+             document
+                 .querySelector("meta[name='csrf-token']")
+                 .getAttribute("content")
+         );
+         Array.from(files).forEach((file) => {
+             fd.append("file[]", file);
+         });
 
-        const fd = new FormData();
-        fd.append("milestone_id", task?.milestoneID);
-        fd.append("task_id", task?.id);
-        fd.append("heading", title);
-        fd.append("start_date", _startDate);
-        fd.append("due_date", _dueDate);
-        fd.append("project_id", task?.projectId);
-        fd.append("category_id", taskCategory?.id);
-        fd.append("user_id", assignedTo?.id);
-        fd.append("description", description);
-        fd.append("board_column_id", task?.boardColumn.id);
-        fd.append("priority", _.lowerCase(priority));
-        fd.append("estimate_hours", estimateTimeHour);
-        fd.append("estimate_minutes", estimateTimeMin);
-        fd.append("deliverable_id", milestone?.deliverable_type ?? '');
-        fd.append("image_url", null);
-        fd.append("addedFiles", null);
-        fd.append("_method", "POST");
-        fd.append(
-            "_token",
-            document
-                .querySelector("meta[name='csrf-token']")
-                .getAttribute("content")
-        );
-        Array.from(files).forEach((file) => {
-            fd.append("file[]", file);
-        });
-
-       if(isValid()){
-        onSubmit(fd);
-       }else{
-        toast.warn('Please fill out all required fields!');
-       }
+        if(isValid()){
+         onSubmit(fd);
+        }else{
+         toast.warn('Please fill out all required fields!');
+        }
 
     };
 

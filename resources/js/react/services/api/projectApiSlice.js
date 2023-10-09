@@ -58,7 +58,13 @@ const projectApiSlice = apiSlice.injectEndpoints({
         updateAuthorizeTask: build.mutation({
             query: (data) => ({
                 url: `/account/tasks/auth-pending-tasks/${data.id}?status=${data.status}`,
-                method: "GET",
+                method: "PUT",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
             }),
             invalidatesTags: ["AUTHORIZE_PARENT_TASK"]
         })
