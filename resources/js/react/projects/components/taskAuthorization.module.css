@@ -23,7 +23,7 @@
     place-items: center;
     width: 100vw;
     height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .card{
@@ -33,15 +33,16 @@
     box-shadow: 0 0 10px rgb(0 0 0 / 15%);
 }
 
-@media only screen and (max-width: 1000px){
+@media only screen and (max-width: 756px){
     .card{
-        width: 90%;
+        width: 100vw;
     }
 }
 
-@media only screen and (max-width: 756px){
+
+@media only screen and (max-width: 1000px){
     .card{
-        width: 90%;
+        width: 100vw
     }
 }
 
@@ -72,6 +73,12 @@
 
 .card_task_details{
     width: 600px;
+}
+
+@media only screen and (max-width: 720px){
+    .card_task_details{
+        width: 100vw;
+    }
 }
 
 .task_info__card_head{
@@ -133,7 +140,6 @@
     right: 0;
     top: 0;
     color: #777;
-
 }
 
 .task_info__text{
@@ -143,7 +149,7 @@
 }
 
 .comment_field > label{
-    color:#989898;
+    color:#626262;
     font-weight: 500;
     position: relative;
 }
@@ -166,4 +172,23 @@
     gap: 12px;
     width: 100%;
     justify-content: flex-end;
+}
+
+
+@media only screen and (max-width: 756px){
+    .inline_flex{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+}
+
+
+.questionPanel{
+
+}
+
+.hasQuestion{
+    text-align: center;
 }

@@ -21,6 +21,7 @@ import AssginedToSelection from "./AssignedToSelection";
 import Loader from "../../tasks/components/Loader";
 import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementModal";
 import { toast } from "react-toastify";
+import { useCheckRestrictedWordsMutation } from "../../services/api/SingleTaskPageApi";
 
 const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const {
@@ -58,6 +59,11 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const required_error = error?.status === 422 ? error?.data : null;
 
     const [getMilestoneDetails, {data:projectInfo ,isFetching: milestoneDataIsFetching}] = useLazyGetMilestoneDetailsQuery();
+
+    const [
+        checkRestrictedWords,
+        {isLoading: checking}
+    ] = useCheckRestrictedWordsMutation();
 
 
 
@@ -157,7 +163,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
 
     // handle confirmation
-    const handleAcknowledgementConfirmation = (data) => {
+    const handleAcknowledgementConfirmation = async (data) => {
         const _startDate = startDate ? dayjs.dayjs(startDate).format("DD-MM-YYYY") : '';
         const _dueDate = dueDate ? dayjs.dayjs(dueDate).format("DD-MM-YYYY") : '';
 
@@ -190,32 +196,79 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
-
-        if(isValid()){
-            storeProjectTask(fd)
-            .unwrap()
-            .then((res) => {
-                toast.success("Task created successfully");
-                onSuccess();
-            })
-            .catch((err) => {
-                if (err?.status === 422) {
-                    Swal.fire({
-                        position: "center",
-                        icon: "error",
-                        title: "Please fill out the all required fields",
-                        showConfirmButton: true,
-                    });
-                }
-            });
-        }else {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Please fill out the all required fields",
-                showConfirmButton: true,
-            });
+        // handle form submit
+        const formSubmit = async () => {
+            if(isValid()){
+                await storeProjectTask(fd)
+                .unwrap()
+                .then((res) => {
+                    toast.success("Task created successfully");
+                    onSuccess();
+                })
+                .catch((err) => {
+                    if (err?.status === 422) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Please fill out the all required fields",
+                            showConfirmButton: true,
+                        });
+                    }
+                });
+            }else {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Please fill out the all required fields",
+                    showConfirmButton: true,
+                });
+            }
         }
+
+        const response = await checkRestrictedWords(task?.projectId).unwrap();
+
+        if(response.status === 400){
+            const error = new Object();
+            const checkViolationWord = (text) => {
+                const violationWords = ["revision", "fix", "modify", "fixing", "revise", "edit"];
+                const violationRegex = new RegExp(`\\b(${violationWords.join("|")})\\b`, "i");
+                return violationRegex.test(_.toLower(text));
+            }
+
+            const alert = () => {
+                Swal.fire({
+                    icon: 'error',
+                    html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> `,
+                    // showCloseButton: true,
+                    showConfirmButton: true,
+                    showCancelButton: true,
+                }).then((res => {
+                    if(res.isConfirmed){
+                        formSubmit();
+                    }
+                }))
+            }
+
+            // check title
+            if(checkViolationWord(title)){
+                setContainViolation(true);
+                error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
+
+                alert();
+            }else if(checkViolationWord(description)){  // check description
+                setContainViolation(true);
+                error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
+                alert();
+            }else{
+                formSubmit();
+            }
+
+            setErr(prev => ({...prev, ...error}))
+        }else{
+            formSubmit();
+        }
+
+
     }
 
 

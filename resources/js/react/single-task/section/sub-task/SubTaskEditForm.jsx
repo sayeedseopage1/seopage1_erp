@@ -103,7 +103,7 @@ const handleChange = (e, setState) =>{
     setState(value);
 }
 
-// handle sumition
+// handle submission
 const handleSubmit = (e) => {
     e.preventDefault();
   const _startDate = dayjs.dayjs(startDate).format('DD-MM-YYYY');
