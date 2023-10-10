@@ -197,6 +197,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
+<<<<<<< HEAD
 
 
                                     {
@@ -229,6 +230,20 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             {isLoading ? (
                                                 <Button isLoading={isLoading} variant="primary">
                                                     Loading
+=======
+                                    <div className={styles.button_group}>
+                                        {isLoading ? (
+                                            <Button isLoading={isLoading} variant="primary">
+                                                Loading
+                                            </Button>
+                                        ) : (
+                                            <>
+                                                <Button
+                                                    variant="danger"
+                                                   onClick={e => handleSubmission(e,false)}
+                                                >
+                                                    Deny
+>>>>>>> 9ed2d1eb7 (pull request)
                                                 </Button>
                                             ) : (
                                                 <>
