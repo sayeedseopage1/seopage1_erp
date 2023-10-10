@@ -1628,7 +1628,7 @@ class TaskController extends AccountBaseController
     public function StoreNewTask(Request $request)
     {
         // dd($request->all());
-       // DB::beginTransaction();
+    //    DB::beginTransaction();
         $setting = global_setting();
         $rules = [
             'heading' => 'required',
@@ -1718,11 +1718,6 @@ class TaskController extends AccountBaseController
                 }
             }
 
-            $task_user = new TaskUser();
-            $task_user->task_id = $pending_parent_tasks->id;
-            $task_user->user_id = $pending_parent_tasks->user_id;
-            $task_user->save();
-
             if (is_array($request->user_id)) {
                 // $assigned_to = User::find($request->user_id[0]);
 
@@ -1750,6 +1745,7 @@ class TaskController extends AccountBaseController
                 //     'body' => 'Project managet assigned new task on you',
                 //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
                 // ]);
+
             } else {
                 // $assigned_to = User::find($request->user_id);
                 // if ($assigned_to->role_id == 6) {
@@ -1778,12 +1774,12 @@ class TaskController extends AccountBaseController
                 //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
                 // ]);
             }
-
         $users = User::where('role_id',1)->orWhere('role_id',8)->get();
             foreach($users as $user)
             {
                 Notification::send($user, new PendingParentTasksNotification($pending_parent_tasks));
             }
+
 
         }else{
 
@@ -5372,11 +5368,97 @@ class TaskController extends AccountBaseController
     }
 
     public function AuthPendingParentTasks(Request $request, $id){
-        dd($request->all());
-        if($request->status=='approved'){
-            dd('adasd');
+        if($request->status){
+            $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
+            $pendingParentTasks->approval_status =  $request->approval_status;
+            $pendingParentTasks->comment = $request->comment;
+            $pendingParentTasks->authorize_by = Auth::user()->id;
+            $pendingParentTasks->save();
+
+            $task = new Task();
+            $task->heading = $pendingParentTasks->heading;
+            $task->description = $pendingParentTasks->description;
+            $task->start_date = $pendingParentTasks->start_date;
+            $task->due_date = $pendingParentTasks->due_date;
+            $task->project_id = $pendingParentTasks->project_id;
+            $task->task_category_id = $pendingParentTasks->category_id;
+            $task->priority = $pendingParentTasks->priority;
+            $task->board_column_id = $pendingParentTasks->board_column_id;
+            $task->estimate_hours = $pendingParentTasks->estimate_hours;
+            $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
+            $task->deliverable_id = $pendingParentTasks->deliverable_id;
+            $task->milestone_id = $pendingParentTasks->milestone_id;
+            // $task->user_id = $pendingParentTasks->user_id;
+            $task->added_by = Auth::user()->id;
+            $task->save();
+            if ($request->hasFile('file')) {
+
+                foreach ($request->file as $fileData) {
+                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
+                    $file->task_id = $task->id;
+
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                    $file->user_id = $task->user_id;
+                    $file->filename = $fileData->getClientOriginalName();
+                    $file->hashname = $filename;
+                    $file->size = $fileData->getSize();
+                    $file->save();
+
+                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
+                }
+            }
+
+            $task_user = new TaskUser();
+            $task_user->task_id = $task->id;
+            $task_user->user_id = $pendingParentTasks->user_id;
+            $task_user->save();
+
         }else{
-            dd('deny');
+            $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
+            $pendingParentTasks->approval_status =  $request->approval_status;
+            $pendingParentTasks->comment = $request->comment;
+            $pendingParentTasks->authorize_by = Auth::user()->id;
+            $pendingParentTasks->save();
+
+            $task = new Task();
+            $task->heading = $pendingParentTasks->heading;
+            $task->description = $pendingParentTasks->description;
+            $task->start_date = $pendingParentTasks->start_date;
+            $task->due_date = $pendingParentTasks->due_date;
+            $task->project_id = $pendingParentTasks->project_id;
+            $task->task_category_id = $pendingParentTasks->category_id;
+            $task->priority = $pendingParentTasks->priority;
+            $task->board_column_id = $pendingParentTasks->board_column_id;
+            $task->estimate_hours = $pendingParentTasks->estimate_hours;
+            $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
+            $task->deliverable_id = $pendingParentTasks->deliverable_id;
+            $task->milestone_id = $pendingParentTasks->milestone_id;
+            // $task->user_id = $pendingParentTasks->user_id;
+            $task->added_by = Auth::user()->id;
+            $task->save();
+            if ($request->hasFile('file')) {
+
+                foreach ($request->file as $fileData) {
+                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
+                    $file->task_id = $task->id;
+
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                    $file->user_id = $task->user_id;
+                    $file->filename = $fileData->getClientOriginalName();
+                    $file->hashname = $filename;
+                    $file->size = $fileData->getSize();
+                    $file->save();
+
+                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
+                }
+            }
+            $task_user = new TaskUser();
+            $task_user->task_id = $task->id;
+            $task_user->user_id = $pendingParentTasks->user_id;
+            $task_user->save();
         }
+        return response()->json(['status'=>200]);
     }
 }

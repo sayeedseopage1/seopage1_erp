@@ -180,14 +180,15 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         <div className={styles.task_info__text}>
                                            <label>
                                                 <input
-                                                    onChange={e => setHasQuestion(e.target.value)} value={true}
+                                                    onChange={e => setHasQuestion(true)}
+                                                    value={true}
                                                     type="radio"
                                                     name="has_question"
                                                 /> Yes
                                             </label>
                                            <label>
                                                 <input
-                                                    onChange={e => setHasQuestion(e.target.value)}
+                                                    onChange={e => setHasQuestion(false)}
                                                     value={false}
                                                     type="radio"
                                                     defaultChecked={true}
