@@ -13,31 +13,37 @@ export const RefetchContext = createContext({});
 const TaskReport = () => {
   const [getTaskReport, { isLoading,isFetching }] = useLazyGetTaskReportQuery();
   const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [refetch, setRefetch] = useState(true);
   const [filter, setFilter] = useState(null);
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState("all");
 
   useEffect(() => {
     // console.log({filter,status,refetch});
-    if (filter && status) {
+    if (filter) {
       // console.log('insert-useeffect-condition');
       getTaskReport(filter)
         .unwrap()
         .then(({ report_issue }) => {
           // console.log("fetched data");
-          const allData = [...report_issue].filter(data => {
-            if (status.title === "all") {
-              return true;
-            } else if (status.title === "resolved") {
-              return data.status === "approved" || data.status === "denied"
-            } else {
-              return data.status === status.title;
-            }
-          })
-          setTableData(allData);
+          setTableData(report_issue);
         });
     }
-  }, [refetch, filter, status])
+  }, [refetch, filter])
+
+
+  useEffect(()=>{
+    const allData = [...tableData].filter(data => {
+      if (status.title === "all") {
+        return true;
+      } else if (status.title === "resolved") {
+        return data.status === "approved" || data.status === "denied"
+      } else {
+        return data.status === status.title;
+      }
+    })
+    setFilteredData(allData);
+  },[status,tableData])
 
   const handleFilter = (filter, status) => {
     const queryObject = _.pickBy(filter, Boolean);
@@ -68,7 +74,7 @@ const TaskReport = () => {
         </div>
       </FilterContainer>
 
-      <TaskReportDataTable isLoading={isLoading || isFetching} tableData={tableData} />
+      <TaskReportDataTable isLoading={isLoading || isFetching} tableData={filteredData} />
       <ToastContainer />
     </RefetchContext.Provider>
   );
