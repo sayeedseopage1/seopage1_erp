@@ -325,8 +325,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('checklist', [DashboardController::class, 'checklist'])->name('checklist');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard-advanced', [DashboardController::class, 'advancedDashboard'])->name('dashboard.advanced');
-    Route::get('dashboard-pm-performance', [DashboardController::class, 'pmPerformance'])->name('dashboard.pm_performance');
-    Route::post('dashboard-pm-data', [DashboardController::class, 'getPmData'])->name('dashboard.getPmData');
+    Route::get('dashboard-pm-performance/{id}', [DashboardController::class, 'pmPerformance'])->name('pm-performance');
+    // Route::post('dashboard-pm-data', [DashboardController::class, 'getPmData'])->name('dashboard.getPmData');
     Route::get('dashboard-core-metric', [DashboardController::class, 'coreMetric'])->name('dashboard.core.metric');
     Route::put('update-core-metric/{id}', [DashboardController::class, 'updateCoreMetric'])->name('update-core-metrics');
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
@@ -800,7 +800,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('new-task/store',[TaskController::class,'StoreNewTask'])->name('store-new-tasks');
     Route::post('new-task/edit',[TaskController::class,'EditTask'])->name('edit-new-tasks');
     Route::get('tasks/pending-parent-tasks', [TaskController::class, 'PendingParentTasks']);
-    Route::put('tasks/auth-pending-tasks/{id}', [TaskController::class, 'AuthPendingParentTasks']);
+    Route::get('tasks/auth-pending-tasks/{id}', [TaskController::class, 'AuthPendingParentTasks']);
     Route::get('tasks/check-pm-taskguideline/{id}', [TaskController::class, 'CheckPmTaskGuideline']);
     Route::post('task-guideline-store',[TaskController::class,'storeTaskGuideline'])->name('task-guideline-store');
     Route::post('tasks/report-issues/resolve', [TaskController::class, 'resolve_report']);
