@@ -140,6 +140,13 @@ class PublicUrlController extends Controller
       
         $deal_id->submission_status= 'Submitted';
         $deal_id->save();
+        $usr= User::where('id',$deal->client_id)->first();
+        //dd($usr);
+        $user=User::find($usr->id);
+        $user->mobile= $request->client_phone;
+        $user->email= $request->email;
+        $user->user_name=  $request->user_name;
+        $user->save();
        // dd($sign,$client,$deal_id);
 
         $authorization_action= AuthorizationAction::where('project_id',$this->project->id)->where('type','deliverable_modification_by_client')->first();
@@ -168,18 +175,30 @@ class PublicUrlController extends Controller
         $filename = str_slug($project->project_name) . '-agreement-' . $project->id;
     
         // Save the PDF to a temporary location
-        $tempFilePath = storage_path('app/temp/' . $filename . '.pdf');
-        $pdf->save($tempFilePath);
+        $tempDirectory = storage_path('app/temp');
+
+    // Create the directory if it doesn't exist
+    if (!file_exists($tempDirectory)) {
+        mkdir($tempDirectory, 0755, true);
+    }
+
+    // Define the file path for the temporary PDF
+    $tempFilePath = $tempDirectory . '/' . $filename . '.pdf';
+
+    // Save the PDF to the temporary location
+    $pdf->save($tempFilePath);
+
 
         event(new ProjectSignedEvent($this->project, $sign));
-        $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->get();
+       $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->orWhere('id',$project->client_id)->get();
+      //  $users= User::where('id',$project->client_id)->get();
         $project_id = Project::where('id',$this->project->id)->first();
        // dd($project_id);
       foreach ($users as $user) {
 
     //   Notification::send($user, new ClientDeliverableSignNotification($project_id));
-    $notification = new ClientDeliverableSignNotification($project_id);
-    $notification->attach($tempFilePath);
+    $notification = new ClientDeliverableSignNotification($project_id,$user);
+    //$notification->attach($tempFilePath);
 
     // Send the notification to the user
     Notification::send($user, $notification);
