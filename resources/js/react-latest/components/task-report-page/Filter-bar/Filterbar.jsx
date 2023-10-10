@@ -8,6 +8,7 @@ import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
 import ProjectFilterItem from "./ProjectFilter";
 import { useGetProjectsOptionsQuery } from "../../../../react/services/api/FilterBarOptionsApiSlice";
+import { User } from "../../../utils/user-details";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -19,7 +20,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [client, setClient] = React.useState(null);
     const [reportIssuer, setReportIssuer] = React.useState(null);
     const [accountableIndividual, setAccountableIndividual] = React.useState(null);
-    const [status, setStatus] = React.useState({id: "1_ts_r_1", column_name: 'All', title: 'all'});
+    const [status, setStatus] = React.useState({ id: "1_ts_r_1", column_name: 'All', title: 'all' });
     const [dateType, setDateType] = React.useState("Created Date");
     const [selectedProject, setSelectedProject] = React.useState(null);
     const { data: getProjectsOptions, isFetching } = useGetProjectsOptionsQuery('');
@@ -68,12 +69,14 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     ]);
 
     const handleProjectFilter = (e, data) => {
-        if(data){
+        if (data) {
             setSelectedProject(data);
-        }else{
+        } else {
             setSelectedProject(null)
         }
     }
+
+    const loggedUser = new User(window.Laravel.user);
 
     return (
         <div className="sp1_task_filter_bar">
@@ -113,22 +116,27 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                     <HDivider />
 
                     {/* Report Issuer */}
-                    <UserFilter
-                        title="Report Issuer"
-                        state={reportIssuer}
-                        setState={setReportIssuer}
-                        roleIds={[5, 6]}
-                    />
+                    {
+                        _.includes([5, 6], loggedUser.getRoleId()) ||
+                        <>
+                            <UserFilter
+                                title="Report Issuer"
+                                state={reportIssuer}
+                                setState={setReportIssuer}
+                                roleIds={[5, 6]}
+                            />
+                            <HDivider />
+                        </>
+                    }
 
 
-                    <HDivider />
 
                     {/* Accountable Individual */}
                     <UserFilter
                         title="Accountable Individual"
                         state={accountableIndividual}
                         setState={setAccountableIndividual}
-                        roleIds={[4,6,8]}
+                        roleIds={[4, 6, 8]}
                     />
 
 
@@ -140,10 +148,10 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         state={status}
                         setState={setStatus}
                     />
-                    
-                    
+
+
                     <HDivider />
-                    
+
                 </React.Fragment>
             )}
 

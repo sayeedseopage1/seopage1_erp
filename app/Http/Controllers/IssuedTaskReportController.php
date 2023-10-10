@@ -102,7 +102,7 @@ class IssuedTaskReportController extends AccountBaseController
         'developer_report_issues.reason as report_reason','developer_report_issues.comment as report_reason_details','developer_report_issues.status',
         'developer_report_issues.previousNotedIssue','resolved_by.id as resolved_by_id','resolved_by.name as resolved_by_name',
         'resolved_by.image as resolved_by_avatar','accountable_role.name as accountable_role_name','report_issuer_role.name as report_issuer_role_name',
-        'resolved_by_role.name as resolved_by_name',
+        'resolved_by_role.name as resolved_by_role_name',
 
         
         )->join('users as report_issuer','report_issuer.id','developer_report_issues.added_by')

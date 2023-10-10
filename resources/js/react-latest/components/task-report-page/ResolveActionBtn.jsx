@@ -28,13 +28,14 @@ const ResolveActionBtn = ({ data }) => {
       status: status,
       report_id: modalData?.id,
       admin_comment: text,
+      resolved_by: window.Laravel.user.id,
     };
 
     submitReport(data)
       .unwrap()
       .then((res) => {
         if (res.status === 200) {
-          toast.success(`Report ${status} successfully`, { theme: "dark" });
+          toast.success(`Report ${status} successfully`);
           close();
           setText('');
           setRefetch(prev=>!prev);
@@ -84,9 +85,11 @@ const ResolveActionBtn = ({ data }) => {
                   won't be able to start any task on next day.
                 </div> */}
 
+                <div style={{border:'solid 1px gray', borderRadius:'2px'}}>
                 <CKEditorComponent
                   onChange={(e, editor) => setText(editor.getData())}
                   placeholder='Write your comment here!' />
+                </div>
                 {
                   showError &&
                   <div className="alert alert-danger" role="alert">

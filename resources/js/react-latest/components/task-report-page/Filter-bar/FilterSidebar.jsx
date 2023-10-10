@@ -4,6 +4,8 @@ import UserFilter from './UserFilter';
 import StatusFilter from './StatusFilter';
 import DateTypeFilter from './DateTypeFilter';
 import ProjectFilterItem from './ProjectFilter';
+import _ from 'lodash';
+import { User } from '../../../utils/user-details';
 
 const FilterSidebar = ({
     client,
@@ -20,6 +22,8 @@ const FilterSidebar = ({
     isFetching,
     close,
 }) => {
+
+    const loggedUser = new User(window.Laravel.user);
 
     return (
         <div className='sp1_filter_sidebar'>
@@ -52,19 +56,22 @@ const FilterSidebar = ({
 
 
                 {/* Report Issuer */}
-                <UserFilter
-                    title="Report Issuer"
-                    state={reportIssuer}
-                    setState={setReportIssuer}
-                    roleIds={[5, 6]}
-                />
+                {
+                    _.includes([5, 6], loggedUser.getRoleId()) ||
+                    <UserFilter
+                        title="Report Issuer"
+                        state={reportIssuer}
+                        setState={setReportIssuer}
+                        roleIds={[5, 6]}
+                    />
+                }
 
                 {/* Accountable Individual */}
                 <UserFilter
                     title="Accountable Individual"
                     state={accountableIndividual}
                     setState={setAccountableIndividual}
-                    roleIds={[4,6,8]}
+                    roleIds={[4, 6, 8]}
                 />
 
 
