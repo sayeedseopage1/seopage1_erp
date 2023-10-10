@@ -88,7 +88,8 @@
                             Estimated Hourly Rate</td>
                             <td class="border-left-0">
                                 @if($project->hours_allocated >  0 )
-                              {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
+                               
+                              {{round(($project->project_budget+$project->deal->upsell_amount)/$project->hours_allocated ,0)}}$/hour
                               @else 
                               --
                               @endif
