@@ -21,8 +21,8 @@ const TaskReport = () => {
 
   useEffect(() => {
     // console.log({filter,status,refetch});
-    if (filter) {
-      // console.log('insert-useeffect-condition');
+    if (filter?.start_date) {
+      // console.log('insert-useeffect-condition',filter);
     
     const queryObject = _.pickBy(filter, Boolean);
     const loggedUser = new User(window.Laravel.user);

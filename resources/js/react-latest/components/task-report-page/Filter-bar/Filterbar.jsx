@@ -117,13 +117,13 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     {/* Report Issuer */}
                     {
-                        _.includes([5, 6], loggedUser.getRoleId()) ||
+                        _.includes([5, 6, 9, 10], loggedUser.getRoleId()) ||
                         <>
                             <UserFilter
                                 title="Report Issuer"
                                 state={reportIssuer}
                                 setState={setReportIssuer}
-                                roleIds={[5, 6]}
+                                roleIds={[5, 6, 9, 10]}
                             />
                             <HDivider />
                         </>

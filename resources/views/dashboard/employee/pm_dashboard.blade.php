@@ -2589,21 +2589,24 @@
 
             var todayOnlyDate = moment(todayDate).format('DD');
 
-            if (todayOnlyDate > 15) {
-                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
-                    monthDate).add(1, 'month').format('MMMM, YYYY'));
-            } else {
+            if (todayOnlyDate < 15) {
                 $('.monthDate').text('' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
                     ' - ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
+            } else {
+                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
+                    monthDate).add(1, 'month').format('MMMM, YYYY'));
             }
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
-                    if (todayOnlyDate > 15) {
+                    // console.log(todayOnlyDate);
+                    if (todayOnlyDate < 15) {
+                        monthDate = moment(monthDate).subtract(2, 'month');
+                    }else {
                         monthDate = moment(monthDate).subtract(1, 'month');
-                    } else {
-                        monthDate = moment(monthDate).subtract(1, 'month');
+                        // monthDate = moment(monthDate).add(1, 'month');
+                        console.log("else", moment(monthDate).format('MMMM, YYYY'));
                     }
                     $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                         moment(monthDate).add(1, 'month').format('MMMM, YYYY'));

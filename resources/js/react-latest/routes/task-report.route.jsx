@@ -24,7 +24,7 @@ if (container) {
                     <DndProvider backend={HTML5Backend}>
                         <Routes>
                             <Route index element={
-                                _.includes([1,5,6,8], loggedUser.getRoleId())?
+                                _.includes([1,5,6,8,9,10], loggedUser.getRoleId())?
                                 <TaskReport />:
                                 <ERROR status_code={403} error_mssg={'Permission Denied'}/>
                                 }/>

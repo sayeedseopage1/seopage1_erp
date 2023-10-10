@@ -92,7 +92,7 @@ const ResolveActionBtn = ({ data }) => {
                 </div>
                 {
                   showError &&
-                  <div className="alert alert-danger" role="alert">
+                  <div className="alert alert-danger mt-3" role="alert">
                     Please write a comment
                   </div>
 
