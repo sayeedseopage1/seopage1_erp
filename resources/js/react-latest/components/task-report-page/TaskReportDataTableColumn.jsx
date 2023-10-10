@@ -40,7 +40,7 @@ export const TaskReportDataTableColumn = [
     draggable: true,
     group: false,
     cell: ({ row: { original }, className }) => {
-      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+      return <div className={`${className}`} style={{ minWidth: '10rem' }}>
         {
           original?.resolved_by_id ?
             <UserRender
@@ -83,7 +83,7 @@ export const TaskReportDataTableColumn = [
     sorted: false,
     sortAccessor: 'client',
     cell: ({ row: { original }, className }) => {
-      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+      return <div className={`${className}`} style={{ minWidth: '10rem' }}>
         {
           original?.clientId ?
             <UserRender
@@ -155,7 +155,7 @@ export const TaskReportDataTableColumn = [
     draggable: true,
     group: false,
     cell: ({ row: { original }, className }) => {
-      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+      return <div className={`${className}`} style={{ minWidth: '10rem' }}>
         {
           original?.report_issuer_id ?
             <UserRender
@@ -179,7 +179,7 @@ export const TaskReportDataTableColumn = [
     draggable: true,
     group: false,
     cell: ({ row: { original }, className }) => {
-      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+      return <div className={`${className}`} style={{ minWidth: '10rem' }}>
         {
           original?.accountable_name ?
             <UserRender
