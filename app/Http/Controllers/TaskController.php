@@ -5190,7 +5190,7 @@ class TaskController extends AccountBaseController
             ->where('task_users.user_id',$id)
             ->where('tasks.board_column_id',3)
             ->count();
-        if($tasks > 10)
+        if($tasks > 4)
         {
             return response()->json([
                 'tasks'=> $tasks,
