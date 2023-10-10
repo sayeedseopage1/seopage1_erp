@@ -184,7 +184,7 @@ export const TaskReportDataTableColumn = [
           original?.accountable_name ?
             <UserRender
               name={original?.accountable_name}
-              profileUrl={`/account/employees/${''}`}
+              profileUrl={`/account/employees/${original?.accountable_id}`}
               image={original?.accountable_avatar}
               role={original?.accountable_role_name}
               roleLink={''}
