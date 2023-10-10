@@ -133,7 +133,6 @@ export const TaskReportDataTableColumn = [
     group: false,
     cell: ({ row: { original }, className }) => {
       return <div className={`${className}`} style={{ minWidth: '5rem' }}>
-        <a className="text-primary font-weight-bold" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
         <Popover>
           <Popover.Button>
             <a className="text-primary font-weight-bold singleline-ellipsis" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
