@@ -225,6 +225,9 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             }
         }
 
+        formSubmit();
+        return;
+
         const response = await checkRestrictedWords(task?.projectId).unwrap();
 
         if(response.status === 400){

@@ -180,14 +180,15 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         <div className={styles.task_info__text}>
                                            <label>
                                                 <input
-                                                    onChange={e => setHasQuestion(e.target.value)} value={true}
+                                                    onChange={e => setHasQuestion(true)}
+                                                    value={true}
                                                     type="radio"
                                                     name="has_question"
                                                 /> Yes
                                             </label>
                                            <label>
                                                 <input
-                                                    onChange={e => setHasQuestion(e.target.value)}
+                                                    onChange={e => setHasQuestion(false)}
                                                     value={false}
                                                     type="radio"
                                                     defaultChecked={true}
@@ -197,7 +198,6 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-<<<<<<< HEAD
 
 
                                     {
@@ -230,20 +230,6 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             {isLoading ? (
                                                 <Button isLoading={isLoading} variant="primary">
                                                     Loading
-=======
-                                    <div className={styles.button_group}>
-                                        {isLoading ? (
-                                            <Button isLoading={isLoading} variant="primary">
-                                                Loading
-                                            </Button>
-                                        ) : (
-                                            <>
-                                                <Button
-                                                    variant="danger"
-                                                   onClick={e => handleSubmission(e,false)}
-                                                >
-                                                    Deny
->>>>>>> 9ed2d1eb7 (pull request)
                                                 </Button>
                                             ) : (
                                                 <>
