@@ -8,6 +8,7 @@ import Avatar from "../../global/Avatar";
 import { useUpdateAuthorizeTaskMutation } from "../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
 import QuestionAnswer from "./QuestionAnswer";
+import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
 
 const TaskAuthorizationForm = ({ data, table }) => {
     const [visible, setVisible] = useState(false);
@@ -170,6 +171,13 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
+
+                                     <TaskAuthorizationQuestionAnswers />
+
+
+                                     <div className={styles.section_divider}>
+                                        <span className="badge badge-secondary"> Authority </span>
+                                    </div>
 
                                     <div className={styles.inline_flex}>
                                         <div

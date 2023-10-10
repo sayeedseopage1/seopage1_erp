@@ -24,10 +24,6 @@ import { toast } from "react-toastify";
 import { useCheckRestrictedWordsMutation } from "../../services/api/SingleTaskPageApi";
 
 const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
-    const {
-        task: taskDetails,
-        subTask,
-    } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
     //   form data
@@ -50,8 +46,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     // ui
     const [visibleAcknowledgementModal, setVisibleAcknowledgementModal] = React.useState(false);
 
-    const task = new SingleTask(taskDetails);
-    const auth = new User(window?.Laravel?.user);
+
 
     const params = useParams();
     const [storeProjectTask, { isLoading, error }] = useStoreProjectTaskMutation()
@@ -225,10 +220,8 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
             }
         }
 
-        formSubmit();
-        return;
+        const response = await checkRestrictedWords(params?.projectId).unwrap();
 
-        const response = await checkRestrictedWords(task?.projectId).unwrap();
 
         if(response.status === 400){
             const error = new Object();

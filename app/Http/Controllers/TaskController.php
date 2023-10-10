@@ -77,6 +77,7 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
 
@@ -5460,5 +5461,32 @@ class TaskController extends AccountBaseController
             $task_user->save();
         }
         return response()->json(['status'=>200]);
+    }
+
+
+    // Parent task authorization conversations
+    // add questions
+    public function get_pending_parent_task_conversation_question(Request $request){
+        dd($request->all());
+    }
+
+    public function add_pending_parent_task_conversation_question(Request $request){
+        $conversation = new PendingParentTaskConversation();
+        $conversation-> question = $request->question;
+        $conversation-> pending_parent_task_id = $request->pending_parent_task_id;
+        $conversation-> created_by = Auth::id();
+        $conversation-> created_date = Carbon::now();
+
+        $conversation->save();
+
+        return response()->json([
+            'data'=> $conversation,
+            'status'=>200
+        ],200);
+
+    }
+
+    public function update_pending_parent_task_conversation_question_by_answer(Request $request, $conversation_id){
+        dd($request->all());
     }
 }

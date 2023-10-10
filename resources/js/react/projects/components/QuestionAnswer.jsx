@@ -1,14 +1,34 @@
 import React, { useState } from "react";
 import styles from "./taskAuthorization.module.css";
 import Button from "../../global/Button";
+import { useCreatePendingTaskAuthorizationConversationMutation } from "../../services/api/projectApiSlice";
+import { toast } from "react-toastify";
 
 const QuestionAnswer = ({ data }) => {
     const [question, setQuestion] = useState("");
     const [err, setErr] = useState(new Object());
 
-    const handleSubmission = (e) => {
+    const [
+        createPendingTaskAuthorizationConversation,
+        {isLoading}
+    ] = useCreatePendingTaskAuthorizationConversationMutation();
+
+
+    const handleSubmission = async (e) => {
         e.preventDefault();
         console.log({question})
+        await createPendingTaskAuthorizationConversation({
+            question,
+            pending_parent_task_id: data.id
+        })
+        .unwrap()
+        .then(res => {
+            if(res?.status === 200){
+                toast.success('Your question has been submitted successfully.');
+                console.log(res)
+            }
+        })
+        .catch(err => console.log(err))
     }
 
     return (
@@ -39,6 +59,7 @@ const QuestionAnswer = ({ data }) => {
                                 variant="success"
                                 onClick={handleSubmission}
                             >
+                                <i className="fa-solid fa-paper-plane" />
                                 Send
                             </Button>
                         </>
