@@ -11,7 +11,7 @@ import Button from '../ui/Button';
 export const RefetchContext = createContext({});
 
 const TaskReport = () => {
-  const [getTaskReport, { isLoading }] = useLazyGetTaskReportQuery();
+  const [getTaskReport, { isLoading,isFetching }] = useLazyGetTaskReportQuery();
   const [tableData, setTableData] = useState([]);
   const [refetch, setRefetch] = useState(true);
   const [filter, setFilter] = useState(null);
@@ -61,14 +61,14 @@ const TaskReport = () => {
             variant="primary"
             onClick={handleRefresh}
             className="d-flex align-items-center btn-outline-dark"
-            isLoading={isLoading}
+            isLoading={isLoading || isFetching}
           >
             <span className="d-inline ml-1"> Refresh </span>
           </Button>
         </div>
       </FilterContainer>
 
-      <TaskReportDataTable isLoading={isLoading} tableData={tableData} />
+      <TaskReportDataTable isLoading={isLoading || isFetching} tableData={tableData} />
       <ToastContainer />
     </RefetchContext.Provider>
   );

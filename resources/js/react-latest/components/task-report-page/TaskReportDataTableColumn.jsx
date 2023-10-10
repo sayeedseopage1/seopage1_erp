@@ -14,7 +14,7 @@ export const TaskReportDataTableColumn = [
     sorted: false,
     cell: ({ row: { original }, className }) => {
       return <div className={`${className}`} style={{ minWidth: '4rem' }}>
-        {original?.id}
+        TSKRPTP{original?.projectId}T{original?.taskId}R{original?.id}
       </div>
     }
   },
@@ -33,6 +33,30 @@ export const TaskReportDataTableColumn = [
     }
   },
   {
+    id: 'resolved_by',
+    header: 'Resolved By',
+    className: '',
+    sorted: false,
+    draggable: true,
+    group: false,
+    cell: ({ row: { original }, className }) => {
+      return <div className={`${className}`} style={{ minWidth: '5rem' }}>
+        {
+          original?.resolved_by_id ?
+            <UserRender
+              name={original?.resolved_by_name}
+              profileUrl={`/account/employees/${original?.resolved_by_id}`}
+              image={original?.resolved_by_avatar}
+              role={original?.resolved_by_role_name}
+              roleLink={''}
+              id={original?.resolved_by_id}
+            /> :
+            <span style={{fontWeight:'bold',color:'gray'}}>Not Resolved Yet</span>
+        }
+      </div>
+    }
+  },
+  {
     id: 'resolved_on',
     header: 'Resolved On',
     className: '',
@@ -43,9 +67,9 @@ export const TaskReportDataTableColumn = [
     cell: ({ row: { original }, className }) => {
       return <div className={`${className}`} style={{ minWidth: '5rem' }}>
         {
-          original?.resolved_on ?
-            dayjs(original?.resolved_on).format('DD-MMM-YYYY') :
-            'Not Resolved Yet'
+          original?.status === "pending" ?
+          <span style={{fontWeight:'bold',color:'gray'}}>Not Resolved Yet</span> :
+          dayjs(original?.resolved_on).format('DD-MMM-YYYY')
         }
       </div>
     }
@@ -110,6 +134,17 @@ export const TaskReportDataTableColumn = [
     cell: ({ row: { original }, className }) => {
       return <div className={`${className}`} style={{ minWidth: '5rem' }}>
         <a className="text-primary font-weight-bold" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
+        <Popover>
+          <Popover.Button>
+            <a className="text-primary font-weight-bold singleline-ellipsis" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
+          </Popover.Button>
+
+          <Popover.Panel>
+            <div className="revision_popover_panel">
+              <a className="text-primary font-weight-bold" href={`/account/tasks/${original?.taskId}`} target="_blank">{original?.task_heading}</a>
+            </div>
+          </Popover.Panel>
+        </Popover>
       </div>
     }
   },
@@ -128,7 +163,7 @@ export const TaskReportDataTableColumn = [
               name={original?.report_issuer_name}
               profileUrl={`/account/employees/${original?.report_issuer_id}`}
               image={original?.report_issuer_avatar}
-              role="Client"
+              role={original?.report_issuer_role_name}
               roleLink={''}
               id={original?.report_issuer_id}
             /> :
@@ -152,7 +187,7 @@ export const TaskReportDataTableColumn = [
               name={original?.accountable_name}
               profileUrl={`/account/employees/${''}`}
               image={original?.accountable_avatar}
-              role="Client"
+              role={original?.accountable_role_name}
               roleLink={''}
               id={original?.accountable_name}
             /> :
