@@ -7,6 +7,7 @@ import _ from 'lodash';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Button from '../ui/Button';
+import { User } from '../utils/user-details';
 
 export const RefetchContext = createContext({});
 
@@ -22,7 +23,17 @@ const TaskReport = () => {
     // console.log({filter,status,refetch});
     if (filter) {
       // console.log('insert-useeffect-condition');
-      getTaskReport(filter)
+    
+    const queryObject = _.pickBy(filter, Boolean);
+    const loggedUser = new User(window.Laravel.user);
+
+    if (_.includes([5,6], loggedUser.getRoleId())) {
+      queryObject.report_issuer_id = loggedUser.userId;
+    }
+    const searchParams = new URLSearchParams(queryObject).toString();
+    // console.log({queryObject,searchParams});
+
+      getTaskReport(searchParams)
         .unwrap()
         .then(({ report_issue }) => {
           // console.log("fetched data");
@@ -46,9 +57,7 @@ const TaskReport = () => {
   },[status,tableData])
 
   const handleFilter = (filter, status) => {
-    const queryObject = _.pickBy(filter, Boolean);
-    const searchParams = new URLSearchParams(queryObject).toString();
-    setFilter(searchParams);
+    setFilter(filter);
     setStatus(status);
   }
 
