@@ -93,7 +93,7 @@ class ClientDeliverableSignNotification extends Notification
         '.'You signed deliverable document '.$project->project_name.'. To check the details, follow this link.'.
         '</p>'
         ;
-        $content = ''
+        $content = '<p>We have also attached the document in this email and you can download the attachment.</p>'
 
         ;
     $subject = 'Greetings from Seopage1';

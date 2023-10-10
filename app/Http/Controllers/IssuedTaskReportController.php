@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DeveloperReportIssue;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Auth;
 
 
 class IssuedTaskReportController extends AccountBaseController
@@ -18,6 +19,10 @@ class IssuedTaskReportController extends AccountBaseController
     public function index()
     {
         $this->pageTitle = 'Tasks Reports';
+        if(Auth::user()->role_id == 7)
+        {
+            abort(403);
+        };
         return view('tasks-report.index',$this->data);
     }
 
