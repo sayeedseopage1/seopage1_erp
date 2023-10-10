@@ -16,7 +16,7 @@ const taskApiSlice = apiSlice.injectEndpoints({
                 body: data
             }),
 
-            invalidatesTags: ["TASKS"]
+            invalidatesTags: ["TASKS", "AUTHORIZE_PARENT_TASK"]
         }),
 
         // update task

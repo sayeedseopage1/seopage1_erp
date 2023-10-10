@@ -86,21 +86,21 @@ const projectApiSlice = apiSlice.injectEndpoints({
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS"]
+            invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS", "AUTHORIZE_PARENT_TASK"]
         }),
 
         updatePendingTaskAuthorizationConversation:build.mutation({
             query: (data) => ({
-                url: `/account/pending-task-conversations/${data.id}`,
+                url: `/account/pending-task-conversations`,
                 method: "PUT",
                 body: {
-                    ...data,
+                    data,
                     _token: document
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
             }),
-            invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS"]
+            invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS", "AUTHORIZE_PARENT_TASK"]
         })
     })
 }) ;

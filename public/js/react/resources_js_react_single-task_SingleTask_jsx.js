@@ -16973,7 +16973,7 @@ var TableRow = function TableRow(_ref) {
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
       className: "__tbody_td _tbody_td_start_time _tbody_td_start_end",
       children: log !== null && log !== void 0 && log.end_time ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.Fragment, {
-        children: [dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.end_time).format('MMM DD, YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.start_time).format('hh:mm a')]
+        children: [dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.end_time).format('MMM DD, YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), dayjs__WEBPACK_IMPORTED_MODULE_1___default()(log === null || log === void 0 ? void 0 : log.end_time).format('hh:mm a')]
       }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         className: "text-success font-weight-bold",
         children: "Active"

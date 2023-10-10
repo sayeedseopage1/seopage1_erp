@@ -224,11 +224,12 @@
 
 .ques_ans_wrapper .ques{
     font-weight: 500;
+    margin-bottom: 6px;
 }
 
 .ques_ans_wrapper .ans{
     font-size: 13px;
-    padding-inline: 10px;
+    padding-left: 10px;
     color: #5F5F5F;
 }
 
@@ -242,4 +243,18 @@
 
 .hasQuestion{
     text-align: center;
+}
+
+.ques_by{
+    font-size: 12px !important;
+    color: #797979;
+    padding-inline: 10px;
+    font-size: 400px;
+    display: block;
+    padding-left: 16px;
+}
+
+.ques_by > strong {
+    font-size: 12px;
+    color: #5F5F5F;
 }

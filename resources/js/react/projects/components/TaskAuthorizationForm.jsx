@@ -9,12 +9,20 @@ import { useUpdateAuthorizeTaskMutation } from "../../services/api/projectApiSli
 import { toast } from "react-toastify";
 import QuestionAnswer from "./QuestionAnswer";
 import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
+import { User } from "../../utils/user-details";
+import _ from "lodash";
 
 const TaskAuthorizationForm = ({ data, table }) => {
     const [visible, setVisible] = useState(false);
     const [comment, setComment] = useState("");
     const [hasQuestion, setHasQuestion] = useState(false);
     const [err, setErr] = useState(new Object());
+
+    const [conversations, setConversations] = React.useState(data.conversations);
+
+    const updateConversation = (entry) => {
+        setConversations([...entry])
+    };
 
     const open = () => setVisible(true);
     const close = () => setVisible(false);
@@ -44,11 +52,19 @@ const TaskAuthorizationForm = ({ data, table }) => {
         }
     };
 
+    const user = new User(window.Laravel.user);
+
+    const notAnswered = _.filter(conversations, c => !c.replied_by)
+    const auth = _.includes([1, 8], user.getRoleId());
+
     return (
         <div>
             <div className={styles.action}>
-                <Button onClick={open} variant="tertiary">
-                    Approve/Deny
+                <Button onClick={open} variant={data.approval_status === null ? 'tertiary': data.approval_status === 1 ? 'success' : 'danger'}>
+                    {data.approval_status === null ?
+                        (!auth ? _.size(notAnswered) ? `${_.size(notAnswered)} Questions` : 'View' : 'Approve/Deny') :
+                        "View"
+                    }
                 </Button>
 
                 <Modal isOpen={visible}>
@@ -89,6 +105,17 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                     "hh:mm A"
                                                 )}
                                             </strong>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Status
+                                        </div>
+                                        <div className={styles.task_info__text}>
+                                            {data.approval_status === null ?<span className="badge badge-warning">Pending</span> : data.approval_status === 1 ? <span className="badge badge-success">Approved</span> : <span className="badge badge-danger">Rejected</span> }
                                         </div>
                                     </div>
 
@@ -172,94 +199,108 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     </div>
 
 
-                                     <TaskAuthorizationQuestionAnswers />
-
-
-                                     <div className={styles.section_divider}>
-                                        <span className="badge badge-secondary"> Authority </span>
-                                    </div>
-
-                                    <div className={styles.inline_flex}>
-                                        <div
-                                            className={styles.task_info__label}
-                                        >
-                                           Has Question
-                                        </div>
-                                        <div className={styles.task_info__text}>
-                                           <label>
-                                                <input
-                                                    onChange={e => setHasQuestion(true)}
-                                                    value={true}
-                                                    type="radio"
-                                                    name="has_question"
-                                                /> Yes
-                                            </label>
-                                           <label>
-                                                <input
-                                                    onChange={e => setHasQuestion(false)}
-                                                    value={false}
-                                                    type="radio"
-                                                    defaultChecked={true}
-                                                    name="has_question"
-                                                /> No
-                                            </label>
-                                        </div>
-                                    </div>
-
-
+                                     <TaskAuthorizationQuestionAnswers
+                                        data={conversations}
+                                        updateConversations={updateConversation}
+                                    />
 
                                     {
-                                        hasQuestion ?
-                                            <QuestionAnswer
-                                                data={data}
-                                            />
-                                        : <>
-                                        <div className={styles.comment_field}>
-                                            <label className="task_info__label">
-                                                Comment:
-                                            </label>
-                                            <textarea
-                                                rows={6}
-                                                value={comment}
-                                                onChange={(e) =>
-                                                    setComment(e.target.value)
+                                        (auth && data.approval_status === null) && <React.Fragment>
+                                             <div className={styles.section_divider}>
+                                                    <span className="badge badge-secondary"> Authority </span>
+                                                </div>
+
+                                                <div className={styles.inline_flex}>
+                                                    <div
+                                                        className={styles.task_info__label}
+                                                    >
+                                                    Has Question
+                                                    </div>
+                                                    <div className={styles.task_info__text}>
+                                                    <label>
+                                                            <input
+                                                                onChange={e => setHasQuestion(true)}
+                                                                value={true}
+                                                                type="radio"
+                                                                name="has_question"
+                                                            /> Yes
+                                                        </label>
+                                                    <label>
+                                                            <input
+                                                                onChange={e => setHasQuestion(false)}
+                                                                value={false}
+                                                                type="radio"
+                                                                defaultChecked={true}
+                                                                name="has_question"
+                                                            /> No
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+
+
+                                                {
+                                                    hasQuestion ?
+                                                        <QuestionAnswer
+                                                            data={data}
+                                                            conversations={conversations}
+                                                            setConversations={updateConversation}
+                                                        />
+                                                    :
+                                                    <>
+                                                    <div className={styles.comment_field}>
+                                                        <label className="task_info__label">
+                                                            Comment:
+                                                        </label>
+                                                        <textarea
+                                                            rows={6}
+                                                            value={comment}
+                                                            onChange={(e) =>
+                                                                setComment(e.target.value)
+                                                            }
+                                                            placeholder="Write your comment here."
+                                                        />
+
+                                                        {err?.comment && (
+                                                            <span className="text-danger">
+                                                                <small>{err?.comment}</small>
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    <div className={styles.button_group}>
+                                                        {isLoading ? (
+                                                            <Button isLoading={isLoading} variant="primary">
+                                                                Loading
+                                                            </Button>
+                                                        ) : (
+                                                            <>
+                                                                <Button
+                                                                    variant="danger"
+                                                                onClick={e => handleSubmission(e,false)}
+                                                                >
+                                                                    Deny
+                                                                </Button>
+                                                                <Button
+                                                                    variant="success"
+                                                                    onClick={(e) =>
+                                                                        handleSubmission(e,true)
+                                                                    }
+                                                                >
+                                                                    Approve
+                                                                </Button>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                    </>
                                                 }
-                                                placeholder="Write your comment here."
-                                            />
-
-                                            {err?.comment && (
-                                                <span className="text-danger">
-                                                    <small>{err?.comment}</small>
-                                                </span>
-                                            )}
-                                        </div>
-
-                                        <div className={styles.button_group}>
-                                            {isLoading ? (
-                                                <Button isLoading={isLoading} variant="primary">
-                                                    Loading
-                                                </Button>
-                                            ) : (
-                                                <>
-                                                    <Button
-                                                        variant="danger"
-                                                    onClick={e => handleSubmission(e,false)}
-                                                    >
-                                                        Deny
-                                                    </Button>
-                                                    <Button
-                                                        variant="success"
-                                                        onClick={(e) =>
-                                                            handleSubmission(e,true)
-                                                        }
-                                                    >
-                                                        Approve
-                                                    </Button>
-                                                </>
-                                            )}
-                                        </div>
-                                        </>
+                                        </React.Fragment>
                                     }
+
+                                   {data.approval_status !== null &&  <div className={`alert ${data.approval_status=== 1 ? 'alert-success' : 'alert-danger'} text-center`}>
+                                            Authorized by <a href={`/account/employees/${data.authorized_by}`}>
+                                            {data.approved_by_name} </a> at {dayjs(data.updated_at).format('MMM DD, YYYY hh:mm A')}
+                                    </div>}
                                 </div>
                             </Card.Body>
                         </Card>

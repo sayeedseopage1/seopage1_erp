@@ -1675,12 +1675,12 @@ class TaskController extends AccountBaseController
             $this->addPermission = user()->permission('add_tasks');
             abort_403(!in_array($this->addPermission, ['all', 'added']));
         }
-
+        
         // DB::beginTransaction();
         $ganttTaskArray = [];
         $gantTaskLinkArray = [];
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-        if($request->need_authorization=="true"){
+        if($request->need_authorization){
             $pending_parent_tasks = new PendingParentTasks();
             $pending_parent_tasks->heading = $request->heading;
             $pending_parent_tasks->description = $request->description;
@@ -1699,7 +1699,7 @@ class TaskController extends AccountBaseController
             $pending_parent_tasks->added_by = Auth::user()->id;
             $pending_parent_tasks->acknowledgement = $request->acknowledgement;
             $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
-            $pending_parent_tasks->need_authorization = $request->need_authorization;
+            $pending_parent_tasks->need_authorization = $request->need_authorization ? 1 : 0;
             $pending_parent_tasks->save();
             if ($request->hasFile('file')) {
 
@@ -5317,6 +5317,7 @@ class TaskController extends AccountBaseController
 
         }
     }
+    
     public function PendingParentTasks(){
         $user = Auth::user();
         if($user->role_id==1 || $user->role_id==8){
@@ -5352,15 +5353,31 @@ class TaskController extends AccountBaseController
                 'assignee_by.id as assignee_by_id',
                 'assignee_by.name as assignee_by_name',
                 'assignee_by.image as assignee_by_avatar',
-
+                'approved_by.name as approved_by_name',
+                'approved_by.image as approved_by_avatar',
             ])
             ->leftJoin('projects','pending_parent_tasks.project_id','=','projects.id')
             ->leftJoin('users as client','projects.client_id','=','client.id')
             ->leftJoin('users as assignee_to','pending_parent_tasks.user_id','=','assignee_to.id')
             ->leftJoin('users as assignee_by','pending_parent_tasks.added_by','=','assignee_by.id')
+            ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
             ->where('pending_parent_tasks.added_by', $user->id)
             ->get();
         }
+
+        $pendingParentTasks->each(function($pendingParentTask){
+            $pendingParentTask->conversations = PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $pendingParentTask->id)
+                                                ->select([
+                                                    "pending_parent_task_conversations.*",
+                                                    'created_by_user.id as created_by_id',
+                                                    'created_by_user.name as created_by_name',
+                                                    'replied_by_user.id as replied_by_id',
+                                                    'replied_by_user.name as replied_by_name',
+                                                ])
+                                                ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
+                                                ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                                                ->get();
+        }); 
 
         return response()->json([
             'data'=>$pendingParentTasks,
@@ -5371,7 +5388,7 @@ class TaskController extends AccountBaseController
     public function AuthPendingParentTasks(Request $request, $id){
         if($request->status){
             $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
-            $pendingParentTasks->approval_status =  $request->approval_status;
+            $pendingParentTasks->approval_status =  $request->status;
             $pendingParentTasks->comment = $request->comment;
             $pendingParentTasks->authorize_by = Auth::user()->id;
             $pendingParentTasks->save();
@@ -5417,7 +5434,7 @@ class TaskController extends AccountBaseController
 
         }else{
             $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
-            $pendingParentTasks->approval_status =  $request->approval_status;
+            $pendingParentTasks->approval_status =  $request->status;
             $pendingParentTasks->comment = $request->comment;
             $pendingParentTasks->authorize_by = Auth::user()->id;
             $pendingParentTasks->save();
@@ -5466,8 +5483,12 @@ class TaskController extends AccountBaseController
 
     // Parent task authorization conversations
     // add questions
-    public function get_pending_parent_task_conversation_question(Request $request){
-        dd($request->all());
+    public function get_pending_parent_task_conversation_question(Request $request, $task_id){
+        $conversations = PendingParentTaskConversation::where('pending_parent_task_id', $task_id)->get();
+        return response()->json([
+            'data'=> $conversations,
+            'status'=>200
+        ],200);
     }
 
     public function add_pending_parent_task_conversation_question(Request $request){
@@ -5479,14 +5500,55 @@ class TaskController extends AccountBaseController
 
         $conversation->save();
 
+        $data = PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $request->pending_parent_task_id)
+                ->select([
+                    "pending_parent_task_conversations.*",
+                    'created_by_user.id as created_by_id',
+                    'created_by_user.name as created_by_name',
+                    'replied_by_user.id as replied_by_id',
+                    'replied_by_user.name as replied_by_name',
+                ])
+                ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
+                ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                ->get();
+
         return response()->json([
-            'data'=> $conversation,
+            'data'=> $data,
             'status'=>200
         ],200);
-
+        
     }
 
-    public function update_pending_parent_task_conversation_question_by_answer(Request $request, $conversation_id){
-        dd($request->all());
+    public function update_pending_parent_task_conversation_question_by_answer(Request $request){
+        $data = $request->data;
+        $pending_parent_task_id = $data[0]["pending_parent_task_id"];
+  
+        foreach ($data as $key => $value) {
+            # code...
+            $conversation = PendingParentTaskConversation::find($value["id"]);
+            $conversation-> answer = $value["answer"]; 
+            $conversation-> replied_by = Auth::id();
+            $conversation-> replied_date = Carbon::now();
+            $conversation->has_update = true; 
+            $conversation->save(); 
+        } 
+ 
+        $conversations =  PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $pending_parent_task_id)
+                                                ->select([
+                                                    "pending_parent_task_conversations.*",
+                                                    'created_by_user.id as created_by_id',
+                                                    'created_by_user.name as created_by_name',
+                                                    'replied_by_user.id as replied_by_id',
+                                                    'replied_by_user.name as replied_by_name',
+                                                ])
+                                                ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
+                                                ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                                                ->get();
+
+
+        return response()->json([
+            'data'=> $conversations,
+            'status'=>200
+        ],200);
     }
 }
