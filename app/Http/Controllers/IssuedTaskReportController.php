@@ -100,14 +100,21 @@ class IssuedTaskReportController extends AccountBaseController
         'report_issuer.image as report_issuer_avatar','tasks.id as taskId','tasks.heading as task_heading','accountable.id as accountable_id','accountable.name as accountable_name',
         'accountable.image as accountable_avatar','projects.id as projectId','projects.project_name as project_name','client.id as clientId','client.name as client_name','client.image as client_avatar',
         'developer_report_issues.reason as report_reason','developer_report_issues.comment as report_reason_details','developer_report_issues.status',
-        'developer_report_issues.previousNotedIssue'
+        'developer_report_issues.previousNotedIssue','resolved_by.id as resolved_by_id','resolved_by.name as resolved_by_name',
+        'resolved_by.image as resolved_by_avatar','accountable_role.name as accountable_role_name','report_issuer_role.name as report_issuer_role_name',
+        'resolved_by_role.name as resolved_by_name',
 
         
         )->join('users as report_issuer','report_issuer.id','developer_report_issues.added_by')
         ->leftJoin('users as accountable','accountable.id','developer_report_issues.person')
         ->leftJoin('tasks','tasks.id','developer_report_issues.task_id')
         ->leftJoin('projects','projects.id','tasks.project_id')
-        ->leftJoin('users as client','client.id','projects.client_id');
+        ->leftJoin('users as client','client.id','projects.client_id')
+        ->leftJoin('users as resolved_by','resolved_by.id','developer_report_issues.resolved_by')
+        ->leftJoin('roles as accountable_role','accountable_role.id','accountable.role_id')
+        ->leftJoin('roles as report_issuer_role','report_issuer_role.id','report_issuer.role_id')
+        ->leftJoin('roles as resolved_by_role','resolved_by_role.id','resolved_by.role_id')
+        ;
         if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
         {
 

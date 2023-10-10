@@ -40,7 +40,7 @@ class CompletedProjectCheck extends Command
         $projects= Project::select('projects.*')
         ->join('deals','deals.id','projects.deal_id')
         ->leftJoin('project_submissions','project_submissions.project_id','projects.id')
-        ->where('project_submissions.status as submission_status','accepted')
+        ->where('project_submissions.status','accepted')
         ->where('deals.project_type','fixed')
         
         ->where('projects.status','in progress')
@@ -89,11 +89,7 @@ class CompletedProjectCheck extends Command
 
             }
 
-  
-            
-                 
-  
-  
+
           }
   
           $this->info('Project marks as completed');

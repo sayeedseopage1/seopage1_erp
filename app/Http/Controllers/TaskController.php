@@ -705,6 +705,7 @@ class TaskController extends AccountBaseController
         $report->admin_comment = $request->admin_comment;
 
         $report->status = $request->status;
+        $report->resolved_by= Auth::id();
         $report->save();
         return response()->json([
             'status' => 200,
@@ -3976,7 +3977,7 @@ class TaskController extends AccountBaseController
         if($request->date != null)
         {
 
-            $currentDate = Carbon::parse($request->date);
+            $currentDate = $request->date;
 
         }else
         {
@@ -4002,6 +4003,7 @@ class TaskController extends AccountBaseController
             {
                 $tracked_times = $totalMinutes;
             }
+       // dd($tracked_times);
 
            // $target_time=  $dayOfWeek =
            $current_day = Carbon::now();
