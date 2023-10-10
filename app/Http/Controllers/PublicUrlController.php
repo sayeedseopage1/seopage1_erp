@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientForm;
+use App\Models\Deal;
 use Carbon\Carbon;
 use App\Helper\Files;
 use App\Helper\Reply;
@@ -88,6 +90,7 @@ class PublicUrlController extends Controller
     public function projectSign(SignRequest $request, $id)
     {
         //dd($request,$id);
+      //  DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
         //dd($this->project);
 
@@ -99,6 +102,7 @@ class PublicUrlController extends Controller
         $sign->full_name = $request->first_name . ' ' . $request->last_name;
         $sign->project_id = $this->project->id;
         $sign->email = $request->email;
+        $sign->number= $request->phone_no;
         $imageName = null;
 
         if ($request->signature_type == 'signature') {
@@ -121,6 +125,22 @@ class PublicUrlController extends Controller
 
         $sign->signature = $imageName;
         $sign->save();
+        $project= Project::where('id',$this->project->id)->first();
+        $deal= Deal::where('id',$project->deal_id)->first();
+        $client = new ClientForm();
+        $client->deal_id=$project->deal_id;
+        $client->client_username= $request->client_username;
+        $client->client_email= $request->email;
+        $client->client_phone= $request->phone_no;
+        $client->client_whatsapp= $request->phone_no;
+       
+        $client->save();
+        $deal_id= Deal::find($client->deal_id);
+        //dd($deal);
+      
+        $deal_id->submission_status= 'Submitted';
+        $deal_id->save();
+       // dd($sign,$client,$deal_id);
 
         $authorization_action= AuthorizationAction::where('project_id',$this->project->id)->where('type','deliverable_modification_by_client')->first();
         if($authorization_action != null)
@@ -131,6 +151,25 @@ class PublicUrlController extends Controller
             $action->save();
 
         }
+        $project = Project::findOrFail($this->project->id);
+        $global = $settings = global_setting();
+    
+        $this->invoiceSetting = InvoiceSetting::first();
+        $pdf = app('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option('enable_php', true);
+        App::setLocale($this->invoiceSetting->locale);
+        Carbon::setLocale($this->invoiceSetting->locale);
+        $pdf->loadView('projects.project-pdf', ['project' => $project, 'global' => $global]);
+    
+        $dom_pdf = $pdf->getDomPDF();
+        $canvas = $dom_pdf->getCanvas();
+        $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
+    
+        $filename = str_slug($project->project_name) . '-agreement-' . $project->id;
+    
+        // Save the PDF to a temporary location
+        $tempFilePath = storage_path('app/temp/' . $filename . '.pdf');
+        $pdf->save($tempFilePath);
 
         event(new ProjectSignedEvent($this->project, $sign));
         $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->get();
@@ -138,7 +177,12 @@ class PublicUrlController extends Controller
        // dd($project_id);
       foreach ($users as $user) {
 
-      Notification::send($user, new ClientDeliverableSignNotification($project_id));
+    //   Notification::send($user, new ClientDeliverableSignNotification($project_id));
+    $notification = new ClientDeliverableSignNotification($project_id);
+    $notification->attach($tempFilePath);
+
+    // Send the notification to the user
+    Notification::send($user, $notification);
     }
 
       return Reply::redirect(route('projects.show', $this->project->id));
@@ -146,6 +190,7 @@ class PublicUrlController extends Controller
 
     public function contractDownload($id)
     {
+       
         $contract = Contract::findOrFail($id);
         $global = global_setting();
 
