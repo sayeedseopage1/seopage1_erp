@@ -187,26 +187,7 @@
             </div>
             @endif
         @endif
-    @elseif(Auth::user()->role_id == 1)
-    <div class="row">
-        <div class="col-lg-8 col-10 mt-3 ml-3">
-            <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
-            @include('projects.modals.clientdeliverableaddmodal')
-            @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
-                <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
-                    <i class="fas fa-check"></i> 
-                    Extend Time
-                </button>
-                @include('projects.modals.deliverableextensionacceptmodal')
-            @endif
-            @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
-
-                <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
-                @include('projects.modals.deliverablefinalauthorizationacceptmodal')
-            @endif
-            
-        </div>
-    </div>
+   
 
 
 
@@ -214,6 +195,27 @@
    @endif
 
 
+  @endif
+  @if(Auth::user()->role_id == 1)
+  <div class="row">
+      <div class="col-lg-8 col-10 mt-3 ml-3">
+          <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+          @include('projects.modals.clientdeliverableaddmodal')
+          @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
+              <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
+                  <i class="fas fa-check"></i> 
+                  Extend Time
+              </button>
+              @include('projects.modals.deliverableextensionacceptmodal')
+          @endif
+          @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+
+              <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
+              @include('projects.modals.deliverablefinalauthorizationacceptmodal')
+          @endif
+          
+      </div>
+  </div> 
   @endif
     <!-- CARD BODY START -->
     <div class="card-body">
