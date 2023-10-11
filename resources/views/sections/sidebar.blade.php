@@ -312,6 +312,9 @@
                             @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8)
                                 <x-sub-menu-item :link="route('task-report-issues.index')" :text="__('Tasks Reports')" />
                             @endif
+
+                                <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" />
+
                             {{-- @endif --}}
                         </div>
                     </x-menu-item>

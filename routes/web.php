@@ -188,6 +188,7 @@ use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\CrossDeptWork;
 use App\Http\Controllers\DisputeController;
+use App\Http\Controllers\IndependentTask;
 use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
@@ -823,6 +824,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
 
+     /******* Independent TASK Start ******** */
+    Route::resource('independent-task',IndependentTask::class);
+     /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
     Route::get('pending-task-conversations/{task_id}', [TaskController::class, 'get_pending_parent_task_conversation_question'] )->name('pending-task-conversations');
@@ -835,6 +839,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::put('task-dispute-question-answer', [TaskController::class, 'update_dispute_question_with_answer'])->name('task-dispute-question-answer');
     Route::put('task-dispute-submit-to-auth', [TaskController::class, 'dispute_send_for_authorization'])->name('task-dispute-submit-to-auth');
     Route::put('task-dispute-read-status', [TaskController::class, 'update_dispute_answer_read_status'])->name('task-dispute-read-status');
+
 
     // Holidays
     Route::get('holidays/mark-holiday', [HolidayController::class, 'markHoliday'])->name('holidays.mark_holiday');
