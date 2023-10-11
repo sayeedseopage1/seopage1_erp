@@ -88,7 +88,8 @@
                             Estimated Hourly Rate</td>
                             <td class="border-left-0">
                                 @if($project->hours_allocated >  0 )
-                              {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
+                               
+                              {{round(($project->project_budget+$project->deal->upsell_amount)/$project->hours_allocated ,0)}}$/hour
                               @else 
                               --
                               @endif
@@ -151,7 +152,7 @@
     //dd( $diff_in_minutes);
     $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
 ?>
-@if($signature == null)
+@if(($signature == null && $project->authorization_status == 'pending' )  || ($signature != null && $project->deliverable_authorization == 0))
     @if($project->pm_id == Auth::id())
         @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
             <div class="col-md-2 mt-3">

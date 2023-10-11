@@ -31,7 +31,7 @@ const TimeLogItem = ({log}) => {
         <div>
           {log?.end_time ? <>
           {dayjs(log?.end_time).format('MMM DD, YYYY')} <br/>
-          {dayjs(log?.start_time).format('hh:mm a')}
+          {dayjs(log?.end_time).format('hh:mm a')}
           </> : <span className='text-success font-weight-bold'>Active</span>}
           </div> 
           
