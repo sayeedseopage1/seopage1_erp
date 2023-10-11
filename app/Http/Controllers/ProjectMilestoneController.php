@@ -230,6 +230,9 @@ class ProjectMilestoneController extends AccountBaseController
         if($project_milestone_cost > $project->project_budget && $project_milestone_cost-$project->project_budget > 1 )
         {
             $project_update= Project::find($project->id);
+            $project_update->deliverable_authorization = 0;
+            $project_update->authorization_status = 'pending';
+
             $project_update->project_budget= $project->project_budget+$milestone->cost;
             $project_update->due= $project->due+ $milestone->cost;
             if($project->status == 'finished')

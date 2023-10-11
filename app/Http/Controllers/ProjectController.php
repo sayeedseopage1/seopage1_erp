@@ -5442,8 +5442,11 @@ public function updatePmBasicSEO(Request $request){
         $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
-        $user = User::where('id', $project_id->pm_id)->get();
-        Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
+        $users = User::where('id', $project_id->pm_id)->get();
+        foreach ($users as $user) {
+            Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
+        }
+      
 
 
         Toastr::success('Authorization request accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);

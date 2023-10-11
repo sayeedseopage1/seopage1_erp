@@ -18,7 +18,7 @@ const TableRow = ({log}) => {
             <td className='__tbody_td _tbody_td_start_time _tbody_td_start_end'>
                 {log?.end_time ? <>
                     {dayjs(log?.end_time).format('MMM DD, YYYY')} <br/>
-                    {dayjs(log?.start_time).format('hh:mm a')}
+                    {dayjs(log?.end_time).format('hh:mm a')}
                 </> : <span className='text-success font-weight-bold'>Active</span>}
             </td>
 

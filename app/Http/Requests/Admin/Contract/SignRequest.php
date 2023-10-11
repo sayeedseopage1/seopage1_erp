@@ -30,6 +30,7 @@ class SignRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email:rfc',
+            'phone_no' => 'required',
         ];
 
         if(request('signature_type') == 'upload'){
