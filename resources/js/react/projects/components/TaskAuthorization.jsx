@@ -40,7 +40,7 @@ const TaskAuthorization = ({title}) => {
 
                     <Card.Body className={styles.card_body}>
                         <DataTable
-                            tableData = {data?.data || []}
+                            tableData = {_.orderBy(data?.data, 'updated_at', 'desc') || []}
                             tableColumns = {AuthorizationColumns}
                             tableName="authorize-task-table"
                             isLoading = {false}

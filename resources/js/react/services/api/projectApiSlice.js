@@ -67,6 +67,40 @@ const projectApiSlice = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: ["AUTHORIZE_PARENT_TASK"]
+        }),
+
+        // get conversations
+        getPendingTaskAuthorizationConversations:build.query({
+            query: (task_id) => `/account/pending-task-conversations/${task_id}`,
+            providesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS"]
+        }),
+
+        createPendingTaskAuthorizationConversation:build.mutation({
+            query: (data) => ({
+                url: `/account/pending-task-conversations`,
+                method: "POST",
+                body: {
+                    ...data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS", "AUTHORIZE_PARENT_TASK"]
+        }),
+
+        updatePendingTaskAuthorizationConversation:build.mutation({
+            query: (data) => ({
+                url: `/account/pending-task-conversations`,
+                method: "PUT",
+                body: {
+                    data,
+                    _token: document
+                        .querySelector("meta[name='csrf-token']")
+                        .getAttribute("content"),
+                },
+            }),
+            invalidatesTags: ["PENDING_TASK_AUTHORIZATION_CONVERSATIONS", "AUTHORIZE_PARENT_TASK"]
         })
     })
 }) ;
@@ -84,5 +118,8 @@ export const {
      useLazyGetProjectManagerTaskGuidelineStatusQuery,
      useGetAuthorizeTasksQuery,
      useUpdateAuthorizeTaskMutation,
+     useGetPendingTaskAuthorizationConversationsQuery,
+     useCreatePendingTaskAuthorizationConversationMutation,
+     useUpdatePendingTaskAuthorizationConversationMutation
 } = projectApiSlice;
 

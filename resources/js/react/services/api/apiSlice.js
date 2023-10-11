@@ -18,7 +18,8 @@ export const apiSlice = createApi({
             "USER_IN_PROGRESS_TASKS",
             "DISPUTES",
             "SUB_TASKS",
-            "AUTHORIZE_PARENT_TASK"
+            "AUTHORIZE_PARENT_TASK",
+            "PENDING_TASK_AUTHORIZATION_CONVERSATIONS"
     ],
     endpoints: () => ({}),
 });

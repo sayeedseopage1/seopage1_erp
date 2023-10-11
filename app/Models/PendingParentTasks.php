@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PendingParentTasks extends Model
 {
     use HasFactory;
+
+   
 }

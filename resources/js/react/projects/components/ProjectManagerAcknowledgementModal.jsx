@@ -15,7 +15,7 @@ const ProjectManagerAcknowledgementModal = ({
     const [loading, setIsLoading] = React.useState(false);
     const [acknowledgement, setAcknowledgement] = React.useState(null);
     const [subAcknowledgement, setSubAcknowledgement] = React.useState(null);
-    const [visible, setIsVisible] = React.useState(null);
+    const [visible, setIsVisible] = React.useState(false);
 
     const handleChange = (e, data) => {
         setAcknowledgement(data);
@@ -35,7 +35,14 @@ const ProjectManagerAcknowledgementModal = ({
         authorization: acknowledgement.authorization
       })
       setIsLoading(false)
-      onClose();
+      close();
+    }
+
+    const close = () => {
+        setAcknowledgement(null);
+        setSubAcknowledgement(null);
+        setIsVisible(false);
+        onClose();
     }
 
     return (
@@ -44,7 +51,7 @@ const ProjectManagerAcknowledgementModal = ({
                 <div className={styles.modal_container}>
                     <Card className={styles.card}>
                         <Card.Head
-                            onClose={onClose}
+                            onClose={close}
                             className={styles.card_header}
                         >
                             <span>&nbsp;</span>
@@ -179,7 +186,7 @@ const ProjectManagerAcknowledgementModal = ({
 
                         <Card.Footer className={styles.card_footer}>
                             <div className={styles.button_group}>
-                                <Button variant="tertiary" onClick={onClose}>
+                                <Button variant="tertiary" onClick={close}>
                                     Cancel
                                 </Button>
                                 <Button
