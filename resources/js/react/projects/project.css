@@ -24,7 +24,7 @@
     align-items: center;
 }
 
-.sp1_table_tab--dd-toggle:hover{ 
+.sp1_table_tab--dd-toggle:hover{
     background: #f3f5f7;
 }
 
@@ -80,7 +80,7 @@
     height: 34.5px;
     white-space: nowrap;
 }
- 
+
 .sp1_task_create_modal_panel{
     max-width: 800px;
 }
@@ -111,13 +111,17 @@
     color: #f00;
 }
 
-.color_remove_btn{ 
-    background-color: rgb(253, 224, 224); 
+.color_remove_btn{
+    background-color: rgb(253, 224, 224);
     color: #f00;
     transition: all .4 ease-in-out;
 }
 
 .color_remove_btn:hover{
     background: #f00;
-    color: rgb(255, 243, 243); 
+    color: rgb(255, 243, 243);
+}
+
+.sp1_data_table_td--acknowledgement{
+    min-width: 320px;
 }

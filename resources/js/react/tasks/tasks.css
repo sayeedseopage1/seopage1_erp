@@ -1,4 +1,4 @@
-.sp1_tlr_tbl_container{ 
+.sp1_tlr_tbl_container{
     background: #fff;
     padding: 16px;
     padding-bottom: 0;
@@ -8,7 +8,7 @@
     box-shadow: 0 0 10px rgb(0 0 0 / 10%);
 }
 
-.sp1_tlr_tab{ 
+.sp1_tlr_tab{
     padding: 6px 10px;
     border-radius: 4px;
     color: #777;
@@ -66,7 +66,7 @@
     background: rgb(245, 29, 29);
 }
 
-.deny_button:hover{ 
+.deny_button:hover{
     border-color: rgb(185, 14, 14);
     background: rgb(185, 14, 14);
 }
@@ -97,7 +97,7 @@
     gap: 10px;
 }
 
-.sp1_task_auth_modal{ 
+.sp1_task_auth_modal{
     width: clamp(280px, 50%, 500px);
 }
 
@@ -108,4 +108,12 @@
     box-shadow: 0 0 10px rgb(0 0 0 / 15%);
     /* width: clamp(255px, 100%, 350px); */
     width: 350px;
+}
+
+.sp1_data_table_td--acknowledgement{
+    min-width: 320px;
+}
+
+.tasks_search_bar{
+    border-color: rgba(151, 151, 151, 0.219) !important;
 }

@@ -146,9 +146,6 @@
                         <div class="accordionItemContent pb-2">
                             <x-sub-menu-item :link="route('dashboard')" :text="__('app.private') . ' ' . __('app.menu.dashboard')" />
                             <x-sub-menu-item :link="route('dashboard.advanced')" :text="__('app.menu.advanced') . ' ' . __('app.menu.dashboard')" />
-                            @if (Auth::user()->role_id == 1)
-                                <a class="f-14 text-lightest" href="{{ route('dashboard.pm_performance') }}" title="PM Performance">PM Performance</a>
-                            @endif
 
                         </div>
                     </x-menu-item>
@@ -317,7 +314,11 @@
                             )
                                 <x-sub-menu-item :link="route('task-report-issues.index')" :text="__('Tasks Reports')" />
                             @endif
+
+
                                 <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" />
+
+
                             {{-- @endif --}}
                         </div>
                     </x-menu-item>

@@ -575,13 +575,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/features/tasksSlice */ "./resources/js/react/services/features/tasksSlice.js");
 /* harmony import */ var _components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/SubtaskTableColumns */ "./resources/js/react/tasks/components/SubtaskTableColumns.jsx");
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_table_TableFilter__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../components/table/TableFilter */ "./resources/js/react/tasks/components/table/TableFilter.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -610,17 +615,21 @@ var Subtasks = function Subtasks() {
     search = _React$useState4[0],
     setSearch = _React$useState4[1];
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(window.Laravel.user);
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState({}),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    columnVisibility = _React$useState6[0],
+    setColumnVisibility = _React$useState6[1];
   var _useLazyGetAllSubtask = (0,_services_api_tasksApiSlice__WEBPACK_IMPORTED_MODULE_7__.useLazyGetAllSubtaskQuery)(),
     _useLazyGetAllSubtask2 = _slicedToArray(_useLazyGetAllSubtask, 2),
     getAllSubtask = _useLazyGetAllSubtask2[0],
     isFetching = _useLazyGetAllSubtask2[1].isFetching;
   var onFilter = function onFilter(filter) {
-    var queryObject = _.pickBy(filter, Boolean);
+    var queryObject = lodash__WEBPACK_IMPORTED_MODULE_12___default().pickBy(filter, Boolean);
     var queryString = new URLSearchParams(queryObject).toString();
     setFilter(queryObject);
     if (filter !== null && filter !== void 0 && filter.start_date && filter !== null && filter !== void 0 && filter.end_date) {
       getAllSubtask("".concat(queryString)).unwrap().then(function (res) {
-        var data = _.orderBy(res === null || res === void 0 ? void 0 : res.tasks, 'due_date', 'desc');
+        var data = lodash__WEBPACK_IMPORTED_MODULE_12___default().orderBy(res === null || res === void 0 ? void 0 : res.tasks, 'due_date', 'desc');
         dispatch((0,_services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_8__.storeSubTasks)({
           subtasks: data
         }));
@@ -629,35 +638,56 @@ var Subtasks = function Subtasks() {
       });
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_3__["default"], {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  var tableColumns = _components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_9__.SubTasksTableColumns;
+  if ((auth === null || auth === void 0 ? void 0 : auth.getRoleId()) !== 5) {
+    tableColumns = lodash__WEBPACK_IMPORTED_MODULE_12___default().filter(_components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_9__.SubTasksTableColumns, function (d) {
+      return d.id !== "action";
+    });
+  }
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Filter_bar_FilterContainer__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Filter_bar_Filterbar__WEBPACK_IMPORTED_MODULE_4__["default"], {
         onFilter: onFilter,
         page: "subtasks"
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
       className: "sp1_tlr_container",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
         className: "sp1_tlr_tbl_container",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsxs)("div", {
           className: "mb-3 d-flex align-items-center flex-wrap justify-content-between",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_1__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Tabbar__WEBPACK_IMPORTED_MODULE_1__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+            className: "ml-auto",
             style: {
               maxWidth: '300px'
             },
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_Searchbox__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_Searchbox__WEBPACK_IMPORTED_MODULE_6__["default"], {
               value: search,
               onChange: setSearch
             })
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)("div", {
+            className: "ml-2",
+            style: {
+              marginTop: '2px'
+            },
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_table_TableFilter__WEBPACK_IMPORTED_MODULE_11__["default"], {
+              tableName: "subTaskTable",
+              columns: lodash__WEBPACK_IMPORTED_MODULE_12___default().filter(tableColumns, function (col) {
+                return col.id !== 'expend';
+              }),
+              columnVisibility: columnVisibility,
+              setColumnVisibility: setColumnVisibility
+            })
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_components_SubtaskTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_13__.jsx)(_components_SubtaskTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
           isLoading: isFetching,
           filter: filter,
           tableName: "subTaskTable",
           search: search,
           reportPermission: [1, 8, 5],
-          tableColumns: _components_SubtaskTableColumns__WEBPACK_IMPORTED_MODULE_9__.SubTasksTableColumns,
-          hideColumns: (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) !== 5 ? ["action"] : []
+          columnVisibility: columnVisibility,
+          setColumnVisibility: setColumnVisibility,
+          tableColumns: tableColumns
         })]
       })
     })]

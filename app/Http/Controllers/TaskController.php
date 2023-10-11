@@ -77,6 +77,9 @@ use App\Models\TaskDisputeQuestion;
 use App\Models\TaskRevisionDispute;
 use App\Models\TaskType;
 use App\Models\DailySubmission;
+use App\Models\PendingParentTaskConversation;
+use App\Models\PendingParentTasks;
+use App\Notifications\PendingParentTasksNotification;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -1626,7 +1629,8 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
-       // DB::beginTransaction();
+        // dd($request->all());
+    //    DB::beginTransaction();
         $setting = global_setting();
         $rules = [
             'heading' => 'required',
@@ -1673,10 +1677,113 @@ class TaskController extends AccountBaseController
             abort_403(!in_array($this->addPermission, ['all', 'added']));
         }
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
         $ganttTaskArray = [];
         $gantTaskLinkArray = [];
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
+        if($request->need_authorization=="true" && $request->sub_acknowledgement !=null){
+            $pending_parent_tasks = new PendingParentTasks();
+            $pending_parent_tasks->heading = $request->heading;
+            $pending_parent_tasks->description = $request->description;
+            $dueDate = ($request->has('without_duedate')) ? null : Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
+            $pending_parent_tasks->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
+            $pending_parent_tasks->due_date = $dueDate;
+            $pending_parent_tasks->project_id = $request->project_id;
+            $pending_parent_tasks->category_id = $request->category_id;
+            $pending_parent_tasks->priority = $request->priority;
+            $pending_parent_tasks->board_column_id = $request->board_column_id;
+            $pending_parent_tasks->estimate_hours = $request->estimate_hours;
+            $pending_parent_tasks->estimate_minutes = $request->estimate_minutes;
+            $pending_parent_tasks->deliverable_id = $request->deliverable_id;
+            $pending_parent_tasks->milestone_id = $request->milestone_id;
+            $pending_parent_tasks->user_id = $request->user_id;
+            $pending_parent_tasks->added_by = Auth::user()->id;
+            $pending_parent_tasks->acknowledgement = $request->acknowledgement;
+            $pending_parent_tasks->sub_acknowledgement = $request->sub_acknowledgement;
+            $pending_parent_tasks->need_authorization = $request->need_authorization ? 1 : 0;
+            $pending_parent_tasks->save();
+            if ($request->hasFile('file')) {
+
+                foreach ($request->file as $fileData) {
+                    $file = new TaskFile();
+                    $file->task_id = $pending_parent_tasks->id;
+
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $pending_parent_tasks->id);
+
+                    $file->user_id = $pending_parent_tasks->user_id;
+                    $file->filename = $fileData->getClientOriginalName();
+                    $file->hashname = $filename;
+                    $file->size = $fileData->getSize();
+                    $file->save();
+
+                    $this->logTaskActivity($pending_parent_tasks->id, $pending_parent_tasks->user_id, 'fileActivity', $pending_parent_tasks->board_column_id);
+                }
+            }
+
+            if (is_array($request->user_id)) {
+                // $assigned_to = User::find($request->user_id[0]);
+
+                // if ($assigned_to->role_id == 6) {
+                //     $authorization_action = new AuthorizationAction();
+                //     $authorization_action->model_name = $pending_parent_tasks->getMorphClass();
+                //     $authorization_action->model_id = $pending_parent_tasks->id;
+                //     $authorization_action->type = 'task_assigned_on_lead_developer';
+                //     $authorization_action->deal_id = $pending_parent_tasks->project->deal_id;
+                //     $authorization_action->project_id = $pending_parent_tasks->project_id;
+                //     $authorization_action->link = route('projects.show', $pending_parent_tasks->project->id) . '?tab=tasks';
+                //     $authorization_action->title = Auth::user()->name . ' assigned task on you';
+                //     $authorization_action->authorization_for = $assigned_to->id;
+                //     $authorization_action->save();
+                //     //authorization action end
+                // }
+                // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
+                // $this->logProjectActivity($project->id, $link);
+
+                // $this->triggerPusher('notification-channel', 'notification', [
+                //     'user_id' => $assigned_to->id,
+                //     'role_id' => $assigned_to->role_id,
+                //     'title' => 'You have new task',
+                //     'body' => 'Project managet assigned new task on you',
+                //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
+                // ]);
+
+            } else {
+                // $assigned_to = User::find($request->user_id);
+                // if ($assigned_to->role_id == 6) {
+
+                //     $authorization_action = new AuthorizationAction();
+                //     $authorization_action->model_name = $pending_parent_tasks->getMorphClass();
+                //     $authorization_action->model_id = $pending_parent_tasks->id;
+                //     $authorization_action->type = 'task_assigned_on_lead_developer';
+                //     $authorization_action->deal_id = $pending_parent_tasks->project->deal_id;
+                //     $authorization_action->project_id = $pending_parent_tasks->project_id;
+                //     $authorization_action->link = route('projects.show', $pending_parent_tasks->project_id) . '?tab=tasks';
+                //     $authorization_action->title = Auth::user()->name . ' assigned task on you';
+                //     $authorization_action->authorization_for = $assigned_to->id;
+                //     $authorization_action->save();
+                //     //authorization action end
+                // }
+                // $text = Auth::user()->name . ' assigned new task on ' . $assigned_to->name;
+                // $link = '<a href="' . route('tasks.show', $pending_parent_tasks->id) . '">' . $text . '</a>';
+                // $this->logProjectActivity($project->id, $link);
+
+                // $this->triggerPusher('notification-channel', 'notification', [
+                //     'user_id' => $assigned_to->id,
+                //     'role_id' => $assigned_to->role_id,
+                //     'title' => 'You have new task',
+                //     'body' => 'Project managet assigned new task on you',
+                //     'redirectUrl' => route('tasks.show', $pending_parent_tasks->id)
+                // ]);
+            }
+        $users = User::where('role_id',1)->orWhere('role_id',8)->get();
+            foreach($users as $user)
+            {
+                Notification::send($user, new PendingParentTasksNotification($pending_parent_tasks));
+            }
+
+
+        }else{
         $task = new Task();
         $task->heading = $request->heading;
 
@@ -1732,6 +1839,7 @@ class TaskController extends AccountBaseController
 
         $task->save();
 
+
         $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
         $task->saveQuietly();
         if ($request->hasFile('file')) {
@@ -1751,7 +1859,6 @@ class TaskController extends AccountBaseController
                 $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
             }
         }
-
 
 
 
@@ -1782,7 +1889,7 @@ class TaskController extends AccountBaseController
         }
 
 
-        DB::commit();
+        // DB::commit();
 
         if (request()->add_more == 'true') {
             unset($request->project_id);
@@ -1859,6 +1966,7 @@ class TaskController extends AccountBaseController
                 'redirectUrl' => route('tasks.show', $task->id)
             ]);
         }
+    }
         return response()->json([
             'status' => 200,
             'message'=> 'Task added successfully',
@@ -4908,7 +5016,6 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
-      // dd($yesterdayData);
 
 
 
@@ -4981,7 +5088,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
-       // dd($request);
+
 
         $daily_submission= new DailySubmission();
 
@@ -5294,5 +5401,239 @@ class TaskController extends AccountBaseController
 
 
         }
+    }
+
+    public function PendingParentTasks(){
+        $user = Auth::user();
+        if($user->role_id==1 || $user->role_id==8){
+            $pendingParentTasks = PendingParentTasks::select([
+                'pending_parent_tasks.*',
+                'projects.project_name',
+                'client.id as client_id',
+                'client.name as client_name',
+                'client.image as client_avatar',
+                'assignee_to.id as assignee_to_id',
+                'assignee_to.name as assignee_to_name',
+                'assignee_to.image as assignee_to_avatar',
+                'assignee_by.id as assignee_by_id',
+                'assignee_by.name as assignee_by_name',
+                'assignee_by.image as assignee_by_avatar',
+
+            ])
+            ->leftJoin('projects','pending_parent_tasks.project_id','=','projects.id')
+            ->leftJoin('users as client','projects.client_id','=','client.id')
+            ->leftJoin('users as assignee_to','pending_parent_tasks.user_id','=','assignee_to.id')
+            ->leftJoin('users as assignee_by','pending_parent_tasks.added_by','=','assignee_by.id')
+            ->get();
+        }else{
+            $pendingParentTasks = PendingParentTasks::select([
+                'pending_parent_tasks.*',
+                'projects.project_name',
+                'client.id as client_id',
+                'client.name as client_name',
+                'client.image as client_avatar',
+                'assignee_to.id as assignee_to_id',
+                'assignee_to.name as assignee_to_name',
+                'assignee_to.image as assignee_to_avatar',
+                'assignee_by.id as assignee_by_id',
+                'assignee_by.name as assignee_by_name',
+                'assignee_by.image as assignee_by_avatar',
+                'approved_by.name as approved_by_name',
+                'approved_by.image as approved_by_avatar',
+            ])
+            ->leftJoin('projects','pending_parent_tasks.project_id','=','projects.id')
+            ->leftJoin('users as client','projects.client_id','=','client.id')
+            ->leftJoin('users as assignee_to','pending_parent_tasks.user_id','=','assignee_to.id')
+            ->leftJoin('users as assignee_by','pending_parent_tasks.added_by','=','assignee_by.id')
+            ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
+            ->where('pending_parent_tasks.added_by', $user->id)
+            ->get();
+        }
+
+        $pendingParentTasks->each(function($pendingParentTask){
+            $pendingParentTask->conversations = PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $pendingParentTask->id)
+                                                ->select([
+                                                    "pending_parent_task_conversations.*",
+                                                    'created_by_user.id as created_by_id',
+                                                    'created_by_user.name as created_by_name',
+                                                    'replied_by_user.id as replied_by_id',
+                                                    'replied_by_user.name as replied_by_name',
+                                                ])
+                                                ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
+                                                ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                                                ->get();
+        });
+
+        return response()->json([
+            'data'=>$pendingParentTasks,
+            'status'=>200
+        ],200);
+    }
+
+    public function AuthPendingParentTasks(Request $request, $id){
+        if($request->status){
+            $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
+            $pendingParentTasks->approval_status =  $request->status;
+            $pendingParentTasks->comment = $request->comment;
+            $pendingParentTasks->authorize_by = Auth::user()->id;
+            $pendingParentTasks->save();
+
+            $task = new Task();
+            $task->heading = $pendingParentTasks->heading;
+            $task->description = $pendingParentTasks->description;
+            $task->start_date = $pendingParentTasks->start_date;
+            $task->due_date = $pendingParentTasks->due_date;
+            $task->project_id = $pendingParentTasks->project_id;
+            $task->task_category_id = $pendingParentTasks->category_id;
+            $task->priority = $pendingParentTasks->priority;
+            $task->board_column_id = $pendingParentTasks->board_column_id;
+            $task->estimate_hours = $pendingParentTasks->estimate_hours;
+            $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
+            $task->deliverable_id = $pendingParentTasks->deliverable_id;
+            $task->milestone_id = $pendingParentTasks->milestone_id;
+            // $task->user_id = $pendingParentTasks->user_id;
+            $task->added_by = Auth::user()->id;
+            $task->save();
+            if ($request->hasFile('file')) {
+
+                foreach ($request->file as $fileData) {
+                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
+                    $file->task_id = $task->id;
+
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                    $file->user_id = $task->user_id;
+                    $file->filename = $fileData->getClientOriginalName();
+                    $file->hashname = $filename;
+                    $file->size = $fileData->getSize();
+                    $file->save();
+
+                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
+                }
+            }
+
+            $task_user = new TaskUser();
+            $task_user->task_id = $task->id;
+            $task_user->user_id = $pendingParentTasks->user_id;
+            $task_user->save();
+
+        }else{
+            $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
+            $pendingParentTasks->approval_status =  $request->status;
+            $pendingParentTasks->comment = $request->comment;
+            $pendingParentTasks->authorize_by = Auth::user()->id;
+            $pendingParentTasks->save();
+
+            $task = new Task();
+            $task->heading = $pendingParentTasks->heading;
+            $task->description = $pendingParentTasks->description;
+            $task->start_date = $pendingParentTasks->start_date;
+            $task->due_date = $pendingParentTasks->due_date;
+            $task->project_id = $pendingParentTasks->project_id;
+            $task->task_category_id = $pendingParentTasks->category_id;
+            $task->priority = $pendingParentTasks->priority;
+            $task->board_column_id = $pendingParentTasks->board_column_id;
+            $task->estimate_hours = $pendingParentTasks->estimate_hours;
+            $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
+            $task->deliverable_id = $pendingParentTasks->deliverable_id;
+            $task->milestone_id = $pendingParentTasks->milestone_id;
+            // $task->user_id = $pendingParentTasks->user_id;
+            $task->added_by = Auth::user()->id;
+            $task->save();
+            if ($request->hasFile('file')) {
+
+                foreach ($request->file as $fileData) {
+                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
+                    $file->task_id = $task->id;
+
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+
+                    $file->user_id = $task->user_id;
+                    $file->filename = $fileData->getClientOriginalName();
+                    $file->hashname = $filename;
+                    $file->size = $fileData->getSize();
+                    $file->save();
+
+                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
+                }
+            }
+            $task_user = new TaskUser();
+            $task_user->task_id = $task->id;
+            $task_user->user_id = $pendingParentTasks->user_id;
+            $task_user->save();
+        }
+        return response()->json(['status'=>200]);
+    }
+
+
+    // Parent task authorization conversations
+    // add questions
+    public function get_pending_parent_task_conversation_question(Request $request, $task_id){
+        $conversations = PendingParentTaskConversation::where('pending_parent_task_id', $task_id)->get();
+        return response()->json([
+            'data'=> $conversations,
+            'status'=>200
+        ],200);
+    }
+
+    public function add_pending_parent_task_conversation_question(Request $request){
+        $conversation = new PendingParentTaskConversation();
+        $conversation-> question = $request->question;
+        $conversation-> pending_parent_task_id = $request->pending_parent_task_id;
+        $conversation-> created_by = Auth::id();
+        $conversation-> created_date = Carbon::now();
+
+        $conversation->save();
+
+        $data = PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $request->pending_parent_task_id)
+                ->select([
+                    "pending_parent_task_conversations.*",
+                    'created_by_user.id as created_by_id',
+                    'created_by_user.name as created_by_name',
+                    'replied_by_user.id as replied_by_id',
+                    'replied_by_user.name as replied_by_name',
+                ])
+                ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
+                ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                ->get();
+
+        return response()->json([
+            'data'=> $data,
+            'status'=>200
+        ],200);
+
+    }
+
+    public function update_pending_parent_task_conversation_question_by_answer(Request $request){
+        $data = $request->data;
+        $pending_parent_task_id = $data[0]["pending_parent_task_id"];
+
+        foreach ($data as $key => $value) {
+            # code...
+            $conversation = PendingParentTaskConversation::find($value["id"]);
+            $conversation-> answer = $value["answer"];
+            $conversation-> replied_by = Auth::id();
+            $conversation-> replied_date = Carbon::now();
+            $conversation->has_update = true;
+            $conversation->save();
+        }
+
+        $conversations =  PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $pending_parent_task_id)
+                                                ->select([
+                                                    "pending_parent_task_conversations.*",
+                                                    'created_by_user.id as created_by_id',
+                                                    'created_by_user.name as created_by_name',
+                                                    'replied_by_user.id as replied_by_id',
+                                                    'replied_by_user.name as replied_by_name',
+                                                ])
+                                                ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
+                                                ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                                                ->get();
+
+
+        return response()->json([
+            'data'=> $conversations,
+            'status'=>200
+        ],200);
     }
 }

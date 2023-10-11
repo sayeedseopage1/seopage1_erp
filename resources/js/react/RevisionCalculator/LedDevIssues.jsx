@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 import Modal from '../global/Modal';
 import Button from '../global/Button';
 import DataTable from '../global/data-table/table';
-import { PMIssuesTableColumns } from './PMIssuesTableColumns';
+import { LeadIssuesTableColumns } from './LeadIssuesTableColumns';
 import { useLazyGetRevisionCalculatorDataLeadIssuesQuery } from '../services/api/revisionCalculatorApiSlice';
 
 
@@ -82,7 +82,7 @@ const LeadDevIssue = () => {
                           data={data} 
                           margeRow={true}
                           tableName='RevisionDevIssuesTableTable'
-                          columns={PMIssuesTableColumns}
+                          columns={LeadIssuesTableColumns}
                           pageIndex={pageIndex}
                           perPageRow={nRows}
                           onPageChange={(value) => setPageIndex(value)}

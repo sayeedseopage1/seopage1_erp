@@ -27,3 +27,23 @@ window.Echo = new Echo({
     forceTLS: true
 });
 
+  
+document.addEventListener("DOMContentLoaded", function () {
+    // Find all input elements of type 'number'
+    const numberInputs = document.querySelectorAll("input[type='number']");
+    
+    // Add a global event listener to prevent the default behavior of the mouse wheel event
+    document.addEventListener("wheel", function (e) {
+        // Check if the event target is an input element of type 'number'
+        if (e.target && e.target.matches("input[type='number']")) {
+            e.target.blur();
+        }
+    });
+
+    // Optional: Add a focus event listener to blur the input when it's focused
+    numberInputs.forEach(function (input) {
+        input.addEventListener("focus", function (e) {
+            e.target.blur();
+        });
+    });
+});

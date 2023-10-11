@@ -33,9 +33,9 @@ export class Category{
 // sub task
 export class SubmittedWork {
     constructor(task){
-        this.id = task?.task_id; 
+        this.id = task?.task_id;
         this.attaches = _.split(task?.attaches, ',');
-        this.submittedLinkes = _.split(task?.links, ','); 
+        this.submittedLinkes = _.split(task?.links, ',');
         this.explaination = task?.text;
         this.submittionNo = task?.submission_no;
         this.submittedAt = task?.submission_date;
@@ -100,14 +100,14 @@ export class TimeLog{
         this.lastUpdatedBy = data?.last_updated_by;
         this.user = new User(data?.user);
     }
- 
+
     getStartTime(format='MMM DD, YYYY'){
-        return dayjs(this.startTime).format(format) 
+        return dayjs(this.startTime).format(format)
     }
 
     getEndTime(format='MMM DD, YYYY'){
-        return dayjs(this.endTime).format(format) 
-    } 
+        return dayjs(this.endTime).format(format)
+    }
 }
 
 
@@ -149,7 +149,7 @@ export class TaskRevision {
       this.approvalStatus = data?.approval_status;
       this.clientRevisionAcknowledgement = data?.client_revision_acknowledgement;
       this.comment = data?.lead_comment;
-      this.createdAt = data?.created_at; 
+      this.createdAt = data?.created_at;
       this.devComment = data?.dev_comment;
       this.id = data?.id;
       this.pmComment = data?.pm_comment;
@@ -163,12 +163,12 @@ export class TaskRevision {
       this.isDeniable = data?.is_deniable;
       this.isDeny = data?.is_deny;
       this.isAccept= data?.is_accept;
-    } 
+    }
   }
 
- 
 
-// single task 
+
+// single task
 export class SingleTask {
     constructor(task){
         this.id = task?.id;
@@ -189,13 +189,13 @@ export class SingleTask {
         this.subTaskTimeLog = task?.sub_task_time_log;
         this.totalTimeLog = task?.timeLog;
         this.milestoneID = Number(task?.milestone_id);
-        this.milestoneTitle = _.startCase(task?.milestone_title);
+        this.milestoneTitle = task?.milestone_title;
         this.category = new Category(task?.category);
         this.guidelines = task?.project_summary;
         this.description = task?.description;
         this.subtask = task?.subtask;
         this.isSubtask = this.parentTaskId ? true : false;
-        this.leadDeveloperParentTaskAction =  task?.parent_task_action; 
+        this.leadDeveloperParentTaskAction =  task?.parent_task_action;
         this.ranningTimer= task?.running_timer;
         this.workingEnvironment = task?.working_environment;
         this.workEnvData = task?.working_environment_data;
@@ -209,15 +209,16 @@ export class SingleTask {
         this.pageType = task?.page_type;
         this.pageName = task?.page_name;
         this.pageUrl = task?.page_url;
+        this.subtaskId = task?.subtask_id;
     }
 
     isLeadDeveloperAbleToSubmit () {
         let text = "Lead Developer Can not Complete Parent Task";
         let compareWith = _.lowerCase(text.replace(/\s/g, ''));
         let compareText  = _.lowerCase(this.leadDeveloperParentTaskAction.replace(/\s/g, ''));
- 
+
         return  compareText === compareWith ? false : true
-    } 
+    }
 
     getSubtaskTitle(){
         return this.title;

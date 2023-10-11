@@ -491,7 +491,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 @endif
                 <!--End Top Management Pm Task Guideline Autonraization-->
 
-                
+
 
                 <?php
                 $dispute = App\Models\ProjectDispute::where('project_id', $project->id)->first();

@@ -1,33 +1,33 @@
 import React from 'react'
 
 const Input = ({
-    label, 
-    id, 
-    readOnly=false, 
-    placeholder='', 
-    inputClass='', 
-    labelClass='', 
-    type='text', 
+    label,
+    id,
+    readOnly=false,
+    placeholder='',
+    inputClass='',
+    labelClass='',
+    type='text',
     className='',
-    value, 
+    value,
     defaultValue,
-    onChange, 
+    onChange,
     error,
-    ...rest 
+    ...rest
 }) => {
   return (
     <div className={`form-group my-3 w-100 ${className}`}>
-        <label 
+        <label
             htmlFor={id}
-            className={`f-14 text-dark-gray mb-1 ${labelClass}`} 
+            className={`f-14 text-dark-gray mb-1 ${labelClass}`}
             data-label="true"
         >
-            {label} 
+            {label}
             {rest.required && <sup className='f-14 mr-1'>*</sup> }
         </label>
-        <input 
+        <input
             type={type}
-            className={`form-control height-35 w-100 f-14 ${inputClass}`}
+            className={`form-control singleline-ellipsis height-35 w-100 f-14 ${inputClass}`}
             placeholder={placeholder}
             id={id}
             value={value}

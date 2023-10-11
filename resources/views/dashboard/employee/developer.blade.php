@@ -1503,7 +1503,7 @@
                                                     class="list-group-item d-flex justify-content-between align-items-center f-12 text-dark-grey">
                                                     <span><i class="fa fa-briefcase"></i> @lang('app.task')</span>
                                                     <a href="{{ route('tasks.show', $myActiveTimer->task->id) }}"
-                                                        class="text-dark-grey openRightModal">{{ $myActiveTimer->task->heading }}</a>
+                                                        class="text-dark-grey">{{ $myActiveTimer->task->heading }}</a>
                                                 </li>
                                                 @foreach ($myActiveTimer->breaks as $item)
                                                     <li
