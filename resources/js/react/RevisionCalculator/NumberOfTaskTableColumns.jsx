@@ -64,7 +64,7 @@ export const NumberOfTaskTableColumns = [
                 : "";
             return (
                 <span className={`singleline-ellipsis text-right ${isEqual ? "highlight" : ""}`}>
-                    {Number(project_budget).toFixed(2)}
+                   $ {Number(project_budget).toFixed(2)}
                 </span>
             );
         },

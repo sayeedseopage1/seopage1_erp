@@ -90,13 +90,14 @@ class ClientDeliverableSignNotification extends Notification
    {
             $header= '';
         $body= '<p>
-        '.'You signed deliverable document '.$project->project_name.'. To check the details, follow this link.'.
-        '</p>'
+        '.'Hope you are doing great. Thanks for signing off the list of deliverables we shared with you. We are attaching a copy of the signed deliverables along with this email for future reference.'.
+        '</p><br><p>Should you have any concern or query, please do not hesitate to inform us.</p>'
+        
         ;
         $content = '<p>We have also attached the document in this email and you can download the attachment.</p><br>'
 
         ;
-    $subject = 'Greetings from Seopage1';
+    $subject = 'Copy of agreed Deliverables for the project with Seopage1';
     $url = url('/projects/public/download/'. $project->id); 
     
    }
