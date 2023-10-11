@@ -2589,31 +2589,40 @@
 
             var todayOnlyDate = moment(todayDate).format('DD');
 
-            if (todayOnlyDate < 15) {
-                console.log("if(1) =>",moment(monthDate).subtract(1, 'month').format('DD MMMM, YYYY'),moment(monthDate).startOf('month').add(16, 'day').format('DD MMMM, YYYY'));
-                $('.monthDate').text('' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
-                    ' - ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
+            const targeted_day = 15;
+
+            if (todayOnlyDate <= targeted_day) {
+                monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
+
+                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') +
+                    ' - ' + moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
             } else {
-                console.log("if(1) =>",moment(monthDate).format('DD MMMM, YYYY'),moment(monthDate).add(1, 'month').format('DD MMMM, YYYY'));
+                monthDate = moment(monthDate).startOf('month').add(targeted_day, 'day');
+
                 $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
-                    monthDate).add(1, 'month').format('MMMM, YYYY'));
+                    monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
             }
 
+            // previos btn action
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 if (mode == 'month') {
                     // console.log(todayOnlyDate);
-                    if (todayOnlyDate < 15) {
-                        monthDate = moment(monthDate).subtract(2, 'month');
-                        console.log("if(2) =>", moment(monthDate).format('DD MMMM, YYYY'));
+                    if (todayOnlyDate <= targeted_day) {
+                        // console.log({date:moment(monthDate).format('MMMM, YYYY'),today:todayOnlyDate});
+                        // console.log("less then 15 =>", moment(monthDate).format('MMMM, YYYY'));
+                    
+                        monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
+
+                        // console.log("less than or equal 15 =>", moment(monthDate).format('MMMM, YYYY'));
                     }else {
-                        monthDate = moment(monthDate).subtract(1, 'month');
-                        // monthDate = moment(monthDate).add(1, 'month');
-                        console.log("else(2) =>", moment(monthDate).format('DD MMMM, YYYY'));
+                        monthDate = moment(monthDate).startOf('month').add(targeted_day, 'day');
+
+                        // console.log("greater than 15 =>", moment(monthDate).format('MMMM, YYYY'));
                     }
 
                     $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
-                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+                        moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).subtract(1, 'days');
@@ -2628,9 +2637,10 @@
                 var mode = $(this).attr('date-mode');
                 var date;
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).add(1, 'month');
+                    monthDate = moment(monthDate).add(1, 'month');                 
+                    
                     $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
-                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+                    moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).add(1, 'days');
