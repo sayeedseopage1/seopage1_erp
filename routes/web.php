@@ -326,7 +326,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('dashboard-advanced', [DashboardController::class, 'advancedDashboard'])->name('dashboard.advanced');
     Route::get('dashboard-pm-performance/{id}', [DashboardController::class, 'pmPerformance'])->name('pm-performance');
-    // Route::post('dashboard-pm-data', [DashboardController::class, 'getPmData'])->name('dashboard.getPmData');
     Route::get('dashboard-core-metric', [DashboardController::class, 'coreMetric'])->name('dashboard.core.metric');
     Route::put('update-core-metric/{id}', [DashboardController::class, 'updateCoreMetric'])->name('update-core-metrics');
     Route::post('dashboard-advanced/show-project-manager-details', [DashboardController::class, 'projectManageDetalsOnAdvanceDashboard'])->name('dashboard.projectManageDetalsOnAdvanceDashboard');
