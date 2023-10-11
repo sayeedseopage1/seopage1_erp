@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import '../styles/time-log-history.css';
 import '../styles/time-log-table.css';
 import '../components/data-table.css';
+import { useLazyGetAllDailySubmissionQuery } from '../../services/api/dailySubmissionApiSlice';
 
 const DailySubmission_Page = () => {
     const [data, setData] = useState([]);
@@ -21,66 +22,57 @@ const DailySubmission_Page = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
     const [trackedTime, setTractedTime] = useState(0);
-    // const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
-
-    
-    // useEffect(() => {
-    //     const d = get_submission_table_data();
-    //     console.log(d);
-    //     setData(d);
-    // }, [])
+    const [getAllDailySubmission,{isLoading}] = useLazyGetAllDailySubmissionQuery();
 
 
-    // useEffect(()=>{
-    //     console.log(renderData);
-    // },[renderData])
+
 
     // handle data
     const handleData = (data, currentPage, perPageData) => {
+        // console.log('handleData',{data,currentPage,perPageData});
         const paginated = paginate(data, currentPage, perPageData);
-        const grouped = groupBy(paginated, 'task_id');
+        const grouped = groupBy(paginated, 'employee_name');
         const sorted = Object.entries(grouped).sort(([keyA], [keyB]) => keyB - keyA);
         setRenderData([...sorted]);
     }
 
     // handle fetch data
     const handleFetchData = (filter) => {
-        console.log(filter);
-
-        // getTaskWiseData(filter)
-        // .unwrap()
-        // .then(res => {
-        //     setCurrentPage(1);
-        //     const sortedData = orderBy(res?.data, ["task_id"], ["desc"]);
-        //     handleData(sortedData, 1, perPageData);
-        //     setData(sortedData);
-        //     const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
-        //     setTractedTime(totalTrackTime);
-        // })
-
+        const queryObject = _.pickBy(filter, Boolean);
+        const searchParams = new URLSearchParams(queryObject).toString();
+        console.log(searchParams);
         setCurrentPage(1);
-        const sortedData = orderBy(get_submission_table_data(), ["task_id"], ["desc"]);
-        handleData(sortedData, 1, perPageData);
-        setData(sortedData);
-        const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
-        setTractedTime(totalTrackTime);
+        getAllDailySubmission(searchParams)
+            .unwrap()
+            .then(({dailySubmission})=>{
+                const newData = dailySubmission.map((data,i)=>({...data,unique_id:i}));
+                const sortedData = orderBy(newData, ["employee_name"],["desc"]);
+                // console.log('handleFetchData',{filter,sortedData,data:newData});
+                handleData(sortedData, 1, perPageData);
+                setData(sortedData);
+                const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
+                setTractedTime(totalTrackTime);
+            });
     }
 
 
     // data sort handle 
     const handleSorting = (sort) => {
+        // console.log('handleSorting',{sort});
         const sortData = orderBy(data, ...sort);
         handleData(sortData, currentPage, perPageData);
     }
 
     // handle pagination
     const handlePagination = (page) => {
+        // console.log('handlePagination',{page});
         setCurrentPage(page);
         handleData(data, page, perPageData);
     }
 
     // handle par page data change
     const handlePerPageData = (number) => {
+        // console.log('handlePerPageData',{number});
         setParPageData(number);
         handleData(data, currentPage, number);
     }
@@ -92,14 +84,14 @@ const DailySubmission_Page = () => {
             <DailySubmissionTableFilter onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="mb-2"> <Tabbar /></div>
-                <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{ gap: '10px' }}>
+                {/* <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{ gap: '10px' }}>
                     <span className="mx-auto">
                         Total Tracked Time: <strong>{convertTime(trackedTime)}</strong>
                     </span>
-                </div>
+                </div> */}
 
                 <DailySubmissionWiseTable
-                    data={renderData}
+                    data={isLoading?[]:renderData}
                     columns={DailySubmissionTableColumn}
                     tableName="daily_submission_wise_table"
                     onSort={handleSorting}
@@ -109,7 +101,7 @@ const DailySubmission_Page = () => {
                     handlePerPageData={handlePerPageData}
                     currentPage={currentPage}
                     totalEntry={data.length}
-                    isLoading={false}
+                    isLoading={isLoading}
                 />
             </div>
         </div>

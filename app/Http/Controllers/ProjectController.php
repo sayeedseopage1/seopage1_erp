@@ -2055,7 +2055,7 @@ class ProjectController extends AccountBaseController
              $authorization_action->title = 'Project Challenge Authorization';
              $authorization_action->authorization_for = 62;
              $authorization_action->save();
- 
+             $users = User::where('role_id', 1)->get();
              foreach ($users as $user) {
                  Notification::send($user, new ProjectReviewNotification($project));
              }
@@ -2088,7 +2088,7 @@ class ProjectController extends AccountBaseController
             // $authorization_action->authorization_for = 1;
             // $authorization_action->save();
             //end authorization action here
-
+            $users = User::where('role_id', 1)->get();
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
                     'user_id' => $user->id,
@@ -2303,6 +2303,16 @@ class ProjectController extends AccountBaseController
      */
     public function show($id)
     {
+        if(Auth::user()->role_id == 4)
+        {
+            $project_id= Project::where('pm_id',Auth::id())->where('id',$id)->first();
+            if($project_id == null )
+            {
+                abort(403);
+            };
+
+        }
+       
         $this->viewPermission = user()->permission('view_projects');
         $viewFilePermission = user()->permission('view_project_files');
         $viewMilestonePermission = user()->permission('view_project_milestones');
@@ -5432,8 +5442,11 @@ public function updatePmBasicSEO(Request $request){
         $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
         $this->logProjectActivity($project->id, $link);
 
-        $user = User::where('id', $project_id->pm_id)->get();
-        Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
+        $users = User::where('id', $project_id->pm_id)->get();
+        foreach ($users as $user) {
+            Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
+        }
+      
 
 
         Toastr::success('Authorization request accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);

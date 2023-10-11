@@ -458,6 +458,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
             var first_name = $('#first_name').val();
             var last_name = $('#last_name').val();
             var email = $('#email').val();
+            var phone_no = $('#phone_no').val();
             var signature = signaturePad.toDataURL('image/png');
             var image = $('#image').val();
 
@@ -493,6 +494,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                     first_name: first_name,
                     last_name: last_name,
                     email: email,
+                    phone_no: phone_no,
                     signature: signature,
                     image: image,
                     signature_type: signature_type,

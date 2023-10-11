@@ -10,7 +10,8 @@ export const apiSlice = createApi({
         'TASKS', 
         'TASKSREPORT', 
         "PMGUIDELINE", 
-        "REVISIONS"
+        "REVISIONS",
+        // "TASK_REPORT"
     ],
     endpoints: () => ({}),
 });

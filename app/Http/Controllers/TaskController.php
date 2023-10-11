@@ -708,6 +708,7 @@ class TaskController extends AccountBaseController
         $report->admin_comment = $request->admin_comment;
 
         $report->status = $request->status;
+        $report->resolved_by= Auth::id();
         $report->save();
         return response()->json([
             'status' => 200,
@@ -4043,6 +4044,7 @@ class TaskController extends AccountBaseController
             $stop_time->transition_hours= $request->transition_hours;
             $stop_time->transition_minutes= $request->transition_minutes;
             $stop_time->date= $request->date;
+            $stop_time->client= $request->client;
             $stop_time->save();
             $task= Task::where('id',$request->task_id)->first();
             if($task->subtask_id == null)
@@ -4074,12 +4076,22 @@ class TaskController extends AccountBaseController
             ]);
 
     }
-    public function DeveloperTrackedTime($id)
+    public function DeveloperTrackedTime(Request $request,$id)
     {
+
         $userID = Auth::id(); // Replace with the actual user ID
 
         //$currentDate = Carbon::now()->toDateString();
-        $currentDate = Carbon::now()->toDateString();
+        if($request->date != null)
+        {
+
+            $currentDate = $request->date;
+
+        }else
+        {
+            $currentDate = Carbon::now()->toDateString();
+
+        }
 
 
         $totalMinutes = DB::table('project_time_logs')
@@ -4099,6 +4111,7 @@ class TaskController extends AccountBaseController
             {
                 $tracked_times = $totalMinutes;
             }
+       // dd($tracked_times);
 
            // $target_time=  $dayOfWeek =
            $current_day = Carbon::now();
@@ -4934,6 +4947,7 @@ class TaskController extends AccountBaseController
     }
     public function get_today_tasks(Request $request,$id)
     {
+    //    / dd("smkdmaskdm");
         $startDate= Carbon::today()->format('Y-m-d');
         $endDate= Carbon::today()->format('Y-m-d');
     //    / dd($startDate, $endDate);
@@ -4974,10 +4988,16 @@ class TaskController extends AccountBaseController
 
         ->groupBy('tasks.id')
         ->get();
+     //   dd($yesterdayData);
         if($yesterdayData->isEmpty())
         {
+          //  dd("nsnaslkdn");
             $user_data= User::where('id',$id)->first();
-            $last_login= $user_data->last_login->format('Y-m-d');
+            $project_time_log_date = ProjectTimeLog::where('user_id',$id)->orderBy('id','desc')->first();
+            $last_login= $project_time_log_date->updated_at;
+
+// Check if the last login date is today's date
+
             $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
         'developers.id as developer_id',
@@ -4998,15 +5018,18 @@ class TaskController extends AccountBaseController
         ->get();
 
 
+
         }
     }
 
     if($request->date_type == 'today')
     {
+       // dd("today");
         $tasks = $todayData;
         $date= Carbon::now();
     }else
     {
+     //   dd("last_day");
         $tasks = $yesterdayData;
         $date= Carbon::yesterday();
 
@@ -5065,6 +5088,7 @@ class TaskController extends AccountBaseController
 
     public function storeDailySubmission(Request $request)
     {
+
 
         $daily_submission= new DailySubmission();
 
@@ -5128,8 +5152,16 @@ class TaskController extends AccountBaseController
         ]);
 
     }
-    public function allDailySubmission(){
-
+    public function allDailySubmission(Request $request){
+    // /   dd($request);
+        $startDate = $request->input('start_date', null);
+        $endDate = $request->input('end_date', null);
+        $employeeId = $request->input('employee_id', null);
+        $pmId = $request->input('pm_id', null);
+        $clientId = $request->input('client_id', null);
+        $status = $request->input('status', null);
+        $projectId = $request->input('project_id', null);
+    //    / dd($startDate,$endDate);
         $dailySubmission = DailySubmission::select(
             'employee.id as employee_id',
             'employee.name as employee_name',
@@ -5160,6 +5192,9 @@ class TaskController extends AccountBaseController
             'working_environments.site_url as site_url',
             'working_environments.frontend_password as frontend_password',
             'daily_submissions.created_at as report_submission_date',
+            'taskboard_columns.column_name as status_name',
+            'taskboard_columns.label_color as status_color'
+           // DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.task_id = tasks.id  AND DATE(project_time_logs.start_time) >= daily_submissions.created_at AND DATE(project_time_logs.end_time) <= daily_submissions.created_at), 0) as total_time_spent'),
             )
             ->join('tasks','tasks.id','=','daily_submissions.task_id')
             ->join('task_types','tasks.id','=','task_types.task_id')
@@ -5168,9 +5203,60 @@ class TaskController extends AccountBaseController
             ->join('projects','projects.id','=','daily_submissions.project_id')
             ->join('project_members','projects.id','=','project_members.project_id')
             ->leftJoin('users as pm','pm.id','=','projects.pm_id')
-            ->leftJoin('users as ld','ld.id','=','project_members.lead_developer_id')
-            ->join('working_environments','projects.id','=','working_environments.project_id')
-            ->get();
+            ->leftJoin('users as ld','ld.id','=','tasks.added_by')
+            ->leftJoin('taskboard_columns','taskboard_columns.id','tasks.board_column_id')
+
+            ->leftJoin('working_environments','projects.id','=','working_environments.project_id')
+            ->groupBy('daily_submissions.task_id')
+            ;
+
+            if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+            {
+
+
+                $dailySubmission = $dailySubmission->whereDate('daily_submissions.report_date', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
+            }else
+            {
+                if (!is_null($startDate)) {
+                    $dailySubmission = $dailySubmission->whereDate('daily_submissions.created_at', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+                }
+                if (!is_null($endDate)) {
+                    $dailySubmission = $dailySubmission->whereDate('daily_submissions.created_at', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+                }
+
+            }
+            if (!is_null($projectId)) {
+                $dailySubmission = $dailySubmission->where('daily_submissions.project_id', $projectId);
+            }
+            if (!is_null($employeeId)) {
+                $dailySubmission = $dailySubmission->where('daily_submissions.user_id', $employeeId);
+            }
+            // // if (!is_null($assignee_by)) {
+            // //     $dailySubmission = $dailySubmission->where('tasks.added_by', $assignee_by);
+            // // }
+            if (!is_null($pmId)) {
+                $dailySubmission = $dailySubmission->where('projects.pm_id', $pmId);
+            }
+            if (!is_null($clientId)) {
+                $dailySubmission = $dailySubmission->where('projects.client_id', $clientId);
+            }
+            $dailySubmission = $dailySubmission->get();
+
+
+
+
+
+
+            // foreach($dailySubmission as $item)
+            // {
+            //     $project_time_logs = ProjectTimeLog::where('task_id',$item->task_id)
+            //     ->whereDate('created_at',$item->created_at)
+            //     ->sum('total_minutes');
+            // $item->total_time_spent = $project_time_logs;
+
+            // }
+        //    / dd($dailySubmission);
 
             return response()->json([
                 'dailySubmission'=> $dailySubmission,
@@ -5211,7 +5297,7 @@ class TaskController extends AccountBaseController
             ->where('task_users.user_id',$id)
             ->where('tasks.board_column_id',3)
             ->count();
-        if($tasks > 10)
+        if($tasks > 4)
         {
             return response()->json([
                 'tasks'=> $tasks,

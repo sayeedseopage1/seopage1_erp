@@ -84,11 +84,10 @@ class WonDealsDataTable extends BaseDataTable
             ->addColumn('client_contact_form', function ($row) {
                 if ($row->submission_status == 'Submitted') {
                     return '<span class="badge bg-success text-light">Submitted</span>';
-                } elseif ($row->submission_status == 'Awaiting for client Response') {
+                } else 
+                {
                     return '<span class="badge bg-warning">Awaiting for client Response</span>';
-                } else {
-                    return '<a class="text-center" href="/deals/details/' . $row->id . '"><i class="fa-solid fa-eye fa-2x"></i></a>';
-                }
+                } 
             })
             ->addColumn('added_by', function ($row) {
                 if (!is_null($row->added_by)) {

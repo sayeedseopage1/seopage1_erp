@@ -59,7 +59,13 @@ trait PmDashboard
             $this->startMonth = $date->startOfMonth()->addDays(15)->toDateString();
             $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(15)->toDateString();
             $this->release_date = $date->endofMonth()->toDateString();
+            $this->nextMonth = $date->startOfMonth()->addMonth(1)->toDateString();
 
+
+            $startMonth = $this->startMonth;
+            $endMonth = $this->endMonth;
+            $release_date = $this->release_date;
+            $nextMonth = $this->nextMonth;
 
            // dd($this->startMonth,$this->endMonth, $this->release_date);
            $this->no_of_projects = Project::select('projects.*','pm_projects.created_at as project_start_date')
@@ -490,15 +496,43 @@ trait PmDashboard
             ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
             ->orderBy('tasks.updated_at','desc')
             ->get();
-
+            //enan code
             $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
             ->leftJoin('task_users','task_users.task_id','tasks.id')
-            ->where('board_column_id',4)
-            ->where('tasks.added_by',Auth::id())
-            ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
-            ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-          //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+  
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->where('board_column_id',4)
+                       ->where('tasks.added_by',Auth::id())
+                       ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                       ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                    
+                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    // $q3->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+                    //    ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth]);
+                       $q2->where('board_column_id',4)
+                          ->where('tasks.added_by',Auth::id())
+                           ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                           ->where('tasks.created_at', '<', $startMonth);
+
+                       
+                
+            })
             ->count();
+                //sayeed code 
+
+        //     $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
+        //     ->leftJoin('task_users','task_users.task_id','tasks.id')
+        //     ->where('board_column_id',4)
+        //     ->where('tasks.added_by',Auth::id())
+        //     ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
+        //     ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+        //   //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+        //     ->count();
+
+
             if($this->total_tasks_assigned_this_cycle > 0)
             {
                 $this->tasks_completion_rate_previous_cycle=  (($this->total_tasks_completed_previous_cycle) /
@@ -512,20 +546,47 @@ trait PmDashboard
 
             }
            // dd($this->total_tasks_assigned_previous_cycle);
-            $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
-            DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-            )
-            ->leftJoin('task_users','task_users.task_id','tasks.id')
+           //code sayeed
+        //     $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+        //     DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+        //     )
+        //     ->leftJoin('task_users','task_users.task_id','tasks.id')
 
-            ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+        //     ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
 
-            ->where('board_column_id',4)
-            ->where('tasks.added_by',Auth::id())
-            ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
-            ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-           // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
-           ->orderBy('tasks.updated_at','desc')
-            ->get();
+        //     ->where('board_column_id',4)
+        //     ->where('tasks.added_by',Auth::id())
+        //     ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
+        //     ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+        //    // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+        //    ->orderBy('tasks.updated_at','desc')
+        //     ->get();
+
+        //code enan 
+        $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+        DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+        )
+        ->leftJoin('task_users','task_users.task_id','tasks.id')
+
+        ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+        ->where('board_column_id',4)
+        ->where('tasks.added_by',Auth::id())
+        ->where(function ($q1) {
+            $q1->where(function ($q2) {
+                
+                   $q2->whereBetween('tasks.updated_at', [$this->nextMonth, $this->release_date])
+                   ->where('tasks.created_at', '<', $this->startMonth);
+            })
+            ->orWhere(function ($q3) {
+                $q3->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+                   ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth]);
+            });
+        })
+       // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+       ->orderBy('tasks.updated_at','desc')
+        ->get();
+            
             $this->average_project_completion_rate = Project::select(
                 'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
                 DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
@@ -624,7 +685,7 @@ trait PmDashboard
             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
             ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status', 'Accepted')
-            ->where('projects.status', 'in progress')
+          
             ->where('p_m_projects.delayed_status', 1)
             ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
@@ -654,7 +715,7 @@ trait PmDashboard
                     ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                     ->where('projects.pm_id', Auth::id())
                     ->where('projects.project_status', 'Accepted')
-                    ->where('projects.status', 'in progress')
+                   
                     ->where('p_m_projects.delayed_status', 1)
                     ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
                     ->orderBy('projects.updated_at','desc')
@@ -1446,7 +1507,7 @@ trait PmDashboard
                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status', 'Accepted')
-                ->where('projects.status', 'in progress')
+                
                 ->where('p_m_projects.delayed_status', 1)
                 ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
                 ->whereBetween('projects.updated_at', [$startMonth, $release_date])
@@ -1476,7 +1537,7 @@ trait PmDashboard
                         ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                         ->where('projects.pm_id', Auth::id())
                         ->where('projects.project_status', 'Accepted')
-                        ->where('projects.status', 'in progress')
+                      
                         ->where('p_m_projects.delayed_status', 1)
                         ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
                         ->orderBy('projects.updated_at','desc')

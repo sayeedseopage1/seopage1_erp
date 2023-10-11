@@ -21,6 +21,10 @@
                 <x-forms.text fieldId="email" :fieldLabel="__('app.email')" fieldName="email" fieldRequired="true">
                 </x-forms.text>
             </div>
+            <div class="col-md-4">
+                <x-forms.text fieldId="phone_no" :fieldLabel="__('Phone No')" fieldName="phone_no" fieldRequired="true">
+                </x-forms.text>
+            </div>
             <div class="col-sm-12 bg-grey p-4 signature">
                 <x-forms.label fieldId="signature-pad" fieldRequired="true" :fieldLabel="__('modules.estimates.signature')" />
                 <div class="signature_wrap wrapper border-0 form-control">

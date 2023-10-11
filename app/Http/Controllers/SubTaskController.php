@@ -50,7 +50,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-        //dd($request);
+      //  dd($request->task_category_id);
 // DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);

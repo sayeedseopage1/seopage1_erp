@@ -337,4 +337,7 @@ class ReportIssueController extends AccountBaseController
         return Reply::dataOnly($ticketData);
     }
 
+
+
+
 }

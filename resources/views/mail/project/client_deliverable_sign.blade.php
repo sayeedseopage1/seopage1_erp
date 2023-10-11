@@ -25,7 +25,8 @@
 
 
 @component('mail::button', ['url' => $url])
-@lang('View') @lang('Project')
+
+@lang('View') @lang('Details')
 @endcomponent
 
 @lang('email.regards'),<br>

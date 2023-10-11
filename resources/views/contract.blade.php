@@ -328,6 +328,7 @@
             var first_name = $('#first_name').val();
             var last_name = $('#last_name').val();
             var email = $('#email').val();
+            var number = $('#number').val();
             var signature = signaturePad.toDataURL('image/png');
             var image = $('#image').val();
 
@@ -363,6 +364,7 @@
                     first_name: first_name,
                     last_name: last_name,
                     email: email,
+                    number: number,
                     signature: signature,
                     image: image,
                     signature_type: signature_type,
