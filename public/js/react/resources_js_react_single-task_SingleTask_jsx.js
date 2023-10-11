@@ -3092,22 +3092,16 @@ var Comment = function Comment(_ref) {
             children: [dayjs__WEBPACK_IMPORTED_MODULE_4___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format('MMM DD, YYYY '), " at \xA0", dayjs__WEBPACK_IMPORTED_MODULE_4___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format('hh:mm a')]
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "d-flex align-items-center",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
           href: "#",
           className: "mr-2 py-2 sp1_task_righ_action_btn ".concat(isOpen ? 'text-primary' : ''),
           onClick: previewComment,
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
             className: "fa-regular fa-eye"
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-          href: "#",
-          className: "mr-2 py-2 sp1_task_righ_action_btn",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
-            className: "fa-regular fa-pen-to-square"
-          })
-        })]
+        })
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
       Modal: true,
