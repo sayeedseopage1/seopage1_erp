@@ -2590,9 +2590,11 @@
             var todayOnlyDate = moment(todayDate).format('DD');
 
             if (todayOnlyDate < 15) {
+                console.log("if(1) =>",moment(monthDate).subtract(1, 'month').format('DD MMMM, YYYY'),moment(monthDate).startOf('month').add(16, 'day').format('DD MMMM, YYYY'));
                 $('.monthDate').text('' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
                     ' - ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
             } else {
+                console.log("if(1) =>",moment(monthDate).format('DD MMMM, YYYY'),moment(monthDate).add(1, 'month').format('DD MMMM, YYYY'));
                 $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
                     monthDate).add(1, 'month').format('MMMM, YYYY'));
             }
@@ -2603,11 +2605,13 @@
                     // console.log(todayOnlyDate);
                     if (todayOnlyDate < 15) {
                         monthDate = moment(monthDate).subtract(2, 'month');
+                        console.log("if(2) =>", moment(monthDate).format('DD MMMM, YYYY'));
                     }else {
                         monthDate = moment(monthDate).subtract(1, 'month');
                         // monthDate = moment(monthDate).add(1, 'month');
-                        console.log("else", moment(monthDate).format('MMMM, YYYY'));
+                        console.log("else(2) =>", moment(monthDate).format('DD MMMM, YYYY'));
                     }
+
                     $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                         moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
                     date = monthDate
