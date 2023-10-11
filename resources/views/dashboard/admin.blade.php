@@ -36,13 +36,14 @@
                 <i class="fa fa-times"></i>
             </a>
 
-            @if ($viewOverviewDashboard == 'all')
-                <x-tab :href="route('dashboard.advanced').'?tab=overview'" :text="__('modules.projects.overview')"
-                    class="overview" ajax="false" />
-            @endif
+
             @if ($viewFinanceDashboard == 'all')
                 <x-tab :href="route('dashboard.advanced').'?tab=web-development'" :text="__('Web Development')" class="web-development"
                     ajax="false" />
+            @endif
+            @if ($viewOverviewDashboard == 'all')
+                <x-tab :href="route('dashboard.advanced').'?tab=overview'" :text="__('modules.projects.overview')"
+                    class="overview" ajax="false" />
             @endif
 
             @if (in_array('projects', user_modules()) && $viewProjectDashboard == 'all')

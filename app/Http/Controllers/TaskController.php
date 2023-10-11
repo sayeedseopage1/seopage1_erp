@@ -1675,12 +1675,12 @@ class TaskController extends AccountBaseController
             $this->addPermission = user()->permission('add_tasks');
             abort_403(!in_array($this->addPermission, ['all', 'added']));
         }
-        
+
         // DB::beginTransaction();
         $ganttTaskArray = [];
         $gantTaskLinkArray = [];
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
-        if($request->need_authorization){
+        if($request->need_authorization=="true" && $request->sub_acknowledgement !=null){
             $pending_parent_tasks = new PendingParentTasks();
             $pending_parent_tasks->heading = $request->heading;
             $pending_parent_tasks->description = $request->description;
@@ -1783,7 +1783,6 @@ class TaskController extends AccountBaseController
 
 
         }else{
-
         $task = new Task();
         $task->heading = $request->heading;
 
@@ -5317,7 +5316,7 @@ class TaskController extends AccountBaseController
 
         }
     }
-    
+
     public function PendingParentTasks(){
         $user = Auth::user();
         if($user->role_id==1 || $user->role_id==8){
@@ -5377,7 +5376,7 @@ class TaskController extends AccountBaseController
                                                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                                                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
                                                 ->get();
-        }); 
+        });
 
         return response()->json([
             'data'=>$pendingParentTasks,
@@ -5516,23 +5515,23 @@ class TaskController extends AccountBaseController
             'data'=> $data,
             'status'=>200
         ],200);
-        
+
     }
 
     public function update_pending_parent_task_conversation_question_by_answer(Request $request){
         $data = $request->data;
         $pending_parent_task_id = $data[0]["pending_parent_task_id"];
-  
+
         foreach ($data as $key => $value) {
             # code...
             $conversation = PendingParentTaskConversation::find($value["id"]);
-            $conversation-> answer = $value["answer"]; 
+            $conversation-> answer = $value["answer"];
             $conversation-> replied_by = Auth::id();
             $conversation-> replied_date = Carbon::now();
-            $conversation->has_update = true; 
-            $conversation->save(); 
-        } 
- 
+            $conversation->has_update = true;
+            $conversation->save();
+        }
+
         $conversations =  PendingParentTaskConversation::where('pending_parent_task_conversations.pending_parent_task_id', $pending_parent_task_id)
                                                 ->select([
                                                     "pending_parent_task_conversations.*",

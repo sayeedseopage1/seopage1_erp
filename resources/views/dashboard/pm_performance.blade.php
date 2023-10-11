@@ -82,32 +82,32 @@
 @endpush
 @section('content')
 @php
-    $selected_pm = App\Models\User::where('id',$pm->id)->first();
-    $employ_details = \App\Models\EmployeeDetails::where('user_id',$selected_pm->id)->first();
+    $employ_details = \App\Models\EmployeeDetails::where('user_id',$pm->id)->first();
     $designation = \App\Models\Designation::where('id',$employ_details->designation_id)->first();
     $pm_core_metrics = \App\Models\PmCoreMetric::orderBy('id','DESC')->first();
 @endphp
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
-            <div class="card mt-3 p-3" style="border: none">
+            <div class="mt-3 p-3" style="border: none">
                 <div class="row">
-                    <div class="col-md-4">
-                    </div>
-                    <div class="col-md-4">
-                        @php
-                            $all_pm = App\Models\User::where('role_id',4)->get();
-                        @endphp
-                        <div>
-                            <label for="pm_select">Select Project Manager</label>
-                            <select name="pm_select" id="pm_select" class="form-control height-35 f-14">
-                                @foreach ($all_pm as $item)
-                                    <option value="{{ $item->id }}" {{ $item->id == 209 ? 'selected' : '' }}>{{ $item->name }}</option>
-                                @endforeach
-                            </select>
+                    <div class="col-md-12">
+                        <div class="card border-0 b-shadow-4 mb-3 e-d-info">
+                            <div class="card-horizontal align-items-center">
+                                <div class="card-img">
+                                    @if ($pm->image)
+                                        <img class="" src="{{ asset('user-uploads/avatar/'.$pm->image) }}" alt="Card image">
+                                    @else
+                                        <img class="" src="{{ asset('user-uploads/avatar/avatar_blank.png') }}" alt="Card image">
+                                    @endif
+                                </div>
+                                <div class="card-body border-0 pl-0">
+                                    <h4 class="card-title f-18 f-w-500 mb-0">{{ $pm->name }}</h4>
+                                    <p class="f-14 font-weight-normal text-dark-grey mb-2">{{ $designation->name }}</p>
+                                    <p class="card-text f-12 text-lightest"> Employee Id :{{ $employ_details->employee_id }} </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
                     </div>
                 </div>
             </div>
@@ -1181,7 +1181,6 @@
                                 </div>
                             </div>
                         </div>
-
                         </div>
                       </div>
                     </div>
@@ -1203,7 +1202,7 @@
         });
     </script>
 
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             $('#pm_select').on('change', function(event) {
                 var selected_pm_id = event.target.value;
@@ -1298,7 +1297,7 @@
                 });
             });
         });
-    </script>
+    </script> --}}
 
     <script type="text/javascript">
         @php
@@ -1724,11 +1723,6 @@
         $(document).ready(function() {
             var todayDate = moment();
             var monthDate = moment();
-            // var pmId;
-            // $('#pm_select').on('change', function() {
-            //     pmId = $(this).val();
-            // });
-
             $('.todayDate').text(todayDate.format('dddd LL'));
 
 

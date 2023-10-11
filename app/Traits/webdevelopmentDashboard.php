@@ -108,10 +108,11 @@ trait webdevelopmentDashboard
                         ->where(DB::raw('DATE(created_at)'), '<=', $endDate)
                         ->count();
 
-        $this->projectassign = PMAssign::whereBetween(DB::raw('DATE(`updated_at`)'), [$startDate, $endDate])
-                        //  ->with('project_count')
+        $this->projectassign = PMAssign::all();
+        // $this->projectassign = User::where('role_id',4)->get();
 
-                          ->get();
+
+
         $this->projects = Project::whereBetween(DB::raw('DATE(`start_date`)'), [$startDate, $endDate])
                                           //  ->with('project_count')
 
