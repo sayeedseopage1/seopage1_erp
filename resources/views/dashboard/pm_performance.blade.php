@@ -1724,37 +1724,46 @@
         $(document).ready(function() {
             var todayDate = moment();
             var monthDate = moment();
-            // var pmId;
-            // $('#pm_select').on('change', function() {
-            //     pmId = $(this).val();
-            // });
-
             $('.todayDate').text(todayDate.format('dddd LL'));
 
 
 
             var todayOnlyDate = moment(todayDate).format('DD');
 
-            if (todayOnlyDate > 15) {
-                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
-                    monthDate).add(1, 'month').format('MMMM, YYYY'));
-            } else {
-                $('.monthDate').text('' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
-                    ' - ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
-            }
+            const targeted_day = 15;
 
+            if (todayOnlyDate <= targeted_day) {
+                monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
+
+                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') +
+                    ' - ' + moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
+            } else {
+                monthDate = moment(monthDate).startOf('month').add(targeted_day, 'day');
+
+                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
+                    monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
+            }
+            
+            // previos btn action
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
-                // var pm_id = pmId;
-                var pm_id = $('#pm_select').val();
                 if (mode == 'month') {
-                    if (todayOnlyDate > 15) {
-                        monthDate = moment(monthDate).subtract(1, 'month');
-                    } else {
-                        monthDate = moment(monthDate).subtract(1, 'month');
+                    // console.log(todayOnlyDate);
+                    if (todayOnlyDate <= targeted_day) {
+                        // console.log({date:moment(monthDate).format('MMMM, YYYY'),today:todayOnlyDate});
+                        // console.log("less then 15 =>", moment(monthDate).format('MMMM, YYYY'));
+                    
+                        monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
+
+                        // console.log("less than or equal 15 =>", moment(monthDate).format('MMMM, YYYY'));
+                    }else {
+                        monthDate = moment(monthDate).startOf('month').add(targeted_day, 'day');
+
+                        // console.log("greater than 15 =>", moment(monthDate).format('MMMM, YYYY'));
                     }
+
                     $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
-                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+                        moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).subtract(1, 'days');
@@ -1762,18 +1771,17 @@
                     date = todayDate
                 }
 
-                getData(mode, $(this), date, pm_id);
+                getData(mode, $(this), date);
             });
 
             $('.fc-next-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 var date;
-                // var pm_id = pmId;
-                var pm_id = $('#pm_select').val();
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).add(1, 'month');
+                    monthDate = moment(monthDate).add(1, 'month');                 
+                    
                     $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
-                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
+                    moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
                     date = monthDate
                 } else {
                     todayDate = moment(todayDate).add(1, 'days');
@@ -1781,14 +1789,12 @@
                     date = todayDate
                 }
 
-                getData(mode, $(this), date, pm_id);
+                getData(mode, $(this), date);
             });
 
             $('.fc-today-button').click(function() {
                 todayDate = moment();
             })
-
-
         });
 
         function getData(mode, disableButton, date, pm_id) {
