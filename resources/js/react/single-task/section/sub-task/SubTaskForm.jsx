@@ -137,7 +137,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         }
 
         if(assignedTo && assignedTo?.isOverloaded){ 
-            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 10 Submittable tasks.`)
+            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 04 Submittable tasks.`)
             count++;
         }
 
@@ -424,7 +424,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                         <WorkingEnvironmentForm 
                             task={task} 
                             onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
-                            close={() => setShowEnvForm(false)} 
+                            close={close} 
                         /> }
                     {/* end working environment form */}
 

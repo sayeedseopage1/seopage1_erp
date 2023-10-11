@@ -22,7 +22,7 @@
                 </x-forms.text>
             </div>
             <div class="col-md-4">
-                <x-forms.text fieldId="phone_no" :fieldLabel="__('Mobile No')" fieldName="phone_no" fieldRequired="true">
+                <x-forms.text fieldId="phone_no" :fieldLabel="__('Phone No')" fieldName="phone_no" fieldRequired="true">
                 </x-forms.text>
             </div>
             <div class="col-sm-12 bg-grey p-4 signature">

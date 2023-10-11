@@ -125,11 +125,14 @@ class PublicUrlController extends Controller
 
         $sign->signature = $imageName;
         $sign->save();
-        $project= Project::where('id',$this->project->id)->first();
+        if($request->email != 'rajat07me@gmail.com' && $request->email != 'rajat07me@seopage1.net')
+        {
+           // dd("true");
+            $project= Project::where('id',$this->project->id)->first();
         $deal= Deal::where('id',$project->deal_id)->first();
         $client = new ClientForm();
         $client->deal_id=$project->deal_id;
-        $client->client_username= $request->client_username;
+       
         $client->client_email= $request->email;
         $client->client_phone= $request->phone_no;
         $client->client_whatsapp= $request->phone_no;
@@ -145,8 +148,11 @@ class PublicUrlController extends Controller
         $user=User::find($usr->id);
         $user->mobile= $request->client_phone;
         $user->email= $request->email;
-        $user->user_name=  $request->user_name;
+      
         $user->save();
+
+        }
+       
        // dd($sign,$client,$deal_id);
 
         $authorization_action= AuthorizationAction::where('project_id',$this->project->id)->where('type','deliverable_modification_by_client')->first();
@@ -190,7 +196,17 @@ class PublicUrlController extends Controller
 
 
         event(new ProjectSignedEvent($this->project, $sign));
-       $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->orWhere('id',$project->client_id)->get();
+        if($request->email != 'rajat07me@gmail.com' && $request->email != 'rajat07me@seopage1.net')
+        {
+            $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->orWhere('id',$project->client_id)->get();
+
+        }else 
+        {
+            $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->get();
+
+        }
+
+      
       //  $users= User::where('id',$project->client_id)->get();
         $project_id = Project::where('id',$this->project->id)->first();
        // dd($project_id);
