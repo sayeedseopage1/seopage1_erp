@@ -54,7 +54,7 @@ export const PMIssuesTableColumns = [
     },  
     {
         id: "revision_request_raised_by",
-        heading: "Revision request raised by",
+        heading: "Revision Requested By",
         moveable: false,
         sort: (row) => `${row?.revision_raised_by_name}`,
         rowSpan: 2,
@@ -72,7 +72,72 @@ export const PMIssuesTableColumns = [
                 </a>
             );
         },
-    },  
+    }, 
+    {
+        id: "revision_requests_against",
+        heading: "Revision Requests Against",
+        moveable: false,
+        sort:  (row) => {
+            const shortCode = row?.dispute_between;
+            if(shortCode === "CPR"){
+                return row.client_name;
+            }else if(shortCode === 'SPR'){
+                return row.sales_name;
+            }else{
+                return row.lead_developer_name;
+            }
+        },
+        rowSpan: 2,
+        marge: false,
+        searchText: (row) => {
+            const shortCode = row?.dispute_between;
+            if(shortCode === "CPR"){
+                return row.client_name;
+            }else if(shortCode === 'SPR'){
+                return row.sales_name;
+            }else{
+                return row.lead_developer_name;
+            }
+        },
+        row: ({ row, table }) => {
+            if(!row) return null;
+
+            const search = table.state.search;
+            const shortCode = row?.dispute_between;
+            const tv = "";
+            let against =  {url: '', name: ''};
+    
+            if(shortCode === "CPR"){
+                against = {
+                    url: `/accounts/employees/${row?.clientId}`,
+                    name: row.client_name,
+                }
+            }else if(shortCode === 'SPR'){
+                against = {
+                    url: `/accounts/employees/${row?.sales_id}`,
+                    name: row.sales_name,
+                }
+            }else{
+                against = {
+                    url: `/accounts/employees/${row?.lead_developer_id}`,
+                    name: row.lead_developer_name,
+                }
+            }
+
+
+
+            const isEqual = search
+                ? _.includes(_.lowerCase(against.name), _.lowerCase(search))
+                : "";
+            return (
+                <a href={against.url} 
+                    title={against.name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}
+                >
+                    {against.name}
+                </a>
+            );
+        },
+    },   
     {
         id: 'reason_for_revision',
         heading: 'Reason for revision',

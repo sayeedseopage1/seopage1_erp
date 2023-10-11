@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from 'react' 
-import { projectElaborationData } from './faker';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from './styles.module.css';
 import Modal from '../global/Modal';
 import Button from '../global/Button';
 import DataTable from '../global/data-table/table';
-import { PMIssuesTableColumns } from './PMIssuesTableColumns';
 import { useLazyGetRevisionCalculatorDataDevIssuesQuery } from '../services/api/revisionCalculatorApiSlice';
+import { DevIssuesTableColumns } from './DevIssuesTableColumns';
 
 
 // const data = projectElaborationData(50);
@@ -47,6 +46,7 @@ const DevIssuesTable = () => {
                 })
             })
 
+            console.log(arr)
             setData(arr); 
 
         } catch(err){
@@ -82,7 +82,7 @@ const DevIssuesTable = () => {
                           data={data} 
                           margeRow={true}
                           tableName='devIssuesTableTable'
-                          columns={PMIssuesTableColumns}
+                          columns={DevIssuesTableColumns}
                           pageIndex={pageIndex}
                           perPageRow={nRows}
                           onPageChange={(value) => setPageIndex(value)}

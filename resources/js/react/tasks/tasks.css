@@ -113,3 +113,7 @@
 .sp1_data_table_td--acknowledgement{
     min-width: 320px;
 }
+
+.tasks_search_bar{
+    border-color: rgba(151, 151, 151, 0.219) !important;
+}

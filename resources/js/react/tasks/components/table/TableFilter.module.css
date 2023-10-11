@@ -1,0 +1,36 @@
+.filter_button{
+    font-family: Inter;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: #5F5F5F;
+    border: 1px solid rgba(151, 151, 151, 0.219)
+}
+
+.filter_button:hover{
+    font-family: Inter;
+    font-weight: 500;
+    background-color: rgba(205, 205, 205, 0.219);
+}
+
+.gear_icon{
+    font-size: 24px;
+}
+
+.filter_menu{
+    max-height: 70vh;
+    overflow-y: auto;
+    width: 200px;
+}
+
+
+.list{
+    display: flex;
+    flex-direction: column;
+}
+
+.list_item label{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}

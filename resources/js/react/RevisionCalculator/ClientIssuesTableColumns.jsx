@@ -72,7 +72,35 @@ export const ClientIssuesTableColumns = [
                     </a>
                 );
             },
-        },  
+        },
+        {
+            id: "revision_requests_against",
+            heading: "Revision Requests Against",
+            moveable: false,
+            sort: (row) => row.client_name,
+            rowSpan: 2,
+            marge: false,
+            searchText:  (row) => row.client_name,
+            row: ({ row, table }) => {
+                if(!row) return null; 
+                const search = table.state.search; 
+                let against = {
+                    url: `/accounts/employees/${row?.clientId}`,
+                    name: row.client_name,
+                };
+         
+                const isEqual = search
+                    ? _.includes(_.lowerCase(against.name), _.lowerCase(search))
+                    : "";
+                return (
+                    <a href={against.url} 
+                        title={against.name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}
+                    >
+                        {against.name}
+                    </a>
+                );
+            },
+        }, 
         {
             id: 'reason_for_revision',
             heading: 'Reason for revision',

@@ -1,32 +1,32 @@
 import React, { useState } from "react";
-import Button from "../../components/Button";
-import Input from "../../components/form/Input";
-import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
-import AssginedToSelection from "./AssignedToSelection";
-import PrioritySelection from "./PrioritySelection";
-import DatePicker from "../comments/DatePicker";
 import CKEditorComponent from "../../../ckeditor";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
+import Button from "../../components/Button";
+import Input from "../../components/form/Input";
+import DatePicker from "../comments/DatePicker";
+import AssginedToSelection from "./AssignedToSelection";
+import PrioritySelection from "./PrioritySelection";
+import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 
 import _ from "lodash";
+import { useNavigate, useParams } from "react-router-dom";
 import {
     useCheckRestrictedWordsMutation,
     useCreateSubtaskMutation,
     useLazyGetTaskDetailsQuery,
 } from "../../../services/api/SingleTaskPageApi";
-import { useNavigate, useParams } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
-import { setWorkingEnvironmentStatus, storeSubTasks } from "../../../services/features/subTaskSlice";
-import { CompareDate } from "../../../utils/dateController";
-import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
-import { SingleTask } from "../../../utils/single-task";
-import { useEffect } from "react";
-import { User } from "../../../utils/user-details";
 import { Listbox } from "@headlessui/react";
-import LeadConfirmationModal from "./LeadConfirmationModal";
-import { checkIsURL } from "../../../utils/check-is-url";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { setWorkingEnvironmentStatus, storeSubTasks } from "../../../services/features/subTaskSlice";
+import { checkIsURL } from "../../../utils/check-is-url";
+import { CompareDate } from "../../../utils/dateController";
+import { SingleTask } from "../../../utils/single-task";
+import { User } from "../../../utils/user-details";
+import LeadConfirmationModal from "./LeadConfirmationModal";
+import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
 
 const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
@@ -133,7 +133,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         }
 
         if(assignedTo && assignedTo?.isOverloaded){
-            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 10 Submittable tasks.`)
+            toast.warn(`You cannot assign this task to ${assignedTo?.name}  because ${assignedTo?.gender === 'male' ? 'He ' : 'She '} has more than 04 Submittable tasks.`)
             count++;
         }
 
@@ -260,7 +260,6 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
             fd.append("file[]", file);
         });
 
-
         const submit = async () => {
 
             if(isValid()){
@@ -289,7 +288,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "Please fillup all required fields",
+                            title: "Please fill up all required fields",
                             showConfirmButton: true,
                         });
                     }
@@ -377,12 +376,8 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     };
 
     const estimateError = (err) => {
-        let errText = "";
-        let hoursErr = err?.estimate_hours?.[0];
-        let minErr = err?.estimate_minutes?.[0];
-        if (hoursErr) errText += hoursErr;
-        if (minErr) errText += minErr;
-        return errText;
+        const text = _.head(err?.errors?.hours)
+        return text
     };
 
 
@@ -418,7 +413,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                         <WorkingEnvironmentForm
                             task={task}
                             onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
-                            close={() => setShowEnvForm(false)}
+                            close={close}
                         /> }
                     {/* end working environment form */}
 
@@ -922,6 +917,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                     <div style={{ color: "red" }}>
                                         {estimateError(required_error)}
                                     </div>
+
                                     <div style={{ color: "#F73B12" }}>
                                     Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>

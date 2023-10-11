@@ -16,22 +16,22 @@ return new class extends Migration
     {
         Schema::create('pending_parent_tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('heading');
-            $table->longText('description');
-            $table->date('start_date');
-            $table->date('due_date');
-            $table->integer('project_id');
-            $table->integer('category_id');
+            $table->string('heading')->nullable();
+            $table->longText('description')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('due_date')->nullable();
+            $table->integer('project_id')->nullable();
+            $table->integer('category_id')->nullable();
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
-            $table->integer('board_column_id');
-            $table->integer('estimate_hours');
-            $table->integer('estimate_minutes');
-            $table->string('deliverable_id');
-            $table->integer('milestone_id');
-            $table->integer('user_id');
-            $table->integer('added_by');
-            $table->string('acknowledgement');
-            $table->string('sub_acknowledgement');
+            $table->integer('board_column_id')->nullable();
+            $table->integer('estimate_hours')->nullable();
+            $table->integer('estimate_minutes')->nullable();
+            $table->string('deliverable_id')->nullable();
+            $table->integer('milestone_id')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->integer('added_by')->nullable();
+            $table->string('acknowledgement')->nullable();
+            $table->string('sub_acknowledgement')->nullable();
             $table->longText('comment')->nullable();
             $table->boolean('need_authorization')->default(0);
             $table->boolean('approval_status')->nullable();

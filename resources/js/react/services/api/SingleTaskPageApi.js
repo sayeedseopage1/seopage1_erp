@@ -46,6 +46,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 body: data,
                 formData: true,
             }),
+
+            invalidatesTags: ["SUB_TASKS"]
         }),
 
         // create note

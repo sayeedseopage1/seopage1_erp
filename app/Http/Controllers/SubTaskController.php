@@ -316,6 +316,7 @@ class SubTaskController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
+        
         $setting = global_setting();
         $task = Task::find($id);
         $startDate = $task->start_date->format($setting->date_format);
@@ -401,26 +402,6 @@ class SubTaskController extends AccountBaseController
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
         $task_s->save();
-        $task_type = new TaskType();
-        $task_type->task_id= $task_s->id;
-        $task_type->page_type= $request->page_type;
-        $task_type->task_type= $request->task_type;
-        $task_type->page_name= $request->page_name;
-        $task_type->page_url= $request->page_url;
-        $task_type->task_type_other= $request->task_type_other;
-        $task_type->page_type_name= $request->page_type_name;
-        $task_type->existing_design_link = $request->existing_design_link;
-        if($request->number_of_pages == null)
-        {
-            $task_type->number_of_pages= 1;
-
-        }else
-        {
-            $task_type->number_of_pages= $request->number_of_pages;
-
-        }
-        $task_type->number_of_pages= $request->number_of_pages;
-        $task_type->save();
 
         if ($request->hasFile('file')) {
 

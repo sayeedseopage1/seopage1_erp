@@ -209,6 +209,7 @@ export class SingleTask {
         this.pageType = task?.page_type;
         this.pageName = task?.page_name;
         this.pageUrl = task?.page_url;
+        this.subtaskId = task?.subtask_id;
     }
 
     isLeadDeveloperAbleToSubmit () {

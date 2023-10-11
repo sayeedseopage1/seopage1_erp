@@ -129,7 +129,6 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
         setState(value);
     };
 
-    console.log({task})
 
     // check validation
     const isValid = () => {
@@ -354,11 +353,9 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                                     >
                                         Project Deliverable
                                     </label>
-                                    <input
-                                        className={`form-control height-35 f-14`}
-                                        readOnly
-                                        defaultValue={milestone?.deliverable_type ?? ''}
-                                    />
+                                    <div className="sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
+                                        <span className="singleline-ellipsis">{isFetchingMilestone ? 'Loading...' : _.find(projects?.milestones, d => d.id === milestone.id)?.deliverable_type}</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -383,6 +380,7 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
 
 
                     <div className="col-6">
+
                         <div className="form-group my-3">
                             <label htmlFor="">
                                 Start Date <sup className="f-14">*</sup>
