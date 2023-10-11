@@ -6,6 +6,7 @@ import DateTypeFilter from './DateTypeFilter';
 import ProjectFilterItem from './ProjectFilter';
 import _ from 'lodash';
 import { User } from '../../../utils/user-details';
+import ReadOnlyUserFilter from './ReadOnlyUserFilter';
 
 const FilterSidebar = ({
     client,
@@ -57,7 +58,11 @@ const FilterSidebar = ({
 
                 {/* Report Issuer */}
                 {
-                    _.includes([5, 6, 9, 10], loggedUser.getRoleId()) ||
+                    _.includes([5, 6, 9, 10], loggedUser.getRoleId())?
+                    <ReadOnlyUserFilter 
+                        title={"Report Issuer"}
+                        text={window.Laravel.user.name}
+                    />:
                     <UserFilter
                         title="Report Issuer"
                         state={reportIssuer}
@@ -65,6 +70,7 @@ const FilterSidebar = ({
                         roleIds={[5, 6, 9, 10]}
                     />
                 }
+                
 
                 {/* Accountable Individual */}
                 <UserFilter

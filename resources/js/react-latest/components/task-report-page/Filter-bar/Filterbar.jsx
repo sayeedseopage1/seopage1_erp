@@ -9,6 +9,7 @@ import DateTypeFilter from "./DateTypeFilter";
 import ProjectFilterItem from "./ProjectFilter";
 import { useGetProjectsOptionsQuery } from "../../../../react/services/api/FilterBarOptionsApiSlice";
 import { User } from "../../../utils/user-details";
+import ReadOnlyUserFilter from "./ReadOnlyUserFilter";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -117,18 +118,20 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     {/* Report Issuer */}
                     {
-                        _.includes([5, 6, 9, 10], loggedUser.getRoleId()) ||
-                        <>
+                        _.includes([5, 6, 9, 10], loggedUser.getRoleId()) ?
+                            <ReadOnlyUserFilter
+                                title={"Report Issuer"}
+                                text={window.Laravel.user.name}
+                            /> :
                             <UserFilter
                                 title="Report Issuer"
                                 state={reportIssuer}
                                 setState={setReportIssuer}
                                 roleIds={[5, 6, 9, 10]}
                             />
-                            <HDivider />
-                        </>
                     }
 
+                    <HDivider />
 
 
                     {/* Accountable Individual */}

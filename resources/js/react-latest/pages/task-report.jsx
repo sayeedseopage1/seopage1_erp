@@ -27,7 +27,7 @@ const TaskReport = () => {
     const queryObject = _.pickBy(filter, Boolean);
     const loggedUser = new User(window.Laravel.user);
 
-    if (_.includes([5,6], loggedUser.getRoleId())) {
+    if (_.includes([5, 6, 9, 10], loggedUser.getRoleId())) {
       queryObject.report_issuer_id = loggedUser.userId;
     }
     const searchParams = new URLSearchParams(queryObject).toString();
