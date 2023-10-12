@@ -8325,7 +8325,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
       count++;
     }
     if (assignedTo && assignedTo !== null && assignedTo !== void 0 && assignedTo.isOverloaded) {
-      react_toastify__WEBPACK_IMPORTED_MODULE_19__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 10 Submittable tasks."));
+      react_toastify__WEBPACK_IMPORTED_MODULE_19__.toast.warn("You cannot assign this task to ".concat(assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.name, "  because ").concat((assignedTo === null || assignedTo === void 0 ? void 0 : assignedTo.gender) === 'male' ? 'He ' : 'She ', " has more than 04 Submittable tasks."));
       count++;
     }
     if (!pageType) {
@@ -8602,9 +8602,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
           onSubmit: function onSubmit() {
             return dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_12__.setWorkingEnvironmentStatus)(false));
           },
-          close: function close() {
-            return setShowEnvForm(false);
-          }
+          close: close
         }), !isWorkingEnvironmentSubmit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_17__["default"], {
           isOpen: !isWorkingEnvironmentSubmit && !showForm,
           onConfirm: function onConfirm() {
