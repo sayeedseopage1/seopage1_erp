@@ -49,7 +49,7 @@ const Tasks = () => {
                 let _data = res?.tasks
                 if(auth.getRoleId() === 4){
                     _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
-                }else if(auth.getRoleId() === 6){
+                }else if(auth.getRoleId() === 6 || auth.getRoleId() === 9 || auth.getRoleId() === 10){
                     _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
                 }
 
