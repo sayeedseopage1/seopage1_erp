@@ -1657,8 +1657,8 @@ class TaskController extends AccountBaseController
 
         $left_in_hours = round($left_minutes / 60, 0);
         $left_in_minutes = $left_minutes % 60;
-
-        if ($left_minutes < 1) {
+        //dd($left_minutes);
+        if ($left_minutes < 0) {
             return response()->json([
                 "message" => "The given data was invalid.",
                 "errors" => [
@@ -1668,9 +1668,11 @@ class TaskController extends AccountBaseController
                 ]
             ], 422);
         }
-        if ($request->estimate_hours== 0 && $request->estimate_minutes == 0) {
+       
+       
+        if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
             return response()->json([
-                "message" => "The given data was invalid.",
+                "message" => "Wrong Input",
                 "errors" => [
                     "hours" => [
                         "Estimate hours and minutes cannot be 0 !"
@@ -1678,6 +1680,7 @@ class TaskController extends AccountBaseController
                 ]
             ], 422);
         }
+
 
  //dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
