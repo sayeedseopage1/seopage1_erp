@@ -281,13 +281,10 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     };
 
     const estimateError = (err) => {
-        let errText = "";
-        let hoursErr = err?.estimate_hours?.[0];
-        let minErr = err?.estimate_minutes?.[0];
-        if (hoursErr) errText += hoursErr;
-        if (minErr) errText += minErr;
-        return errText;
+        const text = _.head(err?.errors?.hours)
+        return text
     };
+
 
     return (
         <Modal isOpen={isOpen}>
@@ -546,6 +543,11 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             }
                                         />{" "}
                                         min
+                                    </div>
+
+
+                                    <div style={{ color: "red" }}>
+                                        {estimateError(required_error)}
                                     </div>
 
 

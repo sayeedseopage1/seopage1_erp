@@ -1,5 +1,5 @@
 import _ from "lodash";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetTaskTypeDataQuery, useLazyGetTasksQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
 import { storeTasks } from "../../services/features/tasksSlice";
@@ -15,6 +15,7 @@ import { User } from "../../utils/user-details";
 import CKEditorComponent from "../../ckeditor";
 import Loader from "../components/Loader";
 import TaskAuthorization from "../../projects/components/TaskAuthorization";
+import TableFilter from "../components/table/TableFilter";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -27,6 +28,7 @@ const Tasks = () => {
     const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false);
     const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
     const [comment, setComment] = React.useState('');
+    const [columnVisibility, setColumnVisibility] = React.useState({})
 
     // api function
     const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
@@ -87,6 +89,11 @@ const Tasks = () => {
     const closeTable = () => setShowAuthorizationTableModal(false);
     const close = () => setShowAuthorizationModal(false);
 
+    let tableColumns = TaskTableColumns;
+
+    if(auth?.getRoleId() !== 6){
+        tableColumns = _.filter(TaskTableColumns, d => d.id !== "action");
+    }
 
 
     return (
@@ -111,12 +118,25 @@ const Tasks = () => {
                         }
 
                         <div className="mr-auto ml-2 mb-2 ">
-                        <TaskAuthorization  />
+                            <TaskAuthorization  />
+                        </div>
+                        <div className="mr-2 mb-2" style={{maxWidth: '300px'}}>
+                            <SearchBox
+                                value={search}
+                                onChange={setSearch}
+                                className="tasks_search_bar"
+                            />
                         </div>
 
-                        <div className="mb-2" style={{maxWidth: '300px'}}>
-                            <SearchBox value={search} onChange={setSearch} />
+                        <div className="mb-2" style={{marginTop: '2px'}}>
+                            <TableFilter
+                                tableName="tasksTable"
+                                columns = {tableColumns}
+                                columnVisibility={columnVisibility}
+                                setColumnVisibility={setColumnVisibility}
+                            />
                         </div>
+
                     </div>
 
                     <TasksTable
@@ -125,8 +145,9 @@ const Tasks = () => {
                         tableName="tasksTable"
                         search={search}
                         reportPermission={[6, 5, 1, 8]}
-                        tableColumns={TaskTableColumns}
-                        hideColumns={auth?.getRoleId() !== 6 ? ["action"] : [] }
+                        tableColumns={tableColumns}
+                        columnVisibility = {columnVisibility}
+                        setColumnVisibility = {setColumnVisibility}
                     />
                 </div>
             </div>

@@ -47,6 +47,7 @@ const PMIssuesTable = () => {
                 })
             })
 
+            console.log(arr)
             setData(arr);
 
         } catch(err){

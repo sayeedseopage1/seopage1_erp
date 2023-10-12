@@ -58,6 +58,7 @@ const SingleTaskPage = () => {
     const loggedUser = new User(window?.Laravel?.user);
     const task = new SingleTask(Task);
 
+
     if(isFetching){
         return <Loading isLoading={isFetching} />
     }
@@ -460,13 +461,32 @@ const SingleTaskPage = () => {
                 </div>
             </div>
             <Toaster />
-            {
-                task.isSubtask ?
-                <SubTaskEditModal task={task} />:
-                <TaskEditForm task={task} />
-            }
+            <ShowEditModals task={task} auth={loggedUser}/>
         </div>
     );
 };
 
 export default SingleTaskPage;
+
+
+const ShowEditModals = ({auth, task}) => {
+    let hasAccess = false;
+
+    let time = task.isSubtask ? task?.parentTaskTimeLog : task?.totalTimeLog;
+
+    if(auth.getRoleId() === 1){
+        hasAccess = true;
+    }else if(auth.getId() === task.assigneeBy.id &&  task.boardColumn.id === 2){
+        hasAccess = true;
+    }else hasAccess = false;
+
+    if(hasAccess){
+        if(task.isSubtask){
+            return <SubTaskEditModal task={task} />
+        }else {
+            return <TaskEditForm task={task} />
+        }
+    }
+
+    return null;
+}

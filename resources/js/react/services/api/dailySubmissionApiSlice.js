@@ -20,8 +20,13 @@ const dailySubmissionApiSlice = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
-            invalidatesTags: ['DAILY_SUBMISSION_STATUS']
+            invalidatesTags: ["DAILY_SUBMISSION_STATUS"]
         }),
+
+        getAllDailySubmission: build.query({
+            query: (searchParam)=>`/account/tasks/all-daily-submissions?${searchParam}`,
+            providesTags: ["ALL_DAILY_SUBMISSION_STATUS"],
+        })
     })
 })
 
@@ -30,5 +35,7 @@ export const {
     useGetDailySubmissionQuery,
     useLazyGetDailySubmissionQuery,
     useGetDailyTasksSubmissionQuery,
-    useSubmitDailySubmissionMutation
+    useSubmitDailySubmissionMutation,
+    useGetAllDailySubmissionQuery,
+    useLazyGetAllDailySubmissionQuery,
 } = dailySubmissionApiSlice;

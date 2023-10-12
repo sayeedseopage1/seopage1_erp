@@ -39,10 +39,8 @@ const EditFormProvider = ({ task }) => {
     // handle submission
     const handleSubmission = (formData) => {
         editSubtask({data: formData, id: task?.id}).unwrap().then(res => {
-            if(res?.status === 200){
-                toast.success("Task Updated successfully!");
-                close();
-            }
+            toast.success("Task Updated successfully!");
+            close();
         }).catch((err) => {
             if(err?.status === 422){
                 toast.warn("Please fill out all required fields")
@@ -123,8 +121,6 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
         setState(value);
     };
 
-    console.log({task})
-
     // check validation
     const isValid = () => {
       let count = 0;
@@ -174,12 +170,12 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
 
          const fd = new FormData();
          fd.append("milestone_id", task?.milestoneID);
-         fd.append("task_id", task?.id);
+         fd.append("task_id", task?.parentTaskId);
          fd.append("title", title);
          fd.append("start_date", _startDate);
          fd.append("due_date", _dueDate);
          fd.append("project_id", task?.projectId);
-         fd.append("category_id", taskCategory?.id);
+         fd.append("task_category_id", taskCategory?.id);
          fd.append("user_id", assignedTo?.id);
          fd.append("description", description);
          fd.append("board_column_id", task?.boardColumn.id);
@@ -189,7 +185,7 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
          fd.append("deliverable_id", milestone?.deliverable_type ?? '');
          fd.append("image_url", null);
          fd.append("addedFiles", null);
-         fd.append('subTaskID', task?.id);
+         fd.append('subTaskID', task?.subtaskId);
          fd.append("_method", "PUT");
          fd.append(
              "_token",

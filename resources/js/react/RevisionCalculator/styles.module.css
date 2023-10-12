@@ -18,6 +18,7 @@
 
 .table tr td{
     padding: 6px 10px;
+    min-width: 150px;
 }
  
 .table tr:nth-child(evet){

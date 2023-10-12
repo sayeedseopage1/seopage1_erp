@@ -88,7 +88,8 @@
                             Estimated Hourly Rate</td>
                             <td class="border-left-0">
                                 @if($project->hours_allocated >  0 )
-                              {{round($project->project_budget/$project->hours_allocated ,0)}}$/hour
+                               
+                              {{round(($project->project_budget+$project->deal->upsell_amount)/$project->hours_allocated ,0)}}$/hour
                               @else 
                               --
                               @endif
@@ -151,7 +152,7 @@
     //dd( $diff_in_minutes);
     $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
 ?>
-@if($signature == null)
+@if(($signature == null && $project->authorization_status == 'pending' )  || ($signature != null && $project->deliverable_authorization == 0))
     @if($project->pm_id == Auth::id())
         @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
             <div class="col-md-2 mt-3">
@@ -186,26 +187,7 @@
             </div>
             @endif
         @endif
-    @elseif(Auth::user()->role_id == 1)
-    <div class="row">
-        <div class="col-lg-8 col-10 mt-3 ml-3">
-            <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
-            @include('projects.modals.clientdeliverableaddmodal')
-            @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
-                <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
-                    <i class="fas fa-check"></i> 
-                    Extend Time
-                </button>
-                @include('projects.modals.deliverableextensionacceptmodal')
-            @endif
-            @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
-
-                <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
-                @include('projects.modals.deliverablefinalauthorizationacceptmodal')
-            @endif
-            
-        </div>
-    </div>
+   
 
 
 
@@ -213,6 +195,27 @@
    @endif
 
 
+  @endif
+  @if(Auth::user()->role_id == 1)
+  <div class="row">
+      <div class="col-lg-8 col-10 mt-3 ml-3">
+          <button type="button" class="btn btn-primary rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverablesaddModal"><i class="fas fa-plus"></i> Add Deliverable</button>
+          @include('projects.modals.clientdeliverableaddmodal')
+          @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
+              <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
+                  <i class="fas fa-check"></i> 
+                  Extend Time
+              </button>
+              @include('projects.modals.deliverableextensionacceptmodal')
+          @endif
+          @if(Auth::user()->role_id == 1 && $project->authorization_status == 'submitted')
+
+              <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
+              @include('projects.modals.deliverablefinalauthorizationacceptmodal')
+          @endif
+          
+      </div>
+  </div> 
   @endif
     <!-- CARD BODY START -->
     <div class="card-body">

@@ -108,7 +108,6 @@ const DataTable = ({
                         </thead>
                         <tbody className="sp1_tlr_tbody">
                             {!isLoading && renderRow(data)}
-
                             {isLoading && <ProjectWiseTimeLogTableLoader />}
                         </tbody>
                     </table>

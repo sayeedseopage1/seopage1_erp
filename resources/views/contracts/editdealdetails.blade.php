@@ -47,47 +47,12 @@
 
           <!-- CARD BODY START -->
           <div class="card-body">
-              @if($deal->submission_status == 'pending')
-              <h5 class="d-flex justify-content-center">Link Submission for Client Data Collection</h5>
-
-            @else
+             
                 <h5>Deal Details</h5>
-            @endif
+         
             <hr>
               <div class="invoice-table-wrapper">
-                @if($deal->submission_status == 'pending')
-                <div class="d-flex justify-content-center">
-                  <form class=""action="{{route('form-submit-to-client')}}" method="post">
-                    @csrf
-                      <input type="hidden" name="id" value="{{$deal->id}}">
-
-
-                  <div class="mt-3">
-                      <label for="input-state-3" class="form-label"><strong style="color:red;">Please Copy This URL, Send It To The Client & Confirm Submission</strong></label>
-                    <div class="row" style="margin-left:40px;">
-
-                      <div class="col-md-10">
-                          <input type="text" class="form-control"  value="https://erp.seopage1.net/deals/{{$deal->hash}}" id="{{$deal->hash}}">
-                      </div>
-                      <div class="col-md-2">
-                              <button type="button" class="btn btn-info" onclick="myFunction{{$deal->hash}}()"><i class="fa-solid fa-copy"></i></button>
-                      </div>
-
-
-                    </div>
-
-
-
-                          <!-- The button used to copy the text -->
-
-                  </div>
-                  <div class="mt-3 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary">Confirm Submission</button>
-                  </div>
-                    </form>
-                </div>
-
-                @else
+               
 
                 <div class="row">
                     <div class="col-sm-12">
@@ -627,7 +592,7 @@
                         </form>
                     </div>
                 </div>
-                @endif
+              
               </div>
               <div class="d-flex flex-column">
               </div>

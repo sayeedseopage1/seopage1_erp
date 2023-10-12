@@ -75,7 +75,7 @@ export const NumberOfRevisionTableColumns = [
         id: "lead_developer",
         heading: "Lead Developer Issues",
         moveable: false,
-        sortBy: "lead_develoepr_issue",
+        sortBy: "lead_developer_issues",
         searchText: (row) => `${row?.lead_developer_issues}`,
         row: ({ row, table }) => {
             const search = table.state.search;
@@ -99,7 +99,7 @@ export const NumberOfRevisionTableColumns = [
         id: "developer",
         heading: "Developers Issues",
         moveable: false,
-        sortBy: "develoepr_issue",
+        sortBy: "developer_issues",
         searchText: (row) => `${row?.developer_issues}`,
         row: ({ row, table }) => {
             const search = table.state.search;
