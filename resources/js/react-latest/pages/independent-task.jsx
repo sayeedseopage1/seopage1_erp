@@ -1,9 +1,10 @@
 import React from 'react';
+import IndependentTaskDataTable from '../components/independent-task-page/IndependentTaskDataTable';
 
 const IndependentTask = () => {
   return (
     <div>
-      <h1>Independent task page</h1>
+      <IndependentTaskDataTable />
     </div>
   );
 };

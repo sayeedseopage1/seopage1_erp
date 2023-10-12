@@ -1,10 +1,10 @@
 
 
 import React from 'react'
-import { useDispatch } from 'react-redux';
-import { addSubtaskToParenttask } from '../../../services/features/tasksSlice';
+// import { useDispatch } from 'react-redux';
+// import { addSubtaskToParenttask } from '../../../services/features/tasksSlice';
 import Loader from '../Loader';
-import { useLazyGetSubTasksQuery } from '../../../services/api/tasksApiSlice';
+// import { useLazyGetSubTasksQuery } from '../../../services/api/tasksApiSlice';
 
 // expend sub task
 export const ExpandTask = ({row, table, pageIndex}) => {
@@ -12,9 +12,12 @@ export const ExpandTask = ({row, table, pageIndex}) => {
     const data = row?.original;
     const subtasks = data?.subtasks_count 
     const pageIdx = pageIndex;
-    const dispatch = useDispatch();
-    const [getSubTasks, {isFetching}] = useLazyGetSubTasksQuery();
+    // const dispatch = useDispatch();
+    // const [getSubTasks, {isFetching}] = useLazyGetSubTasksQuery();
     const { filter } = table.getState();
+
+    // test variable
+    const isFetching = false;
 
     const handleExpanding = (e) => {
       setLoading(true); 
@@ -23,19 +26,20 @@ export const ExpandTask = ({row, table, pageIndex}) => {
         if (!row.getCanExpand()) return;
         row.toggleExpanded();
       }else{
-        getSubTasks({
-          taskId: data?.id,
-          query: new URLSearchParams(filter).toString()
-        })
-        .unwrap()
-        .then( res => {
-          const _data = {...data, subtasks: res?.tasks};  
-          dispatch(addSubtaskToParenttask({id: data?.id, task: _data}));
+        // getSubTasks({
+        //   taskId: data?.id,
+        //   query: new URLSearchParams(filter).toString()
+        // })
+        // .unwrap()
+        // .then( res => {
+        //   const _data = {...data, subtasks: res?.tasks};  
+        //   dispatch(addSubtaskToParenttask({id: data?.id, task: _data}));
 
-          setLoading(false);
-          row.toggleExpanded();
-        })
-        .catch(err => console.error(err)) 
+        //   setLoading(false);
+        //   row.toggleExpanded();
+        // })
+        // .catch(err => console.error(err)) 
+        // console.log('have to fetch expanding data');
       }
     }
      

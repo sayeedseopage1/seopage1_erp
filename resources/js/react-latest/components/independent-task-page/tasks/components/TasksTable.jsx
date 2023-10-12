@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Loader from './Loader';
-import { convertTime } from '../../utils/converTime';
-import { CompareDate } from '../../utils/dateController';
+import { convertTime } from '../../../../utils/converTime';
+import { CompareDate } from '../../../../utils/dateController';
 const compareDate = new CompareDate(); 
 
 import {
@@ -15,25 +15,23 @@ import {
 
 import _ from 'lodash';
 import TasksTablePagination from './TasksTablePagination';
-import dayjs from 'dayjs';
+// import dayjs from 'dayjs';
 import TaskTableLoader from './loader/TaskTableLoader';
-import { useLazyGetSubTasksQuery } from '../../services/api/tasksApiSlice';
-import { useDispatch, useSelector } from 'react-redux';
-import { addSubtaskToParenttask } from '../../services/features/tasksSlice';
-import Dropdown from './Dropdown';
-import Button from './Button';
-import StopWatch from './Timer';
-import EmptyTable from '../../global/EmptyTable';
-import ReportButton from './ReportButton';
-import Person from './Person';
+// import { useLazyGetSubTasksQuery } from '../../services/api/tasksApiSlice';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { addSubtaskToParenttask } from '../../services/features/tasksSlice';
+// import Dropdown from './Dropdown';
+// import Button from './Button';
+// import StopWatch from './Timer';
+// import ReportButton from './ReportButton';
+// import Person from './Person';
 import { DragableColumnHeader } from './table/DragableColumnHeader';
 import { useLocalStorage } from 'react-use';
-import { User } from '../../utils/user-details';
-import { ExpandTask } from './table/ExpandTask';
+import EmptyTable from '../../../../ui/marge-table/EmptyTable';
+import { User } from '../../../../utils/user-details';
 
-
-export default function TasksTable({isLoading, filter, tableName,search, reportPermission, hideColumns, tableColumns}){
-  const { tasks } = useSelector(s => s.tasks);
+export default function TasksTable({tableData:tasks, isLoading, filter, tableName,search, reportPermission, hideColumns, tableColumns}){
+  // const { tasks } = useSelector(s => s.tasks);
   const [data, setData] = React.useState([])
   const [expanded, setExpanded] = React.useState({}); 
   const [sorting, setSorting] = React.useState([]);

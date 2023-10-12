@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { User } from '../../utils/user-details';
+import { User } from '../../../../utils/user-details';
 
 const Tabbar = () => {
   const auth = new User(window?.Laravel?.user);

@@ -1,20 +1,25 @@
 import React from "react";
-import Modal from "../../global/Modal";
 import Button from "./Button";
-import CKEditorComponent from "../../ckeditor/index";
 import SubmitButton from "./SubmitButton";
-import { useResolveReportMutation } from "../../services/api/tasksApiSlice";
+// import { useResolveReportMutation } from "../../services/api/tasksApiSlice";
 import _ from "lodash";
-import { useDispatch } from "react-redux";
-import { updateReportStatus } from "../../services/features/tasksSlice";
+import Modal from "./Modal";
+import CKEditorComponent from "../../../../ui/ckeditor";
+// import { useDispatch } from "react-redux";
+// import { updateReportStatus } from "../../services/features/tasksSlice";
 
 const ReportResoveButton = ({ row }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [search, setSearch] = React.useState("");
     const [comment, setComment] = React.useState("");
-    const [resolveReport, { isLoading }] = useResolveReportMutation();
+    // const [resolveReport, { isLoading }] = useResolveReportMutation();
 
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+
+
+    // test variable
+    const isLoading = false;
+
 
     const handleModal = (e) => {
         setIsOpen(true);
@@ -32,18 +37,18 @@ const ReportResoveButton = ({ row }) => {
         };
 
         if (comment) {
-            resolveReport(data)
-                .unwrap()
-                .then((res) => {
-                    if (res.status === 200) {
-                        dispatch(
-                            updateReportStatus({ id: row?.id, status: type })
-                        );
-                        const body = document.getElementById("body");
-                        body.style.cursor = "default";
-                        close();
-                    }
-                });
+            // resolveReport(data)
+            //     .unwrap()
+            //     .then((res) => {
+            //         if (res.status === 200) {
+            //             dispatch(
+            //                 updateReportStatus({ id: row?.id, status: type })
+            //             );
+            //             const body = document.getElementById("body");
+            //             body.style.cursor = "default";
+            //             close();
+            //         }
+            //     });
         }
     };
 

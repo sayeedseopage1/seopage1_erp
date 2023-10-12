@@ -6,6 +6,8 @@ import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
 import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import IndependentTask from "../pages/independent-task";
+import '../components/independent-task-page/tasks/table.css';
+import '../components/independent-task-page/tasks/tasks.css';
 
 
 const container = document.getElementById("independent-task-container");

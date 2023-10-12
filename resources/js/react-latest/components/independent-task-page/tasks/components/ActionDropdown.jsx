@@ -1,19 +1,24 @@
 import React from "react";
 import Button from "./Button";
 import Dropdown from "./Dropdown";
-import ReportForm from "../../single-task/section/task-actions/report/ReportForm";
-import { SingleTask } from "../../utils/single-task";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "./Modal";
 import Loader from "./Loader";
+import { SingleTask } from "../../../../utils/single-task";
+import ReportForm from "./ReportForm";
 
 // Action Dropdown
 const ActionDropdown = ({row}) => { 
     const [reportModalOpen, setReportModalOpen] = React.useState(false);
     const singleTask = new SingleTask(row); 
-    const close = () => setReportModalOpen(false);  
-    const { subtasks } = useSelector(s => s.tasks);
-    const dispatch = useDispatch();
+    const close = () => setReportModalOpen(false);
+    // const { subtasks } = useSelector(s => s.tasks);
+    
+    // test variable
+    const subtasks = [];
+
+
+    // const dispatch = useDispatch();
     // handle report
     const handleReport = () => {
       // find the index of current task
@@ -21,7 +26,7 @@ const ActionDropdown = ({row}) => {
       // create new instance of this row with updated report count;
       const instance = [...subtasks];
       instance[_index] = {...row, subtasks_reports_count: Number(row.subtasks_reports_count) + 1}
-      dispatch(storeSubTasks({subtasks: [...instance]}))
+      // dispatch(storeSubTasks({subtasks: [...instance]}))
     }
     
     return (

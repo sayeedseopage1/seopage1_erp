@@ -4,7 +4,7 @@ import './filterbar.css';
 const FilterContainer = ({children}) => {
   return ReactDOM.createPortal(
     <>{children}</>,
-    document.getElementById('tasksTableFilterContainer')
+    document.getElementById('independent-task-filter-container')
   )
 }
 

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Placeholder } from "../../../global/Placeholder";
+import { Placeholder } from "../../../../../ui/Placeholder";
 
 export default function ReportTableLoder(){
     return(

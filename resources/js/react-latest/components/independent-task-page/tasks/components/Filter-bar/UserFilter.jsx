@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import Dropdown from '../Dropdown';
-import {User} from '../../../utils/user-details';
 import _ from 'lodash';
-import { useUsers } from '../../../hooks/useUsers';
 import Search from '../Searchbox';
 import Loader from '../Loader';
+import { User } from '../../../../../utils/user-details';
+import { useUsers } from '../../../../../hooks/useUsers';
 
 const UserFilter = ({state, setState, title, selectionBoxClassName, roleIds=[5, 9, 10]}) => {
     const [query, setQuery] = useState(''); 

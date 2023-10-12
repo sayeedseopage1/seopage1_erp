@@ -12,8 +12,8 @@ import demo from "./demo.json";
 import Person from "./Person";
 import ReportResoveButton from "./ReportResolveButton";
 import ReportTableLoder from "./loader/ReportTableLoder";
-import EmptyTable from "../../global/EmptyTable";
 import _ from "lodash";
+import EmptyTable from "../../../../ui/marge-table/EmptyTable";
 
 // columns model
 
