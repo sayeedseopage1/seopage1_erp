@@ -19,7 +19,7 @@ import { SingleTask } from "../../utils/single-task";
 import { User } from "../../utils/user-details";
 import AssignedToSelection from "./AssignedToSelection";
 import { useDeleteUplaodedFileMutation } from "../../services/api/SingleTaskPageApi";
-import { storeTasks } from "../../services/features/tasksSlice";
+import { storeTasks, updateTasks } from "../../services/features/tasksSlice";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);
@@ -166,7 +166,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
 
     // handle submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const _startDate = startDate ? dayjs.dayjs(startDate).format("DD-MM-YYYY") : '';
         const _dueDate = dueDate ? dayjs.dayjs(dueDate).format("DD-MM-YYYY") : '';
@@ -201,21 +201,25 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         );
 
         if(isValid()){
-            updateTask(fd)
+            await updateTask(fd)
             .unwrap()
             .then((res) => {
                 // close();
                 // // change on local
-                const queryString = new URLSearchParams(filter).toString();
+                // const queryString = new URLSearchParams(filter).toString();
+                // console.log({res})
+                 dispatch(updateTasks({task: res.task}))
 
-                // fetch updated tasks
-                getTasks(`?${queryString}`)
-                    .unwrap()
-                    .then(res => {
-                        const data = _.orderBy(res?.tasks, 'due_date', 'desc');
-                        dispatch(storeTasks({tasks: data}))
-                    })
-                    .catch(err => console.log(err))
+
+                // // fetch updated tasks
+                // getTasks(`?${queryString}`)
+                //     .unwrap()
+                //     .then(response => {
+                //         console.log({response})
+                //         const data = _.orderBy(response?.tasks, 'due_date', 'desc');
+                //         dispatch(storeTasks({tasks: data}))
+                //     })
+                //     .catch(err => console.log(err))
 
                 clearForm();
                 // alert update successful
@@ -283,6 +287,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         previousFile.splice(index,1);
         setAttachedFiles(previousFile);
     }
+
+ 
 
     return (
         <Modal isOpen={isOpen}>
@@ -538,7 +544,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     </div>
                                     <div style={{ color: "red" }}>
                                         Estimation time can't exceed{" "}
-                                        {/* {convertTime(projectInfo?.minutes_left ?? 0)} */}
+                                        {convertTime((Number(projectInfo?.minutes_left) + row.estimate_minutes + (row.estimate_hours* 60)) - (Number(estimateTimeMin) + (Number(estimateTimeHour) * 60)))} 
                                     </div>
                                 </div>
                             </div>

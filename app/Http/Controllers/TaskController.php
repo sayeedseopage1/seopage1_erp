@@ -2004,24 +2004,36 @@ class TaskController extends AccountBaseController
             return response($validator->errors(), 422);
         }
         $project_id = Project::where('id', $request->project_id)->first();
+        $task_id= Task::where('id',$request->task_id)->first();
         $task_estimation_hours = Task::where('project_id', $project_id->id)->sum('estimate_hours');
         $task_estimation_minutes = Task::where('project_id', $project_id->id)->sum('estimate_minutes');
         $total_task_estimation_minutes = $task_estimation_hours * 60 + $task_estimation_minutes;
-        $left_minutes = ($project_id->hours_allocated - $request->estimate_hours) * 60 - ($total_task_estimation_minutes + $request->estimate_minutes);
-
+      //  $left_minutes = ($project_id->hours_allocated+ $task_id->estimate_hours - $request->estimate_hours) * 60 - (($total_task_estimation_minutes  + $request->estimate_minutes);
+        $left_minutes = ($project_id->hours_allocated - $task_id->estimate_hours + $request->estimate_hours) * 60 - (($total_task_estimation_minutes- $task_id->estimate_minutes  + $request->estimate_minutes));
         $left_in_hours = round($left_minutes / 60, 0);
         $left_in_minutes = $left_minutes % 60;
+    //   / dd($left_minutes);
+        // if ($left_minutes < 0) {
+        //     return response()->json([
+        //         "message" => "Something went wrong",
+        //         "errors" => [
+        //             "hours" => [
+        //                 "Estimate hours cannot exceed from project allocation hours !"
+        //             ]
+        //         ]
+        //     ], 422);
+        // }
+        // if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
+        //     return response()->json([
+        //         "message" => "Wrong Input",
+        //         "errors" => [
+        //             "hours" => [
+        //                 "Estimate hours and minutes cannot be 0 !"
+        //             ]
+        //         ]
+        //     ], 422);
+        // }
 
-        if ($left_minutes < 1) {
-            // return response()->json([
-            //     "message" => "The given data was invalid.",
-            //     "errors" => [
-            //         "estimate_hours" => [
-            //             "Estimate hours cannot exceed from project allocation hours !"
-            //         ]
-            //     ]
-            // ], 422);
-        }
 
         // dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
@@ -2077,6 +2089,10 @@ class TaskController extends AccountBaseController
 
 
         $task->save();
+
+        $assignee = TaskUser::where('task_id',$task->id)->first();
+        $assignee->user_id = $request->user_id;
+        $assignee->save();
 
 
         if ($request->hasFile('file')) {
@@ -3410,22 +3426,25 @@ class TaskController extends AccountBaseController
                 'projects.id as project_id',
                 'projects.project_name',
                 'projects.project_summary',
+                'pm.id as project_manager_id',
+                'pm.name as project_manager_name',
+                'pm.image as project_manager_avatar',
 
                 'clients.id as clientId','clients.name as client_name',
-
-
-
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
+                'designations.name as pm_designation',
 
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
                 ->join('projects', 'tasks.project_id', 'projects.id')
                 ->leftJoin('users as clients','clients.id','projects.client_id')
+                ->leftJoin('users as pm','pm.id','projects.pm_id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
                 ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-            //    / ->leftJoin('tasks', 'sub_tasks.task_id', 'tasks.id')
                 ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
+                ->leftJoin('employee_details', 'projects.pm_id', 'employee_details.user_id')
+                ->leftJoin('designations', 'employee_details.designation_id', 'designations.id')
                 ->where('tasks.id', $id)
                 ->first();
 
@@ -5418,12 +5437,15 @@ class TaskController extends AccountBaseController
                 'assignee_by.id as assignee_by_id',
                 'assignee_by.name as assignee_by_name',
                 'assignee_by.image as assignee_by_avatar',
+                'approved_by.name as approved_by_name',
+                'approved_by.image as approved_by_avatar',
 
             ])
             ->leftJoin('projects','pending_parent_tasks.project_id','=','projects.id')
             ->leftJoin('users as client','projects.client_id','=','client.id')
             ->leftJoin('users as assignee_to','pending_parent_tasks.user_id','=','assignee_to.id')
             ->leftJoin('users as assignee_by','pending_parent_tasks.added_by','=','assignee_by.id')
+            ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
             ->get();
         }else{
             $pendingParentTasks = PendingParentTasks::select([
@@ -5592,9 +5614,12 @@ class TaskController extends AccountBaseController
                     'created_by_user.name as created_by_name',
                     'replied_by_user.id as replied_by_id',
                     'replied_by_user.name as replied_by_name',
+                    'approved_by.name as approved_by_name',
+                    'approved_by.image as approved_by_avatar',
                 ])
                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
                 ->get();
 
         return response()->json([
@@ -5625,9 +5650,12 @@ class TaskController extends AccountBaseController
                                                     'created_by_user.name as created_by_name',
                                                     'replied_by_user.id as replied_by_id',
                                                     'replied_by_user.name as replied_by_name',
+                                                    'approved_by.name as approved_by_name',
+                                                    'approved_by.image as approved_by_avatar',
                                                 ])
                                                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                                                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
+                                                ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
                                                 ->get();
 
 

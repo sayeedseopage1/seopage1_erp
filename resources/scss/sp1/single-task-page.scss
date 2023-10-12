@@ -1,5 +1,3 @@
-     
-
         .dot-color{
             display: block;
             width: 8px;
@@ -57,10 +55,10 @@
             font-size: 14px;
         }
 
-        .sp1_task_card--body::-webkit-scrollbar{ 
+        .sp1_task_card--body::-webkit-scrollbar{
             width: 4px;
             border-radius: 4px !important;
-        } 
+        }
 
         .sp1_task_card--body::-webkit-scrollbar-track{
             background: rgb(240, 240, 240) !important;
@@ -123,16 +121,16 @@
         }
 
         .sp1_task_right_card--body{
-            height: 110px; 
+            height: 110px;
             overflow-y: auto;
             padding-bottom: 5px;
             padding-right: 5px
         }
 
-        .sp1_task_right_card--body::-webkit-scrollbar{ 
+        .sp1_task_right_card--body::-webkit-scrollbar{
             width: 4px;
             border-radius: 4px !important;
-        } 
+        }
 
         .sp1_task_right_card--body::-webkit-scrollbar-track{
             background: rgb(240, 240, 240) !important;
@@ -169,12 +167,12 @@
             border-style: dashed;
         }
 
-        .sp1_tark_right_item{ 
+        .sp1_tark_right_item{
             a{color: #777;}
             font-size: 13px;
         }
 
-    
+
 
         .sp1_task_right_dl_toggle{
             padding: 0;
@@ -192,14 +190,14 @@
             width: 800px;
             max-height: 90vh;
             overflow: hidden;
-            overflow-y: auto; 
+            overflow-y: auto;
             padding:24px;
             left: 12px !important;
             top: -80px !important;
             border: 0.5px solid #84caf8 !important;
             box-shadow: 0 0 10px rgba(0,0,0,.1);
             background: rgb(250, 250, 252);
-            border-radius: 16px; 
+            border-radius: 16px;
 
             &.--small-device{
                 position: absolute;
@@ -225,14 +223,14 @@
 
 
 .sp1_task_write_comment{
-    display: flex; 
+    display: flex;
     gap: 10px;
 }
 
-.sp1_task_comment_send_box{ 
+.sp1_task_comment_send_box{
     display: flex;
     width: 100%;
-    
+
     & .__avatar{
         width: 48px;
         height: 48px;
@@ -253,7 +251,7 @@
             padding: 10px 12px;
             border: 1px solid #e1e1e1;
             border-radius: 6px;
-            span{ color: #777;} 
+            span{ color: #777;}
 
             &.__reply_text{
                 background: #f5f9fd;
@@ -261,13 +259,13 @@
                 padding-left: 14px;
                 border-radius: 0;
 
-                div{  
+                div{
                     border-left: 1px solid rgba(53, 129, 222, .3);
                     padding-left: 28px;
                 }
             }
         }
-    }  
+    }
 }
 
 .sp1_comment_user--name{
@@ -282,7 +280,7 @@
     }
 
 .sp1_comment_time{
-    font-size: 13px; 
+    font-size: 13px;
     @media (max-width: 557px){
         font-size: 11px;
     }
@@ -315,10 +313,10 @@
     gap: 10px;
 }
 
-.sp1_task_comment_list_items::-webkit-scrollbar{ 
+.sp1_task_comment_list_items::-webkit-scrollbar{
     width: 4px;
     border-radius: 4px !important;
-} 
+}
 
 .sp1_task_comment_list_items::-webkit-scrollbar-track{
     background: rgb(240, 240, 240) !important;
@@ -331,7 +329,7 @@
 }
 
 .sp1_task_comments{
-    width: 100%; 
+    width: 100%;
 }
 
 
@@ -348,7 +346,7 @@
     a{
         color: #777;
         font-size: 14px;
-        
+
         &:hover{
             text-decoration: underline;
             color:#333 !important;
@@ -366,18 +364,18 @@
             position: relative;
             display: flex;
             align-items: center;
-            width: 32px; 
+            width: 32px;
 
             & > div{
                 display: block;
                 position: absolute;
-                left: 0; 
+                left: 0;
                 border-radius: 50%;
                 img{
                     border: 2px solid rgb(237, 237, 237);
                     box-shadow: 0 0 3px rgba(0,0,0,.1);
                 }
-            }   
+            }
         }
 
         &:hover{
@@ -389,10 +387,10 @@
     @media (max-width: 557px){
        & > a {
         font-size: 13px !important;
-       } 
+       }
     }
 }
- 
+
 
 
 .sp1_task_comment_replies{
@@ -412,9 +410,9 @@
     width: 100%;
     max-width: 60vw;
     background: #fff;
-    margin: auto; 
+    margin: auto;
     overflow: hidden;
-    border-radius: 10px; 
+    border-radius: 10px;
 
     & .__header{
         background-color: #ececec;
@@ -435,7 +433,7 @@
 
             &:hover{
                 background-color:#f3f3f3;
-                color: #525252; 
+                color: #525252;
             }
         }
     }
@@ -462,15 +460,15 @@
     }
 }
 
-  
 
-// ck editor holder 
+
+// ck editor holder
 .ck-editor-holder{
     background-color: #fff;
     border: 1px solid #e1e1e1;
-    position: relative;  
-    width: 100%; 
-} 
+    position: relative;
+    width: 100%;
+}
 
 
 .sp1_task_comment_list{
@@ -499,7 +497,7 @@
     max-width: 50vw;
     background: #fff;
     border-radius: 10px;
-    padding: 16px; 
+    padding: 16px;
 
     &> div > ._close-modal{
         background: #f5f5f5;
@@ -522,7 +520,7 @@
     & > ._comment_list{
         max-height: 80vh;
         overflow-x: hidden;
-        overflow-y: auto; 
+        overflow-y: auto;
         padding-right: 10px;
     }
 }
@@ -539,7 +537,7 @@
 
 
 .sp1_st_write_comment_editor{
-    padding-right: 16px; 
+    padding-right: 16px;
 
     & > .ck-content{
         min-height: 250px;
@@ -571,7 +569,7 @@
     color: rgba(30, 31, 32, 0.664);
 }
 
-.sp1_st_write_comment_editor_attach:hover{ 
+.sp1_st_write_comment_editor_attach:hover{
     background: rgb(0 0 0 / 10%);
 }
 
@@ -583,7 +581,7 @@
 
 .sp1-subtask-form {
 
-    &.--modal-panel{ 
+    &.--modal-panel{
         width: 800px;
         height: 100%;
         min-height: 300px;
@@ -591,10 +589,10 @@
         overflow-y: hidden;
         background: #FAFAFC ;
         border-radius: 16px;
-        padding: 16px; 
+        padding: 16px;
         border: 1px solid var(--header_color);
 
-        @media (max-width: 1200px){ 
+        @media (max-width: 1200px){
             position: absolute;
             top: 20px;
             left: 50%;
@@ -606,13 +604,13 @@
             width: 95vw;
             height: fit-content;
         }
-        
+
         &.--modal-submitted{
             width: 600px;
             @media (max-width: 1200px) {
                 top: 50%;
-                transform: translate(-50%, -50%);  
-            } 
+                transform: translate(-50%, -50%);
+            }
             @media (max-width: 768px){
                 width: 95vw;
                 height: 80vh;
@@ -640,18 +638,18 @@
                 max-height: 90vh;
             }
 
-            
+
 
             &.--form{
                 height: fit-content;
             }
-        } 
-  
-    } 
+        }
+
+    }
 }
 
 .sp1_subtask_form{
-        max-height: 70vh !important; 
+        max-height: 70vh !important;
 }
 
 .sp1_st-list-item{
@@ -671,6 +669,12 @@
 .sp1_st-list-item-head{
     width: 120px;
     color: #383b42;
+    position: relative;
+
+    &::before{
+        position: absolute;
+
+    }
 
     @media (max-width: 576px) {
         width: 100px;
@@ -705,7 +709,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-inline: 10px; 
+    padding-inline: 10px;
 
     i.fa-sort{
         color: #d5d7da;
@@ -755,7 +759,7 @@
     }
 }
 
-.sp1-select-option-nodata{ 
+.sp1-select-option-nodata{
     padding: 10px;
     cursor: default;
     user-select: none;
@@ -763,7 +767,7 @@
 }
 
 .ck-editor__editable{
-    background: #fff; 
+    background: #fff;
 }
 
 .sp1_sub-task-file-upload{
@@ -806,7 +810,7 @@
         opacity: 0;
         transition: opacity .4s ease-in-out;
 
-        &:hover{ 
+        &:hover{
             background: rgb(255, 38, 0);
         }
     }
@@ -835,7 +839,7 @@
     & > .__icon{
         width: 40px;
         height: 52px;
-        position: relative; 
+        position: relative;
     }
 }
 
@@ -846,11 +850,11 @@
     padding: 2px;
     background: #fff;
     position: absolute;
-    bottom: 5px ; 
+    bottom: 5px ;
     left: 0;
     transform-origin: 50% 50%;
     font-weight: bold;
-    font-size: 18px;  
+    font-size: 18px;
 }
 
 .cursor-processing{
@@ -874,9 +878,9 @@
     &:hover{
         background: rgb(0 0 0 / 2%)
     }
-} 
+}
 
-.sp1-sumittion_task_modal-view{  
+.sp1-sumittion_task_modal-view{
     width: 100% !important;
     max-width: 500px;
     height: fit-content !important;
@@ -917,7 +921,7 @@
     }
 
     & td{
-        font-size: 14px; 
+        font-size: 14px;
     }
 }
 
@@ -946,7 +950,7 @@
         margin: 0 !important;
     }
 }
- 
+
 
 // offset canvas
 .sp1_subtask_offsetcanvas{
@@ -967,26 +971,26 @@
     }
 
     &--body{
-        padding:0;  
+        padding:0;
         background: #fdfdfd;
         height: 80vh;
         display: -ms-grid;
         display: -moz-grid;
-        display: grid; 
-        grid-template-columns: 200px 1fr; 
-        position: relative; 
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        position: relative;
 
         & .sp1-subtask-modal-sidebar{
             background: #fff;
             border-right: 1px solid rgb(0 0 0 / 10%);
-            padding: 10px; 
-            gap: 3px; 
+            padding: 10px;
+            gap: 3px;
             width: 200px;
             z-index: 1;
 
             & .nav-link{
                 color : #444958 !important;
-               
+
                 &:hover{
                     background-color: #e8f3fe !important;
                 }
@@ -1006,7 +1010,7 @@
             position: relative;
             padding-bottom: 20px;
         }
-    } 
+    }
 }
 
 .sp1_modal_timelog_view{
@@ -1020,12 +1024,12 @@
 }
 
 .sp1_modal_timelog_view-tbl-contanier{
-    overflow-y: auto; 
-    height: calc(80vh - 160px); 
+    overflow-y: auto;
+    height: calc(80vh - 160px);
 }
 
 .sp1_st_tab_panel{
-    height: calc(80vh - 80px); 
+    height: calc(80vh - 80px);
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -1040,7 +1044,7 @@
 }
 
 
-// single task page timer start confirmation modal 
+// single task page timer start confirmation modal
 .subtask-timer-confirmation{
     &--modal{
         display: flex;
@@ -1055,7 +1059,7 @@
         background: #ffff;
         padding: 16px 10px;
         border-radius: 16px;
-        overflow: hidden;  
+        overflow: hidden;
     }
 
     &--content{
@@ -1072,7 +1076,7 @@
         }
     }
 
-} 
+}
 
 
 
@@ -1086,7 +1090,7 @@
         &-panel{
             width: 100%;
             max-width: 650px;
-            margin-inline: auto; 
+            margin-inline: auto;
             background: #fff;
             padding: 8px 16px;
             border-radius: 12px;
@@ -1100,7 +1104,7 @@
             padding-bottom: 10px;
         }
 
-        &-body{ 
+        &-body{
             height: fit-content;
             padding: 16px 0;
 
@@ -1128,7 +1132,7 @@
     gap: 10px;
     margin-top: 10px;
 
-    & > button{ 
+    & > button{
         padding: 3px 16px;
         border-radius: 6px;
         font-size: 13px;
@@ -1137,20 +1141,20 @@
         transition: background 0.2s ease-in-out;
 
         &:first-child{
-            font-size: 1rem; 
+            font-size: 1rem;
             background-color: var(--header_color);
             &:hover{
                 color: #fff;
                 background: #444958;
             }
-        } 
+        }
         &:nth-child(2){
             background-color: #444958;
             &:hover{
                 color: #fff;
                 background: #1e6cff;
             }
-        }  
+        }
     }
 }
 
@@ -1162,7 +1166,7 @@
     z-index: 99999;
     width: 100vw;
     height: 100vh;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .sp1_single_task--modal-panerl-wrapper{
@@ -1177,7 +1181,7 @@
 .sp1_single_task--modal-panel{
     width: fit-content;
     max-width: 90vw;
-    height: fit-content; 
+    height: fit-content;
     background: #fff;
     padding: 10px;
     border-radius: 10px;
@@ -1188,7 +1192,7 @@
     height: 100%;
 }
 
-.sp1_single_task-modal-body-options{ 
+.sp1_single_task-modal-body-options{
     max-width: 550px;
 }
 
@@ -1299,7 +1303,7 @@
 
 /* approve */
 .sp1_st--approve-card{
-    border: 1px solid rgb(0 0 0 / 10%); 
+    border: 1px solid rgb(0 0 0 / 10%);
 
     &-header{
         display: flex;
@@ -1330,10 +1334,10 @@
 // report button
 .sp1_report_btn{
     @media (max-width: 490px ) {
-        margin-left: 0 !important ; 
-    }            
+        margin-left: 0 !important ;
+    }
 }
- 
+
 .sp1_task-edit-button{
     margin-left: auto;
     &:hover{
@@ -1342,6 +1346,6 @@
     }
 
     @media (max-width: 490px ) {
-        margin-left: 0 !important ; 
-    }        
+        margin-left: 0 !important ;
+    }
 }

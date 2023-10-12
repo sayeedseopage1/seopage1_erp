@@ -4,7 +4,7 @@
 
 .authorize_task{
     font-family: Inter;
-    font-weight: 500;
+    font-weight: 500 !important;
     background: #199CDE !important;
     color: #f9f9f9 !important;
     border-color: #199CDE !important;
@@ -12,9 +12,8 @@
 
 .authorize_task:hover{
     font-family: Inter;
-    font-weight: 500;
-    background-color: rgba(0, 0, 0, 0.8) !important;
-    border-color: rgba(0, 0, 0, 0.8) !important;
+    background-color: #1492d2 !important;
+    border-color: #1492d2 !important;
 }
 
 
@@ -132,6 +131,7 @@
     color:#626262;
     font-weight: 500;
     position: relative;
+    padding-right: 10px;
 }
 
 .task_info__label::before{
@@ -140,6 +140,7 @@
     right: 0;
     top: 0;
     color: #777;
+    z-index: 1;
 }
 
 .task_info__text{

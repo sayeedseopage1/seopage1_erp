@@ -131,6 +131,12 @@ const ProjectTasks = () => {
 
     const isFetching = subtaskFetching || taskFetching;
 
+    let _SubTasksTableColumns =  SubTasksTableColumns;
+
+    if(auth.getRoleId() !== 6) {
+        _SubTasksTableColumns = _.filter(_SubTasksTableColumns, col => col.id !== 'action');
+    }
+
     const singleTask = _.head(tasks);
 
     return (
@@ -306,7 +312,7 @@ const ProjectTasks = () => {
                                     "client",
                                     "project_manager",
                                 ]}
-                                tableColumns={SubTasksTableColumns}
+                                tableColumns={_SubTasksTableColumns}
                             />
                         )}
                     </div>
