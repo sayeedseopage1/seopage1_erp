@@ -34,7 +34,7 @@ export class User {
       this.login = data?.login;
       this.mobile = data?.mobile;
       this.modules = data?.modules;
-      this.role = data?.role.map(roleData => new UserRole(roleData));
+      this.role = (data?.role?data?.role:[]).map(roleData => new UserRole(roleData));
       this.rtl = data?.rtl;
       this.roleId = Number(data?.role_id);
       this.salutation = data?.salutation;
