@@ -1,12 +1,7 @@
 @extends('layouts.app')
+@section('filter-section')
+    <div id="independent-task-filter-container"></div>
+@endsection
 @section('content')
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card mt-3 p-3" style="border: none">
-                <h2>Hello,</h2>
-            </div>
-        </div>
-    </div>
-</div>
+    <div id="independent-task-container"></div>
 @endsection

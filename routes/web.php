@@ -192,7 +192,7 @@ use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
-use App\Http\Controllers\IndependentTask;
+use App\Http\Controllers\IndependentTaskController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -824,7 +824,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
 
     /******* Independent TASK Start ******** */
-         Route::resource('independent-task',IndependentTask::class);
+    Route::resource('independent-task',IndependentTaskController::class);
     /******* Independent TASK End ******** */
 
     /******* TASK DISPUTE ******** */
