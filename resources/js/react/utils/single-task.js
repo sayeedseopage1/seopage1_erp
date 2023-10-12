@@ -210,6 +210,10 @@ export class SingleTask {
         this.pageName = task?.page_name;
         this.pageUrl = task?.page_url;
         this.subtaskId = task?.subtask_id;
+        this.projectManagerId = task?.project_manager_id;
+        this.projectManagerAvatar = task?.project_manager_avatar;
+        this.projectManagerName = task?.project_manager_name;
+        this.projectManagerDesignation = task?.pm_designation;
     }
 
     isLeadDeveloperAbleToSubmit () {

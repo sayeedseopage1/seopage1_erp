@@ -48,7 +48,7 @@ const QuestionAnswer = ({ data, conversations, setConversations }) => {
                     </span>
                 )}
 
-                <div className={styles.button_group}>
+                <div className={`${styles.button_group} mt-2`}>
                     {false ? (
                         <Button isLoading={false} variant="primary">
                             Loading

@@ -29,13 +29,13 @@ const projectManagerAcknowladgement = [
         id: 'PLRx04',
         title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
         isDeniable: false,
-    }, 
+    },
     {
         id: 'CPRx05',
         title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
         isDeniable: false,
         createDispute: true,
-    }, 
+    },
     {
         id: 'CPRx06',
         title: "The client is asking for some minor changes which he couldn’t specify until he saw the completed work and we can’t charge him for these",
@@ -66,7 +66,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     const [reason, setReason] = useState(null);
     const [reasonError, setReasonError] = useState("");
     const [comment, setComment] = useState("");
-    const [commentError, setCommentError] = useState(""); 
+    const [commentError, setCommentError] = useState("");
     const [additionalPaid, setAdditionalPaid] = useState('');
     const [additionalInfo, setAdditionalInfo] = useState(null);
     const [additionalAmount, setAdditionalAmount] = useState(0);
@@ -80,28 +80,28 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
         setAdditionalInfo(null);
     };
 
-    
-    // on blur 
+
+    // on blur
     const handleBlurEvent = () => {
         Swal.fire({
             title: 'Do you want to create a milestone?',
-            // showDenyButton: true, 
+            // showDenyButton: true,
             confirmButtonText: 'Yes',
             // denyButtonText: `No`,
             }).then(res => {
             if(res.isConfirmed){
                 window.open(`/account/projects/${task?.projectId}?tab=milestones`, '_blank');
             }
-        })          
+        })
     }
 
-    // additional payment 
+    // additional payment
     const hasAdditionalPayment = (isPay) =>{
-        setAdditionalPaid(() => isPay ? 'yes': 'no');  
+        setAdditionalPaid(() => isPay ? 'yes': 'no');
     }
 
-    // editor change text 
-    const hanldeEditorTextChange= (e, editor) => {
+    // editor change text
+    const handleEditorTextChange= (e, editor) => {
         const data = editor.getData();
         setComment(data);
     }
@@ -109,10 +109,10 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
     // validation
     const validate = () => {
        let errorCount = 0;
-       
+
        if(comment === ""){
             errorCount++;
-            setCommentError('You have to explain the revision in details, so that lead developer can understand where they need to work.')     
+            setCommentError('You have to explain the revision in details, so that lead developer can understand where they need to work.')
        }
 
        if(!reason){
@@ -120,34 +120,34 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
             setReasonError('You have to select a reason from above options')
        }
 
-        
-       if(reason && reason?.id === 'CPRx01'){ 
+
+       if(reason && reason?.id === 'CPRx01'){
             if(additionalPaid === 'yes' && additionalAmount === 0){
                 errorCount++;
                 setAdditionalError('You have to provide amount')
             }
-            
+
             if(additionalPaid === 'no' && !additionalInfo){
                 errorCount++;
                 setAdditionalError('You have to select an option')
-            } 
+            }
        }
 
-       return errorCount === 0; 
+       return errorCount === 0;
     }
 
 
-    // handle submiton
-    const handleSubmition=(e)=>{
+    // handle submission
+    const handleSubmission=(e)=>{
         e.preventDefault();
 
-         
- 
+
+
         const data = {
             acknowledgement_id: reason?.id ,
             task_id: task?.id,
             user_id: auth?.id,
-            is_deniable: reason?.isDeniable, 
+            is_deniable: reason?.isDeniable,
             revision_acknowledgement: reason?.title,
             comment: comment,
             additional_amount: Number(additionalAmount),
@@ -155,18 +155,18 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
             additional_comment: additionalInfo?.info ?? '',
             dispute_create: reason?.createDispute || additionalInfo?.disputeCreate || false
         }
- 
-        if(validate()){  
+
+        if(validate()){
             onSubmit(data);
         }else{
-            console.log('Your forgot to fillup some requried fields')
-        } 
+            console.log('Your forgot to fillup some required fields')
+        }
     }
 
 
 
     return (
-        <React.Fragment> 
+        <React.Fragment>
                 <form className="px-3">
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold">
@@ -189,33 +189,33 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                                 height: "16px",
                                                 marginTop: "3px",
                                             }}
-                                            
+
                                         />
                                         <label
                                             className="form-check-label"
                                             htmlFor={option.id}
                                             style={{ marginBottom: "3px" }}
                                         >
-                                           {option.title} 
+                                           {option.title}
                                         </label>
                                     </div>
                                 ))
-                            } 
+                            }
                         </div>
                         {reasonError && <small id="emailHelp" className="form-text text-danger">{reasonError}</small>}
                     </div>
 
-                    {reason?.id === 'CPRx01' && 
+                    {reason?.id === 'CPRx01' &&
                         <div className="form-group">
-                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label> 
-                            <div className="d-block"> 
+                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label>
+                            <div className="d-block">
                                     <div className="form-check form-check-inline">
-                                        <input 
-                                            className="form-check-input" 
-                                            name="milestone" 
-                                            type="radio" 
-                                            id="createMilestoneYes" 
-                                            value="1" 
+                                        <input
+                                            className="form-check-input"
+                                            name="milestone"
+                                            type="radio"
+                                            id="createMilestoneYes"
+                                            value="1"
                                             onChange={(e)=>hasAdditionalPayment(true)}
                                             style={{
                                                 width: "16px",
@@ -223,63 +223,63 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                                 marginTop: "3px",
                                             }}
                                         />
-                                        <label htmlFor="createMilestoneYes" className="form-check-label">Yes</label> 
+                                        <label htmlFor="createMilestoneYes" className="form-check-label">Yes</label>
                                     </div>
                                     <div className="form-check form-check-inline">
-                                        <input 
-                                            className="form-check-input" 
-                                            name="milestone" 
-                                            type="radio" 
-                                            id="createMilestoneNo" 
-                                            value="0" 
-                                            onChange={(e) => hasAdditionalPayment(false)} 
+                                        <input
+                                            className="form-check-input"
+                                            name="milestone"
+                                            type="radio"
+                                            id="createMilestoneNo"
+                                            value="0"
+                                            onChange={(e) => hasAdditionalPayment(false)}
                                             style={{
                                                 width: "16px",
                                                 height: "16px",
                                                 marginTop: "3px",
                                             }}
                                         />
-                                        <label htmlFor="createMilestoneNo" className="form-check-label">No</label> 
+                                        <label htmlFor="createMilestoneNo" className="form-check-label">No</label>
                                     </div>
                             </div>
-                        </div> 
+                        </div>
                     }
 
-                    {additionalPaid === 'yes' && 
+                    {additionalPaid === 'yes' &&
                         <div className="form-group">
-                            <label htmlFor="" className="d-block font-weight-bold">Amount? <sup>*</sup></label> 
+                            <label htmlFor="" className="d-block font-weight-bold">Amount? <sup>*</sup></label>
                             <div className="input-group">
                                 <div className="input-group-prepend">
                                     <div className="input-group-text">$</div>
                                 </div>
-                                <input 
-                                    type="number" 
-                                    onChange={e => setAdditionalAmount(e.target.value)} 
-                                    className="form-control" 
-                                    id="inlineFormInputGroup" 
-                                    placeholder="300" 
+                                <input
+                                    type="number"
+                                    onChange={e => setAdditionalAmount(e.target.value)}
+                                    className="form-control"
+                                    id="inlineFormInputGroup"
+                                    placeholder="300"
                                     onBlur={handleBlurEvent}
                                 />
                             </div>
-                        </div> 
+                        </div>
                     }
 
                     {
-                        additionalPaid === 'no' && 
+                        additionalPaid === 'no' &&
                         <div className="form-group">
-                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label> 
-                            <div className="d-block"> 
+                            <label htmlFor="" className="d-block font-weight-bold">Is the client paying additionally for these changes? <sup>*</sup></label>
+                            <div className="d-block">
                                     <div className="form-check mb-3">
-                                        <input 
+                                        <input
                                             name="additionalInformation"
-                                            className="form-check-input" 
-                                            type="radio" 
-                                            id="additionalInformation1" 
+                                            className="form-check-input"
+                                            type="radio"
+                                            id="additionalInformation1"
                                             onChange={e => setAdditionalInfo({
                                                 info: e.target.value,
                                                 disputeCreate: false,
                                             })}
-                                            value="Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction"  
+                                            value="Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction"
                                             style={{
                                                 width: "16px",
                                                 height: "16px",
@@ -288,19 +288,19 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                         />
                                         <label htmlFor="additionalInformation1" className="form-check-label">
                                             Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction
-                                        </label> 
+                                        </label>
                                     </div>
                                     <div className="form-check">
-                                        <input 
-                                            className="form-check-input" 
-                                            name="additionalInformation" 
-                                            type="radio" 
-                                            id="additionalInformation2" 
-                                            value="The client is interpreting his original instruction in a very unusual way!" 
+                                        <input
+                                            className="form-check-input"
+                                            name="additionalInformation"
+                                            type="radio"
+                                            id="additionalInformation2"
+                                            value="The client is interpreting his original instruction in a very unusual way!"
                                             onChange={(e) => setAdditionalInfo({
                                                 info: e.target.value,
                                                 disputeCreate: true,
-                                            })} 
+                                            })}
                                             style={{
                                                 width: "16px",
                                                 height: "16px",
@@ -309,24 +309,26 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                         />
                                         <label htmlFor="additionalInformation2" className="form-check-label">
                                         The client is interpreting his original instruction in a very unusual way!
-                                        </label> 
+                                        </label>
                                     </div>
                             </div>
-                        </div> 
+                        </div>
                     }
 
                     { additionalError && <div className="mb-3">
-                        <small id="emailHelp" className="form-text text-danger">{additionalError}</small> 
+                        <small id="emailHelp" className="form-text text-danger">
+                            {additionalError}
+                        </small>
                     </div>}
 
                     {/* Editor  */}
                     <div className="form-group">
-                        <label htmlFor="" className="font-weight-bold"> 
+                        <label htmlFor="" className="font-weight-bold">
                             Explain or Comment<sup className="f-16">*</sup> :
                         </label>
                         <div className="ck-editor-holder">
-                            <CKEditorComponent onChange={hanldeEditorTextChange}/>
-                        </div> 
+                            <CKEditorComponent onChange={handleEditorTextChange}/>
+                        </div>
                         {commentError && <small id="emailHelp" className="form-text text-danger">{commentError}</small>}
                     </div>
 
@@ -336,10 +338,10 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                             <Button onClick={onBack} variant="tertiary" className="ml-auto mr-2">
                                 Back
                             </Button>
-                            <SubmitButton title="Submit" onClick={handleSubmition} isLoading={isSubmitting} />
+                            <SubmitButton title="Submit" onClick={handleSubmission} isLoading={isSubmitting} />
                         </div>
                     </div>
-                </form> 
+                </form>
         </React.Fragment>
     );
 };

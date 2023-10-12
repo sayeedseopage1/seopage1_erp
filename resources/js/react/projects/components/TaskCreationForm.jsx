@@ -280,6 +280,7 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setDescription(data);
     };
 
+
     const estimateError = (err) => {
         const text = _.head(err?.errors?.hours)
         return text
@@ -545,12 +546,9 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         min
                                     </div>
 
-
                                     <div style={{ color: "red" }}>
                                         {estimateError(required_error)}
                                     </div>
-
-
                                     <div style={{ color: "#F01F0A" }}>
                                         Estimation time can't exceed{" "}
                                         {convertTime(Number(projectInfo?.minutes_left) > 0 ? Number(projectInfo?.minutes_left) : 0)}

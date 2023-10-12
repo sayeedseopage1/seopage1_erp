@@ -8,7 +8,7 @@ import DeveloperRevisionView from './DeveloperRevisionView';
 import { revisionButtonPermission } from '../../../permissions';
 
 const RevisionViewControl = ({task, auth, status}) => {
-    const [revisionModal, setRevisionModal] = useState(false); 
+    const [revisionModal, setRevisionModal] = useState(false);
     const singleTask = task;
 
   return (
@@ -20,21 +20,25 @@ const RevisionViewControl = ({task, auth, status}) => {
         >
             <i className="fa-solid fa-plus-minus" />
             <span className="d-inline ml-1">Revision</span>
-        </Button> 
+        </Button>
 
         <Modal isOpen={revisionModal} className="sp1_single_task--modal">
             <div className="sp1_single_task--modal-panerl-wrapper">
                 {
-                    _.includes([6], auth?.getRoleId()) ? 
-                    <RevisionViewModal 
-                        task={singleTask} 
-                        close={() => setRevisionModal(false)} 
-                    /> 
-                    : <DeveloperRevisionView task={task} close={() => setRevisionModal(false)} />
+                    _.includes([6], auth?.getRoleId()) ?
+                    <RevisionViewModal
+                        task={singleTask}
+                        close={() => setRevisionModal(false)}
+                    />
+                    :
+                    <DeveloperRevisionView
+                        task={task}
+                        close={() => setRevisionModal(false)}
+                    />
                 }
-                 
+
             </div>
-        </Modal> 
+        </Modal>
     </React.Fragment>
   )
 }

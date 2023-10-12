@@ -16,6 +16,7 @@ import CKEditorComponent from "../../ckeditor";
 import Loader from "../components/Loader";
 import TaskAuthorization from "../../projects/components/TaskAuthorization";
 import TableFilter from "../components/table/TableFilter";
+import { defaultColumnVisibility } from "../constant";
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -28,7 +29,7 @@ const Tasks = () => {
     const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false);
     const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
     const [comment, setComment] = React.useState('');
-    const [columnVisibility, setColumnVisibility] = React.useState({})
+    const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
 
     // api function
     const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
@@ -36,6 +37,7 @@ const Tasks = () => {
     const auth = new User(window.Laravel.user);
 
     const onFilter = (filter) => {
+
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
@@ -44,7 +46,14 @@ const Tasks = () => {
             getTasks(`?${queryString}`)
             .unwrap()
             .then(res => {
-                const data = _.orderBy(res?.tasks, 'due_date', 'desc');
+                let _data = res?.tasks
+                if(auth.getRoleId() === 4){
+                    _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
+                }else if(auth.getRoleId() === 6){
+                    _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
+                }
+
+                const data = _.orderBy(_data, 'due_date', 'desc');
                 dispatch(storeTasks({tasks: data}))
             })
             .catch(err => console.log(err))
@@ -113,7 +122,12 @@ const Tasks = () => {
                                 onClick={fetchTasksTypeData}
                                 className="sp1_tlr_tab active ml-2 mb-2 text-white"
                             >
-                                {tasksTypeDataIsFetching ? 'Loading...' : <> Authorize <span className="badge badge-light">{unAuthorizedType?.task_types}</span> </>}
+                                {tasksTypeDataIsFetching ? 'Loading...' :
+                                <>
+                                    <i className="fa-solid fa-hourglass-half" />
+                                    Primary Page Authorize
+                                    <span className="badge badge-light">{unAuthorizedType?.task_types}</span>
+                                </>}
                             </Button>
                         }
 

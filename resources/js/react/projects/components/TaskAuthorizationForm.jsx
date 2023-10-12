@@ -198,6 +198,47 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
+                                    { data.approval_status &&
+                                        <>
+                                            <div className={styles.inline_flex}>
+                                                <div
+                                                    className={styles.task_info__label}
+                                                >
+                                                    Authorized By
+                                                </div>
+                                                <div className={styles.task_info__text}>
+                                                    <Avatar
+                                                        name={data.approved_by_name}
+                                                        src={
+                                                            data.approved_by_avatar
+                                                                ? `/user-uploads/avatar/${data.approved_by_avatar}`
+                                                                : null
+                                                        }
+                                                        type="circle"
+                                                        width={32}
+                                                        height={32}
+                                                    />
+                                                    <a href={`/account/employees/${data.authorized_by}`}>
+                                                            {data.approved_by_name}
+                                                        </a>
+                                                </div>
+                                            </div>
+
+                                            <div className={styles.inline_flex}>
+                                                <div
+                                                    className={styles.task_info__label}
+                                                >
+                                                    Authorities' Comment
+                                                </div>
+                                                <div className={styles.task_info__text}>
+                                                    <p>
+                                                        {data.comment}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+
 
                                      <TaskAuthorizationQuestionAnswers
                                         data={conversations}
@@ -298,8 +339,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     }
 
                                    {data.approval_status !== null &&  <div className={`alert ${data.approval_status=== 1 ? 'alert-success' : 'alert-danger'} text-center`}>
-                                            Authorized by <a href={`/account/employees/${data.authorized_by}`}>
-                                            {data.approved_by_name} </a> at {dayjs(data.updated_at).format('MMM DD, YYYY hh:mm A')}
+                                            Authorized by <a href={`/account/employees/${data.authorized_by}`} className="badge badge-success text-white">
+                                            {data.approved_by_name} </a> on <span className="badge badge-success">{dayjs(data.updated_at).format('MMM DD, YYYY hh:mm A')}</span> <span className="badge badge-success">{dayjs(data.updated_at).format('hh:mm A')}</span>
                                     </div>}
                                 </div>
                             </Card.Body>
