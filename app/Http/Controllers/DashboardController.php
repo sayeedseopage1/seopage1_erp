@@ -160,7 +160,10 @@ class DashboardController extends AccountBaseController
                 $this->financeDashboard();
                 break;
             default:
-                if (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
+                if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
+                    $this->activeTab = ($tab == '') ? 'web-development' : $tab;
+                    $this->webdevelopmentDashboard();
+                } elseif (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
                     $this->activeTab = ($tab == '') ? 'overview' : $tab;
                     $this->overviewDashboard();
 
@@ -183,10 +186,7 @@ class DashboardController extends AccountBaseController
                 } else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
                     $this->activeTab = ($tab == '') ? 'finance' : $tab;
                     $this->financeDashboard();
-                }else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'web-development' : $tab;
-                    $this->webdevelopmentDashboard();
-                  }
+                }
                 break;
             }
 
@@ -432,10 +432,8 @@ class DashboardController extends AccountBaseController
         return view('dashboard.pm_explanation',$this->data);
     }
     public function pmPerformance($id){
-
         $this->pm = User::where('id', $id)->first();
         $this->pageTitle = 'PM Performance';
-
         return $this->PmDashboardAdminPmView($this->pm);
     }
 
