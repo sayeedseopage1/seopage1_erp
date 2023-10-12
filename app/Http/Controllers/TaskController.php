@@ -1629,7 +1629,7 @@ class TaskController extends AccountBaseController
     }
     public function StoreNewTask(Request $request)
     {
-        // dd($request->all());
+       //  dd($request->all());
     //    DB::beginTransaction();
         $setting = global_setting();
         $rules = [
@@ -1659,17 +1659,27 @@ class TaskController extends AccountBaseController
         $left_in_minutes = $left_minutes % 60;
 
         if ($left_minutes < 1) {
-            // return response()->json([
-            //     "message" => "The given data was invalid.",
-            //     "errors" => [
-            //         "estimate_hours" => [
-            //             "Estimate hours cannot exceed from project allocation hours !"
-            //         ]
-            //     ]
-            // ], 422);
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours cannot exceed from project allocation hours !"
+                    ]
+                ]
+            ], 422);
+        }
+        if ($request->estimate_hours== 0 && $request->estimate_minutes == 0) {
+            return response()->json([
+                "message" => "The given data was invalid.",
+                "errors" => [
+                    "hours" => [
+                        "Estimate hours and minutes cannot be 0 !"
+                    ]
+                ]
+            ], 422);
         }
 
-        // dd($request);
+ //dd($request);
         $project = request('project_id') ? Project::findOrFail(request('project_id')) : null;
 
         if (is_null($project) || ($project->project_admin != user()->id)) {

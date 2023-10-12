@@ -14,8 +14,8 @@ const TableFilter = ({
   const [value , setValue] = useLocalStorage(tableName);
 
   useEffect(() => {
-    if(value.columnVisibility){
-        setColumnVisibility(value.columnVisibility);
+    if(value?.columnVisibility){
+        setColumnVisibility(value?.columnVisibility);
     }
   }, [])
 
@@ -25,7 +25,11 @@ const TableFilter = ({
     const _columnVisibility = {...columnVisibility}
     _columnVisibility[column] = !checked;
 
-    setValue({...value, columnVisibility: _columnVisibility});
+    if(value){
+      setValue({...value, columnVisibility: _columnVisibility});
+    }else{
+      setValue({ columnVisibility: _columnVisibility});
+    }
     setColumnVisibility(_columnVisibility);
   }
 
@@ -36,7 +40,11 @@ const TableFilter = ({
         _columnVisibility[column] = !checked
     ))
 
-    setValue({...value, columnVisibility: _columnVisibility});
+    if(value){
+      setValue({...value, columnVisibility: _columnVisibility});
+    }else{
+      setValue({ columnVisibility: _columnVisibility});
+    }
     setColumnVisibility(_columnVisibility);
   }
 

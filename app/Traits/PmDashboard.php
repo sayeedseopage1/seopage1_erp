@@ -506,12 +506,9 @@ trait PmDashboard
                        ->where('tasks.added_by',Auth::id())
                        ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
                        ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
-                    
-                   
+                                   
                 })
               ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                    // $q3->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-                    //    ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth]);
                        $q2->where('board_column_id',4)
                           ->where('tasks.added_by',Auth::id())
                            ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])

@@ -484,7 +484,7 @@ const ShowEditModals = ({auth, task}) => {
         if(task.isSubtask){
             return <SubTaskEditModal task={task} />
         }else {
-            <TaskEditForm task={task} />
+            return <TaskEditForm task={task} />
         }
     }
 
