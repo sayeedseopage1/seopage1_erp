@@ -1202,103 +1202,6 @@
         });
     </script>
 
-    {{-- <script>
-        $(document).ready(function() {
-            $('#pm_select').on('change', function(event) {
-                var selected_pm_id = event.target.value;
-                var data= {
-                    '_token': "{{ csrf_token() }}",
-                    'selected_pm_id': selected_pm_id,
-                }
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    type: "post",
-                    url: "{{route('dashboard.getPmData')}}",
-                    data: data,
-                    dataType: "json",
-                    success: function (response) {
-                       // console.log(response.html);
-
-                        $('#pmFilter').html(response.html)
-                        var todayDate = moment();
-            var monthDate = moment();
-            // var pmId;
-            // $('#pm_select').on('change', function() {
-            //     pmId = $(this).val();
-            // });
-
-            $('.todayDate').text(todayDate.format('dddd LL'));
-
-
-
-            var todayOnlyDate = moment(todayDate).format('DD');
-
-            if (todayOnlyDate > 15) {
-                $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
-                    monthDate).add(1, 'month').format('MMMM, YYYY'));
-            } else {
-                $('.monthDate').text('' + moment(monthDate).subtract(1, 'month').format('MMMM, YYYY') +
-                    ' - ' + moment(monthDate).startOf('month').add(16, 'day').format('MMMM, YYYY'));
-            }
-            $('.fc-prev-button').click(function() {
-                var mode = $(this).attr('date-mode');
-                // var pm_id = pmId;
-             //   var pm_id = $('#pm_select').val();
-             var pm_id = event.target.value;
-                if (mode == 'month') {
-                    if (todayOnlyDate > 15) {
-                        monthDate = moment(monthDate).subtract(1, 'month');
-                    } else {
-                        monthDate = moment(monthDate).subtract(2, 'month');
-                    }
-                    $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
-                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
-                    date = monthDate
-                } else {
-                    todayDate = moment(todayDate).subtract(1, 'days');
-                    $(this).next().text(todayDate.format('dddd LL'));
-                    date = todayDate
-                }
-
-              //  getData(mode, $(this), date, pm_id);
-            });
-
-            $('.fc-next-button').click(function() {
-                var mode = $(this).attr('date-mode');
-                var date;
-                // var pm_id = pmId;
-              //  var pm_id = $('#pm_select').val();
-              var pm_id = event.target.value;
-                if (mode == 'month') {
-                    monthDate = moment(monthDate).add(1, 'month');
-                    $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
-                        moment(monthDate).add(1, 'month').format('MMMM, YYYY'));
-                    date = monthDate
-                } else {
-                    todayDate = moment(todayDate).add(1, 'days');
-                    $(this).prev().prev().text(todayDate.format('dddd LL'));
-                    date = todayDate
-                }
-
-              //  getData(mode, $(this), date, pm_id);
-            });
-
-
-
-
-                    },
-                    error: function(error) {
-                        // console.log(response);
-                    }
-                });
-            });
-        });
-    </script> --}}
-
     <script type="text/javascript">
         @php
             $startDate = \Carbon\Carbon::now()
@@ -1739,8 +1642,7 @@
 
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
-                // var pm_id = pmId;
-                var pm_id = $('#pm_select').val();
+                var pm_id = {{ $pm->id }};
                 if (mode == 'month') {
                     if (todayOnlyDate > 15) {
                         monthDate = moment(monthDate).subtract(1, 'month');
@@ -1762,8 +1664,7 @@
             $('.fc-next-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 var date;
-                // var pm_id = pmId;
-                var pm_id = $('#pm_select').val();
+                var pm_id = {{ $pm->id }};
                 if (mode == 'month') {
                     monthDate = moment(monthDate).add(1, 'month');
                     $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +

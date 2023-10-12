@@ -188,7 +188,7 @@ use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\CrossDeptWork;
 use App\Http\Controllers\DisputeController;
-use App\Http\Controllers\IndependentTask;
+use App\Http\Controllers\IndependentTaskController;
 use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
@@ -825,7 +825,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
 
      /******* Independent TASK Start ******** */
-    Route::resource('independent-task',IndependentTask::class);
+    Route::resource('independent-task',IndependentTaskController::class);
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */

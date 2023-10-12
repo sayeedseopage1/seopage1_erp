@@ -53,7 +53,6 @@ trait PmDashboardAdminView
 
 
        if (request('mode') == 'month' && request()->ajax() && request('pm_id')) {
-    //    / dd(request('pm_id'));
             $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
            // dd($date);
 
@@ -841,12 +840,10 @@ trait PmDashboardAdminView
  }
  public function PmDashboardAdminPmView($pm)
 {
+    // dd($pm);
      $this->pm = $pm;
 
-
-
     if (request('mode') == 'month' && request()->ajax() && request('pm_id')) {
-      // dd(request->all());
          $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
         // dd($date);
 

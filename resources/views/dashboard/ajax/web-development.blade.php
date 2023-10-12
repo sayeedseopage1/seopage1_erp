@@ -88,8 +88,7 @@ Overview--}}
                 <tr>
                     <td class="pl-20">{{ $loop->index+1 }}</td>
                     <td>
-                        <a href="{{ route('pm-performance',$pm->id) }}" class="text-darkest-grey f-w-500">{{ $pm->name }}</a>
-                        {{-- @include('dashboard.modals.manageroverviewmodal') --}}
+                        <a href="{{ route('pm-performance',$pm->id) }}" class="f-w-500">{{ $pm->name }}</a>
                     </td>
                     <td>
                         {{$item->project_count}}
