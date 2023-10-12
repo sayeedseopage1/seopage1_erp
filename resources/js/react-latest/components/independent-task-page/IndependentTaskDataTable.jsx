@@ -14,11 +14,14 @@ import TasksTable from "../independent-task-page/tasks/components/TasksTable";
 import Loader from "../independent-task-page/tasks/components/Loader";
 import { User } from '../../utils/user-details';
 import CKEditorComponent from '../../ui/ckeditor';
+import SubmitButton from './tasks/components/SubmitButton';
+import IndependentTaskCreationForm from './IndependentTaskCreationForm';
 
 const IndependentTaskDataTable = ({ tableData = [] }) => {
   // const [tasksType, setTasksType] = React.useState([]);
   const [filter, setFilter] = React.useState(null);
   const [search, setSearch] = React.useState('');
+  const [showIndividualTaskCreationForm, setShowIndividualTaskCreationForm] = useState(false);
   // const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
   // const [comment, setComment] = React.useState('');
 
@@ -35,6 +38,46 @@ const IndependentTaskDataTable = ({ tableData = [] }) => {
 
   // test variable
   const isLoading = false;
+
+
+  // handle table filter
+  const onIndependentTaskCreationFilter = (query) => {
+    // let filter = {
+    //     start_date: startDate,
+    //     end_date: endDate,
+    //     project_id: params?.projectId,
+    //     ...query,
+    // };
+
+    // const queryObject = _.pickBy(filter, Boolean);
+    // const queryString = new URLSearchParams(queryObject).toString();
+    // setFilter(queryObject);
+
+    // dispatch(setFilterOption({ filter: queryObject }));
+
+    // if (startDate && endDate) {
+    //     if (tableType.toLowerCase() === "tasks") {
+    //         getTasks(`?${queryString}`)
+    //             .unwrap()
+    //             .then((res) => {
+    //                 const data = _.orderBy(res?.tasks, "due_date", "desc");
+    //                 dispatch(storeTasks({ tasks: data }));
+    //             })
+    //             .catch((err) => console.log(err));
+    //     } else {
+    //         getAllSubtask(`${queryString}`)
+    //             .unwrap()
+    //             .then((res) => {
+    //                 const data = _.orderBy(res?.tasks, "due_date", "desc");
+    //                 dispatch(storeSubTasks({ subtasks: data }));
+    //             })
+    //             .catch((err) => console.log(err));
+    //     }
+    // }
+    console.log('independent task filter');
+  };
+
+
 
   // const [getTaskTypeData,{ isFetching: tasksTypeDataIsFetching }] = useLazyGetTaskTypeDataQuery();
 
@@ -71,6 +114,10 @@ const IndependentTaskDataTable = ({ tableData = [] }) => {
   // const close = () => setShowAuthorizationModal(false);
 
 
+  const handleTaskAddForm = () => {
+    setShowIndividualTaskCreationForm(true);
+  }
+
 
   return (
     <React.Fragment>
@@ -83,20 +130,67 @@ const IndependentTaskDataTable = ({ tableData = [] }) => {
           <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
             {/* <Tabbar /> */}
 
-            {/* {
-              _.includes([1, 8], auth?.getRoleId()) &&
-              <Button
-                onClick={fetchTasksTypeData}
-                className="sp1_tlr_tab active mr-auto ml-2 mb-2 text-white"
+            {/* table navbar */}
+            <div className="sp1_table-navbar">
+              <div
+                className="d-flex align-items-center flex-wrap"
+                style={{ gap: "10px" }}
               >
-                {tasksTypeDataIsFetching ? 'Loading...' : <> Authorize <span className="badge badge-light">{unAuthorizedType?.task_types}</span> </>}
-              </Button>
-            } */}
+                {/* table selection */}
+                {/* <Dropdown className="">
+                  <Dropdown.Toggle
+                    icon={false}
+                    className="sp1_table_tab--dd-toggle"
+                  >
+                    <i className="fa-solid fa-table"></i>
+                    <span> {tableType} </span>
+                    <i className="fa-solid fa-chevron-down f-12"></i>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu className="sp1_table_tab--dd-menu">
+                    <Dropdown.Item
+                      onClick={() => setTableType("Tasks")}
+                      className={`sp1_table_tab--dd-item ${tableType === "Tasks" && "active"
+                        }`}
+                    >
+                      Tasks
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      onClick={() => setTableType("Subtasks")}
+                      className={`sp1_table_tab--dd-item ${tableType === "Subtasks" && "active"
+                        }`}
+                    >
+                      Subtasks
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown> */}
+                {/* end Table selection */}
+
+                {_.includes([1, 4], auth?.getRoleId()) && (
+                  <SubmitButton
+                    onClick={handleTaskAddForm}
+                    isLoading={isLoading}
+                  >
+                    + Add Task
+                  </SubmitButton>
+                )}
+              </div>
+
+
+            </div>
+            {/* table nav bar */}
 
             <div className="mb-2" style={{ maxWidth: '300px' }}>
               <SearchBox value={search} onChange={setSearch} />
             </div>
+
           </div>
+
+          <IndependentTaskCreationForm
+            isOpen={showIndividualTaskCreationForm}
+            close={() => setShowIndividualTaskCreationForm(false)}
+            projectName={'Demo Project Name'}
+            onSuccess={() => onIndependentTaskCreationFilter({})}
+          />
 
           <TasksTable
             tableData={tableData}
