@@ -393,7 +393,7 @@
                             {{-- <x-sub-menu-item link="" :text="'Resource'" /> --}}
 
                 @endif
-                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7)
+                @if(Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8)
                 <li class="accordionItem closeIt">
                         <a class="nav-item text-lightest f-15 sidebar-text-color" href="{{ route('revision.index') }}" title="Revisions">
                             <i class="fa fa-history" aria-hidden="true"></i>
