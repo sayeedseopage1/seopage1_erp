@@ -108,6 +108,7 @@ class TaskController extends AccountBaseController
             7 => "S",
             8 => "S",
             9 => "UD",
+            10 => "GD",
             "null" => "C"
         ];
     }
