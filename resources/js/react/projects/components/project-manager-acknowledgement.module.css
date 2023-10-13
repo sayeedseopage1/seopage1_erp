@@ -1,0 +1,82 @@
+.modal_container{
+    overflow-y: auto;
+    height: 100vh;
+}
+.card{
+    max-width: 600px;
+    width: 100%;
+    min-width: 320px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Inter;
+    font-weight: 400;
+    box-shadow: 0 10px 10px 100vw rgb(0 0 0 / 20%);
+}
+
+@media only screen and (max-width: 720px){
+    .card{
+        max-width: 100%;
+        min-width: fit-content;
+    }
+}
+
+.card_header{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+
+
+.order_list li{
+    list-style: upper-alpha;
+    margin-bottom: 10px;
+}
+
+.card_body{
+    max-height:80vh !important;
+    overflow-y: auto;
+    color: #232326;
+}
+
+.form_group{
+    padding: 0 12px;
+}
+
+
+.radio_group{
+    display: flex;
+    align-items: flex-start;
+}
+
+.radio_group input{
+   margin-right: 6px;
+   cursor: pointer;
+}
+
+.radio_group label{
+    display: inline;
+    margin-top: -3px;
+}
+
+.form_group_label{
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(36, 36, 38, 0.6);
+    margin-top: 3px;
+}
+
+.footer_label{
+    color: #232326;
+    font-weight: 600;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.button_group{
+    display: flex;
+    align-items: center;
+    gap: .84rem;
+}

@@ -40,7 +40,7 @@
                                 <p>{{ $item->revision_date }}</p>
                             </td>
                             <td>
-                                <a href="{{ route('projects.show',$item->project_id) }}">{{ $item->project_name }}</a>
+                                <a href="{{ route('projects.show',$item->projectId) }}">{{ $item->project_name }}</a>
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">

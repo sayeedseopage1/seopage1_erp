@@ -11,18 +11,18 @@
 </style>
 <?php
 $total_members= App\Models\User::count();
-$total_managers= App\Models\User::where('role_id',4)->count(); 
-$total_lead_developers= App\Models\User::where('role_id',6)->count(); 
-$total_developers= App\Models\User::where('role_id',5)->count(); 
-$total_deals= App\Models\Lead::where('deal_status',1)->count(); 
-$total_won_deals= App\Models\Deal::count(); $total_leads= App\Models\Lead::count(); 
+$total_managers= App\Models\User::where('role_id',4)->count();
+$total_lead_developers= App\Models\User::where('role_id',6)->count();
+$total_developers= App\Models\User::where('role_id',5)->count();
+$total_deals= App\Models\Lead::where('deal_status',1)->count();
+$total_won_deals= App\Models\Deal::count(); $total_leads= App\Models\Lead::count();
 $total_clients= App\Models\ClientDetails::count(); $total_projects= App\Models\Project::count();
-$total_task_completed= App\Models\Task::where('status','completed')->count(); 
-$total_due_task= App\Models\Task::where('status','!=','completed')->count(); 
+$total_task_completed= App\Models\Task::where('status','completed')->count();
+$total_due_task= App\Models\Task::where('status','!=','completed')->count();
 $total_overdue_task= App\Models\Task::where('board_column_id',7)->count();
-$total_payment_release= App\Models\PMAssign::select('release_amount')->sum('release_amount'); 
+$total_payment_release= App\Models\PMAssign::select('release_amount')->sum('release_amount');
 $total_project_due= App\Models\Project::select('project_budget')->sum('project_budget'); $total_payment_due= $total_project_due -
-$total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get(); 
+$total_payment_release; $project_managers= App\Models\User::where('role_id',4)->get();
 $lead_developer= App\Models\User::where('role_id',6)->get(); $developer= App\Models\User::where('role_id',5)->get();
 ?>
 
@@ -82,11 +82,13 @@ Overview--}}
                 </x-slot>
 
                 @forelse($projectassign as $item)
+                @php
+                    $pm = \App\Models\User::where('id',$item->pm_id)->first();
+                @endphp
                 <tr>
                     <td class="pl-20">{{ $loop->index+1 }}</td>
                     <td>
-                        <a href="#" data-toggle="modal" data-target="#manageroverviewmodal{{$item->pm_id}}" class="text-darkest-grey f-w-500">{{ ucfirst($item->project->name) }}</a>
-                        @include('dashboard.modals.manageroverviewmodal')
+                        <a href="{{ route('pm-performance',$pm->id) }}" class="f-w-500">{{ $pm->name }}</a>
                     </td>
                     <td>
                         {{$item->project_count}}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { convertTime } from '../../utils/converTime';
 import { CompareDate } from '../../utils/dateController';
-const compareDate = new CompareDate(); 
+const compareDate = new CompareDate();
 
 import {
   useReactTable, getCoreRowModel,
@@ -28,12 +28,22 @@ import { User } from '../../utils/user-details';
 import { useLocalStorage } from 'react-use';
 
 
-export default function SubTasksTable({isLoading, filter, tableName,search, reportPermission, hideColumns, tableColumns}){
+export default function SubTasksTable({
+    isLoading,
+    filter,
+    tableName,
+    search,
+    reportPermission,
+    hideColumns,
+    tableColumns,
+    columnVisibility,
+    setColumnVisibility
+}){
   const { subtasks } = useSelector(s => s.tasks);
   const [data, setData] = React.useState([])
-  const [expanded, setExpanded] = React.useState({}); 
+  const [expanded, setExpanded] = React.useState({});
   const [sorting, setSorting] = React.useState([]);
-  const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10}); 
+  const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10});
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [ globalFilter, setGlobalFilter ] = React.useState('');
 
@@ -43,19 +53,19 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
   React.useEffect(() => {
     if(_.size(_tasks) === _.size(data)){
       setSkipPageReset(true);
-      _tasks && setData(_tasks) 
+      _tasks && setData(_tasks)
     }else{
       _tasks && setData(_tasks);
     }
   }, [_tasks])
 
-  // clear skipPageReset 
+  // clear skipPageReset
   React.useEffect(() => {
-    if(skipPageReset){ 
+    if(skipPageReset){
       setSkipPageReset(false);
     }
   }, [data])
-    
+
 
 
   const defaultColumns = React.useMemo(() => [...tableColumns])
@@ -69,13 +79,13 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
     let _cols = [...defaultColumns?.filter(f => !_.includes(hideColumns, f.id))];
 
     if(!_.includes(reportPermission, auth?.getRoleId())){
-      _cols = _cols?.filter(col => col.id !== 'report') 
-    } 
+      _cols = _cols?.filter(col => col.id !== 'report')
+    }
     setColumns([..._cols]);
   }, [])
 
-  const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id')); 
-  
+  const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
+
 
   // columns orders
   React.useEffect(() => {
@@ -88,7 +98,7 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
   // reset columns
   const resetColumnsOrder = () => setColumnOrder(_.map(columns, 'id'))
   const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
- 
+
 
   // table instance...
   const table = useReactTable({
@@ -101,8 +111,9 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
       pagination,
       tableName,
       filter,
+      columnVisibility,
       globalFilter: _.trim(search)
-    }, 
+    },
     autoResetPageIndex: !skipPageReset,
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
@@ -126,25 +137,25 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id} className='sp1_tasks_tr'>
                 {headerGroup.headers.map(header => {
-                  return <DragableColumnHeader key={header.id} header={header} table={table} /> 
+                  return <DragableColumnHeader key={header.id} header={header} table={table} />
                 })}
               </tr>
             ))}
           </thead>
-          <tbody className='sp1_tasks_tbody'> 
+          <tbody className='sp1_tasks_tbody'>
             {!isLoading && table.getRowModel().rows.map(row => {
               return (
                 <tr
                   className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
                     key={row.id}
-                  > 
-                  {row.getVisibleCells().map(cell => { 
+                  >
+                  {row.getVisibleCells().map(cell => {
                     return (
                       <td key={cell.id} className='px-2 sp1_tasks_td'>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
-                        )} 
+                        )}
                       </td>
                     )
                   })}
@@ -154,13 +165,13 @@ export default function SubTasksTable({isLoading, filter, tableName,search, repo
             {isLoading && <TaskTableLoader />}
           </tbody>
       </table>
-      
+
       {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
     </div>
-    
 
-      <TasksTablePagination 
-        currentPage = {pageIndex + 1} 
+
+      <TasksTablePagination
+        currentPage = {pageIndex + 1}
         perpageRow= {pageSize}
         onPageSize = {(size) => table.setPageSize(size)}
         onPaginate = {(page) => table.setPageIndex(page - 1)}

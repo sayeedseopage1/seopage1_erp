@@ -38,12 +38,12 @@ const Button = ({
     return (
         <button
             type="button"
-            className={isLoading ? `${styles.cnx__btn} ${styles.cnx__btn_loading}` :classes}
+            className={`${classes} ${ isLoading ? styles.cnx__btn_loading: ''}`}
             disabled={disabled || isLoading}
-            onClick={handleOnClick}
+            onClick={(disabled || isLoading)? null : handleOnClick}
             {...props}
-        >
-            {isLoading ? <Loader title={loaderTitle} /> : children}
+        > 
+            {isLoading ? <Loader title={loaderTitle} borderRightColor="white" /> : children}
         </button>
     );
 };

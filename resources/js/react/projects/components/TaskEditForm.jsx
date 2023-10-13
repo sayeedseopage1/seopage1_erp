@@ -17,9 +17,9 @@ import { convertTime } from '../../utils/converTime';
 import { CompareDate } from "../../utils/dateController";
 import { SingleTask } from "../../utils/single-task";
 import { User } from "../../utils/user-details";
-import AssginedToSelection from "./AssignedToSelection";
+import AssignedToSelection from "./AssignedToSelection";
 import { useDeleteUplaodedFileMutation } from "../../services/api/SingleTaskPageApi";
-import { storeTasks } from "../../services/features/tasksSlice";
+import { storeTasks, updateTasks } from "../../services/features/tasksSlice";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);
@@ -33,14 +33,14 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
-    const [assignedTo, setAssignedTo] = useState(null); 
+    const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [priority, setPriority] = useState("Medium");
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
     const [attachedFiles, setAttachedFiles] = React.useState([]);
-    
+
     const [formError, setFormError] = React.useState(null);
 
     // const task = new SingleTask(taskDetails);
@@ -49,18 +49,18 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     const params = useParams();
     const [updateTask, { isLoading, error }] = useUpdateTaskMutation();
     const [getTasks, {isFetching: taskFetching}] = useLazyGetTasksQuery();
-   
+
     const required_error = error?.status === 422 ? error?.data : null;
- 
-    // get milesstoneDetails
+
+    // get milestone Details
     const [
-        getMilestoneDetails, 
+        getMilestoneDetails,
         {
             data:projectInfo ,
             isFetching: milestoneDataIsFetching
         }
     ] = useLazyGetMilestoneDetailsQuery();
- 
+
     // handle change
     React.useEffect(() => {
         if(isOpen){
@@ -68,9 +68,24 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             .then(res => {
                 let project = _.head(res?.milestones);
                 setProject(project?.project_name ?? '')
-            }) 
+            })
         }
     }, [isOpen]);
+
+    const clearForm = () => {
+        setTitle("");
+        setMilestone( null);
+        setTaskCategory("");
+        setProject("");
+        setStartDate(null);
+        setDueDate(null);
+        setAssignedTo(null)
+        setPriority(null);
+        setEstimateTimeHour(0);
+        setEstimateTimeMin(0);
+        setAttachedFiles(null);
+        setDescription("");
+    }
 
     // initial default data
     useEffect(() => {
@@ -102,7 +117,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setState(value);
     };
 
-    // check validation 
+    // check validation
     const isValid = () => {
         let err = new Object();
         let errCount = 0;
@@ -142,14 +157,16 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             errCount++;
         }
 
-        setFormError(err); 
+        setFormError(err);
         return !errCount;
-  
+
     }
 
 
-    // handle sumition
-    const handleSubmit = (e) => {
+
+
+    // handle submission
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const _startDate = startDate ? dayjs.dayjs(startDate).format("DD-MM-YYYY") : '';
         const _dueDate = dueDate ? dayjs.dayjs(dueDate).format("DD-MM-YYYY") : '';
@@ -157,7 +174,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         // form data
         const fd = new FormData();
         fd.append('heading', title ?? '');
-        fd.append('description', description ?? ''); 
+        fd.append('description', description ?? '');
         fd.append("start_date", _startDate ?? '');
         fd.append("due_date", _dueDate ?? '');
         fd.append("project_id", params?.projectId ?? '');
@@ -168,10 +185,10 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         fd.append("estimate_hours", estimateTimeHour ?? 0);
         fd.append("estimate_minutes", estimateTimeMin ?? 0);
         fd.append("deliverable_id", milestone?.deliverable_type ?? '');
-        fd.append("milestone_id", milestone?.id ?? ''); 
+        fd.append("milestone_id", milestone?.id ?? '');
         fd.append("user_id", assignedTo?.id ?? '');
 
-        
+
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -181,40 +198,45 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
             document
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
-        ); 
- 
-        if(isValid()){
-            updateTask(fd)
-            .unwrap()
-            .then((res) => { 
-                // close();  
-                // // change on local 
-                const queryString = new URLSearchParams(filter).toString();
+        );
 
-                // fetch updated tasks
-                getTasks(`?${queryString}`)
-                    .unwrap()
-                    .then(res => {
-                        const data = _.orderBy(res?.tasks, 'due_date', 'desc');
-                        dispatch(storeTasks({tasks: data}))
-                    })
-                    .catch(err => console.log(err))
-                
-                // alert update successfull
+        if(isValid()){
+            await updateTask(fd)
+            .unwrap()
+            .then((res) => {
+                // close();
+                // // change on local
+                // const queryString = new URLSearchParams(filter).toString();
+                // console.log({res})
+                 dispatch(updateTasks({task: res.task}))
+
+
+                // // fetch updated tasks
+                // getTasks(`?${queryString}`)
+                //     .unwrap()
+                //     .then(response => {
+                //         console.log({response})
+                //         const data = _.orderBy(response?.tasks, 'due_date', 'desc');
+                //         dispatch(storeTasks({tasks: data}))
+                //     })
+                //     .catch(err => console.log(err))
+
+                clearForm();
+                // alert update successful
                 Swal.fire({
                     position: "center",
                     icon: "success",
                     title: res.message,
                     showConfirmButton: false,
                     timer: 2500,
-                }); 
+                });
             })
             .catch((err) => {
                 if (err?.status === 422) {
                     Swal.fire({
                         position: "center",
                         icon: "error",
-                        title: "Please fillup all required fields",
+                        title: "Please fill out all required fields",
                         showConfirmButton: true,
                     });
                 }
@@ -230,7 +252,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
     };
 
 
-    // global cursol loading status
+    // global cursor loading status
     React.useEffect(() => {
         if (isLoading) {
             document.getElementsByTagName("body")[0].style.cursor = "progress";
@@ -245,7 +267,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setDescription(data);
     };
 
-    // genarate estimate error text
+    // generate estimate error text
     const estimateError = (err) => {
         let errText = "";
         let hoursErr = err?.estimate_hours?.[0];
@@ -253,18 +275,20 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         if (hoursErr) errText += hoursErr;
         if (minErr) errText += minErr;
         return errText;
-    }; 
+    };
 
 
     const [deleteUplaodedFile, {isLoading: deletingUploadedFile}] = useDeleteUplaodedFileMutation()
     const handleDeleteUploadedFile = (e, file) => {
-        deleteUplaodedFile(file?.id).unwrap(); 
+        deleteUplaodedFile(file?.id).unwrap();
         // delete form ui
         let previousFile = [...attachedFiles];
         let index = previousFile?.indexOf(file);
         previousFile.splice(index,1);
         setAttachedFiles(previousFile);
     }
+
+ 
 
     return (
         <Modal isOpen={isOpen}>
@@ -303,7 +327,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     error={formError?.title}
                                     onChange={(e) => handleChange(e, setTitle)}
                                 />
-                            </div> 
+                            </div>
 
                             {/* Task Categories List */}
                             <div className="col-12 col-md-6">
@@ -312,7 +336,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     onSelect={setTaskCategory}
                                 />
                                 {formError?.taskCategory  && (
-                                    <div style={{ color: "red" }}> 
+                                    <div style={{ color: "red" }}>
                                         {formError?.taskCategory }
                                     </div>
                                 )}
@@ -336,7 +360,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                             </div>
 
                             {/* Project Milestone Selection Menu */}
-                            <div className="col-12 col-md-6"> 
+                            <div className="col-12 col-md-6">
                                 <Listbox value={milestone} onChange={setMilestone}>
                                     <div className="form-group position-relative my-3">
                                         <label
@@ -346,28 +370,28 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                             Milestone
                                         </label>
                                         <Listbox.Button className=" sp1-selection-display-button form-control height-35 f-14 sp1-selection-display bg-white w-100">
-                                            {milestone?.milestone_title ?? '--'}
+                                        <span className="singleline-ellipsis" >{milestone?.milestone_title ?? '--'}</span>
                                             <div className='__icon'>
                                                 <i className="fa-solid fa-sort"></i>
                                             </div>
                                         </Listbox.Button>
                                         <Listbox.Options  className="sp1-select-options">
                                             {_.map(projectInfo?.milestones, (milestone) => (
-                                                <Listbox.Option 
+                                                <Listbox.Option
                                                     key={milestone.id}
                                                     className={({ active }) =>  `sp1-select-option ${ active ? 'active' : ''}`}
                                                     value={milestone}
                                                 > {milestone?.milestone_title} </Listbox.Option>
                                             ))}
                                         </Listbox.Options>
- 
+
                                         {formError?.milestone && (
-                                            <div style={{ color: "red" }}> 
+                                            <div style={{ color: "red" }}>
                                                 {formError?.milestone}
                                             </div>
                                         )}
                                     </div>
-                                </Listbox> 
+                                </Listbox>
                             </div>
 
                             {/* <div className="col-12 col-md-6">
@@ -439,7 +463,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                             </div>
 
 
-                            {/* Project Deliverable */} 
+                            {/* Project Deliverable */}
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
@@ -458,17 +482,17 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
 
                             {/* assignee to */}
                             <div className="col-12 col-md-6">
-                                <AssginedToSelection
+                                <AssignedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
-                                /> 
-                                
+                                />
+
                                 {formError?.assignedTo && (
                                     <div style={{ color: "red" }}>
                                         {formError?.assignedTo}
                                     </div>
                                 )}
-                            </div> 
+                            </div>
 
                             {/* Priority */}
                             <div className="col-12 col-md-6">
@@ -519,8 +543,8 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                         {estimateError(required_error)}
                                     </div>
                                     <div style={{ color: "red" }}>
-                                        Estimation time can't exceed{" "} 
-                                        {/* {convertTime(projectInfo?.minutes_left ?? 0)} */}
+                                        Estimation time can't exceed{" "}
+                                        {convertTime((Number(projectInfo?.minutes_left) + row.estimate_minutes + (row.estimate_hours* 60)) - (Number(estimateTimeMin) + (Number(estimateTimeHour) * 60)))} 
                                     </div>
                                 </div>
                             </div>

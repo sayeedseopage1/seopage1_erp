@@ -506,12 +506,9 @@ trait PmDashboard
                        ->where('tasks.added_by',Auth::id())
                        ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
                        ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
-                    
-                   
+                                   
                 })
               ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                    // $q3->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-                    //    ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth]);
                        $q2->where('board_column_id',4)
                           ->where('tasks.added_by',Auth::id())
                            ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
@@ -741,7 +738,7 @@ trait PmDashboard
                     'task_revisions.revision_acknowledgement as revision_reason',
                     'task_revisions.dispute_created',
                     'task_revisions.added_by',
-                    'projects.id as project_id',
+                    'projects.id as projectId',
                     'projects.project_name',
                     'projects.client_id',
                     'task_revision_disputes.*'
@@ -761,7 +758,7 @@ trait PmDashboard
                     'task_revisions.revision_acknowledgement as revision_reason',
                     'task_revisions.dispute_created',
                     'task_revisions.added_by',
-                    'projects.id as project_id',
+                    'projects.id as projectId',
                     'projects.project_name',
                     'projects.client_id'
                 )
@@ -781,7 +778,7 @@ trait PmDashboard
                     'task_revisions.final_responsible_person',
                     'task_revisions.added_by',
                     'task_revisions.revision_acknowledgement',
-                    'projects.id as project_id',
+                    'projects.id as projectId',
                     'projects.project_name',
                     'projects.client_id',
                     'project_members.lead_developer_id as ld_id',
@@ -804,7 +801,7 @@ trait PmDashboard
                     'task_revisions.revision_acknowledgement as revision_reason',
                     'task_revisions.dispute_created',
                     'task_revisions.added_by',
-                    'projects.id as project_id',
+                    'projects.id as projectId',
                     'projects.project_name',
                     'projects.client_id',
                     'task_revision_disputes.*'
@@ -826,7 +823,7 @@ trait PmDashboard
                     'task_revisions.revision_acknowledgement as revision_reason',
                     'task_revisions.dispute_created',
                     'task_revisions.added_by',
-                    'projects.id as project_id',
+                    'projects.id as projectId',
                     'projects.project_name',
                     'projects.client_id'
                 )
@@ -849,7 +846,7 @@ trait PmDashboard
                     'task_revisions.final_responsible_person',
                     'task_revisions.added_by',
                     'task_revisions.revision_acknowledgement',
-                    'projects.id as project_id',
+                    'projects.id as projectId',
                     'projects.project_name',
                     'projects.client_id',
                     'project_members.lead_developer_id as ld_id',
@@ -1564,7 +1561,7 @@ trait PmDashboard
                         'task_revisions.revision_acknowledgement as revision_reason',
                         'task_revisions.dispute_created',
                         'task_revisions.added_by',
-                        'projects.id as project_id',
+                        'projects.id as projectId',
                         'projects.project_name',
                         'projects.client_id',
                         'task_revision_disputes.*'
@@ -1584,7 +1581,7 @@ trait PmDashboard
                         'task_revisions.revision_acknowledgement as revision_reason',
                         'task_revisions.dispute_created',
                         'task_revisions.added_by',
-                        'projects.id as project_id',
+                        'projects.id as projectId',
                         'projects.project_name',
                         'projects.client_id'
                     )
@@ -1604,7 +1601,7 @@ trait PmDashboard
                         'task_revisions.final_responsible_person',
                         'task_revisions.added_by',
                         'task_revisions.revision_acknowledgement',
-                        'projects.id as project_id',
+                        'projects.id as projectId',
                         'projects.project_name',
                         'projects.client_id',
                         'project_members.lead_developer_id as ld_id',
@@ -1626,7 +1623,7 @@ trait PmDashboard
                         'task_revisions.revision_acknowledgement as revision_reason',
                         'task_revisions.dispute_created',
                         'task_revisions.added_by',
-                        'projects.id as project_id',
+                        'projects.id as projectId',
                         'projects.project_name',
                         'projects.client_id',
                         'task_revision_disputes.*'
@@ -1648,7 +1645,7 @@ trait PmDashboard
                         'task_revisions.revision_acknowledgement as revision_reason',
                         'task_revisions.dispute_created',
                         'task_revisions.added_by',
-                        'projects.id as project_id',
+                        'projects.id as projectId',
                         'projects.project_name',
                         'projects.client_id'
                     )
@@ -1671,7 +1668,7 @@ trait PmDashboard
                         'task_revisions.final_responsible_person',
                         'task_revisions.added_by',
                         'task_revisions.revision_acknowledgement',
-                        'projects.id as project_id',
+                        'projects.id as projectId',
                         'projects.project_name',
                         'projects.client_id',
                         'project_members.lead_developer_id as ld_id',

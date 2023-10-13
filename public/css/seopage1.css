@@ -633,6 +633,10 @@
 .sp1_st-list-item-head {
   width: 120px;
   color: #383b42;
+  position: relative;
+}
+.sp1_st-list-item-head::before {
+  position: absolute;
 }
 @media (max-width: 576px) {
   .sp1_st-list-item-head {

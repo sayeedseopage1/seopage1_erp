@@ -127,11 +127,7 @@ const OptionFour = ({ id, onChecked, checked, onSubmit, isSubmitting }) => {
             responsible_person_id: person?.id ?? null,
             related_to_any_project: project ? "yes" : "no",
             project_id: project ? project.id : project,
-
-
             responsible,
-
-
             client: client,
         };
           

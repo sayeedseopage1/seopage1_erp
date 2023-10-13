@@ -21,7 +21,7 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
 
   return (
     <div className='sp1_task_card--sub-card'>
-       <div className={`sp1_ck_content sp1_guideline_text ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: showText}}></div> 
+       <div className={`sp1_ck_content sp1_guideline_text ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: showText}}></div>
        {isLong ? <a href="#" onClick={handleExpend} className=''> Read full guideline </a> : ''}
 
        <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
@@ -32,37 +32,37 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                     </button>
                 </div>
 
-                
-                {!_.isEmpty(workEnv) && (
+
+                {!_.isEmpty(workEnv) ? (
                     <div className="sp1_task_card--sub-card m-4">
                         <div className="px-4 py-3" style={{background: '#F3F5F9'}}>
                             <h6 className="mb-2">Working Environment</h6>
                             <hr/>
                             <div className="row">
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={workEnv?.site_url}>View on new tab</a></span> 
+                                    <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={workEnv?.site_url}>View on new tab</a></span>
                                 </div>
 
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Frontend Password</strong>: <br/> {workEnv?.frontend_password}</span> 
+                                    <span><strong>Frontend Password</strong>: <br/> {workEnv?.frontend_password}</span>
                                 </div>
 
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={workEnv?.login_url}>View on new tab</a> </span> 
+                                    <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={workEnv?.login_url}>View on new tab</a> </span>
                                 </div>
 
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {workEnv?.email}</span> 
+                                    <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {workEnv?.email}</span>
                                 </div>
                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                    <span><strong>Password</strong>: <br/> {workEnv?.password}</span> 
+                                    <span><strong>Password</strong>: <br/> {workEnv?.password}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                )}
+                ) : null}
 
-                <div className='__content'> 
+                <div className='__content'>
                     <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
                 </div>
 
@@ -70,11 +70,11 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                     <button className='btn btn-sm py-1 btn-primary ml-auto' onClick={() => setExpend(false)}>
                         Close
                     </button>
-                </div> 
+                </div>
             </div>
         </Modal>
     </div>
   )
 }
 
-export default Guideline 
+export default Guideline

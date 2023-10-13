@@ -9,24 +9,23 @@ import PreviewSubtask from "./PreviewSubtask";
 import ApproveTask from "../task-actions/approve-task/ApproveTask";
 
 const SubTask = ({ subTask, task, status, toggleEditForm }) => {
-    const [isOpen, setIsOpen] = useState(false); 
+    const [isOpen, setIsOpen] = useState(false);
     const auth = new User(window?.Laravel?.user);
-    const [subtaskStaus, setSubtaskStaus] = useState(null);
 
-    const _task = new SingleTask(task); 
 
     const [checkSubTaskTimer, {isFetching}] = useLazyCheckSubTaskTimerQuery()
       // check task edit
-        const { data } = useCheckEditableSubTaskQuery(subTask?.id, {skip: subTask?.id});
+
+        const { data } = useCheckEditableSubTaskQuery(subTask?.id);
         const isEditable = data?.task === 0;
 
     const toggle = (e) => {
       e.preventDefault();
       e.stopPropagation();
       setIsOpen(true);
-    } 
+    }
 
- 
+
     const hasEditPermission = () => {
         return Number(subTask?.added_by) === auth?.getId() && _.includes([1,2,3], status?.id);
     }
@@ -42,7 +41,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'You cannot edit the task because timer is already running', 
+                    text: 'You cannot edit the task because timer is already running',
                 })
             }
         })
@@ -59,7 +58,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'You cannot edit the task because timer is already running', 
+                    text: 'You cannot edit the task because timer is already running',
                 })
             }
         })
@@ -78,7 +77,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
             </div>
 
             <div className="d-flex align-items-center">
-                <div 
+                <div
                     onClick={toggle}
                     className="mr-2 py-2 sp1_task_righ_action_btn"
                     style={{cursor: 'pointer'}}
@@ -86,7 +85,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                     <i className="fa-regular fa-eye"></i>
                 </div>
                 {
-                    isEditable && hasEditPermission() && <div 
+                    isEditable && hasEditPermission() && <div
                         onClick={onEdit}
                         className="mr-2 py-2 sp1_task_righ_action_btn"
                         style={{cursor: 'pointer'}}
@@ -103,7 +102,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                         /> :<i className="fa-regular fa-pen-to-square"></i>}
                     </div>
                 }
-                
+
             </div>
 
 
@@ -131,7 +130,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                 {/* <ApproveTask
                                     task={subTask}
                                     auth={auth}
-                                />      
+                                />
 
                                 <Button variant="success" onClick={() => setIsOpen(false)} className="mr-2 bg-danger">
                                     Revision
@@ -149,9 +148,9 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                                         }}
                                     /> :<i className="fa-regular fa-pen-to-square"></i>}
                                 </a>}
-                                <a 
-                                    href={`/account/tasks/${subTask?.id}`} 
-                                    target="_blank" 
+                                <a
+                                    href={`/account/tasks/${subTask?.id}`}
+                                    target="_blank"
                                     className="border text-dark mr-2 py-1 px-2"
                                 >
                                     {/* <i className="fa-solid fa-up-right-and-down-left-from-center" /> */}
@@ -166,7 +165,7 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
                         <div className="sp1_subtask_offsetcanvas--body">
                             <PreviewSubtask
                                 parentTask={task}
-                                subTask={subTask} 
+                                subTask={subTask}
                             />
                         </div>
                     </div>

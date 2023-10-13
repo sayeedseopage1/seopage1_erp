@@ -26,6 +26,7 @@ import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 import TaskCreationForm from "../components/TaskCreationForm";
 import { toast } from "react-toastify";
 import EditProjectManagerGuideline from "../components/EditProjectManagerGuideline";
+import TaskAuthorization from "../components/TaskAuthorization";
 
 const ProjectTasks = () => {
     const { tasks } = useSelector((s) => s.tasks);
@@ -104,25 +105,25 @@ const ProjectTasks = () => {
         }
     }, [start_date, end_date, tableType]);
 
-    // hanlde task add form
+    // handle task add form
     const handleTaskAddForm = async (e) => {
         e.preventDefault();
-        
-        const deliverable = await isDeliverable(projectId); 
+
+        const deliverable = await isDeliverable(projectId);
         if (deliverable) {
-            const guideline = await getProjectGuidelineStaus(projectId); 
-            if (guideline) { 
+            const guideline = await getProjectGuidelineStaus(projectId);
+            if (guideline) {
                 const projectGuidelineStatus = await isTaskGuidelineAuthorized(projectId);
                if(projectGuidelineStatus){
                 if(projectGuidelineStatus.is_allow){
                     setShowTaskCreationForm(true)
-                }else{ 
+                }else{
                     toast.warn(projectGuidelineStatus.message, {
                         position: 'bottom-right',
                     });
 
-                    setShowProjectGuidelineEditForm({...projectGuidelineStatus, open: true}); 
-                } 
+                    setShowProjectGuidelineEditForm({...projectGuidelineStatus, open: true});
+                }
                }
             } else setShowProjectGuidelineForm(true);
         }
@@ -130,8 +131,14 @@ const ProjectTasks = () => {
 
     const isFetching = subtaskFetching || taskFetching;
 
-    const singleTask = _.head(tasks); 
-    
+    let _SubTasksTableColumns =  SubTasksTableColumns;
+
+    if(auth.getRoleId() !== 6) {
+        _SubTasksTableColumns = _.filter(_SubTasksTableColumns, col => col.id !== 'action');
+    }
+
+    const singleTask = _.head(tasks);
+
     return (
         <React.Fragment>
             {/* task creation form */}
@@ -139,7 +146,10 @@ const ProjectTasks = () => {
                 isOpen={showTaskCreationForm}
                 close={() => setShowTaskCreationForm(false)}
                 projectName={singleTask?.project_name}
-                onSuccess={() => onFilter({})}
+                onSuccess={() => {
+                    setShowTaskCreationForm(false);
+                    onFilter({});
+                }}
             />
             {/* project manager guideline creation form */}
             <ProjectManagerGuideline
@@ -149,14 +159,14 @@ const ProjectTasks = () => {
                 close={() => setShowProjectGuidelineForm(false)}
             />
 
-            {showProjectGuidelineEditForm?.open &&  
+            {showProjectGuidelineEditForm?.open &&
                 <EditProjectManagerGuideline
                     projectId={params.projectId}
                     isOpen={showProjectGuidelineEditForm?.open ?? false}
                     data={showProjectGuidelineEditForm}
                     openTaskForm={() => setShowTaskCreationForm(true)}
                     close={() => setShowProjectGuidelineEditForm(null)}
-                /> 
+                />
             }
 
             {/* end task creation form */}
@@ -213,6 +223,8 @@ const ProjectTasks = () => {
                                         + Add Task
                                     </SubmitButton>
                                 )}
+
+                            <TaskAuthorization />
                         </div>
 
                         <div className="sp1_table_tab">
@@ -259,7 +271,7 @@ const ProjectTasks = () => {
                             </span>
                             <span>
                                 <span style={{ color: "#5c5e60" }}>
-                                    
+
                                     Client:
                                 </span>
                                 <a
@@ -300,7 +312,7 @@ const ProjectTasks = () => {
                                     "client",
                                     "project_manager",
                                 ]}
-                                tableColumns={SubTasksTableColumns}
+                                tableColumns={_SubTasksTableColumns}
                             />
                         )}
                     </div>

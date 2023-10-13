@@ -1,13 +1,12 @@
-import React, { useState, useRef } from "react";
-import CKEditorComponent from "../../../../ckeditor";
-import Button from "../../../components/Button";
-import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { setTaskStatus } from "../../../../services/features/subTaskSlice";
-import SubmitButton from "../../../components/SubmitButton";
+import CKEditorComponent from "../../../../ckeditor";
 import { useRevision } from '../../../../hooks/useRevision';
+import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
+import Button from "../../../components/Button";
+import SubmitButton from "../../../components/SubmitButton";
 
- 
+
 
 const RevisionCreationModal = ({ close, task, auth }) => {
     const [reason, setReason] = useState(null);
@@ -16,8 +15,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     const [commentError, setCommentError] = useState("");
     const [isDeniable, setIsDeniable] = useState(false);
     const dispatch = useDispatch();
-    const { 
-        getLeadDeveloperAcknowladgementOptions, 
+    const {
+        getLeadDeveloperAcknowladgementOptions,
         getProjectManagerAcknowladgementOptions
     } = useRevision();
 
@@ -32,8 +31,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
         setReason(value);
     };
 
-    // editor change text 
-    const hanldeEditorTextChange= (e, editor) => {
+    // editor change text
+    const handleEditorTextChange= (e, editor) => {
         const data = editor.getData();
         setComment(data);
     }
@@ -41,10 +40,10 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     // validation
     const validate = () => {
        let errorCount = 0;
-       
+
        if(comment === ""){
             errorCount++;
-            setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
+            setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')
        }
 
        if(!reason){
@@ -52,12 +51,12 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             setReasonError('You have to select a reason from above options')
        }
 
-       return errorCount === 0; 
+       return errorCount === 0;
     }
 
 
-    // handle submiton
-    const handleSubmition=(e)=>{
+    // handle submission
+    const handleSubmission=(e)=>{
         e.preventDefault();
 
         const data = {
@@ -68,8 +67,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             comment,
             is_deniable: reason?.isDeniable ?? false
         }
- 
-        if(validate()){            
+
+        if(validate()){
             createRevision(data)
             .unwrap()
             .then(res => {
@@ -80,7 +79,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                     timer: 3000,
                     timerProgressBar: true,
                 })
-                
+
                 Toast.fire({
                     icon: 'success',
                     title: 'Task submitted for Revision successfully'
@@ -90,8 +89,8 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             })
             .catch(err => console.log(err));
         }else{
-            console.log('Your forgot to fillup some requried fields')
-        } 
+            console.log('Your forgot to fill up some required fields')
+        }
     }
 
     return (
@@ -131,7 +130,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                                             height: "16px",
                                             marginTop: "3px",
                                         }}
-                                        
+
                                     />
                                     <label
                                         className="form-check-label"
@@ -147,12 +146,12 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="" className="font-weight-bold"> 
+                        <label htmlFor="" className="font-weight-bold">
                             Explain or Comment<sup className="f-16">*</sup> :
                         </label>
                         <div className="ck-editor-holder">
-                            <CKEditorComponent onChange={hanldeEditorTextChange}/>
-                        </div> 
+                            <CKEditorComponent onChange={handleEditorTextChange}/>
+                        </div>
                         {commentError && <small id="emailHelp" className="form-text text-danger">{commentError}</small>}
                     </div>
 
@@ -161,7 +160,7 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                             <Button onClick={close} variant="tertiary" className="ml-auto mr-2">
                                 Close
                             </Button>
-                            <SubmitButton title="Submit" onClick={handleSubmition} isLoading={isLoading} />
+                            <SubmitButton title="Submit" onClick={handleSubmission} isLoading={isLoading} />
                         </div>
                     </div>
                 </form>
