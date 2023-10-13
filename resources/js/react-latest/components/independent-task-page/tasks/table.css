@@ -1,0 +1,223 @@
+.sp1_tasks_table_wrapper{
+    max-height: calc(100vh - 330px);
+    overflow: auto;
+    overflow-y: hidden;
+}
+
+.sp1_tasks_table_wrapper:hover{
+    overflow-y: auto;
+}
+  
+.sp1_tasks_table_wrapper::-webkit-scrollbar{ 
+    width: 10px;
+    height: 10px;
+    background-color: transparent !important;
+} 
+
+.sp1_tasks_table_wrapper::-webkit-scrollbar-thumb{
+    background-color: rgb(219, 219, 219) !important;
+    border: 2px solid rgb(255, 255, 255) !important;
+}
+ 
+.sp1_tasks_table_wrapper::-webkit-scrollbar-thumb:hover{
+    border: 0 !important;
+    background-color: rgb(197, 197, 197) !important;
+}
+
+.sp1_tasks_table_wrapper::-webkit-scrollbar-track{
+    background-color: rgba(219, 219, 219, 0.1) !important;
+}
+
+
+.sp1_tasks_thead{
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.sp1_tasks_th,
+.sp1_tasks_td{
+    padding: 6px 0;
+    font-size: 13px;
+    transition: background 0.2s ease-in-out;
+}
+
+.sp1_tasks_tr:nth-child(even){
+    background-color: #f8f8f8;
+}
+
+.sp1_tasks_td{
+    color: #646770 !important;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+}
+
+.sp1_tasks_td a{
+    color: #646770 !important;
+}
+
+.sp1_tasks_td a:hover{
+    text-decoration: underline !important;
+}
+
+.sp1_tasks_th{
+    border-bottom: 2px solid rgb(242, 242, 245);
+    background-color: #ffffff;
+    position: relative;
+    color: #93979c;
+    min-width: 100px;
+    cursor: default;
+}
+
+.sp1_tasks_th > .resizer{
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+    cursor: col-resize;
+    height: 100% !important;
+}
+
+.sp1_tasks_th > .resizer.isResizing:hover{
+    background: #777;
+}
+
+.sp1_tasks_tr:hover > td{
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e2e2e2;
+    border-top: 1px solid #e2e2e2;
+    color: #222;
+}
+
+.row_expending_btn{
+    color: #464b55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px; 
+    border-radius: 100%;
+    background-color: transparent;
+}
+
+.row_expending_btn > i{
+    color: #909596;
+} 
+
+.row_expending_btn > span > i.fa-eye{
+    color: #b6bcbd;
+}
+
+.row_expending_btn:hover > span > i.fa-eye,
+.row_expending_btn.active > span > i.fa-eye{color: #0e8bff;}
+ 
+ 
+.row_expending_btn._disable{
+    color: #aaaeb8;
+    cursor: default;
+}
+
+
+.sp1_task_table_expended{
+    position: relative;
+}
+
+
+.sp1_task_table_expended::before{
+    content: '';
+    position: absolute;
+    width: 1px;
+    height: 100px;
+}
+
+.sp1_tasks_tr.expended_parent_row > td{
+    background: #fce59b;
+}
+
+.sp1_tasks_tr.expended_row > td{
+    background: #fffaeb;
+    border-color: #fffaeb;
+}
+
+.sp1_tasks_tr.expended_row:hover > td{ 
+    background: rgb(255, 240, 208)
+}
+
+
+.sp1_tasks_td:not(:first-child){
+    padding-left: 10px !important;
+}
+
+.sp1_tasks_th--expend{min-width: 70px !important;}
+.sp1_tasks_th--task{min-width: 100px;}
+.sp1_tasks_th--milestone{min-width: 100px;}
+.sp1_tasks_th--deliverable{min-width: 100px}
+.sp1_tasks_th--timer_status{min-width: 70px;}
+.sp1_tasks_th--project{min-width: 100px;}
+.sp1_tasks_th--client{min-width: 100px}
+.sp1_tasks_th--due_date{min-width: 100px}
+.sp1_tasks_th--start_date{min-width: 100px}
+.sp1_tasks_th--action{min-width: 50px;} 
+
+
+.sp1_tasks_tbl_action{
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    user-select: none;
+}
+
+.sp1_tasks_tbl_action:hover{
+    background: #e5e6e9;
+}
+
+
+.sp1_tasks_tbl_del{
+    background-color: rgb(250, 238, 238);
+    color: #ff0404;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: -moz-none;
+    user-select: none;
+}
+
+.sp1_tasks_tbl_del:hover{
+    background-color: #f00;
+    color: #fff;
+}
+
+.sp1_tasks_tbl_report_btn{
+    padding: 2px 6px;
+    font-size: 13px;
+    border-radius: 3px;
+    background: #ff0f07;
+    color: #fff1f1; 
+    border: 1px solid rgba(231, 231, 231, 0);
+    box-shadow: inset 0 0 3px rgba(255, 241, 241, 0.8);
+}
+
+.sp1_tasks_tbl_report_btn:hover{ 
+    background: #ff231c;
+    color: #fff1f1; 
+}
+
+
+/* report table css */
+.sp1_tasks_report_table_wrapper{
+    padding: 30px;
+}
+.sp1_tasks_report_table{
+    width: 100%;
+} 
+
+.sp1_tasks_report_th,
+.sp1_tasks_report_td{
+    padding-inline: 10px;
+}
+
+.sp1_tasks_tbl_action_dd_menu{
+    min-width: 150px !important;
+}
