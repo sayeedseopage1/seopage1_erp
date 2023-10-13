@@ -58,19 +58,7 @@ const SingleTaskPage = () => {
                     task_revisions: data?.revisions,
                     taskSubTask: data?.Sub_Tasks,
                 }
-                const _task = new SingleTask(task);
-                let hasPermission = singleTaskPagePermission(_task, loggedUser);
-
-                if(!hasPermission){
-                    return throwError({
-                        title: 'Access Denied',
-                        message: "Access to this resource is forbidden. Please contact the administrator for assistance.",
-                        code: 403
-                    })
-                }else{
-                    dispatch(storeTask(task));
-                }
-
+                dispatch(storeTask(task));
             }
         })()
     }, [data]);

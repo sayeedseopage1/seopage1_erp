@@ -6,6 +6,7 @@ import StatusFilter from "./StatusFilter";
 import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
+import { useAuth } from '../../../hooks/useAuth'
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -26,6 +27,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const { width } = useWindowSize();
 
     const isDev = _.includes([5], Number(window?.Laravel?.user?.role_id));
+    const auth = useAuth();
 
     // MEMORIZE VALUES
     const start_date = React.useMemo(() => startDate, [startDate]);
@@ -98,7 +100,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         setState={setLeadDeveloper}
                         roleIds={[1, 4]}
                     />
-                    
+
 
                     <HDivider />
 

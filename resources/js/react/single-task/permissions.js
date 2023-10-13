@@ -14,10 +14,6 @@ export function singleTaskPagePermission (task, auth) {
     return hasPermission;
 }
 
-
-
-
-
 // permission for timer control
 export function timeControlPermision({task, status, loggedUser }){
     let statusPermission = false;
