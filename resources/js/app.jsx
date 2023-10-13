@@ -5,7 +5,7 @@ import "./react/Points/main";
 import "./react/Incentives/main";
 import "./react/QualifiedSales/main";
 // import "./react/PendingAction/main";
-
+import "./react/single-independent-task/index";
 import "./react/single-task/index";
 import "./react/tasks/index";
 import "./react/projects/index";

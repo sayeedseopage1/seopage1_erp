@@ -1,0 +1,70 @@
+.sp1_tlr_tbl_wrapper{
+    overflow-y: auto;
+}
+
+.sp1_tlr_table{
+    width: 100%; 
+}
+
+.sp1_tlr_th {
+    height: 36px;
+    padding: 3px 10px;
+    /* background-color: rgb(55, 55, 55); */
+    border-bottom: 2px solid rgb(219, 228, 255);
+    position: sticky;
+    z-index: 10;
+    top: 0;
+    text-align: center;
+    color: rgb(55, 55, 55);
+}
+
+.sp1_tlr_td{
+    padding: 10px;
+    max-width: 350px;
+    min-width: 150px;
+    border-bottom: 1px solid rgb(219, 228, 255);
+    text-align: center;
+}
+
+.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{
+    background-color:rgba(233, 235, 240, 0.349);
+}
+
+.sp1_tlr_tr .sp1_tlr_td_marged{
+    background-color:rgba(243, 244, 248, 0.349);
+    border-inline: 1px solid rgb(219, 228, 255);
+}
+
+.sp1_tlr_tr .sp1_tlr_td_marged:first-child,
+.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){
+    border-left-color: transparent;
+}
+
+.sp1_tlr_td_border{
+    border-bottom: 2px solid rgb(219, 228, 255);
+}
+
+/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{
+   background-color: #fff !important; 
+} */
+
+
+
+.sp1_drag_th.__dragging {
+    background-color: rgba(170, 173, 180, 0.222);
+}
+
+.sp1_drag_th.__drop-area {
+    background-color: rgba(34, 45, 71, 0.349);
+}
+
+.from_body{
+    padding: 2rem 1rem 3rem;
+}
+
+
+.openRow_bg{
+    background-color:rgba(194, 197, 202, 0.32) !important;
+    border: none !important;
+    overflow: visible;
+}

@@ -1,0 +1,96 @@
+.bdr{
+  /* border: solid; */
+}
+
+.container{
+  padding: 1rem;
+  max-width: 90%;
+  margin: 2rem auto;
+  min-height: 10rem;
+}
+
+.myTable{
+  margin: 0 auto;
+}
+
+.headerRow th{
+  background-color: rgb(34, 34, 34);
+  padding: 15px 25px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
+
+.bodyRow tr{
+  /* border-radius: 5px; */
+}
+
+.bodyRow td{
+  text-align: center;
+  padding: 15px;
+}
+
+
+.form{
+  /* border: solid; */
+  padding: 15px;
+  padding-top: 2rem;
+  background-color: white;
+}
+
+/* floating .label input field */
+.wrapper {
+  margin-bottom: 16px;
+  position: relative;
+  background-color: white;
+  border-radius: 5px;
+}
+.input {
+  position: relative;
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(0,0,0,.37);
+  border-radius: 4px;
+  background-color: transparent;
+  margin: 0px auto;
+  padding: 6px 4px 4px 14px;
+  height: 40px;
+  outline: none !important;
+  font-size: 16px;
+  color: rgba(0,0,0,0.85);
+  transition: all .2s ease-in-out;
+}
+
+.label {
+  position: absolute;
+  top: 30%; 
+  left: 12px;
+  text-align: left;
+  display: inline-block;
+  padding: 0 4px;
+  height: 14px;
+  line-height: 14px;
+  font-size: 14px;
+  font-weight: bold;
+  background: white;
+  color: rgba(0, 0, 0, 0.519);
+  margin: 0px auto;
+  cursor: text;
+  transition: all .15s ease-in-out;
+}
+.input:hover, .input:focus { border: 1px solid #000; }
+
+.input:valid + .label, .input:focus + .label { 
+  top: -6px;
+  color: #000;
+  font-weight: bold;
+}
+.formAsterisk {
+    background-color: inherit;
+    color: #e32b2b;
+    padding: 0;
+    padding-left: 3px;
+}
+.formAsterisk:after {
+    content: "*";
+}
