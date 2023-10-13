@@ -1,0 +1,25 @@
+.form_card{
+    max-width: 800px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: Inter;
+    font-weight: 400;
+    box-shadow: 0 10px 16px rgb(0 0 0 / 20%);
+}
+
+
+.form_card_head{
+    background-color: rgb(243, 243, 243);
+}
+
+.form_card_head h6{
+    margin: 0;
+    font-weight: 600;
+}
+
+.list_border:not(:last-child){
+    border-bottom: 1px dashed rgb(0 0 0 / 10%);
+}

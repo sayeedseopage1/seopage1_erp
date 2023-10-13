@@ -6,27 +6,17 @@ import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi'
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
 
-const people = [
-    { id: 1, name: 'Durward Reynolds', unavailable: false },
-    { id: 2, name: 'Kenton Towne', unavailable: false },
-    { id: 3, name: 'Therese Wunsch', unavailable: false },
-    { id: 4, name: 'Benedict Kessler', unavailable: true },
-    { id: 5, name: 'Katelyn Rohan', unavailable: false },
-    { id: 6, name: 'Katelyn Rohan', unavailable: false },
-    { id: 7, name: 'Katelyn Rohan', unavailable: false },
-    { id: 8, name: 'Katelyn Rohan', unavailable: false },
-    { id: 9, name: 'Katelyn Rohan', unavailable: false },
-  ]
 
-const TaskCategorySelectionBox = ({selected, onSelect, taskId}) => { 
+
+const TaskCategorySelectionBox = ({selected, onSelect, taskId}) => {
     const [query, setQuery] = React.useState('');
 
-    const params = useParams(); 
+    const params = useParams();
     const {
         data:categories,
         isFetching
     } = useGetTaskDetailsQuery(`/${params?.taskId || taskId}/json?mode=category`);
- 
+
 
     const filteredData =
     query === ''
@@ -40,26 +30,26 @@ const TaskCategorySelectionBox = ({selected, onSelect, taskId}) => {
         <div className="form-group position-relative my-3">
             <label htmlFor="">Task category<sup>*</sup></label>
             <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
-                <Combobox.Input 
-                    onChange={e => setQuery(e.target.value)} 
+                <Combobox.Input
+                    onChange={e => setQuery(e.target.value)}
                     placeholder='--'
                     displayValue={(value) => value?.category_name || ''}
-                    className="form-control height-35 f-14 sp1-selection-display w-100" 
+                    className="form-control height-35 f-14 sp1-selection-display w-100"
                 />
                 <div className='__icon'>
                     <i className="fa-solid fa-sort"></i>
                 </div>
             </Combobox.Button>
-                 
+
             <Combobox.Options className="sp1-select-options">
-                
+
                 {isFetching && (
                     <div className='sp1-select-option-nodata'>
                         <Loader />
                     </div>
                 )}
 
-                {filteredData?.length===0 ? 
+                {filteredData?.length===0 ?
                     <div className='sp1-select-option-nodata'>
                          Nothing found.
                     </div>

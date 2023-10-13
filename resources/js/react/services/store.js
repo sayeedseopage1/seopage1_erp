@@ -8,6 +8,7 @@ import pointPageFilterReducer from "./features/pointPageFilterSlice";
 import subtaskReducer from './features/subTaskSlice';
 import timeLogHistoryReducer from "./features/timeLogHistorySlice";
 import tasksReducer from './features/tasksSlice';
+import errorSlice from "./features/errorSlice";
 
 export const store = configureStore({
     reducer: {
@@ -19,10 +20,11 @@ export const store = configureStore({
         pointPageFilterOption: pointPageFilterReducer,
         subTask: subtaskReducer,
         timeLogHistory: timeLogHistoryReducer,
-        tasks: tasksReducer
+        tasks: tasksReducer,
+        error: errorSlice
     },
 
-   // serializableCheck: false, 
+   // serializableCheck: false,
 
    middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

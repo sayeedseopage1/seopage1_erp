@@ -26,7 +26,7 @@
 
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="{{ asset('vendor/css/bootstrap-icons.css') }}">
-    
+
     <!-- Wow js css -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/> -->
     @stack('datatable-styles')
@@ -52,7 +52,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
     <script src="https://code.jscharting.com/latest/jscharting.js"></script>
-    
+
 
     <title>@lang($pageTitle)</title>
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -293,7 +293,9 @@
     <!-- BODY WRAPPER START -->
     <div class="body-wrapper clearfix">
 
-
+        <!-- REACT COMPONENT MASTER ACCESS -->
+        <div id="react-root-container" ></div>
+        <!-- REACT COMPONENT MASTER ACCESS -->
         <!-- MAIN CONTAINER START -->
         <section class="main-container bg-additional-grey" id="fullscreen">
 
@@ -326,9 +328,9 @@
                             @php
                                 if ($deal_id != null) {
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
-                                
+
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
-                                
+
                                     if (\Carbon\Carbon::now()->lt($to)) {
                                         $diff_in_minutes = $from->diffInMinutes($to);
                                     } else {
@@ -372,9 +374,9 @@
                             @php
                                 if ($deal_id != null) {
                                     $to = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', \Carbon\Carbon::now());
-                                
+
                                     $from = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $value->award_time);
-                                
+
                                     $diff_in_minutes = $from->diffInMinutes($to);
                                 }
                             @endphp

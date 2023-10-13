@@ -141,6 +141,9 @@ class DashboardController extends AccountBaseController
             $tab = request('tab');
 
             switch ($tab) {
+            case 'web-development':
+                $this->webdevelopmentDashboard();
+                break;
             case 'project':
                 $this->projectDashboard();
                 break;
@@ -156,11 +159,11 @@ class DashboardController extends AccountBaseController
             case 'finance':
                 $this->financeDashboard();
                 break;
-                case 'web-development':
-                    $this->webdevelopmentDashboard();
-                    break;
             default:
-                if (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
+                if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
+                    $this->activeTab = ($tab == '') ? 'web-development' : $tab;
+                    $this->webdevelopmentDashboard();
+                } elseif (in_array('admin', user_roles()) || $this->sidebarUserPermissions['view_overview_dashboard'] == 4) {
                     $this->activeTab = ($tab == '') ? 'overview' : $tab;
                     $this->overviewDashboard();
 
@@ -183,10 +186,7 @@ class DashboardController extends AccountBaseController
                 } else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
                     $this->activeTab = ($tab == '') ? 'finance' : $tab;
                     $this->financeDashboard();
-                }else if ($this->sidebarUserPermissions['view_ticket_dashboard'] == 4) {
-                    $this->activeTab = ($tab == '') ? 'web-development' : $tab;
-                    $this->webdevelopmentDashboard();
-                  }
+                }
                 break;
             }
 
@@ -431,57 +431,31 @@ class DashboardController extends AccountBaseController
         $this->pageTitle = 'PM Cycle Explanation';
         return view('dashboard.pm_explanation',$this->data);
     }
-    public function pmPerformance(Request $request){
-      //  dd($request->all());
-        if($request->pm_id == null)
-        {
-            $this->pm = User::where('id', 209)->first();
-            $this->pageTitle = 'PM Performance';
-
-            return $this->PmDashboardAdminView($this->pm);
-
-        }else 
-        {
-           // dd("true");
-            $this->pm = User::where('id', $request->pm_id)->first();
-            $this->pageTitle = 'PM Performance';
-          //  dd("dkasdmlkas");
-    
-            return $this->PmDashboardAdminPmView($this->pm);
-
-        }
-        
-
-        // if ($request->selected_pm_id) {
-        //     $this->selected_pm = User::where('id', $request->selected_pm_id)->first();
-        // }else
-        // {
-        //     $this->selected_pm = '';
-
-        // }
-
-       
-    }
-
-    public function getPmData(Request $request){
-       // dd($request);
-        $this->pm = User::where('id', $request->selected_pm_id)->first();
+    public function pmPerformance($id){
+        $this->pm = User::where('id', $id)->first();
         $this->pageTitle = 'PM Performance';
-      //  dd("dkasdmlkas");
-
         return $this->PmDashboardAdminPmView($this->pm);
-      
     }
+
+    // public function getPmData(Request $request){
+    //    // dd($request);
+    //     $this->pm = User::where('id', $request->selected_pm_id)->first();
+    //         $this->pageTitle = 'PM Performance';
+    //   //  dd("dkasdmlkas");
+
+    //             return $this->PmDashboardAdminPmView($this->pm);
+
+    // }
     public function coreMetric(){
         $this->pageTitle = "Update Core Metrics";
         $this->pm_core_metrics = PmCoreMetric::orderBy('id','desc')->first();
-        return view('core_metric.index',$this->data);
+               return view('core_metric.index',$this->data);
       }
       public function updateCoreMetric (Request $request ,$id)
       {
         $validator =  $request->validate([
             'released_amount_for_cycle' => 'required|numeric|min:0',
-            'total_released_amount' => 'required|numeric|min:0',
+            'total_released_amount' => 'required|numeric|m      in:0',
             'avg_project_completion_time_for_cycle' => 'required|numeric|min:0',
             'avg_project_completion_time_in_cycle' => 'required|numeric|min:0',
             'progress_project_count' => 'required|numeric|min:0',

@@ -19,14 +19,16 @@ import _ from "lodash";
 import { useDeveloperCanCompleteTaskQuery, useLazyCheckSubTaskTimerQuery } from "../../../services/api/SingleTaskPageApi";
 import DailySubmissionControl from './DailySubmissionControl';
 import SubtaskCreationControl from "./SubtaskCreationControl";
+import { Link } from "react-router-dom";
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
     const [timerStart, setTimerStart] = React.useState(false);
 
+
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
-      
-    const {  data: checkMarkAsCompleteEnableStatus, isLoading: isLoadingCompleteCheck } = useDeveloperCanCompleteTaskQuery(task?.id, {skip: !task.id}); 
+
+    const {  data: checkMarkAsCompleteEnableStatus, isLoading: isLoadingCompleteCheck } = useDeveloperCanCompleteTaskQuery(task?.id, {skip: !task.id});
     const ENABLE_MARKASCOMPLETE_BUTTON = task && (task?.isSubtask ? checkMarkAsCompleteEnableStatus?.message === "Developer can complete this task" : true);
 
 
@@ -48,12 +50,15 @@ const TaskAction = ({ task, status }) => {
             });
     };
 
+
+    let time = task.isSubtask ? task?.parentTaskTimeLog : task?.totalTimeLog;
+
     return (
         <div
             className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group"
             style={{ gap: "10px" }}
         >
-            {/* with permision */}
+            {/* with permission */}
             {timeControlPermision({ task, status, loggedUser }) ? (
                 <TimerControl
                     task={task}
@@ -67,7 +72,7 @@ const TaskAction = ({ task, status }) => {
                 <MarkAsComplete task={task} auth={loggedUser} />
             ) : null}
 
- 
+
             {/* develop */}
             {approveButtonPermission({ task, status, loggedUser }) ? (
                 <ApproveTask task={task} status={status} auth={loggedUser} />
@@ -86,7 +91,7 @@ const TaskAction = ({ task, status }) => {
             )}
             {/* <TimeExtension task={task} /> */}
             <ClientApproval task={task} status={status} auth={loggedUser} />
-                
+
              {/* daily submission control */}
              {_.includes([5, 9, 10], loggedUser?.getRoleId()) && (
                 <DailySubmissionControl />
@@ -98,7 +103,7 @@ const TaskAction = ({ task, status }) => {
             <div style={{display:'inline-flex',marginLeft:'auto',gap:'0 10px'}}>
 
                 {/* Subtask creation guideline */}
-                {_.includes([6, 4, 1], loggedUser?.getRoleId()) &&  <SubtaskCreationControl />} 
+                {_.includes([6, 4, 1], loggedUser?.getRoleId()) &&  <SubtaskCreationControl />}
 
 
                 {/*********** Report Control ***********/}
@@ -107,9 +112,9 @@ const TaskAction = ({ task, status }) => {
                 )}
 
 
-                {taskEditPermision({ task, status, auth: loggedUser }) && (
-                    <a
-                        href="#"
+                {/* {taskEditPermision({ task, status, auth: loggedUser }) && (
+                    <Link
+                        to={`?modal=edit&task=${task?.id}`}
                         onClick={onModalEditButtonClick}
                         className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"
                         style={{
@@ -131,8 +136,21 @@ const TaskAction = ({ task, status }) => {
                             <i className="fa-regular fa-pen-to-square"></i>
                         )}
                         <span className="ml-1 mr-2">Edit</span>
-                    </a>
-                )}
+                    </Link>
+                )} */}
+
+                {task &&  task.boardColumn.id === 2  &&
+                    <Link
+                        to={`?modal=edit&task=${task?.id}`}
+                        className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"
+                        style={{
+                            marginLeft: 'none'
+                        }}
+                    >
+                        <i className="fa-regular fa-pen-to-square" />
+                        Edit
+                    </Link>
+                }
             </div>
 
             {/* {{-- 3 dot --}} */}

@@ -8,6 +8,7 @@ import Loading from "./components/Loading";
 
 import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import ErrorContextProvider from "../context/ErrorHandleServiceContextProvider";
 
 const SingleTask = React.lazy(() => import("./SingleTask"));
 const container = document.getElementById("sp1SingleTaskPage");
@@ -17,18 +18,20 @@ if (container) {
         <React.StrictMode>
             <DndProvider backend={HTML5Backend}>
                 <Provider store={store}>
-                    <BrowserRouter>
-                        <Routes>
-                            <Route
-                                path="/account/tasks/:taskId"
-                                element={
-                                    <React.Suspense fallback={<Loading />}>
-                                        <SingleTask />
-                                    </React.Suspense>
-                                }
-                            />
-                        </Routes>
-                    </BrowserRouter>
+                    <ErrorContextProvider>
+                        <BrowserRouter>
+                            <Routes>
+                                <Route
+                                    path="/account/tasks/:taskId"
+                                    element={
+                                        <React.Suspense fallback={<Loading />}>
+                                            <SingleTask />
+                                        </React.Suspense>
+                                    }
+                                />
+                            </Routes>
+                        </BrowserRouter>
+                    </ErrorContextProvider>
                 </Provider>
             </DndProvider>
         </React.StrictMode>

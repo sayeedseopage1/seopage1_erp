@@ -2,7 +2,7 @@ import * as React from 'react';
 import Loader from './Loader';
 import { convertTime } from '../../utils/converTime';
 import { CompareDate } from '../../utils/dateController';
-const compareDate = new CompareDate(); 
+const compareDate = new CompareDate();
 
 import {
   useReactTable, getCoreRowModel,
@@ -32,34 +32,45 @@ import { User } from '../../utils/user-details';
 import { ExpandTask } from './table/ExpandTask';
 
 
-export default function TasksTable({isLoading, filter, tableName,search, reportPermission, hideColumns, tableColumns}){
+export default function TasksTable({
+    isLoading,
+    filter,
+    tableName,
+    search,
+    reportPermission,
+    hideColumns,
+    tableColumns,
+    columnVisibility,
+    setColumnVisibility
+}){
   const { tasks } = useSelector(s => s.tasks);
   const [data, setData] = React.useState([])
-  const [expanded, setExpanded] = React.useState({}); 
+  const [expanded, setExpanded] = React.useState({});
   const [sorting, setSorting] = React.useState([]);
-  const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10}); 
+  const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10});
   const [skipPageReset, setSkipPageReset] = React.useState(false);
   const [ globalFilter, setGlobalFilter ] = React.useState('');
   const [value, setValue] = useLocalStorage(tableName ??'')
+
 
   const _tasks = React.useMemo(()=> tasks, [tasks]);
 
   React.useEffect(() => {
     if(_.size(_tasks) === _.size(data)){
       setSkipPageReset(true);
-      _tasks && setData(_tasks) 
+      _tasks && setData(_tasks)
     }else{
       _tasks && setData(_tasks);
     }
   }, [_tasks])
 
-  // clear skipPageReset 
+  // clear skipPageReset
   React.useEffect(() => {
-    if(skipPageReset){ 
+    if(skipPageReset){
       setSkipPageReset(false);
     }
   }, [data])
-    
+
   // default columns
   const defaultColumns = React.useMemo(() => [...tableColumns])
 
@@ -71,13 +82,13 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
     let _cols = [...defaultColumns?.filter(f => !_.includes(hideColumns, f.id))];
 
     if(!_.includes(reportPermission, auth?.getRoleId())){
-      _cols = _cols?.filter(col => col.id !== 'report') 
-    } 
+      _cols = _cols?.filter(col => col.id !== 'report')
+    }
     setColumns([..._cols]);
   }, [])
-  
-  const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id')); 
-  
+
+  const [columnOrder, setColumnOrder] = React.useState(_.map(columns, 'id'));
+
   // reset columns
   const resetColumnsOrder = () => setColumnOrder(_.map(columns, 'id'))
   const pagination = React.useMemo(() => ({pageIndex, pageSize}), [pageIndex, pageSize]);
@@ -88,7 +99,7 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
       setColumnOrder(value.columnOrders);
     }
   }, [])
- 
+
 
   // table instance...
   const table = useReactTable({
@@ -101,6 +112,7 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
       pagination,
       tableName,
       filter,
+      columnVisibility,
       globalFilter: _.trim(search)
     },
     onGlobalFilterChange: setGlobalFilter,
@@ -127,25 +139,25 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
             {table.getHeaderGroups().map(headerGroup => (
               <tr key={headerGroup.id} className='sp1_tasks_tr'>
                 {headerGroup.headers.map(header => {
-                  return <DragableColumnHeader key={header.id} header={header} table={table} /> 
+                  return <DragableColumnHeader key={header.id} header={header} table={table} />
                 })}
               </tr>
             ))}
           </thead>
-          <tbody className='sp1_tasks_tbody'> 
+          <tbody className='sp1_tasks_tbody'>
             {!isLoading &&table.getRowModel().rows.map(row => {
               return (
                 <tr
                   className={`sp1_tasks_tr ${row.parentId !== undefined ? 'expended_row' :''} ${row.getIsExpanded() ? 'expended_parent_row': ''}`}
                     key={row.id}
-                  > 
-                  {row.getVisibleCells().map(cell => { 
+                  >
+                  {row.getVisibleCells().map(cell => {
                     return (
                       <td key={cell.id} className='px-2 sp1_tasks_td'>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
-                        )} 
+                        )}
                       </td>
                     )
                   })}
@@ -155,13 +167,13 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
             {isLoading && <TaskTableLoader />}
           </tbody>
       </table>
-      
+
       {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
     </div>
-    
 
-      <TasksTablePagination 
-        currentPage = {pageIndex + 1} 
+
+      <TasksTablePagination
+        currentPage = {pageIndex + 1}
         perpageRow= {pageSize}
         onPageSize = {(size) => table.setPageSize(size)}
         onPaginate = {(page) => table.setPageIndex(page - 1)}
@@ -180,14 +192,14 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
 // export const ExpandTask = ({row, table, pageIndex}) => {
 //         const [loading, setLoading] = React.useState(false);
 //         const data = row?.original;
-//         const subtasks = data?.subtasks_count 
+//         const subtasks = data?.subtasks_count
 //         const pageIdx = pageIndex;
 //         const dispatch = useDispatch();
 //         const [getSubTasks, {isFetching}] = useLazyGetSubTasksQuery();
 //         const { filter } = table.getState();
 
 //         const handleExpanding = (e) => {
-//           setLoading(true); 
+//           setLoading(true);
 //           if(_.size(data?.subtasks) > 0){
 //             setLoading(false);
 //             if (!row.getCanExpand()) return;
@@ -199,30 +211,30 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
 //             })
 //             .unwrap()
 //             .then( res => {
-//               const _data = {...data, subtasks: res?.tasks};  
+//               const _data = {...data, subtasks: res?.tasks};
 //               dispatch(addSubtaskToParenttask({id: data?.id, task: _data}));
 
 //               setLoading(false);
 //               row.toggleExpanded();
 //             })
-//             .catch(err => console.error(err)) 
+//             .catch(err => console.error(err))
 //           }
 //         }
-         
+
 
 //         return(
 //           <div style={{paddingLeft: `${row.depth * 2}rem`}}>
-             
+
 //             {
-//               row.parentId === undefined  ? 
-//               <button 
+//               row.parentId === undefined  ?
+//               <button
 //                     {...{
 //                       style: {cursor: 'pointer'},
 //                       onClick: () => Number(subtasks) > 0 ? handleExpanding() : null,
 //                       className: row.getIsExpanded() ? 'row_expending_btn active' : 'row_expending_btn'
 //                     }}
 //                   >
-                    
+
 //                     {
 //                       loading ? <Loader title='' /> :
 //                       <React.Fragment>
@@ -234,7 +246,7 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
 //                       </React.Fragment>
 //                     }
 //                   </button> :
-//                 row.getCanExpand() && 
+//                 row.getCanExpand() &&
 //                 <button
 //                     {...{
 //                       style: {cursor: 'pointer'},
@@ -243,7 +255,7 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
 //                     }}
 //                   >
 //                     {
-//                       !loading && !isFetching  && 
+//                       !loading && !isFetching  &&
 //                       <React.Fragment>
 //                           {row.getIsExpanded() ? <i className="fa-solid fa-chevron-down f-12" /> : <i className="fa-solid fa-chevron-right f-12"></i> }
 //                           <span className='d-flex align-items-center ml-2' style={{gap: '4px'}}>
@@ -256,9 +268,9 @@ export default function TasksTable({isLoading, filter, tableName,search, reportP
 //                     {
 //                       loading && isFetching && <Loader title='' />
 //                     }
-                    
+
 //                   </button>
-//             } 
+//             }
 //           </div>
 //         )
 // }
