@@ -148,14 +148,14 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         fd.append('description', description ?? ''); 
         fd.append("start_date", _startDate ?? '');
         fd.append("due_date", _dueDate ?? '');
-        fd.append("project_id", params?.projectId ?? '');
+        // fd.append("project_id", params?.projectId ?? '');
         fd.append("category_id", taskCategory?.id ?? '');
         fd.append("priority", _.lowerCase(priority));
         fd.append("board_column_id", 2);
-        fd.append("estimate_hours", estimateTimeHour ?? 0);
-        fd.append("estimate_minutes", estimateTimeMin ?? 0);
-        fd.append("deliverable_id", milestone?.deliverable_type ?? '');
-        fd.append("milestone_id", milestone?.id ?? ''); 
+        // fd.append("estimate_hours", estimateTimeHour ?? 0);
+        // fd.append("estimate_minutes", estimateTimeMin ?? 0);
+        // fd.append("deliverable_id", milestone?.deliverable_type ?? '');
+        // fd.append("milestone_id", milestone?.id ?? ''); 
         fd.append("user_id", assignedTo?.id ?? '');
 
         
@@ -170,9 +170,14 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
+
+        const result = {};
+
         for (const pair of fd.entries()) {
-          console.log(`${pair[0]} :, ${pair[1]}`);
+          result[pair[0]] = pair[1];
         }
+
+        console.log(result);
  
         if(isValid()){
             // storeProjectTask(fd)
@@ -416,7 +421,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
 
                             {/* Project Deliverable */} 
-                            <div className="col-12 col-md-6">
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -430,7 +435,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         defaultValue={milestone?.deliverable_type ?? ''}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* assignee to */}
                             <div className="col-12 col-md-6">
@@ -455,7 +460,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                             </div>
 
                             {/* Estimate Time */}
-                            <div className="col-12 col-md-6">
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         htmlFor=""
@@ -504,7 +509,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         </div>
                                     }
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-12">
                                 <div className="form-group my-3">
