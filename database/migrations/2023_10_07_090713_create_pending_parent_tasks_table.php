@@ -16,6 +16,7 @@ return new class extends Migration
     {
         Schema::create('pending_parent_tasks', function (Blueprint $table) {
             $table->id();
+            $table->integer('u_id')->nullable();
             $table->string('heading')->nullable();
             $table->longText('description')->nullable();
             $table->date('start_date')->nullable();
@@ -36,6 +37,7 @@ return new class extends Migration
             $table->boolean('need_authorization')->default(0);
             $table->boolean('approval_status')->nullable();
             $table->integer('authorize_by')->nullable();
+            $table->boolean('independent_task_status')->default(0);
             $table->timestamps();
         });
     }

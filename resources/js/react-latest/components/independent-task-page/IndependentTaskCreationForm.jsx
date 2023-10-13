@@ -16,8 +16,8 @@ import { CompareDate } from "../../utils/dateController";
 import { SingleTask } from "../../utils/single-task";
 import { User } from "../../utils/user-details";
 import AssginedToSelection from "../../../react/projects/components/AssignedToSelection";
+import { usePostIndependentTaskMutation } from "../../services/api/independentTaskApiSlice";
 // import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
-// import { useStoreProjectTaskMutation } from "../../services/api/tasksApiSlice";
 
 const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const {
@@ -33,33 +33,33 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const [dueDate, setDueDate] = useState(null);
     const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
-    const [assignedTo, setAssignedTo] = useState(null); 
+    const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
     const [priority, setPriority] = useState("Medium");
     const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
-    
+
     const [formError, setFormError] = React.useState(null);
 
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
 
     const params = useParams();
-    // const [storeProjectTask, { isLoading, error }] = useStoreProjectTaskMutation()
-   
+    const [postIndependentTask, { isLoading, error }] = usePostIndependentTaskMutation()
+
     // const required_error = error?.status === 422 ? error?.data : null;
-    
+
     // const [getMilestoneDetails, {data:projectInfo ,isFetching: milestoneDataIsFetching}] = useLazyGetMilestoneDetailsQuery();
- 
+
 
 
     // test variable
     const projectInfo = {
       minutes_left: 0,
       milestones: []
-    }, milestoneDataIsFetching = false, isLoading = false;
+    }, milestoneDataIsFetching = false;
 
     // handle change
     React.useEffect(() => {
@@ -68,7 +68,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             // .then(res => {
             //     let project = _.head(res?.milestones);
             //     setProject(project?.project_name ?? '')
-            // }) 
+            // })
             setProject('Project_Name')
         }
     }, [isOpen]);
@@ -80,7 +80,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setState(value);
     };
 
-    // check validation 
+    // check validation
     const isValid = () => {
         let err = new Object();
         let errCount = 0;
@@ -95,10 +95,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        if(milestone === null){
-            err.milestone = "Select a milestone";
-            errCount++;
-        }
+        // if(milestone === null){
+        //     err.milestone = "Select a milestone";
+        //     errCount++;
+        // }
 
         if(!startDate){
             err.startDate = "Start date is required";
@@ -119,21 +119,21 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             err.description = 'Write a Description';
             errCount++;
         }
- 
-        if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
-            err.estimateError = "Estimate time not less than 0";
-            errCount++;
-        }
 
-        if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
-            err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
-            errCount++;
-        }
+        // if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
+        //     err.estimateError = "Estimate time not less than 0";
+        //     errCount++;
+        // }
+
+        // if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
+        //     err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
+        //     errCount++;
+        // }
 
 
-        setFormError(err); 
+        setFormError(err);
         return !errCount;
-  
+
     }
 
 
@@ -145,7 +145,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
         const fd = new FormData();
         fd.append('heading', title ?? '');
-        fd.append('description', description ?? ''); 
+        fd.append('description', description ?? '');
         fd.append("start_date", _startDate ?? '');
         fd.append("due_date", _dueDate ?? '');
         // fd.append("project_id", params?.projectId ?? '');
@@ -155,10 +155,12 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         // fd.append("estimate_hours", estimateTimeHour ?? 0);
         // fd.append("estimate_minutes", estimateTimeMin ?? 0);
         // fd.append("deliverable_id", milestone?.deliverable_type ?? '');
-        // fd.append("milestone_id", milestone?.id ?? ''); 
+        // fd.append("milestone_id", milestone?.id ?? '');
         fd.append("user_id", assignedTo?.id ?? '');
+        fd.append("id",`IND_TASK_${Date.now()}`);
+        fd.append("isIndependent",1);
 
-        
+
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
         });
@@ -178,11 +180,11 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         }
 
         console.log(result);
- 
+
         if(isValid()){
-            // storeProjectTask(fd)
+            // postIndependentTask(fd)
             // .unwrap()
-            // .then((res) => { 
+            // .then((res) => {
             //     onSuccess();
             //     close();
 
@@ -192,7 +194,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             //         title: res.message,
             //         showConfirmButton: false,
             //         timer: 2500,
-            //     }); 
+            //     });
             // })
             // .catch((err) => {
             //     if (err?.status === 422) {
@@ -204,13 +206,6 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             //         });
             //     }
             // });
-            Swal.fire({
-                      position: "center",
-                      icon: "success",
-                      title: res.message,
-                      showConfirmButton: false,
-                      timer: 2500,
-                  }); 
         }else {
             Swal.fire({
                 position: "center",
@@ -242,7 +237,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         if (hoursErr) errText += hoursErr;
         if (minErr) errText += minErr;
         return errText;
-    }; 
+    };
 
     return (
         <Modal isOpen={isOpen}>
@@ -281,7 +276,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     error={formError?.title}
                                     onChange={(e) => handleChange(e, setTitle)}
                                 />
-                            </div> 
+                            </div>
 
                             {/* Task Categories List */}
                             <div className="col-12 col-md-6">
@@ -291,7 +286,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     taskId={params?.projectId}
                                 />
                                 {formError?.taskCategory  && (
-                                    <div style={{ color: "red" }}> 
+                                    <div style={{ color: "red" }}>
                                         {formError?.taskCategory }
                                     </div>
                                 )}
@@ -315,7 +310,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                             </div> */}
 
                             {/* Project Milestone Selection Menu */}
-                            {/* <div className="col-12 col-md-6"> 
+                            {/* <div className="col-12 col-md-6">
                                 <Listbox value={milestone} onChange={setMilestone}>
                                     <div className="form-group position-relative my-3">
                                         <label
@@ -332,23 +327,23 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         </Listbox.Button>
                                         <Listbox.Options  className="sp1-select-options">
                                             {_.map(projectInfo?.milestones, (milestone) => (
-                                                <Listbox.Option 
+                                                <Listbox.Option
                                                     key={milestone.id}
                                                     className={({ active, selected }) => `sp1-select-option ${ (active || selected) ? 'active' : ''}`}
                                                     value={milestone}
-                                                > 
-                                                    {milestone?.milestone_title}  
+                                                >
+                                                    {milestone?.milestone_title}
                                                 </Listbox.Option>
                                             ))}
                                         </Listbox.Options>
- 
+
                                         {formError?.milestone && (
-                                            <div style={{ color: "red" }}> 
+                                            <div style={{ color: "red" }}>
                                                 {formError?.milestone}
                                             </div>
                                         )}
                                     </div>
-                                </Listbox> 
+                                </Listbox>
                             </div> */}
 
                             {/* <div className="col-12 col-md-6">
@@ -420,7 +415,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                             </div>
 
 
-                            {/* Project Deliverable */} 
+                            {/* Project Deliverable */}
                             {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
@@ -442,14 +437,14 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 <AssginedToSelection
                                     selected={assignedTo}
                                     onSelect={setAssignedTo}
-                                /> 
-                                
+                                />
+
                                 {formError?.assignedTo && (
                                     <div style={{ color: "red" }}>
                                         {formError?.assignedTo}
                                     </div>
                                 )}
-                            </div> 
+                            </div>
 
                             {/* Priority */}
                             <div className="col-12 col-md-6">
@@ -499,11 +494,11 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
 
                                     <div style={{ color: "var(--header_color)" }}>
-                                        Estimation time can't exceed{" "} 
+                                        Estimation time can't exceed{" "}
                                         {convertTime(Number(projectInfo?.minutes_left) > 0 ? Number(projectInfo?.minutes_left) : 0)}
                                     </div>
 
-                                    {formError?.estimateError &&  
+                                    {formError?.estimateError &&
                                         <div style={{ color: "red" }}>
                                             {formError?.estimateError}
                                         </div>

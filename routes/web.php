@@ -829,6 +829,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
      /******* Independent TASK Start ******** */
     Route::resource('independent-task',IndependentTaskController::class);
+    Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
