@@ -36,7 +36,7 @@ class IndependentTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -82,5 +82,10 @@ class IndependentTaskController extends AccountBaseController
     public function destroy($id)
     {
         //
+    }
+
+    public function independentTaskShow(){
+        $this->pageTitle = 'Single Independent Task';
+        return view('independent-task.show',$this->data);
     }
 }

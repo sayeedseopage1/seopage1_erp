@@ -309,7 +309,7 @@
                             @if (Auth::user()->role_id == 1)
                                 <x-sub-menu-item :link="route('cross-dept-work.index')" :text="__('Cross Dept Work')" />
                             @endif
-                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5 
+                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 6 || Auth::user()->role_id == 5
                             || Auth::user()->role_id == 9 || Auth::user()->role_id == 10
                             )
                                 <x-sub-menu-item :link="route('task-report-issues.index')" :text="__('Tasks Reports')" />
@@ -317,6 +317,10 @@
 
 
                                 <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" />
+<<<<<<< HEAD
+=======
+                                <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" />
+>>>>>>> ff92b39107c400bc0eed8d282699a53b294b5da5
 
 
                             {{-- @endif --}}
