@@ -316,7 +316,7 @@
                             @endif
 
 
-                                {{-- <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" /> --}}
+                                <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" />
 
 
                             {{-- @endif --}}

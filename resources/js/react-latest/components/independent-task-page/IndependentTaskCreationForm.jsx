@@ -159,6 +159,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         fd.append("user_id", assignedTo?.id ?? '');
         fd.append("id",`IND_TASK_${Date.now()}`);
         fd.append("isIndependent",1);
+        // fd.append("_method", "POST");
 
         
         Array.from(files).forEach((file) => {
