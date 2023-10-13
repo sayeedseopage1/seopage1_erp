@@ -16,8 +16,8 @@ import { CompareDate } from "../../utils/dateController";
 import { SingleTask } from "../../utils/single-task";
 import { User } from "../../utils/user-details";
 import AssginedToSelection from "../../../react/projects/components/AssignedToSelection";
+import { usePostIndependentTaskMutation } from "../../services/api/independentTaskApiSlice";
 // import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
-// import { useStoreProjectTaskMutation } from "../../services/api/tasksApiSlice";
 
 const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const {
@@ -47,7 +47,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const auth = new User(window?.Laravel?.user);
 
     const params = useParams();
-    // const [storeProjectTask, { isLoading, error }] = useStoreProjectTaskMutation()
+    const [postIndependentTask, { isLoading, error }] = usePostIndependentTaskMutation();
    
     // const required_error = error?.status === 422 ? error?.data : null;
     
@@ -59,7 +59,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const projectInfo = {
       minutes_left: 0,
       milestones: []
-    }, milestoneDataIsFetching = false, isLoading = false;
+    }, milestoneDataIsFetching = false;
 
     // handle change
     React.useEffect(() => {
@@ -95,10 +95,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
 
-        if(milestone === null){
-            err.milestone = "Select a milestone";
-            errCount++;
-        }
+        // if(milestone === null){
+        //     err.milestone = "Select a milestone";
+        //     errCount++;
+        // }
 
         if(!startDate){
             err.startDate = "Start date is required";
@@ -120,15 +120,15 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
  
-        if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
-            err.estimateError = "Estimate time not less than 0";
-            errCount++;
-        }
+        // if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
+        //     err.estimateError = "Estimate time not less than 0";
+        //     errCount++;
+        // }
 
-        if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
-            err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
-            errCount++;
-        }
+        // if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
+        //     err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
+        //     errCount++;
+        // }
 
 
         setFormError(err); 
@@ -157,6 +157,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         // fd.append("deliverable_id", milestone?.deliverable_type ?? '');
         // fd.append("milestone_id", milestone?.id ?? ''); 
         fd.append("user_id", assignedTo?.id ?? '');
+        fd.append("id",`IND_TASK_${Date.now()}`);
+        fd.append("isIndependent",1);
 
         
         Array.from(files).forEach((file) => {
@@ -180,37 +182,30 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         console.log(result);
  
         if(isValid()){
-            // storeProjectTask(fd)
-            // .unwrap()
-            // .then((res) => { 
-            //     onSuccess();
-            //     close();
+            postIndependentTask(fd)
+            .unwrap()
+            .then((res) => { 
+                onSuccess();
+                close();
 
-            //     Swal.fire({
-            //         position: "center",
-            //         icon: "success",
-            //         title: res.message,
-            //         showConfirmButton: false,
-            //         timer: 2500,
-            //     }); 
-            // })
-            // .catch((err) => {
-            //     if (err?.status === 422) {
-            //         Swal.fire({
-            //             position: "center",
-            //             icon: "error",
-            //             title: "Please fillup all required fields",
-            //             showConfirmButton: true,
-            //         });
-            //     }
-            // });
-            Swal.fire({
-                      position: "center",
-                      icon: "success",
-                      title: res.message,
-                      showConfirmButton: false,
-                      timer: 2500,
-                  }); 
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: res.message,
+                    showConfirmButton: false,
+                    timer: 2500,
+                }); 
+            })
+            .catch((err) => {
+                if (err?.status === 422) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Please fillup all required fields",
+                        showConfirmButton: true,
+                    });
+                }
+            });
         }else {
             Swal.fire({
                 position: "center",
