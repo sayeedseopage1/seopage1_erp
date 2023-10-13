@@ -9,7 +9,7 @@ export function singleTaskPagePermission (task, auth) {
     // check is auth
     const isAuth = auth.getRoleId() === 1;
     const pmPermission = task.projectManagerId === auth.getId();
-    hasPermission = isAuth || pmPermission;
+    hasPermission = true;
 
     return hasPermission;
 }

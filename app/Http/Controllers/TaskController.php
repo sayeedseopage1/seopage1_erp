@@ -1659,26 +1659,26 @@ class TaskController extends AccountBaseController
         $left_in_minutes = $left_minutes % 60;
         //dd($left_minutes);
         if ($left_minutes < 0) {
-            return response()->json([
-                "message" => "The given data was invalid.",
-                "errors" => [
-                    "hours" => [
-                        "Estimate hours cannot exceed from project allocation hours !"
-                    ]
-                ]
-            ], 422);
+            // return response()->json([
+            //     "message" => "The given data was invalid.",
+            //     "errors" => [
+            //         "hours" => [
+            //             "Estimate hours cannot exceed from project allocation hours !"
+            //         ]
+            //     ]
+            // ], 422);
         }
        
        
         if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
-            return response()->json([
-                "message" => "Wrong Input",
-                "errors" => [
-                    "hours" => [
-                        "Estimate hours and minutes cannot be 0 !"
-                    ]
-                ]
-            ], 422);
+            // return response()->json([
+            //     "message" => "Wrong Input",
+            //     "errors" => [
+            //         "hours" => [
+            //             "Estimate hours and minutes cannot be 0 !"
+            //         ]
+            //     ]
+            // ], 422);
         }
 
 
@@ -5526,8 +5526,7 @@ class TaskController extends AccountBaseController
             $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
             $task->deliverable_id = $pendingParentTasks->deliverable_id;
             $task->milestone_id = $pendingParentTasks->milestone_id;
-            // $task->user_id = $pendingParentTasks->user_id;
-            $task->added_by = Auth::user()->id;
+            $task->added_by = $pendingParentTasks->added_by;
             $task->save();
             if ($request->hasFile('file')) {
 
@@ -5627,12 +5626,11 @@ class TaskController extends AccountBaseController
                     'created_by_user.name as created_by_name',
                     'replied_by_user.id as replied_by_id',
                     'replied_by_user.name as replied_by_name',
-                    'approved_by.name as approved_by_name',
-                    'approved_by.image as approved_by_avatar',
+                  
                 ])
                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
-                ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
+              
                 ->get();
 
         return response()->json([
@@ -5663,12 +5661,11 @@ class TaskController extends AccountBaseController
                                                     'created_by_user.name as created_by_name',
                                                     'replied_by_user.id as replied_by_id',
                                                     'replied_by_user.name as replied_by_name',
-                                                    'approved_by.name as approved_by_name',
-                                                    'approved_by.image as approved_by_avatar',
+                                                   
                                                 ])
                                                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                                                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
-                                                ->leftJoin('users as approved_by','pending_parent_tasks.authorize_by','=','approved_by.id')
+                                              
                                                 ->get();
 
 

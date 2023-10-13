@@ -18,8 +18,7 @@ const RevisionViewModal = ({task, close}) => {
   const dispatch = useDispatch();
   const { data: revision, isFetching } = useGetRevisionDetailsQuery(task?.id);
 //   const [revisionAcceptOrDeny, {isLoading: isLoadingRevisionReview}] = useRevisionAcceptOrDenyMutation();
-  const auth = window?.Laravel?.user;
-
+  const auth = new User(window?.Laravel?.user);
   const [
     revisionAcceptOrDeny,
     {isLoading: isLoadingRevisionReview}
@@ -44,7 +43,7 @@ const RevisionViewModal = ({task, close}) => {
         comment: comment?.comment ?? '',
         task_id: data?.task_id,
         project_id: task?.projectId,
-        user_id: auth?.id,
+        user_id: auth?.getId(),
         subTask: _.map(data?.comments, comment => ({...comment, is_deniable: data?.is_deniable})),
         revision_acknowledgement: data?.reason ?? '',
         revision_id: revision?.id,
@@ -76,6 +75,20 @@ const RevisionViewModal = ({task, close}) => {
     }
   }
 
+  
+  const generateModalTitle = () => {
+    if(auth.getRoleId() === 4){
+        return show === "ASSIGNEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager";
+    }else if(auth.getRoleId() === 6){
+        return show === "ASSIGNEE_TO_DEV"  ? "Revision For Developer":"Revision By Project Manager";
+    }else if(auth.getRoleId() === 9 || auth.getRoleId() === 10){
+        return "Revision By Project Manager";
+    }else return "Revision By Lead Developer"
+  }
+
+
+
+
 //   console.log({task})
   return (
     <React.Fragment>
@@ -86,15 +99,7 @@ const RevisionViewModal = ({task, close}) => {
             <div className="border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between">
                 <div className="font-weight-bold f-16">
                     Task#{task?.id}:
-                    {Number(auth?.role_id) === 6 ? (
-                        <React.Fragment>
-                            {show === "ASSIGNEE_TO_DEV"  ? "Revision For Developer":"Revision By Project Manager"}
-                        </React.Fragment>
-                    ): Number(auth?.role_id) === 4 ? (
-                        <React.Fragment>
-                            {show === "ASSIGNEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager"}
-                        </React.Fragment>
-                    ): "Revision By Lead Developer Manager"}
+                    {generateModalTitle()}
                 </div>
                 <Button onClick={close} className="">
                     <i className="fa-solid fa-xmark" />

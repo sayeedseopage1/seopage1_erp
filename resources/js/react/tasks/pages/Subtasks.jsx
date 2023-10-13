@@ -39,6 +39,8 @@ const Subtasks = () => {
                     _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
                 }else if(auth.getRoleId() === 6){
                     _data = _.filter(res.tasks, d => Number(d.added_by) === auth.getId());
+                }else if(auth.getRoleId() === 9 || auth.getRoleId() === 10){
+                    _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
                 }
 
                 const data = _.orderBy(_data, 'due_date', 'desc');
