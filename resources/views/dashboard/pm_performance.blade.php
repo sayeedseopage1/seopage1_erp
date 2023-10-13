@@ -1650,7 +1650,7 @@
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
 
-                var pm_id = {{ $pm->id }};
+                // var pm_id = {{ $pm->id }};
 
                 if (mode == 'month') {
                     // console.log(todayOnlyDate);
@@ -1683,7 +1683,7 @@
                 var mode = $(this).attr('date-mode');
                 var date;
 
-                var pm_id = {{ $pm->id }};
+                // var pm_id = {{ $pm->id }};
 
                 if (mode == 'month') {
                     monthDate = moment(monthDate).add(1, 'month');                 
@@ -1705,7 +1705,7 @@
             })
         });
 
-        function getData(mode, disableButton, date, pm_id) {
+        function getData(mode, disableButton, date) {
            // console.log(pm_id);
             $.easyAjax({
                 url: this.href,
@@ -1714,7 +1714,7 @@
                 buttonSelector: disableButton,
                 data: {
                     mode: mode,
-                    pm_id: pm_id,
+                    pm_id: {{$pm->id}},
                     startDate: date.format('YYYY-MM-DD'),
                 },
                 success: function(resp) {

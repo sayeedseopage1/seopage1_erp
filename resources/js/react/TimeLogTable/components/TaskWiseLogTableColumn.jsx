@@ -110,7 +110,7 @@ export const TaskWiseTableColumn = [
         cell: ({row, className}) =>{
             return <td className={className}>
                 {dayjs(row?.start_time).format('MMM DD, YYYY')} <br/>
-                at {dayjs(row?.start_time).format('mm:hh a')}
+                at {dayjs(row?.start_time).format('hh:mm A')}
             </td>
         }
     },
@@ -123,7 +123,7 @@ export const TaskWiseTableColumn = [
         cell: ({row, className}) =>{
             return <td className={className}>
                 {dayjs(row?.end_time).format('MMM DD, YYYY')} <br/>
-                at {dayjs(row?.end_time).format('mm:hh a')}
+                at {dayjs(row?.end_time).format('hh:mm A')}
             </td>
         }
     },

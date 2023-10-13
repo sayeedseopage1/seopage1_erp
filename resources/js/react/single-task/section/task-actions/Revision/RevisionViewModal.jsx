@@ -8,6 +8,7 @@ import { useGetRevisionDetailsQuery, useRevisionAcceptOrDenyByLeadDeveloperMutat
 import { useDispatch } from 'react-redux';
 import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 import _ from 'lodash';
+import { User } from '../../../../utils/user-details';
 
 
 const RevisionViewModal = ({task, close}) => {
