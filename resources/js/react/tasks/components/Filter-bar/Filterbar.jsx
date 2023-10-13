@@ -6,7 +6,7 @@ import StatusFilter from "./StatusFilter";
 import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
-import { useAuth } from '../../../hooks/useAuth'
+import { useAuth } from "../../../hooks/useAuth";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -64,6 +64,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         date_filter_by,
     ]);
 
+
     return (
         <div className="sp1_task_filter_bar">
             <JqueryDateRangePicker
@@ -101,10 +102,21 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         roleIds={[1, 4]}
                     />
 
-
                     <HDivider />
 
-                    {page === "subtasks" ? (
+                    {page !== "subtasks" && (
+                        <>
+                            <UserFilter
+                                title="Assigned To"
+                                state={developer}
+                                setState={setDeveloper}
+                                roleIds={[4, 6, 9, 10]}
+                            />
+                            <HDivider />
+                        </>
+                    )}
+
+                    {/* {page === "subtasks" ? (
                         <UserFilter
                             title="Assigned To"
                             state={developer}
@@ -118,9 +130,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                             setState={setDeveloper}
                             roleIds={[4, 6, 9, 10]}
                         />
-                    )}
+                    )} */}
 
-                    <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
                     <HDivider />
                     <DateTypeFilter state={dateType} setState={setDateType} />

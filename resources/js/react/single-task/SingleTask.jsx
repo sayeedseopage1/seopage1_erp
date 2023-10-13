@@ -26,8 +26,6 @@ import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
 import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
-import { singleTaskPagePermission } from "./permissions";
-import ERROR from "../global/ERROR";
 import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
 
 

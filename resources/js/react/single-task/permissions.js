@@ -2,17 +2,7 @@ import _ from "lodash";
 import { User } from "../utils/user-details";
 
 
-// * task page permission
 
-export function singleTaskPagePermission (task, auth) {
-    let hasPermission = false;
-    // check is auth
-    const isAuth = auth.getRoleId() === 1;
-    const pmPermission = task.projectManagerId === auth.getId();
-    hasPermission = true;
-
-    return hasPermission;
-}
 
 // permission for timer control
 export function timeControlPermision({task, status, loggedUser }){
@@ -148,7 +138,7 @@ export function submitForClientApproval({task, status, auth}){
     let statusId = status ? status.id : -1;
     let assignedUser = task?.assigneeBy;
 
-    // if status id 6 show timer start button
+    // if status id 8 show timer start button
     if([8].includes(Number(statusId))){ statusPermission = true; }
 
     // if task assign to
@@ -157,7 +147,7 @@ export function submitForClientApproval({task, status, auth}){
         auth?.getRoleId() === 4) ||
         auth?.getRoleId() === 1
     ){
-        assigneePermission = true;
+        assigneePermission = !task.isSubtask;
     }
 
     return statusPermission && assigneePermission;

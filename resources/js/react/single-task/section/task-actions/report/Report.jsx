@@ -4,24 +4,34 @@ import Modal from "../../../components/Modal";
 import { SingleTask } from "../../../../utils/single-task";
 import Loader from "../../../components/Loader";
 const ReportForm = lazy(() => import("./ReportForm"));
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+
 
 const ReportControl = ({ task }) => {
-    const [reportModalOpen, setReportModalOpen] = useState(false); 
+    // const [reportModalOpen, setReportModalOpen] = useState(false);
 
-    const close = () => setReportModalOpen(false);
+    const [searchParams] = useSearchParams(); // get search params
+    const isVisible = searchParams.get("modal") === "report"; // check has modal 
+    const navigate = useNavigate();
+    const location = useLocation();
+
+
+    // const close = () => setReportModalOpen(false);
+    const close = () => navigate(location.pathname, {replace: true})
 
     return (
         <React.Fragment>
-            <Button
+            {/* <Button
                 variant="tertiary"
                 onClick={() => setReportModalOpen(true)}
-                className="ml-auto d-flex align-items-center sp1-st-revision-btn --view-revision sp1_report_btn"
+                //className="d-flex align-items-center sp1-st-revision-btn --view-revision sp1_report_btn"
+                className="single_task_action_dd_item"
             >
                 <i className="fa-solid fa-flag"></i>
                 <span className="d-inline ml-1">Report</span>
-            </Button>
+            </Button> */}
 
-            <Modal isOpen={reportModalOpen} className="sp1_single_task--modal">
+            <Modal isOpen={isVisible} className="sp1_single_task--modal">
                 <div className="sp1_single_task--modal-panerl-wrapper">
                     <div
                         className="sp1_single_task--modal-panel task-report-form--modal-panel"
