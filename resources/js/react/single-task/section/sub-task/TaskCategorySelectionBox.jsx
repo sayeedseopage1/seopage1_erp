@@ -2,9 +2,9 @@ import { Combobox } from '@headlessui/react'
 import * as React from 'react'
 import SearchBox from '../../components/form/Searchbox';
 import _  from 'lodash';
-import { useGetTaskDetailsQuery } from '../../../services/api/SingleTaskPageApi';
 import { useParams } from 'react-router-dom';
 import Loader from '../../components/Loader';
+import { useGetTaskDetailsQuery } from '../../../../react-latest/services/api/SingleTaskPageApi';
 
 
 
