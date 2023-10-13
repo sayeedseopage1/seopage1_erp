@@ -1645,19 +1645,19 @@
                 $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
                     monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
             }
-            
+
             // previos btn action
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
 
-                var pm_id = {{ $pm->id }};
+                // var pm_id = {{ $pm->id }};
 
                 if (mode == 'month') {
                     // console.log(todayOnlyDate);
                     if (todayOnlyDate <= targeted_day) {
                         // console.log({date:moment(monthDate).format('MMMM, YYYY'),today:todayOnlyDate});
                         // console.log("less then 15 =>", moment(monthDate).format('MMMM, YYYY'));
-                    
+
                         monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
 
                         // console.log("less than or equal 15 =>", moment(monthDate).format('MMMM, YYYY'));
@@ -1683,11 +1683,11 @@
                 var mode = $(this).attr('date-mode');
                 var date;
 
-                var pm_id = {{ $pm->id }};
+                // var pm_id = {{ $pm->id }};
 
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).add(1, 'month');                 
-                    
+                    monthDate = moment(monthDate).add(1, 'month');
+
                     $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                     moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
                     date = monthDate
@@ -1705,8 +1705,8 @@
             })
         });
 
-        function getData(mode, disableButton, date, pm_id) {
-           // console.log(pm_id);
+        function getData(mode, disableButton, date) {
+        //    console.log(pm_id);
             $.easyAjax({
                 url: this.href,
                 type: "GET",
@@ -1714,7 +1714,7 @@
                 buttonSelector: disableButton,
                 data: {
                     mode: mode,
-                    pm_id: pm_id,
+                    pm_id: {{ $pm->id }},
                     startDate: date.format('YYYY-MM-DD'),
                 },
                 success: function(resp) {

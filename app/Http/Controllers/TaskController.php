@@ -1668,8 +1668,8 @@ class TaskController extends AccountBaseController
             //     ]
             // ], 422);
         }
-       
-       
+
+
         if ($request->estimate_hours == 0 && $request->estimate_minutes == 0) {
             // return response()->json([
             //     "message" => "Wrong Input",
@@ -5557,44 +5557,6 @@ class TaskController extends AccountBaseController
             $pendingParentTasks->comment = $request->comment;
             $pendingParentTasks->authorize_by = Auth::user()->id;
             $pendingParentTasks->save();
-
-            $task = new Task();
-            $task->heading = $pendingParentTasks->heading;
-            $task->description = $pendingParentTasks->description;
-            $task->start_date = $pendingParentTasks->start_date;
-            $task->due_date = $pendingParentTasks->due_date;
-            $task->project_id = $pendingParentTasks->project_id;
-            $task->task_category_id = $pendingParentTasks->category_id;
-            $task->priority = $pendingParentTasks->priority;
-            $task->board_column_id = $pendingParentTasks->board_column_id;
-            $task->estimate_hours = $pendingParentTasks->estimate_hours;
-            $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
-            $task->deliverable_id = $pendingParentTasks->deliverable_id;
-            $task->milestone_id = $pendingParentTasks->milestone_id;
-            // $task->user_id = $pendingParentTasks->user_id;
-            $task->added_by = Auth::user()->id;
-            $task->save();
-            if ($request->hasFile('file')) {
-
-                foreach ($request->file as $fileData) {
-                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $file->task_id = $task->id;
-
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
-
-                    $file->user_id = $task->user_id;
-                    $file->filename = $fileData->getClientOriginalName();
-                    $file->hashname = $filename;
-                    $file->size = $fileData->getSize();
-                    $file->save();
-
-                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
-                }
-            }
-            $task_user = new TaskUser();
-            $task_user->task_id = $task->id;
-            $task_user->user_id = $pendingParentTasks->user_id;
-            $task_user->save();
         }
         return response()->json(['status'=>200]);
     }
@@ -5626,11 +5588,11 @@ class TaskController extends AccountBaseController
                     'created_by_user.name as created_by_name',
                     'replied_by_user.id as replied_by_id',
                     'replied_by_user.name as replied_by_name',
-                  
+
                 ])
                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
-              
+
                 ->get();
 
         return response()->json([
@@ -5661,11 +5623,11 @@ class TaskController extends AccountBaseController
                                                     'created_by_user.name as created_by_name',
                                                     'replied_by_user.id as replied_by_id',
                                                     'replied_by_user.name as replied_by_name',
-                                                   
+
                                                 ])
                                                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                                                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
-                                              
+
                                                 ->get();
 
 
