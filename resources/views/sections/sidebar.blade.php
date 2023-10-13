@@ -317,10 +317,7 @@
 
 
                                 <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" />
-<<<<<<< HEAD
-=======
                                 <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" />
->>>>>>> ff92b39107c400bc0eed8d282699a53b294b5da5
 
 
                             {{-- @endif --}}
