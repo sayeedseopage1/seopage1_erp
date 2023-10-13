@@ -13,11 +13,14 @@
     border-radius: 4px;
     color: #777;
     border: 1px solid rgba(151, 151, 151, 0.219);
+    font-family: Inter;
+    font-weight: 500 !important;
 }
 
 .sp1_tlr_tab:hover{
     color: #fff;
     background-color: rgba(21, 88, 245, 0.063);
+    border: 1px solid rgba(151, 151, 151, 0.219) !important;
 }
 
 .sp1_tlr_tab.active{

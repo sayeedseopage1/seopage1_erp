@@ -5,14 +5,22 @@ import { Placeholder } from '../../../../global/Placeholder'
 import { User } from '../../../../utils/user-details'
 import SubmitButton from '../../../components/SubmitButton'
 
-const RevisionVeiw = ({revision, isLoading, onAccept, onDeny, onContinue, isContinue}) => { 
-    const auth = new User(window?.Laravel?.user); 
-    const comment = auth?.getRoleId() === 6 ? revision?.pm_comment: revision?.lead_comment; 
+const RevisionView = ({revision, isLoading, onAccept, onDeny, onContinue, isContinue}) => {
+    const auth = new User(window?.Laravel?.user);
 
 
+    const getComment = () => {
+        const roleId = auth?.getRoleId();
+        if(roleId === 6 || roleId === 9 || roleId === 10){
+            return revision?.pm_comment;
+        }else {
+            return revision?.lead_comment;
+        }
+    }
+    const comment = getComment();
     if(isLoading){
         return (
-            <React.Fragment> 
+            <React.Fragment>
                 <div>
                     <div>
                         <Placeholder width='450px' className='mb-2' />
@@ -21,7 +29,7 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny, onContinue, isCont
                 </div>
 
                 <div className='st_revision_comment mb-4'>
-                    
+
                     {isLoading &&
                         <div>
                             <Placeholder width='100%' className='mb-2' />
@@ -29,15 +37,15 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny, onContinue, isCont
                             <Placeholder width='30%' className='mb-2' />
                         </div>
                     }
-                </div>  
+                </div>
             </React.Fragment>
         )
     }else if(!comment && !isLoading){
         return null;
     }else{
         return (
-            <React.Fragment> 
-                {revision?.revision_acknowledgement && 
+            <React.Fragment>
+                {revision?.revision_acknowledgement &&
                     <div>
                         {!isLoading ? (
                             <p>
@@ -50,10 +58,10 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny, onContinue, isCont
                         </div>}
                     </div>
                 }
-        
+
                 <div className='st_revision_comment'>
                     {!isLoading && <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: comment}} />}
-                    
+
                     {isLoading &&
                         <div>
                             <Placeholder width='100%' className='mb-2' />
@@ -61,7 +69,7 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny, onContinue, isCont
                             <Placeholder width='30%' className='mb-2' />
                         </div>
                     }
-                </div> 
+                </div>
                 <div className="mt-4 mb-2 d-flex align-items-center">
                    {!isLoading && (
                         revision?.is_deniable ? (
@@ -69,30 +77,30 @@ const RevisionVeiw = ({revision, isLoading, onAccept, onDeny, onContinue, isCont
                                 <Button onClick={onDeny} variant="tertiary" className="ml-auto mr-2">
                                     Deny & Continue
                                 </Button>
-                
+
                                 <AcceptAndContinueButton
-                                    onClick={onAccept} 
+                                    onClick={onAccept}
                                     isLoading={false}
                                 />
                             </React.Fragment>
-                        ): 
-                                <React.Fragment>
-                                    <div className='ml-auto'>
-                                    <SubmitButton 
-                                        onClick={onContinue} 
-                                        variant="primary"  
-                                        isLoading={isContinue} 
-                                        title="Continue" 
-                                    />
-                                    </div>
-                                </React.Fragment>
-                    ) 
+                        ):
+                            <React.Fragment>
+                                <div className='ml-auto'>
+                                <SubmitButton
+                                    onClick={onContinue}
+                                    variant="primary"
+                                    isLoading={isContinue}
+                                    title="Continue"
+                                />
+                                </div>
+                            </React.Fragment>
+                    )
                    }
                 </div>
             </React.Fragment>
           )
     }
-  
+
 }
 
-export default RevisionVeiw
+export default RevisionView

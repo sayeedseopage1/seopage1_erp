@@ -1,0 +1,44 @@
+.dispute-status-tooltip{
+    position: relative;
+}
+
+.tooltip{
+    background-color: #1d82f5;
+    z-index: 1;
+    border-radius: 6px;
+    /* border: 1px solid #41c7e2; */
+    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
+
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+
+.arrow{
+    overflow: hidden;
+    width: 12px;
+    height: 10px;
+}
+
+.arrow::before{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(29, 130, 245);
+    content: '';
+    /* border: 1px solid #41c7e2; */
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    transform-origin: center;
+    top: -7px;
+    left: 1px;
+}
+
+
+.tooltip_content{
+    font-size: 10px;
+    padding: 1px 6px;
+    color: white;
+}

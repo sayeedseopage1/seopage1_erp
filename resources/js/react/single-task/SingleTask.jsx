@@ -26,38 +26,56 @@ import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
 import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
+import { singleTaskPagePermission } from "./permissions";
+import ERROR from "../global/ERROR";
+import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
 
 
 const SingleTaskPage = () => {
     const { task:Task } = useSelector((s) => s.subTask);
+    const { throwError } = useErrorHandler();
     const dispatch = useDispatch();
     const params = useParams();
     const { data, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`, { refetchOnMountOrArgChange: true});
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
 
+    const task = new SingleTask(Task); // task instance
+    const loggedUser = new User(window?.Laravel?.user); // logged users data
+
 
 
     useEffect(() => {
-        if (data) {
-            let task = {
-                ...data?.task,
-                parent_task_title: data?.parent_task_heading?.heading || null,
-                parent_task_action: data?.parent_task_action,
-                subtask: data?.subtasks,
-                working_environment: data?.working_environment,
-                working_environment_data: data?.working_environment_data,
-                pm_task_guideline: data?.task_guideline,
-                task_revisions: data?.revisions,
-                taskSubTask: data?.Sub_Tasks,
+        (() => {
+            if (data) {
+                let task = {
+                    ...data?.task,
+                    parent_task_title: data?.parent_task_heading?.heading || null,
+                    parent_task_action: data?.parent_task_action,
+                    subtask: data?.subtasks,
+                    working_environment: data?.working_environment,
+                    working_environment_data: data?.working_environment_data,
+                    pm_task_guideline: data?.task_guideline,
+                    task_revisions: data?.revisions,
+                    taskSubTask: data?.Sub_Tasks,
+                }
+                const _task = new SingleTask(task);
+                let hasPermission = singleTaskPagePermission(_task, loggedUser);
+
+                if(!hasPermission){
+                    return throwError({
+                        title: 'Access Denied',
+                        message: "Access to this resource is forbidden. Please contact the administrator for assistance.",
+                        code: 403
+                    })
+                }else{
+                    dispatch(storeTask(task));
+                }
+
             }
-            dispatch(storeTask(task));
-        }
+        })()
     }, [data]);
 
     const loadingClass = isFetching ? "skeleton-loading" : "";
-    const loggedUser = new User(window?.Laravel?.user);
-    const task = new SingleTask(Task);
-
 
     if(isFetching){
         return <Loading isLoading={isFetching} />
@@ -116,7 +134,6 @@ const SingleTaskPage = () => {
                                             </a>
                                         </div>
                                     </div>
-
                                     <div className="sp1_st-list-item">
                                         <div className="sp1_st-list-item-head">Client : </div>
                                         <div className="sp1_st-list-item-value">
@@ -124,6 +141,48 @@ const SingleTaskPage = () => {
                                             <span>
                                                 {task?.clientName}
                                             </span>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div className="sp1_st-list-item">
+                                        <div className="sp1_st-list-item-head">Project Manager: </div>
+
+                                        <div className="sp1_st-list-item-value">
+                                            <div style={{ width: "32px", height: "32px" }}>
+                                                <img
+                                                    src={`/user-uploads/avatar/${task?.projectManagerAvatar}`}
+                                                    alt={task?.projectManagerName}
+                                                    width="32px"
+                                                    height="32px"
+                                                    className="rounded-circle"
+                                                />
+                                            </div>
+                                            <div className="ml-2">
+                                                <span
+                                                    className={`d-block f-14 font-weight-bold`}
+                                                >
+                                                    <a
+                                                        href={`/account/employees/${task?.projectManagerId}`}
+                                                        className="hover-underline"
+                                                    >
+                                                        {task?.projectManagerName}</a>
+                                                    {Number(task?.projectManagerId) ===
+                                                        Number(loggedUser?.getId()) && (
+                                                        <sup
+                                                            className="rounded-pill bg-dark text-white px-1 ml-1"
+                                                            style={{ fontSize: "10px", whiteSpace: 'nowrap' }}
+                                                        >
+                                                            It's You
+                                                        </sup>
+                                                    )}
+                                                </span>
+
+                                                <span style={{ fontSize: "12px" }}>
+                                                   {task?.projectManagerDesignation}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -352,7 +411,6 @@ const SingleTaskPage = () => {
                                         }
 
                                     </Accordion>
-
                                 }
 
                                 <Accordion
@@ -450,7 +508,7 @@ const SingleTaskPage = () => {
                         </div>
                         {/* comments */}
                         {task && task?.id && <SubmittedWork task={task} />}
-                        {  !_.includes([5, 9, 10], loggedUser?.getRoleId()) && <SubTaskSection status={taskStatus} />}
+                        { !task.isSubtask && <SubTaskSection status={taskStatus} />}
                         {task && task?.id  && <DailySubmissionSection task={task} />}
                         {task && task?.id && <CommentSection task={task} isLoading={isFetching} /> }
                         <NoteSection />

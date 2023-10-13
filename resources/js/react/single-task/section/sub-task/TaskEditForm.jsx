@@ -27,6 +27,7 @@ import { useUpdateTaskMutation } from "../../../services/api/tasksApiSlice";
 import { useGetMilestoneDetailsQuery, useLazyGetMilestoneDetailsQuery } from "../../../services/api/projectApiSlice";
 import { Listbox } from "@headlessui/react";
 import Loader from "../../../global/Loader";
+import { convertTime } from "../../../utils/converTime";
 
 const dayjs = new CompareDate();
 
@@ -500,9 +501,9 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                                 {estimateError(required_error)}
                             </div>
                             <div style={{ color: "red" }}>
+                                {console.log({a: projects?.minutes_left})}
                                 Estimation time can't exceed{" "}
-                                {estimation?.hours_left} hours{" "}
-                                {estimation?.minutes_left} minutes
+                                {convertTime(Number(projects?.minutes_left) > 0 ? Number(projects?.minutes_left) : 0)}
                             </div>
                         </div>
                     </div>

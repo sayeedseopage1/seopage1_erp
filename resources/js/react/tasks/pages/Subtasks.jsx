@@ -11,6 +11,7 @@ import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 import { User } from "../../utils/user-details";
 import TableFilter from "../components/table/TableFilter";
 import _ from "lodash";
+import { defaultColumnVisibility } from "../constant";
 
 const Subtasks = () => {
     const {tasks} = useSelector(s => s.tasks)
@@ -18,7 +19,7 @@ const Subtasks = () => {
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
     const auth = new User(window.Laravel.user);
-    const [columnVisibility, setColumnVisibility] = React.useState({})
+    const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
 
     const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
 
@@ -32,7 +33,17 @@ const Subtasks = () => {
             getAllSubtask(`${queryString}`)
             .unwrap()
             .then(res => {
-                const data = _.orderBy(res?.tasks, 'due_date', 'desc');
+
+                let _data = res?.tasks
+                if(auth.getRoleId() === 4){
+                    _data = _.filter(res.tasks, d => Number(d.project_manager_id) === auth.getId());
+                }else if(auth.getRoleId() === 6){
+                    _data = _.filter(res.tasks, d => Number(d.added_by) === auth.getId());
+                }else if(auth.getRoleId() === 9 || auth.getRoleId() === 10){
+                    _data = _.filter(res.tasks, d => Number(d.assigned_to_id) === auth.getId());
+                }
+
+                const data = _.orderBy(_data, 'due_date', 'desc');
                 dispatch(storeSubTasks({subtasks: data}))
             })
             .catch(err => console.log(err))

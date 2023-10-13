@@ -30,7 +30,7 @@ export const SubTasksTableColumns = [
       header: 'Task',
       accessorFn: (row) => `${row.id}${row.heading}`,
       cell: ({row}) => {
-        const data = row?.original;  
+        const data = row?.original;
         return (
           <abbr title={data?.heading} style={{textDecoration: 'none'}}>
             <div className='d-flex align-items-center' style={{gap: '10px'}}>
@@ -60,13 +60,13 @@ export const SubTasksTableColumns = [
          }
 
          const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
-         
+
         const color = (isActive || clockIsRunning) ? '#54B688' : '#DCDEE1'
         return(
           <div style={{color}} className='d-flex align-items-center'>
             <i className="fa-solid fa-stopwatch f-18"/>
             {row.parentId === undefined && subtaskCount === 0 && !clockIsRunning && <span className='ml-2'><strong>{count}</strong></span>}
-            {clockIsRunning && 
+            {clockIsRunning &&
               <span className='ml-1 badge badge-primary text-white' style={{fontSize: '11px'}}>
                 {<StopWatch time={timer} run={clockIsRunning} />}
               </span>
@@ -74,7 +74,7 @@ export const SubTasksTableColumns = [
           </div>
         )
       }
-    }, 
+    },
     {
       id: 'milestone',
       header: 'Milestone',
@@ -102,7 +102,7 @@ export const SubTasksTableColumns = [
               {data?.deliverable_title ?? '--'}
             </span>
           </abbr>
-          
+
         )
       }
     },
@@ -120,7 +120,7 @@ export const SubTasksTableColumns = [
           </abbr>
         )
       }
-    }, 
+    },
     {
       id: 'client',
       header: 'Client',
@@ -133,11 +133,11 @@ export const SubTasksTableColumns = [
               url={`/account/clients/${data?.client_id}`}
               avatar={data?.client_avatar}
               name={data?.client_name}
-            /> 
+            />
           </div>
         )
       }
-    }, 
+    },
     {
       id: 'project_manager',
       header: 'Project Manager',
@@ -149,11 +149,11 @@ export const SubTasksTableColumns = [
             url={`/account/employees/${data?.project_manager_id}`}
             name={data?.pm_id_name}
             avatar={data?.pm_id_avatar}
-          /> 
+          />
         )
       }
     },
-    
+
     {
       id: 'creation_date',
       header: 'Creation Date',
@@ -166,7 +166,7 @@ export const SubTasksTableColumns = [
           </span>
         )
       }
-    }, 
+    },
     {
       id: 'due_date',
       header: 'Due Date',
@@ -183,15 +183,15 @@ export const SubTasksTableColumns = [
         }else if(compareDate.isAfter(currentDate, date)){
           color= 'red'
         }
-        
+
         date = date === 'Today' ? date : dayjs(date).format('DD-MM-YYYY');
         return(
           <span style={{color: color}}>
-           <strong>{date ?? '--'}</strong> 
+           <strong>{date ?? '--'}</strong>
           </span>
         )
       }
-    }, 
+    },
     {
       id: 'start_date',
       header: 'Started Date',
@@ -202,13 +202,13 @@ export const SubTasksTableColumns = [
           <strong>
             {data?.start_date ? (
               <>
-                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
+                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/>
               </>
             ): '--'}
           </strong>
         )
       }
-    }, 
+    },
     {
       id: 'completion_date',
       header: 'Completion Date',
@@ -217,18 +217,18 @@ export const SubTasksTableColumns = [
         const data = row?.original;
         return(
           <strong>
-            {Number(data?.board_column_id) === 4 ? 
+            {Number(data?.board_column_id) === 4 ?
               data?.completion_date && (
                 <>
-                  {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
+                  {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/>
                 </>
               ): '--'
-            } 
+            }
           </strong>
         )
       }
-    }, 
-    
+    },
+
     {
       id: 'approved_on',
       header: 'Approved On',
@@ -236,7 +236,7 @@ export const SubTasksTableColumns = [
       cell: ({row}) => {
         const data = row?.original;
         return(
-          <strong> 
+          <strong>
             {data?.task_approval_date ? (
               <>
                 {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
@@ -245,7 +245,7 @@ export const SubTasksTableColumns = [
           </strong>
         )
       }
-    }, 
+    },
     {
       id: 'estimated_time',
       header: 'Estimated Time',
@@ -258,7 +258,7 @@ export const SubTasksTableColumns = [
           </div>
         )
       }
-    }, 
+    },
     {
       id: 'hours_logged',
       header: 'Hours Logged',
@@ -270,8 +270,8 @@ export const SubTasksTableColumns = [
           </div>
         )
       }
-    }, 
-    
+    },
+
     {
       id: 'assigned_by',
       header: 'Assigned By',
@@ -283,7 +283,7 @@ export const SubTasksTableColumns = [
             url={`/account/employees/${data?.added_by}` }
             avatar={data?.added_by_avatar}
             name={data?.added_by_name}
-          /> 
+          />
         )
       }
     },
@@ -293,12 +293,12 @@ export const SubTasksTableColumns = [
       accessorKey: 'assigned_to_name',
       cell: ({row}) => {
         const data = row?.original;
-        return( 
+        return(
           <Person
             url={`/account/employees/${data?.assigned_to_id}` }
             avatar={data?.assigned_to_avatar}
             name={data?.assigned_to_name}
-          /> 
+          />
         )
       }
     },
@@ -310,53 +310,53 @@ export const SubTasksTableColumns = [
         const data = row?.original;
         return(
           <span
-            className='badge text-white' 
+            className='badge text-white'
             style={{background: data?.label_color}}
           >
             {data?.column_name}
           </span>
         )
       }
-    }, 
-    {
-      id: 'progress',
-      header: 'Progress',
-      cell: ({row}) => {
-        const data = row?.original;
-        const count = Number(data?.subtasks_count);
-        const completed = Number(data?.subtasks_completed_count);
-        let bg = 'bg-transparent';
-        let percent = 0;
+    },
+    // {
+    //   id: 'progress',
+    //   header: 'Progress',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     const count = Number(data?.subtasks_count);
+    //     const completed = Number(data?.subtasks_completed_count);
+    //     let bg = 'bg-transparent';
+    //     let percent = 0;
 
-        if(count > 0){percent = (completed / count) * 100;}
-        else{percent = Number(data?.board_column_id)=== 4 ? 100 : 0;}
-
-
-        if(percent === 100){
-          bg = 'bg-success'
-        }else if(percent < 100 && percent >= 75){
-          bg = 'bg-info';
-        }else if( percent < 75 && percent >= 25){
-          bg = 'bg-warning'
-        }else bg='bg-danger'
+    //     if(count > 0){percent = (completed / count) * 100;}
+    //     else{percent = Number(data?.board_column_id)=== 4 ? 100 : 0;}
 
 
-        return(
-          <div>
-            <div className="progress" style={{height: '16px'}}>
-                <div 
-                  className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`} 
-                  role="progressbar" 
-                  style={{width: `${percent}%`}} 
-                  aria-valuenow="10" 
-                  aria-valuemin="0" 
-                  aria-valuemax="100"
-                >{Math.floor(percent)}%</div>
-            </div>
-          </div>
-        )
-      }
-    }, 
+    //     if(percent === 100){
+    //       bg = 'bg-success'
+    //     }else if(percent < 100 && percent >= 75){
+    //       bg = 'bg-info';
+    //     }else if( percent < 75 && percent >= 25){
+    //       bg = 'bg-warning'
+    //     }else bg='bg-danger'
+
+
+    //     return(
+    //       <div>
+    //         <div className="progress" style={{height: '16px'}}>
+    //             <div
+    //               className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`}
+    //               role="progressbar"
+    //               style={{width: `${percent}%`}}
+    //               aria-valuenow="10"
+    //               aria-valuemin="0"
+    //               aria-valuemax="100"
+    //             >{Math.floor(percent)}%</div>
+    //         </div>
+    //       </div>
+    //     )
+    //   }
+    // },
     {
       id: 'report',
       header: 'Report',
@@ -372,16 +372,16 @@ export const SubTasksTableColumns = [
         const data = row?.original;
         return <ActionDropdown row={data} />
       },
-    }   
+    }
   ]
 
 
 
   // Action Dropdown
-  const ActionDropdown = ({row}) => { 
+  const ActionDropdown = ({row}) => {
     const [reportModalOpen, setReportModalOpen] = React.useState(false);
-    const singleTask = new SingleTask(row); 
-    const close = () => setReportModalOpen(false);  
+    const singleTask = new SingleTask(row);
+    const close = () => setReportModalOpen(false);
     const { subtasks } = useSelector(s => s.tasks);
     const dispatch = useDispatch();
     // handle report
@@ -393,7 +393,7 @@ export const SubTasksTableColumns = [
       instance[_index] = {...row, subtasks_reports_count: Number(row.subtasks_reports_count) + 1}
       dispatch(storeSubTasks({subtasks: [...instance]}))
     }
-    
+
     return (
       <React.Fragment>
         <Dropdown>
@@ -407,7 +407,7 @@ export const SubTasksTableColumns = [
                 <i className="fa-solid fa-bug mr-2"></i> Report
               </Dropdown.Item>
             </Dropdown.Menu>
-        </Dropdown> 
+        </Dropdown>
 
         {/* report form modal */}
         <Modal isOpen={reportModalOpen} className="sp1_single_task--modal">
@@ -430,4 +430,3 @@ export const SubTasksTableColumns = [
       </React.Fragment>
     )
   }
- 
