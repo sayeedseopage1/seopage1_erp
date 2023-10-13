@@ -87,52 +87,55 @@ export const TaskTableColumns = [
         )
       }
     }, 
-    {
-      id: 'milestone',
-      header: 'Milestone',
-      accessorKey: 'milestone_title',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <abbr title={data?.milestone_title} style={{textDecoration: 'none'}}>
-            <span className='multine-ellipsis word-break'>
-              {data?.milestone_title}
-            </span>
-          </abbr>
-        )
-      }
-    },
-    {
-      id: 'deliverable',
-      header: 'Deliverable',
-      accessorKey: 'deliverable_title',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <abbr title={data?.deliverable_title} style={{textDecoration: 'none'}}>
-            <span className='multine-ellipsis word-break'>
-              {data?.deliverable_title ?? '--'}
-            </span>
-          </abbr>
+
+    // {
+    //   id: 'milestone',
+    //   header: 'Milestone',
+    //   accessorKey: 'milestone_title',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <abbr title={data?.milestone_title} style={{textDecoration: 'none'}}>
+    //         <span className='multine-ellipsis word-break'>
+    //           {data?.milestone_title}
+    //         </span>
+    //       </abbr>
+    //     )
+    //   }
+    // },
+    
+    // {
+    //   id: 'deliverable',
+    //   header: 'Deliverable',
+    //   accessorKey: 'deliverable_title',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <abbr title={data?.deliverable_title} style={{textDecoration: 'none'}}>
+    //         <span className='multine-ellipsis word-break'>
+    //           {data?.deliverable_title ?? '--'}
+    //         </span>
+    //       </abbr>
           
-        )
-      }
-    },
-    {
-      id: 'project',
-      header: 'Project',
-      accessorFn: row => `${row.project_id}${row.project_name}`,
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <abbr title={data?.project_name} style={{textDecoration: 'none'}}>
-            <a href={`/account/projects/${data?.project_id}`} className='multine-ellipsis'>
-              {data?.project_name}
-            </a>
-          </abbr>
-        )
-      }
-    }, 
+    //     )
+    //   }
+    // },
+    
+    // {
+    //   id: 'project',
+    //   header: 'Project',
+    //   accessorFn: row => `${row.project_id}${row.project_name}`,
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <abbr title={data?.project_name} style={{textDecoration: 'none'}}>
+    //         <a href={`/account/projects/${data?.project_id}`} className='multine-ellipsis'>
+    //           {data?.project_name}
+    //         </a>
+    //       </abbr>
+    //     )
+    //   }
+    // }, 
     {
       id: 'client',
       header: 'Client',
@@ -150,21 +153,21 @@ export const TaskTableColumns = [
         )
       }
     }, 
-    {
-      id: 'project_manager',
-      header: 'Project Manager',
-      accessorKey: 'pm_id_name',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <Person
-            url={`/account/employees/${data?.project_manager_id}`}
-            name={data?.pm_id_name}
-            avatar={data?.pm_id_avatar}
-          /> 
-        )
-      }
-    },
+    // {
+    //   id: 'project_manager',
+    //   header: 'Project Manager',
+    //   accessorKey: 'pm_id_name',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <Person
+    //         url={`/account/employees/${data?.project_manager_id}`}
+    //         name={data?.pm_id_name}
+    //         avatar={data?.pm_id_avatar}
+    //       /> 
+    //     )
+    //   }
+    // },
     
     {
       id: 'creation_date',
@@ -261,20 +264,22 @@ export const TaskTableColumns = [
         )
       }
     }, 
-    {
-      id: 'estimated_time',
-      header: 'Estimated Time',
-      accessorKey: 'estimate_hours',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <div>
-            {data?.estimate_hours ?? 0} hrs <br/>
-            {data?.estimate_minutes ?? 0} mins
-          </div>
-        )
-      }
-    }, 
+
+    // {
+    //   id: 'estimated_time',
+    //   header: 'Estimated Time',
+    //   accessorKey: 'estimate_hours',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <div>
+    //         {data?.estimate_hours ?? 0} hrs <br/>
+    //         {data?.estimate_minutes ?? 0} mins
+    //       </div>
+    //     )
+    //   }
+    // }, 
+    
     {
       id: 'hours_logged',
       header: 'Hours Logged',
@@ -336,46 +341,48 @@ export const TaskTableColumns = [
         )
       }
     }, 
-    {
-      id: 'progress',
-      header: 'Progress',
-      accessorKey: 'subtasks_count',
-      cell: ({row}) => {
-        const data = row?.original;
-        const count = Number(data?.subtasks_count);
-        const completed = Number(data?.subtasks_completed_count);
-        let bg = 'bg-transparent';
-        let percent = 0;
+    
+    // {
+    //   id: 'progress',
+    //   header: 'Progress',
+    //   accessorKey: 'subtasks_count',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     const count = Number(data?.subtasks_count);
+    //     const completed = Number(data?.subtasks_completed_count);
+    //     let bg = 'bg-transparent';
+    //     let percent = 0;
 
-        if(count > 0){percent = (completed / count) * 100;}
-        else{percent = Number(data?.board_column_id) === 4 ? 100 : 0;}
-
-
-        if(percent === 100){
-          bg = 'bg-success'
-        }else if(percent < 100 && percent >= 75){
-          bg = 'bg-info';
-        }else if( percent < 75 && percent >= 25){
-          bg = 'bg-warning'
-        }else bg='bg-danger'
+    //     if(count > 0){percent = (completed / count) * 100;}
+    //     else{percent = Number(data?.board_column_id) === 4 ? 100 : 0;}
 
 
-        return(
-          <div>
-            <div className="progress" style={{height: '16px'}}>
-                <div 
-                  className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`} 
-                  role="progressbar" 
-                  style={{width: `${percent}%`}} 
-                  aria-valuenow="10" 
-                  aria-valuemin="0" 
-                  aria-valuemax="100"
-                >{Math.floor(percent)}%</div>
-            </div>
-          </div>
-        )
-      }
-    }, 
+    //     if(percent === 100){
+    //       bg = 'bg-success'
+    //     }else if(percent < 100 && percent >= 75){
+    //       bg = 'bg-info';
+    //     }else if( percent < 75 && percent >= 25){
+    //       bg = 'bg-warning'
+    //     }else bg='bg-danger'
+
+
+    //     return(
+    //       <div>
+    //         <div className="progress" style={{height: '16px'}}>
+    //             <div 
+    //               className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`} 
+    //               role="progressbar" 
+    //               style={{width: `${percent}%`}} 
+    //               aria-valuenow="10" 
+    //               aria-valuemin="0" 
+    //               aria-valuemax="100"
+    //             >{Math.floor(percent)}%</div>
+    //         </div>
+    //       </div>
+    //     )
+    //   }
+    // }, 
+    
     {
       id: 'report',
       header: 'Report',
