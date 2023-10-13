@@ -16,6 +16,7 @@ import { User } from '../../utils/user-details';
 import CKEditorComponent from '../../ui/ckeditor';
 import SubmitButton from './tasks/components/SubmitButton';
 import IndependentTaskCreationForm from './IndependentTaskCreationForm';
+import TaskAuthorization from './tasks/components/TaskAuthorization';
 
 const IndependentTaskDataTable = ({ tableData = [] }) => {
   // const [tasksType, setTasksType] = React.useState([]);
@@ -178,6 +179,10 @@ const IndependentTaskDataTable = ({ tableData = [] }) => {
 
             </div>
             {/* table nav bar */}
+
+            <div className="mr-auto ml-2 mb-2 ">
+              <TaskAuthorization />
+            </div>
 
             <div className="mb-2" style={{ maxWidth: '300px' }}>
               <SearchBox value={search} onChange={setSearch} />
