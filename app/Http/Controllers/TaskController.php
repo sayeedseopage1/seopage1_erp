@@ -5526,8 +5526,7 @@ class TaskController extends AccountBaseController
             $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
             $task->deliverable_id = $pendingParentTasks->deliverable_id;
             $task->milestone_id = $pendingParentTasks->milestone_id;
-            // $task->user_id = $pendingParentTasks->user_id;
-            $task->added_by = Auth::user()->id;
+            $task->added_by = $pendingParentTasks->added_by;
             $task->save();
             if ($request->hasFile('file')) {
 
