@@ -1,0 +1,122 @@
+.sp1_tlr_tbl_container{
+    background: #fff;
+    padding: 16px;
+    padding-bottom: 0;
+    margin: 1rem;
+    border-radius: 10px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgb(0 0 0 / 10%);
+}
+
+.sp1_tlr_tab{
+    padding: 6px 10px;
+    border-radius: 4px;
+    color: #777;
+    border: 1px solid rgba(151, 151, 151, 0.219);
+    font-family: Inter;
+    font-weight: 500 !important;
+}
+
+.sp1_tlr_tab:hover{
+    color: #fff;
+    background-color: rgba(21, 88, 245, 0.063);
+    border: 1px solid rgba(151, 151, 151, 0.219) !important;
+}
+
+.sp1_tlr_tab.active{
+    color: #fff !important;
+    background-color: var(--header_color) !important;
+}
+
+
+/* modal panel */
+.sp1_tlr--modal-panel{
+    width: 100%;
+    max-width: 80vw;
+}
+
+.sp1_tlr_loader{
+    width: 100%;
+    height: calc(100vh - 250px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sp1_tlh_resolve_btn{
+    padding-inline: 6px;
+    transition: all .3 ease-in-out;
+    border: 1px solid rgb(0 0 0 / 0%);
+}
+
+.sp1_tlh_resolve_btn:hover{
+    border: 1px solid rgb(0 0 0 / 10%);
+}
+
+.resolve--modal-panel{
+    width: 576px;
+}
+
+@media only screen and (max-width: 576px){
+    .resolve--modal-panel{
+        width: 95vw;
+    }
+}
+
+.deny_button{
+    color: #fff;
+    border-color: rgb(245, 29, 29);
+    background: rgb(245, 29, 29);
+}
+
+.deny_button:hover{
+    border-color: rgb(185, 14, 14);
+    background: rgb(185, 14, 14);
+}
+
+.cnx__table_pagination_btn:disabled{
+    color: inherit !important;
+}
+
+.sp1_tasks_column_sort_btn{
+    background-color: transparent;
+}
+
+@media only screen and (max-width: 1400px){
+    .sp1_filter_toggle{
+        padding: 4px 8px;
+        border: 1px solid #f1f1f1;
+    }
+}
+
+.sp1_task_report_modal{
+    width: 80vw;
+}
+
+.sp1_modal_items{
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sp1_task_auth_modal{
+    width: clamp(280px, 50%, 500px);
+}
+
+.revision_popover_panel{
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%);
+    /* width: clamp(255px, 100%, 350px); */
+    width: 350px;
+}
+
+.sp1_data_table_td--acknowledgement{
+    min-width: 320px;
+}
+
+.tasks_search_bar{
+    border-color: rgba(151, 151, 151, 0.219) !important;
+}
