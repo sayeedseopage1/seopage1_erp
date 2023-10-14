@@ -1100,10 +1100,15 @@ trait PmDashboard
                 $startMonth = Carbon::now()->startOfMonth()->addDays(15)->toDateString();
                 $endMonth = Carbon::now()->startOfMonth()->addMonth(1)->addDays(14)->toDateString();
                 $release_date = Carbon::now()->endOfMonth()->addMonth(1)->toDateString();
+                $nextMonth = Carbon::now()->startOfMonth()->addMonth(1)->toDateString();
+               // dd($startMonth,$endMonth, $release_date,$nextMonth);
             } else {
                 $startMonth = Carbon::now()->startOfMonth()->subMonths(1)->addDays(15)->toDateString();
                 $endMonth = Carbon::now()->startOfMonth()->addDays(14)->toDateString();
                 $release_date = Carbon::now()->endOfMonth()->toDateString();
+                $nextMonth = Carbon::now()->startOfMonth()->toDateString();
+
+             //   dd($startMonth,$endMonth, $release_date,$nextMonth);
             }
             //dd($startMonth, $endMonth,$release_date);
             $this->no_of_projects = Project::select('projects.*','pm_projects.created_at as project_start_date')
@@ -1205,8 +1210,19 @@ trait PmDashboard
             ->leftJoin('payments','payments.invoice_id','invoices.id')
             ->where('projects.pm_id', Auth::id())
            // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-           ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-            ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+        //    ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
+        //     ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+            $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+               ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                           
+        })
+      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+               $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+                ->where('project_milestones.created_at', '<', $startMonth);
+
+    })
             ->orderBy('payments.paid_on','desc')
 
             ->get();
@@ -1224,8 +1240,19 @@ trait PmDashboard
             ->where('projects.pm_id', Auth::id())
             ->where('projects.status','finished')
 
-            ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-            ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+            // ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+            // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                    ->where('pm_projects.created_at', '<', $startMonth);
+    
+        })
             ->orderBy('projects.updated_at','desc')
             ->get();
             $this->value_of_finished_projects_this_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -1241,8 +1268,19 @@ trait PmDashboard
             ->where('projects.pm_id', Auth::id())
             ->where('projects.status','finished')
 
-            ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-            ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+            // ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+            // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                    ->where('pm_projects.created_at', '<', $startMonth);
+    
+        })
             ->sum('projects.project_budget');
             $this->no_of_100_finished_project_this_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
@@ -1289,8 +1327,19 @@ trait PmDashboard
 
             ->whereNull('project_milestones.id')
            // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-           ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-            ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+        //    ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+        //     ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+            $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+               ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                           
+        })
+      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+               $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                ->where('pm_projects.created_at', '<', $startMonth);
+
+    })
             ->orderBy('projects.updated_at','desc')
             ->get();
             $this->value_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -1306,8 +1355,19 @@ trait PmDashboard
 
             ->whereNull('project_milestones.id')
            // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-           ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-            ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+        //    ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+        //     ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+            $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+               ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                           
+        })
+      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+               $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                ->where('pm_projects.created_at', '<', $startMonth);
+
+    })
             ->sum('projects.project_budget');
             $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
             $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
@@ -1444,8 +1504,19 @@ trait PmDashboard
             ->orderBy('payments.paid_on','desc')
            //->groupBy('project_milestones.id')
 
-            ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-            ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+            // ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
+            // ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+                   ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+                    ->where('project_milestones.created_at', '<', $startMonth);
+    
+        })
             ->where('projects.pm_id', Auth::id())
             ->where('project_milestones.status', 'complete')
 
@@ -1492,7 +1563,7 @@ trait PmDashboard
 
             $this->total_tasks_completed_this_cycle= Task::select('tasks.*')
             ->leftJoin('task_users','task_users.task_id','tasks.id')
-            ->where('board_column_id',4)
+            ->where('tasks.board_column_id',4)
             ->where('tasks.added_by',Auth::id())
             ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
             ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
@@ -1514,7 +1585,7 @@ trait PmDashboard
             ->leftJoin('task_users','task_users.task_id','tasks.id')
 
             ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-            ->where('board_column_id',4)
+            ->where('tasks.board_column_id',4)
             ->where('tasks.added_by',Auth::id())
 
             ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
@@ -1525,10 +1596,26 @@ trait PmDashboard
 
             $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
             ->leftJoin('task_users','task_users.task_id','tasks.id')
-            ->where('board_column_id',4)
-            ->where('tasks.added_by',Auth::id())
-            ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
-            ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+         
+            // ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
+            // ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                   ->where('tasks.board_column_id',4)
+                   ->where('tasks.added_by',Auth::id())
+                   ;
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                    ->where('tasks.created_at', '<', $startMonth)
+                    ->where('tasks.board_column_id',4)
+                    ->where('tasks.added_by',Auth::id())
+                    ;
+    
+        })
           //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
             ->count();
 
@@ -1551,11 +1638,27 @@ trait PmDashboard
             ->leftJoin('task_users','task_users.task_id','tasks.id')
 
             ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-            ->where('board_column_id',4)
-            ->where('tasks.added_by',Auth::id())
+           
 
-            ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
-            ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
+            // ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+            // ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                   ->where('tasks.board_column_id',4)
+                   ->where('tasks.added_by',Auth::id())
+                   ;
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                    ->where('tasks.created_at', '<', $startMonth)
+                    ->where('tasks.board_column_id',4)
+                    ->where('tasks.added_by',Auth::id())
+                    ;
+    
+        })
             ->orderBy('tasks.updated_at','desc')
             ->get();
             $this->average_project_completion_rate = Project::select(
@@ -1579,8 +1682,19 @@ trait PmDashboard
                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                 ->where('projects.status', 'finished')
                 ->where('projects.pm_id', Auth::id())
-                ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-                ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+                // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                        ->where('p_m_projects.created_at', '<', $startMonth);
+        
+            })
                 ->orderBy('projects.updated_at','desc')
                 ->get();
 
@@ -1612,8 +1726,19 @@ trait PmDashboard
 
                 ->where('projects.pm_id', Auth::id())
                 ->where('projects.project_status','Accepted')
-                ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-                ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+                // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                        ->where('p_m_projects.created_at', '<', $startMonth);
+        
+            })
                 ->orderBy('projects.updated_at','desc')
                 ->get();
                 $this->no_of_new_deals_added = Deal::select('deals.*')
@@ -1675,8 +1800,19 @@ trait PmDashboard
 
                     ->where('projects.status', 'finished')
                     ->where('p_m_projects.delayed_status', 1)
-                    ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-                    ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                    // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+                    // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                    ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                        $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                           ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                                       
+                    })
+                  ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                           $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                            ->where('p_m_projects.created_at', '<', $startMonth);
+            
+                })
                     ->orderBy('projects.updated_at','desc')
 
                     ->get();
@@ -1787,8 +1923,19 @@ trait PmDashboard
                     ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
                     ->where('projects.pm_id', Auth::id())
                     ->where('task_revisions.final_responsible_person','PM')
-                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-                    ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+                    // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+                    ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                        $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                           ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                                       
+                    })
+                  ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                           $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                            ->where('tasks.created_at', '<', $startMonth);
+            
+                })
                     ->groupBy('task_revisions.id')
                     ->get();
 
@@ -1808,8 +1955,19 @@ trait PmDashboard
                     ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
                     ->where('projects.pm_id', Auth::id())
                     ->where('task_revisions.final_responsible_person', '!=', 'PM')
-                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-                    ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+                    // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+                    ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                        $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                           ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                                       
+                    })
+                  ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                           $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                            ->where('tasks.created_at', '<', $startMonth);
+            
+                })
                     ->groupBy('task_revisions.id')
                     ->get();
 
@@ -1835,8 +1993,19 @@ trait PmDashboard
                     ->where('projects.pm_id', Auth::id())
                     ->where('task_revisions.dispute_created', 1)
                     ->groupBy('task_revisions.id')
-                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-                    ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+                    // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+                    ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                        $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                           ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                                       
+                    })
+                  ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                           $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                            ->where('tasks.created_at', '<', $startMonth);
+            
+                })
                     ->get();
 
 
