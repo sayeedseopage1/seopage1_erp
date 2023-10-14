@@ -66,7 +66,7 @@
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                                 Budget</td>
-                            <td class="border-left-0">{{$project->deal->actual_amount}}{{$currency->currency_symbol}}
+                            <td class="border-left-0">{{$project->deal->actual_amount + $project->deal->upsell_actual_amount}}{{$currency->currency_symbol}}
                             </td>
                         </tr>
                           <tr>

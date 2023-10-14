@@ -288,7 +288,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                           @if ($project->project_budget != 0)
                         <tr>
                             <td class="heading-table-left">@lang('Project Budget')</td>
-                            <td class="heading-table-right">{{$project->deal->actual_amount}}({{$project->deal->original_currency->currency_code}})
+                            <td class="heading-table-right">{{$project->deal->actual_amount+ $project->deal->upsell_actual_amount}}({{$project->deal->original_currency->currency_code}})
                             </td>
                         </tr>
                         @endif
