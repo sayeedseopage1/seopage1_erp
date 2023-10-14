@@ -54,12 +54,15 @@ trait PmDashboard
        if (request('mode') == 'month' && request()->ajax()) {
           //  dd(request());
             $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
-           // dd($date);
+          //  dd($date);
 
             $this->startMonth = $date->startOfMonth()->addDays(15)->toDateString();
+          
             $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(15)->toDateString();
             $this->release_date = $date->endofMonth()->toDateString();
+           
             $this->nextMonth = $date->startOfMonth()->toDateString();
+           // dd($this->startMonth,$this->endMonth,$this->release_date ,$this->nextMonth);
 
             
             $startMonth= $this->startMonth;
@@ -726,22 +729,30 @@ trait PmDashboard
                 )
                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
 
-                ->whereIn('projects.status', ['canceled','partially finished'])
-                ->where('projects.project_status','Accepted')
-
-                ->where('projects.pm_id', Auth::id())
+             
 
                 ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
                     $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
-                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                       ->whereIn('projects.status', ['canceled','partially finished'])
+                       ->where('projects.project_status','Accepted')
+           
+                       ->where('projects.pm_id', Auth::id())
+                       ;
                                    
                 })
               ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                        $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
-                        ->where('p_m_projects.created_at', '<', $startMonth);
+                        ->where('p_m_projects.created_at', '<', $startMonth)
+                        ->whereIn('projects.status', ['canceled','partially finished'])
+                        ->where('projects.project_status','Accepted')
+            
+                        ->where('projects.pm_id', Auth::id())
+                        ;
         
             })
+           
                     ->orderBy('projects.updated_at','desc')
                     ->get();
             $this->no_of_new_deals_added_previous = Deal::select('deals.*')
@@ -1722,21 +1733,28 @@ trait PmDashboard
                 )
                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
 
-                ->whereIn('projects.status', ['canceled','partially finished'])
+              
 
-                ->where('projects.pm_id', Auth::id())
-                ->where('projects.project_status','Accepted')
+                
                 // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
                 // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
                 ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
                     $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
-                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                       ->where('projects.pm_id', Auth::id())
+                ->where('projects.project_status','Accepted')
+                ->whereIn('projects.status', ['canceled','partially finished'])
+                       ;
                                    
                 })
               ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                        $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
-                        ->where('p_m_projects.created_at', '<', $startMonth);
+                        ->where('p_m_projects.created_at', '<', $startMonth)
+                        ->where('projects.pm_id', Auth::id())
+                ->where('projects.project_status','Accepted')
+                ->whereIn('projects.status', ['canceled','partially finished'])
+                        ;
         
             })
                 ->orderBy('projects.updated_at','desc')

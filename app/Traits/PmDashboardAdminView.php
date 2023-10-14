@@ -1725,20 +1725,27 @@ trait PmDashboardAdminView
              )
              ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
 
-             ->whereIn('projects.status', ['canceled','partially finished'])
-             ->where('projects.project_status','Accepted')
-
-            ->where('projects.pm_id', $this->pm->id)
+            
 
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
                  $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
-                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                    ->whereIn('projects.status', ['canceled','partially finished'])
+                    ->where('projects.project_status','Accepted')
+       
+                   ->where('projects.pm_id', $this->pm->id)
+                    ;
                                 
              })
            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                     $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
-                     ->where('p_m_projects.created_at', '<', $startMonth);
+                     ->where('p_m_projects.created_at', '<', $startMonth)
+                     ->whereIn('projects.status', ['canceled','partially finished'])
+                     ->where('projects.project_status','Accepted')
+        
+                    ->where('projects.pm_id', $this->pm->id)
+                     ;
      
          })
                  ->orderBy('projects.updated_at','desc')
@@ -2722,21 +2729,28 @@ trait PmDashboardAdminView
           )
           ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
 
-          ->whereIn('projects.status', ['canceled','partially finished'])
-
-          ->where('projects.pm_id', $this->pm->id)
-          ->where('projects.project_status','Accepted')
+         
           // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
           // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
           ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
               $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
-                 ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                 ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                 ->whereIn('projects.status', ['canceled','partially finished'])
+
+                 ->where('projects.pm_id', $this->pm->id)
+                 ->where('projects.project_status','Accepted')
+                 ;
                              
           })
         ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                  $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
-                  ->where('p_m_projects.created_at', '<', $startMonth);
+                  ->where('p_m_projects.created_at', '<', $startMonth)
+                  ->whereIn('projects.status', ['canceled','partially finished'])
+
+                  ->where('projects.pm_id', $this->pm->id)
+                  ->where('projects.project_status','Accepted')
+                  ;
   
       })
           ->orderBy('projects.updated_at','desc')
