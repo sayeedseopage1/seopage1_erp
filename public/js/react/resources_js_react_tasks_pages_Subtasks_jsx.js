@@ -636,6 +636,10 @@ var Subtasks = function Subtasks() {
           _data = lodash__WEBPACK_IMPORTED_MODULE_12___default().filter(res.tasks, function (d) {
             return Number(d.added_by) === auth.getId();
           });
+        } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
+          _data = lodash__WEBPACK_IMPORTED_MODULE_12___default().filter(res.tasks, function (d) {
+            return Number(d.assigned_to_id) === auth.getId();
+          });
         }
         var data = lodash__WEBPACK_IMPORTED_MODULE_12___default().orderBy(_data, 'due_date', 'desc');
         dispatch((0,_services_features_tasksSlice__WEBPACK_IMPORTED_MODULE_8__.storeSubTasks)({

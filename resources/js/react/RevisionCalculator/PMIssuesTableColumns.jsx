@@ -1,4 +1,4 @@
-export const PMIssuesTableColumns = [ 
+export const PMIssuesTableColumns = [
     {
         id: "project_name",
         heading: "Project Name",
@@ -7,7 +7,7 @@ export const PMIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/accounts/projects/${row?.projectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a> 
+        row: ({row}) => <a href={`/accounts/projects/${row?.ProjectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a>
     },
     {
         id: "client_name",
@@ -51,7 +51,7 @@ export const PMIssuesTableColumns = [
                 </span>
             );
         },
-    },  
+    },
     {
         id: "revision_request_raised_by",
         heading: "Revision Requested By",
@@ -72,7 +72,7 @@ export const PMIssuesTableColumns = [
                 </a>
             );
         },
-    }, 
+    },
     {
         id: "revision_requests_against",
         heading: "Revision Requests Against",
@@ -106,7 +106,7 @@ export const PMIssuesTableColumns = [
             const shortCode = row?.dispute_between;
             const tv = "";
             let against =  {url: '', name: ''};
-    
+
             if(shortCode === "CPR"){
                 against = {
                     url: `/accounts/employees/${row?.clientId}`,
@@ -130,14 +130,14 @@ export const PMIssuesTableColumns = [
                 ? _.includes(_.lowerCase(against.name), _.lowerCase(search))
                 : "";
             return (
-                <a href={against.url} 
+                <a href={against.url}
                     title={against.name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}
                 >
                     {against.name}
                 </a>
             );
         },
-    },   
+    },
     {
         id: 'reason_for_revision',
         heading: 'Reason for revision',
@@ -157,7 +157,7 @@ export const PMIssuesTableColumns = [
         row: ({row}) =>{
             return <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'NO'}</span>
         }
-    },  
+    },
     {
         id: 'total_comments',
         heading: 'Total comments',
@@ -176,7 +176,7 @@ export const PMIssuesTableColumns = [
         searchText: (row) => `${row?.verdict}`,
         row: ({row}) => <Verdict row={row} />
     },
-     
+
 ];
 
 

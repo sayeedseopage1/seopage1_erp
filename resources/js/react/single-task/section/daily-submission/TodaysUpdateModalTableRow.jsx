@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }) => {
+    const [showSubmissionForm, setShowSubmissionForm] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
     const [attachmentLink, setAttachmentLink] = useState('');
@@ -45,6 +46,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
         return valid;
     }
 
+    // console.log(process.env.APP_URL)
 
     // daily update submission function
     const handleSubmit = () => {
@@ -120,7 +122,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
 
                 <td className={`sp1_tlr_td`} style={{ minWidth: '50px' }}>{loading ? <Placeholder /> : index + 1}</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data?.task_title}</td>
-                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : 
+                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> :
                     data?.page_url ?
                         <a href={data.page_url} title={data.page_url} target="_blank">View Link</a>
                         :
@@ -156,6 +158,8 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
                     }
                 </td>
             </tr>
+
+
             {open === index && (
                 <tr className={``} style={{ border: "solid gray 1px", borderTop: "none" }}>
                     <td colSpan={6}>

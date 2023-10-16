@@ -1,42 +1,117 @@
-// import * as React from 'react'
-// import { usePopper } from 'react-popper';
-// import { motion, AnimatePresence } from 'framer-motion'; 
-// import SubTaskForm from './SubTaskForm';
+import * as React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
+import { SingleTask } from "../../../utils/single-task";
+import { useAuth } from "../../../hooks/useAuth";
+import SubTaskForm from "./SubTaskForm";
+import Button from "../../components/Button";
+import LeadConfirmationModal from "./LeadConfirmationModal";
 
+const VisibleItem = ({ isVisible, children }) => {
+    if (!isVisible) return null;
+    return children;
+};
 
-// const SubTaskFormModal = ({toggleRef = null,  isOpen, close, children}) => {
-//     const [modalRef, setModalRef] = React.useState(null); 
-//     const { styles, attributes } = usePopper(toggleRef, modalRef,{
-//         placement: 'left-start',
-//         modifiers: [
-//             {name: 'offset', options: {offset: [-100, -10]}}
-//         ]
-//     })
+const WithContainer = ({ children, close, visibleEnvironmentForm }) => {
+    return (
+        <div className="sp1-subtask-form --modal-panel">
+            <div className="sp1-subtask-form --modal-panel-header">
+                <h6>
+                    {visibleEnvironmentForm
+                        ? "Working Environment"
+                        : "Create Sub Task"}
+                </h6>
+                <Button
+                    aria-label="close-modal"
+                    className="_close-modal"
+                    onClick={close}
+                >
+                    <i className="fa-solid fa-xmark" />
+                </Button>
+            </div>
 
-//   return (
-//     <div 
-//         ref={setModalRef}
-//         style={{
-//             ...styles.popper,
-//              pointerEvents: isOpen ? 'all' : 'none', 
-//              zIndex: '99'
-//         }}
-//         {...attributes.popper}
-//     >   
-//     <AnimatePresence>
-//         {isOpen && (
-//             <motion.div 
-//                 initial={{opacity: 0}}
-//                 animate={{opacity: 1}}
-//                 exit={{opacity: 0}}
-//                 className=''
-//             >
-//                {children}
-//             </motion.div>
-//         )}
-//     </AnimatePresence>
-//     </div>
-//   )
-// }
+            <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
+                {children}
+            </div>
+        </div>
+    );
+};
 
-// export default SubTaskFormModal
+export default function SubTaskFormController({
+    close,
+    isFirstSubtask = true,
+}) {
+    // task information
+    const {
+        task: taskDetails,
+        subTask,
+        isWorkingEnvironmentSubmit,
+    } = useSelector((s) => s.subTask);
+
+    // ui information
+    const [visibleEnvironmentForm, setVisibleEnvironmentForm] =
+        React.useState(false);
+    const [visibleInformationModal, setVisibleInformationModal] =
+        React.useState(!visibleEnvironmentForm);
+
+    const dispatch = useDispatch(); // dispatch
+    const auth = useAuth(); // logged user
+    const task = new SingleTask(taskDetails); // task instance;
+
+    // environment status
+    React.useEffect(() => {
+        const showEnv =
+            task?.workingEnvironment === 0
+                ? _.size(task?.subtask) === 0
+                    ? true
+                    : false
+                : false;
+        if (auth.getRoleId() === 6 && showEnv) {
+            setVisibleEnvironmentForm(true);
+        }
+    }, []);
+
+    // render
+    return (
+        <React.Fragment>
+            {/* working environment form */}
+            <VisibleItem isVisible={visibleEnvironmentForm}>
+                <WithContainer
+                    close={close}
+                    visibleEnvironmentForm={visibleEnvironmentForm}
+                >
+                    <WorkingEnvironmentForm
+                        task={task}
+                        onSubmit={() => {
+                            setVisibleEnvironmentForm(false);
+                            setVisibleInformationModal(true);
+                        }}
+                        close={close}
+                    />
+                </WithContainer>
+            </VisibleItem>
+
+            {/* task creation guideline */}
+            <VisibleItem
+                isVisible={!visibleEnvironmentForm && visibleInformationModal}
+            >
+                <LeadConfirmationModal
+                    isOpen={true}
+                    onConfirm={() => setVisibleInformationModal(false)}
+                />
+            </VisibleItem>
+
+            {/* task creation form */}
+            <VisibleItem
+                isVisible={!visibleEnvironmentForm && !visibleInformationModal}
+            >
+                <WithContainer
+                    close={close}
+                    visibleEnvironmentForm={visibleEnvironmentForm}
+                >
+                    <SubTaskForm close={close} />
+                </WithContainer>
+            </VisibleItem>
+        </React.Fragment>
+    );
+}

@@ -14,21 +14,30 @@ const QuestionAnswer = ({ data, conversations, setConversations }) => {
     ] = useCreatePendingTaskAuthorizationConversationMutation();
 
 
-    const handleSubmission = async (e) => {
+    const handleSubmission = (e) => {
         e.preventDefault();
-        await createPendingTaskAuthorizationConversation({
-            question,
-            pending_parent_task_id: data.id
-        })
-        .unwrap()
-        .then(res => {
-            if(res?.status === 200){
-                toast.success('Your question has been submitted successfully.');
-                setConversations([...res.data]);
-                setQuestion('');
-            }
-        })
-        .catch(err => console.log(err))
+        const error = new Object();
+
+        if(question){
+           createPendingTaskAuthorizationConversation({
+                question,
+                pending_parent_task_id: data.id
+            })
+            .unwrap()
+            .then(res => {
+                if(res?.status === 200){
+                    toast.success('Your question has been submitted successfully.');
+                    setConversations([...res.data]);
+                    setQuestion('');
+                }
+            })
+            .catch(err => console.log(err))
+        }else{
+            toast.warn("Please write a question before submitting.");
+            error.comment = "Please write a question before submitting.";
+            setErr(error);
+        }
+
     }
 
     return (
@@ -51,7 +60,7 @@ const QuestionAnswer = ({ data, conversations, setConversations }) => {
                 <div className={`${styles.button_group} mt-2`}>
                     {false ? (
                         <Button isLoading={false} variant="primary">
-                            Loading
+                            Loading...
                         </Button>
                     ) : (
                         <>

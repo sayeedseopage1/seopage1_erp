@@ -6,6 +6,7 @@ import StatusFilter from "./StatusFilter";
 import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
+import { useAuth } from "../../../hooks/useAuth";
 
 const Filterbar = ({ onFilter, page = "tasks" }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -26,6 +27,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
     const { width } = useWindowSize();
 
     const isDev = _.includes([5], Number(window?.Laravel?.user?.role_id));
+    const auth = useAuth();
 
     // MEMORIZE VALUES
     const start_date = React.useMemo(() => startDate, [startDate]);
@@ -61,6 +63,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         _status,
         date_filter_by,
     ]);
+
 
     return (
         <div className="sp1_task_filter_bar">
@@ -98,11 +101,22 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                         setState={setLeadDeveloper}
                         roleIds={[1, 4]}
                     />
-                    
 
                     <HDivider />
 
-                    {page === "subtasks" ? (
+                    {page !== "subtasks" && (
+                        <>
+                            <UserFilter
+                                title="Assigned To"
+                                state={developer}
+                                setState={setDeveloper}
+                                roleIds={[4, 6, 9, 10]}
+                            />
+                            <HDivider />
+                        </>
+                    )}
+
+                    {/* {page === "subtasks" ? (
                         <UserFilter
                             title="Assigned To"
                             state={developer}
@@ -116,9 +130,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                             setState={setDeveloper}
                             roleIds={[4, 6, 9, 10]}
                         />
-                    )}
+                    )} */}
 
-                    <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
                     <HDivider />
                     <DateTypeFilter state={dateType} setState={setDateType} />

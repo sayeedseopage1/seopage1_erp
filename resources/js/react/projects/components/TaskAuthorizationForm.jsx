@@ -17,6 +17,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
     const [comment, setComment] = useState("");
     const [hasQuestion, setHasQuestion] = useState(false);
     const [err, setErr] = useState(new Object());
+    const [showFullDescription, setShowFullDescription] = useState(false);
 
     const [conversations, setConversations] = React.useState(data.conversations);
 
@@ -26,6 +27,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
     const open = () => setVisible(true);
     const close = () => setVisible(false);
+
+    const notAnswered = _.filter(conversations, c => !c.replied_by)
 
     const [updateAuthorizeTask, { isLoading }] =
         useUpdateAuthorizeTaskMutation();
@@ -38,7 +41,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
             comment
         };
 
-        if (comment) {
+        // check the all question has answer
+        const verified = _.size(conversations) ? _.size(notAnswered) === 0 : true;
+
+        if (comment && verified) {
             await updateAuthorizeTask(_data)
                 .unwrap()
                 .then((res) => {
@@ -46,16 +52,39 @@ const TaskAuthorizationForm = ({ data, table }) => {
                     close();
                 });
         } else {
-            toast.warn("Please write a comment before submitting.");
-            error.comment = "Please write a comment before submitting.";
+            if(!verified){
+                toast.warn("Some questions do not have answers yet!");
+                error.comment = "Some questions do not have answers yet!";
+            }else{
+                toast.warn("Please write a comment before submitting.");
+                error.comment = "Please write a comment before submitting.";
+            }
             setErr(error);
         }
     };
 
     const user = new User(window.Laravel.user);
 
-    const notAnswered = _.filter(conversations, c => !c.replied_by)
+
     const auth = _.includes([1, 8], user.getRoleId());
+
+
+
+    const getDescription = () => {
+
+        // return 'console...'
+        let description = data?.description;
+        let descLength = description.length;
+
+        if(descLength > 500 && !showFullDescription){
+            // setShowFullDescription(false);
+            description = description.slice(0, 500);
+        }
+
+
+
+        return description;
+    }
 
     return (
         <div>
@@ -198,7 +227,30 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-                                    { data.approval_status &&
+
+                                    <div >
+                                        <label
+                                            className="task_info__label"
+                                            style={{fontWeight: '500', fontFamily: 'Inter', color: '#626262'}}
+                                        >
+                                            Descriptions:
+                                        </label>
+                                        <div className={styles.task_info__text}>
+                                            <div>
+                                                <div dangerouslySetInnerHTML={{__html: getDescription() + `${!showFullDescription ? '...' : ''}` }} />
+                                                {data?.description.length > 500 &&
+                                                    <button
+                                                        className={styles.show_more_btn}
+                                                        onClick={() => setShowFullDescription(!showFullDescription)}
+                                                    >
+                                                        {showFullDescription ? 'Show Less' : 'Show More'}
+                                                    </button>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    { data.approval_status !== null &&
                                         <>
                                             <div className={styles.inline_flex}>
                                                 <div
@@ -240,7 +292,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     }
 
 
-                                     <TaskAuthorizationQuestionAnswers
+                                    <TaskAuthorizationQuestionAnswers
                                         data={conversations}
                                         updateConversations={updateConversation}
                                     />

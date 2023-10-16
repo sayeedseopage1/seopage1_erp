@@ -16,7 +16,7 @@ export const TaskWiseTableColumn = [
             >
                 <a  href={`/account/tasks/${row?.task_id}`} >{row?.task_name}</a>
             </td>
-        } 
+        }
     },
     {
         id: 'project_id',
@@ -32,7 +32,7 @@ export const TaskWiseTableColumn = [
             >
                 <a  href={`/account/tasks/${row?.task_id}`} >{row?.project_name}</a>
             </td>
-        } 
+        }
     },
     {
         id: 'pm_id',
@@ -54,7 +54,7 @@ export const TaskWiseTableColumn = [
                     id={row?.pm_id}
                 />
             </td>
-        } 
+        }
     },
     {
         id: 'client_id',
@@ -77,7 +77,7 @@ export const TaskWiseTableColumn = [
                     id={row?.client_id}
                 />
             </td>
-        } 
+        }
     },
     {
         id: 'employee_id',
@@ -85,7 +85,7 @@ export const TaskWiseTableColumn = [
         className: '',
         sorted: true,
         group: false,
-        sortAccessor: '', 
+        sortAccessor: '',
         cell: ({row, col, className, rowSpan}) => {
             return <td className={className} rowSpan={rowSpan}>
                 <UserRender
@@ -99,7 +99,7 @@ export const TaskWiseTableColumn = [
                 />
             </td>
         }
-        
+
     },
     {
         id: 'start_time',

@@ -16,28 +16,27 @@ import { useNavigate } from "react-router-dom";
 const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     const { task, lessTrackModalFor, lessTrackDate } = useSelector(s => s.subTask)
     const [optionId, setOptionId] = React.useState(null);
-    const [closingToday, setClosingToday] = React.useState(false); 
+    const [closingToday, setClosingToday] = React.useState(false);
     const [trackHours, setTrackHours] = React.useState('');
     const [trackMinutes, setTrackMinutes] = React.useState('');
-    const loggedUser = new User(window?.Laravel?.user); 
+    const loggedUser = new User(window?.Laravel?.user);
 
     const [ storeStopTrackTimer, {
         isLoading: isSubmitting
     }] = useStoreStopTrackTimerMutation();
 
     const {
-        data: trackTime, 
+        data: trackTime,
         isFetching
     } = useGetUserTrackTimeQuery(`${loggedUser?.getId()}?date=${dayjs(lessTrackDate).format('YYYY-MM-DD')}`);
 
- 
 
     const navigate = useNavigate();
-     
+
 
     React.useEffect(() => {
         if(!isFetching && trackTime){
-            let m = Math.abs(trackTime.target_time - trackTime?.tracked_times); 
+            let m = Math.abs(trackTime.target_time - trackTime?.tracked_times);
             let h = Math.floor(m/60);
             m = m%60;
 
@@ -63,7 +62,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
     return (
         <div
             className="sp1_single_task--modal-panel"
-            style={{ transition: ".4s" }}   
+            style={{ transition: ".4s" }}
         >
             <div className="border-bottom pb-2 px-3 d-flex align-items-center justify-content-between">
                 <div className="font-weight-bold f-16">
@@ -74,7 +73,7 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                 </Button>
             </div>
             {!closingToday && lessTrackModalFor==="STOP_TIMER" && (
-                <div className="py-2 px-4" > 
+                <div className="py-2 px-4" >
                     <h3 className="mb-3 text-center">
                         Are you closing for the day?
                     </h3>
@@ -98,8 +97,8 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                 </div>
             )}
 
-            { lessTrackModalFor=="START_TIMER" || (lessTrackModalFor==="STOP_TIMER" && closingToday) ? ( 
-            
+            { lessTrackModalFor=="START_TIMER" || (lessTrackModalFor==="STOP_TIMER" && closingToday) ? (
+
                 <div className="sp1_single_task--modal-body sp1_single_task-modal-body-options p-3">
                     {/* show track time */}
                     <div className="alert alert-warning">
@@ -109,12 +108,12 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                             <Placeholder width="60%" height={14} />
                         </React.Fragment> :
                         <React.Fragment>
-                            Your tracked time for <span className="font-weight-bold">{lessTrackDate}</span> is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> {trackTime?.target_time/ 60} hours </span> and <span className="font-weight-bold"> {trackTime?.target_time % 60} minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less. 
-                        </React.Fragment> 
+                            Your tracked time for <span className="font-weight-bold">{lessTrackDate}</span> is <span className="font-weight-bold">{ Math.floor(trackTime?.tracked_times / 60)} hours</span> and <span className="font-weight-bold">{Math.floor(trackTime?.tracked_times%60)} minutes.</span> <br/> Your minimum tracked hours should have been <span className="font-weight-bold"> {Math.floor(trackTime?.target_time/ 60)} hours </span> and <span className="font-weight-bold"> {Math.floor(trackTime?.target_time % 60)} minutes</span>, <br />and it is <span className="font-weight-bold text-danger"> {trackHours} hours </span> and <span className="font-weight-bold text-danger"> {trackMinutes} minutes </span> less.
+                        </React.Fragment>
                         }
                     </div>
 
-                    
+
                     {/* show track time   */}
 
                     <div className="sp1_stop-button-confirmation-option">
@@ -222,15 +221,15 @@ const StopTimerConfrimationPopUp = ({ handleTemporarilyStopTimer, close}) => {
                                         onSubmit={handleSubmitForm}
                                         isSubmitting = {isSubmitting}
                                         checked={optionId === "option-5"}
-                                    /> 
-                                    
+                                    />
+
                                     <OptionSix
                                         id="option-6"
                                         onChecked={setOptionId}
                                         onSubmit={handleSubmitForm}
                                         isSubmitting = {isSubmitting}
                                         checked={optionId === "option-6"}
-                                    /> 
+                                    />
                                 </>
                             )}
                         </div>}

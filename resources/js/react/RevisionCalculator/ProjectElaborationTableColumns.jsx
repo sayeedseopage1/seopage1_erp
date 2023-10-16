@@ -9,7 +9,7 @@ export const ProjectElaborationTableColumns = [
         sort: row => row?.project_name,
         rowSpan: 2,
         marge: true,
-        searchText: (row) => `${row['projectId']} ${row['project_name']}`,
+        searchText: (row) => `${row['ProjectId']} ${row['project_name']}`,
         row: ({ row, table }) => {
             const search = table.state.search;
             const text = row?.project_name
@@ -19,7 +19,7 @@ export const ProjectElaborationTableColumns = [
 
             return (
                 <abbr title={text}>
-                    <a href={`/account/projects/${row?.projectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                    <a href={`/account/projects/${row?.ProjectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {text}
                     </a>
                 </abbr>
@@ -76,7 +76,7 @@ export const ProjectElaborationTableColumns = [
         sortBy: "number_of_task",
         rowSpan: 2,
         marge: true,
-        row: ({ row, table}) => { 
+        row: ({ row, table}) => {
             const search = table.state.search;
             const tt = row?.total_tasks;
             const isEqual = search

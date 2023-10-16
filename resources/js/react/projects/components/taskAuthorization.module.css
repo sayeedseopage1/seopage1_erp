@@ -256,3 +256,8 @@
     font-size: 12px;
     color: #5F5F5F;
 }
+
+.show_more_btn{
+    padding-inline: 8px;
+    border-radius: 3px;
+}

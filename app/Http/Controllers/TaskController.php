@@ -379,7 +379,7 @@ class TaskController extends AccountBaseController
             'project_deliverables.title as deliverable_title','task_approves.created_at as task_approval_date',
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
-            'project_time_logs.start_time','project_time_logs.end_time',
+            'project_time_logs.start_time','project_time_logs.end_time', 
 
 
 
@@ -389,6 +389,7 @@ class TaskController extends AccountBaseController
             ->where('sub_tasks.task_id', $id)
             ->join('tasks','tasks.subtask_id','sub_tasks.id')
             ->join('projects', 'projects.id', 'tasks.project_id')
+            
             ->join('users as client', 'client.id', 'projects.client_id')
             ->join('task_users', 'task_users.task_id', 'tasks.id')
             ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
@@ -440,6 +441,7 @@ class TaskController extends AccountBaseController
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
             'task_category.category_name',
             'task_files.filename',
+            'project_time_logs.start_time','project_time_logs.end_time',
 
 
             DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
@@ -5029,7 +5031,7 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',Carbon::yesterday()) 
-       
+
         ->groupBy('tasks.id')
         ->get();
      //   dd($yesterdayData);
@@ -5057,7 +5059,6 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',$last_login)
-       
         ->groupBy('tasks.id')
         ->get();
 
@@ -5612,11 +5613,9 @@ class TaskController extends AccountBaseController
                     'created_by_user.name as created_by_name',
                     'replied_by_user.id as replied_by_id',
                     'replied_by_user.name as replied_by_name',
-                  
                 ])
                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
-              
                 ->get();
 
         return response()->json([
@@ -5647,11 +5646,9 @@ class TaskController extends AccountBaseController
                                                     'created_by_user.name as created_by_name',
                                                     'replied_by_user.id as replied_by_id',
                                                     'replied_by_user.name as replied_by_name',
-                                                   
                                                 ])
                                                 ->leftJoin('users as created_by_user', 'created_by_user.id', 'pending_parent_task_conversations.created_by')
                                                 ->leftJoin('users as replied_by_user', 'replied_by_user.id', 'pending_parent_task_conversations.replied_by')
-                                              
                                                 ->get();
 
 

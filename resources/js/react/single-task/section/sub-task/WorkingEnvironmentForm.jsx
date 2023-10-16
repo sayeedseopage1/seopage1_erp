@@ -28,21 +28,21 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
     };
 
     const isValid = () => {
-        let count = 0;     
+        let count = 0;
         const error = new Object();
 
         if(!siteUrl){
            count++;
-           error.siteUrl = "You have to provide Working/Staging Site's URL" 
+           error.siteUrl = "You have to provide Working/Staging Site's URL"
         }else if(!checkIsURL(siteUrl)){
             count++;
             error.siteUrl = "Please enter a valid URL";
             toast.warn("Please enter a valid Working/Staging Site's URL", {position: 'top-right'})
         }
-        
+
         if(!loginUrl){
             count++;
-            error.loginUrl = "You have to provide Working/Staging Site's Admin Panel URL" 
+            error.loginUrl = "You have to provide Working/Staging Site's Admin Panel URL"
          }else if(!checkIsURL(loginUrl)){
              count++;
              error.loginUrl = "Please enter a valid URL";
@@ -63,8 +63,8 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
             count++;
             error.frontendPassword = "You have to provide Working/Staging Site's Frontend Password"
          }
-         
-        setErr(error);  
+
+        setErr(error);
         return !count;
     }
 
@@ -77,13 +77,12 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
             password: password,
             frontend_password: frontendPassword
         }
- 
-        if(isValid()){ 
+
+        if(isValid()){
             try{
                 await workingEnvironment(data).unwrap().then(res => {
                     toast.success('Working environment store successfully', {position: 'top-right'});
                     onSubmit();
-                    close();
                 })
             }catch(err){
                 console.log(err)
@@ -173,7 +172,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                             error={err?.password}
                             onChange={(e) => handleChange(e, setPassword)}
                         />
-                    </div> 
+                    </div>
                 </div>
             </div>
 
@@ -194,7 +193,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
 
                     {/* {isLoading ? (
                         <Button onClick={handleSubmit}>
-                            
+
                         </Button>
                     ) : (
                         <Button className="cursor-processing">
