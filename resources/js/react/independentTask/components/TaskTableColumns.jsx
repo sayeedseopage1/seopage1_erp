@@ -15,8 +15,8 @@ import { ExpandTask } from "./table/ExpandTask";
 // import { useDispatch, useSelector } from "react-redux";
 // import Popover from '../../global/Popover';
 import ActionDropdown from "./ActionDropdown";
-import { CompareDate } from "../../../../utils/dateController";
-import { convertTime } from "../../../../utils/converTime";
+import { CompareDate } from "../../utils/dateController";
+import { convertTime } from "../../utils/converTime";
 
 const compareDate = new CompareDate();
 
@@ -62,7 +62,7 @@ export const TaskTableColumns = [
           <>
               <abbr title={data?.heading} style={{textDecoration: 'none'}}>
                 <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                    <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
+                    <a href={`/account/tasks/${data?.u_id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
                 </div>
               </abbr>  
           </>
@@ -316,7 +316,7 @@ export const TaskTableColumns = [
     
     // assigned by
     {
-      id: 'assigned_by',
+      id: 'assign_by_id',
       header: 'Assigned By', 
       accessorKey: 'added_by_name',
       cell: ({row}) => {
@@ -324,9 +324,9 @@ export const TaskTableColumns = [
         
         return(
           <Person
-            url={`/account/employees/${data?.added_by}` }
-            avatar={data?.added_by_avatar}
-            name={data?.added_by_name}
+            url={`/account/employees/${data?.assign_by_id}` }
+            avatar={data?.assign_by_avator}
+            name={data?.assign_by_name}
           /> 
         )
       }
@@ -334,11 +334,12 @@ export const TaskTableColumns = [
 
     // assigned to
     {
-      id: 'assigned_to',
+      id: 'assigned_to_id',
       header: 'Assigned To',
       accessorKey: 'assigned_to_name',
       cell: ({row}) => {
         const data = row?.original;
+        console.log(data);
         return( 
           <Person
             url={`/account/employees/${data?.assigned_to_id}` }
