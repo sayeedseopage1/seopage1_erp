@@ -4987,7 +4987,7 @@ class TaskController extends AccountBaseController
     //    / dd($startDate, $endDate);
     $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
-        'developers.id as developer_id',
+        'developers.id as developer_id', 'daily_submissions.status as daily_submission_status','project_time_logs.created_at as project_time_logs_created_at',
 
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
         )
@@ -4999,14 +4999,15 @@ class TaskController extends AccountBaseController
         ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
 
-        ->whereDate('project_time_logs.created_at',Carbon::today())
-
+        ->whereDate('project_time_logs.created_at',Carbon::today()) 
         ->groupBy('tasks.id')
         ->get();
+
+        // dd($todayData);
     if ($todayData->isEmpty()) {
         $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
-        'developers.id as developer_id',
+        'developers.id as developer_id', 'project_time_logs.created_at as project_time_logs_created_at',
 
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
         )
@@ -5018,8 +5019,8 @@ class TaskController extends AccountBaseController
         ->leftJoin('daily_submissions','daily_submissions.task_id','tasks.id')
         ->where('project_time_logs.user_id',$id)
 
-        ->whereDate('project_time_logs.created_at',Carbon::yesterday())
-
+        ->whereDate('project_time_logs.created_at',Carbon::yesterday()) 
+        ->where('daily_submissions.status', '<>', 1)
         ->groupBy('tasks.id')
         ->get();
      //   dd($yesterdayData);
@@ -5034,7 +5035,7 @@ class TaskController extends AccountBaseController
 
             $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
-        'developers.id as developer_id',
+        'developers.id as developer_id', 'project_time_logs.created_at as project_time_logs_created_at',
 
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$last_login.'" AND DATE(project_time_logs.end_time) <= "'.$last_login.'"), 0) as total_time_spent'),
         )
@@ -5047,7 +5048,7 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',$last_login)
-
+        ->where('daily_submissions.status', '<>', 1)
         ->groupBy('tasks.id')
         ->get();
 
@@ -5068,6 +5069,17 @@ class TaskController extends AccountBaseController
         $date= Carbon::yesterday();
 
     }
+
+    $tasks->each(function($task) {
+        $daily_submission = DailySubmission::select("status")
+            ->where('task_id', $task->id)
+            ->whereDate("created_at", '=', date('Y-m-d', strtotime($task->project_time_logs_created_at)))
+            ->orderBy('id', 'desc')
+            ->first();
+        $task->daily_submission_status = $daily_submission ? $daily_submission->status : 0;
+    });
+
+    // dd($tasks);
         // $tasks = $yesterdayData;
     // } else {
     //     $tasks = $todayData;

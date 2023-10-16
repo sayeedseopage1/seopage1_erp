@@ -50,7 +50,7 @@ const TaskAction = ({ task, status }) => {
         checkSubTaskTimer(task?.id)
             .unwrap()
             .then((res) => {
-                if (res?.status === 200) { 
+                if (res?.status === 200) {
                     navigate(`?modal=edit&task=${task?.id}`);
                 } else {
                     Swal.fire({
@@ -61,8 +61,8 @@ const TaskAction = ({ task, status }) => {
                 }
             });
     };
-  
-    usePageLeave(() => console.log('Page left...'));
+
+    // usePageLeave(() => console.log('Page left...'));
     let time = task.isSubtask ? task?.parentTaskTimeLog : task?.totalTimeLog;
 
     const timerControlPermission = timeControlPermision({
@@ -135,24 +135,6 @@ const TaskAction = ({ task, status }) => {
             {/*********** Report Control ***********/}
 
             <ReportControl task={task} />
-
-            {/* {task && task.boardColumn.id === 2 && (
-                    <Link
-                        to={`?modal=edit&task=${task?.id}`}
-                        className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"
-                        style={{
-                            marginLeft: "none",
-                        }}
-                    >
-                        <i className="fa-regular fa-pen-to-square" />
-                        Edit
-                    </Link>
-                )} */}
-
-            {/* {{-- 3 dot --}} */}
-            {/* <button type="button" className="d-flex align-items-center btn btn-sm btn-outline-dark mr-2 border-0 ml-auto">
-                <i className="bi bi-three-dots" ></i>
-            </button> */}
             <Dropdown>
                 <Dropdown.Toggle icon={false}>
                     <div className="single_task_three_dot">
@@ -165,7 +147,7 @@ const TaskAction = ({ task, status }) => {
                                         border: "0.14em solid rgb(77, 77, 77)",
                                         borderRightColor: "transparent",
                                     }}
-                                />: 
+                                />:
                         <i className="fa-solid fa-ellipsis" />
                         }
                     </div>
