@@ -69,10 +69,10 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
         files.forEach((file) => formData.append('file[]', file))
 
 
-        submitDailySubmission(formData)
+        const submit = () => {
+            submitDailySubmission(formData)
             .unwrap()
             .then(res => {
-                console.log(res);
                 if (res.mark_as_complete==="true" || res.mark_as_complete===true) {
                     navigate(`${location.pathname}?modal=complete-task`);
                 }
@@ -91,6 +91,21 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
                 setOpen(null);
             })
             .catch(err => console.log(err))
+        }
+
+
+        Swal.fire({
+            title: 'Do you want to finish this task for today?',
+            icon: 'info',
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No'
+        }).then(res => {
+            if(res.isConfirmed){
+                submit();
+            }
+        })
     }
 
 

@@ -1635,6 +1635,7 @@
             const targeted_day = 15;
 
             if (todayOnlyDate <= targeted_day) {
+
                 monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
 
                 $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') +
@@ -1645,27 +1646,15 @@
                 $('.monthDate').text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' + moment(
                     monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
             }
-            
+
+          //  console.log({monthDate:moment(monthDate).format('DD-MMM-YYYY')});
+
             // previos btn action
             $('.fc-prev-button').click(function() {
                 var mode = $(this).attr('date-mode');
-
-                // var pm_id = {{ $pm->id }};
-
                 if (mode == 'month') {
-                    // console.log(todayOnlyDate);
-                    if (todayOnlyDate <= targeted_day) {
-                        // console.log({date:moment(monthDate).format('MMMM, YYYY'),today:todayOnlyDate});
-                        // console.log("less then 15 =>", moment(monthDate).format('MMMM, YYYY'));
-                    
-                        monthDate = moment(monthDate).subtract(1, 'month').startOf('month').add(targeted_day, 'day');
 
-                        // console.log("less than or equal 15 =>", moment(monthDate).format('MMMM, YYYY'));
-                    }else {
-                        monthDate = moment(monthDate).startOf('month').add(targeted_day, 'day');
-
-                        // console.log("greater than 15 =>", moment(monthDate).format('MMMM, YYYY'));
-                    }
+                    monthDate = moment(monthDate).subtract(1, 'month')
 
                     $(this).next().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                         moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
@@ -1682,10 +1671,8 @@
             $('.fc-next-button').click(function() {
                 var mode = $(this).attr('date-mode');
                 var date;
-
-                // var pm_id = {{ $pm->id }};
-
                 if (mode == 'month') {
+
                     monthDate = moment(monthDate).add(1, 'month');                 
                     
                     $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
