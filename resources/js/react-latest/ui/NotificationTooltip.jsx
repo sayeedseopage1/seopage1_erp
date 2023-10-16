@@ -1,8 +1,9 @@
 import React from "react";
 import { usePopper } from "react-popper";
 import styles from './NotificationTooltip.module.css'
+const css = styles;
 
-const NotificationTooltip = ({ children, className, content, show }) => {
+const NotificationTooltip = ({ children, className, content, show, offset = [10, 0] }) => {
     const [referenceElement, setReferenceElement] = React.useState(null);
     const [popperElement, setPopperElement] = React.useState(null);
     const [arrowElement, setArrowElement] = React.useState(null);
@@ -10,7 +11,7 @@ const NotificationTooltip = ({ children, className, content, show }) => {
     const {styles, attributes} = usePopper(referenceElement, popperElement, {
         placement: 'top',
         modifiers:[
-            {name:'offset', options: {offset: [10,0]}},
+            {name:'offset', options: {offset}},
             {
                 name: 'arrow',
                 options: {
@@ -25,19 +26,19 @@ const NotificationTooltip = ({ children, className, content, show }) => {
         {
             show  ?
                 <div
-                    className={`${styles.tooltip} ${className}`}
+                    className={`${css.tooltip} ${className}`}
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
                 >
                     {/* tooltip content */}
-                    <div className={styles.tooltip_content}>
+                    <div className={css.tooltip_content}>
                         {(typeof content === 'function') ? content() : content}
                     </div>
                     <div
                         ref={setArrowElement}
                         style={styles.arrow}
-                        className={styles.arrow}
+                        className={css.arrow}
                     />
                 </div>
             : null

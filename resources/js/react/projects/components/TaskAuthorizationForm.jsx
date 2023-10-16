@@ -17,6 +17,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
     const [comment, setComment] = useState("");
     const [hasQuestion, setHasQuestion] = useState(false);
     const [err, setErr] = useState(new Object());
+    const [showFullDescription, setShowFullDescription] = useState(false);
 
     const [conversations, setConversations] = React.useState(data.conversations);
 
@@ -66,6 +67,24 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
 
     const auth = _.includes([1, 8], user.getRoleId());
+
+
+
+    const getDescription = () => {
+
+        // return 'console...'
+        let description = data?.description;
+        let descLength = description.length;
+
+        if(descLength > 500 && !showFullDescription){
+            // setShowFullDescription(false);
+            description = description.slice(0, 500);
+        }
+
+
+
+        return description;
+    }
 
     return (
         <div>
@@ -205,6 +224,29 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                     {data.sub_acknowledgement}
                                                 </strong>
                                             </p>
+                                        </div>
+                                    </div>
+
+
+                                    <div >
+                                        <label
+                                            className="task_info__label"
+                                            style={{fontWeight: '500', fontFamily: 'Inter', color: '#626262'}}
+                                        >
+                                            Descriptions:
+                                        </label>
+                                        <div className={styles.task_info__text}>
+                                            <div>
+                                                <div dangerouslySetInnerHTML={{__html: getDescription() + `${!showFullDescription ? '...' : ''}` }} />
+                                                {data?.description.length > 500 &&
+                                                    <button
+                                                        className={styles.show_more_btn}
+                                                        onClick={() => setShowFullDescription(!showFullDescription)}
+                                                    >
+                                                        {showFullDescription ? 'Show Less' : 'Show More'}
+                                                    </button>
+                                                }
+                                            </div>
                                         </div>
                                     </div>
 
