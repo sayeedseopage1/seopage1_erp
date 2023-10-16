@@ -26,6 +26,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Dropdown from "../../components/Dropdown";
 import { toast } from "react-toastify";
 import { useBattery, useIdle, useNetworkState, usePageLeave, usePermission } from "react-use";
+import Button from "../../components/Button";
 
 const TaskAction = ({ task, status }) => {
     const loggedUser = new User(window?.Laravel?.user);
@@ -80,6 +81,19 @@ const TaskAction = ({ task, status }) => {
             loggedUser,
         });
 
+
+    const handleAuthorizedByTopManagementStatus = () => {
+        const acknowledgement = task?.acknowledgement;
+        const subAcknowledgement = task?.subAcknowledgement;
+        const text = `<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>${acknowledgement + ' '}${subAcknowledgement}</strong>. And the management authorized it considering the circumstances.</p>`
+
+        Swal.fire({
+            title: text,
+            icon: 'info',
+            showCloseButton: true,
+        })
+    }
+
     return (
         <div
             className="d-flex flex-wrap border-bottom pb-3 sp1_task_btn_group"
@@ -126,6 +140,13 @@ const TaskAction = ({ task, status }) => {
             <div className="single_task_divider" />
 
             {/* right side button container */}
+            {
+                task?.approvalStatus ?
+                <div className="">
+                <Button variant="success" onClick={handleAuthorizedByTopManagementStatus}>Authorized By Top Management</Button>
+                </div> : null
+            }
+
 
             {/* Subtask creation guideline */}
             {_.includes([6, 4, 1], loggedUser?.getRoleId()) && (

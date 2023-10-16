@@ -228,7 +228,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     </div>
 
 
-                                    <div >
+                                    <div className="mb-3">
                                         <label
                                             className="task_info__label"
                                             style={{fontWeight: '500', fontFamily: 'Inter', color: '#626262'}}

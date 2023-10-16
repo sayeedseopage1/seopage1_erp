@@ -3457,6 +3457,10 @@ class TaskController extends AccountBaseController
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
                 'designations.name as pm_designation',
+                'pending_parent_tasks.acknowledgement as acknowledgement',
+                'pending_parent_tasks.sub_acknowledgement as sub_acknowledgement',
+                'pending_parent_tasks.comment as comment',
+                'pending_parent_tasks.approval_status as approval_status',
 
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
@@ -3468,6 +3472,7 @@ class TaskController extends AccountBaseController
                 ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->leftJoin('employee_details', 'projects.pm_id', 'employee_details.user_id')
                 ->leftJoin('designations', 'employee_details.designation_id', 'designations.id')
+                ->leftJoin('pending_parent_tasks', 'tasks.pp_task_id', 'pending_parent_tasks.id')
                 ->where('tasks.id', $id)
                 ->first();
 
