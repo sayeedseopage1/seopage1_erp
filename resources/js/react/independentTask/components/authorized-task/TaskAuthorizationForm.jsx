@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import styles from "./taskAuthorization.module.css";
-import Button from "../../global/Button";
-import Modal from "../../global/Modal";
-import Card from "../../global/Card";
 import dayjs from "dayjs";
-import Avatar from "../../global/Avatar";
-import { useUpdateAuthorizeTaskMutation } from "../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
 import QuestionAnswer from "./QuestionAnswer";
 import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
-import { User } from "../../utils/user-details";
 import _ from "lodash";
+import Button from "../Button";
+import Modal from "../Modal";
+import Card from "../../../global/Card";
+import Avatar from "../../../global/Avatar";
+import { useUpdateAuthorizeTaskMutation } from "../../../services/api/projectApiSlice";
+import { User } from "../../../utils/user-details";
 
 const TaskAuthorizationForm = ({ data, table }) => {
     const [visible, setVisible] = useState(false);

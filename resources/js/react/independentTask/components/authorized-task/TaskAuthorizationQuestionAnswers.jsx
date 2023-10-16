@@ -1,15 +1,16 @@
 import React, { useEffect } from "react";
 import styles from "./taskAuthorization.module.css";
-import { User } from "../../utils/user-details";
 import _ from "lodash";
-import Button from "../../global/Button";
-import { useUpdatePendingTaskAuthorizationConversationMutation } from "../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import { User } from "../../../utils/user-details";
+import Button from "../Button";
+import { useUpdatePendingTaskAuthorizationConversationMutation } from "../../../services/api/projectApiSlice";
+import { useState } from "react";
 
 const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
-    const [conversations, setConversations] = React.useState([]);
-    const [err, setErr] = React.useState(null);
+    const [conversations, setConversations] = useState([]);
+    const [err, setErr] = useState(null);
 
     const user = new User(window.Laravel.user);
     const auth = _.includes([1, 8], user.getRoleId());
@@ -54,6 +55,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
             .unwrap()
             .then(res => {
                 toast.success('Your answer has been submitted successfully.');
+                console.log(res);
                 setConversations(res.data);
             })
         }
@@ -62,7 +64,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
 
     const countNotAnsweredQuestion = _.size(_.filter(conversations, c => !c.replied_by));
 
-    if(!conversations.length) return null;
+    if(!conversations?.length) return null;
 
     return (
         <div className={styles.question_answer_container}>

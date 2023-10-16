@@ -14,9 +14,9 @@ import TasksTable from "../components/TasksTable";
 import { User } from "../../utils/user-details";
 import CKEditorComponent from "../../ckeditor";
 import Loader from "../components/Loader";
-import TaskAuthorization from "../../projects/components/TaskAuthorization";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
+import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
 
 const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     // const {tasks} = useSelector(s => s.tasks)

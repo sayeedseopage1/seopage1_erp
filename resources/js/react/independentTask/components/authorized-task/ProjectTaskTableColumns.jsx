@@ -1,14 +1,14 @@
 import dayjs from "dayjs";
-import Person from "../../tasks/components/Person";
-import StopWatch from "../../tasks/components/Timer";
-import { ExpandTask } from "../../tasks/components/table/ExpandTask";
-import { CompareDate } from "../../utils/dateController";
-import { convertTime } from "../../utils/converTime";
-import ReportButton from "../../tasks/components/ReportButton";
-import Dropdown from "../../tasks/components/Dropdown";
-import Button from "../../tasks/components/Button";
-import TaskEditForm from "./TaskEditForm";
 import React from "react";
+import Person from "../Person";
+import StopWatch from "../Timer";
+import { ExpandTask } from "../table/ExpandTask";
+import { CompareDate } from "../../../utils/dateController";
+import { convertTime } from "../../../utils/converTime";
+import ReportButton from "../ReportButton";
+import Dropdown from "../Dropdown";
+import Button from "../Button";
+import TaskEditForm from "./TaskEditForm";
 
 
 

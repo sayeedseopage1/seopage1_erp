@@ -1,19 +1,18 @@
 import dayjs from "dayjs";
 import * as React from 'react';
-import ReportForm from "../../single-task/section/task-actions/report/ReportForm";
-import Button from "../../tasks/components/Button";
-import Dropdown from '../../tasks/components/Dropdown';
-import Loader from "../../tasks/components/Loader";
-import Modal from "../../tasks/components/Modal";
-import Person from "../../tasks/components/Person";
-import ReportButton from "../../tasks/components/ReportButton";
-import StopWatch from "../../tasks/components/Timer";
-import { convertTime } from "../../utils/converTime";
-import { CompareDate } from "../../utils/dateController";
-import { SingleTask } from "../../utils/single-task";
+import ReportForm from "../../../single-task/section/task-actions/report/ReportForm";
+import Button from "../Button";
+import Dropdown from "../Dropdown";
+import Loader from "../Loader";
+import Modal from "../Modal";
+import Person from "../Person";
+import ReportButton from "../ReportButton";
+import StopWatch from "../Timer";
+import { convertTime } from "../../../utils/converTime";
+import { CompareDate } from "../../../utils/dateController";
+import { SingleTask } from "../../../utils/single-task";
 import { useDispatch, useSelector } from "react-redux";
-import { storeSubTasks } from "../../services/features/tasksSlice";
-import { User } from "../../utils/user-details";
+import { storeSubTasks } from "../../../services/features/tasksSlice";
 
 const compareDate = new CompareDate();
 

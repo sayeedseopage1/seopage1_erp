@@ -1,12 +1,12 @@
 import _ from "lodash";
 import React from "react";
-import CKEditorComponent from "../../ckeditor";
-import { useStoreProjectGuidelineMutation, useUpdateProjectGuidelineMutation } from "../../services/api/projectApiSlice";
-import Button from "../../tasks/components/Button";
-import Modal from "../../tasks/components/Modal";
-import SubmitButton from "../../tasks/components/SubmitButton";
-import Input from "../../tasks/components/form/Input";
 import { toast } from "react-toastify";
+import CKEditorComponent from "../../../ckeditor";
+import { useUpdateProjectGuidelineMutation } from "../../../services/api/projectApiSlice";
+import Button from "../Button";
+import Modal from "../Modal";
+import SubmitButton from "../SubmitButton";
+import Input from "../../../UI/form/Input";
 
 const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projectId }) => {
     const [themeDetails, setThemeDetails] = React.useState("");
@@ -833,7 +833,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                         <div className="form-group pl-2">
                                                             <label htmlFor="">Where Should Developer Use this Color <sup>*</sup></label>
                                                             <div className="ck-editor-holder">
-                                                                <CKEditorComponent 
+                                                                <CKEditorComponent
                                                                     onChange={(e, editor) => (
                                                                         setPrimaryColorDescription(editor.getData())
                                                                     )}

@@ -1,12 +1,13 @@
 import dayjs from "dayjs";
-// import { ExpandTask } from "../../independentTask/components/table/ExpandTask";
-import Person from "../../independentTask/components/Person";
-import ActionDropdown from "../../independentTask/components/ActionDropdown";
-import { CompareDate } from "../../utils/dateController";
+import Person from "../Person";
+import ActionDropdown from "../ActionDropdown";
+import { CompareDate } from "../../../utils/dateController";
+import TaskAuthorizationForm from "./TaskAuthorizationForm";
 
 const compareDate = new CompareDate();
 
 export const AuthorizationColumns = [
+
     {
         id: 'u_id',
         header: 'IndependentTaskId',
@@ -129,7 +130,7 @@ export const AuthorizationColumns = [
         accessorKey: 'assigned_to_name',
         cell: ({ row }) => {
             const data = row?.original;
-            //   console.log(data);
+            // console.log(data);
             return (
                 <Person
                     url={`/account/employees/${data?.assign_to_id}`}
@@ -141,11 +142,15 @@ export const AuthorizationColumns = [
     },
 
     {
-        id: 'action',
-        header: 'Action',
-        cell: ({ row }) => {
-            const data = row?.original;
-            return <ActionDropdown row={data} />
-        },
-    }
+        id: "action",
+        header: 'Actions',
+        draggable: true,
+
+        cell: ({ row, table })=> {
+
+            return(
+                <TaskAuthorizationForm data={row.original} table={table} />
+            )
+        }
+    },
 ]

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types';
 import styles from './taskAuthorization.module.css'
-import Button from '../../global/Button'
-import Modal from '../../global/Modal';
-import Card from '../../global/Card';
-import DataTable from '../../global/table/DataTable';
+// import Button from '../../global/Button'
+// import Modal from '../../global/Modal';
+// import Card from '../../global/Card';
+// import DataTable from '../../global/table/DataTable';
 import { AuthorizationColumns } from './TaskAuthorizationColumns';
 import _ from 'lodash';
-import { useGetIndependentAuthorizeTaskQuery } from '../../services/api/independentTaskApiSlice';
+import { useGetIndependentAuthorizeTaskQuery } from '../../../services/api/independentTaskApiSlice';
+import Button from '../Button';
+import Modal from '../Modal';
+import Card from '../../../../react-latest/ui/Card';
+import DataTable from '../table/DataTable';
 
 const TaskAuthorization = ({title}) => {
   const [visible, setVisible] = useState(false);

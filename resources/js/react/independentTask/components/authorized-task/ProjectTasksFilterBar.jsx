@@ -1,10 +1,9 @@
 import React from "react";
-import Button from "../../tasks/components/Button";
-import UserFilter from "../../tasks/components/Filter-bar/UserFilter";
-import StatusFilter from "../../tasks/components/Filter-bar/StatusFilter";
-import DateTypeFilter from "../../tasks/components/Filter-bar/DateTypeFilter";
 import _ from "lodash";
-import Dropdown from "../../tasks/components/Dropdown";
+import UserFilter from "../Filter-bar/UserFilter";
+import StatusFilter from "../Filter-bar/StatusFilter";
+import DateTypeFilter from "../Filter-bar/DateTypeFilter";
+import Dropdown from "../Dropdown";
 
 const ProjectTasksFilterBar = ({ onFilter, page = "tasks",  }) => {
     const [search, setSearch] = React.useState("");
@@ -124,7 +123,7 @@ const ProjectTasksFilterBar = ({ onFilter, page = "tasks",  }) => {
                                 />
                             )}
 
-                            <StatusFilter 
+                            <StatusFilter
                                 state={status} 
                                 setState={setStatus}
                                 selectionBoxClassName="sp1_tasks_filter_item"

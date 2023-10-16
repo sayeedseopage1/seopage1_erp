@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./project-manager-acknowledgement.module.css";
-import Modal from "../../global/Modal";
-import Card from "../../global/Card";
-import Button from "../../global/Button";
 import _ from "lodash";
+import Modal from "../Modal";
+import Card from "../../../global/Card";
+import Button from "../Button";
 
 
 const ProjectManagerAcknowledgementModal = ({

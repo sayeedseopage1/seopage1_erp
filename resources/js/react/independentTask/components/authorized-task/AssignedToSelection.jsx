@@ -1,8 +1,8 @@
 import { Combobox } from '@headlessui/react'
 import * as React from 'react' 
 import _  from 'lodash';
-import { useUsers } from '../../hooks/useUsers';
-import Loader from '../../tasks/components/Loader';
+import { useUsers } from '../../../hooks/useUsers';
+import Loader from '../Loader';
 
 
 const AssginedToSelection = ({selected, onSelect}) => {

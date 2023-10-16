@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styles from "./taskAuthorization.module.css";
-import Button from "../../global/Button";
-import { useCreatePendingTaskAuthorizationConversationMutation } from "../../services/api/projectApiSlice";
 import { toast } from "react-toastify";
+import { useCreatePendingTaskAuthorizationConversationMutation } from "../../../services/api/projectApiSlice";
+import Button from "../Button";
 
 const QuestionAnswer = ({ data, conversations, setConversations }) => {
     const [question, setQuestion] = useState("");
