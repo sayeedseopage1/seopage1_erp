@@ -27,7 +27,7 @@ export const AuthorizationColumns = [
                 </Popover.Button>
                 <Popover.Panel>
                     <div  className={styles.popover_panel}>
-                        <a href={`/account/projects/${row.original?.project_id}`} className="singleline-ellipsis">
+                        <a href={`/account/projects/${row.original?.project_id}`}>
                             { row.original?.project_name }
                         </a>
                     </div>

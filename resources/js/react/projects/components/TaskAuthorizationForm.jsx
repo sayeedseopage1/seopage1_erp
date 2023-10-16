@@ -198,7 +198,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-                                    { data.approval_status &&
+                                    { data.approval_status !== null &&
                                         <>
                                             <div className={styles.inline_flex}>
                                                 <div
