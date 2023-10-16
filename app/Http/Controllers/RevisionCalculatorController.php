@@ -65,6 +65,7 @@ class RevisionCalculatorController extends AccountBaseController
 
                 $tasks_revisions= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
+                ->where('task_revisions.dispute_between','!=','')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $project_timelogs= ProjectTimelog::leftJoin('projects','projects.id','project_time_logs.project_id')
@@ -94,7 +95,7 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('projects.pm_id',$pm->project_manager_id)
               
                 ->where('task_revisions.final_responsible_person','LD')
-                ->where('task_revisions.revision_acknowledgement','!=',null)
+                ->where('task_revisions.dispute_between','!=','')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $developer_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
@@ -230,6 +231,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','S')
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['pm_issues'] = TaskRevision::select('task_revisions.id')
@@ -237,6 +239,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','PM')
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['client_issues'] = TaskRevision::select('task_revisions.id')
@@ -244,6 +247,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','C')
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['lead_developer_issues'] = TaskRevision::select('task_revisions.id')
@@ -251,6 +255,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','LD')
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['developer_issues'] = TaskRevision::select('task_revisions.id')
@@ -258,6 +263,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','D')
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['total_disputes'] = TaskRevision::select('task_revisions.id')
@@ -265,6 +271,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.dispute_created',1)
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['total_disputes_not_solved'] = TaskRevision::select('task_revisions.id')
@@ -273,6 +280,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->where('projects.pm_id',$id)
             ->where('task_revisions.dispute_created',1)
             ->where('task_revisions.dispute_status',0)
+            ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
        // dd($total_tasks);
@@ -463,7 +471,7 @@ public function LeadDevIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_by','dispute_raised_by.id','task_revision_disputes.raised_by') 
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')       
         ->where('projects.pm_id',$id)
-        ->where('task_revisions.revision_acknowledgement','!=',null)
+        ->where('task_revisions.dispute_between','!=','')
         ->where('task_revisions.final_responsible_person','LD')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])

@@ -55,10 +55,16 @@ trait PmDashboardAdminView
        if (request('mode') == 'month' && request()->ajax() && request('pm_id')) {
             $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
            // dd($date);
+           $this->startMonth = $date->startOfMonth()->addDays(15)->toDateString();
+           $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(15)->toDateString();
+           $this->release_date = $date->endofMonth()->toDateString();
+           $this->nextMonth = $date->startOfMonth()->toDateString();
 
-            $this->startMonth = $date->startOfMonth()->addDays(15)->toDateString();
-            $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(15)->toDateString();
-            $this->release_date = $date->endofMonth()->toDateString();
+           
+           $startMonth= $this->startMonth;
+           $endMonth = $this->endMonth;
+           $release_date= $this->release_date;
+           $nextMonth= $this->nextMonth;
 
 
 
@@ -144,6 +150,7 @@ trait PmDashboardAdminView
 
         // ->take(2)
          ->get();
+        
          $this->total_released_amount_previous_cycle = Project::select('projects.*',
          'project_milestones.milestone_title as milestone_title',
          'project_milestones.created_at as milestone_creation_date',
@@ -157,11 +164,23 @@ trait PmDashboardAdminView
          ->leftJoin('payments','payments.invoice_id','invoices.id')
         // ->groupBy('project_milestones.project_id')
         //->groupBy('project_milestones.id')
-         ->where('projects.pm_id', $this->pm->id)
-         ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
+        
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-         ->sum('project_milestones.cost');
+         $q3->where('projects.pm_id', $this->pm->id)
+            ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+            ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                        
+     })
+   ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+            $q2->where('projects.pm_id', $this->pm->id)
+              
+                ->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+                ->where('project_milestones.created_at', '<', $startMonth);
+
+            
+     
+ })->sum('project_milestones.cost');
          $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
          'project_milestones.milestone_title as milestone_title',
          'project_milestones.created_at as milestone_creation_date',
@@ -173,15 +192,21 @@ trait PmDashboardAdminView
          ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
          ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
          ->leftJoin('payments','payments.invoice_id','invoices.id')
-         ->where('projects.pm_id', $this->pm->id)
+         ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-
-     //    / ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-      ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
+             $q3->where('projects.pm_id', $this->pm->id)
+                ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+                ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                            
+         })
+       ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                $q2->where('projects.pm_id', $this->pm->id)
+                  
+                    ->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+                    ->where('project_milestones.created_at', '<', $startMonth);
+   
+     })
         // ->take(2)
-
-
         ->orderBy('payments.paid_on','desc')
          ->get();
          $this->no_of_finished_projects_this_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -193,15 +218,29 @@ trait PmDashboardAdminView
          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
          ->orderBy('projects.updated_at','desc')
          ->get();
+        
          $this->no_of_finished_projects_previous_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
          ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
          ->where('projects.pm_id', $this->pm->id)
          ->where('projects.status','finished')
 
-         ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+         // ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
+         // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+         ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+             $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                            
+         })
+       ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                 ->where('pm_projects.created_at', '<', $startMonth);
+ 
+     })
+
          ->orderBy('projects.updated_at','desc')
          ->get();
+
          $this->value_of_finished_projects_this_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
          ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
          ->where('projects.pm_id', $this->pm->id)
@@ -210,14 +249,25 @@ trait PmDashboardAdminView
          ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
          ->sum('projects.project_budget');
+        
+
          $this->value_of_finished_projects_previous_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
          ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
          ->where('projects.pm_id', $this->pm->id)
 
          ->where('projects.status','finished')
          //->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-         ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+         ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+             $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                            
+         })
+       ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                 ->where('pm_projects.created_at', '<', $startMonth);
+ 
+     })
          ->sum('projects.project_budget');
          $this->no_of_100_finished_project_this_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
          ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
@@ -252,6 +302,7 @@ trait PmDashboardAdminView
          ->orderBy('projects.updated_at','desc')
          ->sum('projects.project_budget');
 
+         
          $this->no_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
          ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
          ->leftJoin('project_milestones', function ($join) {
@@ -265,431 +316,557 @@ trait PmDashboardAdminView
 
          ->whereNull('project_milestones.id')
         // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-        ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+         $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+            ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                        
+     })
+   ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+            $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+             ->where('pm_projects.created_at', '<', $startMonth);
+
+ })
          ->orderBy('projects.updated_at','desc')
          ->get();
          $this->value_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
-         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-         ->leftJoin('project_milestones', function ($join) {
-             $join->on('projects.id', '=', 'project_milestones.project_id')
-                 ->where('project_milestones.status','<>', 'complete')
-                 ->where('project_milestones.project_completion_status', 0)
-                 ->where('project_milestones.qc_status', 0);
-         })
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('projects.status', 'in progress')
-
-         ->whereNull('project_milestones.id')
-        // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-        ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-         ->sum('projects.project_budget');
-         $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
-         $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
-         $this->value_of_100_and_finish_this_cycle = $this->value_of_100_finished_project_this_cycle+$this->value_of_finished_projects_this_cycle;
-         $this->value_of_100_and_finish_previous_cycle = $this->value_of_100_finished_project_previous_cycle+$this->value_of_finished_projects_previous_cycle;
-         if (count($this->no_of_accepted_projects) > 0 ) {
-             $this->project_completion_rate_count_this_cycle=  ((count($this->no_of_finished_projects_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
-             $this->project_completion_rate_count_previous_cycle = ((count($this->no_of_finished_projects_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_finished_projects_previous_cycle))- (count($this->no_of_finished_projects_this_cycle))) * 100);
-             $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_and_finish_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
-
-         }else {
-             $this->project_completion_rate_count_this_cycle= 0;
-             $this->project_completion_rate_count_previous_cycle = 0;
-             $this->project_completion_rate_count_this_cycle_100_in_progress= 0;
-
-
-
-         }
-         if(count($this->no_of_100_and_finish_this_cycle) > 0)
-         {
-             $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_and_finish_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_and_finish_previous_cycle))- (count($this->no_of_100_and_finish_this_cycle))) * 100);
-
-         }else
-         {
-             $this->project_completion_rate_count_previous_cycle_100_in_progress = 0;
-
-         }
-         if($this->value_of_100_and_finish_previous_cycle > 0)
-         {
-             $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_and_finish_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_and_finish_previous_cycle- $this->value_of_100_and_finish_this_cycle) * 100);
-
-         }else
-         {
-             $this->project_completion_rate_count_previous_cycle_value_100_in_progress = 0;
-
-         }
-
-
-         if (($this->accepted_project_value) > 0 ) {
-             $this->project_completion_rate_count_this_cycle_value=  (($this->value_of_finished_projects_this_cycle)/($this->accepted_project_value) )*100;
-             $this->project_completion_rate_count_previous_cycle_value =( ($this->value_of_finished_projects_previous_cycle) / ($this->accepted_project_value+ $this->value_of_finished_projects_previous_cycle -$this->value_of_finished_projects_this_cycle) *100);
-             $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_and_finish_this_cycle/$this->accepted_project_value )*100;
-
-         }else {
-             $this->project_completion_rate_count_this_cycle_value= 0;
-             $this->project_completion_rate_count_previous_cycle_value = 0;
-             $this->project_completion_rate_count_this_cycle_value_100_in_progress= 0;
-
-
-         }
-         $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge','projects.project_budget','projects.project_name',
-         'projects.status as project_status','clients.created_at as client_creation_date'
-         )
-         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-         ->join('deals', 'deals.client_id', 'projects.client_id')
-         ->join('users as clients','clients.id','projects.client_id')
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('deals.client_badge','new client')
-         ->groupBy('clients.id')
-         ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-         ->whereBetween('clients.created_at', [$this->startMonth, $this->endMonth])
-         ->orderBy('clients.created_at','desc')
-         ->get();
-         $this->no_of_existing_clients_this_cycle = Project::select('clients.*','deals.client_badge')
-         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-         ->join('deals', 'deals.client_id', 'projects.client_id')
-         ->join('users as clients','clients.id','projects.client_id')
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('deals.client_badge','<>','new client')
-         ->groupBy('clients.id')
-         ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-         ->orderBy('clients.created_at','desc')
-         ->get();
-
-         $this->total_client_monthly = $this->no_of_new_clients_this_cycle->concat($this->no_of_existing_clients_this_cycle);
-
-         $this->total_milestone_assigned_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
-         )
-         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-         ->where('projects.pm_id', $this->pm->id)
-
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->orderBy('project_milestones.created_at','desc')
-
-         ->get();
-         $this->total_milestone_assigned_this_cycle_value= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
-         )
-         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-         ->where('projects.pm_id', $this->pm->id)
-
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->sum('project_milestones.cost');
-         $this->total_milestone_completed_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
-         )
-         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-         ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-         ->leftJoin('payments','payments.invoice_id','invoices.id')
-         ->orderBy('payments.paid_on','desc')
-        //->groupBy('project_milestones.id')
-
-        // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('project_milestones.status', 'complete')
-
-
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->get();
-
-         $this->total_milestone_completed_previous_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
-         )
-         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-         ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-         ->leftJoin('payments','payments.invoice_id','invoices.id')
-         ->orderBy('payments.paid_on','desc')
-        //->groupBy('project_milestones.id')
-
-         ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('project_milestones.status', 'complete')
-        // ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
-
-         ->get();
-         $this->total_milestone_completed_this_current_month= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
-         )
-         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-         ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-         ->leftJoin('payments','payments.invoice_id','invoices.id')
-         ->orderBy('payments.paid_on','desc')
-        //->groupBy('project_milestones.id')
-
-        // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('payments.paid_on', [$this->startMonth, $this->endMonth])
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('project_milestones.status', 'complete')
-
-
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->get();
-         if (count($this->total_milestone_assigned_this_cycle) > 0 ) {
-             $this->milestone_completion_rate_count_this_cycle=  ((count($this->total_milestone_completed_this_cycle))/(count($this->total_milestone_assigned_this_cycle)) )*100;
-             $this->milestone_completion_rate_count_previous_cycle = ((count($this->total_milestone_completed_previous_cycle)) / ((count($this->total_milestone_assigned_this_cycle))+(count($this->total_milestone_completed_previous_cycle))- (count($this->total_milestone_completed_this_cycle))) * 100);
-         }else {
-             $this->milestone_completion_rate_count_this_cycle= 0;
-             $this->milestone_completion_rate_count_previous_cycle = 0;
-
-         }
-         if ($this->total_milestone_assigned_this_cycle_value > 0 ) {
-             $this->milestone_completion_rate_value_this_cycle=  (($this->total_released_amount_this_cycle)/($this->total_milestone_assigned_this_cycle_value) )*100;
-             $this->milestone_completion_rate_value_previous_cycle = (($this->total_released_amount_previous_cycle) / (($this->total_milestone_assigned_this_cycle_value)+($this->total_released_amount_previous_cycle)- ($this->total_released_amount_this_cycle)) * 100);
-         }else {
-             $this->milestone_completion_rate_value_this_cycle= 0;
-             $this->milestone_completion_rate_value_previous_cycle = 0;
-
-         }
-         $this->total_tasks_assigned_this_cycle= Task::select('tasks.*')
-         ->leftJoin('task_users','task_users.task_id','tasks.id')
-         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-         ->where('tasks.added_by',$this->pm->id)->count();
-         $this->total_tasks_assigned_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
-         DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-         )
-         ->leftJoin('task_users','task_users.task_id','tasks.id')
-         ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-
-
-         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-         ->where('tasks.added_by',$this->pm->id)
-         ->orderBy('tasks.created_at','desc')
-         ->get();
-
-        // dd($this->total_tasks_assigned_this_cycle_get);
-         $this->total_tasks_completed_this_cycle= Task::select('tasks.*')
-         ->leftJoin('task_users','task_users.task_id','tasks.id')
-         ->where('board_column_id',4)
-         ->where('tasks.added_by',$this->pm->id)
-         ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-         ->count();
-         if($this->total_tasks_assigned_this_cycle > 0)
-         {
-             $this->tasks_completion_rate_this_cycle= ($this->total_tasks_completed_this_cycle/ $this->total_tasks_assigned_this_cycle)*100;
-
-         }else
-         {
-             $this->tasks_completion_rate_this_cycle = 0;
-
-         }
-         //$this->task_completion_rate_this_cycle=
-         $this->total_tasks_completed_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar','tasks.updated_at as task_completion_date',
-         DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-         )
-         ->leftJoin('task_users','task_users.task_id','tasks.id')
-         ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-
-
-         ->where('board_column_id',4)
-         ->where('tasks.added_by',$this->pm->id)
-         ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-         ->orderBy('tasks.updated_at','desc')
-         ->get();
-
-         $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
-         ->leftJoin('task_users','task_users.task_id','tasks.id')
-         ->where('board_column_id',4)
-         ->where('tasks.added_by',$this->pm->id)
-         ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-       //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
-         ->count();
-         if($this->total_tasks_assigned_this_cycle > 0)
-         {
-             $this->tasks_completion_rate_previous_cycle=  (($this->total_tasks_completed_previous_cycle) /
-              (($this->total_tasks_assigned_this_cycle)+
-              ($this->total_tasks_completed_previous_cycle)-
-              ($this->total_tasks_completed_this_cycle)) * 100);
-
-         }else
-         {
-             $this->tasks_completion_rate_previous_cycle = 0;
-
-         }
-        // dd($this->total_tasks_assigned_previous_cycle);
-         $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
-         DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-         )
-         ->leftJoin('task_users','task_users.task_id','tasks.id')
-
-         ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-
-         ->where('board_column_id',4)
-         ->where('tasks.added_by',$this->pm->id)
-         ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-        // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
-        ->orderBy('tasks.updated_at','desc')
-         ->get();
-         $this->average_project_completion_rate = Project::select(
-             'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
-             DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
-         )
-             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-             ->where('projects.status', 'finished')
-             ->where('projects.pm_id', $this->pm->id)
-             ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-             ->orderBy('projects.updated_at','desc')
-             ->get();
-
-         $this->average_completion_days = $this->average_project_completion_rate->avg('completion_time_days');
-         $this->average_project_completion_rate_previous_cycle = Project::select(
-             'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
-             DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
-         )
-             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-             ->where('projects.status', 'finished')
-             ->where('projects.pm_id', $this->pm->id)
-            // ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
-            ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-             ->orderBy('projects.updated_at','desc')
-             ->get();
-
-         $this->average_completion_days_previous_cycle = $this->average_project_completion_rate_previous_cycle->avg('completion_time_days');
-         // /dd($this->average_completion_days);
-         $this->cancelled_projects_this_cycle=  Project::select(
-             'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
-
-         )
-             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-             ->whereIn('projects.status', ['canceled','partially finished'])
-
-             ->where('projects.pm_id', $this->pm->id)
-             ->where('projects.project_status','Accepted')
-             ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-             ->orderBy('projects.updated_at','desc')
-             ->get();
-
-             $this->cancelled_projects_previous_cycle=  Project::select(
-                 'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
-
-
-             )
-             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-
-             ->whereIn('projects.status', ['canceled','partially finished'])
-             ->where('projects.project_status','Accepted')
-
-             ->where('projects.pm_id', $this->pm->id)
-
-                 ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-
-                 ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-                 ->orderBy('projects.updated_at','desc')
-                 ->get();
-         $this->no_of_new_deals_added_previous = Deal::select('deals.*')
-         ->where('deals.added_by', $this->pm->id)
-         ->whereBetween('deals.created_at', [$this->startMonth, $this->endMonth])
-         ->orderBy('deals.created_at','desc')
-         ->get();
-         $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
-         ->join('projects','projects.id','project_milestones.project_id')
-         ->join('deals','deals.id','projects.deal_id')
-         ->where('deals.project_type','fixed')
-         ->where('projects.pm_id',$this->pm->id)
-         ->where('project_milestones.added_by',$this->pm->id)
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->where('project_milestones.status','!=','canceled')
-         ->orderBy('project_milestones.created_at','desc')
-         ->get();
-         $this->no_of_new_milestones_added_on_old_projects_id = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId','projects.status as projectStatus')
-         ->join('projects','projects.id','project_milestones.project_id')
-         ->join('deals','deals.id','projects.deal_id')
-         ->where('deals.project_type','fixed')
-         ->where('projects.pm_id',$this->pm->id)
-         ->where('project_milestones.added_by',$this->pm->id)
-         ->groupBy('project_milestones.project_id')
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->where('project_milestones.status','!=','canceled')
-         ->orderBy('project_milestones.created_at','desc')
-         ->get();
-         $this->no_of_new_milestones_added_on_old_projects_value = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
-         ->join('projects','projects.id','project_milestones.project_id')
-         ->join('deals','deals.id','projects.deal_id')
-         ->where('deals.project_type','fixed')
-         ->where('projects.pm_id',$this->pm->id)
-         ->where('project_milestones.added_by',$this->pm->id)
-         ->where('project_milestones.status','!=','canceled')
-         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-         ->sum('project_milestones.cost');
-         $this->no_of_delayed_projects = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
-         ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-         ->where('projects.pm_id', $this->pm->id)
-         ->where('projects.project_status', 'Accepted')
-         ->where('projects.status', 'in progress')
-         ->where('p_m_projects.delayed_status', 1)
-         ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-         ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-         ->orderBy('projects.updated_at','desc')
-
-         ->get();
-
-        // dd($delay_date);
-
-             $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-
-             ->where('projects.pm_id', $this->pm->id)
-
-             ->where('projects.status', 'finished')
-             ->where('p_m_projects.delayed_status', 1)
-             ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-             ->orderBy('projects.updated_at','desc')
-
-             ->get();
-
-
-
-             $this->no_of_delayed_projects_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
-                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-                 ->where('projects.pm_id', $this->pm->id)
-                 ->where('projects.project_status', 'Accepted')
-                 ->where('projects.status', 'in progress')
-                 ->where('p_m_projects.delayed_status', 1)
-                 ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-                 ->orderBy('projects.updated_at','desc')
-
-
-                 // Compare against the calculated deadline date
-                 ->get();
-             $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-
-             ->where('projects.pm_id', $this->pm->id)
-             ->where('projects.project_status', 'Accepted')
-             ->where('projects.status', 'finished')
-             ->where('p_m_projects.delayed_status', 1)
-             ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-             ->orderBy('projects.updated_at','desc')
-
-             ->get();
-
-             $this->caused_by_me_for_previous_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'task_revision_disputes.*'
+            ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
+            ->leftJoin('project_milestones', function ($join) {
+                $join->on('projects.id', '=', 'project_milestones.project_id')
+                    ->where('project_milestones.status','<>', 'complete')
+                    ->where('project_milestones.project_completion_status', 0)
+                    ->where('project_milestones.qc_status', 0);
+            })
+           ->where('projects.pm_id', $this->pm->id)
+            ->where('projects.status', 'in progress')
+
+            ->whereNull('project_milestones.id')
+           // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
+           ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+            $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+               ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth]);
+                           
+        })
+      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+               $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                ->where('pm_projects.created_at', '<', $startMonth);
+
+    })
+            ->sum('projects.project_budget');
+            $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
+            $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
+            $this->value_of_100_and_finish_this_cycle = $this->value_of_100_finished_project_this_cycle+$this->value_of_finished_projects_this_cycle;
+            $this->value_of_100_and_finish_previous_cycle = $this->value_of_100_finished_project_previous_cycle+$this->value_of_finished_projects_previous_cycle;
+            if (count($this->no_of_accepted_projects) > 0 ) {
+                $this->project_completion_rate_count_this_cycle=  ((count($this->no_of_finished_projects_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
+                $this->project_completion_rate_count_previous_cycle = ((count($this->no_of_finished_projects_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_finished_projects_previous_cycle))- (count($this->no_of_finished_projects_this_cycle))) * 100);
+                $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_and_finish_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
+
+            }else {
+                $this->project_completion_rate_count_this_cycle= 0;
+                $this->project_completion_rate_count_previous_cycle = 0;
+                $this->project_completion_rate_count_this_cycle_100_in_progress= 0;
+
+
+
+            }
+            if(count($this->no_of_100_and_finish_this_cycle) > 0)
+            {
+                $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_and_finish_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_and_finish_previous_cycle))- (count($this->no_of_100_and_finish_this_cycle))) * 100);
+
+            }else
+            {
+                $this->project_completion_rate_count_previous_cycle_100_in_progress = 0;
+
+            }
+            if($this->value_of_100_and_finish_previous_cycle > 0)
+            {
+                $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_and_finish_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_and_finish_previous_cycle- $this->value_of_100_and_finish_this_cycle) * 100);
+
+            }else
+            {
+                $this->project_completion_rate_count_previous_cycle_value_100_in_progress = 0;
+
+            }
+
+
+            if (($this->accepted_project_value) > 0 ) {
+                $this->project_completion_rate_count_this_cycle_value=  (($this->value_of_finished_projects_this_cycle)/($this->accepted_project_value) )*100;
+                $this->project_completion_rate_count_previous_cycle_value =( ($this->value_of_finished_projects_previous_cycle) / ($this->accepted_project_value+ $this->value_of_finished_projects_previous_cycle -$this->value_of_finished_projects_this_cycle) *100);
+                $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_and_finish_this_cycle/$this->accepted_project_value )*100;
+
+            }else {
+                $this->project_completion_rate_count_this_cycle_value= 0;
+                $this->project_completion_rate_count_previous_cycle_value = 0;
+                $this->project_completion_rate_count_this_cycle_value_100_in_progress= 0;
+
+
+            }
+            $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge','projects.project_budget','projects.project_name',
+            'projects.status as project_status','clients.created_at as client_creation_date'
+            )
+            ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
+            ->join('deals', 'deals.client_id', 'projects.client_id')
+            ->join('users as clients','clients.id','projects.client_id')
+           ->where('projects.pm_id', $this->pm->id)
+            ->where('deals.client_badge','new client')
+            ->groupBy('clients.id')
+            ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
+            ->whereBetween('clients.created_at', [$this->startMonth, $this->endMonth])
+            ->orderBy('clients.created_at','desc')
+            ->get();
+            $this->no_of_existing_clients_this_cycle = Project::select('clients.*','deals.client_badge')
+            ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
+            ->join('deals', 'deals.client_id', 'projects.client_id')
+            ->join('users as clients','clients.id','projects.client_id')
+           ->where('projects.pm_id', $this->pm->id)
+            ->where('deals.client_badge','<>','new client')
+            ->groupBy('clients.id')
+            ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
+            ->orderBy('clients.created_at','desc')
+            ->get();
+
+            $this->total_client_monthly = $this->no_of_new_clients_this_cycle->concat($this->no_of_existing_clients_this_cycle);
+
+            $this->total_milestone_assigned_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+           ->where('projects.pm_id', $this->pm->id)
+
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->orderBy('project_milestones.created_at','desc')
+
+            ->get();
+            $this->total_milestone_assigned_this_cycle_value= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+           ->where('projects.pm_id', $this->pm->id)
+
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->sum('project_milestones.cost');
+            $this->total_milestone_completed_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+            ->leftJoin('payments','payments.invoice_id','invoices.id')
+            ->orderBy('payments.paid_on','desc')
+           //->groupBy('project_milestones.id')
+
+           // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+            ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
+           ->where('projects.pm_id', $this->pm->id)
+            ->where('project_milestones.status', 'complete')
+
+
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->get();
+
+            $this->total_milestone_completed_previous_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+            ->leftJoin('payments','payments.invoice_id','invoices.id')
+           
+           //->groupBy('project_milestones.id')
+
+           ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+            $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+               ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                           
+        })
+      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+               $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+                ->where('project_milestones.created_at', '<', $startMonth);
+
+    })
+           ->where('projects.pm_id', $this->pm->id)
+            ->orderBy('payments.paid_on','desc')
+            ->where('project_milestones.status', 'complete')
+           // ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
+
+            ->get();
+            $this->total_milestone_completed_this_current_month= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+            'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+            )
+            ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+            ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+            ->leftJoin('payments','payments.invoice_id','invoices.id')
+            ->orderBy('payments.paid_on','desc')
+           //->groupBy('project_milestones.id')
+
+           // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+            ->whereBetween('payments.paid_on', [$this->startMonth, $this->endMonth])
+           ->where('projects.pm_id', $this->pm->id)
+            ->where('project_milestones.status', 'complete')
+
+
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->get();
+            if (count($this->total_milestone_assigned_this_cycle) > 0 ) {
+                $this->milestone_completion_rate_count_this_cycle=  ((count($this->total_milestone_completed_this_cycle))/(count($this->total_milestone_assigned_this_cycle)) )*100;
+                $this->milestone_completion_rate_count_previous_cycle = ((count($this->total_milestone_completed_previous_cycle)) / ((count($this->total_milestone_assigned_this_cycle))+(count($this->total_milestone_completed_previous_cycle))- (count($this->total_milestone_completed_this_cycle))) * 100);
+            }else {
+                $this->milestone_completion_rate_count_this_cycle= 0;
+                $this->milestone_completion_rate_count_previous_cycle = 0;
+
+            }
+            if ($this->total_milestone_assigned_this_cycle_value > 0 ) {
+                $this->milestone_completion_rate_value_this_cycle=  (($this->total_released_amount_this_cycle)/($this->total_milestone_assigned_this_cycle_value) )*100;
+                $this->milestone_completion_rate_value_previous_cycle = (($this->total_released_amount_previous_cycle) / (($this->total_milestone_assigned_this_cycle_value)+($this->total_released_amount_previous_cycle)- ($this->total_released_amount_this_cycle)) * 100);
+            }else {
+                $this->milestone_completion_rate_value_this_cycle= 0;
+                $this->milestone_completion_rate_value_previous_cycle = 0;
+
+            }
+            $this->total_tasks_assigned_this_cycle= Task::select('tasks.*')
+            ->leftJoin('task_users','task_users.task_id','tasks.id')
+            ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+           ->where('tasks.added_by', $this->pm->id)->count();
+            $this->total_tasks_assigned_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+            DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+            )
+            ->leftJoin('task_users','task_users.task_id','tasks.id')
+            ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+
+            ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+           ->where('tasks.added_by', $this->pm->id)
+            ->orderBy('tasks.created_at','desc')
+            ->get();
+
+           // dd($this->total_tasks_assigned_this_cycle_get);
+            $this->total_tasks_completed_this_cycle= Task::select('tasks.*')
+            ->leftJoin('task_users','task_users.task_id','tasks.id')
+            ->where('board_column_id',4)
+           ->where('tasks.added_by', $this->pm->id)
+            ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+            ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+            ->count();
+            if($this->total_tasks_assigned_this_cycle > 0)
+            {
+                $this->tasks_completion_rate_this_cycle= ($this->total_tasks_completed_this_cycle/ $this->total_tasks_assigned_this_cycle)*100;
+
+            }else
+            {
+                $this->tasks_completion_rate_this_cycle = 0;
+
+            }
+            //$this->task_completion_rate_this_cycle=
+            $this->total_tasks_completed_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar','tasks.updated_at as task_completion_date',
+            DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+            )
+            ->leftJoin('task_users','task_users.task_id','tasks.id')
+            ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+
+            ->where('board_column_id',4)
+           ->where('tasks.added_by', $this->pm->id)
+            ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+            ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+            ->orderBy('tasks.updated_at','desc')
+            ->get();
+            //enan code
+            $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
+            ->leftJoin('task_users','task_users.task_id','tasks.id')
+  
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->where('board_column_id',4)
+                      ->where('tasks.added_by', $this->pm->id)
+                       ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                       ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->where('board_column_id',4)
+                         ->where('tasks.added_by', $this->pm->id)
+                           ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                           ->where('tasks.created_at', '<', $startMonth);
+
+                       
+                
+            })
+            ->count();
+             //   sayeed code 
+
+        //     $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
+        //     ->leftJoin('task_users','task_users.task_id','tasks.id')
+        //     ->where('board_column_id',4)
+        //    ->where('tasks.added_by', $this->pm->id)
+        //     ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
+        //     ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+        //   //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+        //     ->count();
+
+
+            if($this->total_tasks_assigned_this_cycle > 0)
+            {
+                $this->tasks_completion_rate_previous_cycle=  (($this->total_tasks_completed_previous_cycle) /
+                 (($this->total_tasks_assigned_this_cycle)+
+                 ($this->total_tasks_completed_previous_cycle)-
+                 ($this->total_tasks_completed_this_cycle)) * 100);
+
+            }else
+            {
+                $this->tasks_completion_rate_previous_cycle = 0;
+
+            }
+           // dd($this->total_tasks_assigned_previous_cycle);
+           //code sayeed
+        //     $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+        //     DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+        //     )
+        //     ->leftJoin('task_users','task_users.task_id','tasks.id')
+
+        //     ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+        //     ->where('board_column_id',4)
+        //    ->where('tasks.added_by', $this->pm->id)
+        //     ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
+        //     ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+        //    // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+        //    ->orderBy('tasks.updated_at','desc')
+        //     ->get();
+
+        //code enan 
+        $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+        DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+        )
+        ->leftJoin('task_users','task_users.task_id','tasks.id')
+
+        ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+            $q3->where('board_column_id',4)
+              ->where('tasks.added_by', $this->pm->id)
+               ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+               ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                           
+        })
+      ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+               $q2->where('board_column_id',4)
+                 ->where('tasks.added_by', $this->pm->id)
+                   ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                   ->where('tasks.created_at', '<', $startMonth);
+
+               
+        
+    })
+       // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+       ->orderBy('tasks.updated_at','desc')
+        ->get();
+            
+            $this->average_project_completion_rate = Project::select(
+                'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
+                DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
+            )
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                ->where('projects.status', 'finished')
+               ->where('projects.pm_id', $this->pm->id)
+                ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+                ->orderBy('projects.updated_at','desc')
+                ->get();
+
+            $this->average_completion_days = $this->average_project_completion_rate->avg('completion_time_days');
+            $this->average_project_completion_rate_previous_cycle = Project::select(
+                'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
+                DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
+            )
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                ->where('projects.status', 'finished')
+               ->where('projects.pm_id', $this->pm->id)
+               // ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+            //    ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+            //     ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                    ->where('p_m_projects.created_at', '<', $startMonth);
+    
+        })
+                ->orderBy('projects.updated_at','desc')
+                ->get();
+
+            $this->average_completion_days_previous_cycle = $this->average_project_completion_rate_previous_cycle->avg('completion_time_days');
+            // /dd($this->average_completion_days);
+            $this->cancelled_projects_this_cycle=  Project::select(
+                'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
+
+            )
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                ->whereIn('projects.status', ['canceled','partially finished'])
+
+               ->where('projects.pm_id', $this->pm->id)
+                ->where('projects.project_status','Accepted')
+                ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+                ->orderBy('projects.updated_at','desc')
+                ->get();
+
+                $this->cancelled_projects_previous_cycle=  Project::select(
+                    'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
+
+
                 )
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+
+                ->whereIn('projects.status', ['canceled','partially finished'])
+                ->where('projects.project_status','Accepted')
+
+               ->where('projects.pm_id', $this->pm->id)
+
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                        ->where('p_m_projects.created_at', '<', $startMonth);
+        
+            })
+                    ->orderBy('projects.updated_at','desc')
+                    ->get();
+            $this->no_of_new_deals_added_previous = Deal::select('deals.*')
+            ->where('deals.added_by', $this->pm->id)
+            ->whereBetween('deals.created_at', [$this->startMonth, $this->endMonth])
+            ->orderBy('deals.created_at','desc')
+            ->get();
+            $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
+            ->join('projects','projects.id','project_milestones.project_id')
+            ->join('deals','deals.id','projects.deal_id')
+            ->where('deals.project_type','fixed')
+            ->where('projects.pm_id',$this->pm->id)
+            ->where('project_milestones.added_by',$this->pm->id)
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->where('project_milestones.status','!=','canceled')
+            ->orderBy('project_milestones.created_at','desc')
+            ->get();
+            $this->no_of_new_milestones_added_on_old_projects_id = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId','projects.status as projectStatus')
+            ->join('projects','projects.id','project_milestones.project_id')
+            ->join('deals','deals.id','projects.deal_id')
+            ->where('deals.project_type','fixed')
+            ->where('projects.pm_id',$this->pm->id)
+            ->where('project_milestones.added_by',$this->pm->id)
+            ->groupBy('project_milestones.project_id')
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->where('project_milestones.status','!=','canceled')
+            ->orderBy('project_milestones.created_at','desc')
+            ->get();
+            $this->no_of_new_milestones_added_on_old_projects_value = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
+            ->join('projects','projects.id','project_milestones.project_id')
+            ->join('deals','deals.id','projects.deal_id')
+            ->where('deals.project_type','fixed')
+            ->where('projects.pm_id',$this->pm->id)
+            ->where('project_milestones.added_by',$this->pm->id)
+            ->where('project_milestones.status','!=','canceled')
+            ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+            ->sum('project_milestones.cost');
+            $this->no_of_delayed_projects = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
+            ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+           ->where('projects.pm_id', $this->pm->id)
+            ->where('projects.project_status', 'Accepted')
+          
+            ->where('p_m_projects.delayed_status', 1)
+            // ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+            // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+            ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                    ->where('p_m_projects.created_at', '<', $startMonth);
+    
+        })
+            ->orderBy('projects.updated_at','desc')
+
+
+            ->get();
+
+           // dd($delay_date);
+
+                $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+
+               ->where('projects.pm_id', $this->pm->id)
+
+                ->where('projects.status', 'finished')
+                ->where('p_m_projects.delayed_status', 1)
+                // ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+                // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                       ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                        ->where('p_m_projects.created_at', '<', $startMonth);
+        
+            })
+                ->orderBy('projects.updated_at','desc')
+
+                ->get();
+
+
+
+                $this->no_of_delayed_projects_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
+                    ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                   ->where('projects.pm_id', $this->pm->id)
+                    ->where('projects.project_status', 'Accepted')
+                   
+                    ->where('p_m_projects.delayed_status', 1)
+                    ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                    ->orderBy('projects.updated_at','desc')
+
+
+                    // Compare against the calculated deadline date
+                    ->get();
+                $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+                ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+
+               ->where('projects.pm_id', $this->pm->id)
+                ->where('projects.project_status', 'Accepted')
+                ->where('projects.status', 'finished')
+                ->where('p_m_projects.delayed_status', 1)
+                ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+                ->orderBy('projects.updated_at','desc')
+
+                ->get();
+
+                $this->caused_by_me_for_previous_cycle = TaskRevision::select(
+                    'task_revisions.created_at as revision_date',
+                    'task_revisions.revision_acknowledgement as revision_reason',
+                    'task_revisions.dispute_created',
+                    'task_revisions.added_by',
+                    'projects.id as projectId',
+                    'projects.project_name',
+                    'projects.client_id',
+                    'task_revision_disputes.*'
+                    )
                 ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
                 ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
                 ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-                ->where('projects.pm_id', $this->pm->id)
+               ->where('projects.pm_id', $this->pm->id)
                 ->where('task_revisions.final_responsible_person','PM')
                 ->groupBy('task_revisions.id')
                 ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
@@ -708,7 +885,7 @@ trait PmDashboardAdminView
                 ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
                 ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
                 ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
-                ->where('projects.pm_id', $this->pm->id)
+               ->where('projects.pm_id', $this->pm->id)
                 ->where('task_revisions.final_responsible_person', '!=', 'PM')
                 ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
                 ->groupBy('task_revisions.id')
@@ -731,11 +908,13 @@ trait PmDashboardAdminView
                 ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
                 ->leftJoin('projects','task_revisions.project_id','=','projects.id')
                 ->leftJoin('project_members','projects.id','=','project_members.project_id')
-                ->where('projects.pm_id', $this->pm->id)
+               ->where('projects.pm_id', $this->pm->id)
                 ->where('task_revisions.dispute_created', 1)
                 ->groupBy('task_revisions.id')
                 ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
                 ->get();
+
+
 
                 $this->caused_by_me_in_previous_cycle = TaskRevision::select(
                     'task_revisions.created_at as revision_date',
@@ -751,12 +930,24 @@ trait PmDashboardAdminView
                 ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
                 ->leftJoin('projects','task_revisions.project_id','=','projects.id')
                 ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-                ->where('projects.pm_id', $this->pm->id)
+               ->where('projects.pm_id', $this->pm->id)
                 ->where('task_revisions.final_responsible_person','PM')
-                ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-                ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+                // ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+                // ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                       ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                        ->where('task_revisions.created_at', '<', $startMonth);
+        
+            })
                 ->groupBy('task_revisions.id')
                 ->get();
+
 
                 $this->caused_by_other_in_previous_cycle = TaskRevision::select(
                     'task_revisions.created_at as revision_date',
@@ -771,10 +962,19 @@ trait PmDashboardAdminView
                 ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
                 ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
                 ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-                ->where('projects.pm_id', $this->pm->id)
+               ->where('projects.pm_id', $this->pm->id)
                 ->where('task_revisions.final_responsible_person', '!=', 'PM')
-                ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-                ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                       ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                        ->where('task_revisions.created_at', '<', $startMonth);
+        
+            })
                 ->groupBy('task_revisions.id')
                 ->get();
 
@@ -797,35 +997,45 @@ trait PmDashboardAdminView
                 ->leftJoin('projects','task_revisions.project_id','=','projects.id')
                 ->leftJoin('project_members','projects.id','=','project_members.project_id')
                 ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-                ->where('projects.pm_id', $this->pm->id)
+               ->where('projects.pm_id', $this->pm->id)
                 ->where('task_revisions.dispute_created', 1)
                 ->groupBy('task_revisions.id')
-                ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-                ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+                ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                    $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                       ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth]);
+                                   
+                })
+              ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                       $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                        ->where('task_revisions.created_at', '<', $startMonth);
+        
+            })
+            
                 ->get();
 
-         if(count($this->no_of_accepted_projects) > 0 )
-         {
-             $this->delayed_projects_percentage_this_cycle = (count($this->no_of_delayed_projects_this_cycle)/(count($this->no_of_accepted_projects)))*100;
-             $this->delayed_projects_percentage_previous_cycle = (count($this->no_of_delayed_projects) /((count($this->no_of_accepted_projects))+(count($this->no_of_delayed_projects))))*100;
-             $this->project_cancelation_rate =  (count($this->cancelled_projects_this_cycle)/count($this->no_of_accepted_projects)) * 100;
-         }else
-         {
-             $this->delayed_projects_percentage_this_cycle = 0;
-             $this->delayed_projects_percentage_previous_cycle = 0;
-             $this->project_cancelation_rate = 0;
-         }
-         $first_day = $this->startMonth;
-             $this->days = Carbon::parse($first_day)->diffInDays(Carbon::parse($this->endMonth));
-             //dd($this->days);
+            if(count($this->no_of_accepted_projects) > 0 )
+            {
+                $this->delayed_projects_percentage_this_cycle = (count($this->no_of_delayed_projects_this_cycle)/(count($this->no_of_accepted_projects)))*100;
+                $this->delayed_projects_percentage_previous_cycle = (count($this->no_of_delayed_projects) /((count($this->no_of_accepted_projects))+(count($this->no_of_delayed_projects))))*100;
+                $this->project_cancelation_rate =  (count($this->cancelled_projects_this_cycle)/count($this->no_of_accepted_projects)) * 100;
+            }else
+            {
+                $this->delayed_projects_percentage_this_cycle = 0;
+                $this->delayed_projects_percentage_previous_cycle = 0;
+                $this->project_cancelation_rate = 0;
+            }
+            $first_day = $this->startMonth;
+                $this->days = Carbon::parse($first_day)->diffInDays(Carbon::parse($this->endMonth));
+                //dd($this->days);
 
-             if (count($this->total_milestone_completed_this_cycle) > 0) {
-                 $this->avg_payment_release_per_day= count($this->total_milestone_completed_this_cycle) /$this->days ;
-             }else
-             {
-                 $this->avg_payment_release_per_day =0;
+                if (count($this->total_milestone_completed_this_cycle) > 0) {
+                    $this->avg_payment_release_per_day= count($this->total_milestone_completed_this_cycle) /$this->days ;
+                }else
+                {
+                    $this->avg_payment_release_per_day =0;
 
-             }
+                }
 
 
 
@@ -847,9 +1057,16 @@ trait PmDashboardAdminView
          $date = Carbon::createFromFormat('Y-m-d', request('startDate'));
         // dd($date);
 
-         $this->startMonth = $date->startOfMonth()->addDays(15)->toDateString();
-         $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(15)->toDateString();
-         $this->release_date = $date->endofMonth()->toDateString();
+        $this->startMonth = $date->startOfMonth()->addDays(15)->toDateString();
+        $this->endMonth = $date->startOfMonth()->addMonth(1)->addDays(15)->toDateString();
+        $this->release_date = $date->endofMonth()->toDateString();
+        $this->nextMonth = $date->startOfMonth()->toDateString();
+
+        
+        $startMonth= $this->startMonth;
+        $endMonth = $this->endMonth;
+        $release_date= $this->release_date;
+        $nextMonth= $this->nextMonth;
 
 
 
@@ -929,12 +1146,13 @@ trait PmDashboardAdminView
       ->leftJoin('payments','payments.invoice_id','invoices.id')
       ->where('projects.pm_id', $this->pm->id)
 
-      ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
       ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
       ->orderBy('payments.paid_on','desc')
 
      // ->take(2)
       ->get();
+     
       $this->total_released_amount_previous_cycle = Project::select('projects.*',
       'project_milestones.milestone_title as milestone_title',
       'project_milestones.created_at as milestone_creation_date',
@@ -948,11 +1166,23 @@ trait PmDashboardAdminView
       ->leftJoin('payments','payments.invoice_id','invoices.id')
      // ->groupBy('project_milestones.project_id')
      //->groupBy('project_milestones.id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
+     
+     ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-      ->sum('project_milestones.cost');
+      $q3->where('projects.pm_id', $this->pm->id)
+         ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+         ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                     
+  })
+->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+         $q2->where('projects.pm_id', $this->pm->id)
+           
+             ->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+             ->where('project_milestones.created_at', '<', $startMonth);
+
+         
+  
+})->sum('project_milestones.cost');
       $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
       'project_milestones.milestone_title as milestone_title',
       'project_milestones.created_at as milestone_creation_date',
@@ -964,15 +1194,21 @@ trait PmDashboardAdminView
       ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
       ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
       ->leftJoin('payments','payments.invoice_id','invoices.id')
-      ->where('projects.pm_id', $this->pm->id)
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
+          $q3->where('projects.pm_id', $this->pm->id)
+             ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+             ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth]);
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->where('projects.pm_id', $this->pm->id)
+               
+                 ->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+                 ->where('project_milestones.created_at', '<', $startMonth);
 
-  //    / ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-   ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
+  })
      // ->take(2)
-
-
      ->orderBy('payments.paid_on','desc')
       ->get();
       $this->no_of_finished_projects_this_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -984,15 +1220,34 @@ trait PmDashboardAdminView
       ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
       ->orderBy('projects.updated_at','desc')
       ->get();
+     
       $this->no_of_finished_projects_previous_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status','finished')
+     
 
-      ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+      // ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
+      // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+             ->where('projects.pm_id', $this->pm->id)
+             ->where('projects.status','finished')
+             ;
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+              ->where('pm_projects.created_at', '<', $startMonth)
+              ->where('projects.pm_id', $this->pm->id)
+              ->where('projects.status','finished')
+              ;
+
+  })
+
       ->orderBy('projects.updated_at','desc')
       ->get();
+
       $this->value_of_finished_projects_this_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
       ->where('projects.pm_id', $this->pm->id)
@@ -1001,14 +1256,29 @@ trait PmDashboardAdminView
       ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
       ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
       ->sum('projects.project_budget');
+     
+
       $this->value_of_finished_projects_previous_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-
-      ->where('projects.status','finished')
+    
       //->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-      ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+             ->where('projects.pm_id', $this->pm->id)
+
+             ->where('projects.status','finished');
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+              ->where('pm_projects.created_at', '<', $startMonth)
+              ->where('projects.pm_id', $this->pm->id)
+
+              ->where('projects.status','finished');
+
+  })
       ->sum('projects.project_budget');
       $this->no_of_100_finished_project_this_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
@@ -1043,6 +1313,7 @@ trait PmDashboardAdminView
       ->orderBy('projects.updated_at','desc')
       ->sum('projects.project_budget');
 
+      
       $this->no_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
       ->leftJoin('project_milestones', function ($join) {
@@ -1051,575 +1322,852 @@ trait PmDashboardAdminView
               ->where('project_milestones.project_completion_status', 0)
               ->where('project_milestones.qc_status', 0);
       })
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status', 'in progress')
-
-      ->whereNull('project_milestones.id')
+    
      // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-     ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+     ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+      $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+         ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+         ->where('projects.pm_id', $this->pm->id)
+         ->where('projects.status', 'in progress')
+   
+         ->whereNull('project_milestones.id')
+         ;
+                     
+  })
+->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+         $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+          ->where('pm_projects.created_at', '<', $startMonth)
+          ->where('projects.pm_id', $this->pm->id)
+          ->where('projects.status', 'in progress')
+    
+          ->whereNull('project_milestones.id')
+          ;
+
+})
       ->orderBy('projects.updated_at','desc')
       ->get();
       $this->value_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
-      ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->leftJoin('project_milestones', function ($join) {
-          $join->on('projects.id', '=', 'project_milestones.project_id')
-              ->where('project_milestones.status','<>', 'complete')
-              ->where('project_milestones.project_completion_status', 0)
-              ->where('project_milestones.qc_status', 0);
-      })
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status', 'in progress')
-
-      ->whereNull('project_milestones.id')
-     // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-     ->whereNotBetween('pm_projects.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-      ->sum('projects.project_budget');
-      $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
-      $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
-      $this->value_of_100_and_finish_this_cycle = $this->value_of_100_finished_project_this_cycle+$this->value_of_finished_projects_this_cycle;
-      $this->value_of_100_and_finish_previous_cycle = $this->value_of_100_finished_project_previous_cycle+$this->value_of_finished_projects_previous_cycle;
-      if (count($this->no_of_accepted_projects) > 0 ) {
-          $this->project_completion_rate_count_this_cycle=  ((count($this->no_of_finished_projects_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
-          $this->project_completion_rate_count_previous_cycle = ((count($this->no_of_finished_projects_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_finished_projects_previous_cycle))- (count($this->no_of_finished_projects_this_cycle))) * 100);
-          $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_and_finish_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
-
-      }else {
-          $this->project_completion_rate_count_this_cycle= 0;
-          $this->project_completion_rate_count_previous_cycle = 0;
-          $this->project_completion_rate_count_this_cycle_100_in_progress= 0;
-
-
-
-      }
-      if(count($this->no_of_100_and_finish_this_cycle) > 0)
-      {
-          $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_and_finish_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_and_finish_previous_cycle))- (count($this->no_of_100_and_finish_this_cycle))) * 100);
-
-      }else
-      {
-          $this->project_completion_rate_count_previous_cycle_100_in_progress = 0;
-
-      }
-      if($this->value_of_100_and_finish_previous_cycle > 0)
-      {
-          $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_and_finish_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_and_finish_previous_cycle- $this->value_of_100_and_finish_this_cycle) * 100);
-
-      }else
-      {
-          $this->project_completion_rate_count_previous_cycle_value_100_in_progress = 0;
-
-      }
-
-
-      if (($this->accepted_project_value) > 0 ) {
-          $this->project_completion_rate_count_this_cycle_value=  (($this->value_of_finished_projects_this_cycle)/($this->accepted_project_value) )*100;
-          $this->project_completion_rate_count_previous_cycle_value =( ($this->value_of_finished_projects_previous_cycle) / ($this->accepted_project_value+ $this->value_of_finished_projects_previous_cycle -$this->value_of_finished_projects_this_cycle) *100);
-          $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_and_finish_this_cycle/$this->accepted_project_value )*100;
-
-      }else {
-          $this->project_completion_rate_count_this_cycle_value= 0;
-          $this->project_completion_rate_count_previous_cycle_value = 0;
-          $this->project_completion_rate_count_this_cycle_value_100_in_progress= 0;
-
-
-      }
-      $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge','projects.project_budget','projects.project_name',
-      'projects.status as project_status','clients.created_at as client_creation_date'
-      )
-      ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->join('deals', 'deals.client_id', 'projects.client_id')
-      ->join('users as clients','clients.id','projects.client_id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('deals.client_badge','new client')
-      ->groupBy('clients.id')
-      ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-      ->whereBetween('clients.created_at', [$this->startMonth, $this->endMonth])
-      ->orderBy('clients.created_at','desc')
-      ->get();
-      $this->no_of_existing_clients_this_cycle = Project::select('clients.*','deals.client_badge')
-      ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->join('deals', 'deals.client_id', 'projects.client_id')
-      ->join('users as clients','clients.id','projects.client_id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('deals.client_badge','<>','new client')
-      ->groupBy('clients.id')
-      ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-      ->orderBy('clients.created_at','desc')
-      ->get();
-
-      $this->total_client_monthly = $this->no_of_new_clients_this_cycle->concat($this->no_of_existing_clients_this_cycle);
-
-      $this->total_milestone_assigned_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-      'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
-      )
-      ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->orderBy('project_milestones.created_at','desc')
-
-      ->get();
-      $this->total_milestone_assigned_this_cycle_value= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-      'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
-      )
-      ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->sum('project_milestones.cost');
-      $this->total_milestone_completed_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-      'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
-      )
-      ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-      ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-      ->leftJoin('payments','payments.invoice_id','invoices.id')
-      ->orderBy('payments.paid_on','desc')
-     //->groupBy('project_milestones.id')
-
-     // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('project_milestones.status', 'complete')
-
-
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->get();
-
-      $this->total_milestone_completed_previous_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-      'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
-      )
-      ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-      ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-      ->leftJoin('payments','payments.invoice_id','invoices.id')
-      ->orderBy('payments.paid_on','desc')
-     //->groupBy('project_milestones.id')
-
-      ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('project_milestones.status', 'complete')
-     // ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
-
-      ->get();
-      $this->total_milestone_completed_this_current_month= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
-      'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
-      )
-      ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
-      ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
-      ->leftJoin('payments','payments.invoice_id','invoices.id')
-      ->orderBy('payments.paid_on','desc')
-     //->groupBy('project_milestones.id')
-
-     // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('payments.paid_on', [$this->startMonth, $this->endMonth])
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('project_milestones.status', 'complete')
-
-
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->get();
-      if (count($this->total_milestone_assigned_this_cycle) > 0 ) {
-          $this->milestone_completion_rate_count_this_cycle=  ((count($this->total_milestone_completed_this_cycle))/(count($this->total_milestone_assigned_this_cycle)) )*100;
-          $this->milestone_completion_rate_count_previous_cycle = ((count($this->total_milestone_completed_previous_cycle)) / ((count($this->total_milestone_assigned_this_cycle))+(count($this->total_milestone_completed_previous_cycle))- (count($this->total_milestone_completed_this_cycle))) * 100);
-      }else {
-          $this->milestone_completion_rate_count_this_cycle= 0;
-          $this->milestone_completion_rate_count_previous_cycle = 0;
-
-      }
-      if ($this->total_milestone_assigned_this_cycle_value > 0 ) {
-          $this->milestone_completion_rate_value_this_cycle=  (($this->total_released_amount_this_cycle)/($this->total_milestone_assigned_this_cycle_value) )*100;
-          $this->milestone_completion_rate_value_previous_cycle = (($this->total_released_amount_previous_cycle) / (($this->total_milestone_assigned_this_cycle_value)+($this->total_released_amount_previous_cycle)- ($this->total_released_amount_this_cycle)) * 100);
-      }else {
-          $this->milestone_completion_rate_value_this_cycle= 0;
-          $this->milestone_completion_rate_value_previous_cycle = 0;
-
-      }
-      $this->total_tasks_assigned_this_cycle= Task::select('tasks.*')
-      ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-      ->where('tasks.added_by',$this->pm->id)->count();
-      $this->total_tasks_assigned_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
-      DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-      )
-      ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-
-
-      ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-      ->where('tasks.added_by',$this->pm->id)
-      ->orderBy('tasks.created_at','desc')
-      ->get();
-
-     // dd($this->total_tasks_assigned_this_cycle_get);
-      $this->total_tasks_completed_this_cycle= Task::select('tasks.*')
-      ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->where('board_column_id',4)
-      ->where('tasks.added_by',$this->pm->id)
-      ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-      ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-      ->count();
-      if($this->total_tasks_assigned_this_cycle > 0)
-      {
-          $this->tasks_completion_rate_this_cycle= ($this->total_tasks_completed_this_cycle/ $this->total_tasks_assigned_this_cycle)*100;
-
-      }else
-      {
-          $this->tasks_completion_rate_this_cycle = 0;
-
-      }
-      //$this->task_completion_rate_this_cycle=
-      $this->total_tasks_completed_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar','tasks.updated_at as task_completion_date',
-      DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-      )
-      ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-
-
-      ->where('board_column_id',4)
-      ->where('tasks.added_by',$this->pm->id)
-      ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-      ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-      ->orderBy('tasks.updated_at','desc')
-      ->get();
-
-      $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
-      ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->where('board_column_id',4)
-      ->where('tasks.added_by',$this->pm->id)
-      ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-    //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
-      ->count();
-      if($this->total_tasks_assigned_this_cycle > 0)
-      {
-          $this->tasks_completion_rate_previous_cycle=  (($this->total_tasks_completed_previous_cycle) /
-           (($this->total_tasks_assigned_this_cycle)+
-           ($this->total_tasks_completed_previous_cycle)-
-           ($this->total_tasks_completed_this_cycle)) * 100);
-
-      }else
-      {
-          $this->tasks_completion_rate_previous_cycle = 0;
-
-      }
-     // dd($this->total_tasks_assigned_previous_cycle);
-      $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
-      DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
-      )
-      ->leftJoin('task_users','task_users.task_id','tasks.id')
-
-      ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-
-      ->where('board_column_id',4)
-      ->where('tasks.added_by',$this->pm->id)
-      ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
-     // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
-     ->orderBy('tasks.updated_at','desc')
-      ->get();
-      $this->average_project_completion_rate = Project::select(
-          'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
-          DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
-      )
-          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-          ->where('projects.status', 'finished')
-          ->where('projects.pm_id', $this->pm->id)
-          ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-          ->orderBy('projects.updated_at','desc')
-          ->get();
-
-      $this->average_completion_days = $this->average_project_completion_rate->avg('completion_time_days');
-      $this->average_project_completion_rate_previous_cycle = Project::select(
-          'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
-          DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
-      )
-          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-          ->where('projects.status', 'finished')
-          ->where('projects.pm_id', $this->pm->id)
-         // ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
-         ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-          ->orderBy('projects.updated_at','desc')
-          ->get();
-
-      $this->average_completion_days_previous_cycle = $this->average_project_completion_rate_previous_cycle->avg('completion_time_days');
-      // /dd($this->average_completion_days);
-      $this->cancelled_projects_this_cycle=  Project::select(
-          'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
-
-      )
-          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-          ->whereIn('projects.status', ['canceled','partially finished'])
-
-          ->where('projects.pm_id', $this->pm->id)
-          ->where('projects.project_status','Accepted')
-          ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-          ->orderBy('projects.updated_at','desc')
-          ->get();
-
-          $this->cancelled_projects_previous_cycle=  Project::select(
-              'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
-
-
-          )
-          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-
-          ->whereIn('projects.status', ['canceled','partially finished'])
-          ->where('projects.project_status','Accepted')
-
-          ->where('projects.pm_id', $this->pm->id)
-
-              ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-
-              ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-              ->orderBy('projects.updated_at','desc')
-              ->get();
-      $this->no_of_new_deals_added_previous = Deal::select('deals.*')
-      ->where('deals.added_by', $this->pm->id)
-      ->whereBetween('deals.created_at', [$this->startMonth, $this->endMonth])
-      ->orderBy('deals.created_at','desc')
-      ->get();
-      $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
-      ->join('projects','projects.id','project_milestones.project_id')
-      ->join('deals','deals.id','projects.deal_id')
-      ->where('deals.project_type','fixed')
-      ->where('projects.pm_id',$this->pm->id)
-      ->where('project_milestones.added_by',$this->pm->id)
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->where('project_milestones.status','!=','canceled')
-      ->orderBy('project_milestones.created_at','desc')
-      ->get();
-      $this->no_of_new_milestones_added_on_old_projects_id = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId','projects.status as projectStatus')
-      ->join('projects','projects.id','project_milestones.project_id')
-      ->join('deals','deals.id','projects.deal_id')
-      ->where('deals.project_type','fixed')
-      ->where('projects.pm_id',$this->pm->id)
-      ->where('project_milestones.added_by',$this->pm->id)
-      ->groupBy('project_milestones.project_id')
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->where('project_milestones.status','!=','canceled')
-      ->orderBy('project_milestones.created_at','desc')
-      ->get();
-      $this->no_of_new_milestones_added_on_old_projects_value = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
-      ->join('projects','projects.id','project_milestones.project_id')
-      ->join('deals','deals.id','projects.deal_id')
-      ->where('deals.project_type','fixed')
-      ->where('projects.pm_id',$this->pm->id)
-      ->where('project_milestones.added_by',$this->pm->id)
-      ->where('project_milestones.status','!=','canceled')
-      ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
-      ->sum('project_milestones.cost');
-      $this->no_of_delayed_projects = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
-      ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.project_status', 'Accepted')
-      ->where('projects.status', 'in progress')
-      ->where('p_m_projects.delayed_status', 1)
-      ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-      ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-      ->orderBy('projects.updated_at','desc')
-
-
-      ->get();
-
-     // dd($delay_date);
-
-          $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-
-          ->where('projects.pm_id', $this->pm->id)
-
-          ->where('projects.status', 'finished')
-          ->where('p_m_projects.delayed_status', 1)
-          ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
-          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-          ->orderBy('projects.updated_at','desc')
-
-          ->get();
-
-
-
-          $this->no_of_delayed_projects_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
-              ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-              ->where('projects.pm_id', $this->pm->id)
-              ->where('projects.project_status', 'Accepted')
-              ->where('projects.status', 'in progress')
-              ->where('p_m_projects.delayed_status', 1)
-              ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-              ->orderBy('projects.updated_at','desc')
-
-
-              // Compare against the calculated deadline date
-              ->get();
-          $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
-          ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-
-          ->where('projects.pm_id', $this->pm->id)
-          ->where('projects.project_status', 'Accepted')
-          ->where('projects.status', 'finished')
-          ->where('p_m_projects.delayed_status', 1)
-          ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
-          ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
-          ->orderBy('projects.updated_at','desc')
-
-          ->get();
-
-          $this->caused_by_me_for_previous_cycle = TaskRevision::select(
-            'task_revisions.created_at as revision_date',
-            'task_revisions.revision_acknowledgement as revision_reason',
-            'task_revisions.dispute_created',
-            'task_revisions.added_by',
-            'projects.id as projectId',
-            'projects.project_name',
-            'projects.client_id',
-            'task_revision_disputes.*'
-            )
-            ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-            ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
+         ->leftJoin('project_milestones', function ($join) {
+             $join->on('projects.id', '=', 'project_milestones.project_id')
+                 ->where('project_milestones.status','<>', 'complete')
+                 ->where('project_milestones.project_completion_status', 0)
+                 ->where('project_milestones.qc_status', 0);
+         })
+      
+        // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+         $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+            ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
             ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.final_responsible_person','PM')
-            ->groupBy('task_revisions.id')
-            ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-            ->get();
+            ->where('projects.status', 'in progress')
+   
+            ->whereNull('project_milestones.id')
+            ;
+                        
+     })
+   ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+            $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+             ->where('pm_projects.created_at', '<', $startMonth)
+             ->where('projects.pm_id', $this->pm->id)
+             ->where('projects.status', 'in progress')
+    
+             ->whereNull('project_milestones.id')
+             ;
+
+ })
+         ->sum('projects.project_budget');
+         $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
+         $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
+         $this->value_of_100_and_finish_this_cycle = $this->value_of_100_finished_project_this_cycle+$this->value_of_finished_projects_this_cycle;
+         $this->value_of_100_and_finish_previous_cycle = $this->value_of_100_finished_project_previous_cycle+$this->value_of_finished_projects_previous_cycle;
+         if (count($this->no_of_accepted_projects) > 0 ) {
+             $this->project_completion_rate_count_this_cycle=  ((count($this->no_of_finished_projects_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
+             $this->project_completion_rate_count_previous_cycle = ((count($this->no_of_finished_projects_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_finished_projects_previous_cycle))- (count($this->no_of_finished_projects_this_cycle))) * 100);
+             $this->project_completion_rate_count_this_cycle_100_in_progress=  ((count($this->no_of_100_and_finish_this_cycle))/(count($this->no_of_accepted_projects)) )*100;
+
+         }else {
+             $this->project_completion_rate_count_this_cycle= 0;
+             $this->project_completion_rate_count_previous_cycle = 0;
+             $this->project_completion_rate_count_this_cycle_100_in_progress= 0;
 
 
 
-            $this->caused_by_other_for_previous_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id'
-            )
-            ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
-            ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
+         }
+         if(count($this->no_of_100_and_finish_this_cycle) > 0)
+         {
+             $this->project_completion_rate_count_previous_cycle_100_in_progress = ((count($this->no_of_100_and_finish_previous_cycle)) / ((count($this->no_of_accepted_projects))+(count($this->no_of_100_and_finish_previous_cycle))- (count($this->no_of_100_and_finish_this_cycle))) * 100);
+
+         }else
+         {
+             $this->project_completion_rate_count_previous_cycle_100_in_progress = 0;
+
+         }
+         if($this->value_of_100_and_finish_previous_cycle > 0)
+         {
+             $this->project_completion_rate_count_previous_cycle_value_100_in_progress = (($this->value_of_100_and_finish_previous_cycle) / ($this->accepted_project_value+$this->value_of_100_and_finish_previous_cycle- $this->value_of_100_and_finish_this_cycle) * 100);
+
+         }else
+         {
+             $this->project_completion_rate_count_previous_cycle_value_100_in_progress = 0;
+
+         }
+
+
+         if (($this->accepted_project_value) > 0 ) {
+             $this->project_completion_rate_count_this_cycle_value=  (($this->value_of_finished_projects_this_cycle)/($this->accepted_project_value) )*100;
+             $this->project_completion_rate_count_previous_cycle_value =( ($this->value_of_finished_projects_previous_cycle) / ($this->accepted_project_value+ $this->value_of_finished_projects_previous_cycle -$this->value_of_finished_projects_this_cycle) *100);
+             $this->project_completion_rate_count_this_cycle_value_100_in_progress=  ($this->value_of_100_and_finish_this_cycle/$this->accepted_project_value )*100;
+
+         }else {
+             $this->project_completion_rate_count_this_cycle_value= 0;
+             $this->project_completion_rate_count_previous_cycle_value = 0;
+             $this->project_completion_rate_count_this_cycle_value_100_in_progress= 0;
+
+
+         }
+         $this->no_of_new_clients_this_cycle = Project::select('clients.*','deals.client_badge','projects.project_budget','projects.project_name',
+         'projects.status as project_status','clients.created_at as client_creation_date'
+         )
+         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
+         ->join('deals', 'deals.client_id', 'projects.client_id')
+         ->join('users as clients','clients.id','projects.client_id')
+        ->where('projects.pm_id', $this->pm->id)
+         ->where('deals.client_badge','new client')
+         ->groupBy('clients.id')
+         ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
+         ->whereBetween('clients.created_at', [$this->startMonth, $this->endMonth])
+         ->orderBy('clients.created_at','desc')
+         ->get();
+         $this->no_of_existing_clients_this_cycle = Project::select('clients.*','deals.client_badge')
+         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
+         ->join('deals', 'deals.client_id', 'projects.client_id')
+         ->join('users as clients','clients.id','projects.client_id')
+        ->where('projects.pm_id', $this->pm->id)
+         ->where('deals.client_badge','<>','new client')
+         ->groupBy('clients.id')
+         ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
+         ->orderBy('clients.created_at','desc')
+         ->get();
+
+         $this->total_client_monthly = $this->no_of_new_clients_this_cycle->concat($this->no_of_existing_clients_this_cycle);
+
+         $this->total_milestone_assigned_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
+         )
+         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+        ->where('projects.pm_id', $this->pm->id)
+
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->orderBy('project_milestones.created_at','desc')
+
+         ->get();
+         $this->total_milestone_assigned_this_cycle_value= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date'
+         )
+         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+        ->where('projects.pm_id', $this->pm->id)
+
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->sum('project_milestones.cost');
+         $this->total_milestone_completed_this_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+         )
+         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+         ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+         ->leftJoin('payments','payments.invoice_id','invoices.id')
+         ->orderBy('payments.paid_on','desc')
+        //->groupBy('project_milestones.id')
+
+        // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+         ->whereBetween('payments.paid_on', [$this->startMonth, $this->release_date])
+        ->where('projects.pm_id', $this->pm->id)
+         ->where('project_milestones.status', 'complete')
+
+
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->get();
+
+         $this->total_milestone_completed_previous_cycle= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+         )
+         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+         ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+         ->leftJoin('payments','payments.invoice_id','invoices.id')
+        
+        //->groupBy('project_milestones.id')
+
+        ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+         $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+            ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
             ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.final_responsible_person', '!=', 'PM')
-            ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-            ->groupBy('task_revisions.id')
-            ->get();
+        
+            ->where('project_milestones.status', 'complete')
+            ;
+                        
+     })
+   ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+            $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+             ->where('project_milestones.created_at', '<', $startMonth)
+             ->where('projects.pm_id', $this->pm->id)
+        
+             ->where('project_milestones.status', 'complete')
+             ;
+
+ })
+       
+        // ->whereBetween('project_milestones.updated_at', [$startMonth, $endMonth])
+        ->orderBy('payments.paid_on','desc')
+         ->get();
+         $this->total_milestone_completed_this_current_month= Project::select('projects.*','project_milestones.milestone_title','project_milestones.cost',
+         'project_milestones.status as milestone_status','project_milestones.created_at as milestone_creation_date', 'payments.paid_on as milestone_completion_date'
+         )
+         ->join('project_milestones', 'project_milestones.project_id', 'projects.id')
+         ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
+         ->leftJoin('payments','payments.invoice_id','invoices.id')
+         ->orderBy('payments.paid_on','desc')
+        //->groupBy('project_milestones.id')
+
+        // ->whereNotBetween('project_milestones.created_at', [$this->endMonth, $this->release_date])
+         ->whereBetween('payments.paid_on', [$this->startMonth, $this->endMonth])
+        ->where('projects.pm_id', $this->pm->id)
+         ->where('project_milestones.status', 'complete')
 
 
-            $this->dispute_for_previous_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.final_responsible_person',
-                'task_revisions.added_by',
-                'task_revisions.revision_acknowledgement',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'project_members.lead_developer_id as ld_id',
-                'task_revision_disputes.*'
-                )
-            ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-            ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-            ->leftJoin('project_members','projects.id','=','project_members.project_id')
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->get();
+         if (count($this->total_milestone_assigned_this_cycle) > 0 ) {
+             $this->milestone_completion_rate_count_this_cycle=  ((count($this->total_milestone_completed_this_cycle))/(count($this->total_milestone_assigned_this_cycle)) )*100;
+             $this->milestone_completion_rate_count_previous_cycle = ((count($this->total_milestone_completed_previous_cycle)) / ((count($this->total_milestone_assigned_this_cycle))+(count($this->total_milestone_completed_previous_cycle))- (count($this->total_milestone_completed_this_cycle))) * 100);
+         }else {
+             $this->milestone_completion_rate_count_this_cycle= 0;
+             $this->milestone_completion_rate_count_previous_cycle = 0;
+
+         }
+         if ($this->total_milestone_assigned_this_cycle_value > 0 ) {
+             $this->milestone_completion_rate_value_this_cycle=  (($this->total_released_amount_this_cycle)/($this->total_milestone_assigned_this_cycle_value) )*100;
+             $this->milestone_completion_rate_value_previous_cycle = (($this->total_released_amount_previous_cycle) / (($this->total_milestone_assigned_this_cycle_value)+($this->total_released_amount_previous_cycle)- ($this->total_released_amount_this_cycle)) * 100);
+         }else {
+             $this->milestone_completion_rate_value_this_cycle= 0;
+             $this->milestone_completion_rate_value_previous_cycle = 0;
+
+         }
+         $this->total_tasks_assigned_this_cycle= Task::select('tasks.*')
+         ->leftJoin('task_users','task_users.task_id','tasks.id')
+         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+        ->where('tasks.added_by', $this->pm->id)->count();
+         $this->total_tasks_assigned_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+         DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+         )
+         ->leftJoin('task_users','task_users.task_id','tasks.id')
+         ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+
+         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+        ->where('tasks.added_by', $this->pm->id)
+         ->orderBy('tasks.created_at','desc')
+         ->get();
+
+        // dd($this->total_tasks_assigned_this_cycle_get);
+         $this->total_tasks_completed_this_cycle= Task::select('tasks.*')
+         ->leftJoin('task_users','task_users.task_id','tasks.id')
+         ->where('board_column_id',4)
+        ->where('tasks.added_by', $this->pm->id)
+         ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+         ->count();
+         if($this->total_tasks_assigned_this_cycle > 0)
+         {
+             $this->tasks_completion_rate_this_cycle= ($this->total_tasks_completed_this_cycle/ $this->total_tasks_assigned_this_cycle)*100;
+
+         }else
+         {
+             $this->tasks_completion_rate_this_cycle = 0;
+
+         }
+         //$this->task_completion_rate_this_cycle=
+         $this->total_tasks_completed_this_cycle_get= Task::select('tasks.*','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar','tasks.updated_at as task_completion_date',
+         DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+         )
+         ->leftJoin('task_users','task_users.task_id','tasks.id')
+         ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+
+         ->where('board_column_id',4)
+        ->where('tasks.added_by', $this->pm->id)
+         ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+         ->whereBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+         ->orderBy('tasks.updated_at','desc')
+         ->get();
+         //enan code
+         $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
+         ->leftJoin('task_users','task_users.task_id','tasks.id')
+
+         ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                 $q3->where('board_column_id',4)
+                   ->where('tasks.added_by', $this->pm->id)
+                    ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+                    ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                                
+             })
+           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    $q2->where('board_column_id',4)
+                      ->where('tasks.added_by', $this->pm->id)
+                        ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                        ->where('tasks.created_at', '<', $startMonth);
+
+                    
+             
+         })
+         ->count();
+          //   sayeed code 
+
+     //     $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
+     //     ->leftJoin('task_users','task_users.task_id','tasks.id')
+     //     ->where('board_column_id',4)
+     //    ->where('tasks.added_by', $this->pm->id)
+     //     ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
+     //     ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+     //   //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+     //     ->count();
+
+
+         if($this->total_tasks_assigned_this_cycle > 0)
+         {
+             $this->tasks_completion_rate_previous_cycle=  (($this->total_tasks_completed_previous_cycle) /
+              (($this->total_tasks_assigned_this_cycle)+
+              ($this->total_tasks_completed_previous_cycle)-
+              ($this->total_tasks_completed_this_cycle)) * 100);
+
+         }else
+         {
+             $this->tasks_completion_rate_previous_cycle = 0;
+
+         }
+        // dd($this->total_tasks_assigned_previous_cycle);
+        //code sayeed
+     //     $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+     //     DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+     //     )
+     //     ->leftJoin('task_users','task_users.task_id','tasks.id')
+
+     //     ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+     //     ->where('board_column_id',4)
+     //    ->where('tasks.added_by', $this->pm->id)
+     //     ->whereNotBetween('tasks.created_at', [$this->endMonth, $this->release_date])
+     //     ->whereBetween('tasks.updated_at', [$this->startMonth, $this->release_date])
+     //    // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+     //    ->orderBy('tasks.updated_at','desc')
+     //     ->get();
+
+     //code enan 
+     $this->total_tasks_completed_previous_cycle_get= Task::select('tasks.*','tasks.updated_at as task_completion_date','tasks.added_by as tasks_added_by','tasks.created_at as task_creation_date','assigned_to.id as assined_to_id','assigned_to.name as assined_to_name','assigned_to.image as assined_to_avatar',
+     DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE tasks.id = project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$this->startMonth.'" AND DATE(project_time_logs.end_time) <= "'.$this->endMonth.'") as total_minutes')
+     )
+     ->leftJoin('task_users','task_users.task_id','tasks.id')
+
+     ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
+
+     ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+         $q3->where('board_column_id',4)
+           ->where('tasks.added_by', $this->pm->id)
+            ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+            ->whereBetween('tasks.created_at', [$startMonth, $endMonth]);
+                        
+     })
+   ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+            $q2->where('board_column_id',4)
+              ->where('tasks.added_by', $this->pm->id)
+                ->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+                ->where('tasks.created_at', '<', $startMonth);
+
+            
+     
+ })
+    // ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+    ->orderBy('tasks.updated_at','desc')
+     ->get();
+         
+         $this->average_project_completion_rate = Project::select(
+             'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
+             DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
+         )
+             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+             ->where('projects.status', 'finished')
             ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.dispute_created', 1)
-            ->groupBy('task_revisions.id')
-            ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-            ->get();
+             ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+             ->orderBy('projects.updated_at','desc')
+             ->get();
 
-            $this->caused_by_me_in_previous_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'task_revision_disputes.*'
-                )
-            ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-            ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-            ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+         $this->average_completion_days = $this->average_project_completion_rate->avg('completion_time_days');
+         $this->average_project_completion_rate_previous_cycle = Project::select(
+             'projects.*','p_m_projects.created_at as project_start_date','projects.updated_at as project_completion_date',
+             DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
+         )
+             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+            
+            // ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+         //    ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+         //     ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+         ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+             $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                ->where('projects.status', 'finished')
+                ->where('projects.pm_id', $this->pm->id)
+                ;
+                            
+         })
+       ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                 ->where('p_m_projects.created_at', '<', $startMonth)
+                 ->where('projects.status', 'finished')
+                 ->where('projects.pm_id', $this->pm->id)
+                 ;
+ 
+     })
+             ->orderBy('projects.updated_at','desc')
+             ->get();
+
+         $this->average_completion_days_previous_cycle = $this->average_project_completion_rate_previous_cycle->avg('completion_time_days');
+         // /dd($this->average_completion_days);
+         $this->cancelled_projects_this_cycle=  Project::select(
+             'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
+
+         )
+             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+             ->whereIn('projects.status', ['canceled','partially finished'])
+
             ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.final_responsible_person','PM')
-            ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-            ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-            ->groupBy('task_revisions.id')
-            ->get();
+             ->where('projects.project_status','Accepted')
+             ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+             ->orderBy('projects.updated_at','desc')
+             ->get();
 
-            $this->caused_by_other_in_previous_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id'
-            )
-            ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
-            ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
-            ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+             $this->cancelled_projects_previous_cycle=  Project::select(
+                 'projects.*','p_m_projects.created_at as project_creation_date','projects.updated_at as project_canceled_date',
+
+
+             )
+             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+
+            
+
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                 $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                    ->whereIn('projects.status', ['canceled','partially finished'])
+                    ->where('projects.project_status','Accepted')
+       
+                   ->where('projects.pm_id', $this->pm->id)
+                    ;
+                                
+             })
+           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                     ->where('p_m_projects.created_at', '<', $startMonth)
+                     ->whereIn('projects.status', ['canceled','partially finished'])
+                     ->where('projects.project_status','Accepted')
+        
+                    ->where('projects.pm_id', $this->pm->id)
+                     ;
+     
+         })
+                 ->orderBy('projects.updated_at','desc')
+                 ->get();
+         $this->no_of_new_deals_added_previous = Deal::select('deals.*')
+         ->where('deals.added_by', $this->pm->id)
+         ->whereBetween('deals.created_at', [$this->startMonth, $this->endMonth])
+         ->orderBy('deals.created_at','desc')
+         ->get();
+         $this->no_of_new_milestones_added_on_old_projects = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
+         ->join('projects','projects.id','project_milestones.project_id')
+         ->join('deals','deals.id','projects.deal_id')
+         ->where('deals.project_type','fixed')
+         ->where('projects.pm_id',$this->pm->id)
+         ->where('project_milestones.added_by',$this->pm->id)
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->where('project_milestones.status','!=','canceled')
+         ->orderBy('project_milestones.created_at','desc')
+         ->get();
+         $this->no_of_new_milestones_added_on_old_projects_id = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId','projects.status as projectStatus')
+         ->join('projects','projects.id','project_milestones.project_id')
+         ->join('deals','deals.id','projects.deal_id')
+         ->where('deals.project_type','fixed')
+         ->where('projects.pm_id',$this->pm->id)
+         ->where('project_milestones.added_by',$this->pm->id)
+         ->groupBy('project_milestones.project_id')
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->where('project_milestones.status','!=','canceled')
+         ->orderBy('project_milestones.created_at','desc')
+         ->get();
+         $this->no_of_new_milestones_added_on_old_projects_value = ProjectMilestone::select('project_milestones.*','projects.project_name','projects.project_budget','projects.client_id','projects.id as projectId')
+         ->join('projects','projects.id','project_milestones.project_id')
+         ->join('deals','deals.id','projects.deal_id')
+         ->where('deals.project_type','fixed')
+         ->where('projects.pm_id',$this->pm->id)
+         ->where('project_milestones.added_by',$this->pm->id)
+         ->where('project_milestones.status','!=','canceled')
+         ->whereBetween('project_milestones.created_at', [$this->startMonth, $this->endMonth])
+         ->sum('project_milestones.cost');
+         $this->no_of_delayed_projects = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
+         ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+       
+         // ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+         // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+         ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+             $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                ->where('projects.pm_id', $this->pm->id)
+                ->where('projects.project_status', 'Accepted')
+              
+                ->where('p_m_projects.delayed_status', 1)
+                ;
+                            
+         })
+       ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                 ->where('p_m_projects.created_at', '<', $startMonth)
+                 ->where('projects.pm_id', $this->pm->id)
+                 ->where('projects.project_status', 'Accepted')
+               
+                 ->where('p_m_projects.delayed_status', 1)
+                 ;
+ 
+     })
+         ->orderBy('projects.updated_at','desc')
+
+
+         ->get();
+
+        // dd($delay_date);
+
+             $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+
+           
+             // ->whereNotBetween('p_m_projects.created_at', [$this->endMonth, $this->release_date])
+             // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                 $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                    ->where('projects.pm_id', $this->pm->id)
+
+                    ->where('projects.status', 'finished')
+                    ->where('p_m_projects.delayed_status', 1)
+                    ;
+                                
+             })
+           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                     ->where('p_m_projects.created_at', '<', $startMonth)
+                     ->where('projects.pm_id', $this->pm->id)
+
+                     ->where('projects.status', 'finished')
+                     ->where('p_m_projects.delayed_status', 1)
+                     ;
+     
+         })
+             ->orderBy('projects.updated_at','desc')
+
+             ->get();
+
+
+
+             $this->no_of_delayed_projects_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status', 'p_m_projects.created_at as project_creation_date')
+                 ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+                ->where('projects.pm_id', $this->pm->id)
+                 ->where('projects.project_status', 'Accepted')
+                
+                 ->where('p_m_projects.delayed_status', 1)
+                 ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+                 ->orderBy('projects.updated_at','desc')
+
+
+                 // Compare against the calculated deadline date
+                 ->get();
+             $this->no_of_delayed_projects_finished_this_cycle = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
+             ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
+
             ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.final_responsible_person', '!=', 'PM')
-            ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-            ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-            ->groupBy('task_revisions.id')
-            ->get();
+             ->where('projects.project_status', 'Accepted')
+             ->where('projects.status', 'finished')
+             ->where('p_m_projects.delayed_status', 1)
+             ->whereBetween('p_m_projects.created_at', [$this->startMonth, $this->endMonth])
+             ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
+             ->orderBy('projects.updated_at','desc')
+
+             ->get();
+
+             $this->caused_by_me_for_previous_cycle = TaskRevision::select(
+                 'task_revisions.created_at as revision_date',
+                 'task_revisions.revision_acknowledgement as revision_reason',
+                 'task_revisions.dispute_created',
+                 'task_revisions.added_by',
+                 'projects.id as projectId',
+                 'projects.project_name',
+                 'projects.client_id',
+                 'task_revision_disputes.*'
+                 )
+             ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+             ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+             ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                   ->where('projects.pm_id', $this->pm->id)
+                 
+                   ->where('task_revisions.dispute_created', 1)
+                   ->where('task_revisions.final_responsible_person', 'PM')
+                   ;
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                    ->where('task_revisions.created_at', '<', $startMonth)
+                    ->where('projects.pm_id', $this->pm->id)
+                    ->where('task_revisions.dispute_created', 1)
+                    ->where('task_revisions.final_responsible_person', 'PM')
+                   
+                    ;
+                })
+        
+             ->groupBy('task_revisions.id')
+            
+             ->get();
 
 
-            $this->dispute_in_previous_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.final_responsible_person',
-                'task_revisions.added_by',
-                'task_revisions.revision_acknowledgement',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'project_members.lead_developer_id as ld_id',
-                'task_revision_disputes.*'
-                )
-            ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-            ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-            ->leftJoin('project_members','projects.id','=','project_members.project_id')
-            ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-            ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.dispute_created', 1)
-            ->groupBy('task_revisions.id')
-            ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
-            ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
-            ->get();
+             $this->caused_by_other_for_previous_cycle = TaskRevision::select(
+                 'task_revisions.created_at as revision_date',
+                 'task_revisions.revision_acknowledgement as revision_reason',
+                 'task_revisions.dispute_created',
+                 'task_revisions.added_by',
+                 'projects.id as projectId',
+                 'projects.project_name',
+                 'projects.client_id'
+             )
+             ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
+             ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
+             ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
+           
+           
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-      if(count($this->no_of_accepted_projects) > 0 )
-      {
-          $this->delayed_projects_percentage_this_cycle = (count($this->no_of_delayed_projects_this_cycle)/(count($this->no_of_accepted_projects)))*100;
-          $this->delayed_projects_percentage_previous_cycle = (count($this->no_of_delayed_projects) /((count($this->no_of_accepted_projects))+(count($this->no_of_delayed_projects))))*100;
-          $this->project_cancelation_rate =  (count($this->cancelled_projects_this_cycle)/count($this->no_of_accepted_projects)) * 100;
-      }else
-      {
-          $this->delayed_projects_percentage_this_cycle = 0;
-          $this->delayed_projects_percentage_previous_cycle = 0;
-          $this->project_cancelation_rate = 0;
-      }
-      $first_day = $this->startMonth;
-          $this->days = Carbon::parse($first_day)->diffInDays(Carbon::parse($this->endMonth));
-          //dd($this->days);
+                $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                   ->where('projects.pm_id', $this->pm->id)
+                 
+                   ->where('task_revisions.dispute_created', 1)
+                   ->where('task_revisions.final_responsible_person', '!=', 'PM')
+                   ;
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                    ->where('task_revisions.created_at', '<', $startMonth)
+                    ->where('projects.pm_id', $this->pm->id)
+                    ->where('task_revisions.dispute_created', 1)
+                    ->where('task_revisions.final_responsible_person', '!=', 'PM')
+                   
+                    ;
+                })
+    
+             ->groupBy('task_revisions.id')
+             ->get();
 
-          if (count($this->total_milestone_completed_this_cycle) > 0) {
-              $this->avg_payment_release_per_day= count($this->total_milestone_completed_this_cycle) /$this->days ;
-          }else
-          {
-              $this->avg_payment_release_per_day =0;
+             $this->dispute_for_previous_cycle = TaskRevision::select(
+                 'task_revisions.created_at as revision_date',
+                 'task_revisions.revision_acknowledgement as revision_reason',
+                 'task_revisions.dispute_created',
+                 'task_revisions.final_responsible_person',
+                 'task_revisions.added_by',
+                 'task_revisions.revision_acknowledgement',
+                 'projects.id as projectId',
+                 'projects.project_name',
+                 'projects.client_id',
+                 'project_members.lead_developer_id as ld_id',
+                 'task_revision_disputes.*'
+                 )
+             ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+             ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+             ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+             ->leftJoin('project_members','projects.id','=','project_members.project_id')
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-          }
+                $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                   ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                   ->where('projects.pm_id', $this->pm->id)
+                 
+                   ->where('task_revisions.dispute_created', 1)
+                   ;
+                               
+            })
+          ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                   $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                    ->where('task_revisions.created_at', '<', $startMonth)
+                    ->where('projects.pm_id', $this->pm->id)
+                    ->where('task_revisions.dispute_created', 1)
+                   
+                    ;
+    
+        })
+          
+             ->groupBy('task_revisions.id')
+             ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+             ->get();
+
+
+
+             $this->caused_by_me_in_previous_cycle = TaskRevision::select(
+                 'task_revisions.created_at as revision_date',
+                 'task_revisions.revision_acknowledgement as revision_reason',
+                 'task_revisions.dispute_created',
+                 'task_revisions.added_by',
+                 'projects.id as projectId',
+                 'projects.project_name',
+                 'projects.client_id',
+                 'task_revision_disputes.*'
+                 )
+             ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+             ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+             ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+             ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+          
+            
+             // ->whereBetween('task_revisions.created_at', [$this->startMonth, $this->endMonth])
+             // ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                 $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->where('projects.pm_id', $this->pm->id)
+                    ->where('task_revisions.final_responsible_person','PM')
+                    ;
+                                
+             })
+           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                     ->where('task_revisions.created_at', '<', $startMonth)
+                     ->where('projects.pm_id', $this->pm->id)
+                     ->where('task_revisions.final_responsible_person','PM')
+                     ;
+     
+         })
+             ->groupBy('task_revisions.id')
+             ->get();
+
+
+             $this->caused_by_other_in_previous_cycle = TaskRevision::select(
+                 'task_revisions.created_at as revision_date',
+                 'task_revisions.revision_acknowledgement as revision_reason',
+                 'task_revisions.dispute_created',
+                 'task_revisions.added_by',
+                 'projects.id as projectId',
+                 'projects.project_name',
+                 'projects.client_id'
+             )
+             ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
+             ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
+             ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
+             ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+           
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                 $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->where('projects.pm_id', $this->pm->id)
+                    ->where('task_revisions.final_responsible_person', '!=', 'PM')
+                    ;
+                                
+             })
+           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                     ->where('task_revisions.created_at', '<', $startMonth)
+                     ->where('projects.pm_id', $this->pm->id)
+                     ->where('task_revisions.final_responsible_person', '!=', 'PM')
+                     ;
+     
+         })
+             ->groupBy('task_revisions.id')
+             ->get();
+
+
+             $this->dispute_in_previous_cycle = TaskRevision::select(
+                 'task_revisions.created_at as revision_date',
+                 'task_revisions.revision_acknowledgement as revision_reason',
+                 'task_revisions.dispute_created',
+                 'task_revisions.final_responsible_person',
+                 'task_revisions.added_by',
+                 'task_revisions.revision_acknowledgement',
+                 'projects.id as projectId',
+                 'projects.project_name',
+                 'projects.client_id',
+                 'project_members.lead_developer_id as ld_id',
+                 'task_revision_disputes.*'
+                 )
+             ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+             ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+             ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+             ->leftJoin('project_members','projects.id','=','project_members.project_id')
+             ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+           
+             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                 $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                    ->where('projects.pm_id', $this->pm->id)
+                    ->where('task_revisions.dispute_created', 1)
+                 
+                    ;
+                                
+             })
+           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                    $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                     ->where('task_revisions.created_at', '<', $startMonth)
+                     ->where('projects.pm_id', $this->pm->id)
+                     ->where('task_revisions.dispute_created', 1)
+                  
+                     ;
+     
+         })
+         ->groupBy('task_revisions.id')
+         
+             ->get();
+
+         if(count($this->no_of_accepted_projects) > 0 )
+         {
+             $this->delayed_projects_percentage_this_cycle = (count($this->no_of_delayed_projects_this_cycle)/(count($this->no_of_accepted_projects)))*100;
+             $this->delayed_projects_percentage_previous_cycle = (count($this->no_of_delayed_projects) /((count($this->no_of_accepted_projects))+(count($this->no_of_delayed_projects))))*100;
+             $this->project_cancelation_rate =  (count($this->cancelled_projects_this_cycle)/count($this->no_of_accepted_projects)) * 100;
+         }else
+         {
+             $this->delayed_projects_percentage_this_cycle = 0;
+             $this->delayed_projects_percentage_previous_cycle = 0;
+             $this->project_cancelation_rate = 0;
+         }
+         $first_day = $this->startMonth;
+             $this->days = Carbon::parse($first_day)->diffInDays(Carbon::parse($this->endMonth));
+             //dd($this->days);
+
+             if (count($this->total_milestone_completed_this_cycle) > 0) {
+                 $this->avg_payment_release_per_day= count($this->total_milestone_completed_this_cycle) /$this->days ;
+             }else
+             {
+                 $this->avg_payment_release_per_day =0;
+
+             }
 
 
 
@@ -1682,15 +2230,20 @@ trait PmDashboardAdminView
           $startMonth = Carbon::now()->startOfMonth()->addDays(15)->toDateString();
           $endMonth = Carbon::now()->startOfMonth()->addMonth(1)->addDays(14)->toDateString();
           $release_date = Carbon::now()->endOfMonth()->addMonth(1)->toDateString();
+          $nextMonth = Carbon::now()->startOfMonth()->addMonth(1)->toDateString();
+         // dd($startMonth,$endMonth, $release_date,$nextMonth);
       } else {
           $startMonth = Carbon::now()->startOfMonth()->subMonths(1)->addDays(15)->toDateString();
           $endMonth = Carbon::now()->startOfMonth()->addDays(14)->toDateString();
           $release_date = Carbon::now()->endOfMonth()->toDateString();
+          $nextMonth = Carbon::now()->startOfMonth()->toDateString();
+
+       //   dd($startMonth,$endMonth, $release_date,$nextMonth);
       }
       //dd($startMonth, $endMonth,$release_date);
       $this->no_of_projects = Project::select('projects.*','pm_projects.created_at as project_start_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->where('projects.pm_id',  $this->pm->id)
+      ->where('projects.pm_id', $this->pm->id)
 
       ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
       ->orderBy('pm_projects.created_at','desc')
@@ -1768,10 +2321,23 @@ trait PmDashboardAdminView
       ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
       ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
       ->leftJoin('payments','payments.invoice_id','invoices.id')
-      ->where('projects.pm_id', $this->pm->id)
+      
      // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-     ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-      ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+     ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+        $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+           ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+           ->where('projects.pm_id', $this->pm->id)
+           ;
+                       
+    })
+  ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+           $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+            ->where('project_milestones.created_at', '<', $startMonth)
+            ->where('projects.pm_id', $this->pm->id)
+            ;
+  
+  })
   //    / ->groupBy('project_milestones.project_id')
       ->sum('project_milestones.cost');
       $this->total_released_amount_previous_cycle_get = Project::select('projects.*',
@@ -1785,10 +2351,25 @@ trait PmDashboardAdminView
       ->leftJoin('project_milestones','project_milestones.project_id','projects.id')
       ->leftJoin('invoices','invoices.milestone_id','project_milestones.id')
       ->leftJoin('payments','payments.invoice_id','invoices.id')
-      ->where('projects.pm_id', $this->pm->id)
+    
      // ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
-     ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-      ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+  //    ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
+  //     ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+  ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+      $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+         ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+         ->where('projects.pm_id', $this->pm->id)
+         ;
+                     
+  })
+->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+         $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+          ->where('project_milestones.created_at', '<', $startMonth)
+          ->where('projects.pm_id', $this->pm->id)
+          ;
+
+})
       ->orderBy('payments.paid_on','desc')
 
       ->get();
@@ -1803,11 +2384,27 @@ trait PmDashboardAdminView
       ->get();
       $this->no_of_finished_projects_previous_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status','finished')
+      
 
-      ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-      ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+      // ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+      // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+             ->where('projects.pm_id', $this->pm->id)
+            ->where('projects.status','finished')
+             ;
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+              ->where('pm_projects.created_at', '<', $startMonth)
+              ->where('projects.pm_id', $this->pm->id)
+                ->where('projects.status','finished')
+              ;
+
+  })
       ->orderBy('projects.updated_at','desc')
       ->get();
       $this->value_of_finished_projects_this_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -1820,11 +2417,27 @@ trait PmDashboardAdminView
       ->sum('projects.project_budget');
       $this->value_of_finished_projects_previous_cycle= Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status','finished')
+    
 
-      ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-      ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+      // ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+      // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+             ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+             ->where('projects.pm_id', $this->pm->id)
+             ->where('projects.status','finished')
+             ;
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+              ->where('pm_projects.created_at', '<', $startMonth)
+              ->where('projects.pm_id', $this->pm->id)
+              ->where('projects.status','finished')
+              ;
+
+  })
       ->sum('projects.project_budget');
       $this->no_of_100_finished_project_this_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
       ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
@@ -1866,13 +2479,31 @@ trait PmDashboardAdminView
               ->where('project_milestones.project_completion_status', 0)
               ->where('project_milestones.qc_status', 0);
       })
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status', 'in progress')
-
-      ->whereNull('project_milestones.id')
+    
      // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-     ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-      ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+  //    ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+  //     ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+  ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+      $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+         ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+         ->where('projects.pm_id', $this->pm->id)
+         ->where('projects.status', 'in progress')
+   
+         ->whereNull('project_milestones.id')
+         ;
+                     
+  })
+->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+         $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+          ->where('pm_projects.created_at', '<', $startMonth)
+          ->where('projects.pm_id', $this->pm->id)
+          ->where('projects.status', 'in progress')
+    
+          ->whereNull('project_milestones.id')
+          ;
+
+})
       ->orderBy('projects.updated_at','desc')
       ->get();
       $this->value_of_100_finished_project_previous_cycle = Project::select('projects.*','pm_projects.created_at as project_start_date','projects.updated_at as project_completion_date')
@@ -1883,13 +2514,31 @@ trait PmDashboardAdminView
               ->where('project_milestones.project_completion_status', 0)
               ->where('project_milestones.qc_status', 0);
       })
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('projects.status', 'in progress')
-
-      ->whereNull('project_milestones.id')
+     
      // ->whereBetween('pm_projects.created_at', [$this->startMonth, $this->endMonth])
-     ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
-      ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+  //    ->whereNotBetween('pm_projects.created_at', [$endMonth, $release_date])
+  //     ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+  ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+      $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+         ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+         ->where('projects.pm_id', $this->pm->id)
+         ->where('projects.status', 'in progress')
+   
+         ->whereNull('project_milestones.id')
+         ;
+                     
+  })
+->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+         $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+          ->where('pm_projects.created_at', '<', $startMonth)
+          ->where('projects.pm_id', $this->pm->id)
+          ->where('projects.status', 'in progress')
+    
+          ->whereNull('project_milestones.id')
+          ;
+
+})
       ->sum('projects.project_budget');
       $this->no_of_100_and_finish_this_cycle = $this->no_of_100_finished_project_this_cycle->concat($this->no_of_finished_projects_this_cycle);
       $this->no_of_100_and_finish_previous_cycle = $this->no_of_100_finished_project_previous_cycle->concat($this->no_of_finished_projects_previous_cycle);
@@ -2026,10 +2675,26 @@ trait PmDashboardAdminView
       ->orderBy('payments.paid_on','desc')
      //->groupBy('project_milestones.id')
 
-      ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
-      ->whereBetween('payments.paid_on', [$startMonth, $release_date])
-      ->where('projects.pm_id', $this->pm->id)
-      ->where('project_milestones.status', 'complete')
+      // ->whereNotBetween('project_milestones.created_at', [$endMonth, $release_date])
+      // ->whereBetween('payments.paid_on', [$startMonth, $release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('payments.paid_on', [$startMonth, $release_date])
+             ->whereBetween('project_milestones.created_at', [$startMonth, $endMonth])
+             ->where('projects.pm_id', $this->pm->id)
+             ->where('project_milestones.status', 'complete')
+             ;
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('payments.paid_on', [$nextMonth, $release_date])
+              ->where('project_milestones.created_at', '<', $startMonth)
+              ->where('projects.pm_id', $this->pm->id)
+              ->where('project_milestones.status', 'complete')
+              ;
+
+  })
+    
 
 
 
@@ -2074,7 +2739,7 @@ trait PmDashboardAdminView
 
       $this->total_tasks_completed_this_cycle= Task::select('tasks.*')
       ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->where('board_column_id',4)
+      ->where('tasks.board_column_id',4)
       ->where('tasks.added_by',$this->pm->id)
       ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
       ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
@@ -2096,7 +2761,7 @@ trait PmDashboardAdminView
       ->leftJoin('task_users','task_users.task_id','tasks.id')
 
       ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-      ->where('board_column_id',4)
+      ->where('tasks.board_column_id',4)
       ->where('tasks.added_by',$this->pm->id)
 
       ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
@@ -2107,10 +2772,26 @@ trait PmDashboardAdminView
 
       $this->total_tasks_completed_previous_cycle= Task::select('tasks.*')
       ->leftJoin('task_users','task_users.task_id','tasks.id')
-      ->where('board_column_id',4)
-      ->where('tasks.added_by',$this->pm->id)
-      ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
-      ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+   
+      // ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
+      // ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+             ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+             ->where('tasks.board_column_id',4)
+             ->where('tasks.added_by',$this->pm->id)
+             ;
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+              ->where('tasks.created_at', '<', $startMonth)
+              ->where('tasks.board_column_id',4)
+              ->where('tasks.added_by',$this->pm->id)
+              ;
+
+  })
     //  ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
       ->count();
 
@@ -2133,11 +2814,27 @@ trait PmDashboardAdminView
       ->leftJoin('task_users','task_users.task_id','tasks.id')
 
       ->leftJoin('users as assigned_to','assigned_to.id','task_users.user_id')
-      ->where('board_column_id',4)
-      ->where('tasks.added_by',$this->pm->id)
+     
 
-      ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
-      ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
+      // ->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+      // ->whereNotBetween('tasks.created_at', [$endMonth, $release_date])
+      ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+          $q3->whereBetween('tasks.updated_at', [$startMonth, $release_date])
+             ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+             ->where('tasks.board_column_id',4)
+             ->where('tasks.added_by',$this->pm->id)
+             ;
+                         
+      })
+    ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+             $q2->whereBetween('tasks.updated_at', [$nextMonth, $release_date])
+              ->where('tasks.created_at', '<', $startMonth)
+              ->where('tasks.board_column_id',4)
+              ->where('tasks.added_by',$this->pm->id)
+              ;
+
+  })
       ->orderBy('tasks.updated_at','desc')
       ->get();
       $this->average_project_completion_rate = Project::select(
@@ -2159,10 +2856,26 @@ trait PmDashboardAdminView
           DB::raw('DATEDIFF(projects.updated_at, p_m_projects.created_at) AS completion_time_days')
       )
           ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
-          ->where('projects.status', 'finished')
-          ->where('projects.pm_id', $this->pm->id)
-          ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-          ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+         
+          // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+          // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+          ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+              $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                 ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                 ->where('projects.status', 'finished')
+                 ->where('projects.pm_id', $this->pm->id)
+                 ;
+                             
+          })
+        ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                 $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                  ->where('p_m_projects.created_at', '<', $startMonth)
+                  ->where('projects.status', 'finished')
+                  ->where('projects.pm_id', $this->pm->id)
+                  ;
+  
+      })
           ->orderBy('projects.updated_at','desc')
           ->get();
 
@@ -2190,12 +2903,30 @@ trait PmDashboardAdminView
           )
           ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
 
-          ->whereIn('projects.status', ['canceled','partially finished'])
+         
+          // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+          // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+          ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-          ->where('projects.pm_id', $this->pm->id)
-          ->where('projects.project_status','Accepted')
-          ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-          ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+              $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                 ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                 ->whereIn('projects.status', ['canceled','partially finished'])
+
+                 ->where('projects.pm_id', $this->pm->id)
+                 ->where('projects.project_status','Accepted')
+                 ;
+                             
+          })
+        ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                 $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                  ->where('p_m_projects.created_at', '<', $startMonth)
+                  ->whereIn('projects.status', ['canceled','partially finished'])
+
+                  ->where('projects.pm_id', $this->pm->id)
+                  ->where('projects.project_status','Accepted')
+                  ;
+  
+      })
           ->orderBy('projects.updated_at','desc')
           ->get();
           $this->no_of_new_deals_added = Deal::select('deals.*')
@@ -2239,7 +2970,7 @@ trait PmDashboardAdminView
           ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
           ->where('projects.pm_id', $this->pm->id)
           ->where('projects.project_status', 'Accepted')
-          ->where('projects.status', 'in progress')
+          
           ->where('p_m_projects.delayed_status', 1)
           ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
           ->whereBetween('projects.updated_at', [$startMonth, $release_date])
@@ -2253,12 +2984,30 @@ trait PmDashboardAdminView
               $this->no_of_delayed_projects_finished = Project::select('projects.*','p_m_projects.delayed_status as delayed_status','p_m_projects.created_at as project_creation_date','projects.updated_at as project_completion_date')
               ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
 
-              ->where('projects.pm_id', $this->pm->id)
+             
+              // ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
+              // ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-              ->where('projects.status', 'finished')
-              ->where('p_m_projects.delayed_status', 1)
-              ->whereNotBetween('p_m_projects.created_at', [$endMonth, $release_date])
-              ->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                  $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
+                     ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
+                     ->where('projects.pm_id', $this->pm->id)
+
+                     ->where('projects.status', 'finished')
+                     ->where('p_m_projects.delayed_status', 1)
+                     ;
+                                 
+              })
+            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                     $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
+                      ->where('p_m_projects.created_at', '<', $startMonth)
+                      ->where('projects.pm_id', $this->pm->id)
+
+                      ->where('projects.status', 'finished')
+                      ->where('p_m_projects.delayed_status', 1)
+                      ;
+      
+          })
               ->orderBy('projects.updated_at','desc')
 
               ->get();
@@ -2269,7 +3018,7 @@ trait PmDashboardAdminView
                   ->leftJoin('p_m_projects', 'p_m_projects.project_id', '=', 'projects.id')
                   ->where('projects.pm_id', $this->pm->id)
                   ->where('projects.project_status', 'Accepted')
-                  ->where('projects.status', 'in progress')
+                
                   ->where('p_m_projects.delayed_status', 1)
                   ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
                   ->orderBy('projects.updated_at','desc')
@@ -2292,135 +3041,183 @@ trait PmDashboardAdminView
 
               // Number of revisions for cycle
               $this->caused_by_me_for_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'task_revision_disputes.*'
-                )
-                ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-                ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-                ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-                ->where('projects.pm_id', $this->pm->id)
-                ->where('task_revisions.final_responsible_person','PM')
-                ->groupBy('task_revisions.id')
-                ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-                ->get();
+                  'task_revisions.created_at as revision_date',
+                  'task_revisions.revision_acknowledgement as revision_reason',
+                  'task_revisions.dispute_created',
+                  'task_revisions.added_by',
+                  'projects.id as projectId',
+                  'projects.project_name',
+                  'projects.client_id',
+                  'task_revision_disputes.*'
+                  )
+              ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+              ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+              ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+              ->where('projects.pm_id', $this->pm->id)
+              ->where('task_revisions.final_responsible_person','PM')
+              ->groupBy('task_revisions.id')
+              ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+              ->get();
 
 
-                $this->caused_by_other_for_cycle = TaskRevision::select(
-                    'task_revisions.created_at as revision_date',
-                    'task_revisions.revision_acknowledgement as revision_reason',
-                    'task_revisions.dispute_created',
-                    'task_revisions.added_by',
-                    'projects.id as projectId',
-                    'projects.project_name',
-                    'projects.client_id'
-                )
-                ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
-                ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
-                ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
-                ->where('projects.pm_id', $this->pm->id)
-                ->where('task_revisions.final_responsible_person', '!=', 'PM')
-                ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-                ->groupBy('task_revisions.id')
-                ->get();
+              $this->caused_by_other_for_cycle = TaskRevision::select(
+                  'task_revisions.created_at as revision_date',
+                  'task_revisions.revision_acknowledgement as revision_reason',
+                  'task_revisions.dispute_created',
+                  'task_revisions.added_by',
+                  'projects.id as projectId',
+                  'projects.project_name',
+                  'projects.client_id'
+              )
+              ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
+              ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
+              ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
+              ->where('projects.pm_id', $this->pm->id)
+              ->where('task_revisions.final_responsible_person', '!=', 'PM')
+              ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+              ->groupBy('task_revisions.id')
+              ->get();
 
-                $this->dispute_for_cycle = TaskRevision::select(
-                    'task_revisions.created_at as revision_date',
-                    'task_revisions.revision_acknowledgement as revision_reason',
-                    'task_revisions.dispute_created',
-                    'task_revisions.final_responsible_person',
-                    'task_revisions.added_by',
-                    'task_revisions.revision_acknowledgement',
-                    'projects.id as projectId',
-                    'projects.project_name',
-                    'projects.client_id',
-                    'project_members.lead_developer_id as ld_id',
-                    'task_revision_disputes.*'
-                    )
-                ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-                ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-                ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-                ->leftJoin('project_members','projects.id','=','project_members.project_id')
-                ->where('projects.pm_id', $this->pm->id)
-                ->where('task_revisions.dispute_created', 1)
-                ->groupBy('task_revisions.id')
-                ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-                ->get();
+              $this->dispute_for_cycle = TaskRevision::select(
+                  'task_revisions.created_at as revision_date',
+                  'task_revisions.revision_acknowledgement as revision_reason',
+                  'task_revisions.dispute_created',
+                  'task_revisions.final_responsible_person',
+                  'task_revisions.added_by',
+                  'task_revisions.revision_acknowledgement',
+                  'projects.id as projectId',
+                  'projects.project_name',
+                  'projects.client_id',
+                  'project_members.lead_developer_id as ld_id',
+                  'task_revision_disputes.*'
+                  )
+              ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+              ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+              ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+              ->leftJoin('project_members','projects.id','=','project_members.project_id')
+              ->where('projects.pm_id', $this->pm->id)
+              ->where('task_revisions.dispute_created', 1)
+              ->groupBy('task_revisions.id')
+              ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+              ->get();
 
               // Number of revisions in this cycle
               $this->caused_by_me_in_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'task_revision_disputes.*'
-                )
-            ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-            ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-            ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-            ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.final_responsible_person','PM')
-            ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-            ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
-            ->groupBy('task_revisions.id')
-            ->get();
+                  'task_revisions.created_at as revision_date',
+                  'task_revisions.revision_acknowledgement as revision_reason',
+                  'task_revisions.dispute_created',
+                  'task_revisions.added_by',
+                  'projects.id as projectId',
+                  'projects.project_name',
+                  'projects.client_id',
+                  'task_revision_disputes.*'
+                  )
+              ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+              ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+              ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+              ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+             
+              // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+              // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+
+                  $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                     ->where('projects.pm_id', $this->pm->id)
+                     ->where('task_revisions.final_responsible_person','PM')
+                     ;
+                                 
+              })
+            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                     $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                      ->where('task_revisions.created_at', '<', $startMonth)
+                      ->where('projects.pm_id', $this->pm->id)
+                      ->where('task_revisions.final_responsible_person','PM')
+                      ;
+      
+          })
+              ->groupBy('task_revisions.id')
+              ->get();
 
 
+              $this->caused_by_other_in_cycle = TaskRevision::select(
+                  'task_revisions.created_at as revision_date',
+                  'task_revisions.revision_acknowledgement as revision_reason',
+                  'task_revisions.dispute_created',
+                  'task_revisions.added_by',
+                  'projects.id as projectId',
+                  'projects.project_name',
+                  'projects.client_id'
+              )
+              ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
+              ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
+              ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
+              ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+              
+              // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+              // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-            $this->caused_by_other_in_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.added_by',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id'
-            )
-            ->leftJoin('task_revision_disputes', 'task_revisions.id', '=', 'task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions', 'task_dispute_questions.dispute_id', '=', 'task_revision_disputes.id')
-            ->join('projects', 'task_revisions.project_id', '=', 'projects.id')
-            ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-            ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.final_responsible_person', '!=', 'PM')
-            ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-            ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
-            ->groupBy('task_revisions.id')
-            ->get();
+                  $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                     ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                     ->where('projects.pm_id', $this->pm->id)
+                        ->where('task_revisions.final_responsible_person', '!=', 'PM')
+                     ;
+                                 
+              })
+            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                     $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                      ->where('task_revisions.created_at', '<', $startMonth)
+                      ->where('projects.pm_id', $this->pm->id)
+              ->where('task_revisions.final_responsible_person', '!=', 'PM')
+                      ;
+      
+          })
+              ->groupBy('task_revisions.id')
+              ->get();
 
 
-            $this->dispute_in_cycle = TaskRevision::select(
-                'task_revisions.created_at as revision_date',
-                'task_revisions.revision_acknowledgement as revision_reason',
-                'task_revisions.dispute_created',
-                'task_revisions.final_responsible_person',
-                'task_revisions.added_by',
-                'task_revisions.revision_acknowledgement',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.client_id',
-                'project_members.lead_developer_id as ld_id',
-                'task_revision_disputes.*'
-                )
-            ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
-            ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
-            ->leftJoin('projects','task_revisions.project_id','=','projects.id')
-            ->leftJoin('project_members','projects.id','=','project_members.project_id')
-            ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
-            ->where('projects.pm_id', $this->pm->id)
-            ->where('task_revisions.dispute_created', 1)
-            ->groupBy('task_revisions.id')
-            ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
-            ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
-            ->get();
+              $this->dispute_in_cycle = TaskRevision::select(
+                  'task_revisions.created_at as revision_date',
+                  'task_revisions.revision_acknowledgement as revision_reason',
+                  'task_revisions.dispute_created',
+                  'task_revisions.final_responsible_person',
+                  'task_revisions.added_by',
+                  'task_revisions.revision_acknowledgement',
+                  'projects.id as projectId',
+                  'projects.project_name',
+                  'projects.client_id',
+                  'project_members.lead_developer_id as ld_id',
+                  'task_revision_disputes.*'
+                  )
+              ->leftJoin('task_revision_disputes','task_revisions.id','=','task_revision_disputes.revision_id')
+              ->leftJoin('task_dispute_questions','task_dispute_questions.dispute_id','=','task_revision_disputes.id')
+              ->leftJoin('projects','task_revisions.project_id','=','projects.id')
+              ->leftJoin('project_members','projects.id','=','project_members.project_id')
+              ->leftJoin('tasks','task_revisions.task_id','=','tasks.id')
+             
+              ->groupBy('task_revisions.id')
+              // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+              // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
+              ->where(function ($q3) use( $startMonth, $endMonth,$release_date,) {
+
+                  $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
+                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
+                     ->where('projects.pm_id', $this->pm->id)
+                     ->where('task_revisions.dispute_created', 1)
+                     ;
+                                 
+              })
+            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
+                     $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
+                      ->where('tasks.created_at', '<', $startMonth)
+                      ->where('projects.pm_id', $this->pm->id)
+                      ->where('task_revisions.dispute_created', 1)
+                      ;
+      
+          })
+              ->get();
+
 
           if(count($this->no_of_accepted_projects) > 0 )
           {

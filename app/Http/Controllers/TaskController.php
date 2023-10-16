@@ -108,6 +108,7 @@ class TaskController extends AccountBaseController
             7 => "S",
             8 => "S",
             9 => "UD",
+            10 => "GD",
             "null" => "C"
         ];
     }
@@ -2787,85 +2788,92 @@ class TaskController extends AccountBaseController
 
 
      /************* CLIENT HAS REVISION *************** */
-    public function clientHasRevision(Request $request)
-    {
-
-
-        $dispute_between = explode('x', $request->acknowledgement_id)[0];
-
-        $auth = Auth::user();
-
-
-        // chagne board column status
-        $task_status = Task::find($request->task_id);
-        $task_status->task_status = "revision";
-        $task_status->board_column_id = 1;
-        $task_status->save();
-
-        $sale = null;
-        if($dispute_between == 'SPR'){
-            // find sale person
-            $project_deal_id = Project::find($task_status->project_id)->deal_id;
-            $sale = Deal::find($project_deal_id)->added_by;
-       }
-
-        // store revision on revision table
-        $task_revision = new TaskRevision(); // instance of TaskRevision
-
-        $task_revision->pm_comment= $request->comment;
-        $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
-        $task_revision->task_id = $request->task_id;
-        $task_revision->is_deniable = $request->is_deniable;
-
-        if($request->is_deniable == false && $auth->role_id != 1 ){
-            $task_revision->final_responsible_person = $this->role[$auth->role_id];
+     public function clientHasRevision(Request $request)
+     {    
+ 
+        
+         $dispute_between = explode('x', $request->acknowledgement_id)[0];
+ 
+         $auth = Auth::user();
+            
+            
+         // chagne board column status
+         $task_status = Task::find($request->task_id);
+         $task_status->task_status = "revision";
+         $task_status->board_column_id = 1;
+         $task_status->save();
+ 
+         $sale = null;
+         if($dispute_between == 'SPR'){
+             // find sale person
+             $project_deal_id = Project::find($task_status->project_id)->deal_id;
+             $sale = Deal::find($project_deal_id)->added_by;
         }
-
-
-        // if ($task_status->subtask_id != null) {
-        //     $task_revision->subtask_id = $task_status->subtask_id;
-        // }
-        $task_revision->revision_status = "Client Has Revision";
-
-        $task_revision->project_id = $task_status->project_id;
-        $task_revision->acknowledgement_id = $request->acknowledgement_id;
-        $task_revision->additional_amount= $request->additional_amount;
-        $task_revision->additional_status= $request->additional_status;
-        $task_revision->additional_deny_comment=$request->additional_comment;
-        $task_revision->sale_person = $sale;
-
-        $task_revision->dispute_created = $request->dispute_create;
-        $task_revision->dispute_between = $dispute_between;
-
-        $task_revision->added_by = Auth::id();
-        $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
-        foreach ($taskRevisionFind as $taskRevision) {
-            $taskRevision->revision_no = $taskRevision->revision_no + 1;
-            $taskRevision->save();
-        }
-        // $parentTask = Subtask::where('task_id',$request->task_id)->get();
-        // dd($parentTask);
-        // foreach ($parentTask as $subtask){
-        //     $subTask = Task::where('subtask_id',$subtask->id)->first();
-        //     $updateTask = Task::find($subTask->id);
-        //     $updateTask->status= "incomplete";
-        //     $updateTask->task_status= "revision";
-        //     $updateTask->board_column_id=1;
-        //     $updateTask->save();
-        // }
-        // dd($task_revision);
-        $task_revision->save();
-
-
-        // CREATE DISPUTE
-        if($request->dispute_create){
-            $this->create_dispute($task_revision, $request);
-        }
-
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
+ 
+         // store revision on revision table
+         $task_revision = new TaskRevision(); // instance of TaskRevision
+ 
+         $task_revision->pm_comment= $request->comment;
+         $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
+         $task_revision->task_id = $request->task_id;
+         $task_revision->is_deniable = $request->is_deniable; 
+ 
+         if($request->is_deniable == false && $auth->role_id != 1 ){ 
+             $task_revision->final_responsible_person = $this->role[$auth->role_id];
+         }
+ 
+         
+         // if ($task_status->subtask_id != null) {
+         //     $task_revision->subtask_id = $task_status->subtask_id;
+         // }
+         $task_revision->revision_status = "Client Has Revision";
+ 
+         $task_revision->project_id = $task_status->project_id;
+         $task_revision->acknowledgement_id = $request->acknowledgement_id;
+         $task_revision->additional_amount= $request->additional_amount;
+         $task_revision->additional_status= $request->additional_status;
+         $task_revision->additional_deny_comment=$request->additional_comment;
+         $task_revision->sale_person = $sale;
+ 
+         $task_revision->dispute_created = $request->dispute_create;
+         $task_revision->dispute_between = $dispute_between;
+ 
+         $task_revision->added_by = Auth::id();
+         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
+         foreach ($taskRevisionFind as $taskRevision) {
+             $taskRevision->revision_no = $taskRevision->revision_no + 1;
+             $taskRevision->save();
+         }
+         // $parentTask = Subtask::where('task_id',$request->task_id)->get();
+         // dd($parentTask);
+         // foreach ($parentTask as $subtask){
+         //     $subTask = Task::where('subtask_id',$subtask->id)->first();
+         //     $updateTask = Task::find($subTask->id);
+         //     $updateTask->status= "incomplete";
+         //     $updateTask->task_status= "revision";
+         //     $updateTask->board_column_id=1;
+         //     $updateTask->save();
+         // }
+         // dd($task_revision);
+         $task_revision->save();
+ 
+         $clientRevisionCount = TaskRevision::where('acknowledgement_id', 'CPRx06')
+                                 -> where('task_id', $task_revision->id)
+                                 ->count();
+ 
+         if($clientRevisionCount >= 5){ 
+             $task_revision->dispute_created = true; 
+             $task_revision->save();
+         }
+         // CREATE DISPUTE
+         if($task_revision->dispute_created ){
+             $this->create_dispute($task_revision);
+         }
+  
+         return response()->json([
+             'status' => 200,
+         ]);
+     }
 
 
     //ACCEPT AND CONTINUE BUTTON SECTION
@@ -4080,6 +4088,7 @@ class TaskController extends AccountBaseController
             $stop_time->date= $request->date;
             $stop_time->client= $request->client;
             $stop_time->save();
+          
             $task= Task::where('id',$request->task_id)->first();
             if($task->subtask_id == null)
             {
@@ -4102,6 +4111,7 @@ class TaskController extends AccountBaseController
             {
                 $parent_task_action = "No Subtask on this parent tasks";
             }
+          
 
             return response()->json([
                 'stop_time' => $stop_time,
@@ -4191,7 +4201,7 @@ class TaskController extends AccountBaseController
     public function GetRevision($id)
     {
         $task_revision= TaskRevision::where('task_id',$id)->orderBy('id','desc')->where('approval_status','pending')->first();
-       // dd($task_revision);
+        
         return response()->json($task_revision);
     }
     public function GetTaskStatus($id)
@@ -4866,6 +4876,7 @@ class TaskController extends AccountBaseController
                             $query->where('revisions.id', $revision_id);
                         }
                     })
+                    ->where('revisions.acknowledgement_id','!=',null)
                     ->get();
 
 
@@ -5020,7 +5031,7 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',Carbon::yesterday()) 
-        ->where('daily_submissions.status', '<>', 1)
+
         ->groupBy('tasks.id')
         ->get();
      //   dd($yesterdayData);
@@ -5029,7 +5040,7 @@ class TaskController extends AccountBaseController
           //  dd("nsnaslkdn");
             $user_data= User::where('id',$id)->first();
             $project_time_log_date = ProjectTimeLog::where('user_id',$id)->orderBy('id','desc')->first();
-            $last_login= $project_time_log_date->updated_at;
+            $last_login= $project_time_log_date->created_at;
 
 // Check if the last login date is today's date
 
@@ -5048,7 +5059,6 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',$last_login)
-        ->where('daily_submissions.status', '<>', 1)
         ->groupBy('tasks.id')
         ->get();
 
@@ -5541,6 +5551,7 @@ class TaskController extends AccountBaseController
             $task->deliverable_id = $pendingParentTasks->deliverable_id;
             $task->milestone_id = $pendingParentTasks->milestone_id;
             $task->added_by = $pendingParentTasks->added_by;
+            $task->pp_task_id = $pendingParentTasks->id;
             $task->save();
             if ($request->hasFile('file')) {
 
@@ -5571,44 +5582,6 @@ class TaskController extends AccountBaseController
             $pendingParentTasks->comment = $request->comment;
             $pendingParentTasks->authorize_by = Auth::user()->id;
             $pendingParentTasks->save();
-
-            $task = new Task();
-            $task->heading = $pendingParentTasks->heading;
-            $task->description = $pendingParentTasks->description;
-            $task->start_date = $pendingParentTasks->start_date;
-            $task->due_date = $pendingParentTasks->due_date;
-            $task->project_id = $pendingParentTasks->project_id;
-            $task->task_category_id = $pendingParentTasks->category_id;
-            $task->priority = $pendingParentTasks->priority;
-            $task->board_column_id = $pendingParentTasks->board_column_id;
-            $task->estimate_hours = $pendingParentTasks->estimate_hours;
-            $task->estimate_minutes = $pendingParentTasks->estimate_minutes;
-            $task->deliverable_id = $pendingParentTasks->deliverable_id;
-            $task->milestone_id = $pendingParentTasks->milestone_id;
-            // $task->user_id = $pendingParentTasks->user_id;
-            $task->added_by = Auth::user()->id;
-            $task->save();
-            if ($request->hasFile('file')) {
-
-                foreach ($request->file as $fileData) {
-                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $file->task_id = $task->id;
-
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
-
-                    $file->user_id = $task->user_id;
-                    $file->filename = $fileData->getClientOriginalName();
-                    $file->hashname = $filename;
-                    $file->size = $fileData->getSize();
-                    $file->save();
-
-                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
-                }
-            }
-            $task_user = new TaskUser();
-            $task_user->task_id = $task->id;
-            $task_user->user_id = $pendingParentTasks->user_id;
-            $task_user->save();
         }
         return response()->json(['status'=>200]);
     }

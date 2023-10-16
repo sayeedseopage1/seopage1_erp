@@ -94,7 +94,7 @@ class ClientDeliverableSignNotification extends Notification
         '</p><br><p>Should you have any concern or query, please do not hesitate to inform us.</p>'
         
         ;
-        $content = '<p>We have also attached the document in this email and you can download the attachment.</p><br>'
+        $content = ''
 
         ;
     $subject = 'Copy of agreed Deliverables for the project with Seopage1';
