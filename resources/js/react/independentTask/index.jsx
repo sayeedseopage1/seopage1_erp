@@ -131,9 +131,12 @@ const IndependentTask = () => {
     //         <Tasks tableData={tableData} isLoading={isLoading || isFetching} onFilter={onFilter} filter={filter} />
     //     </RefreshContext.Provider>
     //   );
+    const handleRefresh = ()=>{
+        setRefresh(prev=>!prev);
+    }
 
     return (
-        <RefreshContext.Provider value={{ refresh, setRefresh }}>
+        <RefreshContext.Provider value={{ refresh, setRefresh:handleRefresh }}>
             <BrowserRouter basename="/account/independent-task">
                 <Routes>
                     <Route path="/" element={<Container />}>

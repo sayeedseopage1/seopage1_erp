@@ -17,6 +17,9 @@ import Loader from "../components/Loader";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
 import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
+import SubmitButton from "../components/SubmitButton";
+import { useState } from "react";
+import IndependentTaskCreationForm from "../components/authorized-task/IndependentTaskCreationForm";
 
 const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     // const {tasks} = useSelector(s => s.tasks)
@@ -24,12 +27,13 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     // const dispatch = useDispatch();
     // const [getTasks, { isFetching }] = useLazyGetTasksQuery();
     // const [filter, setFilter] = React.useState(null);
-    const [search, setSearch] = React.useState('');
+    const [search, setSearch] = useState('');
+    const [showIndividualTaskCreationForm, setShowIndividualTaskCreationForm] = useState(false);
     // const [showAuthorizationModal, setShowAuthorizationModal] = React.useState(false);
     // const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false);
     // const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
     // const [comment, setComment] = React.useState('');
-    const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
+    const [columnVisibility, setColumnVisibility] = useState(defaultColumnVisibility)
 
     // api function
     // const [updateTasktypeAuthStatus, { isLoading }] = useUpdateTasktypeAuthStatusMutation();
@@ -101,6 +105,9 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
         tableColumns = _.filter(TaskTableColumns, d => d.id !== "action");
     }
 
+    const handleTaskAddForm = () => {
+        setShowIndividualTaskCreationForm(true);
+    }
 
     return (
         <React.Fragment>
@@ -111,7 +118,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
             <div className="sp1_tlr_container">
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
-                        <Tabbar />
+                        {/* <Tabbar /> */}
 
                         {/* {
                             _.includes([1, 8], auth?.getRoleId()) &&
@@ -127,10 +134,25 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                                     </>}
                             </Button>
                         } */}
+                        <div
+                            className="d-flex align-items-center flex-wrap"
+                            style={{ gap: "10px" }}
+                        >
 
-                        <div className="mr-auto ml-2 mb-2 ">
+                            {_.includes([1, 4], auth?.getRoleId()) && (
+                                <SubmitButton
+                                    onClick={handleTaskAddForm}
+                                    isLoading={false}
+                                >
+                                    + Add Task
+                                </SubmitButton>
+                            )}
+
                             <TaskAuthorization />
                         </div>
+
+                        <div className="mr-auto ml-2 mb-2 "/>                            
+                        
                         <div className="mr-2 mb-2" style={{ maxWidth: '300px' }}>
                             <SearchBox
                                 value={search}
@@ -149,6 +171,13 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                         </div>
 
                     </div>
+
+                    <IndependentTaskCreationForm
+                        isOpen={showIndividualTaskCreationForm}
+                        close={() => setShowIndividualTaskCreationForm(false)}
+                        projectName={'independent-task-creation-form'}
+                        onSuccess={() => onFilter({})}
+                    />
 
                     <TasksTable
                         tasks={tableData}

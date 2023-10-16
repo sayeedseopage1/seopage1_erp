@@ -16,9 +16,12 @@ const QuestionAnswer = ({ data, conversations, setConversations }) => {
 
     const handleSubmission = async (e) => {
         e.preventDefault();
+
+        // console.log({question, data});
+        
         await createPendingTaskAuthorizationConversation({
             question,
-            pending_parent_task_id: data.id
+            pending_parent_task_id: data?.u_id
         })
         .unwrap()
         .then(res => {

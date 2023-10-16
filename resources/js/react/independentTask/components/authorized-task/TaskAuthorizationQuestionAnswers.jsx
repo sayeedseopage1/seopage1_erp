@@ -16,6 +16,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
     const auth = _.includes([1, 8], user.getRoleId());
 
     useEffect(() => {
+        console.log({"taskAuth:L19":data});
         setConversations(data);
     }, [data])
 
@@ -51,6 +52,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
         setErr(error ?? null);
 
         if(count === 0){
+            console.log({conversations});
             await updatePendingTaskAuthorizationConversation(conversations)
             .unwrap()
             .then(res => {

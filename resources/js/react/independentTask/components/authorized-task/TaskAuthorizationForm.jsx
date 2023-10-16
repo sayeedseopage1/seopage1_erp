@@ -11,13 +11,29 @@ import Card from "../../../global/Card";
 import Avatar from "../../../global/Avatar";
 import { useUpdateAuthorizeTaskMutation } from "../../../services/api/projectApiSlice";
 import { User } from "../../../utils/user-details";
+import useIndependentTaskContext from "../../../hooks/useIndependentTaskContext";
+import { CompareDate } from "../../../utils/dateController";
+import DatePickerComponent from "./DatePicker";
+import { useEffect } from "react";
+
+const day = new CompareDate();
 
 const TaskAuthorizationForm = ({ data, table }) => {
+    const { setRefresh } = useIndependentTaskContext();
+
+    const [startDate, setStartDate] = useState(null);
+    const [dueDate, setDueDate] = useState(null);
     const [visible, setVisible] = useState(false);
     const [comment, setComment] = useState("");
     const [hasQuestion, setHasQuestion] = useState(false);
     const [err, setErr] = useState(new Object());
 
+    useEffect(()=>{
+      console.log({startDate,dueDate});
+      console.log({});
+    },[startDate,dueDate])
+
+    console.log({ chat: data?.conversations });
     const [conversations, setConversations] = React.useState(data.conversations);
 
     const updateConversation = (entry) => {
@@ -44,6 +60,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                 .then((res) => {
                     toast.success("Success! Your request has been completed.");
                     close();
+                    setRefresh();
                 });
         } else {
             toast.warn("Please write a comment before submitting.");
@@ -57,10 +74,14 @@ const TaskAuthorizationForm = ({ data, table }) => {
     const notAnswered = _.filter(conversations, c => !c.replied_by)
     const auth = _.includes([1, 8], user.getRoleId());
 
+
+    // console
+    console.log({ data, table });
+
     return (
         <div>
             <div className={styles.action}>
-                <Button onClick={open} variant={data.approval_status === null ? 'tertiary': data.approval_status === 1 ? 'success' : 'danger'}>
+                <Button onClick={open} variant={data.approval_status === null ? 'tertiary' : data.approval_status === 1 ? 'success' : 'danger'}>
                     {data.approval_status === null ?
                         (!auth ? _.size(notAnswered) ? `${_.size(notAnswered)} Questions` : 'View' : 'Approve/Deny') :
                         "View"
@@ -77,13 +98,70 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
                             <Card.Body className={styles.card_body}>
                                 <div className={styles.task_project}>
-                                    <h6>{data.project_name}</h6>
+                                    <h6>{data.heading}</h6>
                                     <span className="d-block">
                                         {data.client_name}
                                     </span>
                                 </div>
 
                                 <div className={styles.task_info}>
+
+                                    {/* start_date */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Start Date{" "}
+                                        </div>
+                                        <div
+                                            className={styles.task_info__text}
+                                            style={{ gap: "6px" }}
+                                        >
+                                            <strong>
+                                                {dayjs(data.start_date).format(
+                                                    "MMM DD, YYYY"
+                                                )}
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-12 col-md-6">
+                                        <div className="form-group my-3">
+                                            <label htmlFor="">
+                                                Start Date <sup className="f-14">*</sup>
+                                            </label>
+                                            <div className="form-control height-35 f-14">
+                                                <DatePickerComponent
+                                                    placeholderText={day.dayjs().format("DD-MM-YYYY")}
+                                                    minDate={day.dayjs().toDate()}
+                                                    maxDate={dueDate}
+                                                    date={startDate}
+                                                    setDate={setStartDate}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* due_date */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={styles.task_info__label}
+                                        >
+                                            Due Date{" "}
+                                        </div>
+                                        <div
+                                            className={styles.task_info__text}
+                                            style={{ gap: "6px" }}
+                                        >
+                                            <strong>
+                                                {dayjs(data.due_date).format(
+                                                    "MMM DD, YYYY"
+                                                )}
+                                            </strong>
+                                        </div>
+                                    </div>
+
+                                    {/* creation_date */}
                                     <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
@@ -95,19 +173,20 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             style={{ gap: "6px" }}
                                         >
                                             <strong>
-                                                {dayjs(data.created_at).format(
+                                                {dayjs(data.creation_date).format(
                                                     "MMM DD, YYYY"
                                                 )}
                                             </strong>
                                             at
                                             <strong>
-                                                {dayjs(data.created_at).format(
+                                                {dayjs(data.creation_date).format(
                                                     "hh:mm A"
                                                 )}
                                             </strong>
                                         </div>
                                     </div>
 
+                                    {/* approval_status */}
                                     <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
@@ -115,10 +194,11 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             Status
                                         </div>
                                         <div className={styles.task_info__text}>
-                                            {data.approval_status === null ?<span className="badge badge-warning">Pending</span> : data.approval_status === 1 ? <span className="badge badge-success">Approved</span> : <span className="badge badge-danger">Rejected</span> }
+                                            {data.approval_status === null ? <span className="badge badge-warning">Pending</span> : data.approval_status === 1 ? <span className="badge badge-success">Approved</span> : <span className="badge badge-danger">Rejected</span>}
                                         </div>
                                     </div>
 
+                                    {/* heading */}
                                     <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
@@ -130,6 +210,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
+                                    {/* assign_by */}
                                     <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
@@ -138,10 +219,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                         <div className={styles.task_info__text}>
                                             <Avatar
-                                                name={data.assignee_by_name}
+                                                name={data.assign_by_name}
                                                 src={
-                                                    data.assignee_by_avatar
-                                                        ? `/user-uploads/avatar/${data.assignee_by_avatar}`
+                                                    data.assign_by_avator
+                                                        ? `/user-uploads/avatar/${data.assign_by_avator}`
                                                         : null
                                                 }
                                                 type="circle"
@@ -149,13 +230,14 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                 height={32}
                                             />
                                             <a
-                                                href={`/account/employees/${data.assignee_by_id}`}
+                                                href={`/account/employees/${data.assign_by_id}`}
                                             >
-                                                {data.assignee_by_name}
+                                                {data.assign_by_name}
                                             </a>
                                         </div>
                                     </div>
 
+                                    {/* assign_to */}
                                     <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
@@ -164,10 +246,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                         <div className={styles.task_info__text}>
                                             <Avatar
-                                                name={data.assignee_by_name}
+                                                name={data.assign_to_name}
                                                 src={
-                                                    data.assignee_by_avatar
-                                                        ? `/user-uploads/avatar/${data.assignee_by_avatar}`
+                                                    data.assign_to_avator
+                                                        ? `/user-uploads/avatar/${data.assign_to_avator}`
                                                         : null
                                                 }
                                                 type="circle"
@@ -175,14 +257,15 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                 height={32}
                                             />
                                             <a
-                                                href={`/account/employees/${data.assignee_to_id}`}
+                                                href={`/account/employees/${data.assign_to_id}`}
                                             >
-                                                {data.assignee_to_name}
+                                                {data.assign_to_name}
                                             </a>
                                         </div>
                                     </div>
 
-                                    <div className={styles.inline_flex}>
+
+                                    {/* <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
                                         >
@@ -196,9 +279,9 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                 </strong>
                                             </p>
                                         </div>
-                                    </div>
+                                    </div> */}
 
-                                    { data.approval_status &&
+                                    {data.approval_status &&
                                         <>
                                             <div className={styles.inline_flex}>
                                                 <div
@@ -219,8 +302,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                         height={32}
                                                     />
                                                     <a href={`/account/employees/${data.authorized_by}`}>
-                                                            {data.approved_by_name}
-                                                        </a>
+                                                        {data.approved_by_name}
+                                                    </a>
                                                 </div>
                                             </div>
 
@@ -240,106 +323,106 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     }
 
 
-                                     <TaskAuthorizationQuestionAnswers
+                                    <TaskAuthorizationQuestionAnswers
                                         data={conversations}
                                         updateConversations={updateConversation}
                                     />
 
                                     {
                                         (auth && data.approval_status === null) && <React.Fragment>
-                                             <div className={styles.section_divider}>
-                                                    <span className="badge badge-secondary"> Authority </span>
-                                                </div>
+                                            <div className={styles.section_divider}>
+                                                <span className="badge badge-secondary"> Authority </span>
+                                            </div>
 
-                                                <div className={styles.inline_flex}>
-                                                    <div
-                                                        className={styles.task_info__label}
-                                                    >
+                                            <div className={styles.inline_flex}>
+                                                <div
+                                                    className={styles.task_info__label}
+                                                >
                                                     Has Question
-                                                    </div>
-                                                    <div className={styles.task_info__text}>
-                                                    <label>
-                                                            <input
-                                                                onChange={e => setHasQuestion(true)}
-                                                                value={true}
-                                                                type="radio"
-                                                                name="has_question"
-                                                            /> Yes
-                                                        </label>
-                                                    <label>
-                                                            <input
-                                                                onChange={e => setHasQuestion(false)}
-                                                                value={false}
-                                                                type="radio"
-                                                                defaultChecked={true}
-                                                                name="has_question"
-                                                            /> No
-                                                        </label>
-                                                    </div>
                                                 </div>
+                                                <div className={styles.task_info__text}>
+                                                    <label>
+                                                        <input
+                                                            onChange={e => setHasQuestion(true)}
+                                                            value={true}
+                                                            type="radio"
+                                                            name="has_question"
+                                                        /> Yes
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            onChange={e => setHasQuestion(false)}
+                                                            value={false}
+                                                            type="radio"
+                                                            defaultChecked={true}
+                                                            name="has_question"
+                                                        /> No
+                                                    </label>
+                                                </div>
+                                            </div>
 
 
 
-                                                {
-                                                    hasQuestion ?
-                                                        <QuestionAnswer
-                                                            data={data}
-                                                            conversations={conversations}
-                                                            setConversations={updateConversation}
-                                                        />
+                                            {
+                                                hasQuestion ?
+                                                    <QuestionAnswer
+                                                        data={data}
+                                                        conversations={conversations}
+                                                        setConversations={updateConversation}
+                                                    />
                                                     :
                                                     <>
-                                                    <div className={styles.comment_field}>
-                                                        <label className="task_info__label">
-                                                            Comment:
-                                                        </label>
-                                                        <textarea
-                                                            rows={6}
-                                                            value={comment}
-                                                            onChange={(e) =>
-                                                                setComment(e.target.value)
-                                                            }
-                                                            placeholder="Write your comment here."
-                                                        />
+                                                        <div className={styles.comment_field}>
+                                                            <label className="task_info__label">
+                                                                Comment:
+                                                            </label>
+                                                            <textarea
+                                                                rows={6}
+                                                                value={comment}
+                                                                onChange={(e) =>
+                                                                    setComment(e.target.value)
+                                                                }
+                                                                placeholder="Write your comment here."
+                                                            />
 
-                                                        {err?.comment && (
-                                                            <span className="text-danger">
-                                                                <small>{err?.comment}</small>
-                                                            </span>
-                                                        )}
-                                                    </div>
+                                                            {err?.comment && (
+                                                                <span className="text-danger">
+                                                                    <small>{err?.comment}</small>
+                                                                </span>
+                                                            )}
+                                                        </div>
 
-                                                    <div className={styles.button_group}>
-                                                        {isLoading ? (
-                                                            <Button isLoading={isLoading} variant="primary">
-                                                                Loading
-                                                            </Button>
-                                                        ) : (
-                                                            <>
-                                                                <Button
-                                                                    variant="danger"
-                                                                onClick={e => handleSubmission(e,false)}
-                                                                >
-                                                                    Deny
+                                                        <div className={styles.button_group}>
+                                                            {isLoading ? (
+                                                                <Button isLoading={isLoading} variant="primary">
+                                                                    Loading
                                                                 </Button>
-                                                                <Button
-                                                                    variant="success"
-                                                                    onClick={(e) =>
-                                                                        handleSubmission(e,true)
-                                                                    }
-                                                                >
-                                                                    Approve
-                                                                </Button>
-                                                            </>
-                                                        )}
-                                                    </div>
+                                                            ) : (
+                                                                <>
+                                                                    <Button
+                                                                        variant="danger"
+                                                                        onClick={e => handleSubmission(e, false)}
+                                                                    >
+                                                                        Deny
+                                                                    </Button>
+                                                                    <Button
+                                                                        variant="success"
+                                                                        onClick={(e) =>
+                                                                            handleSubmission(e, true)
+                                                                        }
+                                                                    >
+                                                                        Approve
+                                                                    </Button>
+                                                                </>
+                                                            )}
+                                                        </div>
                                                     </>
-                                                }
+                                            }
                                         </React.Fragment>
                                     }
 
-                                   {data.approval_status !== null &&  <div className={`alert ${data.approval_status=== 1 ? 'alert-success' : 'alert-danger'} text-center`}>
-                                            Authorized by <a href={`/account/employees/${data.authorized_by}`} className="badge badge-success text-white">
+                                    {data.approval_status !== null && <div className={`alert ${data.approval_status === 1 ? 'alert-success' : 'alert-danger'} text-center`}>
+                                        Authorized by <a href={`/account/employees/${data.authorized_by}`} className="badge badge-success text-white">
                                             {data.approved_by_name} </a> on <span className="badge badge-success">{dayjs(data.updated_at).format('MMM DD, YYYY hh:mm A')}</span> <span className="badge badge-success">{dayjs(data.updated_at).format('hh:mm A')}</span>
                                     </div>}
                                 </div>

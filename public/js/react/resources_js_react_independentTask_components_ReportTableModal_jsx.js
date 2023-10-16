@@ -407,67 +407,6 @@ var ReportTableModal = function ReportTableModal(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/independentTask/components/SubmitButton.jsx":
-/*!************************************************************************!*\
-  !*** ./resources/js/react/independentTask/components/SubmitButton.jsx ***!
-  \************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Button */ "./resources/js/react/independentTask/components/Button.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-
-
-var SubmitButton = function SubmitButton(_ref) {
-  var onClick = _ref.onClick,
-    isLoading = _ref.isLoading,
-    className = _ref.className,
-    _ref$variant = _ref.variant,
-    variant = _ref$variant === void 0 ? "primary" : _ref$variant,
-    children = _ref.children,
-    title = _ref.title;
-  var body = document.querySelector('#body');
-  var handleOnClick = function handleOnClick(e) {
-    e.stopPropagation();
-    onClick(e);
-  };
-  react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    if (isLoading) {
-      body.style.cursor = 'progress';
-    } else {
-      body.style.cursor = 'default';
-    }
-  }, [isLoading]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: !isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      variant: variant,
-      onClick: handleOnClick,
-      className: className,
-      children: children || title
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-      className: "cursor-processing cnx__btn cnx__btn_sm cnx__btn_primary",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        className: "spinner-border text-white",
-        role: "status",
-        style: {
-          width: "18px",
-          height: "18px"
-        }
-      }), "Processing..."]
-    })
-  });
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (SubmitButton);
-
-/***/ }),
-
 /***/ "./resources/js/react/independentTask/components/loader/ReportTableLoder.jsx":
 /*!***********************************************************************************!*\
   !*** ./resources/js/react/independentTask/components/loader/ReportTableLoder.jsx ***!
