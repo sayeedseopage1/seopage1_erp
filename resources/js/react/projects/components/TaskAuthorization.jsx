@@ -31,7 +31,7 @@ const TaskAuthorization = ({ title }) => {
         : "Tasks [Need Authorization]";
 
     const badge = () => {
-        return _.size(_.filter(data?.data, (d) => !d.approval_status));
+        return _.size(_.filter(data?.data, (d) => d?.approval_status === null));
     };
 
     return (
