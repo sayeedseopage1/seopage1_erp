@@ -1925,7 +1925,7 @@ trait PmDashboardAdminView
              ->leftJoin('projects','task_revisions.project_id','=','projects.id')
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                    ->where('projects.pm_id', $this->pm->id)
                  
@@ -1935,7 +1935,7 @@ trait PmDashboardAdminView
                                
             })
           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                   $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                   $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
                     ->where('task_revisions.created_at', '<', $startMonth)
                     ->where('projects.pm_id', $this->pm->id)
                     ->where('task_revisions.dispute_created', 1)
@@ -1965,7 +1965,7 @@ trait PmDashboardAdminView
            
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                    ->where('projects.pm_id', $this->pm->id)
                  
@@ -1975,7 +1975,7 @@ trait PmDashboardAdminView
                                
             })
           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                   $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                   $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
                     ->where('task_revisions.created_at', '<', $startMonth)
                     ->where('projects.pm_id', $this->pm->id)
                     ->where('task_revisions.dispute_created', 1)
@@ -2006,7 +2006,7 @@ trait PmDashboardAdminView
              ->leftJoin('project_members','projects.id','=','project_members.project_id')
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
                    ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                    ->where('projects.pm_id', $this->pm->id)
                  
@@ -2015,7 +2015,7 @@ trait PmDashboardAdminView
                                
             })
           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                   $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                   $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
                     ->where('task_revisions.created_at', '<', $startMonth)
                     ->where('projects.pm_id', $this->pm->id)
                     ->where('task_revisions.dispute_created', 1)
@@ -2050,7 +2050,7 @@ trait PmDashboardAdminView
              // ->whereNotBetween('tasks.created_at', [$this->startMonth, $this->endMonth])
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                 $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                 $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                     ->where('projects.pm_id', $this->pm->id)
                     ->where('task_revisions.final_responsible_person','PM')
@@ -2058,7 +2058,7 @@ trait PmDashboardAdminView
                                 
              })
            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                    $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                    $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
                      ->where('task_revisions.created_at', '<', $startMonth)
                      ->where('projects.pm_id', $this->pm->id)
                      ->where('task_revisions.final_responsible_person','PM')
@@ -2085,7 +2085,7 @@ trait PmDashboardAdminView
            
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                 $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                 $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                     ->where('projects.pm_id', $this->pm->id)
                     ->where('task_revisions.final_responsible_person', '!=', 'PM')
@@ -2093,7 +2093,7 @@ trait PmDashboardAdminView
                                 
              })
            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                    $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                    $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
                      ->where('task_revisions.created_at', '<', $startMonth)
                      ->where('projects.pm_id', $this->pm->id)
                      ->where('task_revisions.final_responsible_person', '!=', 'PM')
@@ -2125,7 +2125,7 @@ trait PmDashboardAdminView
            
              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                 $q3->whereBetween('tasks.created_at', [$startMonth, $release_date])
+                 $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                     ->where('projects.pm_id', $this->pm->id)
                     ->where('task_revisions.dispute_created', 1)
@@ -2134,7 +2134,7 @@ trait PmDashboardAdminView
                                 
              })
            ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                    $q2->whereBetween('tasks.created_at', [$nextMonth, $release_date])
+                    $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
                      ->where('task_revisions.created_at', '<', $startMonth)
                      ->where('projects.pm_id', $this->pm->id)
                      ->where('task_revisions.dispute_created', 1)
@@ -3122,7 +3122,7 @@ trait PmDashboardAdminView
               ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
                   $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
-                     ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                      ->where('projects.pm_id', $this->pm->id)
                      ->where('task_revisions.final_responsible_person','PM')
                      ;
@@ -3130,7 +3130,7 @@ trait PmDashboardAdminView
               })
             ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                      $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
-                      ->where('tasks.created_at', '<', $startMonth)
+                      ->where('task_revisions.created_at', '<', $startMonth)
                       ->where('projects.pm_id', $this->pm->id)
                       ->where('task_revisions.final_responsible_person','PM')
                       ;
@@ -3167,7 +3167,7 @@ trait PmDashboardAdminView
               })
             ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                      $q2->whereBetween('task_revisions.updated_at', [$nextMonth, $release_date])
-                      ->where('tasks.created_at', '<', $startMonth)
+                      ->where('task_revisions.created_at', '<', $startMonth)
                       ->where('projects.pm_id', $this->pm->id)
               ->where('task_revisions.final_responsible_person', '!=', 'PM')
                       ;
@@ -3199,10 +3199,10 @@ trait PmDashboardAdminView
               ->groupBy('task_revisions.id')
               // ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
               // ->whereNotBetween('tasks.created_at', [$startMonth, $endMonth])
-              ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
+              ->where(function ($q3) use( $startMonth, $endMonth,$release_date,) {
 
                   $q3->whereBetween('task_revisions.updated_at', [$startMonth, $release_date])
-                     ->whereBetween('tasks.created_at', [$startMonth, $endMonth])
+                     ->whereBetween('task_revisions.created_at', [$startMonth, $endMonth])
                      ->where('projects.pm_id', $this->pm->id)
                      ->where('task_revisions.dispute_created', 1)
                      ;
