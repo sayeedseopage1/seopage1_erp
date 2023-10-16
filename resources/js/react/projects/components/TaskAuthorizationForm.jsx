@@ -27,6 +27,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
     const open = () => setVisible(true);
     const close = () => setVisible(false);
 
+    const notAnswered = _.filter(conversations, c => !c.replied_by)
+
     const [updateAuthorizeTask, { isLoading }] =
         useUpdateAuthorizeTaskMutation();
     const handleSubmission = async (e, status) => {
@@ -38,7 +40,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
             comment
         };
 
-        if (comment) {
+        // check the all question has answer
+        const verified = _.size(conversations) ? _.size(notAnswered) === 0 : true;
+
+        if (comment && verified) {
             await updateAuthorizeTask(_data)
                 .unwrap()
                 .then((res) => {
@@ -46,15 +51,20 @@ const TaskAuthorizationForm = ({ data, table }) => {
                     close();
                 });
         } else {
-            toast.warn("Please write a comment before submitting.");
-            error.comment = "Please write a comment before submitting.";
+            if(!verified){
+                toast.warn("Some questions do not have answers yet!");
+                error.comment = "Some questions do not have answers yet!";
+            }else{
+                toast.warn("Please write a comment before submitting.");
+                error.comment = "Please write a comment before submitting.";
+            }
             setErr(error);
         }
     };
 
     const user = new User(window.Laravel.user);
 
-    const notAnswered = _.filter(conversations, c => !c.replied_by)
+
     const auth = _.includes([1, 8], user.getRoleId());
 
     return (
@@ -240,7 +250,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     }
 
 
-                                     <TaskAuthorizationQuestionAnswers
+                                    <TaskAuthorizationQuestionAnswers
                                         data={conversations}
                                         updateConversations={updateConversation}
                                     />
