@@ -4199,7 +4199,7 @@ class TaskController extends AccountBaseController
     public function GetRevision($id)
     {
         $task_revision= TaskRevision::where('task_id',$id)->orderBy('id','desc')->where('approval_status','pending')->first();
-       // dd($task_revision);
+        
         return response()->json($task_revision);
     }
     public function GetTaskStatus($id)
@@ -4874,6 +4874,7 @@ class TaskController extends AccountBaseController
                             $query->where('revisions.id', $revision_id);
                         }
                     })
+                    ->where('revisions.acknowledgement_id','!=',null)
                     ->get();
 
 
