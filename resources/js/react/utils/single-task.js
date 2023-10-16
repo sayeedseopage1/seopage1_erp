@@ -214,6 +214,9 @@ export class SingleTask {
         this.projectManagerAvatar = task?.project_manager_avatar;
         this.projectManagerName = task?.project_manager_name;
         this.projectManagerDesignation = task?.pm_designation;
+        this.subAcknowledgement = task?.sub_acknowledgement;
+        this.acknowledgement = task?.acknowledgement;
+        this.approvalStatus = task?.approval_status;
     }
 
     isLeadDeveloperAbleToSubmit () {
