@@ -334,17 +334,17 @@ export const TaskTableColumns = [
 
     // assigned to
     {
-      id: 'assigned_to_id',
+      id: 'assign_to_id',
       header: 'Assigned To',
       accessorKey: 'assigned_to_name',
       cell: ({row}) => {
         const data = row?.original;
-        console.log(data);
+        // console.log(data);
         return( 
           <Person
-            url={`/account/employees/${data?.assigned_to_id}` }
-            avatar={data?.assigned_to_avatar}
-            name={data?.assigned_to_name}
+            url={`/account/employees/${data?.assign_to_id}` }
+            avatar={data?.assign_to_avator}
+            name={data?.assign_to_name}
           /> 
         )
       }

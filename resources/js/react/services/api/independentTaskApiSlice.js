@@ -10,6 +10,12 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
       providesTags : ["INDEPENDENT_TASK"],
     }),
 
+    // get all independent task for authorization
+    getIndependentAuthorizeTask : builder.query({
+      query: (query)=>`/account/get-independent-task`,
+      providesTags : ["INDEPENDENT_TASK"],
+    }),
+
     // post an independent task
     postIndependentTask : builder.mutation({
       query: (data) => ({
@@ -27,5 +33,6 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetIndependentTaskQuery,
   useLazyGetIndependentTaskQuery,
+  useGetIndependentAuthorizeTaskQuery,
   usePostIndependentTaskMutation,
 } = independentTaskApiSlice;
