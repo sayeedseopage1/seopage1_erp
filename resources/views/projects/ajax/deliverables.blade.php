@@ -160,7 +160,11 @@
             </div>
 
             <div class="col-md-12 mt-3">
-                <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
+                @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
+                    <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project.You have already submitted deliverable time extension request. Please wait for confirmation.</h6>
+                @else
+                    <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
+                @endif
             </div>
             @include('projects.modals.deliverableauthorizationmodal')
         @else
