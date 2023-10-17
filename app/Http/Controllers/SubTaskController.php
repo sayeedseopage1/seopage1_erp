@@ -186,6 +186,7 @@ class SubTaskController extends AccountBaseController
         $task_s->task_status = "pending";
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
+        $task_s->pp_task_id = $task_id->pp_task_id;
         $task_s->save();
         $task_type = new TaskType();
         $task_type->task_id= $task_s->id;
@@ -316,7 +317,7 @@ class SubTaskController extends AccountBaseController
      */
     public function update(Request $request, $id)
     {
-        
+
         $setting = global_setting();
         $task = Task::find($id);
         $startDate = $task->start_date->format($setting->date_format);

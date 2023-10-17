@@ -56,18 +56,18 @@ class IndependentTaskController extends AccountBaseController
 
      public function independentTaskGet(){
 
-        $pendingParentTask = DB::table('pending_parent_tasks')
+        $pending_parent_task = DB::table('pending_parent_tasks')
                             ->leftJoin('users as user', 'pending_parent_tasks.user_id', '=', 'user.id')
                             ->leftJoin('roles as userRole', 'user.role_id', '=', 'userRole.id')
                             ->leftJoin('users as addedBy', 'pending_parent_tasks.added_by', '=', 'addedBy.id')
                             ->leftJoin('roles as addedByRole', 'addedBy.role_id', '=', 'addedByRole.id')
-                            ->select('pending_parent_tasks.id','pending_parent_tasks.heading','pending_parent_tasks.description','pending_parent_tasks.start_date','pending_parent_tasks.due_date','pending_parent_tasks.category_id','pending_parent_tasks.board_column_id','user.id as assign_to_id','user.name as assign_to_name','user.image as assign_to_avator','userRole.name as assign_to_designation','pending_parent_tasks.u_id','pending_parent_tasks.independent_task_status','addedBy.id as assign_by_id','addedBy.name as assign_by_name','addedBy.image as assign_by_avator','addedByRole.name as assign_by_designation','pending_parent_tasks.created_at as creation_date')
-                            ->where('independent_task_status', '1')
+                            ->select('pending_parent_tasks.id','pending_parent_tasks.heading','pending_parent_tasks.description','pending_parent_tasks.start_date','pending_parent_tasks.due_date','pending_parent_tasks.category_id','pending_parent_tasks.board_column_id','pending_parent_tasks.need_authorization','pending_parent_tasks.approval_status','user.id as assign_to_id','user.name as assign_to_name','user.image as assign_to_avator','userRole.name as assign_to_designation','pending_parent_tasks.u_id','pending_parent_tasks.independent_task_status','addedBy.id as assign_by_id','addedBy.name as assign_by_name','addedBy.image as assign_by_avator','addedByRole.name as assign_by_designation','pending_parent_tasks.created_at as creation_date')
+                            ->where('pending_parent_tasks.independent_task_status', '1')
                             ->get();
 
 
         return response()->json([
-            'pendingParentTask'=> $pendingParentTask,
+            'pendingParentTask'=> $pending_parent_task,
             'status'=>200
         ]);
      }
