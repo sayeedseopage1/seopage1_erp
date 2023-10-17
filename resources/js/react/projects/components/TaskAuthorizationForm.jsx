@@ -237,7 +237,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </label>
                                         <div className={styles.task_info__text}>
                                             <div className={styles.task_description}>
-                                                <div className="sp1_ck_content" dangerouslySetInnerHTML={{__html: getDescription() + `${!showFullDescription ? '...' : ''}` }} />
+                                                <div className="sp1_ck_content" dangerouslySetInnerHTML={{__html: getDescription() + `${(!showFullDescription && data?.description.length >= 500) ? '...' : ''}` }} />
                                                 {data?.description.length > 500 &&
                                                     <div className="d-flex align-items-center justify-content-center w-100 mt-3">
                                                         <button

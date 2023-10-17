@@ -3476,6 +3476,14 @@ class TaskController extends AccountBaseController
                 ->where('tasks.id', $id)
                 ->first();
 
+                // if($task->subtask_id !=null){
+                //     $ppSubTask = SubTask::where('id',$task->subtask_id)->first();
+                //     $ppTask = Task::where('id',$ppSubTask->task_id)->first();
+                //     // dd($ppTask);
+
+                //     $task->ppTask_id = $ppTask->pp_task_id;
+                // }
+
             if($task->subtask_id == null)
             {
                 $subtasks = Subtask::where('task_id', $task->id)->get();

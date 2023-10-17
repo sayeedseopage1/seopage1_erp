@@ -150,6 +150,7 @@
 }
 
 .task_description{
+    width: 100%;
     padding: 1rem;
     border-radius: 1rem;
     background-color: rgb(0 0 0 / 5%);
