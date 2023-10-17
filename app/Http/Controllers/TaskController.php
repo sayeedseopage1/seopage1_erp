@@ -3437,6 +3437,7 @@ class TaskController extends AccountBaseController
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
+                'task_types.task_type',
                 'task_types.page_name',
                 'task_types.page_url',
                 'task_types.task_type_other',
