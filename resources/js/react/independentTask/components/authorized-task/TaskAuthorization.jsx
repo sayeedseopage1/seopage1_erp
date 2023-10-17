@@ -21,7 +21,7 @@ const TaskAuthorization = ({title}) => {
   const open = () => setVisible(true);
   const close = () => setVisible(false);
 
-//   console.log({data,isFetching});
+  console.log({data,isFetching});
 
 
   return (
