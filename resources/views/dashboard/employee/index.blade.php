@@ -834,7 +834,7 @@
                                                     <div class="media-body">
                                                         <h5 class="f-12 mb-1 text-darkest-grey"><a
                                                                 href="{{ route('tasks.show', [$task->id]) }}"
-                                                                class="openRightModal">{{ ucfirst($task->heading) }}</a>
+                                                                class="">{{ ucfirst($task->heading) }}</a>
                                                         </h5>
                                                         <p class="mb-0">
                                                             @foreach ($task->labels as $label)
