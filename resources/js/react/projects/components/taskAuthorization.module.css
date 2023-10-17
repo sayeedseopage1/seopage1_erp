@@ -149,6 +149,12 @@
     gap: 12px;
 }
 
+.task_description{
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: rgb(0 0 0 / 5%);
+}
+
 .comment_field > label{
     color:#626262;
     font-weight: 500;
@@ -259,5 +265,8 @@
 
 .show_more_btn{
     padding-inline: 8px;
-    border-radius: 3px;
+    border-radius: 6px;
+    background-color: #131313;
+    color: #f8f8f8;
+    font-size: 12px;
 }

@@ -57,57 +57,43 @@ const ProjectManagerAcknowledgementModal = ({
                             <span>&nbsp;</span>
                         </Card.Head>
                         <Card.Body className={styles.card_body}>
-                            <h5>Do you understand these responsibilities?</h5>
+                            <h5>Do you understand the following things?</h5>
                             <ol className={styles.order_list}>
                                 <li>
-                                    Decide how the website should look based on
-                                    reference websites.
+                                    It is your job to decide what the look and feel of a website will be based on a few reference websites.
                                 </li>
                                 <li>
-                                    Research a theme as per the client's
-                                    instructions.
+                                    It is your job is to research a theme based on the overall direction given by the client.
                                 </li>
                                 <li>
-                                    Research a plugin according to the client's
-                                    overall direction.
+                                    It is your job to research a plugin based on the overall direction given by the client.
                                 </li>
-                                <li>Choose the colors for the website.</li>
+                                <li>It is your job to choose the color scheme of a website.</li>
                                 <li>
-                                    Talk to support teams like Shopify, theme,
-                                    and plugin support when needed.
+                                It is your job to talk to the support for example the shopify support team, theme support, plugin support and any other support for any solution.
                                 </li>
                                 <li>
-                                    Create or find tutorials as the client
-                                    requests during or after a project.
+                                    It is your job to create any tutorial or find them from youtube based on clients requirement during a project/after the completion of a project.
                                 </li>
                                 <li>
-                                    Recognize how crucial these tasks are for
-                                    the project's success. They are your
-                                    responsibility because you directly interact
-                                    with the client. If you assign them to
-                                    developers, you're neglecting your core role
-                                    and risking the project.
+                                    You understand that the above things are critical for any projects success and the technical team may not be a good fit for them as they don’t have direct contact with the client. Assigning them to developers only means that you are skipping your core responsibility and you don’t care about the project’s fate
                                 </li>
                             </ol>
 
                             <p className="ml-2">
-                                In general, defining requirements is your job.
-                                Developers focus on executing detailed tasks
-                                based on those requirements. If you need
-                                developer help with any of these tasks, you must
-                                get top management's approval for separate
-                                tasks.
+                                In general, anything that has to do with requirements define (of any sort) has to be done by you. Developers job is to execute the work based on the defined requirements (In granular level).
                             </p>
 
                             <p className="ml-2">
-                                Assigning these tasks without proper approval
-                                may lead to negative performance reviews if the
-                                technical team reports it.
+                                If for any reason, you need developers help for any of the above things, you will have to create a separate task for each of them and those tasks have to be authorized by the top management mandatorily.
+                            </p>
+
+                            <p className="ml-2">
+                                If you assign any of the above things as a regular task and if the technical team complains/files a report, you will receive some negative performance points after verification.
                             </p>
 
                             <div className={styles.footer_label}>
-                                # Based on these principles, please select one
-                                of the options below:
+                                # Based on the above concept, please select one of the options below:
                             </div>
                             <div className={styles.form_group}>
 
@@ -115,18 +101,16 @@ const ProjectManagerAcknowledgementModal = ({
                                     <input
                                         type="radio"
                                         name="statement"
-                                        value="This is a routine task that falls within
-                                        the responsibilities of the development
-                                        team."
+                                        value="This is a regular task that should be done by the developer team"
                                         onChange={ e => {
                                           setIsVisible(false);
                                           handleChange(e, {
-                                          text: "This is a routine task that falls within the responsibilities of the development team.",
+                                          text: "This is a regular task that should be done by the developer team",
                                           authorization: false,
                                         })}}
                                     />
                                     <label>
-                                        This is a routine task that falls within the responsibilities of the development team.
+                                        This is a regular task that should be done by the developer team
                                     </label>
                                 </div>
 
@@ -134,16 +118,17 @@ const ProjectManagerAcknowledgementModal = ({
                                     <input
                                         type="radio"
                                         name="statement"
+                                        value="This is by default my work but I still want to send this to the technical team for the following reasons:"
                                         onChange={e => {
                                           setIsVisible(true);
                                           handleChange(e, {
-                                            text: 'This is inherently my responsibility, but I would like to involve the technical team for the following reasons:',
+                                            text: 'This is by default my work but I still want to send this to the technical team for the following reasons:',
                                             authorization: true,
                                           })
                                         }}
                                     />
                                     <label>
-                                      This is inherently my responsibility, but I would like to involve the technical team for the following reasons:
+                                    This is by default my work but I still want to send this to the technical team for the following reasons:
                                     </label>
                                 </div>
 
@@ -154,13 +139,14 @@ const ProjectManagerAcknowledgementModal = ({
                                               type="radio"
                                               disabled={!visible}
                                               name="subStatement"
+                                              value="This is too technical for me"
                                               onChange={e =>  handleSubChange(e, {
-                                                text: "It's highly technical, beyond my expertise.",
+                                                text: "This is too technical for me",
                                                 authorization: true,
                                               })}
                                           />
                                           <label>
-                                              It's highly technical, beyond my expertise.
+                                                This is too technical for me.
                                           </label>
                                       </div>
 
@@ -169,13 +155,14 @@ const ProjectManagerAcknowledgementModal = ({
                                               type="radio"
                                               disabled={!visible}
                                               name="subStatement"
+                                              value="I don’t understand what the client said and I believe the developers will be able to understand"
                                               onChange={e =>  handleSubChange(e, {
-                                                text: "I don't fully understand the client's instructions, and I believe developers can interpret them better.",
+                                                text: " I don’t understand what the client said and I believe the developers will be able to understand",
                                                 authorization: true,
                                               })}
                                           />
                                           <label>
-                                              I don't fully understand the client's instructions, and I believe developers can interpret them better.
+                                            I don’t understand what the client said and I believe the developers will be able to understand.
                                           </label>
                                       </div>
                                   </div>

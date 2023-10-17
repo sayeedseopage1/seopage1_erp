@@ -83,12 +83,11 @@ const TaskAction = ({ task, status }) => {
 
 
     const handleAuthorizedByTopManagementStatus = () => {
-        const acknowledgement = task?.acknowledgement;
         const subAcknowledgement = task?.subAcknowledgement;
-        const text = `<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>${acknowledgement + ' '}${subAcknowledgement}</strong>. And the management authorized it considering the circumstances.</p>`
 
         Swal.fire({
-            title: text,
+            title: '',
+            html: `<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>"${subAcknowledgement}"</strong>. And the management authorized it considering the circumstances.</p>`,
             icon: 'info',
             showCloseButton: true,
         })
