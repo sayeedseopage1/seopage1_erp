@@ -48,8 +48,8 @@ class TaskObserver
 
         if (!isRunningInConsoleOrSeeding()) {
             if (user()) {
-                $task->created_by = user()->id;
-                $task->added_by = user()->id;
+            //    $task->created_by = user()->id;
+             //   $task->added_by = user()->id;
             }
 
             if (request()->has('board_column_id')) {
