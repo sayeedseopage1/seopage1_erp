@@ -1,0 +1,18 @@
+.list_container{
+    overflow-y: auto;
+    width: 100%;
+    height: fit-content;
+    max-height: 80vh;
+    padding-right: 10px;
+}
+
+
+.list{
+    margin-left: 30px;
+}
+
+.list,
+.list li{
+    list-style: unset !important;
+    margin-bottom: 10px;
+}
