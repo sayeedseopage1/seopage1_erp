@@ -263,7 +263,9 @@ const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     // handle submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        setVisibleAcknowledgementModal(true);
+        if(isValid()){
+            setVisibleAcknowledgementModal(true);
+        }
     };
 
     React.useEffect(() => {

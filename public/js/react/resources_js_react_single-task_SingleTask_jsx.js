@@ -15690,11 +15690,10 @@ var TaskAction = function TaskAction(_ref) {
     loggedUser: loggedUser
   });
   var handleAuthorizedByTopManagementStatus = function handleAuthorizedByTopManagementStatus() {
-    var acknowledgement = task === null || task === void 0 ? void 0 : task.acknowledgement;
     var subAcknowledgement = task === null || task === void 0 ? void 0 : task.subAcknowledgement;
-    var text = "<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>".concat(acknowledgement + ' ').concat(subAcknowledgement, "</strong>. And the management authorized it considering the circumstances.</p>");
     Swal.fire({
-      title: text,
+      title: '',
+      html: "<p>This task doesn't fall into your core job scope, but the project manager wanted the technical team to do it for <strong>\"".concat(subAcknowledgement, "\"</strong>. And the management authorized it considering the circumstances.</p>"),
       icon: 'info',
       showCloseButton: true
     });

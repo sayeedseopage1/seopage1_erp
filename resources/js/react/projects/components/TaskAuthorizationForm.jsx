@@ -236,15 +236,17 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             Descriptions:
                                         </label>
                                         <div className={styles.task_info__text}>
-                                            <div>
-                                                <div dangerouslySetInnerHTML={{__html: getDescription() + `${!showFullDescription ? '...' : ''}` }} />
+                                            <div className={styles.task_description}>
+                                                <div className="sp1_ck_content" dangerouslySetInnerHTML={{__html: getDescription() + `${!showFullDescription ? '...' : ''}` }} />
                                                 {data?.description.length > 500 &&
-                                                    <button
-                                                        className={styles.show_more_btn}
-                                                        onClick={() => setShowFullDescription(!showFullDescription)}
-                                                    >
-                                                        {showFullDescription ? 'Show Less' : 'Show More'}
-                                                    </button>
+                                                    <div className="d-flex align-items-center justify-content-center w-100 mt-3">
+                                                        <button
+                                                            className={styles.show_more_btn}
+                                                            onClick={() => setShowFullDescription(!showFullDescription)}
+                                                        >
+                                                            {showFullDescription ? 'Show Less' : 'Show More'}
+                                                        </button>
+                                                    </div>
                                                 }
                                             </div>
                                         </div>
