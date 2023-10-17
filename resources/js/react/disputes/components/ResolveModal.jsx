@@ -22,6 +22,7 @@ import { useDispute } from '../context';
 import { CompareDate } from '../../utils/dateController';
 import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ResolveBtnPopupText from './Resolve-Btn/ResolveBtnPopupText';
 
 const compareDate = new CompareDate();
 
@@ -374,6 +375,8 @@ const close =async () => {
 
         <Modal isOpen={showResolveModal}>
             <div className="sp1_modal-content-wrapper">
+
+                <ResolveBtnPopupText />
                 <div className="sp1_modal-panel sp1_task_create_modal_panel w-100"   >
                     {/* header */}
                     <div className="sp1_modal-head">

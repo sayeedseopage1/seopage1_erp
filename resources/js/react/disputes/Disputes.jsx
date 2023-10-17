@@ -14,11 +14,11 @@ const reducer = (state=[], action) => {
     switch(action.type){
         case 'INIT_DISPUTE':
             const sortedData = _.orderBy(
-                action.disputes, 
+                action.disputes,
                 [
                     'status',
                     'dispute_updated_at'
-                ], 
+                ],
                 ['asc', 'desc']
             );
 
@@ -61,7 +61,7 @@ const Disputes = () => {
     const [search, setSearch] = React.useState('');
     const [getDisputes, {isFetching}] = useLazyGetDisputesQuery();
     const auth = new User(window.Laravel.user);
-      
+
      const onFilter = async (filter) => {
         let queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
@@ -69,8 +69,8 @@ const Disputes = () => {
 
         try{
             if(filter?.start_date && filter?.end_date){
-                const res = await getDisputes(`?${queryString}`).unwrap();  
-                if(res){   
+                const res = await getDisputes(`?${queryString}`).unwrap();
+                if(res){
                     const data = _.filter(res, d=> {
                         if(filter.status === 'Pending'){
                             return d.status === 0 && _.size(d.conversations)===0 && !d.resolved_by
@@ -85,7 +85,7 @@ const Disputes = () => {
             }
         }catch(err){
             console.log(err)
-        } 
+        }
     }
 
     const defString = JSON.stringify(disputes);
@@ -96,13 +96,13 @@ const Disputes = () => {
         const raisedByMe = _.filter(disputes, data => data?.raised_by?.id === auth?.getId())
         const resolveByAdmin = _.filter(disputes, data => data?.status && data?.authorized_by?.id === auth?.getId())
         const resolveByTeamLead = _.filter(disputes, data => data.status && !data?.need_authrization && data?.resolved_by?.id === auth?.getId())
-         
 
-        
+
+
         const totalDispute = _.size(disputes);
-        // need attention 
-        
-        // calcualte need my attention item 
+        // need attention
+
+        // calcualte need my attention item
         let filterData = _.filter(disputes , dispute=> {
             if(dispute && dispute.conversations){
                 let indexOf = dispute.conversations.findIndex( d => !d.replies );
@@ -110,23 +110,23 @@ const Disputes = () => {
                     return true;
                 }else return false;
             } return false;
-        }) 
+        })
 
         const teamLeadAction = _.size(_.filter(disputes, d=> !d.status && !d.need_authrization))
         const needActionForAdmin = _.size(_.filter(disputes, d=> !d.status && d.need_authrization))
-        
-        const needMyAttention = auth?.getRoleId() === 1 ? needActionForAdmin : auth?.getRoleId() === 8 ? teamLeadAction : _.size(filterData) 
+
+        const needMyAttention = auth?.getRoleId() === 1 ? needActionForAdmin : auth?.getRoleId() === 8 ? teamLeadAction : _.size(filterData)
 
         // resolve dispute
         const resolvedDispute = _.size(_.filter(disputes, f => f.status));
         const won = _.size(_.filter(disputes, f => f.status && f?.winner?.id === auth.getId()))
         const lost = _.size(_.filter(disputes, f => f.status && f?.winner?.id !== auth.getId()))
-        
-        
+
+
         setWidgetData({
             ...widgetDate,
             raisedByMe: _.size(raisedByMe),
-            totalDispute, 
+            totalDispute,
             needMyAttention,
             resolvedDispute,
             wonDispute: won,
@@ -146,7 +146,7 @@ const Disputes = () => {
         })
     }
     // Update Single Dispute
-    const updateDisputeById = ({disputeId, data})=>{ 
+    const updateDisputeById = ({disputeId, data})=>{
         dispatch({
             type: 'UPDATE_DISPUTE',
             disputeId,
@@ -159,7 +159,7 @@ const Disputes = () => {
         <React.Fragment>
 
             <FilterContainer>
-                <Filterbar onFilter={onFilter} /> 
+                <Filterbar onFilter={onFilter} />
             </FilterContainer>
 
             <div className="py-2 py-md-4 px-2 px-md-5 w-full">
@@ -175,7 +175,7 @@ const Disputes = () => {
                     {/* end card */}
 
                     {
-                        auth?.getRoleId() === 1 ? 
+                        auth?.getRoleId() === 1 ?
                             <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
                                 <div className="p-3 bg-white rounded-lg h-100">
                                     <span className="f-14 font-weight-bold" style={{color: '#9D9FA9'}}>Disputes Resolved by Me</span>
@@ -186,7 +186,7 @@ const Disputes = () => {
                     }
 
                     {
-                        auth?.getRoleId() === 8 ? 
+                        auth?.getRoleId() === 8 ?
                             <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
                                 <div className="p-3 bg-white rounded-lg h-100">
                                     <span className="f-14 font-weight-bold" style={{color: '#9D9FA9'}}>Disputes Resolved by Me</span>
@@ -198,7 +198,7 @@ const Disputes = () => {
 
                     {/* card */}
                     {
-                        !_.includes([1,8], auth?.getRoleId()) ? 
+                        !_.includes([1,8], auth?.getRoleId()) ?
                             <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 mb-3">
                             <div className="p-3 bg-white rounded-lg h-100">
                                 <span className="f-14 font-weight-bold" style={{color: '#9D9FA9'}}>Disputes Raised by Me</span>
@@ -262,13 +262,14 @@ const Disputes = () => {
             </div>
 
 
-        
-            <ResolveModal 
+
+
+            <ResolveModal
                 state={{
                     updateDisputeConversation,
                     updateDisputeById
                 }}
-            />  {/* resolve modal */}  
+            />  {/* resolve modal */}
         </React.Fragment>
     );
 };
