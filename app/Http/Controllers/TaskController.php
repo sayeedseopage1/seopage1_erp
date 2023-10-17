@@ -1851,6 +1851,8 @@ class TaskController extends AccountBaseController
         $total_minutes = $request->estimate_minutes;
         $total_in_minutes = $total_hours + $total_minutes;
         $task->estimate_time_left_minutes = $total_in_minutes;
+        $task->added_by = Auth::id();
+        $task->created_by = Auth::id();
 
 
         $task->save();
