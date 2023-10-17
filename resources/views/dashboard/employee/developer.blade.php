@@ -233,7 +233,7 @@
                                                 @forelse($todayDeadLineTasks as $value)
                                                 <tr>
                                                     <td>{{$index +1}}</td>
-                                                    <td><a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
+                                                    <td><a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
                                                     <td>{{$value->start_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} Hours</td>
@@ -313,7 +313,7 @@
                                                 @forelse($todayStartTasks as $value)
                                                 <tr>
                                                     <td>{{$index +1}}</td>
-                                                    <td><a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
+                                                    <td><a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
                                                     <td>{{$value->start_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} Hours</td>
@@ -544,7 +544,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -627,7 +627,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -712,7 +712,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -795,7 +795,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -986,7 +986,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -1069,7 +1069,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -1154,7 +1154,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
@@ -1237,7 +1237,7 @@
                                                 <tr>
                                                     <td>{{$value->id}}</td>
                                                     <td>
-                                                        <a href="{{route('tasks.show', $value->task_id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
+                                                        <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
