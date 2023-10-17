@@ -18,9 +18,9 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
 
     // post an independent task
     postIndependentTask : builder.mutation({
-      query: (data) => ({
-        url:  `/account/independent-task`,
-        method: 'POST',
+      query: (id,data) => ({
+        url:  `/account/independent-task/${id}/edit`,
+        method: 'PUT',
         body: data,
         formData: true,
       }),
