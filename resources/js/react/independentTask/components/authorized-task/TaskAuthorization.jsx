@@ -5,7 +5,7 @@ import styles from './taskAuthorization.module.css'
 // import Modal from '../../global/Modal';
 // import Card from '../../global/Card';
 // import DataTable from '../../global/table/DataTable';
-import { AuthorizationColumns } from './TaskAuthorizationColumns';
+import { authorizationColumns } from './TaskAuthorizationColumns';
 import _ from 'lodash';
 import { useGetIndependentAuthorizeTaskQuery } from '../../../services/api/independentTaskApiSlice';
 import Button from '../Button';
@@ -46,7 +46,7 @@ const TaskAuthorization = ({title}) => {
                     <Card.Body className={styles.card_body}>
                         <DataTable
                             tableData = {_.orderBy(data?.pendingParentTask, 'updated_at', 'desc') || []}
-                            tableColumns = {AuthorizationColumns}
+                            tableColumns = {authorizationColumns()}
                             tableName="authorize-task-table"
                             isLoading = {false}
                             // tableMaxHeight

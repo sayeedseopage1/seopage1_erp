@@ -9,7 +9,7 @@ const AssginedToSelection = ({selected, onSelect}) => {
     const [query, setQuery] = React.useState('');
     const {users, usersIsFetching: isFetching} = useUsers();
 
-    const employees = _.filter(users, user => _.includes([6, 9, 10, 4], Number(user?.role_id)))
+    const employees = _.filter(users, user => _.includes([1, 2, 4, 5, 6, 7, 8, 9, 10], Number(user?.role_id)))
 
     const filteredData =
     query === ''

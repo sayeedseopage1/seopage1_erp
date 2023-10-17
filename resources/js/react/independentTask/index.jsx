@@ -116,7 +116,7 @@ const IndependentTask = () => {
 
 
 
-    console.log({ filter, refresh, isLoading, isFetching, tableData });
+    // console.log({ filter, refresh, isLoading, isFetching, tableData });
 
     // handle filter
     const onFilter = (filter) => {

@@ -9,31 +9,55 @@ import Button from "../Button";
 import Modal from "../Modal";
 import Card from "../../../global/Card";
 import Avatar from "../../../global/Avatar";
-import { useUpdateAuthorizeTaskMutation } from "../../../services/api/projectApiSlice";
 import { User } from "../../../utils/user-details";
 import useIndependentTaskContext from "../../../hooks/useIndependentTaskContext";
 import { CompareDate } from "../../../utils/dateController";
 import DatePickerComponent from "./DatePicker";
 import { useEffect } from "react";
+import Input from "../form/Input";
+import UserSelectionList from "./UserSelectionList";
+import { usePostIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
+import Swal from "sweetalert2";
 
 const day = new CompareDate();
+
+const clientRadio = [
+    {
+        id: 'existingClient',
+        title: 'Existing Client'
+    },
+    {
+        id: 'newClient',
+        title: 'New Client'
+    },
+    {
+        id: 'inHouseWork',
+        title: 'In House Work'
+    }
+]
 
 const TaskAuthorizationForm = ({ data, table }) => {
     const { setRefresh } = useIndependentTaskContext();
 
-    const [startDate, setStartDate] = useState(null);
-    const [dueDate, setDueDate] = useState(null);
+    const [startDate, setStartDate] = useState(new Date(data?.start_date));
+    const [showless, setShowless] = useState(true);
+    const [client, setClient] = useState('');
+    const [dueDate, setDueDate] = useState(new Date(data?.due_date));
+    const [radio, setRadio] = useState('')
     const [visible, setVisible] = useState(false);
     const [comment, setComment] = useState("");
     const [hasQuestion, setHasQuestion] = useState(false);
-    const [err, setErr] = useState(new Object());
 
-    useEffect(()=>{
-      console.log({startDate,dueDate});
-      console.log({});
-    },[startDate,dueDate])
+    useEffect(() => {
+        // console.log({ radio });
+        if (radio === 'inHouseWork') {
+            setClient('SEOPAGE1');
+        } else{
+            setClient('');
+        }
+    }, [radio])
 
-    console.log({ chat: data?.conversations });
+    // console.log({ chat: data?.conversations });
     const [conversations, setConversations] = React.useState(data.conversations);
 
     const updateConversation = (entry) => {
@@ -41,31 +65,61 @@ const TaskAuthorizationForm = ({ data, table }) => {
     };
 
     const open = () => setVisible(true);
-    const close = () => setVisible(false);
+    const close = () => {
+        setVisible(false);
+        setRadio('');
+    };
 
-    const [updateAuthorizeTask, { isLoading }] =
-        useUpdateAuthorizeTaskMutation();
+    const [postIndependentAuthorizeTask, { isLoading }] = usePostIndependentTaskMutation();
+
     const handleSubmission = async (e, status) => {
 
-        const error = new Object();
+        if (!client) {
+            toast.warning('Client is required');
+            return;
+        }else if(!comment) {
+            toast.warning('Comment is required');
+            return;
+        }
+
         const _data = {
-            id: data.id,
+            u_id: data.u_id,
+            start_date:dayjs(startDate.toString()).format('YYYY-MM-DD'),
+            due_date:dayjs(dueDate.toString()).format('YYYY-MM-DD'),
+            approval_status:status?1:2,
             status: status,
-            comment
+            client: client instanceof Object? client.id:client,
+            comment,
+            _token: document.querySelector("meta[name='csrf-token']").getAttribute("content"),
         };
 
+        // console.log('start-date',dayjs(startDate.toString()).format('YYYY-MM-DD'));
+        // console.log('dui-date',dayjs(dueDate.toString()).format('YYYY-MM-DD'));
+        // console.log({client: client instanceof Object? client.id:client});
+        // console.log(_data);
+
         if (comment) {
-            await updateAuthorizeTask(_data)
+            await postIndependentAuthorizeTask(_data)
                 .unwrap()
                 .then((res) => {
-                    toast.success("Success! Your request has been completed.");
+                    console.log(res);
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Task authorized successfully",
+                        showConfirmButton: false,
+                        timer: 2500,
+                    });
                     close();
                     setRefresh();
                 });
         } else {
-            toast.warn("Please write a comment before submitting.");
-            error.comment = "Please write a comment before submitting.";
-            setErr(error);
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Task authorization unsuccessfull",
+                showConfirmButton: true,
+            });
         }
     };
 
@@ -76,7 +130,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
 
     // console
-    console.log({ data, table });
+    // console.log({ data, table });
+
 
     return (
         <div>
@@ -98,66 +153,48 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
                             <Card.Body className={styles.card_body}>
                                 <div className={styles.task_project}>
-                                    <h6>{data.heading}</h6>
-                                    <span className="d-block">
-                                        {data.client_name}
-                                    </span>
+                                    <h6>Need to Authorize Task</h6>
                                 </div>
 
                                 <div className={styles.task_info}>
 
                                     {/* start_date */}
-                                    <div className={styles.inline_flex}>
+                                    <div className={styles.inline_flex} style={{ alignItems: 'center' }}>
                                         <div
                                             className={styles.task_info__label}
                                         >
                                             Start Date{" "}
                                         </div>
                                         <div
-                                            className={styles.task_info__text}
-                                            style={{ gap: "6px" }}
+                                            className={`${styles.task_info__text} w-100 bg-white py-1 pl-2 pr-1 border d-flex align-items-center justify-content-between`}
                                         >
-                                            <strong>
-                                                {dayjs(data.start_date).format(
-                                                    "MMM DD, YYYY"
-                                                )}
-                                            </strong>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-12 col-md-6">
-                                        <div className="form-group my-3">
-                                            <label htmlFor="">
-                                                Start Date <sup className="f-14">*</sup>
-                                            </label>
-                                            <div className="form-control height-35 f-14">
-                                                <DatePickerComponent
-                                                    placeholderText={day.dayjs().format("DD-MM-YYYY")}
-                                                    minDate={day.dayjs().toDate()}
-                                                    maxDate={dueDate}
-                                                    date={startDate}
-                                                    setDate={setStartDate}
-                                                />
-                                            </div>
+                                            <DatePickerComponent
+                                                placeholderText={day.dayjs().format("DD-MM-YYYY")}
+                                                minDate={new Date(data?.start_date)}
+                                                maxDate={dueDate}
+                                                date={startDate}
+                                                setDate={setStartDate}
+                                            />
                                         </div>
                                     </div>
 
                                     {/* due_date */}
-                                    <div className={styles.inline_flex}>
+                                    <div className={styles.inline_flex} style={{ alignItems: 'center' }}>
                                         <div
                                             className={styles.task_info__label}
                                         >
                                             Due Date{" "}
                                         </div>
                                         <div
-                                            className={styles.task_info__text}
-                                            style={{ gap: "6px" }}
+                                            className={`${styles.task_info__text} w-100 bg-white py-1 pl-2 pr-1 border d-flex align-items-center justify-content-between`}
                                         >
-                                            <strong>
-                                                {dayjs(data.due_date).format(
-                                                    "MMM DD, YYYY"
-                                                )}
-                                            </strong>
+                                            <DatePickerComponent
+                                                placeholderText={day.dayjs().format("DD-MM-YYYY")}
+                                                minDate={new Date(data?.start_date)}
+                                                maxDate={null}
+                                                date={dueDate}
+                                                setDate={setDueDate}
+                                            />
                                         </div>
                                     </div>
 
@@ -207,6 +244,25 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                         <div className={styles.task_info__text}>
                                             {data.heading}
+                                        </div>
+                                    </div>
+
+                                    {/* description */}
+                                    <div style={{display:'flex',flexFlow:'column nowrap',gap:'5px'}}>
+                                        <div
+                                            className={styles.task_info__label}
+                                            style={{width:'135px'}}
+                                        >
+                                            Task Description{" "}
+                                        </div>
+                                        {/* <div dangerouslySetInnerHTML={{__html:data.description}}/> */}
+                                        <div className={`${styles.task_info__text} bg-additional-grey`} style={{flexBasis:'100%', padding:'10px', borderRadius:'2px',flexFlow:'column nowrap'}}>
+                                            <div
+                                                dangerouslySetInnerHTML={{__html:data.description}}
+                                                style={{maxHeight:`${showless?'100px':'none'}`,overflow:'hidden',transition:'height 3s',textAlign:'left',alignSelf:'stretch'}}
+                                            >
+                                            </div>
+                                            <button className="btn btn-dark btn-sm" onClick={()=>setShowless(prev=>!prev)}>{showless?'Show More':'Show Less'}</button>
                                         </div>
                                     </div>
 
@@ -264,22 +320,59 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
-
-                                    {/* <div className={styles.inline_flex}>
+                                    {/* client_name */}
+                                    <div className={styles.inline_flex}>
                                         <div
                                             className={styles.task_info__label}
                                         >
-                                            Acknowledgement{" "}
+                                            Client Name{" "}
+                                        </div>
+                                        <div className={`${styles.task_info__text} ${styles.radio_container}`}>
+                                            {
+                                                clientRadio.map((radio) => {
+                                                    return (
+                                                        <label key={radio.id} htmlFor={radio.id}>
+                                                            <input required onClick={() => setRadio(radio.id)} type="radio" name="client_name" id={radio.id} />
+                                                            <span>{radio.title}</span>
+                                                        </label>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+
+                                    {/* client_field_according_to_radio */}
+                                    <div className={styles.inline_flex}>
+                                        <div
+                                            className={''}
+                                        >
+                                            {" "}
                                         </div>
                                         <div className={styles.task_info__text}>
-                                            <p>
-                                                {data.acknowledgement + " "}
-                                                <strong>
-                                                    {data.sub_acknowledgement}
-                                                </strong>
-                                            </p>
+                                            {
+                                                radio === 'inHouseWork' &&
+                                                <input
+                                                className={`w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center justify-content-between mb-3`}
+                                                type="text"
+                                                value={client}
+                                                readOnly
+                                                disabled />
+                                            }
+                                            {
+                                                radio === 'newClient' &&
+                                                <input
+                                                placeholder="Write client name here..."
+                                                className={`w-100 bg-white py-2 pl-2 pr-1 border d-flex align-items-center  justify-content-between mb-3`}
+                                                type="text"
+                                                value={client}
+                                                onChange={(e) => setClient(e.target.value)} />
+                                            }
+                                            {
+                                                radio === 'existingClient' &&
+                                                <UserSelectionList person={client} setPerson={setClient} filter={'client'} />
+                                            }
                                         </div>
-                                    </div> */}
+                                    </div>
 
                                     {data.approval_status &&
                                         <>
@@ -385,11 +478,6 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                                 placeholder="Write your comment here."
                                                             />
 
-                                                            {err?.comment && (
-                                                                <span className="text-danger">
-                                                                    <small>{err?.comment}</small>
-                                                                </span>
-                                                            )}
                                                         </div>
 
                                                         <div className={styles.button_group}>
