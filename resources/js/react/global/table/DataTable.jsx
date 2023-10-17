@@ -14,6 +14,7 @@ import {
  } from '@tanstack/react-table';
 import { DragableColumnHeader } from './DragableColumnHeader';
 import TablePagination from './TablePagination';
+import {Placeholder} from '../../global/Placeholder';
 
 const DataTable = ({
     tableData,
@@ -33,7 +34,7 @@ const DataTable = ({
   const [sorting, setSorting] = React.useState([]);
   const [{pageIndex, pageSize}, setPagination] = React.useState({pageIndex: 0, pageSize: 10});
 
-  // initiat data
+  // initial data
   React.useEffect(() => {
     setData(tableData);
   }, [tableData])
@@ -138,6 +139,7 @@ const DataTable = ({
 
                     {isLoading && loader}
                 </tbody>
+
             </table>
 
             {(!isLoading && _.size(tableData)) === 0  ?
