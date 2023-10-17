@@ -71,9 +71,6 @@ class PendingParentTasksNotification extends Notification
     </p>'.
      '<p>
         <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
-    </p>'.
-     '<p>
-        <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
     </p>'
     .
     '<p>
