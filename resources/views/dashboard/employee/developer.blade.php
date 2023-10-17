@@ -231,6 +231,7 @@
                                             <tbody>
                                                 @php $index = 0 @endphp
                                                 @forelse($todayDeadLineTasks as $value)
+                                                {{dd($value)}}
                                                 <tr>
                                                     <td>{{$index +1}}</td>
                                                     <td><a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 15, '...')}}</a></td>
