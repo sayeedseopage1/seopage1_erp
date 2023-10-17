@@ -224,7 +224,7 @@ const ProjectTasks = () => {
                                     </SubmitButton>
                                 )}
 
-                            <TaskAuthorization />
+                            <TaskAuthorization filter={{type:'project', projectId }}/>
                         </div>
 
                         <div className="sp1_table_tab">

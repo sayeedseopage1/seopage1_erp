@@ -10,11 +10,16 @@ import { AuthorizationColumns } from "./TaskAuthorizationColumns";
 import { useAuth } from "../../hooks/useAuth";
 import _ from "lodash";
 import NotificationTooltip from "../../../react-latest/ui/NotificationTooltip";
-import { Link, useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+    useSearchParams,
+    useLocation,
+} from "react-router-dom";
 import Loader from "../../global/Loader";
 import { Placeholder } from "../../global/Placeholder";
 
-const TaskAuthorization = ({ title }) => {
+const TaskAuthorization = ({ title, filter }) => {
     const auth = useAuth();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -27,28 +32,26 @@ const TaskAuthorization = ({ title }) => {
     const { data, isFetching } = useGetAuthorizeTasksQuery("");
 
     const open = () => {
-        searchParams.set('modal', 'authorize_task')
-        searchParams.set('show', 'pending')
+        searchParams.set("modal", "authorize_task");
+        searchParams.set("show", "pending");
         setSearchParams(searchParams);
     };
-
 
     const handleTabNavigation = (e, params) => {
         e.preventDefault();
 
-        for(const[key, value] of Object.entries(params)){
-            searchParams.set(key,value);
+        for (const [key, value] of Object.entries(params)) {
+            searchParams.set(key, value);
         }
         setSearchParams(searchParams);
-
-    }
+    };
 
     const close = () => {
-        searchParams.delete('modal')
-        searchParams.delete('show')
+        searchParams.delete("modal");
+        searchParams.delete("show");
 
         setSearchParams(searchParams);
-    }
+    };
 
     const isProjectManager = auth.getRoleId() === 4 ? true : false;
 
@@ -56,32 +59,34 @@ const TaskAuthorization = ({ title }) => {
         ? "Tasks [Awaiting Authorization]"
         : "Tasks [Need Authorization]";
 
-    const badge = () => {
-        return _.size(_.filter(data?.data, (d) => d?.approval_status === null));
-    };
 
+     const getData = (type) => {
+            let _data = _.orderBy(data?.data, "updated_at", "desc") || [];
 
-    const getData = () => {
-        let _data = _.orderBy(
-            data?.data,
-            "updated_at",
-            "desc"
-        ) || [];
-
-        switch (searchParams.get('show')) {
-            case 'all':
-                return _data;
-            case 'pending':
-                return _.filter(_data, data => data.approval_status === null);
-            case 'denied':
-                return _.filter(_data, data => data.approval_status === 0);
-            case 'authorized':
-                return _.filter(_data, data => data.approval_status === 1);
-            default:
-               return _.filter(_data, data => data.approval_status === null);
+        if (filter && filter.type === "project" && filter.projectId) {
+            _data = _.filter(
+                _data,
+                (d) => d.project_id === Number(filter.projectId)
+            );
         }
 
-    }
+        switch (type) {
+            case "all":
+                return _data;
+            case "pending":
+                return _.filter(_data, (data) => data.approval_status === null);
+            case "denied":
+                return _.filter(_data, (data) => data.approval_status === 0);
+            case "authorized":
+                return _.filter(_data, (data) => data.approval_status === 1);
+            default:
+                return _.filter(_data, (data) => data.approval_status === null);
+        }
+    };
+
+    const badge = (type) => {
+        return _.size([...getData(type)]);
+    };
 
     return (
         <div className={styles.task_authorization}>
@@ -92,10 +97,10 @@ const TaskAuthorization = ({ title }) => {
             >
                 <i className="fa-solid fa-hourglass-end" />
                 {title || buttonTitle}
-                <span className="badge badge-light">{badge()}</span>
+                <span className="badge badge-light">{badge('pending')}</span>
             </Button>
 
-            <Modal isOpen={searchParams.get('modal') === 'authorize_task'}>
+            <Modal isOpen={searchParams.get("modal") === "authorize_task"}>
                 <div className={styles.modal_overlay}>
                     <Card className={styles.card}>
                         <Card.Head onClose={close} className={styles.card_head}>
@@ -103,20 +108,80 @@ const TaskAuthorization = ({ title }) => {
                         </Card.Head>
 
                         <Card.Body className={styles.card_body}>
-
                             <div className={styles.tabs}>
-                                <Link to='#' onClick={(e) => handleTabNavigation(e, {modal: 'authorize_task', show: 'all'})} data-type="all" data-active={searchParams.get('show') === 'all'}>All</Link>
-                                <Link to='#' onClick={(e) => handleTabNavigation(e, {modal: 'authorize_task', show: 'pending'})} data-type="pending" data-active={searchParams.get('show') === 'pending'}>Pending</Link>
-                                <Link to='#' onClick={(e) => handleTabNavigation(e, {modal: 'authorize_task', show: 'authorized'})} data-type="authorized" data-active={searchParams.get('show') === 'authorized'}>Authorized</Link>
-                                <Link to='#' onClick={(e) => handleTabNavigation(e, {modal: 'authorize_task', show: 'denied'})} data-type="denied" data-active={searchParams.get('show') === 'denied'}>Denied</Link>
+                                <Link
+                                    to="#"
+                                    onClick={(e) =>
+                                        handleTabNavigation(e, {
+                                            modal: "authorize_task",
+                                            show: "all",
+                                        })
+                                    }
+                                    data-type="all"
+                                    data-active={
+                                        searchParams.get("show") === "all"
+                                    }
+                                >
+                                    All  <span className="badge badge-light">{badge('all')}</span>
+                                </Link>
+                                <Link
+                                    to="#"
+                                    onClick={(e) =>
+                                        handleTabNavigation(e, {
+                                            modal: "authorize_task",
+                                            show: "pending",
+                                        })
+                                    }
+                                    data-type="pending"
+                                    data-active={
+                                        searchParams.get("show") === "pending"
+                                    }
+                                >
+                                    Pending <span className="badge badge-light">{badge('pending')}</span>
+                                </Link>
+                                <Link
+                                    to="#"
+                                    onClick={(e) =>
+                                        handleTabNavigation(e, {
+                                            modal: "authorize_task",
+                                            show: "authorized",
+                                        })
+                                    }
+                                    data-type="authorized"
+                                    data-active={
+                                        searchParams.get("show") ===
+                                        "authorized"
+                                    }
+                                >
+                                    Authorized <span className="badge badge-light">{badge('authorized')}</span>
+                                </Link>
+                                <Link
+                                    to="#"
+                                    onClick={(e) =>
+                                        handleTabNavigation(e, {
+                                            modal: "authorize_task",
+                                            show: "denied",
+                                        })
+                                    }
+                                    data-type="denied"
+                                    data-active={
+                                        searchParams.get("show") === "denied"
+                                    }
+                                >
+                                    Denied <span className="badge badge-light">{badge('denied')}</span>
+                                </Link>
                             </div>
 
                             <DataTable
-                                tableData={[...getData()]}
+                                tableData={[...getData(searchParams.get("show"))]}
                                 tableColumns={AuthorizationColumns}
                                 tableName="authorize-task-table"
                                 isLoading={isFetching}
-                                loader={<LoaderComponent columns = {AuthorizationColumns} />}
+                                loader={
+                                    <LoaderComponent
+                                        columns={AuthorizationColumns}
+                                    />
+                                }
                             />
                         </Card.Body>
                     </Card>
@@ -132,16 +197,14 @@ TaskAuthorization.propTypes = {
 
 export default TaskAuthorization;
 
-const LoaderComponent = ({columns}) => {
-    return (
-        _.times(10, item => (
-            <tr key={item} className={`sp1-data-table-tr`}>
-                {_.map(columns, col => (
-                    <td key={col.id} className={`sp1-data-table-td`}>
-                        <Placeholder width="100%" />
-                    </td>
-                ))}
-            </tr>
-        ))
-    )
-}
+const LoaderComponent = ({ columns }) => {
+    return _.times(10, (item) => (
+        <tr key={item} className={`sp1-data-table-tr`}>
+            {_.map(columns, (col) => (
+                <td key={col.id} className={`sp1-data-table-td`}>
+                    <Placeholder width="100%" />
+                </td>
+            ))}
+        </tr>
+    ));
+};

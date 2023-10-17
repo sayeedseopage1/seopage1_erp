@@ -288,6 +288,16 @@
     font-weight: 500;
     font-size: 14px;
     transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabs a span.badge{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0 0 0 / 15%);
 }
 
 .tabs a[data-type='all'] {
@@ -309,7 +319,7 @@
 
 .tabs a[data-type='pending']:hover,
 .tabs a[data-type='pending'][data-active="true"]{
-    color:rgb(255, 238, 219) !important;
+    color:rgb(255, 248, 240) !important;
     background-color:rgb(255, 145, 20);
 }
 
