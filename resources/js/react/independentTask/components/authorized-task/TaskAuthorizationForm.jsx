@@ -96,7 +96,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
         // console.log('start-date',dayjs(startDate.toString()).format('YYYY-MM-DD'));
         // console.log('dui-date',dayjs(dueDate.toString()).format('YYYY-MM-DD'));
         // console.log({client: client instanceof Object? client.id:client});
-        // console.log(_data);
+        console.log(_data);
 
         if (comment) {
             await postIndependentAuthorizeTask(_data)
