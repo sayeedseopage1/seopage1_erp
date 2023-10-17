@@ -84,7 +84,7 @@ const reducer = (state, action) => {
 const ResolveModal = ({state}) => {
   const {users, getUserById, usersIsFetching} = useUsers();
   const [conversations, setConversations] = React.useState([]);
-
+  const [showModalResolveInfo, setShowModalResolveInfo] = React.useState(true);
   const { showResolveModal, rowData:row, close: closeModal, mode, setRowData} = useDispute();
 
 
@@ -376,7 +376,7 @@ const close =async () => {
         <Modal isOpen={showResolveModal}>
             <div className="sp1_modal-content-wrapper">
 
-                <ResolveBtnPopupText />
+                <ResolveBtnPopupText isOpen={showModalResolveInfo} close={() => setShowModalResolveInfo(false)} />
                 <div className="sp1_modal-panel sp1_task_create_modal_panel w-100"   >
                     {/* header */}
                     <div className="sp1_modal-head">

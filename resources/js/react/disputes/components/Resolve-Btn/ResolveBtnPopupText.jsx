@@ -20,7 +20,7 @@ export default function ResolveBtnPopupText({ isOpen, close, timer = 20 }) {
     }, [])
 
     return (
-        <Modal isOpen={true} className="sp1_mark-as--modal">
+        <Modal isOpen={isOpen} className="sp1_mark-as--modal">
             <div
                 className={`sp1_single_task--modal-panerl-wrapper ${styles.wrapper}`}
                 style={{
