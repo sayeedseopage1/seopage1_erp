@@ -2972,7 +2972,7 @@ trait PmDashboardAdminView
           ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
             $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
-               ->whereBetween('pm_projects.created_at', [$startMonth, $endMonth])
+               ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
                ->where('projects.pm_id', $this->pm->id)
                ->where('projects.project_status', 'Accepted')
                
@@ -2983,7 +2983,7 @@ trait PmDashboardAdminView
         })
       ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
                $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
-                ->where('pm_projects.created_at', '<', $startMonth)
+                ->where('p_m_projects.created_at', '<', $startMonth)
                 ->where('projects.pm_id', $this->pm->id)
           ->where('projects.project_status', 'Accepted')
           
