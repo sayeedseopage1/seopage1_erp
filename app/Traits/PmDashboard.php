@@ -843,7 +843,7 @@ trait PmDashboard
             // ->whereBetween('projects.updated_at', [$this->startMonth, $this->release_date])
             ->where(function ($q3) use( $startMonth, $endMonth,$release_date) {
 
-                $q3->whereBetween('p_m_projects.updated_at', [$startMonth, $release_date])
+                $q3->whereBetween('projects.updated_at', [$startMonth, $release_date])
                    ->whereBetween('p_m_projects.created_at', [$startMonth, $endMonth])
                    ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status', 'Accepted')
@@ -853,7 +853,7 @@ trait PmDashboard
                                
             })
           ->orWhere(function ($q2) use( $startMonth,$release_date,$nextMonth){
-                   $q2->whereBetween('p_m_projects.updated_at', [$nextMonth, $release_date])
+                   $q2->whereBetween('projects.updated_at', [$nextMonth, $release_date])
                     ->where('p_m_projects.created_at', '<', $startMonth)
                     ->where('projects.pm_id', Auth::id())
             ->where('projects.project_status', 'Accepted')
