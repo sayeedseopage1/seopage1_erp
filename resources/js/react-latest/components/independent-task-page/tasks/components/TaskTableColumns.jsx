@@ -36,7 +36,7 @@ export const TaskTableColumns = [
       }
     },
     {
-      id: 'id',
+      id: 'u_id',
       header: 'IndependentTaskId',
       accessorFn: row => `${row.u_id}}`,
       cell: ({row}) => {
@@ -88,7 +88,7 @@ export const TaskTableColumns = [
             timer = localTime - serverTime;
          }
 
-         const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
+        const clockIsRunning = data?.start_time && _.isNull(data?.end_time)
          
         const color = (isActive || clockIsRunning) ? '#54B688' : '#DCDEE1'
         return(
@@ -152,7 +152,8 @@ export const TaskTableColumns = [
     //       </abbr>
     //     )
     //   }
-    // }, 
+    // },
+
     {
       id: 'client',
       header: 'Client',
@@ -169,7 +170,8 @@ export const TaskTableColumns = [
           </div>
         )
       }
-    }, 
+    },
+
     // {
     //   id: 'project_manager',
     //   header: 'Project Manager',
@@ -200,6 +202,23 @@ export const TaskTableColumns = [
       }
     }, 
     {
+      id: 'start_date',
+      header: 'Started Date',
+      accessorFn: row => row?.start_date ? dayjs(row?.start_date).format('DD-MM-YYYY') : '--',
+      cell: ({row}) => {
+        const data = row?.original;
+        return(
+          <strong>
+            {data?.start_date ? (
+              <>
+                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
+              </>
+            ): '--'}
+          </strong>
+        )
+      }
+    },
+    {
       id: 'due_date',
       header: 'Due Date',
       accessorFn: row => row?.due_date ? dayjs(row?.due_date).format('DD-MM-YYYY') : '--',
@@ -226,43 +245,27 @@ export const TaskTableColumns = [
           </span>
         )
       }
-    }, 
-    {
-      id: 'start_date',
-      header: 'Started Date',
-      accessorFn: row => row?.start_date ? dayjs(row?.start_date).format('DD-MM-YYYY') : '--',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <strong>
-            {data?.start_date ? (
-              <>
-                {dayjs(data?.start_date).format('DD-MM-YYYY')} <br/> 
-              </>
-            ): '--'}
-          </strong>
-        )
-      }
-    }, 
-    {
-      id: 'completion_date',
-      header: 'Completion Date',
-      accessorFn: row => row?.completion_date ? dayjs(row?.completion_date).format('DD-MM-YYYY') : '--',
-      cell: ({row}) => {
-        const data = row?.original;
-        return(
-          <strong>
-            {Number(data?.board_column_id) === 4 ? 
-              data?.completion_date && (
-                <>
-                  {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
-                </>
-              ): '--'
-            } 
-          </strong>
-        )
-      }
-    }, 
+    },
+
+    // {
+    //   id: 'completion_date',
+    //   header: 'Completion Date',
+    //   accessorFn: row => row?.completion_date ? dayjs(row?.completion_date).format('DD-MM-YYYY') : '--',
+    //   cell: ({row}) => {
+    //     const data = row?.original;
+    //     return(
+    //       <strong>
+    //         {Number(data?.board_column_id) === 4 ? 
+    //           data?.completion_date && (
+    //             <>
+    //               {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
+    //             </>
+    //           ): '--'
+    //         } 
+    //       </strong>
+    //     )
+    //   }
+    // }, 
     
     {
       id: 'approved_on',
@@ -311,6 +314,7 @@ export const TaskTableColumns = [
       }
     }, 
     
+    // assigned by
     {
       id: 'assigned_by',
       header: 'Assigned By', 
@@ -327,6 +331,8 @@ export const TaskTableColumns = [
         )
       }
     },
+
+    // assigned to
     {
       id: 'assigned_to',
       header: 'Assigned To',
@@ -342,6 +348,7 @@ export const TaskTableColumns = [
         )
       }
     },
+
     {
       id: 'status',
       header: 'Task Status',
@@ -416,5 +423,5 @@ export const TaskTableColumns = [
         const data = row?.original;
         return <ActionDropdown row={data}/>
       },  
-    } 
+    }
   ]

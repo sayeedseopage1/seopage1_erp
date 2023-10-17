@@ -17,10 +17,12 @@ import CKEditorComponent from '../../ui/ckeditor';
 import SubmitButton from './tasks/components/SubmitButton';
 import IndependentTaskCreationForm from './IndependentTaskCreationForm';
 import TaskAuthorization from './tasks/components/TaskAuthorization';
+import { useContext } from 'react';
+import { RefreshContext } from '../../pages/independent-task';
 
-const IndependentTaskDataTable = ({ tableData = [] }) => {
+const IndependentTaskDataTable = ({ tableData = [], isLoading, onFilter, filter }) => {
   // const [tasksType, setTasksType] = React.useState([]);
-  const [filter, setFilter] = React.useState(null);
+  const { setRefresh } = useContext(RefreshContext);
   const [search, setSearch] = React.useState('');
   const [showIndividualTaskCreationForm, setShowIndividualTaskCreationForm] = useState(false);
   // const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
@@ -31,14 +33,12 @@ const IndependentTaskDataTable = ({ tableData = [] }) => {
   // const { data: unAuthorizedType } = useCheckUnAuthorizedTaskTypeQuery();
   const auth = new User(window.Laravel.user);
 
-  const onFilter = (filter) => {
-    const queryObject = _.pickBy(filter, Boolean);
-    const queryString = new URLSearchParams(queryObject).toString();
-    setFilter(queryString);
-  }
 
-  // test variable
-  const isLoading = false;
+
+  // handle table refresh
+  const handleRefresh = () => {
+    setRefresh(prev => !prev);
+  }
 
 
   // handle table filter
@@ -174,18 +174,28 @@ const IndependentTaskDataTable = ({ tableData = [] }) => {
                     + Add Task
                   </SubmitButton>
                 )}
+
+                <TaskAuthorization />
+
               </div>
 
 
             </div>
             {/* table nav bar */}
 
-            <div className="mr-auto ml-2 mb-2 ">
-              <TaskAuthorization />
-            </div>
 
-            <div className="mb-2" style={{ maxWidth: '300px' }}>
+            <div className="mb-2 d-inline-flex" style={{ maxWidth: '300px',gap:'0 10px' }}>
               <SearchBox value={search} onChange={setSearch} />
+
+              {/* table refresh button */}
+              <Button
+                variant="primary"
+                onClick={handleRefresh}
+                className="d-flex align-items-center btn-outline-dark"
+                isLoading={isLoading}
+              >
+                <span className="d-inline ml-1"> Refresh </span>
+              </Button>
             </div>
 
           </div>
