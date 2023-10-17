@@ -279,11 +279,27 @@ const close =async () => {
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
 
   const handleSubmitForAuthorization = async () =>{
+
+    const data = {
+        resolve_comment: row?.need_authrization ? row?.resolve_comment : resolveComment,
+        need_authrization: needAuthorization,
+        raised_by_percent: raisedByPercent,
+        raised_against_percent: raisedAgainstPercent,
+        resolve_by: row?.need_authrization ? row?.resolved_by?.id :window?.Laravel?.user?.id,
+        dispute_id: row?.id,
+        authorized: true,
+        task_id: row?.task_id,
+        authorized_by: row?.need_authrization ? window?.Laravel?.user?.id : null,
+        winner: winner?.id ?? null,
+        authorize_comment: row?.need_authrization ? resolveComment : null,
+    }
+
+
         if(!winner && !finishedPartial){
             return toast.warn('Please select a person!');
         }
 
-        if(finishedPartial &&  ((raisedByPercent + raisedAgainstPercent) !== 100 || raisedAgainstPercent > 0 || raisedByPercent > 0)){
+        if(finishedPartial &&  ((Number(raisedByPercent) + Number(raisedAgainstPercent)) !== 100 || Number(raisedAgainstPercent) === 0 || Number(raisedByPercent) === 0)){
             return toast.warn("Both parties' percentages must add up to 100% (e.g., 15% & 85%), and each party's percentage must be greater than 1%");
         }
 
