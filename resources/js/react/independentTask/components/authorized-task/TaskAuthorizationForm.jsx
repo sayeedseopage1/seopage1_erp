@@ -16,7 +16,7 @@ import DatePickerComponent from "./DatePicker";
 import { useEffect } from "react";
 import Input from "../form/Input";
 import UserSelectionList from "./UserSelectionList";
-import { usePostIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
+import { usePutIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
 import Swal from "sweetalert2";
 
 const day = new CompareDate();
@@ -70,7 +70,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
         setRadio('');
     };
 
-    const [postIndependentAuthorizeTask, { isLoading }] = usePostIndependentTaskMutation();
+    const [putIndependentAuthorizeTask, { isLoading }] = usePutIndependentTaskMutation();
 
     const handleSubmission = async (e, status) => {
 
@@ -100,7 +100,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
         console.log(_data);
 
         if (comment) {
-            await postIndependentAuthorizeTask(data.id,_data)
+            await putIndependentAuthorizeTask(data.id,_data)
                 .unwrap()
                 .then((res) => {
                     console.log(res);

@@ -18,14 +18,26 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
 
     // post an independent task
     postIndependentTask : builder.mutation({
+      query: (data) => ({
+        url:  `/account/independent-task`,
+        method: 'POST',
+        body: data,
+        formData: true,
+      }),
+      invalidatesTags : ["INDEPENDENT_TASK"],
+    }),
+    
+    // update an independent task
+    putIndependentTask : builder.mutation({
       query: (id,data) => ({
-        url:  `/account/independent-task/${id}/edit`,
+        url:  `/account/independent-task/${id}`,
         method: 'PUT',
         body: data,
         formData: true,
       }),
       invalidatesTags : ["INDEPENDENT_TASK"],
     })
+
 
   })
 })
@@ -35,4 +47,5 @@ export const {
   useLazyGetIndependentTaskQuery,
   useGetIndependentAuthorizeTaskQuery,
   usePostIndependentTaskMutation,
+  usePutIndependentTaskMutation,
 } = independentTaskApiSlice;
