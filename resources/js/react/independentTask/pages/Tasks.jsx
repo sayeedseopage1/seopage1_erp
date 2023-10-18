@@ -101,7 +101,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
 
     let tableColumns = TaskTableColumns;
 
-    if (auth?.getRoleId() !== 6) {
+    if (true) {
         tableColumns = _.filter(TaskTableColumns, d => d.id !== "action");
     }
 

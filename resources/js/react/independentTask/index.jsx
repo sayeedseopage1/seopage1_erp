@@ -103,10 +103,10 @@ const IndependentTask = () => {
         if (filter) {
             getIndependentTask(filter)
                 .unwrap()
-                .then(({ pendingParentTask, status }) => {
-                    // console.log({status,pendingParentTask});
+                .then(({ data, status }) => {
+                    // console.log({status,data});
                     if (Number(status) === 200) {
-                        setTableData(pendingParentTask);
+                        setTableData(data);
                     } else {
                         setTableData([]);
                     }

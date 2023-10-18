@@ -5,10 +5,11 @@ import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { User } from "../../../utils/user-details";
 import Button from "../Button";
-import { useUpdatePendingTaskAuthorizationConversationMutation } from "../../../services/api/projectApiSlice";
 import { useState } from "react";
+import { useUpdateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
+import Loader from "../../../global/Loader";
 
-const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
+const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading }) => {
     const [conversations, setConversations] = useState([]);
     const [err, setErr] = useState(null);
 
@@ -20,11 +21,12 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
         setConversations(data);
     }, [data])
 
+    // console.log({isConversationLoading});
 
-   const [
-        updatePendingTaskAuthorizationConversation,
-        {isLoading}
-   ] = useUpdatePendingTaskAuthorizationConversationMutation();
+    const [
+        updateIndependentTaskAuthorizationConversation,
+        { isLoading }
+    ] = useUpdateIndependentTaskAuthorizationConversationMutation();
 
     const updateConversation = (e, prevData) => {
         const shadow = _.map(conversations, (c) => {
@@ -33,7 +35,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
             } else return c;
         });
         setConversations(shadow);
-        updateConversations(shadow);
+        // updateConversations(shadow);
     };
 
 
@@ -43,30 +45,30 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
         let count = 0;
 
         _.forEach(conversations, c => {
-            if(!c.answer){
+            if (!c.answer) {
                 error[c.id] = "Please answer the above question, as your response is essential."
                 count++;
             }
         })
+        // console.log({conversations});
 
         setErr(error ?? null);
 
-        if(count === 0){
-            console.log({conversations});
-            await updatePendingTaskAuthorizationConversation(conversations)
-            .unwrap()
-            .then(res => {
-                toast.success('Your answer has been submitted successfully.');
-                console.log(res);
-                setConversations(res.data);
-            })
+        if (count === 0) {
+            await updateIndependentTaskAuthorizationConversation(conversations)
+                .unwrap()
+                .then(res => {
+                    toast.success('Your answer has been submitted successfully.');
+                    console.log(res);
+                    setConversations(res.data);
+                })
         }
 
     }
 
     const countNotAnsweredQuestion = _.size(_.filter(conversations, c => !c.replied_by));
 
-    if(!conversations?.length) return null;
+    if (!conversations?.length) return null;
 
     return (
         <div className={styles.question_answer_container}>
@@ -97,10 +99,10 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
                                 <>
                                     <p>- {conversation.answer}</p>
                                     <span className={styles.ques_by}>
-                                    -by
-                                    <strong>{" " + conversation.replied_by_name + " "}</strong>
-                                    (<span>{dayjs(conversation.replied_date).format('MMM DD, YYYY hh:mm A')}</span>)
-                                </span>
+                                        -by
+                                        <strong>{" " + conversation.replied_by_name + " "}</strong>
+                                        (<span>{dayjs(conversation.replied_date).format('MMM DD, YYYY hh:mm A')}</span>)
+                                    </span>
                                 </>
                             ) : auth ? (
                                 <i> Not Answered Yet! </i>
@@ -108,23 +110,25 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
                                 <Answer
                                     conversation={conversation}
                                     updateConversation={updateConversation}
-                                    error = {err}
+                                    error={err}
                                 />
                             )}
                         </div>
                     </div>
                 ))}
-
+                <div className="d-flex my-3 justify-content-center">
+                    {isConversationLoading && <Loader title="Loading..." />}
+                </div>
                 {
                     countNotAnsweredQuestion && !auth ?
-                    <div className={styles.comment_field}>
-                        <div className={styles.button_group}>
-                            <Button isLoading={isLoading} variant="success" onClick={handleSubmission}>
-                                <i className="fa-solid fa-paper-plane" />
-                                Submit Answers
-                            </Button>
-                        </div>
-                    </div> : null
+                        <div className={styles.comment_field}>
+                            <div className={styles.button_group}>
+                                <Button isLoading={isLoading} variant="success" onClick={handleSubmission}>
+                                    <i className="fa-solid fa-paper-plane" />
+                                    Submit Answers
+                                </Button>
+                            </div>
+                        </div> : null
                 }
                 {/* end item */}
             </div>
@@ -145,9 +149,9 @@ const Answer = ({ conversation, updateConversation, error }) => {
                 placeholder="Write your answer here."
             />
             {error && error[conversation.id] && (
-                    <span className="text-danger">
-                       {error[conversation.id]}
-                    </span>
+                <span className="text-danger">
+                    {error[conversation.id]}
+                </span>
             )}
         </div>
     );
