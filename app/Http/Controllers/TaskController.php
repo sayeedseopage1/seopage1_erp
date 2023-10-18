@@ -4979,6 +4979,7 @@ class TaskController extends AccountBaseController
                 'client_name' => $client->name,
                 'client_image' => $client->image,
                 'authorization_status' => $item->authorization_status,
+                'updated_at' => $item->updated_at
             ];
         }
         return response()->json([
