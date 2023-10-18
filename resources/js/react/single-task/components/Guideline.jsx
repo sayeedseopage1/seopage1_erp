@@ -3,8 +3,9 @@ import { useState, useRef } from 'react';
 import Modal from './Modal';
 import { useClickAway } from 'react-use';
 import _ from 'lodash';
+import PMGuideline from './PMGuideline';
 
-const Guideline = ({text, editorContainerClass, workEnv}) => {
+const Guideline = ({text, task, editorContainerClass, workEnv}) => {
   const [expend, setExpend] = useState(false);
   let isLong = text?.length > 400;
   const showText = isLong ? text.slice(0, 400) + '...' : text;
@@ -32,6 +33,16 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                     </button>
                 </div>
 
+                
+
+                <div className='__content'>
+                
+                {task?.hasProjectManagerGuideline &&
+                    <div className='mb-3'>
+                        <h1>Project Manager Guideline</h1>
+                        <PMGuideline guideline={task?.PMTaskGuideline} />
+                    </div> 
+                }
 
                 {!_.isEmpty(workEnv) ? (
                     <div className="sp1_task_card--sub-card m-4">
@@ -61,8 +72,6 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
                         </div>
                     </div>
                 ) : null}
-
-                <div className='__content'>
                     <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
                 </div>
 
