@@ -8,8 +8,8 @@ import styles from './table.module.css';
 import { paginate } from './utils';
 import EmptyTable from './EmptyTable';
 import { Placeholder } from '../Placeholder';
-
-
+ 
+ 
 const DataTable = ({
     data = [],
     columns,
@@ -376,6 +376,8 @@ const DataTable = ({
     </React.Fragment>
   )
 }
+
+
 
 export default DataTable
 

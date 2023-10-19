@@ -1,4 +1,4 @@
-##### columns structure
+# columns structure
 
 *  id:
     type: string

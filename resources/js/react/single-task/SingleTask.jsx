@@ -338,7 +338,7 @@ const SingleTaskPage = () => {
                                     expendable={false}
                                     title="General Guidelines"
                                 >
-                                   {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> }
+                                   {task?.hasProjectManagerGuideline && <div className="mb-3"><PMGuideline guideline={task?.PMTaskGuideline} /></div> }
 
 
 
@@ -371,7 +371,7 @@ const SingleTaskPage = () => {
                                         </div>
                                     ) }
 
-                                    <Guideline text={task?.guidelines} workEnv={task?.workEnvData} />
+                                    <Guideline text={task?.guidelines} task={task} workEnv={task?.workEnvData} />
                                 </Accordion>
 
                                 {
