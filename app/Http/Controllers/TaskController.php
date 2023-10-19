@@ -725,7 +725,8 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-    // dd($request);
+      
+       // DB::beginTransaction();
         $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
@@ -754,7 +755,7 @@ class TaskController extends AccountBaseController
     //    }
 
         $order = TaskSubmission::orderBy('id', 'desc')->where('user_id', $request->user_id)->where('task_id', $request->task_id)->first();
-
+       
         if ($request->text != null) {
             $task_submit = new TaskSubmission();
             $task_submit->task_id = $request->task_id;
@@ -769,6 +770,7 @@ class TaskController extends AccountBaseController
                 $task_submit->submission_no = $order->submission_no + 1;
             }
             $task_submit->save();
+           
         }
 
         if ($request->link != null) {
@@ -790,8 +792,7 @@ class TaskController extends AccountBaseController
                 $task_submit->save();
             }
         }
-       // dd($task_submit);
-
+      
         if ($request->file('file') != null) {
             foreach ($request->file('file') as $att) {
                 $task_submit = new TaskSubmission();
@@ -816,13 +817,18 @@ class TaskController extends AccountBaseController
                 $task_submit->save();
             }
         }
+      
 
 
 
-        $task = Task::find($request->task_id);
+        $task = Task::where('id',$request->task_id)->first();
+      //  dd($task);
         $task->board_column_id = 6;
         $task->task_status = "submitted";
+       
         $task->save();
+      //  dd($task);
+        
         $board_column = TaskBoardColumn::where('id',$task->board_column_id)->first();
      //   dd($task_submit,$task,$board_column);
 
@@ -844,8 +850,9 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' mark task complete',
             'redirectUrl' => route('tasks.show', $task->id)
         ]);
+        //dd("hdbjasdbjasd");
 
-        Notification::send($user, new TaskSubmitNotification($task_id, $sender));
+         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
         //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return response()->json([
@@ -3470,12 +3477,12 @@ class TaskController extends AccountBaseController
 
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
-                ->join('projects', 'tasks.project_id', 'projects.id')
+                ->leftJoin('projects', 'tasks.project_id', 'projects.id')
                 ->leftJoin('users as clients','clients.id','projects.client_id')
                 ->leftJoin('users as pm','pm.id','projects.pm_id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
                 ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-                ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
+                ->leftJoin('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->leftJoin('employee_details', 'projects.pm_id', 'employee_details.user_id')
                 ->leftJoin('designations', 'employee_details.designation_id', 'designations.id')
                 ->leftJoin('pending_parent_tasks', 'tasks.pp_task_id', 'pending_parent_tasks.id')
