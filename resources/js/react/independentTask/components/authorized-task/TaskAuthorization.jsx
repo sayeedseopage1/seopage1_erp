@@ -25,13 +25,15 @@ const TaskAuthorization = ({ title }) => {
     // const [searchParams, setSearchParams] = useSearchParams();
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState([]);
+    const [authorizedData, setAuthorizedData] = useState([]);
+    const [visibilityOption,setVisibilityOption] = useState('all')
 
     const { data: authorizationData, isFetching } = useGetIndependentAuthorizeTaskQuery();
 
     const open = () => setVisible(true);
     const close = () => setVisible(false);
 
-    console.log({ data, isFetching });
+    // console.log({ data, isFetching });
 
     const filteredData = (data = []) => {
         const newData = data.filter((d) => {
@@ -46,44 +48,41 @@ const TaskAuthorization = ({ title }) => {
     useEffect(() => {
         if (authorizationData) {
             if (auth) {
-                setData(authorizationData?.pendingParentTask);
+                setAuthorizedData(authorizationData?.pendingParentTask);
             } else {
-                setData(filteredData(authorizationData?.pendingParentTask));
+                setAuthorizedData(filteredData(authorizationData?.pendingParentTask));
             }
         }
     }, [authorizationData]);
 
-    // const tasksType = data ? data?.pendingParentTask : [];
 
     // filter data
-    // const getData = (type) => {
-    //     let _data = _.orderBy(tasksType, 'authorization_status', 'asc');
-    //     switch (type) { 
-    //         case 'all':
-    //             return _data;
-    //         case 'pending':
-    //             return _.filter(_data, d => !d.authorization_status);
-    //         case 'denied':
-    //             return _.filter(_data, d => d.authorization_status === 2);        
-    //         case 'authorized':
-    //             return _.filter(_data, d => d.authorization_status === 1);        
-    //         default:
-    //             return _data;
-    //     }
-    // }
+    const getData = (type) => {
+        switch (type) { 
+            case 'all':
+                return authorizedData;
+            case 'pending':
+                return _.filter(authorizedData, d => !d.approval_status);
+            case 'denied':
+                return _.filter(authorizedData, d => d.approval_status === 2);        
+            case 'authorized':
+                return _.filter(authorizedData, d => d.approval_status === 1);        
+            default:
+                return authorizedData;
+        }
+    }
 
-    // const _data = {
-    //     'all': getData('all'),
-    //     'pending': getData('pending'),
-    //     'denied' : getData('denied'),
-    //     'authorized': getData('authorized'),
-    // }
+    const _data = {
+        'all': getData('all'),
+        'pending': getData('pending'),
+        'denied' : getData('denied'),
+        'authorized': getData('authorized'),
+    }
 
-    // const tableData = (type) => {
-    //     if(type){
-    //         return _.orderBy(_data[type], 'updated_at', 'desc')
-    //     }else return []
-    // }
+    useEffect(()=>{
+        // console.log(visibilityOption);
+        setData(_data[visibilityOption]);
+    },[visibilityOption,authorizedData])
 
     return (
         <div className={styles.task_authorization}>
@@ -93,31 +92,36 @@ const TaskAuthorization = ({ title }) => {
                 className={styles.authorize_task}
             >
                 <i className='fa-solid fa-hourglass-end' />
-                {title ?? 'Authorize Task'} <span className='badge badge-light'>{_.size(data)}</span>
+                {title ?? 'Authorize Task'} <span className='badge badge-light'>{_.size(authorizedData)}</span>
             </Button>
 
 
-            <Modal isOpen={visible}>
-                <div className={styles.modal_overlay}>
-                    <Card className={styles.card}>
-                        <Card.Head onClose={close} className={styles.card_head}>
-                            <span>Authorize Task </span>
-                        </Card.Head>
+            {
+                _.size(authorizedData)?
+                <Modal isOpen={visible}>
+                    <div className={styles.modal_overlay}>
+                        <Card className={styles.card}>
+                            <Card.Head onClose={close} className={styles.card_head}>
+                                <span>Authorize Task </span>
+                            </Card.Head>
 
-                        <Card.Body className={styles.card_body}>
-                            {/* <Tabs data={_data} /> */}
+                            <Card.Body className={styles.card_body}>
+                                <Tabs data={_data} setVisibilityOption={setVisibilityOption} visibilityOption={visibilityOption}/>
 
-                            <DataTable
-                                tableData={_.orderBy(data, 'updated_at', 'desc') || []}
-                                tableColumns={authorizationColumns()}
-                                tableName="authorize-task-table"
-                                isLoading={false}
-                            // tableMaxHeight
-                            />
-                        </Card.Body>
-                    </Card>
-                </div>
-            </Modal>
+                                <DataTable
+                                    tableData={_.orderBy(data, 'updated_at', 'desc') || []}
+                                    tableColumns={authorizationColumns()}
+                                    tableName="authorize-task-table"
+                                    isLoading={false}
+                                // tableMaxHeight
+                                />
+                            </Card.Body>
+                        </Card>
+                    </div>
+                </Modal>
+                :
+                ''
+            }
         </div>
     )
 }
@@ -133,66 +137,56 @@ export default TaskAuthorization
 
 
 // tabs
-// const Tabs = (props) => {
-//     const [searchParams, setSearchParams] = useSearchParams();
-//     const data = props.data;
-//     const handleRouteChange = (e, params) => {
-//         e.preventDefault();
-//         for (const [key, value] of Object.entries(params)) {
-//             searchParams.set(key, value);
-//         }
-//         setSearchParams(searchParams);
-//     }
+const Tabs = ({data,visibilityOption,setVisibilityOption}) => {
 
+    const badge = (type) => {
+        return _.size(data[type]);
+    }
+    return (
+        <ul className={styles.tabs}>
+            <li>
+                <a
+                    onClick={()=>{
+                      setVisibilityOption('all');
+                    }}
+                    className={`${visibilityOption==='all'?styles.all_active:styles.all_btn}`}
+                >
+                    All <span className="badge badge-light">{badge('all')}</span>
+                </a>
+            </li>
 
-//     const badge = (type) => {
-//         return _.size(data[type]);
-//     }
-//     return (
-//         <ul className={styles.tabs}>
-//             <li>
-//                 <Link
-//                     to="#"
-//                     data-type="all"
-//                     onClick={e => handleRouteChange(e, { show: 'all' })}
-//                     data-active={searchParams.get("show") === "all"}
-//                 >
-//                     All <span className="badge badge-light">{badge('all')}</span>
-//                 </Link>
-//             </li>
+            <li>
+                <a
+                    onClick={()=>{
+                        setVisibilityOption('pending');
+                      }}
+                    className={`${visibilityOption==='pending'?styles.pending_active:styles.pending_btn}`}
+                >
+                    Pending <span className="badge badge-light">{badge('pending')}</span>
+                </a>
+            </li>
 
-//             <li>
-//                 <Link
-//                     to="#"
-//                     data-type="pending"
-//                     onClick={e => handleRouteChange(e, { show: 'pending' })}
-//                     data-active={searchParams.get("show") === "pending"}
-//                 >
-//                     Pending <span className="badge badge-light">{badge('pending')}</span>
-//                 </Link>
-//             </li>
+            <li>
+                <a
+                    onClick={()=>{
+                        setVisibilityOption('authorized');
+                      }}
+                    className={`${visibilityOption==='authorized'?styles.authorized_active:styles.authorized_btn}`}
+                >
+                    Authorized <span className="badge badge-light">{badge('authorized')}</span>
+                </a>
+            </li>
 
-//             <li>
-//                 <Link
-//                     to="#"
-//                     data-type="authorized"
-//                     onClick={e => handleRouteChange(e, { show: 'authorized' })}
-//                     data-active={searchParams.get("show") === "authorized"}
-//                 >
-//                     Authorized <span className="badge badge-light">{badge('authorized')}</span>
-//                 </Link>
-//             </li>
-
-//             <li>
-//                 <Link
-//                     to="#"
-//                     data-type="denied"
-//                     onClick={e => handleRouteChange(e, { show: 'denied' })}
-//                     data-active={searchParams.get("show") === "denied"}
-//                 >
-//                     Denied <span className="badge badge-light">{badge('denied')}</span>
-//                 </Link>
-//             </li>
-//         </ul>
-//     );
-// };
+            <li>
+                <a
+                    onClick={()=>{
+                        setVisibilityOption('denied');
+                      }}
+                    className={`${visibilityOption==='denied'?styles.denied_active:styles.denied_btn}`}
+                >
+                    Denied <span className="badge badge-light">{badge('denied')}</span>
+                </a>
+            </li>
+        </ul>
+    );
+};
