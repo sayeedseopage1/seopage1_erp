@@ -13,18 +13,45 @@ import Modal from '../Modal';
 import Card from '../../../../react-latest/ui/Card';
 import DataTable from '../table/DataTable';
 import { useSearchParams } from 'react-router-dom';
+import { User } from '../../../utils/user-details';
 
 
 const TaskAuthorization = ({ title }) => {
+    // user and auth
+    const user = new User(window.Laravel.user);
+    const auth = _.includes([1, 8], user.getRoleId());
+
+
     // const [searchParams, setSearchParams] = useSearchParams();
     const [visible, setVisible] = useState(false);
+    const [data, setData] = useState([]);
 
-    const { data, isFetching } = useGetIndependentAuthorizeTaskQuery();
+    const { data: authorizationData, isFetching } = useGetIndependentAuthorizeTaskQuery();
 
     const open = () => setVisible(true);
     const close = () => setVisible(false);
 
-      console.log({data,isFetching});
+    console.log({ data, isFetching });
+
+    const filteredData = (data = []) => {
+        const newData = data.filter((d) => {
+            return d.assign_by_id === user.id || d.assign_to_id === user.id;
+        })
+
+        return newData;
+    }
+
+
+    // filter data according to role and user
+    useEffect(() => {
+        if (authorizationData) {
+            if (auth) {
+                setData(authorizationData?.pendingParentTask);
+            } else {
+                setData(filteredData(authorizationData?.pendingParentTask));
+            }
+        }
+    }, [authorizationData]);
 
     // const tasksType = data ? data?.pendingParentTask : [];
 
@@ -66,7 +93,7 @@ const TaskAuthorization = ({ title }) => {
                 className={styles.authorize_task}
             >
                 <i className='fa-solid fa-hourglass-end' />
-                {title ?? 'Authorize Task'} <span className='badge badge-light'>{_.size(data?.pendingParentTask)}</span>
+                {title ?? 'Authorize Task'} <span className='badge badge-light'>{_.size(data)}</span>
             </Button>
 
 
@@ -81,7 +108,7 @@ const TaskAuthorization = ({ title }) => {
                             {/* <Tabs data={_data} /> */}
 
                             <DataTable
-                                tableData={_.orderBy(data?.pendingParentTask, 'updated_at', 'desc') || []}
+                                tableData={_.orderBy(data, 'updated_at', 'desc') || []}
                                 tableColumns={authorizationColumns()}
                                 tableName="authorize-task-table"
                                 isLoading={false}

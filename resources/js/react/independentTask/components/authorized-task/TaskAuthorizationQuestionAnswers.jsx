@@ -89,8 +89,8 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading }) => {
                                 Q{index + 1}. {conversation.question}
                                 <span className={styles.ques_by}>
                                     -by
-                                    <strong>{" " + conversation.created_by_name + " "}</strong>
-                                    (<span>{dayjs(conversation.created_date).format('MMM DD, YYYY hh:mm A')}</span>)
+                                    <a href={`/account/employees/${conversation?.created_by_id}`}><strong>{" " + conversation.created_by_name + " "}</strong></a>
+                                    (<span>{dayjs(conversation.created_at).format('MMM DD, YYYY hh:mm A')}</span>)
                                 </span>
                             </span>
                         </div>
@@ -100,8 +100,8 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading }) => {
                                     <p>- {conversation.answer}</p>
                                     <span className={styles.ques_by}>
                                         -by
-                                        <strong>{" " + conversation.replied_by_name + " "}</strong>
-                                        (<span>{dayjs(conversation.replied_date).format('MMM DD, YYYY hh:mm A')}</span>)
+                                        <a href={`/account/employees/${conversation?.replied_by}`}><strong>{" " + conversation.replied_by_name + " "}</strong></a>
+                                        (<span>{dayjs(conversation.updated_at).format('MMM DD, YYYY hh:mm A')}</span>)
                                     </span>
                                 </>
                             ) : auth ? (
@@ -116,9 +116,9 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading }) => {
                         </div>
                     </div>
                 ))}
-                <div className="d-flex my-3 justify-content-center">
+                {/* <div className="d-flex my-3 justify-content-center">
                     {isConversationLoading && <Loader title="Loading..." />}
-                </div>
+                </div> */}
                 {
                     countNotAnsweredQuestion && !auth ?
                         <div className={styles.comment_field}>

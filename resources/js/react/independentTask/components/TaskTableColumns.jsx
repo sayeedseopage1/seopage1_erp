@@ -21,6 +21,7 @@ import { convertTime } from "../../utils/converTime";
 const compareDate = new CompareDate();
 
 export const TaskTableColumns = [
+    // expand
     {
       id:'expend',
       header: '',
@@ -36,6 +37,7 @@ export const TaskTableColumns = [
       }
     },
 
+    // unique id
     {
       id: 'u_id',
       header: 'IndependentTaskId',
@@ -54,6 +56,7 @@ export const TaskTableColumns = [
       }
     },
 
+    // task
     {
       id: 'task',
       header: 'Task',
@@ -72,6 +75,7 @@ export const TaskTableColumns = [
       }
     },
 
+    // timer status
     {
       id: 'timer_status',
       header: 'Timer Status',
@@ -108,6 +112,7 @@ export const TaskTableColumns = [
       }
     }, 
 
+    // client
     {
       id: 'client',
       header: 'Client',
@@ -126,6 +131,7 @@ export const TaskTableColumns = [
       }
     },
     
+    // creation date
     {
       id: 'creation_date',
       header: 'Creation Date',
@@ -140,6 +146,7 @@ export const TaskTableColumns = [
       }
     },
     
+    // start date
     {
       id: 'start_date',
       header: 'Started Date',
@@ -158,6 +165,7 @@ export const TaskTableColumns = [
       }
     },
 
+    // due date
     {
       id: 'due_date',
       header: 'Due Date',
@@ -187,6 +195,7 @@ export const TaskTableColumns = [
       }
     },
     
+    // approved on
     {
       id: 'approved_on',
       header: 'Approved On',
@@ -206,6 +215,7 @@ export const TaskTableColumns = [
       }
     },
     
+    // hours logged
     {
       id: 'hours_logged',
       header: 'Hours Logged',
@@ -257,6 +267,7 @@ export const TaskTableColumns = [
       }
     },
 
+    // status
     {
       id: 'status',
       header: 'Task Status',
@@ -275,6 +286,7 @@ export const TaskTableColumns = [
       }
     },
     
+    // report
     {
       id: 'report',
       header: 'Report',
@@ -284,6 +296,7 @@ export const TaskTableColumns = [
       }
     },
      
+    // action
     {
       id: 'action',
       header: 'Action',

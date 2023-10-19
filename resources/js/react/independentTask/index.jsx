@@ -21,6 +21,8 @@ import { useLazyGetIndependentTaskQuery } from "../services/api/independentTaskA
 import { createContext } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { User } from "../utils/user-details";
+import _ from "lodash";
 
 // custom drag layer
 const DragLayer = () => {
@@ -97,6 +99,18 @@ const IndependentTask = () => {
     // const { data: tasks } = useGetIndependentTaskQuery();
     const [getIndependentTask, { isFetching, isLoading }] = useLazyGetIndependentTaskQuery();
 
+    // user and auth
+    const user = new User(window.Laravel.user);
+    const auth = _.includes([1, 8], user.getRoleId());
+
+    const filteredData = (data=[])=>{
+      const newData = data.filter((d)=>{
+        return d.assigned_by_id === user.id || d.assigned_to_id === user.id;
+      })
+
+      return newData;
+    }
+
 
     // fetching data against dependencies
     useEffect(() => {
@@ -106,7 +120,12 @@ const IndependentTask = () => {
                 .then(({ data, status }) => {
                     // console.log({status,data});
                     if (Number(status) === 200) {
-                        setTableData(data);
+                        if (auth) {
+                            setTableData(data);
+                        }else{
+                            setTableData(filteredData(data))
+                        }
+
                     } else {
                         setTableData([]);
                     }

@@ -18,6 +18,7 @@ import Input from "../form/Input";
 import UserSelectionList from "./UserSelectionList";
 import { useGetIndependentTaskAuthorizationConversationsQuery, usePutIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
 import Swal from "sweetalert2";
+import Loader from "../Loader";
 
 const day = new CompareDate();
 
@@ -385,7 +386,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                                 height={32}
                                                             />
                                                             <a
-                                                                href={data.existing_client_id ?`/account/employees/${data.existing_client_id}`:''}
+                                                                href={data.existing_client_id ? `/account/employees/${data.existing_client_id}` : ''}
                                                             >
                                                                 {data.existing_client_id ? data.existing_client_name : data.new_client}
                                                             </a>
@@ -479,6 +480,10 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         isConversationLoading={isConversationLoading || isFetching}
                                     // updateConversations={updateConversation}
                                     />
+
+                                    <div className="d-flex my-3 justify-content-center">
+                                        {(isConversationLoading || isFetching) && <Loader title="Loading..." />}
+                                    </div>
 
                                     {
                                         (auth && data?.approval_status === null) && <React.Fragment>

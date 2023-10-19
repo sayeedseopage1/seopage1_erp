@@ -48,6 +48,7 @@ class IndependentTaskController extends AccountBaseController
                             ->get();
 
 
+
         return response()->json([
             'pendingParentTask'=> $pendingParentTask,
             'status'=>200
@@ -104,7 +105,7 @@ class IndependentTaskController extends AccountBaseController
         $users = User::where('role_id',1)->orWhere('role_id',8)->get();
             foreach($users as $user)
                 {
-                    // Notification::send($user, new IndependentTasksNotification($ppTask));
+                    Notification::send($user, new IndependentTasksNotification($ppTask));
                 }
 
         return response()->json([
@@ -244,7 +245,13 @@ class IndependentTaskController extends AccountBaseController
 
 
     public function get_independent_task_conversation_question(Request $request, $id){
-        $conversations = PendingParentTaskConversation::where('pending_parent_task_id', $id)->get();
+        $conversations = DB::table('pending_parent_task_conversations')
+                        ->leftJoin('users as createdBy','pending_parent_task_conversations.created_by','createdBy.id')
+                        ->leftJoin('users as repliedBy','pending_parent_task_conversations.replied_by','repliedBy.id')
+                        ->select('pending_parent_task_conversations.*','createdBy.id as created_by_id','createdBy.name as created_by_name','repliedBy.id as replied_by_id','repliedBy.name as replied_by_name')
+                        ->where('pending_parent_task_id',$id)
+                        ->get();
+
         return response()->json([
             'data'=> $conversations,
             'status'=>200
