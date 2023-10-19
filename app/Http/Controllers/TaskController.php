@@ -2839,6 +2839,9 @@ class TaskController extends AccountBaseController
  
          $task_revision->dispute_created = $request->dispute_create;
          $task_revision->dispute_between = $dispute_between;
+         if($dispute_between == 'CPR'){ 
+            $task_revision->final_responsible_person = 'C';
+         }
  
          $task_revision->added_by = Auth::id();
          $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();

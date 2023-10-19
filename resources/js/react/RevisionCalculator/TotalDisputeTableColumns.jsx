@@ -289,10 +289,7 @@ export const TotalDisputeTableColumn = [
         row: ({ row, table }) => {
 
             return (
-                <a
-                    href="/account/dispute"
-                    onClick={open}
-                >
+                <a href="/account/disputes">
                     {row?.disputes_comments}
                 </a>
             );
