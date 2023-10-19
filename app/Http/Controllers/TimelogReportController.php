@@ -516,7 +516,7 @@ class TimelogReportController extends AccountBaseController
         while ($currentDate->lte($endDate)) {
             if ($currentDate->isWeekday()) {
                 // Monday to Friday (weekdays)
-                $idealTrackedMinutes += (7 * 60 + 15); // Convert 7 hours 15 minutes to minutes
+                $idealTrackedMinutes += (7 * 60 ); // Convert 7 hours 15 minutes to minutes
             } elseif ($currentDate->isSaturday()) {
                 // Saturday
                 $idealTrackedMinutes += (4 * 60 + 30); // Convert 4 hours 30 minutes to minutes
