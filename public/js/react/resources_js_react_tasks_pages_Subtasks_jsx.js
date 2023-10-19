@@ -613,7 +613,6 @@ var Subtasks = function Subtasks() {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     search = _React$useState4[0],
     setSearch = _React$useState4[1];
-  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_10__.User(window.Laravel.user);
   var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0___default().useState(new Object((0,_constant__WEBPACK_IMPORTED_MODULE_13__.defaultColumnVisibility)(auth))),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     columnVisibility = _React$useState6[0],

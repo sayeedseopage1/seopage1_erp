@@ -16,9 +16,9 @@ export const revisionColumns = [
         row: ({row}) => {
             return(
                 <a href={`/accounts/employees/${row.project_manager_id}`} title={row?.project_manager_name} >
-                    <span className="singleline-ellipsis"> 
-                        {row?.project_manager_name} 
-                    </span> 
+                    <span className="singleline-ellipsis">
+                        {row?.project_manager_name}
+                    </span>
                 </a>
             )
         }
@@ -30,14 +30,14 @@ export const revisionColumns = [
         moveable: true,
         sort: (row) => row.total_projects,
         rowSpan: 2,
-        searchText: (row) => `${row?.total_projects}`, 
+        searchText: (row) => `${row?.total_projects}`,
         loader: () => <Placeholder />,
         row: ({row, table}) => {
             const { startDate, endDate } = table.state;
-        
+
             return(
-                <Link 
-                    to={`project-elaboration?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                <Link
+                    to={`project-elaboration?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                     className="singleline-ellipsis"
                 >
                     {row?.total_projects}
@@ -66,8 +66,8 @@ export const revisionColumns = [
         row: ({row, table}) => {
             const { startDate, endDate } = table.state;
             return(
-                <Link 
-                    to={`number-of-project-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                <Link
+                    to={`number-of-project-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                     className="singleline-ellipsis"
                 >
                     {row?.total_tasks}
@@ -86,8 +86,8 @@ export const revisionColumns = [
         row: ({row, table}) => {
             const { startDate, endDate } = table.state;
             return(
-                <Link 
-                    to={`number-of-revision-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                <Link
+                    to={`number-of-revision-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                     className="singleline-ellipsis"
                 >
                     {row?.total_revisions}
@@ -107,7 +107,7 @@ export const revisionColumns = [
     },
     {
         id: 'revision_breakdown',
-        heading: 'Revision Breakdown', 
+        heading: 'Revision Breakdown',
         moveable: true,
         subHeading: [
             {
@@ -120,8 +120,8 @@ export const revisionColumns = [
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`sales-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`sales-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.sales_issues}
@@ -132,21 +132,21 @@ export const revisionColumns = [
             {
                 id: 'client_side_issues',
                 heading: 'Client Side Issues',
-                moveable: false, 
+                moveable: false,
                 sort: row => row?.client_issues,
                 searchText: (row) => `${row?.client_issues}`,
                 loader: () => <Placeholder />,
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`client-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`client-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.client_issues}
                         </Link>
                     )
-                } 
+                }
             },
             {
                 id: 'project_manager_issues',
@@ -158,14 +158,14 @@ export const revisionColumns = [
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`project-manager-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`project-manager-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.pm_issues}
                         </Link>
                     )
-                } 
+                }
             },
             {
                 id: 'lead_developer',
@@ -177,14 +177,14 @@ export const revisionColumns = [
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`lead-developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`lead-developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.lead_developer_issues}
                         </Link>
                     )
-                } 
+                }
             },
             {
                 id: 'developer',
@@ -196,14 +196,14 @@ export const revisionColumns = [
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`developer-issues-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.developer_issues}
                         </Link>
                     )
-                } 
+                }
             },
             
             {
@@ -233,14 +233,14 @@ export const revisionColumns = [
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`total-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`total-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.total_disputes}
                         </Link>
                     )
-                } 
+                }
             },
             {
                 id: 'disputed_not_solved',
@@ -252,15 +252,15 @@ export const revisionColumns = [
                 row: ({row, table}) => {
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`total-unsolved-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`total-unsolved-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {row?.total_disputes_not_solved}
                         </Link>
                     )
-                } 
+                }
             }
         ]
     }
-] 
+]

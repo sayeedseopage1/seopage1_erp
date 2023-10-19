@@ -14,7 +14,7 @@ export const defaultColumnVisibility = (auth) =>({
     estimated_time: true,
     hours_logged: true,
     assigned_by: true,
-     assigned_to: auth.getRoleId() !== 5,
+    assigned_to: auth.getRoleId() !== 5,
     status: true,
     progress: auth.getRoleId() !== 5,
     report: true,

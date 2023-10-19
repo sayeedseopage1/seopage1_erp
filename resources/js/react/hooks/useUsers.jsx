@@ -26,11 +26,11 @@ export const useUsers = () => {
 
 
     const getUserById = (id) => {
-         if(!usersObject) return; 
+         if(!usersObject) return;
          return usersObject[Number(id)];
     }
 
 
     return {users, usersObject, usersIsFetching ,usersIsLoading, getUserById}
 
-} 
+}

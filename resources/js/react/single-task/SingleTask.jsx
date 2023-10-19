@@ -384,13 +384,21 @@ const SingleTaskPage = () => {
                                             color: "#fff",
                                         }}
                                     >
-                                        { _.map(task?.revisions, (revision, index) => (
+                                        {/* { _.map(task?.revisions, (revision, index) => (
                                              <RevisionText
                                                     key={revision?.id}
                                                     index={index + 1}
                                                     date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
                                                     time={dayjs(revision.createdAt).format('hh:mm a')}
                                                     text={revision?.comment || revision?.devComment || revision?.pmComment}
+                                                    revision={revision}
+                                                />
+                                            ))
+                                        } */}
+                                        { _.map(task?.revisions, (revision, index) => (
+                                             <RevisionText
+                                                    key={revision?.id}
+                                                    index={index + 1}
                                                     revision={revision}
                                                 />
                                             ))

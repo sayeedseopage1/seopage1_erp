@@ -21,7 +21,6 @@ const Subtasks = () => {
     const dispatch = useDispatch();
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
-    const auth = new User(window.Laravel.user);
     const [columnVisibility, setColumnVisibility] = React.useState(new Object(defaultColumnVisibility(auth)))
 
     const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
