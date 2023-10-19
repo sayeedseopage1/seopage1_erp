@@ -17,6 +17,7 @@ import LeadDevIssue from './LedDevIssues';
 import DevIssuesTable from './DevIssues';
 import TotalDisputeTable from './TotalDisputeTable';
 import TotalUnsolvedDisputeTable from './TotalUnsolvedDisputeTable';
+import PendingRevisionTable from './PendingRevisions/PendingRevisions';
  
 const container = document.getElementById("revisionCalculator");
 
@@ -38,6 +39,7 @@ if(container){
                 <Route path="developer-issues-table" element={<DevIssuesTable />} />
                 <Route path="total-dispute-table" element= {<TotalDisputeTable />} />
                 <Route path="total-unsolved-dispute-table" element= {<TotalUnsolvedDisputeTable />} />
+                <Route path="pending-revisions" element= {<PendingRevisionTable />} />
               </Route>
           </Routes>
         </DndProvider>

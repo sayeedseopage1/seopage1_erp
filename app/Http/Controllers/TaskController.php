@@ -5371,7 +5371,8 @@ class TaskController extends AccountBaseController
         $tasks = Task::select('tasks.id')
             ->leftJoin('task_users','task_users.task_id','tasks.id')
             ->where('task_users.user_id',$id)
-            ->where('tasks.board_column_id',3)
+          
+            ->whereIn('tasks.board_column_id', [2,3])
             ->count();
         if($tasks > 4)
         {

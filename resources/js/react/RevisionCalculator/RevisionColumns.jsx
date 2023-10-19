@@ -205,6 +205,24 @@ export const revisionColumns = [
                     )
                 }
             },
+            
+            {
+                id: "rev_accept_deny_pending",
+                heading: 'Rev. Accept/Deny Pending',
+                loader: () => <Placeholder />,
+                row: ({row, table}) => {
+                    const count = row?.pending_issues || 0;  
+                    const { startDate, endDate } = table.state;
+                    return(
+                        <Link 
+                            to={`pending-revisions?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                            className="singleline-ellipsis"
+                        >
+                            {count}
+                        </Link>
+                    )
+                }
+            },
             {
                 id: 'disputed_total',
                 heading: 'Total Disputed',

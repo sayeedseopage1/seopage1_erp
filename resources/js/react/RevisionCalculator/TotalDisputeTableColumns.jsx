@@ -289,7 +289,9 @@ export const TotalDisputeTableColumn = [
         row: ({ row, table }) => {
 
             return (
-                <a href="/account/disputes">
+                <a
+                    href="/account/disputes"
+                >
                     {row?.disputes_comments}
                 </a>
             );

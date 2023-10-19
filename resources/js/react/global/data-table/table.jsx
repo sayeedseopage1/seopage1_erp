@@ -286,7 +286,7 @@ const DataTable = ({
             <div className={styles.table_navigation}>
                 {navbar}
 
-                <div className={styles.search_bar} >
+                {/* <div className={styles.search_bar} >
                     <span className={styles.search_bar__icon}>
                         <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -302,7 +302,7 @@ const DataTable = ({
                         value={search} 
                         onChange={e => setSearch(e.target.value)}
                     />
-                </div>
+                </div> */}
             </div>
 
             {/* table */}
