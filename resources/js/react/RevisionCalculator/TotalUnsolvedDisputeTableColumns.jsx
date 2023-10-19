@@ -283,8 +283,7 @@ export const TotalUnsolvedDisputeTableColumns = [
 
             return (
                 <a
-                    href="/account/dispute"
-                    onClick={open}
+                    href="/account/disputes"
                 >
                     {row?.disputes_comments}
                 </a>
