@@ -106,7 +106,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
         }
         console.log(_data);
 
-        if (comment) {
+        // if (comment) {
             await putIndependentAuthorizeTask(_data)
                 .unwrap()
                 .then((res) => {
@@ -119,16 +119,18 @@ const TaskAuthorizationForm = ({ data, table }) => {
                         timer: 2500,
                     });
                     close();
-                    setRefresh();
+                    setTimeout(() => {
+                        setRefresh();
+                    }, 1000);
                 });
-        } else {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Task authorization unsuccessfull",
-                showConfirmButton: true,
-            });
-        }
+        // } else {
+            // Swal.fire({
+            //     position: "center",
+            //     icon: "error",
+            //     title: "Task authorization unsuccessfull",
+            //     showConfirmButton: true,
+            // });
+        // }
     };
 
     const user = new User(window.Laravel.user);

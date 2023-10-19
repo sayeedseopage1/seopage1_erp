@@ -2514,7 +2514,15 @@ class TaskController extends AccountBaseController
         $project = Project::where('id', $this->task->project_id)->first();
         $task_member = TaskUser::where('task_id', $id)->first();
         $sender = User::where('id', Auth::id())->first();
-        $users = User::where('id', $this->task->added_by)->orWhere('id', $task_member->user_id)->orWhere('id', $project->pm_id)->get();
+        if($project != null)
+        {
+            $users = User::where('id', $this->task->added_by)->orWhere('id', $task_member->user_id)->orWhere('id', $project->pm_id)->get();
+        }else 
+        {
+            $users = User::where('id', $this->task->added_by)->orWhere('id', $task_member->user_id)->get();
+
+        }
+       
 
         $this->replys = DB::table('task_replies')
             ->join('users', 'task_replies.user_id', '=', 'users.id')
@@ -3444,6 +3452,8 @@ class TaskController extends AccountBaseController
                 'pm.image as project_manager_avatar',
 
                 'clients.id as clientId','clients.name as client_name',
+                'ind_client.id as ind_clientId','ind_client.name as ind_client_name',
+                'tasks.client_name as independent_client_name',
                 'project_milestones.id as milestone_id',
                 'project_milestones.milestone_title',
                 'designations.name as pm_designation',
@@ -3457,6 +3467,7 @@ class TaskController extends AccountBaseController
                 ->leftJoin('projects', 'tasks.project_id', 'projects.id')
                 ->leftJoin('users as clients','clients.id','projects.client_id')
                 ->leftJoin('users as pm','pm.id','projects.pm_id')
+                ->leftJoin('users as ind_client','ind_client.id','tasks.client_id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
                 ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
                 ->leftJoin('project_milestones', 'tasks.milestone_id', 'project_milestones.id')

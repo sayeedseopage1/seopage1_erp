@@ -7,7 +7,7 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
     // get all authorized independent task
     getIndependentTask: builder.query({
       query: (query) => `/account/get-all-independent-task?${query}`,
-      providesTags: ["INDEPENDENT_TASK"],
+      // providesTags: ["INDEPENDENT_TASK"],
     }),
 
     // get all independent task for authorization
