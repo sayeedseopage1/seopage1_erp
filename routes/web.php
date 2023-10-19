@@ -1296,7 +1296,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/developer/primary-page-authorization-count/',[TaskController::class,'PrimaryPageAuthorization']);
 
     Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
-
+    Route::get('/check-independent-task/{id}',[TaskController::class,'independenttask']);
+   
 
 
 

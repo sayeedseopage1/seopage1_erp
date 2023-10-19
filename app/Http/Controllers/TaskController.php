@@ -5650,4 +5650,25 @@ class TaskController extends AccountBaseController
             'status'=>200
         ],200);
     }
+    public function independenttask($id)
+    {
+        $task = Task::where('id',$id)->first();
+        if($task->independent_task_status == 1)
+        {
+            return response()->json([
+                'is_independent'=> true,
+                'status'=>200
+            ],200);
+
+        }else 
+        {
+            return response()->json([
+                'is_independent'=> false,
+                'status'=>200
+            ],200);
+
+        }
+    }
+
+    
 }
