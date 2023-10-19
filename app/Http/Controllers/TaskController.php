@@ -3454,17 +3454,18 @@ class TaskController extends AccountBaseController
 
                 DB::raw('IFNULL(sub_tasks.id, false) as has_subtask'),
             ])
-                ->join('projects', 'tasks.project_id', 'projects.id')
+                ->leftJoin('projects', 'tasks.project_id', 'projects.id')
                 ->leftJoin('users as clients','clients.id','projects.client_id')
                 ->leftJoin('users as pm','pm.id','projects.pm_id')
                 ->leftJoin('sub_tasks', 'tasks.subtask_id', 'sub_tasks.id')
                 ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-                ->join('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
+                ->leftJoin('project_milestones', 'tasks.milestone_id', 'project_milestones.id')
                 ->leftJoin('employee_details', 'projects.pm_id', 'employee_details.user_id')
                 ->leftJoin('designations', 'employee_details.designation_id', 'designations.id')
                 ->leftJoin('pending_parent_tasks', 'tasks.pp_task_id', 'pending_parent_tasks.id')
                 ->where('tasks.id', $id)
                 ->first();
+               
 
                 // if($task->subtask_id !=null){
                 //     $ppSubTask = SubTask::where('id',$task->subtask_id)->first();
