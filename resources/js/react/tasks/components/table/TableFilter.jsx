@@ -23,7 +23,7 @@ const TableFilter = ({
   const updateFilter = (e, column) => {
     const checked = e.target.checked;
     const _columnVisibility = {...columnVisibility}
-    _columnVisibility[column] = !checked;
+    _columnVisibility[column] = checked;
 
     if(value){
       setValue({...value, columnVisibility: _columnVisibility});
@@ -37,7 +37,7 @@ const TableFilter = ({
     let checked = e.target.checked;
     const _columnVisibility = {...columnVisibility}
     _.map(columns, column => (
-        _columnVisibility[column] = !checked
+        _columnVisibility[column] = checked
     ))
 
     if(value){
@@ -56,10 +56,11 @@ const TableFilter = ({
   const _col = _.pickBy(columnVisibility, value => value);
 
 
-  const filtered = _.difference(_ids, _.keys(columnVisibility))
+  const filtered = _.difference(_ids, _.keys(_col))
 
 
-  const size = _.size(filtered) + _.size(_col);
+  const size = _.size(filtered);
+
 
 
   return (
@@ -75,7 +76,7 @@ const TableFilter = ({
                         <input
                             type='checkbox'
                             name='column_filter'
-                            checked={_.size(columnVisibility) === 0 ? false : size === 0 }
+                            checked={size===0}
                             id="all"
                             onChange={e => updateAll(e, _ids)}
                         /> Select All
@@ -89,7 +90,7 @@ const TableFilter = ({
                                     type='checkbox'
                                     name='column_filter'
                                     id={col.id}
-                                    checked={columnVisibility[col.id] === false ?? false}
+                                    checked={columnVisibility[col.id] === true}
                                     onChange={e => updateFilter(e, col.id)}
                                 /> {col.header}
                             </label>
