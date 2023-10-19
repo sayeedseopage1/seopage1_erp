@@ -20,17 +20,19 @@ import { defaultColumnVisibility } from "../constant";
 import PrimaryPageAuthorizationTable from "../components/PrimaryPageAuthorizationTable";
 import { useSearchParams } from "react-router-dom";
 
+const auth = new User(window.Laravel.user);
+
 const Tasks = () => {
-    const {tasks} = useSelector(s => s.tasks) 
+    const {tasks} = useSelector(s => s.tasks)
     const dispatch = useDispatch();
     const [getTasks, {isFetching}] = useLazyGetTasksQuery();
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
-    const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
+    const [columnVisibility, setColumnVisibility] = React.useState(new Object(defaultColumnVisibility(auth)))
 
-    // api function 
+    // api function
     const { data: unAuthorizedType } = useCheckUnAuthorizedTaskTypeQuery();
-    const auth = new User(window.Laravel.user);
+
     const [searchParams, setSearchParams] = useSearchParams();
 
     const onFilter = (filter) => {
@@ -56,15 +58,15 @@ const Tasks = () => {
             .catch(err => console.log(err))
         }
     }
- 
+
 
     // fetch table data
     const fetchTasksTypeData = () => {
         searchParams.set('modal', 'primary_task_authorization');
         searchParams.set('show', 'pending');
-        setSearchParams(searchParams) 
+        setSearchParams(searchParams)
     }
-  
+
 
     let tableColumns = TaskTableColumns;
 
@@ -96,11 +98,11 @@ const Tasks = () => {
                                 onClick={fetchTasksTypeData}
                                 className="sp1_tlr_tab active ml-2 mb-2 text-white"
                             >
-                                  
+
                                     <i className="fa-solid fa-hourglass-half" />
                                       {primaryPageButton}
                                     <span className="badge badge-light">{unAuthorizedType?.task_types}</span>
-                                 
+
                             </Button>
                         }
 
@@ -138,7 +140,7 @@ const Tasks = () => {
                     />
                 </div>
             </div>
-            <PrimaryPageAuthorizationTable /> 
+            <PrimaryPageAuthorizationTable />
         </React.Fragment>
     );
 };

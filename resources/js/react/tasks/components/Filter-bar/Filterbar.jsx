@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import JqueryDateRangePicker from "./JqueryDateRangePicker";
 import UserFilter from "./UserFilter";
 import _ from "lodash";
@@ -64,6 +64,12 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         date_filter_by,
     ]);
 
+    // console.log(developer)
+    useLayoutEffect(() => {
+        if(page === "subtasks" && auth.getRoleId() === 5 && window !== undefined) {
+            setDeveloper(window.Laravel.user);
+        }
+    }, [])
 
     return (
         <div className="sp1_task_filter_bar">
@@ -104,23 +110,24 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
 
-                    {page !== "subtasks" && (
+                    {/* {page !== "subtasks" && (
                         <>
                             <UserFilter
-                                title="Assigned To"
+                                title="Assignee To"
                                 state={developer}
                                 setState={setDeveloper}
                                 roleIds={[4, 6, 9, 10]}
                             />
                             <HDivider />
                         </>
-                    )}
+                    )} */}
 
-                    {/* {page === "subtasks" ? (
+                    {page === "subtasks" ? (
                         <UserFilter
                             title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
+                            disabled={auth.getRoleId() === 5}
                             roleIds={[5]}
                         />
                     ) : (
@@ -130,7 +137,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                             setState={setDeveloper}
                             roleIds={[4, 6, 9, 10]}
                         />
-                    )} */}
+                    )}
 
                     <StatusFilter state={status} setState={setStatus} />
                     <HDivider />
