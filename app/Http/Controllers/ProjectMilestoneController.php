@@ -71,6 +71,7 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone= ProjectMilestone::find($request->id);
         $milestone->status= "complete";
         $milestone->last_updated_by= Auth::id();
+        $milestone->end_date = Carbon::now();
         $milestone->save();
 
         $project= Project::where('id',$milestone->project_id)->first();
@@ -511,6 +512,7 @@ class ProjectMilestoneController extends AccountBaseController
      */
     public function update(StoreMilestone $request, $id)
     {
+      //  dd($request);
         $pre_cost= ProjectMilestone::where('id',$id)->first();
         // dd($pre_cost);
         $project_id= Project::where('id',$request->project_id)->first();

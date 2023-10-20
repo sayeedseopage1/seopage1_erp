@@ -14,6 +14,7 @@ import { SingleTask } from "../../utils/single-task";
 import { useDispatch, useSelector } from "react-redux";
 import { storeSubTasks } from "../../services/features/tasksSlice";
 import { User } from "../../utils/user-details";
+import Switch from '../../global/Switch';
 
 const compareDate = new CompareDate();
 
@@ -257,14 +258,31 @@ export const SubTasksTableColumns = [
       accessorFn: row => `${row?.task_approval_date ? dayjs(row?.task_approval_date).format('DD-MM-YYYY') : 'Not Completed Yet!'}`,
       cell: ({row}) => {
         const data = row?.original;
-        return(
-          <strong>
-            {data?.task_approval_date ? (
-              <>
-                {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
-              </>
-            ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
-          </strong>
+        // return(
+        //   <strong>
+        //     {data?.task_approval_date ? (
+        //       <>
+        //         {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
+        //       </>
+        //     ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
+        //   </strong>
+        // )
+        return (
+          <Switch>
+            <Switch.Case condition={data?.task_approval_date && _.includes([4,8,9], data?.board_column_id) }>
+              {dayjs(data?.task_approval_date).format('DD-MM-YYYY')} <br/>
+              {dayjs(data?.task_approval_date).format('hh:mm A')}
+            </Switch.Case>
+            
+            <Switch.Case condition={!data?.task_approval_date && data?.task_updated_at && _.includes([4,8,9], data?.board_column_id) }>
+              {dayjs(data?.task_updated_at).format('DD-MM-YYYY')} <br/>
+              {dayjs(data?.task_updated_at).format('hh:mm A')} <br/>
+            </Switch.Case>
+
+            <Switch.Case condition={!_.includes([4,8,9], data?.board_column_id) }>
+              --
+            </Switch.Case>
+          </Switch>
         )
       }
     },

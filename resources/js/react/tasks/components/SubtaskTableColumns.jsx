@@ -15,6 +15,7 @@ import Modal from "./Modal";
 import Loader from "./Loader";
 import { storeSubTasks } from "../../services/features/tasksSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Switch from "../../global/Switch";
 
 const compareDate = new CompareDate();
 
@@ -250,21 +251,38 @@ export const SubTasksTableColumns = [
         )
       }
     },
-
+// 4, 8, 9, // boardColumn iD
     {
       id: 'approved_on',
       header: 'Approved On',
       accessorFn: row => `${row?.task_approval_date ? dayjs(row?.task_approval_date).format('DD-MM-YYYY') : 'Not Completed Yet!'}`,
       cell: ({row}) => {
         const data = row?.original;
-        return(
-          <strong>
-            {data?.task_approval_date ? (
-              <>
-                {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
-              </>
-            ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
-          </strong>
+        // return(
+        //   <strong>
+        //     {data?.task_approval_date ? (
+        //       <>
+        //         {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
+        //       </>
+        //     ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
+        //   </strong>
+        // ) 
+        return (
+          <Switch>
+            <Switch.Case condition={data?.task_approval_date && _.includes([4,8,9], data?.board_column_id) }>
+              {dayjs(data?.task_approval_date).format('DD-MM-YYYY')} <br/>
+              {dayjs(data?.task_approval_date).format('hh:mm A')}
+            </Switch.Case>
+            
+            <Switch.Case condition={!data?.task_approval_date && data?.task_updated_at && _.includes([4,8,9], data?.board_column_id) }>
+              {dayjs(data?.task_updated_at).format('DD-MM-YYYY')} <br/>
+              {dayjs(data?.task_updated_at).format('hh:mm A')} <br/>
+            </Switch.Case>
+
+            <Switch.Case condition={!_.includes([4,8,9], data?.board_column_id) }>
+              --
+            </Switch.Case>
+          </Switch>
         )
       }
     },
@@ -452,3 +470,5 @@ export const SubTasksTableColumns = [
       </React.Fragment>
     )
   }
+
+ 
