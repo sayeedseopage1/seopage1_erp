@@ -238,8 +238,8 @@ export const SubTasksTableColumns = [
         const data = row?.original;
         return(
           <strong>
-            {Number(data?.board_column_id) === 4 ?
-              data?.task_submission_date && (
+            { 
+              data?.task_submission_date ? (
                 <>
                   {dayjs(data?.task_submission_date).format('DD-MM-YYYY')} <br/>
                   {dayjs(data?.task_submission_date).format('hh:mm A')} <br/>
