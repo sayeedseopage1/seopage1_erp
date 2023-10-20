@@ -1,11 +1,11 @@
-import { apiSlice } from "./apiSlice";            
+import { apiSlice } from "./apiSlice";
 
 const revisionApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
       // revisions
       getRevisions: build.query({
         query: () => `/account/tasks/revisions`,
-        providesTags: ["REVISIONS"] 
+        providesTags: ["REVISIONS"]
       }),
 
        // sales revision response
@@ -21,13 +21,13 @@ const revisionApi = apiSlice.injectEndpoints({
                 },
             }),
             invalidatesTags: ["REVISIONS"]
-        }) 
-    }),  
+        })
+    }),
 }) ;
 
 
 
-export const { 
+export const {
    useGetRevisionsQuery,
    useSaleRevisionActionMutation
  } = revisionApi;

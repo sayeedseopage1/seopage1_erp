@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import styles from "../styles/revision-page.module.css";
 import { RevisionTableColumns } from "../components/revision-page/RevisionTableColumns";
 import { User } from "../utils/user-details";
-import useSWR from "swr";
 import DataTable from "../ui/basic-table/DataTable";
 import Toaster from "../ui/Toaster";
-import Filterbar from "../components/filterbar/Filterbar";
+import Filterbar from "../components/revision-page/filterbar/Filterbar";
 import { useGetRevisionsQuery } from "../services/api/revisionApiSlice";
 
 const Revision = () => {
@@ -14,19 +13,12 @@ const Revision = () => {
 
     const {data, isFetching, isLoading} = useGetRevisionsQuery();
 
-    // // get data
-    // const { data, error, isLoading } = useSWR(
-    //     `/account/tasks/revisions`,
-    //     (url) => axios.get(url).then((res) => res.data)
-    // );
-
-     
 
     return (
         <section className={styles.revision_section_container}>
             {/* filter */}
             <div>
-                {/* <Filterbar /> */}
+                <Filterbar onFilter={(filters) => console.log(filters)} />
             </div>
             {/* end filter */}
             <div className={styles.table_container}>

@@ -1,0 +1,63 @@
+.select{
+    border: 1px solid rgb(0 0 0 / 5%);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.content{
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.options{
+    border-radius: 6px;
+    min-width: 180px;
+    max-width: 250px;
+    background-color: #fff;
+    z-index: 999;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 15%);
+    max-height: 400px;
+    overflow: hidden;
+    overflow-y: auto;
+    border: 1px solid rgb(0 0 0 / 10%);
+}
+
+
+.option{
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.option:hover{
+    background-color:  rgb(0 0 0 / 5%);
+}
+
+.option.selected{
+    background-color:  rgb(0 0 0 / 5%);
+}
+
+.search_box{
+    width: 100%;
+    padding: 6px;
+    background-color:rgb(0 0 0 / 15%);
+}
+
+.search_box input{
+    border: none;
+    width: 100%;
+    padding: 6px 10px;
+    background: rgb(255, 255, 255);
+}
+.wrapper{
+    max-height: 350px;
+    overflow: hidden;
+    overflow-y: auto;
+}

@@ -142,27 +142,64 @@ export class ProjectMangerGuideline {
 
 
 // task revisions
+// export class TaskRevision {
+//     constructor(data) {
+//       this.acceptAndContinue = data?.accept_statement;
+//       this.addedBy = data?.added_by;
+//       this.approvalStatus = data?.approval_status;
+//       this.clientRevisionAcknowledgement = data?.client_revision_acknowledgement;
+//       this.comment = data?.lead_comment;
+//       this.createdAt = data?.created_at;
+//       this.devComment = data?.dev_comment;
+//       this.id = data?.id;
+//       this.pmComment = data?.pm_comment;
+//       this.projectId = data?.project_id;
+//       this.revisionAcknowledgement = data?.revision_acknowledgement;
+//       this.revisionNo = data?.revision_no;
+//       this.revisionReason = data?.revision_reason;
+//       this.revisionStatus = data?.revision_status;
+//       this.taskId = data?.task_id;
+//       this.updatedAt = data?.updated_at;
+//       this.isDeniable = data?.is_deniable;
+//       this.isDeny = data?.is_deny;
+//       this.isAccept= data?.is_accept;
+//     }
+//   }
+
 export class TaskRevision {
     constructor(data) {
-      this.acceptAndContinue = data?.accept_statement;
-      this.addedBy = data?.added_by;
-      this.approvalStatus = data?.approval_status;
-      this.clientRevisionAcknowledgement = data?.client_revision_acknowledgement;
-      this.comment = data?.lead_comment;
-      this.createdAt = data?.created_at;
-      this.devComment = data?.dev_comment;
-      this.id = data?.id;
-      this.pmComment = data?.pm_comment;
-      this.projectId = data?.project_id;
-      this.revisionAcknowledgement = data?.revision_acknowledgement;
-      this.revisionNo = data?.revision_no;
-      this.revisionReason = data?.revision_reason;
-      this.revisionStatus = data?.revision_status;
-      this.taskId = data?.task_id;
-      this.updatedAt = data?.updated_at;
-      this.isDeniable = data?.is_deniable;
-      this.isDeny = data?.is_deny;
-      this.isAccept= data?.is_accept;
+        this.acknowledgementId = data.acknowledgement_id;
+        this.addedBy = data.added_by;
+        this.additionalAmount = data.additional_amount;
+        this.additionalDenyComment = data.additional_deny_comment;
+        this.additionalStatus = data.additional_status;
+        this.approvalStatus = data.approval_status;
+        this.clientPmDispute = data.client_pm_dispute;
+        this.createdAt = data.created_at;
+        this.denyReason = data.deny_reason;
+        this.devComment = data.dev_comment;
+        this.disputeBetween = data.dispute_between;
+        this.disputeCreated = data.dispute_created;
+        this.disputeId = data.dispute_id;
+        this.disputeStatus = data.dispute_status;
+        this.finalResponsiblePerson = data.final_responsible_person;
+        this.id = data.id;
+        this.isAccept = data.is_accept;
+        this.isDeniable = data.is_deniable;
+        this.isDeny = data.is_deny;
+        this.leadComment = data.lead_comment;
+        this.pmComment = data.pm_comment;
+        this.projectId = data.project_id;
+        this.revisionAcknowledgement = data.revision_acknowledgement;
+        this.revisionNo = data.revision_no;
+        this.revisionReason = data.revision_reason;
+        this.revisionStatus = data.revision_status;
+        this.saleAccept = data.sale_accept;
+        this.saleComment = data.sale_comment;
+        this.saleDeny = data.sale_deny;
+        this.salePerson = data.sale_person;
+        this.taskId = data.task_id;
+        this.updatedAt = data.updated_at;
     }
   }
 
@@ -189,7 +226,7 @@ export class SingleTask {
         this.subTaskTimeLog = task?.sub_task_time_log;
         this.totalTimeLog = task?.timeLog;
         this.milestoneID = Number(task?.milestone_id);
-        this.milestoneTitle = _.startCase(task?.milestone_title);
+        this.milestoneTitle = task?.milestone_title;
         this.category = new Category(task?.category);
         this.guidelines = task?.project_summary;
         this.description = task?.description;
@@ -200,10 +237,23 @@ export class SingleTask {
         this.workingEnvironment = task?.working_environment;
         this.workEnvData = task?.working_environment_data;
         this.hasProjectManagerGuideline = task?.pm_task_guideline ? true : false;
+        this.clientName = task?.client_name;
+        this.clientId = task?.clientId;
         this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
         this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision));
         this.taskSubTask = task?.taskSubTask;
+        this.taskType = task?.task_type;
+        this.pageType = task?.page_type;
+        this.pageName = task?.page_name;
+        this.pageUrl = task?.page_url;
         this.subtaskId = task?.subtask_id;
+        this.projectManagerId = task?.project_manager_id;
+        this.projectManagerAvatar = task?.project_manager_avatar;
+        this.projectManagerName = task?.project_manager_name;
+        this.projectManagerDesignation = task?.pm_designation;
+        this.subAcknowledgement = task?.sub_acknowledgement;
+        this.acknowledgement = task?.acknowledgement;
+        this.approvalStatus = task?.approval_status;
     }
 
     isLeadDeveloperAbleToSubmit () {

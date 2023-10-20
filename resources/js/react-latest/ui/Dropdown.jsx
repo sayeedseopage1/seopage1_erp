@@ -59,9 +59,9 @@ const DropdownItem = ({
     );
 };
 
-const DropdownToggle = ({ children, icon = true, className }) => {
+const DropdownToggle = ({ children, disabled=false, icon = true, className }) => {
     const { setIsOpen, isOpen, setReference } = useDropdown();
-    const toggle = () => setIsOpen(!isOpen);
+    const toggle = () => !disabled && setIsOpen(!isOpen);
     return (
         <div
             ref={setReference}
