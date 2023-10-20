@@ -442,6 +442,7 @@ class TaskController extends AccountBaseController
             'task_category.category_name',
             'task_files.filename',
             'project_time_logs.start_time','project_time_logs.end_time',
+            'task_submissions.created_at as task_submission_date',
 
 
             DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
@@ -465,6 +466,10 @@ class TaskController extends AccountBaseController
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
             ->leftJoin('task_files','task_files.task_id','tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+            })
 
 
             ->groupBy('tasks.id')
