@@ -278,7 +278,8 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
                         />
                     </div>
 
-                    <div className="col-12 col-md-6">
+                    {/* project */}
+                    {/* <div className="col-12 col-md-6">
                         <div className="form-group my-3">
                             <label
                                 className={`f-14 text-dark-gray mb-1`}
@@ -292,11 +293,11 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
                                 defaultValue={project}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
 
                     {/* Project Milestone Selection Menu */}
-                    <div className="col-12 col-md-6">
+                    {/* <div className="col-12 col-md-6">
                         <div className="form-group my-3">
                             <label
                                 className={`f-14 text-dark-gray mb-1`}
@@ -310,9 +311,10 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
                                 defaultValue={milestone?.milestone_title}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
 
+                    {/* parent task */}
                     <div className="col-12 col-md-6">
                         <div className="form-group my-3">
                             <label
@@ -418,7 +420,8 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
                         />
                     </div>
 
-                    <div className="col-12 col-md-6">
+                    {/* Set Estimate Time */}
+                    {/* <div className="col-12 col-md-6">
                         <div className="form-group my-3">
                             <label htmlFor="" className="f-14 text-dark-gray">
                                 Set Estimate Time{" "}
@@ -456,7 +459,7 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
                                 {estimation?.minutes_left} minutes
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="col-12">
                         <div className="form-group my-3">

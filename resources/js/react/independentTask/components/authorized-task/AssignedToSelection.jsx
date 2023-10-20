@@ -3,13 +3,17 @@ import * as React from 'react'
 import _  from 'lodash';
 import { useUsers } from '../../../hooks/useUsers';
 import Loader from '../Loader';
+import { User } from '../../../utils/user-details';
 
+const currentUser = new User(window.Laravel.user);
 
 const AssginedToSelection = ({selected, onSelect}) => {
     const [query, setQuery] = React.useState('');
     const {users, usersIsFetching: isFetching} = useUsers();
 
-    const employees = _.filter(users, user => _.includes([1, 2, 4, 5, 6, 7, 8, 9, 10], Number(user?.role_id)))
+    const employees = _.filter(users, user => _.includes([6, 9, 10], Number(user?.role_id)) || user.id === currentUser.id);
+
+    console.log(employees);
 
     const filteredData =
     query === ''
@@ -86,7 +90,10 @@ const AssginedToSelection = ({selected, onSelect}) => {
                                     <span className='badge badge-warning'>Working...</span> :
                                     <span className='badge badge-primary'>Open to Work</span> 
                                 }
-                                 
+                                {
+                                    employee.id === currentUser.id &&
+                                    <span className='badge badge-dark ml-2'>It's you</span>
+                                }
 
                             </span>
                             {selected ? (

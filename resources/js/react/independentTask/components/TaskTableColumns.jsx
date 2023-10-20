@@ -22,20 +22,20 @@ const compareDate = new CompareDate();
 
 export const TaskTableColumns = [
     // expand
-    {
-      id:'expend',
-      header: '',
-      cell: ({row, table}) => { 
-        const {pageIndex} = table.getState();
-        return(
-          <ExpandTask
-            row={row} 
-            table={table}
-            pageIndex={pageIndex}
-          />
-        )
-      }
-    },
+    // {
+    //   id:'expend',
+    //   header: '',
+    //   cell: ({row, table}) => { 
+    //     const {pageIndex} = table.getState();
+    //     return(
+    //       <ExpandTask
+    //         row={row} 
+    //         table={table}
+    //         pageIndex={pageIndex}
+    //       />
+    //     )
+    //   }
+    // },
 
     // unique id
     {
@@ -48,7 +48,7 @@ export const TaskTableColumns = [
           <>
               <abbr title={data?.heading} style={{textDecoration: 'none'}}>
                 <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                    <a href={`/account/tasks/${data?.u_id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
+                    <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
                 </div>
               </abbr>  
           </>
@@ -242,8 +242,8 @@ export const TaskTableColumns = [
         return(
           <Person
             url={`/account/employees/${data?.assigned_by_id}` }
-            avatar={data?.assigned_to_avator}
-            name={data?.assigned_to_name}
+            avatar={data?.assigned_by_avator}
+            name={data?.assigned_by_name}
           /> 
         )
       }

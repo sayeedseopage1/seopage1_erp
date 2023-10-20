@@ -175,6 +175,8 @@ class IndependentTaskController extends AccountBaseController
             }else{
                 $independent_task->client_name = $pendingParentTasks->client_name;
             }
+            $independent_task->created_by = $pendingParentTasks->added_by;
+            $independent_task->added_by = $pendingParentTasks->added_by;
             $independent_task->save();
 
 

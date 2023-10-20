@@ -316,7 +316,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
 
 
             // check violation words
-            const response = await checkRestrictedWords(task?.projectId).unwrap();
+            const response = await checkRestrictedWords('').unwrap();
 
             if(response.status === 400){
                 const error = new Object();
@@ -439,7 +439,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                 />
                             </div>
 
-                            <div className="col-12 col-md-6">
+
+                            {/* Milestone */}
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -453,7 +455,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                         defaultValue={milestone}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
@@ -471,7 +473,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                 </div>
                             </div>
 
-                            <div className="col-12 col-md-6">
+
+                            {/* Project */}
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -485,7 +489,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                         defaultValue={project}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
@@ -881,7 +885,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                 />
                             </div>
 
-                            <div className="col-12 col-md-6">
+
+                            {/* Set Estimate Time */}
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         htmlFor=""
@@ -922,7 +928,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                     Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
 
 

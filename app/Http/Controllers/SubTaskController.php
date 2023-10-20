@@ -50,29 +50,59 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-      //  dd($request->task_category_id);
-// DB::beginTransaction();
+        dd($request->all());
+ DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
 
         $startDate = $task->start_date->format($setting->date_format);
         $dueDate = !is_null($task->due_date) ? $task->due_date->format($setting->date_format) : '';
-        $task_title = Task::where('project_id', $task->project_id)
-                  ->where('heading', $request->title)
-                  ->first();
+        if($task->independent_task_status != null)
+        {
+            $task_title = Task::where('project_id', $task->project_id)
+            ->where('heading', $request->title)
+            ->first();
 
-        if ($task_title !== null) {
-            return response()->json(['title' => ['Task title should be unique on this project']], 422);
+  if ($task_title !== null) {
+      return response()->json(['title' => ['Task title should be unique on this project']], 422);
+  }
+
+        }else 
+        {
+            $task_title = Task::where('id', $task->id)
+            ->where('heading', $request->title)
+            ->first();
+
+  if ($task_title !== null) {
+      return response()->json(['title' => ['Task title should be unique on this project']], 422);
+  }
+
         }
-        $rules = [
-            'title' => 'required',
-            'estimate_hours' => 'required',
-            'estimate_minutes' => 'required',
-            'description' => 'required',
-            'user_id' => 'required',
+       
+        if($task->independent_task_status == 1){
+            $rules = [
+                'title' => 'required',
+              
+                'description' => 'required',
+                'user_id' => 'required',
+    
+    
+            ];
 
+        }else 
+        {
+            $rules = [
+                'title' => 'required',
+                'estimate_hours' => 'required',
+                'estimate_minutes' => 'required',
+                'description' => 'required',
+                'user_id' => 'required',
+    
+    
+            ];
 
-        ];
+        }
+        
         $validator = Validator::make($request->all(), $rules);
         if ($request->start_date == "Invalid Date" ) {
             return response($validator->errors(), 422);
@@ -150,9 +180,14 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
+        dd($subTask);
 
         $task_id = Task::where('id', $request->task_id)->first();
         $task_s = new Task();
+        if($task->independent_task_status == 1)
+        {
+            $task_s->independent_task_status = 1;
+        }
         $task_s->task_short_code = $task_id->task_short_code . '-' . $subTask->id;
         $task_s->heading = $subTask->title;
         $task_s->description = str_replace('<p><br></p>', '', trim($request->description));
@@ -186,6 +221,8 @@ class SubTaskController extends AccountBaseController
         $task_s->task_status = "pending";
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
+        $task_s->added_by = Auth::id();
+        $task_s->created_by= Auth::id();
         $task_s->pp_task_id = $task_id->pp_task_id;
         $task_s->save();
         $task_type = new TaskType();
@@ -204,7 +241,7 @@ class SubTaskController extends AccountBaseController
         $task_type->existing_design_link = $request->existing_design_link;
         $task_type->number_of_pages= $request->number_of_pages;
         $task_type->save();
-       // dd($task_type);
+        dd($task_type,$task_s);
 
 
         $authorization_action = new AuthorizationAction();
