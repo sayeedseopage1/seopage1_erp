@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { useStoreCommentMutation } from '../../../services/api/SingleTaskPageApi';
 import { User } from '../../../utils/user-details';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+
 
 const CommentSendBox = ({onCommentPost, task}) => {
   const [editMode, setEditMode] = React.useState(false);
@@ -22,6 +24,11 @@ const CommentSendBox = ({onCommentPost, task}) => {
   } 
 
   const handleSubmit = (e) => {
+    if (!comment && !files.length) {
+      toast.warning('Please write a comment');
+      return;
+    }
+
     e.preventDefault();
     const fd = new FormData();
     fd.append('comment', comment);

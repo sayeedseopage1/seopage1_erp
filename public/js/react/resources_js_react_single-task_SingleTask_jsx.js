@@ -1751,7 +1751,7 @@ var Guideline = function Guideline(_ref) {
       href: "#",
       onClick: handleExpend,
       className: "",
-      children: " Read full guideline "
+      children: " View more "
     }) : '', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "sp1_task_card--sub-card-modal",
       isOpen: expend,
@@ -2426,7 +2426,7 @@ var RevisionText = function RevisionText(_ref) {
         }), ":", " ", time]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-      className: "",
+      className: "px-3",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
           className: "sp1_ck_content",
@@ -2438,7 +2438,7 @@ var RevisionText = function RevisionText(_ref) {
         href: "#",
         className: "ml-2",
         onClick: toggleModal,
-        children: "Read full guideline"
+        children: "View more"
       }) : "", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_Insights_ui_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
         className: "sp1_task_card--sub-card-modal",
         isOpen: expend,
@@ -2472,19 +2472,8 @@ var RevisionText = function RevisionText(_ref) {
                   children: "Time"
                 }), ": ", time]
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
-                className: "d-block mb-2",
-                children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                  className: "font-weight-bold text-danger",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("strong", {
-                    children: "Reason: "
-                  })
-                }), " ", revision === null || revision === void 0 ? void 0 : revision.revisionAcknowledgement]
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
-                className: "font-weight-bold text-success",
-                children: "Commitment:"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                 className: "sp1_ck_content",
                 style: {
                   textIndent: "2rem"
@@ -2492,7 +2481,7 @@ var RevisionText = function RevisionText(_ref) {
                 dangerouslySetInnerHTML: {
                   __html: text
                 }
-              })]
+              })
             })]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: " __footer",
@@ -3412,7 +3401,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
@@ -3425,6 +3415,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -3462,6 +3453,10 @@ var CommentSendBox = function CommentSendBox(_ref) {
     setComment(data);
   };
   var handleSubmit = function handleSubmit(e) {
+    if (!comment && !files.length) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_8__.toast.warning('Please write a comment');
+      return;
+    }
     e.preventDefault();
     var fd = new FormData();
     fd.append('comment', comment);
@@ -3486,29 +3481,29 @@ var CommentSendBox = function CommentSendBox(_ref) {
   };
   var commentMode = function commentMode() {
     if (editMode) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "w-100",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "ck-editor-holder",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
             data: comment,
             onChange: handleEditorChange
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "mt-2",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h6", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
             children: "Attach Files"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_3__["default"], {
             files: files,
             setFiles: setFiles,
             uploadInputClass: "comment-file-upload",
             fileWrapperClass: "comment-uploaded-file"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
           className: "mt-3 d-flex align-items-center",
-          children: [isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: [isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             className: "cursor-processing mr-2",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
               className: "spinner-border text-white",
               role: "status",
               style: {
@@ -3516,11 +3511,11 @@ var CommentSendBox = function CommentSendBox(_ref) {
                 height: '18px'
               }
             }), "Processing..."]
-          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             className: "mr-2",
             onClick: handleSubmit,
             children: "Send"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             variant: "secondary",
             onClick: function onClick() {
               return setEditMode(false);
@@ -3530,26 +3525,26 @@ var CommentSendBox = function CommentSendBox(_ref) {
         })]
       });
     }
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       onClick: function onClick() {
         return setEditMode(true);
       },
       className: "__box",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("span", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
         children: "Write a comment ..."
       })
     });
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
     className: "sp1_task_comment_send_box",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "__avatar rounded-circle mr-2",
         style: {
           width: '36px',
           height: '36px'
         },
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("img", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
           src: auth === null || auth === void 0 ? void 0 : auth.getAvatar(),
           alt: "sender_name",
           width: "36px",
@@ -3557,7 +3552,7 @@ var CommentSendBox = function CommentSendBox(_ref) {
           className: "rounded-circle"
         })
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
       className: "__send-box",
       children: commentMode()
     })]
@@ -3903,10 +3898,14 @@ var InnerComment = function InnerComment(_ref) {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     replyMode = _React$useState4[0],
     setReplyMode = _React$useState4[1];
-  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0__.useState(''),
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
-    selectedEmoji = _React$useState6[0],
-    setSelectedEmoji = _React$useState6[1];
+    commentEdit = _React$useState6[0],
+    setCommentEdit = _React$useState6[1];
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0__.useState(""),
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    selectedEmoji = _React$useState8[0],
+    setSelectedEmoji = _React$useState8[1];
   var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User(comment.user) : null;
   var replies = comment === null || comment === void 0 ? void 0 : comment.replies;
   var handleReplyButtonClick = function handleReplyButtonClick(e) {
@@ -3923,7 +3922,7 @@ var InnerComment = function InnerComment(_ref) {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "__send-box flex-column align-items-start",
       style: {
-        maxWidth: '100%'
+        maxWidth: "100%"
       },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
         className: "d-flex align-items-center",
@@ -3947,19 +3946,23 @@ var InnerComment = function InnerComment(_ref) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
             className: "sp1_comment_time",
             style: {
-              color: '#888'
+              color: "#888"
             },
             children: (comment === null || comment === void 0 ? void 0 : comment.last_updated_at) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-              children: [dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format('MMM DD, YYYY '), " at \xA0", dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format('hh:mm a')]
+              children: [dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format("MMM DD, YYYY "), " ", "at \xA0", dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format("hh:mm a")]
             })
           })]
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "__box __reply_text w-100 my-1 text-dark",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        children:
+        /*#__PURE__*/
+        // commentEdit ?
+        // <CKEditorComponent /> :
+        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "sp1_ck_content sp1_message--body",
           style: {
-            overflow: 'hidden'
+            overflow: "hidden"
           },
           dangerouslySetInnerHTML: {
             __html: comment === null || comment === void 0 ? void 0 : comment.comment
@@ -3980,74 +3983,8 @@ var InnerComment = function InnerComment(_ref) {
             }, file === null || file === void 0 ? void 0 : file.name);
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-        className: "sp1_task_comment_actions",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Toggle, {
-            icon: false,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
-              className: "fa-regular fa-face-smile"
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Menu, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              lazyLoadEmojis: true
-            })
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
-          href: "#",
-          onClick: handleReplyButtonClick,
-          children: "Reply"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
-          href: "#",
-          children: "Delete"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
-          href: "#",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
-            className: "fa-solid fa-paperclip"
-          })
-        }), (replies === null || replies === void 0 ? void 0 : replies.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-          className: "replies_count",
-          onClick: function onClick() {
-            return setShowReplies(!showReplies);
-          },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-            className: "reply_auth_avatar",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle ml-2"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle ml-3"
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-            className: "ml-2",
-            children: "3 replies"
-          })]
-        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        className: "sp1_task_comment_actions"
       }), replyMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "mt-3 pl-3 w-100",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {

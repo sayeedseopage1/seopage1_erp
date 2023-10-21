@@ -59,7 +59,7 @@ class TaskCommentNotification extends Notification
        </p>'
        ;
        $header= '<p>
-          <h1 style="color: red; text-align: center;" >' . __('A new comment on '.$task->heading.' task') .'</b>'.'
+          <h1 style="color: red; text-align: center;" >' . __('New comment added: Client ('.$client->name.') Task ('.$task->heading.')') .'</b>'.'
       </h1>';
       $body= '<p>
         '.$sender->name.' has make a comment on this task ('.$task->heading.'). To check the details, follow this link.'.
@@ -80,7 +80,7 @@ class TaskCommentNotification extends Notification
    ;
   
           return (new MailMessage)
-          ->subject(__('[No Reply] New Comment on Task') )
+          ->subject(__('New comment added: Client ('.$client->name.') Task ('.$task->heading.')') )
   
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.task.task_comment', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
