@@ -226,12 +226,12 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
 
         const fd = new FormData();
-        fd.append("milestone_id", task?.milestoneID);
+        // fd.append("milestone_id", task?.milestoneID);
         fd.append("task_id", task?.id);
         fd.append("title", title);
         fd.append("start_date", _startDate);
         fd.append("due_date", _dueDate);
-        fd.append("project_id", task?.projectId);
+        // fd.append("project_id", task?.projectId);
         fd.append("task_category_id", taskCategory?.id);
         fd.append("user_id", assignedTo?.id);
         fd.append("description", description);
@@ -887,7 +887,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
 
 
                             {/* Set Estimate Time */}
-                            {/* <div className="col-12 col-md-6">
+                            <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         htmlFor=""
@@ -928,7 +928,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                     Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>
                                 </div>
-                            </div> */}
+                            </div>
 
 
 
