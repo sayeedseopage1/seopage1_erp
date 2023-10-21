@@ -3226,6 +3226,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+var currentUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User(window.Laravel.user);
 var InnerComment = function InnerComment(_ref) {
   var _comment$files_data;
   var comment = _ref.comment;
@@ -3237,12 +3238,20 @@ var InnerComment = function InnerComment(_ref) {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     replyMode = _React$useState4[0],
     setReplyMode = _React$useState4[1];
-  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0__.useState(''),
+  var _React$useState5 = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
-    selectedEmoji = _React$useState6[0],
-    setSelectedEmoji = _React$useState6[1];
+    commentEdit = _React$useState6[0],
+    setCommentEdit = _React$useState6[1];
+  var _React$useState7 = react__WEBPACK_IMPORTED_MODULE_0__.useState(''),
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    selectedEmoji = _React$useState8[0],
+    setSelectedEmoji = _React$useState8[1];
   var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User(comment.user) : null;
   var replies = comment === null || comment === void 0 ? void 0 : comment.replies;
+  console.log({
+    user: user,
+    currentUser: currentUser
+  });
   var handleReplyButtonClick = function handleReplyButtonClick(e) {
     e.preventDefault();
     setReplyMode(true);
@@ -3290,7 +3299,11 @@ var InnerComment = function InnerComment(_ref) {
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "__box __reply_text w-100 my-1 text-dark",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        children:
+        /*#__PURE__*/
+        // commentEdit ?
+        // <CKEditorComponent /> :
+        (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "sp1_ck_content sp1_message--body",
           style: {
             overflow: 'hidden'
@@ -3314,74 +3327,23 @@ var InnerComment = function InnerComment(_ref) {
             }, file === null || file === void 0 ? void 0 : file.name);
           })
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "sp1_task_comment_actions",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Toggle, {
-            icon: false,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
-              className: "fa-regular fa-face-smile"
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Menu, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              lazyLoadEmojis: true
-            })
+        children: user.id === currentUser.id && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+            children: "\u2022"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+            href: "#",
+            onClick: function onClick() {
+              return setCommentEdit(function (prev) {
+                return !prev;
+              });
+            },
+            children: "Edit"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+            children: "\u2022"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
-          href: "#",
-          onClick: handleReplyButtonClick,
-          children: "Reply"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
-          href: "#",
-          children: "Delete"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
-          href: "#",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("i", {
-            className: "fa-solid fa-paperclip"
-          })
-        }), (replies === null || replies === void 0 ? void 0 : replies.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-          className: "replies_count",
-          onClick: function onClick() {
-            return setShowReplies(!showReplies);
-          },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
-            className: "reply_auth_avatar",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle ml-2"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle ml-3"
-              })
-            })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
-            className: "ml-2",
-            children: "3 replies"
-          })]
-        })]
+        })
       }), replyMode && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
         className: "mt-3 pl-3 w-100",
         children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {

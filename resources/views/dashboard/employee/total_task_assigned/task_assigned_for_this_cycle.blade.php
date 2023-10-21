@@ -42,17 +42,30 @@
                     @foreach ($total_tasks_assigned_this_cycle_get as $item)
                         @php
                             $project = \App\Models\Project::where('id',$item->project_id)->first();
-                            $client = \App\Models\User::where('id',$project->client_id)->first();
+                            if($project != null)
+                            {
+                                $client = \App\Models\User::where('id',$project->client_id)->first();
+
+                            }
+                           
                             $taskboard_column = \App\Models\TaskboardColumn::where('id',$item->board_column_id)->first();
                         @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->heading }}</td>
                         <td>
+                            @if($project != null)
                             <a href="{{ route('projects.show',$project->id) }}">{{ $project->project_name }}</a>
+                            @else 
+                            -- 
+                            @endif
                         </td>
                         <td>
+                        @if($project != null)
                             <a href="{{ route('clients.show',$client->id) }}">{{ $client->name }}</a>
+                        @else 
+                        {{$item->client_name}}
+                        @endif
                         </td>
                         <td>{{ $item->due_date }}</td>
                         <td>
