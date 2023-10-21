@@ -80,6 +80,7 @@ use App\Models\DailySubmission;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
+use App\Notifications\TaskCommentNotification;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -4001,31 +4002,46 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-            $data = new TaskComment();
-            $data->comment = $request->comment;
-            $data->user_id = $this->user->id;
-            $data->task_id = $request->task_id;
-            $data->added_by = $this->user->id;
-            $data->last_updated_by = $this->user->id;
-
-            $data->save();
-            if ($request->hasFile('file')) {
-                $files = $request->file('file');
-                $destinationPath = storage_path('app/public');
-                $file_name = [];
-                foreach ($files as $file) {
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                    array_push($file_name, $filename);
-                    $file->move($destinationPath, $filename);
-                }
-                $data->files = $file_name;
+            //   /  DB::beginTransaction();
+                $data = new TaskComment();
+                $data->comment = $request->comment;
+                $data->user_id = $this->user->id;
+                $data->task_id = $request->task_id;
+                $data->added_by = $this->user->id;
+                $data->last_updated_by = $this->user->id;
+    
                 $data->save();
-            }
-
-            $data = TaskComment::find($data->id);
-            $data->last_updated_at = $data->updated_at;
-            return response()->json($data);
-        } elseif ($request->mode == 'comment_reply_store') {
+                $taskID= Task::where('id',$request->task_id)->first();
+                $task_member= TaskUser::where('task_id',$request->task_id)->first();
+                $projectID= Project::where('id',$taskID->project_id)->first();
+                $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$projectID->pm_id)->get();
+                $sender= User::where('id',Auth::id())->first();
+               
+                if ($request->hasFile('file')) {
+                    $files = $request->file('file');
+                    $destinationPath = storage_path('app/public');
+                    $file_name = [];
+                    foreach ($files as $file) {
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        array_push($file_name, $filename);
+                        $file->move($destinationPath, $filename);
+                    }
+                    $data->files = $file_name;
+                    $data->save();
+                    
+                }
+    
+                $data = TaskComment::find($data->id);
+                $data->last_updated_by = Auth::id();
+                $data->updated_at = $data->updated_at;
+               
+                $data->save();
+                foreach ($users as $user) {
+                    // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+                        Notification::send($user, new TaskCommentNotification($taskID,$sender));
+                    }
+                return response()->json($data);
+            }  elseif ($request->mode == 'comment_reply_store') {
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
             $data->reply = $request->comment;
