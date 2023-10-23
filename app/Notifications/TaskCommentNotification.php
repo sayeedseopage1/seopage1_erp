@@ -52,10 +52,24 @@ class TaskCommentNotification extends Notification
         $url = url('/account/tasks/'. $task->id);
         $project= Project::where('id',$task->project_id)->first();
         $sender= User::where('id',$this->sender->id)->first();
-        $task_comment = TaskComment::where('task_id', $task->id)->first();
+        $task_comment = TaskComment::where('task_id', $task->id)
+                        ->orderBy('created_at', 'desc')
+                        ->first();
 
         $pm= User::where('id',$project->pm_id)->first();
         $client= User::where('id',$project->client_id)->first();
+
+        if ($task_comment->files) {
+            $files = json_decode($task_comment->files);
+             $imgUrls = '';
+
+             foreach ($files as $item) {
+                $img = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/' . $item;
+               $imgUrls .= ' <img src="'.$img.'" alt="">';
+            }
+        }
+
+
         $greet= '<p>
            <b style="color: black">'  . '<span style="color:black">'.'Hello '.$notifiable->name. ','.'</span>'.'</b>
        </p>'
@@ -64,7 +78,7 @@ class TaskCommentNotification extends Notification
           <h1 style="color: red; text-align: center;" >' . __('New comment added: Client ('.$client->name.') Task ('.$task->heading.')') .'</b>'.'
       </h1>';
       $body= '<p>
-        '.$sender->name.' has make a comment on this task ('.$task->heading.'). To check the details, follow this link.'.
+        '.$sender->name.' added a comment on this task ('.$task->heading.'). To check the details, follow this link.'.
      '</p>'
      ;
      $content =
@@ -80,7 +94,12 @@ class TaskCommentNotification extends Notification
        <b style="color: black">' . __('Comment') . ': '.'</b>' .$task_comment->comment . '
    </p>'
 
+
    ;
+   $content .=
+   $imgUrls;
+
+//    dd($imgUrls);
 
 
           return (new MailMessage)
