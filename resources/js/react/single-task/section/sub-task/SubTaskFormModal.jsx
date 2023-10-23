@@ -98,6 +98,7 @@ export default function SubTaskFormController({
                 <LeadConfirmationModal
                     isOpen={true}
                     onConfirm={() => setVisibleInformationModal(false)}
+                    close = {close}
                 />
             </VisibleItem>
 

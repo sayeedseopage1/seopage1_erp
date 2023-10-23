@@ -97,7 +97,6 @@ export const RevisionTableColumns = [
         accessorFn: (row) => row.pm_comment || row.lead_comment,
         cell: ({ row }) => {
             const data = row.original;
-
             const text = data.pm_comment || data.lead_comment;
 
             return (

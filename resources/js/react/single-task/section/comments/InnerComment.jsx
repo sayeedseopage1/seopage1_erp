@@ -7,16 +7,11 @@ import { User } from "../../../utils/user-details";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 import FileUploader from "../../../file-upload/FileUploader";
 import dayjs from "dayjs";
-import Switch from '../../../global/Switch'
-import EditComment from "./EditComment";
-import ReplyComment from "./ReplyComment";
-import AttachmentUpload from "./AttachmentUpload";
 
 const InnerComment = ({ comment }) => {
     const [showReplies, setShowReplies] = React.useState(false);
     const [replyMode, setReplyMode] = React.useState(false);
-    const [activeEditMode, setActiveEditModal] = React.useState(false);
-    const [uploadAttachment, setUploadAttachment] = React.useState(false);
+    const [commentEdit, setCommentEdit] = React.useState(false);
     const [selectedEmoji, setSelectedEmoji] = React.useState("");
     const user = comment?.user ? new User(comment.user) : null;
 
@@ -25,30 +20,16 @@ const InnerComment = ({ comment }) => {
     const handleReplyButtonClick = (e) => {
         e.preventDefault();
         setReplyMode(true);
-        setActiveEditModal(false);
-        setUploadAttachment(false)
     };
-
-    // handle edit
-    const handleEditButton = (e) => {
-        e.preventDefault();
-        setReplyMode(false);
-        setUploadAttachment(false)
-        setActiveEditModal(true);
-    }
-
-    const handleUploadAttachment = (e) => {
-        e.preventDefault();
-        setReplyMode(false);
-        setActiveEditModal(false);
-        setUploadAttachment(true)
-    }
-
 
     // emoji selection control
     const handleEmojiSelect = (emojiData, event) => {
         setSelectedEmoji(emojiData.unified);
     };
+
+    React.useEffect(()=>{
+      console.log({comment});
+    },[comment])
 
     return (
         <div className="sp1_task_comment_send_box sp1_task_comment_replied pl-2 pb-2">
@@ -56,7 +37,7 @@ const InnerComment = ({ comment }) => {
                 className="__send-box flex-column align-items-start"
                 style={{ maxWidth: "100%" }}
             >
-                <div className="w-100 d-flex align-items-center">
+                <div className="d-flex align-items-center">
                     <div className="mr-2">
                         <div className="rounded-circle">
                             <img
@@ -92,11 +73,17 @@ const InnerComment = ({ comment }) => {
                 </div>
 
                 <div className="__box __reply_text w-100 my-1 text-dark">
-                    <div
-                        className="sp1_ck_content sp1_message--body"
-                        style={{ overflow: "hidden" }}
-                        dangerouslySetInnerHTML={{ __html: comment?.comment }}
-                    />
+                    {
+                        // commentEdit ?
+                        // <CKEditorComponent /> :
+                        <div
+                            className="sp1_ck_content sp1_message--body"
+                            style={{ overflow: "hidden" }}
+                            dangerouslySetInnerHTML={{
+                                __html: comment?.comment,
+                            }}
+                        />
+                    }
                 </div>
 
                 <div className="files">
@@ -117,86 +104,97 @@ const InnerComment = ({ comment }) => {
                 </div>
 
                 <div className="sp1_task_comment_actions">
-                    <Dropdown>
+                   {/* <Dropdown>
                         <Dropdown.Toggle icon={false}>
                             <i className="fa-regular fa-face-smile"></i>
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                            <EmojiPicker lazyLoadEmojis={true} />
+                            <EmojiPicker
+                                lazyLoadEmojis={true}
+                            />
                         </Dropdown.Menu>
-                    </Dropdown>
+                    </Dropdown> */}
 
-                    <span>•</span>
-                    <a href="#" onClick={handleReplyButtonClick}>
-                        Reply
-                    </a>
-                    <span>•</span>
-                    <a href="#"  onClick={handleEditButton} >Edit</a>
-                    <span>•</span>
-                    <a href="#">Delete</a>
-                    <span>•</span>
-                    <a href="#" onClick={handleUploadAttachment}>
-                        <i className="fa-solid fa-paperclip"></i>
-                    </a>
+                    {/* {
+                        user.id === currentUser.id &&
+                        <>
+                            <span>•</span>
+                            <a href="#" onClick={() => setCommentEdit(prev => !prev)}>Edit</a>
+                            <span>•</span>
+                        </>
+                    } */}
 
-                    {replies?.length > 0 && (
-                        <div
-                            className="replies_count"
-                            onClick={() => setShowReplies(!showReplies)}
-                        >
-                            <div className="reply_auth_avatar">
-                                <div>
-                                    <img
-                                        src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                                        alt="sender_name"
-                                        width="20px"
-                                        height="20px"
-                                        className="rounded-circle"
-                                    />
+                    {/* <span>•</span> */}
+                    {/* <a href="#" onClick={handleReplyButtonClick}>Reply</a> */}
+                    {/* <span>•</span> */}
+                    {/* <a href="#">Delete</a> */}
+                    {/* <span>•</span> */}
+                    {/* <a href="#"><i className="fa-solid fa-paperclip"></i></a> */}
+
+                    {/* {
+                        replies?.length > 0 && (
+                            <div className='replies_count' onClick={() => setShowReplies(!showReplies)}>
+                                <div className='reply_auth_avatar'>
+                                    <div>
+                                        <img
+                                            src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
+                                            alt='sender_name'
+                                            width="20px"
+                                            height="20px"
+                                            className='rounded-circle'
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <img
+                                            src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
+                                            alt='sender_name'
+                                            width="20px"
+                                            height="20px"
+                                            className='rounded-circle ml-2'
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <img
+                                            src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
+                                            alt='sender_name'
+                                            width="20px"
+                                            height="20px"
+                                            className='rounded-circle ml-3'
+                                        />
+                                    </div>
                                 </div>
-
-                                <div>
-                                    <img
-                                        src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                                        alt="sender_name"
-                                        width="20px"
-                                        height="20px"
-                                        className="rounded-circle ml-2"
-                                    />
-                                </div>
-
-                                <div>
-                                    <img
-                                        src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                                        alt="sender_name"
-                                        width="20px"
-                                        height="20px"
-                                        className="rounded-circle ml-3"
-                                    />
+                                <div className='ml-2'>
+                                    3 replies
                                 </div>
                             </div>
-                            <div className="ml-2">3 replies</div>
-                        </div>
-                    )}
+                        )
+                    } */}
                 </div>
 
-                <Switch>
-                    <Switch.Case condition={activeEditMode}>
-                        <EditComment comment={comment} />
-                    </Switch.Case>
-
-                    <Switch.Case condition={replyMode}>
-                        <ReplyComment comment={comment} />
-                    </Switch.Case>
-
-                    <Switch.Case condition={uploadAttachment}>
-                        <AttachmentUpload comment={comment} />
-                    </Switch.Case>
-                </Switch>
-
+                {/* reply box */}
+                {replyMode && (
+                    <div className="mt-3 pl-3 w-100">
+                        <div className="w-100">
+                            <div className="ck-editor-holder">
+                                <CKEditorComponent />
+                            </div>
+                            <div className="mt-3 d-flex align-items-center">
+                                <Button className="mr-2">Reply</Button>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => setReplyMode(false)}
+                                >
+                                    Close
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* reply box */}
 
-                {/* <div className='sp1_task_replies_comment_list w-100'>
+                {/* <div className='sp1_task_replies_comment_list w-100'> 
                 {showReplies && replies ? replies.map((r, i) => (
                     <div key={i} className='pl-3 border-left mt-3 w-100'>
                         <InnerComment replies={r.replies} />

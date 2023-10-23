@@ -87,6 +87,16 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
+        // edit comment
+        editComment: build.mutation({
+            query: (comment)=>({
+              url: `/account/task/${comment.id}/json?mode=comment_edit`,
+              method: 'POST',
+              body: comment,
+              formData: true,
+            })
+        }),
+
         //start time
         startTimerApi: build.mutation({
             query: (data) => ({
@@ -498,6 +508,7 @@ export const {
     useDeleteNoteUploadedFileMutation,
     useUpdateNoteMutation,
     useStoreCommentMutation,
+    useEditCommentMutation,
     useStartTimerApiMutation,
     useStopTimerApiMutation,
     useGetDeveloperTasksQuery,
