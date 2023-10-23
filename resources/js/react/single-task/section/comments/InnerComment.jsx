@@ -27,6 +27,10 @@ const InnerComment = ({ comment }) => {
         setSelectedEmoji(emojiData.unified);
     };
 
+    React.useEffect(()=>{
+      console.log({comment});
+    },[comment])
+
     return (
         <div className="sp1_task_comment_send_box sp1_task_comment_replied pl-2 pb-2">
             <div

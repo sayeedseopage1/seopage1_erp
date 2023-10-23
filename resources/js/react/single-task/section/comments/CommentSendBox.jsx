@@ -24,12 +24,13 @@ const CommentSendBox = ({onCommentPost, task}) => {
   } 
 
   const handleSubmit = (e) => {
+    e.preventDefault();
+    
     if (!comment && !files.length) {
       toast.warning('Please write a comment');
       return;
     }
 
-    e.preventDefault();
     const fd = new FormData();
     fd.append('comment', comment);
     fd.append('task_id', task?.id);

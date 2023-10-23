@@ -3883,6 +3883,7 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'task_comment') {
             $data = TaskComment::where('task_id', $id)->get();
+          //dd($data);
             foreach ($data as $value) {
                 $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
                 $value->total_replies = $replies->count();
@@ -4019,12 +4020,19 @@ class TaskController extends AccountBaseController
 
                 if ($request->hasFile('file')) {
                     $files = $request->file('file');
-                    $destinationPath = storage_path('app/public');
+                    $destinationPath = storage_path('app/public/');
                     $file_name = [];
+                    // foreach ($files as $file) {
+                    //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    //     array_push($file_name, $filename);
+                    //     $file->move($destinationPath, $filename);
+                    // }
                     foreach ($files as $file) {
                         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                         array_push($file_name, $filename);
-                        $file->move($destinationPath, $filename);
+                        
+                        // Store the file in AWS S3 using the 's3' disk
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                     }
                     $data->files = $file_name;
                     $data->save();

@@ -60,36 +60,36 @@ const ProjectManagerAcknowledgementModal = ({
                             <h5>Do you understand the following things?</h5>
                             <ol className={styles.order_list}>
                                 <li>
-                                    It is your job to decide what the look and feel of a website will be based on a few reference websites.
+                                    It is your job to decide the look and feel of a website based on a few reference websites.
                                 </li>
                                 <li>
-                                    It is your job is to research a theme based on the overall direction given by the client.
+                                It is your job to research a theme based on the overall direction given by the client. 
                                 </li>
                                 <li>
-                                    It is your job to research a plugin based on the overall direction given by the client.
+                                It is your job to research a plugin based on the overall direction given by the client. 
                                 </li>
-                                <li>It is your job to choose the color scheme of a website.</li>
+                                <li> It is your job to choose the color scheme of a website. </li>
                                 <li>
-                                It is your job to talk to the support for example the shopify support team, theme support, plugin support and any other support for any solution.
-                                </li>
-                                <li>
-                                    It is your job to create any tutorial or find them from youtube based on clients requirement during a project/after the completion of a project.
+                                It is your job to talk to the support. Example: Shopify support team, theme support, plugin support and any other support for any solution. 
                                 </li>
                                 <li>
-                                    You understand that the above things are critical for any projects success and the technical team may not be a good fit for them as they don’t have direct contact with the client. Assigning them to developers only means that you are skipping your core responsibility and you don’t care about the project’s fate
+                                It is your responsibility to either create tutorials or find them on YouTube as per the client's requirements that you received during or after project completion.
+                                </li>
+                                <li>
+                                You understand that the particulars mentioned above are vital for a project's success. Since the technical team does not have direct client interaction, assigning these responsibilities to developers indicates neglecting your core duties and not caring about the project's fate.
                                 </li>
                             </ol>
 
                             <p className="ml-2">
-                                In general, anything that has to do with requirements define (of any sort) has to be done by you. Developers job is to execute the work based on the defined requirements (In granular level).
+                            In general, anything that has to do with the defined requirements (of any sort) has to be done by you. The developer's job is to execute the work based on the defined requirements (In granular level). 
                             </p>
 
                             <p className="ml-2">
-                                If for any reason, you need developers help for any of the above things, you will have to create a separate task for each of them and those tasks have to be authorized by the top management mandatorily.
+                            If for any reason you need developers assistance regarding any of the above things, you will have to create a separate task for each of them, and those tasks have to be authorized by the top management mandatorily. 
                             </p>
 
                             <p className="ml-2">
-                                If you assign any of the above things as a regular task and if the technical team complains/files a report, you will receive some negative performance points after verification.
+                            If you assign any of the above things as a regular task and if the technical team complains/files a report, you will receive some negative performance points after verification.
                             </p>
 
                             <div className={styles.footer_label}>
