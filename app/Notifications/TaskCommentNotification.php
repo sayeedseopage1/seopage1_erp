@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notification;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\TaskComment;
 
 class TaskCommentNotification extends Notification
 {
@@ -46,12 +47,13 @@ class TaskCommentNotification extends Notification
      */
     public function toMail($notifiable)
     {
-       
+
         $task= Task::where('id',$this->task->id)->first();
         $url = url('/account/tasks/'. $task->id);
         $project= Project::where('id',$task->project_id)->first();
         $sender= User::where('id',$this->sender->id)->first();
-  
+        $task_comment = TaskComment::where('task_id', $task->id)->first();
+
         $pm= User::where('id',$project->pm_id)->first();
         $client= User::where('id',$project->client_id)->first();
         $greet= '<p>
@@ -66,22 +68,24 @@ class TaskCommentNotification extends Notification
      '</p>'
      ;
      $content =
-  
+
      '<p>
-        <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
+        <b style="color: black">' . __('Task Name') . ': '.'</b>' . '<a href="'.route('tasks.show',$task->id).'">'.$task->heading . '
     </p>'
     .
     '<p>
        <b style="color: black">' . __('Client Name') . ': '.'</b>' . '<a href="'.route('clients.show',$client->id).'">'.$client->name .'</a>'. '
+   </p>'.
+   '<p>
+       <b style="color: black">' . __('Comment') . ': '.'</b>' .$task_comment->comment . '
    </p>'
-    
-  
-  
+
    ;
-  
+
+
           return (new MailMessage)
           ->subject(__('New comment added: Client ('.$client->name.') Task ('.$task->heading.')') )
-  
+
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.task.task_comment', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);
     }
