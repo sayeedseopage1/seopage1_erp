@@ -49,6 +49,7 @@ trait PmDashboardAdminView
      */
     public function PmDashboardAdminView($pm)
     {
+        dd('adasd');
         $this->pm = $pm;
 
 
@@ -1057,7 +1058,6 @@ trait PmDashboardAdminView
  }
  public function PmDashboardAdminPmView($pm)
 {
-    // dd($pm);
      $this->pm = $pm;
 
     if (request('mode') == 'month' && request()->ajax() && request('pm_id')) {

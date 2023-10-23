@@ -66,7 +66,7 @@
                           <tr>
                             <td class="bg-light-grey border-right-0 f-w-500">
                                 Budget</td>
-                            <td class="border-left-0">{{$project->deal->actual_amount + $project->deal->upsell_actual_amount}}{{$currency->currency_symbol}}
+                            <td class="border-left-0">{{$project->deal->actual_amount}}{{$currency->currency_symbol}}
                             </td>
                         </tr>
                           <tr>
@@ -88,9 +88,9 @@
                             Estimated Hourly Rate</td>
                             <td class="border-left-0">
                                 @if($project->hours_allocated >  0 )
-                               
-                              {{round(($project->deal->amount+ $project->deal->upsell_amount)/$project->hours_allocated ,0)}}$/hour
-                              @else 
+
+                              {{round(($project->project_budget+$project->deal->upsell_amount)/$project->hours_allocated ,0)}}$/hour
+                              @else
                               --
                               @endif
                             </td>
@@ -141,7 +141,7 @@
                       </table>
 
                   </td>
-    
+
 </div>
 <?php
     $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
@@ -161,9 +161,9 @@
 
             <div class="col-md-12 mt-3">
                 @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
-                    <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project.You have already submitted deliverable time extension request. Please wait for confirmation.</h6>
+                <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project.You have already submitted deliverable time extension request. Please wait for confirmation.</h6>
                 @else
-                    <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
+                <h6 class="text-red">You cannot add deliverables as 24 hours have been past since you accepted the project. For authorization to enable the feature <a href="#"  data-toggle="modal" data-target="#deliverableauthorization">click here</a> to send approval request to top management.</h6>
                 @endif
             </div>
             @include('projects.modals.deliverableauthorizationmodal')
@@ -191,7 +191,7 @@
             </div>
             @endif
         @endif
-   
+
 
 
 
@@ -207,7 +207,7 @@
           @include('projects.modals.clientdeliverableaddmodal')
           @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
               <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
-                  <i class="fas fa-check"></i> 
+                  <i class="fas fa-check"></i>
                   Extend Time
               </button>
               @include('projects.modals.deliverableextensionacceptmodal')
@@ -217,9 +217,9 @@
               <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
               @include('projects.modals.deliverablefinalauthorizationacceptmodal')
           @endif
-          
+
       </div>
-  </div> 
+  </div>
   @endif
     <!-- CARD BODY START -->
     <div class="card-body">
@@ -288,7 +288,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -373,7 +373,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -438,7 +438,7 @@
                                         'column_name' => 'estimation_time',
                                     ])->latest()->first();
                                 @endphp
-                                
+
                                 @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
                                     <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
                                 @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
@@ -470,7 +470,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -527,7 +527,7 @@
                                     'column_name' => 'quantity',
                                 ])->latest()->first();
                             @endphp
-                            
+
                             @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
                                 <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
                             @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
@@ -559,7 +559,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -644,7 +644,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -719,7 +719,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -774,7 +774,7 @@
                                         'column_name' => 'estimation_completed_date',
                                     ])->latest()->first();
                                 @endphp
-                                
+
                                 @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
                                     <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
                                 @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
@@ -806,7 +806,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -1215,7 +1215,7 @@
                 denyButtonText: `Cancel`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                   //  $('#sendAuthorizationBtn').attr('disabled','disabld');
                     $("#sendAuthorizationBtn").attr("disabled", true);
                     $("#sendAuthorizationBtn").html("Processing...");

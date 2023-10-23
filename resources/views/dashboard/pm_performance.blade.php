@@ -1647,7 +1647,7 @@
                     monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
             }
 
-          //  console.log({monthDate:moment(monthDate).format('DD-MMM-YYYY')});
+            console.log({monthDate:moment(monthDate).format('DD-MMM-YYYY')});
 
             // previos btn action
             $('.fc-prev-button').click(function() {
@@ -1693,7 +1693,7 @@
         });
 
         function getData(mode, disableButton, date) {
-           // console.log(pm_id);
+        //    console.log(pm_id);
             $.easyAjax({
                 url: this.href,
                 type: "GET",
@@ -1701,7 +1701,7 @@
                 buttonSelector: disableButton,
                 data: {
                     mode: mode,
-                    pm_id: {{$pm->id}},
+                    pm_id: {{ $pm->id }},
                     startDate: date.format('YYYY-MM-DD'),
                 },
                 success: function(resp) {
