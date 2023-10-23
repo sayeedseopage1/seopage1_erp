@@ -5263,6 +5263,7 @@ class TaskController extends AccountBaseController
         ->leftJoin('working_environments','working_environments.project_id','tasks.project_id')
         ->leftJoin('users','users.id','daily_submissions.user_id')
         ->where('tasks.id',$id)
+        ->groupBy('daily_submissions.created_at')
         ->get();
         return response()->json([
             'daily_submissions'=> $daily_submissions,
