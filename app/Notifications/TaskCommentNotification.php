@@ -65,7 +65,7 @@ class TaskCommentNotification extends Notification
 
              foreach ($files as $item) {
                 $img = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/' . $item;
-               $imgUrls .= ' <img src="'.$img.'" alt="">';
+               $imgUrls .= ' <img src="'.$img.'" alt=""><br>';
             }
         }
 
@@ -92,13 +92,14 @@ class TaskCommentNotification extends Notification
    </p>'.
    '<p>
        <b style="color: black">' . __('Comment') . ': '.'</b>' .$task_comment->comment . '
+   </p>'. 
+   '<p>
+       <b style="color: black">' . __('Attachments') . ': '.'</b><br>' .$imgUrls . '
    </p>'
 
 
    ;
-   $content .=
-   $imgUrls;
-
+ 
 //    dd($imgUrls);
 
 
