@@ -100,6 +100,7 @@ class TaskObserver
     // phpcs:ignore
     public function updated(Task $task)
     {
+    //   /  dd($task);
         $movingTaskId = request()->has('movingTaskId'); // If task moved in taskboard
 
         if (!isRunningInConsoleOrSeeding()) {

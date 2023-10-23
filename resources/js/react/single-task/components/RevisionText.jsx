@@ -124,7 +124,7 @@ const RevisionText = ({ index, revision }) => {
                     <strong>Time</strong>:{" "}{time}
                 </span>
             </div>
-            <div className="">
+            <div className="px-3">
                 {/* {revision?.revisionAcknowledgement ?
                 <span className='d-block mb-2'>
                     <span className='font-weight-bold text-danger'> <strong>Reason: </strong>  </span>
@@ -143,7 +143,7 @@ const RevisionText = ({ index, revision }) => {
 
                 {isLong ? (
                     <a href="#" className="ml-2" onClick={toggleModal}>
-                        Read full guideline
+                        View more
                     </a>
                 ) : (
                     ""
@@ -173,7 +173,7 @@ const RevisionText = ({ index, revision }) => {
                                 </span>
                             </div>
                             <div>
-                                <span className="d-block mb-2">
+                                {/* <span className="d-block mb-2">
                                     {" "}
                                     <span className="font-weight-bold text-danger">
                                         <strong>Reason: </strong>
@@ -182,7 +182,7 @@ const RevisionText = ({ index, revision }) => {
                                 </span>
                                 <span className="font-weight-bold text-success">
                                     Commitment:
-                                </span>
+                                </span> */}
                                 <div
                                     className="sp1_ck_content"
                                     style={{ textIndent: "2rem" }}

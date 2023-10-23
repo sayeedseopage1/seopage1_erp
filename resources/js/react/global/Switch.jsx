@@ -1,13 +1,13 @@
 const Switch = ({children}) => {
     return(
-       <> {children} </>
-    )
+       <div> {children} </div>
+    ) 
  }
-
+ 
  const Case = ({children, condition}) => {
    if(!condition) return null;
    return (
-     <>{children}</>
+     <div>{children}</div>
    )
  }
 
