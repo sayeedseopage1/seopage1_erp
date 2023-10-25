@@ -829,12 +829,21 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
      /******* Independent TASK Start ******** */
     Route::resource('independent-task',IndependentTaskController::class);
+    Route::get('get-independent-task',[IndependentTaskController::class,'independentTaskGet'])->name('independent-task-get');
+    Route::get('independent-task-show',[IndependentTaskController::class,'independentTaskShow'])->name('independent-task-show');
+    Route::get('get-all-independent-task',[IndependentTaskController::class,'independentTaskAll'])->name('get-all-independent-task');
      /******* Independent TASK End ******** */
 
     /******* PENDING PARENT TASK CONVERSATION ******** */
     Route::get('pending-task-conversations/{task_id}', [TaskController::class, 'get_pending_parent_task_conversation_question'] )->name('pending-task-conversations');
     Route::post('pending-task-conversations', [TaskController::class, 'add_pending_parent_task_conversation_question'] )->name('create-pending-task-conversations');
     Route::put('pending-task-conversations', [TaskController::class, 'update_pending_parent_task_conversation_question_by_answer'] )->name('update-pending-task-conversations');
+
+
+    /******* INDEPENDENT TASK CONVERSATION ******** */
+    Route::get('independent-task-conversations/{id}', [IndependentTaskController::class, 'get_independent_task_conversation_question'] )->name('independent-task-conversations');
+    Route::post('create-independent-task-conversations', [IndependentTaskController::class, 'add_independent_task_conversation_question'] )->name('create-independent-task-conversations');
+    Route::put('update-independent-task-conversations', [IndependentTaskController::class, 'update_independent_task_conversation_question_by_answer'] )->name('update-independent-task-conversations');
 
     /******* TASK DISPUTE ******** */
     Route::get('task-disputes', [TaskController::class, 'get_disputes'])->name('task-disputes');
@@ -1288,7 +1297,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/developer/primary-page-authorization-count/',[TaskController::class,'PrimaryPageAuthorization']);
 
     Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
-
+    Route::get('/check-independent-task/{id}',[TaskController::class,'independenttask']);
+   
 
 
 

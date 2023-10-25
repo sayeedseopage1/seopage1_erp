@@ -50,6 +50,7 @@ class PendingParentTasksNotification extends Notification
 
 
         $client= User::where('id',$project->client_id)->first();
+        $pm= User::where('id',$project->pm_id)->first();
         $assingee_to= User::where('id',$pending_parent_tasks->user_id)->first();
         $added_by= User::where('id',$pending_parent_tasks->added_by)->first();
         $greet= '<p>
@@ -57,7 +58,7 @@ class PendingParentTasksNotification extends Notification
        </p>'
        ;
        $header= '<p>
-          <h1 style="color: red; text-align: center;" >' . __('You have a new pending parent task need to approve.') .'</b>'.'
+          <h1 style="color: red; text-align: center;" >' . __('Client '.$client->name.', Pm '.$pm->name.' ,Wants to assign his/her task to the team.') .'</b>'.'
       </h1>';
       $body= '<p>
         '.'You’ve Received a mail. To check the details, follow this link.'.
@@ -67,9 +68,6 @@ class PendingParentTasksNotification extends Notification
 
      '<p>
         <b style="color: black">' . __('Task Name') . ': '.'</b>' .$pending_parent_tasks->heading . '
-    </p>'.
-     '<p>
-        <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
     </p>'.
      '<p>
         <b style="color: black">' . __('Project Name') . ': '.'</b>' . '<a href="'.route('projects.show',$project->id).'">'.$project->project_name . '
@@ -88,7 +86,7 @@ class PendingParentTasksNotification extends Notification
    ;
 
           return (new MailMessage)
-          ->subject(__('Client '.$client->name.', You have a new pending parent task need to approve') )
+          ->subject(__('Client '.$client->name.', Pm '.$pm->name.' ,Wants to assign his/her task to the team') )
 
           ->greeting(__('email.hello') . ' ' . mb_ucwords($notifiable->name) . ',')
           ->markdown('mail.pending-parent-task.pending_parent_task', ['url' => $url, 'greet'=> $greet,'content' => $content, 'body'=> $body,'header'=>$header, 'name' => mb_ucwords($notifiable->name)]);

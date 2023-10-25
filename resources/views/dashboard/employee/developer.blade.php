@@ -274,8 +274,21 @@
                                                         }
                                                         @endphp
                                                     </td>
-                                                    <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                    <td>{{$value->project->deadline}}</td>
+                                                    <td>
+                                                    @if($value->project_id != null)    
+                                                    <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
+                                                        @else 
+                                                        -- 
+                                                        @endif
+                                                
+                                                </td>
+                                                    <td>
+                                                    @if($value->project_id != null)      
+                                                    {{$value->project->deadline}}
+                                                    @else 
+                                                    -- 
+                                                    @endif
+                                                </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
@@ -354,8 +367,20 @@
                                                         }
                                                         @endphp
                                                     </td>
-                                                    <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                    <td>{{$value->project->deadline}}</td>
+                                                    <td>
+                                                    @if($value->project_id != null)        
+                                                    <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
+                                                    @else 
+                                                    -- 
+                                                    @endif
+                                                </td>
+                                                    <td>
+                                                    @if($value->project_id != null)        
+                                                    {{$value->project->deadline}}
+                                                        @else 
+                                                        -- 
+                                                        @endif
+                                                </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
@@ -547,10 +572,23 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                        @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        -- 
+                                                        @endif
+                                                   
                                                     </td>
                                                     <td>
-                                                        <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        <span class="text-primary">
+                                                            @if($value->project_id != null)
+                                                            
+                                                        {{$value->project->client->name}}
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
+                                                    
+                                                    </span>
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -630,10 +668,19 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                        @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else
+                                                        --
+
+                                                        @endif
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -715,10 +762,19 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                        @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        --
+                                                        @endif
+                                                    
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -798,10 +854,18 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        --
+                                                        @endif
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -989,10 +1053,18 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        --
+                                                        @endif
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -1072,10 +1144,18 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        --
+                                                        @endif
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -1157,10 +1237,18 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        --
+                                                        @endif
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>
@@ -1240,10 +1328,18 @@
                                                         <a href="{{route('tasks.show', $value->id)}}" title="{{$value->heading}}">{{\Str::limit($value->heading, 20, ' ...')}}</a>
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
+                                                        @else 
+                                                        --
+                                                        @endif
                                                     </td>
                                                     <td>
+                                                    @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
+                                                        @else 
+                                                        {{$value->client_name}}
+                                                        @endif
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
                                                     <td>{{$value->estimate_hours}} h {{$value->estimate_minutes}} M</td>

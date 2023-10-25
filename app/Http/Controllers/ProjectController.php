@@ -835,7 +835,7 @@ class ProjectController extends AccountBaseController
             if ($find_project_id->status == 'not started') {
                 if ($this->user->role_id == 4) {
                     $type = 'project_manager_accept_project';
-                } 
+                }
                 $authorization_action = AuthorizationAction::where([
                     'deal_id' => $find_deal_id->id,
                     'project_id' => $find_project_id->id,
@@ -843,7 +843,7 @@ class ProjectController extends AccountBaseController
                     'authorization_for' => $this->user->id,
                     'status' => '0'
                 ])->first();
-        
+
                 if ($authorization_action) {
                     $authorization_action->authorization_by = Auth::id();
                     $authorization_action->approved_at = Carbon::now();
@@ -1043,17 +1043,17 @@ class ProjectController extends AccountBaseController
                     '</a> authorized the deal : <a style="color:blue" href="'.route('projects.show',$find_project_id->id).'">'
                     .$find_project_id->project_name. '</a>, Client: <a style="color:blue" href="'.route('clients.show',$find_project_id->client_id).'">'.
                     $find_project_id->client_name->name .'</a> (Accpeted By PM(' . $kpi->authorized_by_leader . '%))';
-        
+
                 $point->gained_as = "Individual";
                 $point->points= $earned_point;
                 $point->type = 'Authorization Bonus';
-        
+
                 if ($cash_points_team_lead != null) {
                     $point->total_points_earn=$cash_points_team_lead+ $earned_point/100;
                 } else {
                     $point->total_points_earn= $earned_point/100;
                 }
-        
+
                 $point->save();
             }
           //  dd($point);
@@ -1285,7 +1285,7 @@ class ProjectController extends AccountBaseController
 
                         // Set other fields as needed
                         $point->save();
-                       
+
                         CashPoint::where('user_id', $total_points->user_id)->where('type', 'Single Deal Bonus')->delete();
                         $updated_total_points=  CashPoint::where('user_id', $total_points->user_id)->orderBy('id','desc')->first();
                         $total_points=  CashPoint::where('user_id', $total_points->user_id)->sum('points');
@@ -1500,7 +1500,7 @@ class ProjectController extends AccountBaseController
                 //     $point->save();
                 // }
 
-                // //points for sales team lead 
+                // //points for sales team lead
                 // $kpi_settings = kpiSettingGenerateSale::where('kpi_id', $kpi->id)->where('bonus_status', 0)->get();
                 // // dd($kpi_settings);
                 // $user_name = User::where('role_id', 8)->first();
@@ -1944,7 +1944,7 @@ class ProjectController extends AccountBaseController
             // }
             $users = User::where('role_id', 1)->get();
 
-           
+
         }
 
 
@@ -2013,7 +2013,7 @@ class ProjectController extends AccountBaseController
         //$project->hours_allocated = 0;
         if ($request->project_challenge == 'No Challenge') {
         $project->status = 'in progress';
-        }else 
+        }else
         {
             $project->status = 'in progress';
 
@@ -2044,7 +2044,7 @@ class ProjectController extends AccountBaseController
             $project_update = Project::find($request->project_id);
              $project->status = 'in progress';
             $project_update->save();
- 
+
              $authorization_action = new AuthorizationAction();
              $authorization_action->model_name = $project->getMorphClass();
              $authorization_action->model_id = $project->id;
@@ -2063,7 +2063,7 @@ class ProjectController extends AccountBaseController
 
 
         // $this->logProjectActivity($project->id, 'Project accepted by ');
-       
+
 
         if ($project->project_status != 'Accepted') {
             foreach ($users as $user) {
@@ -2312,7 +2312,7 @@ class ProjectController extends AccountBaseController
             };
 
         }
-       
+
         $this->viewPermission = user()->permission('view_projects');
         $viewFilePermission = user()->permission('view_project_files');
         $viewMilestonePermission = user()->permission('view_project_milestones');
@@ -2341,8 +2341,8 @@ class ProjectController extends AccountBaseController
 
 
         $memberIds = $this->project->members->pluck('user_id')->toArray();
-      
-       
+
+
         abort_403(!($this->viewPermission == 'all'
             || $this->project->public
             || $this->viewProjectMemberPermission == 'all'
@@ -3142,8 +3142,8 @@ class ProjectController extends AccountBaseController
 
         $sign->signature = $imageName;
         $sign->save();
-        
-      
+
+
 
         event(new ProjectSignedEvent($this->project, $sign));
 
@@ -3630,7 +3630,7 @@ class ProjectController extends AccountBaseController
 //        $plugin_names = json_encode($data['plugin_name']);
 //        $plugin_urls = json_encode($data['plugin_url']);
         $project_cms = ProjectCms::where('cms_name',$request->cms_category)->first();
-       
+
         $project_portfolio = new ProjectPortfolio();
         $project_portfolio->project_id = $project->project_id;
         if ($project_cms) {
@@ -4437,7 +4437,7 @@ public function updateSalesBasicSeoShareCms(Request $request ,$id){
 }
 // ================== Update Web Content =======================
 public function updatePmWebContent(Request $request){
-    // DB::beginTransaction();
+    DB::beginTransaction();
     $data = $request->all();
     $folder_links = json_encode($data['folder_link']);
     $reference_websites = json_encode($data['reference_website']);
@@ -4566,7 +4566,7 @@ public function updatePmWebContent(Request $request){
     $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
     $task->saveQuietly();
 
-    $users = User::where('role_id',13)->get();
+    $users = User::where('role_id',11)->get();
     foreach ($users as $user) {
         $task_user = new TaskUser();
         $task_user->user_id = $user->id;
@@ -4692,7 +4692,7 @@ public function updatePmBlogArticle(Request $request){
      $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
      $task->saveQuietly();
 
-     $users = User::where('role_id',13)->get();
+     $users = User::where('role_id',11)->get();
      foreach ($users as $user) {
          $task_user = new TaskUser();
          $task_user->user_id = $user->id;
@@ -4812,7 +4812,7 @@ public function updatePmProductDescription(Request $request){
     $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
     $task->saveQuietly();
 
-    $users = User::where('role_id',13)->get();
+    $users = User::where('role_id',11)->get();
     foreach ($users as $user) {
         $task_user = new TaskUser();
         $task_user->user_id = $user->id;
@@ -4930,7 +4930,7 @@ public function updatePmProductCategory(Request $request){
     $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
     $task->saveQuietly();
 
-    $users = User::where('role_id',13)->get();
+    $users = User::where('role_id',11)->get();
     foreach ($users as $user) {
         $task_user = new TaskUser();
         $task_user->user_id = $user->id;
@@ -5048,7 +5048,7 @@ public function updatePmBasicSEO(Request $request){
     $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
     $task->saveQuietly();
 
-    $users = User::where('role_id',13)->get();
+    $users = User::where('role_id',11)->get();
     foreach ($users as $user) {
         $task_user = new TaskUser();
         $task_user->user_id = $user->id;
@@ -5446,7 +5446,7 @@ public function updatePmBasicSEO(Request $request){
         foreach ($users as $user) {
             Notification::send($user, new ProjectDeliverableTimeAcceptNotification($project_id));
         }
-      
+
 
 
         Toastr::success('Authorization request accepted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -5753,10 +5753,10 @@ public function updatePmBasicSEO(Request $request){
             } else {
             }
             $data = Project::select(
-                        'projects.id as id', 
+                        'projects.id as id',
                         'projects.status as project_status',
-                        'projects.project_name', 
-                        'users.id as client_id', 
+                        'projects.project_name',
+                        'users.id as client_id',
                         'users.name as client_name',
                         'users.status as client_status'
                     )
@@ -5766,10 +5766,10 @@ public function updatePmBasicSEO(Request $request){
         } else {
 
             $data = Project::select(
-                        'projects.id as id', 
+                        'projects.id as id',
                         'projects.status as project_status',
-                        'projects.project_name', 
-                        'users.id as client_id', 
+                        'projects.project_name',
+                        'users.id as client_id',
                         'users.name as client_name',
                         'users.status as client_status'
                     )
@@ -5782,25 +5782,25 @@ public function updatePmBasicSEO(Request $request){
     }
 
     public function get_project_details($id)
-    { 
-        
+    {
+
         $milestones= ProjectMilestone::select('project_milestones.*','project_milestones.milestone_title',
         'project_deliverables.deliverable_type','project_deliverables.title as deliverable_title','projects.project_name'
-        
+
         )
         ->join('projects','projects.id','project_milestones.project_id')
-        
+
         ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
         ->groupBy('project_milestones.id')
 
         ->where('project_milestones.project_id',$id)->get();
         $project = Project::where('id',$id)->first();
         $estimate_minutes_project= $project->hours_allocated *60;
-       
+
         if($estimate_minutes_project == 0)
         {
             $estimated_minutes_left = 0;
-        }else 
+        }else
         {
         $estimated_hours_tasks = Task::where('project_id',$project->id)->where('subtask_id','=',null)->sum('estimate_hours');
         $estimated_minutes_tasks = Task::where('project_id',$project->id)->where('subtask_id','=',null)->sum('estimate_minutes');
@@ -5811,8 +5811,8 @@ public function updatePmBasicSEO(Request $request){
         $estimated_minutes_left = $estimate_minutes_project - $total_minutes;
     //    / dd($estimated_hours_tasks);
         }
-        
-        
+
+
 
         return response()->json([
             'milestones' => $milestones,

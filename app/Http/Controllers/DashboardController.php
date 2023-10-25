@@ -436,16 +436,6 @@ class DashboardController extends AccountBaseController
         $this->pageTitle = 'PM Performance';
         return $this->PmDashboardAdminPmView($this->pm);
     }
-
-    // public function getPmData(Request $request){
-    //    // dd($request);
-    //     $this->pm = User::where('id', $request->selected_pm_id)->first();
-    //         $this->pageTitle = 'PM Performance';
-    //   //  dd("dkasdmlkas");
-
-    //             return $this->PmDashboardAdminPmView($this->pm);
-
-    // }
     public function coreMetric(){
         $this->pageTitle = "Update Core Metrics";
         $this->pm_core_metrics = PmCoreMetric::orderBy('id','desc')->first();
@@ -455,7 +445,7 @@ class DashboardController extends AccountBaseController
       {
         $validator =  $request->validate([
             'released_amount_for_cycle' => 'required|numeric|min:0',
-            'total_released_amount' => 'required|numeric|m      in:0',
+            'total_released_amount' => 'required|numeric|min:0',
             'avg_project_completion_time_for_cycle' => 'required|numeric|min:0',
             'avg_project_completion_time_in_cycle' => 'required|numeric|min:0',
             'progress_project_count' => 'required|numeric|min:0',

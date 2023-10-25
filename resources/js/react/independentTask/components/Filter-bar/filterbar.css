@@ -1,0 +1,83 @@
+.sp1_task_filter_bar{
+    width: 100%;
+    padding: 4px 16px;
+    background-color: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.sp1_task_filter_bar > .search_container{
+    width: 100%;
+    max-width: 250px;
+}
+
+.sp1_tasks_table_page.__date-picker{
+    background-color: #fff;
+    padding-inline: 6px;
+}
+
+.filter_divider {
+    width: 1px;
+    height: 40px;
+    background-color: #dddee6;
+    margin-inline: 6px;
+}
+
+.sp1_filter--users{
+    max-height: 324px;
+    overflow-y: auto;
+}
+
+.sp1_filter--user{
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.sp1_filter--user img{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.sp1_filter--user.active{
+    background: #e7efff;
+}
+
+.sp1_filter_button{
+    padding: 6px 10px;
+    display: flex;
+    align-items: center;
+}
+
+
+.sp1_filter_button:hover{
+    cursor: pointer;
+    background: #f1f1f1;
+}
+
+.sp1_filter_sidebar{
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    width: 200px;
+    height: 100vh;
+    overflow-y: auto;
+    background: #fff;
+    border-left: 1px solid #f3f3f3;
+    box-shadow: 0 -3px 6px #f8f8f8;
+}
+
+.sp1_filter_sidebar_header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f3f3f3;
+}
+
