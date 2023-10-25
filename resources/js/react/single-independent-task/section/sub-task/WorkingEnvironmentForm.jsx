@@ -83,7 +83,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                 await workingEnvironment(data).unwrap().then(res => {
                     toast.success('Working environment store successfully', {position: 'top-right'});
                     onSubmit();
-                    close();
+                    // close();
                 })
             }catch(err){
                 console.log(err)

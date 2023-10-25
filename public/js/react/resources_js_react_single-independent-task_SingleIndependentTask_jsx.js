@@ -8898,7 +8898,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
   var _window, _required_error$title, _required_error$start, _required_error$start2, _required_error$due_d, _required_error$due_d2, _ref3, _required_error$pageT, _required_error$pageT2, _ref6, _ref9, _ref12, _required_error$page_, _required_error$page_2, _required_error$descr, _required_error$descr2;
   var close = _ref.close,
     _ref$isFirstSubtask = _ref.isFirstSubtask,
-    isFirstSubtask = _ref$isFirstSubtask === void 0 ? true : _ref$isFirstSubtask;
+    isFirstSubtask = _ref$isFirstSubtask === void 0 ? false : _ref$isFirstSubtask;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -8907,61 +8907,46 @@ var SubTaskForm = function SubTaskForm(_ref) {
     isWorkingEnvironmentSubmit = _useSelector.isWorkingEnvironmentSubmit;
   var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_11__.useDispatch)();
   var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_15__.CompareDate();
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
-    _useState2 = _slicedToArray(_useState, 2),
-    showEnvForm = _useState2[0],
-    setShowEnvForm = _useState2[1];
+
   //   form data
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    _useState2 = _slicedToArray(_useState, 2),
+    title = _useState2[0],
+    setTitle = _useState2[1];
   var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
-    title = _useState4[0],
-    setTitle = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    parentTask = _useState4[0],
+    setParentTask = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState6 = _slicedToArray(_useState5, 2),
-    milestone = _useState6[0],
-    setMilestone = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    startDate = _useState6[0],
+    setStateDate = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState8 = _slicedToArray(_useState7, 2),
-    parentTask = _useState8[0],
-    setParentTask = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    dueDate = _useState8[0],
+    setDueDate = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState10 = _slicedToArray(_useState9, 2),
-    startDate = _useState10[0],
-    setStateDate = _useState10[1];
+    taskCategory = _useState10[0],
+    setTaskCategory = _useState10[1];
   var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState12 = _slicedToArray(_useState11, 2),
-    dueDate = _useState12[0],
-    setDueDate = _useState12[1];
+    assignedTo = _useState12[0],
+    setAssignedTo = _useState12[1];
+  // const [taskObserver, setTaskObserver] = useState("");
   var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState14 = _slicedToArray(_useState13, 2),
-    project = _useState14[0],
-    setProject = _useState14[1];
-  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
+    description = _useState14[0],
+    setDescription = _useState14[1];
+  // const [status, setStatus] = useState("To Do");
+  var _useState15 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Regular"),
     _useState16 = _slicedToArray(_useState15, 2),
-    taskCategory = _useState16[0],
-    setTaskCategory = _useState16[1];
-  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState18 = _slicedToArray(_useState17, 2),
-    assignedTo = _useState18[0],
-    setAssignedTo = _useState18[1];
-  var _useState19 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
-    _useState20 = _slicedToArray(_useState19, 2),
-    taskObserver = _useState20[0],
-    setTaskObserver = _useState20[1];
-  var _useState21 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
-    _useState22 = _slicedToArray(_useState21, 2),
-    description = _useState22[0],
-    setDescription = _useState22[1];
-  var _useState23 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("To Do"),
-    _useState24 = _slicedToArray(_useState23, 2),
-    status = _useState24[0],
-    setStatus = _useState24[1];
-  var _useState25 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("Regular"),
-    _useState26 = _slicedToArray(_useState25, 2),
-    priority = _useState26[0],
-    setPriority = _useState26[1];
+    priority = _useState16[0],
+    setPriority = _useState16[1];
+
   // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
   // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
+
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0___default().useState([]),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     files = _React$useState2[0],
@@ -8998,13 +8983,14 @@ var SubTaskForm = function SubTaskForm(_ref) {
     _React$useState18 = _slicedToArray(_React$useState17, 2),
     pageTypeName = _React$useState18[0],
     setPageTypeName = _React$useState18[1];
-  var _useState27 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
-    _useState28 = _slicedToArray(_useState27, 2),
-    err = _useState28[0],
-    setErr = _useState28[1];
+  var _useState17 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState18 = _slicedToArray(_useState17, 2),
+    err = _useState18[0],
+    setErr = _useState18[1];
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_16__.SingleTask(taskDetails);
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_17__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
-  var params = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_21__.useParams)();
+
+  // const params = useParams();
   var _useCreateSubtaskMuta = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_10__.useCreateSubtaskMutation)(),
     _useCreateSubtaskMuta2 = _slicedToArray(_useCreateSubtaskMuta, 2),
     createSubtask = _useCreateSubtaskMuta2[0],
@@ -9037,8 +9023,6 @@ var SubTaskForm = function SubTaskForm(_ref) {
 
   // handle change
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    setMilestone(task === null || task === void 0 ? void 0 : task.milestoneTitle);
-    setProject(task === null || task === void 0 ? void 0 : task.projectName);
     setParentTask(task === null || task === void 0 ? void 0 : task.title);
   }, [task]);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
@@ -9247,13 +9231,11 @@ var SubTaskForm = function SubTaskForm(_ref) {
     return text;
   };
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    var showEnv = (task === null || task === void 0 ? void 0 : task.workingEnvironment) === 0 ? lodash__WEBPACK_IMPORTED_MODULE_9___default().size(task === null || task === void 0 ? void 0 : task.subtask) === 0 ? true : false : false;
+    // const showEnv = _.size(task?.subtask) === 0 ? true : false;
     if (auth.getRoleId() === 6) {
-      if (isWorkingEnvironmentSubmit === undefined) {
-        dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_13__.setWorkingEnvironmentStatus)(showEnv));
-      }
+      dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_13__.setWorkingEnvironmentStatus)(isFirstSubtask));
     }
-  }, []);
+  }, [isFirstSubtask]);
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     console.log({
       isWorkingEnvironmentSubmit: isWorkingEnvironmentSubmit,
@@ -9278,18 +9260,18 @@ var SubTaskForm = function SubTaskForm(_ref) {
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
         className: "sp1-subtask-form --modal-panel-body sp1_subtask_form",
-        children: [isFirstSubtask && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_19__["default"], {
+        children: [isWorkingEnvironmentSubmit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_WorkingEnvironmentForm__WEBPACK_IMPORTED_MODULE_19__["default"], {
           task: task,
           onSubmit: function onSubmit() {
             return dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_13__.setWorkingEnvironmentStatus)(false));
           },
           close: close
         }), !isWorkingEnvironmentSubmit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_LeadConfirmationModal__WEBPACK_IMPORTED_MODULE_18__["default"], {
-          isOpen: !isWorkingEnvironmentSubmit && !showForm,
+          isOpen: !showForm,
           onConfirm: function onConfirm() {
             return setShowForm(true);
           }
-        }), !isWorkingEnvironmentSubmit && showForm && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
+        }), !isWorkingEnvironmentSubmit && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
           className: "sp1-subtask-form --form row",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
             className: "col-12 col-md-6",
@@ -9963,7 +9945,7 @@ var SubTaskSection = function SubTaskSection(_ref) {
         formMode: formMode,
         children: !edit ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_SubTaskForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
           close: closeAddModal,
-          isFirstSubtask: !isFetching && subTask !== null && subTask !== void 0 && subTask.length ? true : false
+          isFirstSubtask: !isFetching && subTask !== null && subTask !== void 0 && subTask.length ? false : true
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_SubTaskEditForm__WEBPACK_IMPORTED_MODULE_7__["default"], {
           close: closeEditForm,
           editId: edit
@@ -9974,7 +9956,7 @@ var SubTaskSection = function SubTaskSection(_ref) {
         isOpen: isTaskModalOpen,
         children: !edit ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_SubTaskForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
           close: closeAddModal,
-          isFirstSubtask: !isFetching && subTask !== null && subTask !== void 0 && subTask.length ? true : false
+          isFirstSubtask: !isFetching && subTask !== null && subTask !== void 0 && subTask.length ? false : true
         }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_SubTaskEditForm__WEBPACK_IMPORTED_MODULE_7__["default"], {
           close: closeEditForm,
           editId: edit
@@ -10950,7 +10932,7 @@ var WorkingEnvironmentForm = function WorkingEnvironmentForm(_ref) {
                 position: 'top-right'
               });
               onSubmit();
-              close();
+              // close();
             });
           case 5:
             _context.next = 10;

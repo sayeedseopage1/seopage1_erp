@@ -147,7 +147,7 @@ const SubTaskSection = ({status}) => {
                                 <SubTaskForm
                                     close={closeAddModal}
                                     isFirstSubtask={
-                                        !isFetching && subTask?.length ? true : false
+                                        !isFetching && subTask?.length ? false : true
                                     }
                                 />
                             ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
@@ -160,7 +160,7 @@ const SubTaskSection = ({status}) => {
                                 <SubTaskForm
                                     close={closeAddModal}
                                     isFirstSubtask={
-                                        !isFetching && subTask?.length ? true : false
+                                        !isFetching && subTask?.length ? false : true
                                     }
                                 />
                             ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
