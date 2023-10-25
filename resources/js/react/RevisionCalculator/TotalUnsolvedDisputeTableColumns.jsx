@@ -25,7 +25,7 @@ export const TotalUnsolvedDisputeTableColumns = [
 
             return (
                 <abbr title={text}>
-                    <a href={`/account/projects/${row?.projectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                    <a href={`/account/projects/${row?.ProjectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {text}
                     </a>
                 </abbr>
@@ -54,7 +54,7 @@ export const TotalUnsolvedDisputeTableColumns = [
             );
         },
     },
-    
+
 
     {
         id: "task_title",
@@ -71,7 +71,7 @@ export const TotalUnsolvedDisputeTableColumns = [
                 : "";
 
             return (
-                <abbr title={row?.task_title}> 
+                <abbr title={row?.task_title}>
                    <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {task_name}
                     </span>
@@ -96,8 +96,8 @@ export const TotalUnsolvedDisputeTableColumns = [
 
             return (
                 <abbr title={text}>
-                    <a 
-                        href={`/account/employees/${row?.revision_raised_by_id}`} 
+                    <a
+                        href={`/account/employees/${row?.revision_raised_by_id}`}
                         className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}
                     >
                         {text}
@@ -145,12 +145,12 @@ export const TotalUnsolvedDisputeTableColumns = [
                 ? _.includes(_.lowerCase(text), _.lowerCase(search))
                 : "";
 
-            return ( 
+            return (
                 <Popover>
-                <Popover.Button> <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`} >{text} </span> </Popover.Button> 
+                <Popover.Button> <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`} >{text} </span> </Popover.Button>
                 <Popover.Panel>
-                    <div className={styles.revision_popover_panel}> 
-                        {text} 
+                    <div className={styles.revision_popover_panel}>
+                        {text}
                     </div>
                 </Popover.Panel>
             </Popover>
@@ -165,7 +165,7 @@ export const TotalUnsolvedDisputeTableColumns = [
         sort: row => row?.dispute_creation_date,
         rowSpan: 2,
         searchText: (row) => `${row?.dispute_creation_date}`,
-        row: ({ row, table }) => { 
+        row: ({ row, table }) => {
             return (
                 <abbr title={row?.task_title}>
                 <span style={{minWidth: '160px'}}>{dayjs(row?.dispute_creation_date).format('DD MMM, YYYY')}</span> <br/>
@@ -174,7 +174,7 @@ export const TotalUnsolvedDisputeTableColumns = [
             );
         },
     },
-    
+
     {
         id: "reason_for_dispute",
         heading: "Reason for dispute",
@@ -232,9 +232,9 @@ export const TotalUnsolvedDisputeTableColumns = [
                                 <h6>Project Manager</h6>
                                 <p> {row?.reason_for_revision} </p>
                             </div>
-    
+
                             <div>
-                                <h6>Lead Developer</h6> 
+                                <h6>Lead Developer</h6>
                                 <p>{row?.deny_reason}</p>
                             </div>
                         </div>
@@ -246,9 +246,9 @@ export const TotalUnsolvedDisputeTableColumns = [
                                 <h6>Lead Developer</h6>
                                 <p> {row?.reason_for_revision} </p>
                             </div>
-    
+
                             <div>
-                                <h6>Developer</h6> 
+                                <h6>Developer</h6>
                                 <p>{row?.deny_reason}</p>
                             </div>
                         </div>
@@ -256,10 +256,10 @@ export const TotalUnsolvedDisputeTableColumns = [
                 }
             }
 
-            return ( 
+            return (
                 <Popover>
                     <Popover.Button>
-                        Contradictory claims between {responsible()}; 
+                        Contradictory claims between {responsible()};
                     </Popover.Button>
 
                     <Popover.Panel>
@@ -267,10 +267,10 @@ export const TotalUnsolvedDisputeTableColumns = [
                             { comment(row?.dispute_between)}
                         </div>
                     </Popover.Panel>
-                </Popover> 
+                </Popover>
             );
         },
-    }, 
+    },
 
     {
         id: "total_comments",
@@ -281,10 +281,9 @@ export const TotalUnsolvedDisputeTableColumns = [
         searchText: (row) => `${row?.disputes_comments}`,
         row: ({ row, table }) => {
 
-            return ( 
+            return (
                 <a
-                    href="/account/dispute"
-                    onClick={open} 
+                    href="/account/disputes"
                 >
                     {row?.disputes_comments}
                 </a>
@@ -319,7 +318,7 @@ const Comment = ({row}) => {
             >
                 {row?.disputes_comments}
             </a>
-            <Modal isOpen={isOpen}> 
+            <Modal isOpen={isOpen}>
                 <div className="sp1_modal-content-wrapper">
                     <div className="sp1_modal-panel sp1_task_auth_modal_table ">
                         {/* header */}
@@ -337,16 +336,16 @@ const Comment = ({row}) => {
                                 {_.times(10, i => (
                                     <div key={i} className={styles.comment_item}>
                                         <div className={styles.comment_item_header}>
-                                            
+
                                         </div>
                                         <div className={styles.comment_item_body}>
                                             <div>
                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, assumenda iste vitae exercitationem consequatur libero maiores deserunt quas sed fugit accusantium ducimus natus dicta, cumque animi ullam illo distinctio eaque.
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 ))}
- 
+
                             </div>
                         </div>
                     </div>

@@ -192,7 +192,7 @@
                     <p class="mb-0 f-21 font-weight-bold text-success d-grid mr-5">
                         <a href="#" data-toggle="modal" data-target="#completedProjectForCycle{{ count($no_of_finished_projects_previous_cycle) }}">{{round($project_completion_rate_count_previous_cycle_value,2)}}%</a>
                         <span class="f-12 font-weight-normal text-lightest">
-                            @lang('Completed/Finished projects for cycle')
+                            @lang('Completed/Finished projects in cycle')
                             <i class="fa fa-question-circle" aria-hidden="true" data-toggle="modal" data-target="#completed_or_finished_project_in_cycle_modal"></i>
                             @include('dashboard.card-data-modal.completed_or_finished_project_in_cycle')
                         </span>

@@ -1,19 +1,20 @@
-import React from "react"; 
-import { User } from "../../../../utils/user-details"; 
+import React from "react";
+import { User } from "../../../../utils/user-details";
 import Accordion from "../../../components/Accordion";
 import Guideline from "../../../components/Guideline";
 import RevisionText from "../../../components/RevisionText";
 import GenarelLoader from "../../../components/loader/GenarelLoader";
 import ArticleLoader from "../../../components/loader/ArticleLoader";
 import dayjs from "dayjs";
+import PMGuideline from "../../../components/PMGuideline";
 
-const Genarel = ({task, isFetching}) => { 
+const Genarel = ({task, isFetching}) => {
     const loggedUser = new User(window?.Laravel?.user);
 
-    
+
     return (
         <div className="row">
-            {isFetching ? <GenarelLoader /> : 
+            {isFetching ? <GenarelLoader /> :
                 <React.Fragment>
                     <div className="col-12 col-xl-6 pb-3 pb-xl-0">
                         <div className="d-flex flex-column" style={{ gap: "10px" }}>
@@ -41,8 +42,8 @@ const Genarel = ({task, isFetching}) => {
                                 <div className="sp1_st-list-item-head">Project : </div>
                                 <div className="sp1_st-list-item-value">
                                     <span className="dot-color bg-danger mr-2" />
-                                    <a href={`/account/projects/${task?.projectId}`} className="text-dark text-hover-underline"> 
-                                        {task?.projectName} 
+                                    <a href={`/account/projects/${task?.projectId}`} className="text-dark text-hover-underline">
+                                        {task?.projectName}
                                     </a>
                                 </div>
                             </div>
@@ -76,7 +77,7 @@ const Genarel = ({task, isFetching}) => {
                                         <span
                                             className={`d-block f-14 font-weight-bold`}
                                         >
-                                            <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a> 
+                                            <a href={task?.assigneeTo?.getUserLink()} className="text-dark hover-underline">{task?.assigneeTo?.getName()}</a>
                                             {Number(task?.assigneeTo?.getId()) ===
                                                 Number(loggedUser?.getId()) && (
                                                 <sup
@@ -115,7 +116,7 @@ const Genarel = ({task, isFetching}) => {
                                         <span
                                             className={`d-block f-14 font-weight-bold`}
                                         >
-                                            <a 
+                                            <a
                                                 href={task?.assigneeBy?.getUserLink()}
                                                 className="text-dark hover-underline"
                                             >
@@ -249,11 +250,47 @@ const Genarel = ({task, isFetching}) => {
 
             <div className="col-12 border-top py-4 mt-4">
                 <Accordion expendable={false} title="General Guidelines">
+
                     {
-                        isFetching ? 
-                        <ArticleLoader /> :
-                        <Guideline text={task?.guidelines} editorContainerClass="modal-guideline-editor-text" />
+                        isFetching ?
+                        <ArticleLoader /> :  <>
+                        {task?.hasProjectManagerGuideline && <div className="mb-3"><PMGuideline guideline={task?.PMTaskGuideline} /></div> }
+
+                            {!_.isEmpty(task?.workEnvData)  && (
+                                <div className="sp1_task_card--sub-card">
+                                    <div className="px-4 py-3" style={{background: '#F3F5F9'}}>
+                                        <h6 className="mb-2">Working Environment</h6>
+                                        <hr/>
+                                        <div className="row">
+                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                <span><strong>Working/Staging Site's URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.site_url}>View on new tab</a></span>
+                                            </div>
+
+                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                <span><strong>Frontend Password</strong>: <br/> {task?.workEnvData?.frontend_password}</span>
+                                            </div>
+
+                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                <span><strong>Working/Staging Site's Login URL</strong>: <br/> <a target="__blank" href={task?.workEnvData?.login_url}>View on new tab</a> </span>
+                                            </div>
+
+                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                <span><strong>Working/Staging Site's Username/Email</strong>: <br/> {task?.workEnvData?.email}</span>
+                                            </div>
+                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                <span><strong>Password</strong>: <br/> {task?.workEnvData?.password}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) }
+
+                            <Guideline text={task?.guidelines} task={task} workEnv={task?.workEnvData} editorContainerClass="modal-guideline-editor-text" />
+                        </>
                     }
+
+
+
                 </Accordion>
 
                 {_.size(task?.revisions) > 0 &&
@@ -276,7 +313,7 @@ const Genarel = ({task, isFetching}) => {
                                 />
                             ))
                         }
-                        
+
                     </Accordion>
                 }
 

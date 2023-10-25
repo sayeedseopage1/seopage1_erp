@@ -25,7 +25,7 @@ export const TotalDisputeTableColumn = [
 
             return (
                 <abbr title={text}>
-                    <a href={`/account/projects/${row?.projectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                    <a href={`/account/projects/${row?.ProjectId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
                         {text}
                     </a>
                 </abbr>
@@ -54,7 +54,7 @@ export const TotalDisputeTableColumn = [
             );
         },
     },
-    
+
 
     {
         id: "task_title",
@@ -96,8 +96,8 @@ export const TotalDisputeTableColumn = [
 
             return (
                 <abbr title={text}>
-                    <a 
-                        href={`/account/employees/${row?.revision_raised_by_id}`} 
+                    <a
+                        href={`/account/employees/${row?.revision_raised_by_id}`}
                         className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}
                     >
                         {text}
@@ -145,12 +145,12 @@ export const TotalDisputeTableColumn = [
                 ? _.includes(_.lowerCase(text), _.lowerCase(search))
                 : "";
 
-            return ( 
+            return (
                 <Popover>
-                <Popover.Button> <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`} >{text} </span> </Popover.Button> 
+                <Popover.Button> <span className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`} >{text} </span> </Popover.Button>
                 <Popover.Panel>
-                    <div className={styles.revision_popover_panel}> 
-                        {text} 
+                    <div className={styles.revision_popover_panel}>
+                        {text}
                     </div>
                 </Popover.Panel>
             </Popover>
@@ -158,7 +158,7 @@ export const TotalDisputeTableColumn = [
         },
     },
 
-   
+
     {
         id: "dispute_start_date",
         heading: "Dispute start date",
@@ -166,7 +166,7 @@ export const TotalDisputeTableColumn = [
         sort: row => row?.dispute_creation_date,
         rowSpan: 2,
         searchText: (row) => `${row?.dispute_creation_date}`,
-        row: ({ row, table }) => { 
+        row: ({ row, table }) => {
             return (
                 <abbr title={row?.task_title}>
                     <span style={{minWidth: '160px'}}>{dayjs(row?.dispute_creation_date).format('DD MMM, YYYY')}</span> <br/>
@@ -175,7 +175,7 @@ export const TotalDisputeTableColumn = [
             );
         },
     },
-    
+
     {
         id: "reason_for_dispute",
         heading: "Reason for dispute",
@@ -233,9 +233,9 @@ export const TotalDisputeTableColumn = [
                                 <h6>Project Manager</h6>
                                 <p> {row?.reason_for_revision} </p>
                             </div>
-    
+
                             <div>
-                                <h6>Lead Developer</h6> 
+                                <h6>Lead Developer</h6>
                                 <p>{row?.deny_reason}</p>
                             </div>
                         </div>
@@ -247,9 +247,9 @@ export const TotalDisputeTableColumn = [
                                 <h6>Lead Developer</h6>
                                 <p> {row?.reason_for_revision} </p>
                             </div>
-    
+
                             <div>
-                                <h6>Developer</h6> 
+                                <h6>Developer</h6>
                                 <p>{row?.deny_reason}</p>
                             </div>
                         </div>
@@ -259,11 +259,11 @@ export const TotalDisputeTableColumn = [
 
             const t = `Contradictory claims between ${responsible()}`;
 
-            return ( 
+            return (
                 <Popover>
                     <Popover.Button>
                         <abbr title={t}>
-                            <div className="multiline-ellipsis"> 
+                            <div className="multiline-ellipsis">
                                 {t}
                             </div>
                         </abbr>
@@ -274,10 +274,10 @@ export const TotalDisputeTableColumn = [
                             { comment(row?.dispute_between)}
                         </div>
                     </Popover.Panel>
-                </Popover> 
+                </Popover>
             );
         },
-    }, 
+    },
 
     {
         id: "total_comments",
@@ -290,25 +290,24 @@ export const TotalDisputeTableColumn = [
 
             return (
                 <a
-                    href="/account/dispute"
-                    onClick={open} 
+                    href="/account/disputes"
                 >
                     {row?.disputes_comments}
                 </a>
             );
         },
     },
-    
+
     {
         id: "resolved_y_n",
         heading: "Resolved (Y/N)",
         moveable: false,
         rowSpan: 2,
         row: ({ row, table }) => {
-            return ( 
+            return (
                 <span>
                     {row?.status ? 'Yes' : "No" }
-                </span>    
+                </span>
             );
         },
     },
@@ -321,7 +320,7 @@ export const TotalDisputeTableColumn = [
         searchText: (row) => `${row?.verdict}`,
         row: ({row}) => <Verdict row={row} />
     },
-     
+
 ];
 
 
@@ -371,7 +370,7 @@ const Comment = ({row}) => {
             >
                 {row?.disputes_comments}
             </a>
-            <Modal isOpen={isOpen}> 
+            <Modal isOpen={isOpen}>
                 <div className="sp1_modal-content-wrapper">
                     <div className="sp1_modal-panel sp1_task_auth_modal_table ">
                         {/* header */}
@@ -389,16 +388,16 @@ const Comment = ({row}) => {
                                 {_.times(10, i => (
                                     <div key={i} className={styles.comment_item}>
                                         <div className={styles.comment_item_header}>
-                                            
+
                                         </div>
                                         <div className={styles.comment_item_body}>
                                             <div>
                                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, assumenda iste vitae exercitationem consequatur libero maiores deserunt quas sed fugit accusantium ducimus natus dicta, cumque animi ullam illo distinctio eaque.
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 ))}
- 
+
                             </div>
                         </div>
                     </div>

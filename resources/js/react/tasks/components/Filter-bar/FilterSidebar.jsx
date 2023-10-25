@@ -3,6 +3,8 @@ import Button from '../Button';
 import UserFilter from './UserFilter';
 import StatusFilter from './StatusFilter';
 import DateTypeFilter from './DateTypeFilter';
+import { useAuth } from '../../../hooks/useAuth';
+import _ from 'lodash';
 
 const FilterSidebar = ({
     developer,
@@ -22,6 +24,7 @@ const FilterSidebar = ({
     close,
     isDev
 }) => {
+    const auth = useAuth();
   return (
     <div className='sp1_filter_sidebar'>
         <div className='sp1_filter_sidebar_header'>
@@ -32,38 +35,38 @@ const FilterSidebar = ({
         </div>
 
 
-        <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>  
+        <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>
             <DateTypeFilter state={dateType} setState={setDateType} />
 
-            <UserFilter 
-                title="Client" 
+            <UserFilter
+                title="Client"
                 state={client}
                 setState={setClient}
                 roleIds={null}
-            /> 
-            
+            />
 
-            <UserFilter 
-                title="Project Manager" 
+
+            <UserFilter
+                title="Project Manager"
                 state={pm}
                 setState={setPm}
                 roleIds={[4]}
-            /> 
+            />
 
-            <UserFilter 
-                title="Lead Developer" 
+            <UserFilter
+                title="Assigned By"
                 state={leadDeveloper}
                 setState={setLeadDeveloper}
-                roleIds={[6]}
-            /> 
-            
-            {!isDev &&  <UserFilter 
-                title="Developer" 
+                roleIds={_.includes([9, 10], auth.getRoleId()) ? [1,4] : [1, 6]}
+            />
+
+            {!isDev &&  <UserFilter
+                title="Assigned To"
                 state={developer}
                 setState={setDeveloper}
                 roleIds={[5, 9, 10]}
-            /> } 
-            
+            /> }
+
             <StatusFilter state={status} setState={setStatus} />
         </div>
     </div>

@@ -13,13 +13,15 @@ import TableFilter from "../components/table/TableFilter";
 import _ from "lodash";
 import { defaultColumnVisibility } from "../constant";
 
+
+const auth = new User(window.Laravel.user);
+
 const Subtasks = () => {
     const {tasks} = useSelector(s => s.tasks)
     const dispatch = useDispatch();
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
-    const auth = new User(window.Laravel.user);
-    const [columnVisibility, setColumnVisibility] = React.useState(defaultColumnVisibility)
+    const [columnVisibility, setColumnVisibility] = React.useState(new Object(defaultColumnVisibility(auth)))
 
     const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
 

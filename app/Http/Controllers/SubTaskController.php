@@ -224,6 +224,7 @@ class SubTaskController extends AccountBaseController
         $task_s->task_status = "pending";
         $task_s->dependent_task_id = $request->task_id;
         $task_s->subtask_id = $subTask->id;
+
         $task_s->added_by = Auth::id();
         $task_s->created_by= Auth::id();
         $task_s->pp_task_id = $task_id->pp_task_id;
@@ -233,6 +234,7 @@ class SubTaskController extends AccountBaseController
             $task_s->client_id = $task->client_id;
             $task_s->client_name = $task->client_name;
         }  
+
         $task_s->save();
         $task_type = new TaskType();
         $task_type->task_id= $task_s->id;

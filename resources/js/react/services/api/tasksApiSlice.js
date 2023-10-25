@@ -101,6 +101,7 @@ export const {
      useStoreProjectTaskMutation,
      useUpdateTaskMutation,
      useLazyGetTaskTypeDataQuery,
+     useGetTaskTypeDataQuery,
      useUpdateTasktypeAuthStatusMutation,
      useCheckUnAuthorizedTaskTypeQuery
 } = taskApiSlice;

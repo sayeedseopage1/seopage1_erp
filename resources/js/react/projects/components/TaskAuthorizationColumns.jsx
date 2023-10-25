@@ -11,13 +11,14 @@ export const AuthorizationColumns = [
         id: "date",
         header: 'Date',
         draggable: true,
+        accessorKey: "created_at",
         cell: ({ row, table })=> dayjs(row.original?.created_at).format('MMM DD, YYYY')
     },
     {
         id: "project",
         header: 'Project',
         draggable: true,
-
+        accessorKey: "project_name",
         cell: ({ row, table })=> (
             <Popover>
                 <Popover.Button>
@@ -27,7 +28,7 @@ export const AuthorizationColumns = [
                 </Popover.Button>
                 <Popover.Panel>
                     <div  className={styles.popover_panel}>
-                        <a href={`/account/projects/${row.original?.project_id}`} className="singleline-ellipsis">
+                        <a href={`/account/projects/${row.original?.project_id}`}>
                             { row.original?.project_name }
                         </a>
                     </div>
@@ -39,7 +40,7 @@ export const AuthorizationColumns = [
         id: "client",
         header: 'Client',
         draggable: true,
-
+        accessorKey: "client_name",
         cell: ({ row, table })=> (
            <PersonColumn
                 name= {row.original.client_name}
@@ -53,7 +54,7 @@ export const AuthorizationColumns = [
         id: "task",
         header: 'Task',
         draggable: true,
-
+        accessorKey: "heading",
         cell: ({ row, table })=> (
             <Popover>
                 <Popover.Button>
@@ -72,7 +73,7 @@ export const AuthorizationColumns = [
         id: "assignee_by",
         header: 'Assignee By',
         draggable: true,
-
+        accessorKey: "assignee_by_name",
         cell: ({ row, table })=> (
             <PersonColumn
                 name= { row.original?.assignee_by_name}
@@ -87,7 +88,7 @@ export const AuthorizationColumns = [
         id: "assignee_to",
         header: 'Assignee To',
         draggable: true,
-
+        accessorKey: "assignee_to_name",
         cell: ({ row, table })=> (
             <PersonColumn
                 name= { row.original?.assignee_to_name}
@@ -101,7 +102,6 @@ export const AuthorizationColumns = [
         id: "acknowledgement",
         header: 'Acknowledgement',
         draggable: true,
-
         cell: ({ row, table })=> {
             const subAcknowledgement = row.original?.sub_acknowledgement;
             const acknowledgement = row.original?.acknowledgement;

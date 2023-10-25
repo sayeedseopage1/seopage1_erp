@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }) => {
+    const [showSubmissionForm, setShowSubmissionForm] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
     const [attachmentLink, setAttachmentLink] = useState('');
@@ -45,6 +46,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
         return valid;
     }
 
+    // console.log(process.env.APP_URL)
 
     // daily update submission function
     const handleSubmit = () => {
@@ -69,10 +71,10 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
         files.forEach((file) => formData.append('file[]', file))
 
 
-        submitDailySubmission(formData)
+        const submit = () => {
+            submitDailySubmission(formData)
             .unwrap()
             .then(res => {
-                console.log(res);
                 if (res.mark_as_complete==="true" || res.mark_as_complete===true) {
                     navigate(`${location.pathname}?modal=complete-task`);
                 }
@@ -91,6 +93,21 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
                 setOpen(null);
             })
             .catch(err => console.log(err))
+        }
+
+
+        Swal.fire({
+            title: 'Do you want to finish this task for today?',
+            icon: 'info',
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: 'No'
+        }).then(res => {
+            if(res.isConfirmed){
+                submit();
+            }
+        })
     }
 
 
@@ -105,7 +122,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
 
                 <td className={`sp1_tlr_td`} style={{ minWidth: '50px' }}>{loading ? <Placeholder /> : index + 1}</td>
                 <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : data?.task_title}</td>
-                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> : 
+                <td className={`sp1_tlr_td`}>{loading ? <Placeholder /> :
                     data?.page_url ?
                         <a href={data.page_url} title={data.page_url} target="_blank">View Link</a>
                         :
@@ -141,6 +158,8 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
                     }
                 </td>
             </tr>
+
+
             {open === index && (
                 <tr className={``} style={{ border: "solid gray 1px", borderTop: "none" }}>
                     <td colSpan={6}>

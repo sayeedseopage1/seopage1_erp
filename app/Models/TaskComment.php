@@ -136,6 +136,7 @@ class TaskComment extends BaseModel
             if (isset($file_array) && is_array($file_array)) {
                 foreach ($file_array as $value) {
                     $ext = pathinfo($value, PATHINFO_EXTENSION); /* @phpstan-ignore-line */
+                    $type= '';
                     if (in_array($ext, ['png', 'jpe', 'jpeg', 'jpg', 'gif', 'bmp', 'ico', 'tif', 'svg', 'svgz', 'psd', 'csv'])) {
                         $type = 'images';
                     }

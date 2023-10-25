@@ -28,18 +28,18 @@ if (timeLogTableContainer) {
     const root = ReactDOM.createRoot(timeLogTableContainer);
     root.render(
         <React.StrictMode>
-            <Provider store={store}>    
+            <Provider store={store}>
                 <DndProvider backend={HTML5Backend}>
                    <ContextProvider>
                         <BrowserRouter basename='/account/time-log-report'>
                             <Routes>
                                 <Route path="/" element={<TimeLogTable />} >
-                                    <Route index element={<Navigate to="employee-wise" replace />} />
+                                    <Route index element={<Navigate to="task-wise" replace />} />
                                     <Route path='/employee-wise' element={
                                             <React.Suspense fallback={<PageLoader />}>
                                                 <EmployeeWiseTimeLogTable />
                                             </React.Suspense>
-                                        } 
+                                        }
                                     />
                                     <Route path='/project-wise' element={
                                         <React.Suspense fallback={<PageLoader />}>
@@ -63,8 +63,8 @@ if (timeLogTableContainer) {
                                     } />
                                 </Route>
                             </Routes>
-                        </BrowserRouter> 
-                    </ContextProvider> 
+                        </BrowserRouter>
+                    </ContextProvider>
                 </DndProvider>
             </Provider>
         </React.StrictMode>

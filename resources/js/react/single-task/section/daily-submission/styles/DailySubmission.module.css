@@ -63,7 +63,7 @@
 
 .label {
   position: absolute;
-  top: 30%; 
+  top: 30%;
   left: 12px;
   text-align: left;
   display: inline-block;
@@ -80,7 +80,7 @@
 }
 .input:hover, .input:focus { border: 1px solid #000; }
 
-.input:valid + .label, .input:focus + .label { 
+.input:valid + .label, .input:focus + .label {
   top: -6px;
   color: #000;
   font-weight: bold;

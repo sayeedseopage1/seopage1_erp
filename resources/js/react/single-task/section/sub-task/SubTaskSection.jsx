@@ -10,7 +10,7 @@ import {
 } from "../../../services/api/SingleTaskPageApi";
 import { useNavigate } from "react-router-dom";
 import { storeSubTasks } from "../../../services/features/subTaskSlice";
-import SubtTaskEditForm from "./SubTaskEditForm";
+import SubTaskEditForm from "./SubTaskEditForm";
 import CustomModal from "../../components/CustomModal";
 import {useWindowSize} from 'react-use';
 import Modal from "../../components/Modal";
@@ -20,6 +20,7 @@ import { SingleTask } from '../../../utils/single-task';
 import { subTaskCreationPermision } from "../../permissions";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
+import SubTaskFormController from "./SubTaskFormModal";
 
 const SubTaskSection = ({status}) => {
     const { task, subTask } = useSelector((s) => s.subTask);
@@ -33,7 +34,7 @@ const SubTaskSection = ({status}) => {
     const {width} = useWindowSize();
     const auth = new User(window?.Laravel?.user);
 
-    // check in progress task history 
+    // check in progress task history
     const [getInProgressTaskStatus, { isFetching: inProgressTaskStatus }] = useLazyGetInProgressTaskStatusQuery();
 
     const toggleAddButton = async () => {
@@ -44,7 +45,7 @@ const SubTaskSection = ({status}) => {
         //     }else{
         //         setIsTaskModalOpen(!isTaskModalOpen);
         //     }
- 
+
         // }catch(err){
         //     console.log(err)
         // }
@@ -135,26 +136,18 @@ const SubTaskSection = ({status}) => {
                             formMode={formMode}
                         >
                             {!edit ? (
-                                <SubTaskForm
-                                    close={closeAddModal}
-                                    isFirstSubtask={
-                                        !isFetching && subTask?.length ? true : false
-                                    }
-                                />
-                            ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
+                                <>
+                                    <SubTaskFormController close={closeAddModal} />
+                                </>
+                            ) : (<SubTaskEditForm close={closeEditForm} editId={edit} /> )}
                         </CustomModal>
                 </React.Fragment>:
                 <React.Fragment>
                     {/* modal */}
                         <Modal isOpen={isTaskModalOpen}>
                             {!edit ? (
-                                <SubTaskForm
-                                    close={closeAddModal}
-                                    isFirstSubtask={
-                                        !isFetching && subTask?.length ? true : false
-                                    }
-                                />
-                            ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
+                                <SubTaskFormController close={closeAddModal} />
+                            ) : (<SubTaskEditForm close={closeEditForm} editId={edit} /> )}
                         </Modal>
                 </React.Fragment>
             }
@@ -164,7 +157,7 @@ const SubTaskSection = ({status}) => {
             {isTaskModalOpen && (
                 <button
                     aria-label="openCommentModalButton"
-                    
+
                     className="sp1_task_right_dl_toggle"
                     onClick={toggleAddButton}
                     style={{ zIndex: isTaskModalOpen ? "110" : "" }}
@@ -197,7 +190,7 @@ const SubTaskSection = ({status}) => {
                 </div>
 
                {
-                    subTaskCreationPermision({task: Task, auth, status}) && 
+                    subTaskCreationPermision({task: Task, auth, status}) &&
                         <Button
                             variant="tertiary"
                             className="sp1_tark_add_item"
@@ -210,13 +203,13 @@ const SubTaskSection = ({status}) => {
                                 </React.Fragment>
                             ) : (
                                 <React.Fragment>
-                                    {inProgressTaskStatus ? 
+                                    {inProgressTaskStatus ?
                                     <Loader title="Loading..." />
                                     : <><i className="fa-solid fa-plus" style={{ fontSize: "12px" }} />  Sub Task</>}
                                 </React.Fragment>
                             )}
                         </Button>
-               } 
+               }
             </div>
 
             <div className="sp1_task_right_card--body">

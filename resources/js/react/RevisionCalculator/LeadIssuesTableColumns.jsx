@@ -1,4 +1,4 @@
-export const LeadIssuesTableColumns = [ 
+export const LeadIssuesTableColumns = [
     {
         id: "project_name",
         heading: "Project Name",
@@ -7,7 +7,7 @@ export const LeadIssuesTableColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/accounts/projects/${row?.projectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a> 
+        row: ({row}) => <a href={`/accounts/projects/${row?.ProjectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a>
     },
     {
         id: "client_name",
@@ -51,7 +51,7 @@ export const LeadIssuesTableColumns = [
                 </span>
             );
         },
-    },  
+    },
     {
         id: "revision_request_raised_by",
         heading: "Revision Requested By",
@@ -72,7 +72,7 @@ export const LeadIssuesTableColumns = [
                 </a>
             );
         },
-    }, 
+    },
     {
         id: "revision_requests_against",
         heading: "Revision Requests Against",
@@ -94,7 +94,7 @@ export const LeadIssuesTableColumns = [
                 </a>
             );
         },
-    }, 
+    },
     {
         id: 'reason_for_revision',
         heading: 'Reason for revision',
@@ -114,7 +114,7 @@ export const LeadIssuesTableColumns = [
         row: ({row}) =>{
             return <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'NO'}</span>
         }
-    },  
+    },
     {
         id: 'total_comments',
         heading: 'Total comments',
@@ -133,7 +133,7 @@ export const LeadIssuesTableColumns = [
         searchText: (row) => `${row?.verdict}`,
         row: ({row}) => <Verdict row={row} />
     },
-     
+
 ];
 
 

@@ -23,10 +23,10 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     const [timerId, setTimerId] = useState(null);
     const [seconds, setSeconds] = useState(0);
     const [isOpenConfirmationModal, setIsOpenConfirmationModal] =
-        useState(false); 
+        useState(false);
 
-    const dispatch = useDispatch(); 
-    const dayjs = new CompareDate(); 
+    const dispatch = useDispatch();
+    const dayjs = new CompareDate();
     const loggedUser = new User(window?.Laravel?.user);
     const navigate = useNavigate();
 
@@ -97,8 +97,8 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
     // stop timer api slice
     const [stopTimerApi, { isLoading: timerStopStatusIsLoading }] =
         useStopTimerApiMutation();
-    
-    
+
+
 
     // timer start control
     const startTimerControl = () => {
@@ -126,7 +126,9 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     });
                 }
             })
-            .catch((err) => { 
+            .catch((err) => {
+                // TODO: Need to check again backend condition...
+
                 if(err.status === 400){
                     if(err.data.acknowledgement_submitted === false){
                         Swal.fire({
@@ -139,14 +141,14 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                             /* Read more about isConfirmed, isDenied below */
                             if (result.isConfirmed) {
                                 dispatch(setLessTrackModal({
-                                    show: true, 
-                                    type: 'START_TIMER', 
+                                    show: true,
+                                    type: 'START_TIMER',
                                     date: dayjs.dayjs(err?.data?.date).format("MMM DD, YYYY"),
                                 }))
-                            } 
+                            }
                           })
                      }
-                     
+
                      else if(err.data.daily_submission_submitted === false){
                         Swal.fire({
                             title:  "You didn't submit last day daily submission",
@@ -158,18 +160,18 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                             /* Read more about isConfirmed, isDenied below */
                             if (result.isConfirmed) {
                                 navigate(`?modal=daily-submission&date_type=last-date`)
-                            } 
+                            }
                           })
                      }
-    
-                } 
+
+                }
             });
     };
 
     // start timer function
     const startTimer = (e) => {
         e.preventDefault();
-        
+
         startTimerFirstCheck(
             `/${task?.id}/json?mode=developer_first_task_check&project_id=${task?.projectId}`
         )
@@ -181,13 +183,13 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
             })
     };
 
-    
+
 
     /*********** End of Start Timer control ***************/
 
     // stop timer
-    const stopTimer = () => { 
-        //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`); 
+    const stopTimer = () => {
+        //navigate(`/account/tasks/${task?.id}?modal=daily-submission&trigger=stop-button`);
         stopTimerApi({ timeId: timerId })
             .unwrap()
             .then((res) => {
@@ -206,17 +208,17 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     });
                 }
             });
-    }; 
+    };
     const [getUserTrackTime, {
         isFetching: trackTimerFetcing
     }] = useLazyGetUserTrackTimeQuery();
 
-    // handle stop timer 
+    // handle stop timer
     const handleStopTimer = () => {
         // fetch data
         getUserTrackTime(loggedUser?.getId())
         .unwrap()
-        .then(res => { 
+        .then(res => {
             if(res){
                 let currentTime = dayjs.dayjs(res.current_time);
                 let target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
@@ -234,7 +236,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     stopTimer();
                 }
             }
-            
+
         })
         .catch(err => console.log(err))
     }
@@ -260,7 +262,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                             className="d-flex align-items-center btn-outline-dark text-dark"
                         >
                             <i className="fa-solid fa-circle-play" />
-                            <span>Start Timer</span> 
+                            <span>Start Timer</span>
                         </Button>
                     ) : (
                         <Button className="cursor-processing mr-2">
@@ -293,7 +295,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                     /> */}
 
                     {
-                        trackTimerFetcing ? 
+                        trackTimerFetcing ?
                         (
                             <Button className="cursor-processing">
                                 <div
@@ -324,7 +326,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                                 Stopping...
                             </Button>
                         )
-                    } 
+                    }
                 </React.Fragment>
             )}
 

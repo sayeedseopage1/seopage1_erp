@@ -26,8 +26,6 @@ import TaskAction from "./section/task-actions/TaskAction";
 import TimeLogSection from "./section/time-logs/TimeLogSection";
 import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
-import { singleTaskPagePermission } from "./permissions";
-import ERROR from "../global/ERROR";
 import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
 
 
@@ -58,19 +56,7 @@ const SingleTaskPage = () => {
                     task_revisions: data?.revisions,
                     taskSubTask: data?.Sub_Tasks,
                 }
-                const _task = new SingleTask(task);
-                let hasPermission = singleTaskPagePermission(_task, loggedUser);
-
-                if(!hasPermission){
-                    return throwError({
-                        title: 'Access Denied',
-                        message: "Access to this resource is forbidden. Please contact the administrator for assistance.",
-                        code: 403
-                    })
-                }else{
-                    dispatch(storeTask(task));
-                }
-
+                dispatch(storeTask(task));
             }
         })()
     }, [data]);
@@ -352,7 +338,7 @@ const SingleTaskPage = () => {
                                     expendable={false}
                                     title="General Guidelines"
                                 >
-                                   {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> }
+                                   {task?.hasProjectManagerGuideline && <div className="mb-3"><PMGuideline guideline={task?.PMTaskGuideline} /></div> }
 
 
 
@@ -385,7 +371,7 @@ const SingleTaskPage = () => {
                                         </div>
                                     ) }
 
-                                    <Guideline text={task?.guidelines} workEnv={task?.workEnvData} />
+                                    <Guideline text={task?.guidelines} task={task} workEnv={task?.workEnvData} />
                                 </Accordion>
 
                                 {
@@ -398,13 +384,21 @@ const SingleTaskPage = () => {
                                             color: "#fff",
                                         }}
                                     >
-                                        { _.map(task?.revisions, (revision, index) => (
+                                        {/* { _.map(task?.revisions, (revision, index) => (
                                              <RevisionText
                                                     key={revision?.id}
                                                     index={index + 1}
                                                     date={dayjs(revision.createdAt).format('MMM DD, YYYY')}
                                                     time={dayjs(revision.createdAt).format('hh:mm a')}
                                                     text={revision?.comment || revision?.devComment || revision?.pmComment}
+                                                    revision={revision}
+                                                />
+                                            ))
+                                        } */}
+                                        { _.map(task?.revisions, (revision, index) => (
+                                             <RevisionText
+                                                    key={revision?.id}
+                                                    index={index + 1}
                                                     revision={revision}
                                                 />
                                             ))

@@ -501,7 +501,6 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
                                 {estimateError(required_error)}
                             </div>
                             <div style={{ color: "red" }}>
-                                {console.log({a: projects?.minutes_left})}
                                 Estimation time can't exceed{" "}
                                 {convertTime(Number(projects?.minutes_left) > 0 ? Number(projects?.minutes_left) : 0)}
                             </div>

@@ -39,11 +39,4 @@ document.addEventListener("DOMContentLoaded", function () {
             e.target.blur();
         }
     });
-
-    // Optional: Add a focus event listener to blur the input when it's focused
-    // numberInputs.forEach(function (input) {
-    //     input.addEventListener("focus", function (e) {
-    //         e.target.blur();
-    //     });
-    // });
 });

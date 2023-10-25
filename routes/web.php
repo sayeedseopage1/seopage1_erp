@@ -1107,6 +1107,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('revision-calculator-data/dev-issues/{id}', [RevisionCalculatorController::class, 'DevIssue']);
     Route::get('revision-calculator-data/total-dispute/{id}', [RevisionCalculatorController::class, 'TotalDispute']);
     Route::get('revision-calculator-data/dispute-not-resolve/{id}', [RevisionCalculatorController::class, 'DisputeNotResolve']);
+    Route::get('revision-calculator-data/pending-issues/{id}', [RevisionCalculatorController::class, 'PendingIssues']);
 
 
     // Contracts

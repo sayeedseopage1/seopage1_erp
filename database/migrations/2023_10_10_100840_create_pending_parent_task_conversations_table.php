@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('pending_parent_task_conversations', function (Blueprint $table) {
             $table->id();
             $table->integer('pending_parent_task_id');
-            $table->string('question');
-            $table->string('answer')->nullable();
+            $table->longText('question');
+            $table->longText('answer')->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('replied_by')->nullable();
             $table->date('replied_date')->nullable();

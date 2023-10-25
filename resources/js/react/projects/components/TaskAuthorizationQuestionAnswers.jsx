@@ -91,7 +91,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, updateConversations }) => {
                         <div className={styles.ans}>
                             {conversation.replied_by ? (
                                 <>
-                                    <p>- {conversation.answer}</p>
+                                    <p><span className="text-success"><strong>Answer: </strong></span> {conversation.answer}</p>
                                     <span className={styles.ques_by}>
                                     -by
                                     <strong>{" " + conversation.replied_by_name + " "}</strong>

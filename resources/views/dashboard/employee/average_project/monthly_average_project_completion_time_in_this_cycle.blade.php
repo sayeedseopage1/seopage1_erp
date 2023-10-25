@@ -5,7 +5,7 @@
         <div class="modal-header">
           <div class="modal-title">
 
-            <h4>Average tasks completion rate in this cycle: {{round($average_completion_days_previous_cycle,2)}} days</h4>
+            <h4>Average Project completion rate in this cycle: {{round($average_completion_days_previous_cycle,2)}} days</h4>
 
           </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">

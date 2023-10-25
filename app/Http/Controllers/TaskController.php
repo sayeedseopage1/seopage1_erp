@@ -109,6 +109,7 @@ class TaskController extends AccountBaseController
             7 => "S",
             8 => "S",
             9 => "UD",
+            10 => "GD",
             "null" => "C"
         ];
     }
@@ -382,7 +383,12 @@ class TaskController extends AccountBaseController
             'taskboard_columns.column_name','taskboard_columns.label_color','project_time_logs.created_at as task_start_date',
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
             'project_time_logs.start_time','project_time_logs.end_time',
+
             'tasks.client_name as ind_client_name','ind_client.id as ind_client_id','ind_client.name as ind_existing_client_name',
+
+            'task_submissions.created_at as task_submission_date',
+            'tasks.updated_at as task_updated_at',
+
 
 
 
@@ -391,9 +397,11 @@ class TaskController extends AccountBaseController
         )
             ->where('sub_tasks.task_id', $id)
             ->join('tasks','tasks.subtask_id','sub_tasks.id')
+
             ->leftJoin('projects', 'projects.id', 'tasks.project_id')
             ->leftJoin('users as client', 'client.id', 'projects.client_id')
             ->leftJoin('users as ind_client', 'ind_client.id', 'tasks.client_id')
+
             ->join('task_users', 'task_users.task_id', 'tasks.id')
             ->join('users as assigned_to', 'assigned_to.id', 'task_users.user_id')
             ->join('users as added_by', 'added_by.id', 'tasks.added_by')
@@ -405,6 +413,10 @@ class TaskController extends AccountBaseController
             ->leftJoin('project_time_logs','project_time_logs.task_id','tasks.id')
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+            })
 
         ->groupBy('tasks.id')
             ->orderBy('id', 'desc')
@@ -445,7 +457,13 @@ class TaskController extends AccountBaseController
             'tasks.created_at as creation_date','tasks.updated_at as completion_date',
             'task_category.category_name',
             'task_files.filename',
+
             'tasks.client_name as ind_client_name','ind_client.id as ind_client_id','ind_client.name as ind_existing_client_name',
+
+            'project_time_logs.start_time','project_time_logs.end_time',
+            'task_submissions.created_at as task_submission_date',
+            'tasks.updated_at as task_updated_at',
+
 
 
             DB::raw('(SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE task_id = tasks.id) as subtasks_hours_logged'),
@@ -470,6 +488,10 @@ class TaskController extends AccountBaseController
             ->leftJoin('project_deliverables','project_deliverables.milestone_id','project_milestones.id')
             ->leftJoin('task_approves','task_approves.task_id','tasks.id')
             ->leftJoin('task_files','task_files.task_id','tasks.id')
+            ->leftJoin('task_submissions', function ($join) {
+                $join->on('task_submissions.task_id', '=', 'tasks.id')
+                    ->whereRaw('task_submissions.created_at = (SELECT MAX(created_at) FROM task_submissions WHERE task_id = tasks.id)');
+            })
 
 
             ->groupBy('tasks.id')
@@ -730,7 +752,8 @@ class TaskController extends AccountBaseController
 
     public function TaskReview(Request $request)
     {
-    // dd($request);
+
+       // DB::beginTransaction();
         $validator = Validator::make($request->input(), [
             'link' => 'required|array',
             'link.*' => 'required|url|min:1',
@@ -774,6 +797,7 @@ class TaskController extends AccountBaseController
                 $task_submit->submission_no = $order->submission_no + 1;
             }
             $task_submit->save();
+
         }
 
         if ($request->link != null) {
@@ -795,7 +819,6 @@ class TaskController extends AccountBaseController
                 $task_submit->save();
             }
         }
-       // dd($task_submit);
 
         if ($request->file('file') != null) {
             foreach ($request->file('file') as $att) {
@@ -824,10 +847,15 @@ class TaskController extends AccountBaseController
 
 
 
-        $task = Task::find($request->task_id);
+
+        $task = Task::where('id',$request->task_id)->first();
+      //  dd($task);
         $task->board_column_id = 6;
         $task->task_status = "submitted";
+
         $task->save();
+      //  dd($task);
+
         $board_column = TaskBoardColumn::where('id',$task->board_column_id)->first();
      //   dd($task_submit,$task,$board_column);
 
@@ -849,8 +877,9 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' mark task complete',
             'redirectUrl' => route('tasks.show', $task->id)
         ]);
+        //dd("hdbjasdbjasd");
 
-        Notification::send($user, new TaskSubmitNotification($task_id, $sender));
+         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
         //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return response()->json([
@@ -1856,6 +1885,8 @@ class TaskController extends AccountBaseController
         $total_minutes = $request->estimate_minutes;
         $total_in_minutes = $total_hours + $total_minutes;
         $task->estimate_time_left_minutes = $total_in_minutes;
+        $task->added_by = Auth::id();
+        $task->created_by = Auth::id();
 
 
         $task->save();
@@ -2801,85 +2832,95 @@ class TaskController extends AccountBaseController
 
 
      /************* CLIENT HAS REVISION *************** */
-    public function clientHasRevision(Request $request)
-    {
+     public function clientHasRevision(Request $request)
+     {
 
 
-        $dispute_between = explode('x', $request->acknowledgement_id)[0];
+         $dispute_between = explode('x', $request->acknowledgement_id)[0];
 
-        $auth = Auth::user();
+         $auth = Auth::user();
 
 
-        // chagne board column status
-        $task_status = Task::find($request->task_id);
-        $task_status->task_status = "revision";
-        $task_status->board_column_id = 1;
-        $task_status->save();
+         // chagne board column status
+         $task_status = Task::find($request->task_id);
+         $task_status->task_status = "revision";
+         $task_status->board_column_id = 1;
+         $task_status->save();
 
-        $sale = null;
-        if($dispute_between == 'SPR'){
-            // find sale person
-            $project_deal_id = Project::find($task_status->project_id)->deal_id;
-            $sale = Deal::find($project_deal_id)->added_by;
-       }
-
-        // store revision on revision table
-        $task_revision = new TaskRevision(); // instance of TaskRevision
-
-        $task_revision->pm_comment= $request->comment;
-        $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
-        $task_revision->task_id = $request->task_id;
-        $task_revision->is_deniable = $request->is_deniable;
-
-        if($request->is_deniable == false && $auth->role_id != 1 ){
-            $task_revision->final_responsible_person = $this->role[$auth->role_id];
+         $sale = null;
+         if($dispute_between == 'SPR'){
+             // find sale person
+             $project_deal_id = Project::find($task_status->project_id)->deal_id;
+             $sale = Deal::find($project_deal_id)->added_by;
         }
 
+         // store revision on revision table
+         $task_revision = new TaskRevision(); // instance of TaskRevision
 
-        // if ($task_status->subtask_id != null) {
-        //     $task_revision->subtask_id = $task_status->subtask_id;
-        // }
-        $task_revision->revision_status = "Client Has Revision";
+         $task_revision->pm_comment= $request->comment;
+         $task_revision->revision_acknowledgement = $request->revision_acknowledgement;
+         $task_revision->task_id = $request->task_id;
+         $task_revision->is_deniable = $request->is_deniable;
 
-        $task_revision->project_id = $task_status->project_id;
-        $task_revision->acknowledgement_id = $request->acknowledgement_id;
-        $task_revision->additional_amount= $request->additional_amount;
-        $task_revision->additional_status= $request->additional_status;
-        $task_revision->additional_deny_comment=$request->additional_comment;
-        $task_revision->sale_person = $sale;
-
-        $task_revision->dispute_created = $request->dispute_create;
-        $task_revision->dispute_between = $dispute_between;
-
-        $task_revision->added_by = Auth::id();
-        $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
-        foreach ($taskRevisionFind as $taskRevision) {
-            $taskRevision->revision_no = $taskRevision->revision_no + 1;
-            $taskRevision->save();
-        }
-        // $parentTask = Subtask::where('task_id',$request->task_id)->get();
-        // dd($parentTask);
-        // foreach ($parentTask as $subtask){
-        //     $subTask = Task::where('subtask_id',$subtask->id)->first();
-        //     $updateTask = Task::find($subTask->id);
-        //     $updateTask->status= "incomplete";
-        //     $updateTask->task_status= "revision";
-        //     $updateTask->board_column_id=1;
-        //     $updateTask->save();
-        // }
-        // dd($task_revision);
-        $task_revision->save();
+         if($request->is_deniable == false && $auth->role_id != 1 ){
+             $task_revision->final_responsible_person = $this->role[$auth->role_id];
+         }
 
 
-        // CREATE DISPUTE
-        if($request->dispute_create){
-            $this->create_dispute($task_revision, $request);
-        }
+         // if ($task_status->subtask_id != null) {
+         //     $task_revision->subtask_id = $task_status->subtask_id;
+         // }
+         $task_revision->revision_status = "Client Has Revision";
 
-        return response()->json([
-            'status' => 200,
-        ]);
-    }
+         $task_revision->project_id = $task_status->project_id;
+         $task_revision->acknowledgement_id = $request->acknowledgement_id;
+         $task_revision->additional_amount= $request->additional_amount;
+         $task_revision->additional_status= $request->additional_status;
+         $task_revision->additional_deny_comment=$request->additional_comment;
+         $task_revision->sale_person = $sale;
+
+         $task_revision->dispute_created = $request->dispute_create;
+         $task_revision->dispute_between = $dispute_between;
+         if($dispute_between == 'CPR'){
+            $task_revision->final_responsible_person = 'C';
+         }
+
+         $task_revision->added_by = Auth::id();
+         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
+         foreach ($taskRevisionFind as $taskRevision) {
+             $taskRevision->revision_no = $taskRevision->revision_no + 1;
+             $taskRevision->save();
+         }
+         // $parentTask = Subtask::where('task_id',$request->task_id)->get();
+         // dd($parentTask);
+         // foreach ($parentTask as $subtask){
+         //     $subTask = Task::where('subtask_id',$subtask->id)->first();
+         //     $updateTask = Task::find($subTask->id);
+         //     $updateTask->status= "incomplete";
+         //     $updateTask->task_status= "revision";
+         //     $updateTask->board_column_id=1;
+         //     $updateTask->save();
+         // }
+         // dd($task_revision);
+         $task_revision->save();
+
+         $clientRevisionCount = TaskRevision::where('acknowledgement_id', 'CPRx06')
+                                 -> where('task_id', $task_revision->id)
+                                 ->count();
+
+         if($clientRevisionCount >= 5){
+             $task_revision->dispute_created = true;
+             $task_revision->save();
+         }
+         // CREATE DISPUTE
+         if($task_revision->dispute_created ){
+             $this->create_dispute($task_revision);
+         }
+
+         return response()->json([
+             'status' => 200,
+         ]);
+     }
 
 
     //ACCEPT AND CONTINUE BUTTON SECTION
@@ -3443,6 +3484,7 @@ class TaskController extends AccountBaseController
             $task = Task::with('users', 'createBy', 'boardColumn')->select([
                 'tasks.*',
                 'task_types.page_type',
+                'task_types.task_type',
                 'task_types.page_name',
                 'task_types.page_url',
                 'task_types.task_type_other',
@@ -3489,6 +3531,14 @@ class TaskController extends AccountBaseController
                 // if($task->subtask_id !=null){
                 //     $ppSubTask = SubTask::where('id',$task->subtask_id)->first();
                 //     $ppTask = Task::where('id',$ppSubTask->task_id)->first();
+
+                //     $task->ppTask_id = $ppTask->pp_task_id;
+                // }
+
+                // if($task->subtask_id !=null){
+                //     $ppSubTask = SubTask::where('id',$task->subtask_id)->first();
+                //     $ppTask = Task::where('id',$ppSubTask->task_id)->first();
+                //     // dd($ppTask);
 
                 //     $task->ppTask_id = $ppTask->pp_task_id;
                 // }
@@ -3866,6 +3916,7 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'task_comment') {
             $data = TaskComment::where('task_id', $id)->get();
+          //dd($data);
             foreach ($data as $value) {
                 $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
                 $value->total_replies = $replies->count();
@@ -3985,46 +4036,55 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-        //   /  DB::beginTransaction();
-            $data = new TaskComment();
-            $data->comment = $request->comment;
-            $data->user_id = $this->user->id;
-            $data->task_id = $request->task_id;
-            $data->added_by = $this->user->id;
-            $data->last_updated_by = $this->user->id;
 
-            $data->save();
-            $taskID= Task::where('id',$request->task_id)->first();
-            $task_member= TaskUser::where('task_id',$request->task_id)->first();
-            $projectID= Project::where('id',$taskID->project_id)->first();
-            $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$projectID->pm_id)->get();
-            $sender= User::where('id',Auth::id())->first();
-           
-            if ($request->hasFile('file')) {
-                $files = $request->file('file');
-                $destinationPath = storage_path('app/public');
-                $file_name = [];
-                foreach ($files as $file) {
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                    array_push($file_name, $filename);
-                    $file->move($destinationPath, $filename);
-                }
-                $data->files = $file_name;
+            //    DB::beginTransaction();
+                $data = new TaskComment();
+                $data->comment = $request->comment;
+                $data->user_id = $this->user->id;
+                $data->task_id = $request->task_id;
+                $data->added_by = $this->user->id;
+                $data->last_updated_by = $this->user->id;
+
                 $data->save();
-                
-            }
+                $taskID= Task::where('id',$request->task_id)->first();
+                $task_member= TaskUser::where('task_id',$request->task_id)->first();
+                $projectID= Project::where('id',$taskID->project_id)->first();
+                $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$projectID->pm_id)->get();
+                $sender= User::where('id',Auth::id())->first();
 
-            $data = TaskComment::find($data->id);
-            $data->last_updated_by = Auth::id();
-            $data->updated_at = $data->updated_at;
-           
-            $data->save();
-            foreach ($users as $user) {
-                // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
-                    Notification::send($user, new TaskCommentNotification($taskID,$sender));
+                if ($request->hasFile('file')) {
+                    $files = $request->file('file');
+                    $destinationPath = storage_path('app/public/');
+                    $file_name = [];
+                    // foreach ($files as $file) {
+                    //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    //     array_push($file_name, $filename);
+                    //     $file->move($destinationPath, $filename);
+                    // }
+                    foreach ($files as $file) {
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        array_push($file_name, $filename);
+                        
+                        // Store the file in AWS S3 using the 's3' disk
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                    }
+                    $data->files = $file_name;
+                    $data->save();
+
                 }
-            return response()->json($data);
-        } elseif ($request->mode == 'comment_reply_store') {
+
+                $data = TaskComment::find($data->id);
+                $data->last_updated_by = Auth::id();
+                $data->updated_at = $data->updated_at;
+
+                $data->save();
+                foreach ($users as $user) {
+                    // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+                        Notification::send($user, new TaskCommentNotification($taskID,$sender));
+                    }
+                return response()->json($data);
+            }  elseif ($request->mode == 'comment_reply_store') {
+
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
             $data->reply = $request->comment;
@@ -4125,6 +4185,7 @@ class TaskController extends AccountBaseController
             $stop_time->date= $request->date;
             $stop_time->client= $request->client;
             $stop_time->save();
+
             $task= Task::where('id',$request->task_id)->first();
             if($task->subtask_id == null)
             {
@@ -4147,6 +4208,7 @@ class TaskController extends AccountBaseController
             {
                 $parent_task_action = "No Subtask on this parent tasks";
             }
+
 
             return response()->json([
                 'stop_time' => $stop_time,
@@ -4236,7 +4298,7 @@ class TaskController extends AccountBaseController
     public function GetRevision($id)
     {
         $task_revision= TaskRevision::where('task_id',$id)->orderBy('id','desc')->where('approval_status','pending')->first();
-       // dd($task_revision);
+
         return response()->json($task_revision);
     }
     public function GetTaskStatus($id)
@@ -4911,6 +4973,7 @@ class TaskController extends AccountBaseController
                             $query->where('revisions.id', $revision_id);
                         }
                     })
+                    ->where('revisions.acknowledgement_id','!=',null)
                     ->get();
 
 
@@ -4997,6 +5060,7 @@ class TaskController extends AccountBaseController
                 'client_name' => $client->name,
                 'client_image' => $client->image,
                 'authorization_status' => $item->authorization_status,
+                'updated_at' => $item->updated_at
             ];
         }
         return response()->json([
@@ -5032,7 +5096,7 @@ class TaskController extends AccountBaseController
     //    / dd($startDate, $endDate);
     $todayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
-        'developers.id as developer_id',
+        'developers.id as developer_id', 'daily_submissions.status as daily_submission_status','project_time_logs.created_at as project_time_logs_created_at',
 
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::today().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::today().'"), 0) as total_time_spent'),
         )
@@ -5045,13 +5109,14 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',Carbon::today())
-
         ->groupBy('tasks.id')
         ->get();
+
+        // dd($todayData);
     if ($todayData->isEmpty()) {
         $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
-        'developers.id as developer_id',
+        'developers.id as developer_id', 'project_time_logs.created_at as project_time_logs_created_at',
 
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.Carbon::yesterday().'" AND DATE(project_time_logs.end_time) <= "'.Carbon::yesterday().'"), 0) as total_time_spent'),
         )
@@ -5073,13 +5138,13 @@ class TaskController extends AccountBaseController
           //  dd("nsnaslkdn");
             $user_data= User::where('id',$id)->first();
             $project_time_log_date = ProjectTimeLog::where('user_id',$id)->orderBy('id','desc')->first();
-            $last_login= $project_time_log_date->updated_at;
+            $last_login= $project_time_log_date->created_at;
 
 // Check if the last login date is today's date
 
             $yesterdayData = ProjectTimeLog::select('tasks.id','tasks.heading as task_title','task_types.page_url','projects.id as projectId',
         'projects.project_name','projects.project_budget','clients.name as client_name','clients.id as clientId',
-        'developers.id as developer_id',
+        'developers.id as developer_id', 'project_time_logs.created_at as project_time_logs_created_at',
 
         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "'.$id.'" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "'.$last_login.'" AND DATE(project_time_logs.end_time) <= "'.$last_login.'"), 0) as total_time_spent'),
         )
@@ -5092,7 +5157,6 @@ class TaskController extends AccountBaseController
         ->where('project_time_logs.user_id',$id)
 
         ->whereDate('project_time_logs.created_at',$last_login)
-
         ->groupBy('tasks.id')
         ->get();
 
@@ -5113,6 +5177,17 @@ class TaskController extends AccountBaseController
         $date= Carbon::yesterday();
 
     }
+
+    $tasks->each(function($task) {
+        $daily_submission = DailySubmission::select("status")
+            ->where('task_id', $task->id)
+            ->whereDate("created_at", '=', date('Y-m-d', strtotime($task->project_time_logs_created_at)))
+            ->orderBy('id', 'desc')
+            ->first();
+        $task->daily_submission_status = $daily_submission ? $daily_submission->status : 0;
+    });
+
+    // dd($tasks);
         // $tasks = $yesterdayData;
     // } else {
     //     $tasks = $todayData;
@@ -5223,6 +5298,7 @@ class TaskController extends AccountBaseController
         ->leftJoin('working_environments','working_environments.project_id','tasks.project_id')
         ->leftJoin('users','users.id','daily_submissions.user_id')
         ->where('tasks.id',$id)
+        ->groupBy('daily_submissions.created_at')
         ->get();
         return response()->json([
             'daily_submissions'=> $daily_submissions,
@@ -5374,7 +5450,8 @@ class TaskController extends AccountBaseController
         $tasks = Task::select('tasks.id')
             ->leftJoin('task_users','task_users.task_id','tasks.id')
             ->where('task_users.user_id',$id)
-            ->where('tasks.board_column_id',3)
+
+            ->whereIn('tasks.board_column_id', [2,3])
             ->count();
         if($tasks > 4)
         {
@@ -5553,12 +5630,15 @@ class TaskController extends AccountBaseController
     }
 
     public function AuthPendingParentTasks(Request $request, $id){
+      // DB::beginTransaction();
         if($request->status){
-            $pendingParentTasks = PendingParentTasks::where('id',$id)->first();
-            $pendingParentTasks->approval_status =  $request->status;
-            $pendingParentTasks->comment = $request->comment;
-            $pendingParentTasks->authorize_by = Auth::user()->id;
-            $pendingParentTasks->save();
+            $pendingParentTasksAccept = PendingParentTasks::where('id',$id)->first();
+            $pendingParentTasksAccept->approval_status =  $request->status;
+            $pendingParentTasksAccept->comment = $request->comment;
+            $pendingParentTasksAccept->authorize_by = Auth::user()->id;
+            $pendingParentTasksAccept->save();
+            $pendingParentTasks= PendingParentTasks::where('id',$pendingParentTasksAccept->id)->first();
+
 
             $task = new Task();
             $task->heading = $pendingParentTasks->heading;
@@ -5577,26 +5657,32 @@ class TaskController extends AccountBaseController
             $task->created_by = $pendingParentTasks->added_by;
             $task->pp_task_id = $pendingParentTasks->id;
             $task->save();
+
+
+          
+          //  dd($pendingParentTasks->added_by, $task_s->added_by);
+
             if ($request->hasFile('file')) {
 
                 foreach ($request->file as $fileData) {
                     $file = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $file->task_id = $task->id;
+                    $file->task_id = $task_s->id;
 
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task_s->id);
 
-                    $file->user_id = $task->user_id;
+                    $file->user_id = $task_s->user_id;
                     $file->filename = $fileData->getClientOriginalName();
                     $file->hashname = $filename;
                     $file->size = $fileData->getSize();
                     $file->save();
 
-                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
+                    $this->logTaskActivity($task_s->id, $task_s->user_id, 'fileActivity', $task_s->board_column_id);
                 }
             }
 
+
             $task_user = new TaskUser();
-            $task_user->task_id = $task->id;
+            $task_user->task_id = $task_s->id;
             $task_user->user_id = $pendingParentTasks->user_id;
             $task_user->save();
 

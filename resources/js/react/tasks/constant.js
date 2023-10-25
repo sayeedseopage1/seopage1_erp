@@ -1,9 +1,7 @@
-
-
-export const defaultColumnVisibility = {
+export const defaultColumnVisibility = (auth) =>({
     task: true,
     timer_status: true,
-    milestone: false,
+    milestone: auth.getRoleId() !== 5,
     deliverable: true,
     project: true,
     client: true,
@@ -11,13 +9,13 @@ export const defaultColumnVisibility = {
     creation_date: true,
     due_date: true,
     start_date: true,
-    completion_date: false,
+    completion_date: auth.getRoleId() !== 5,
     approved_on: true,
     estimated_time: true,
     hours_logged: true,
     assigned_by: true,
-    assigned_to: false,
+    assigned_to: auth.getRoleId() !== 5,
     status: true,
-    progress: false,
+    progress: auth.getRoleId() !== 5,
     report: true,
-}
+})

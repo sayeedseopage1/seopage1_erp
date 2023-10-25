@@ -25,7 +25,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
     const [pluginDescription, setPluginDescription] = React.useState('');
     const [colorSchema, setColorSchema] = React.useState('');
     const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
-    const [primaryColorDescription, setPrimaryColorDescription] = React.useState(''); 
+    const [primaryColorDescription, setPrimaryColorDescription] = React.useState('');
     const [secondaryColors, setSecondaryColors] = React.useState([{
             id:'egqsz',
             color: '#1D82F5',
@@ -33,7 +33,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
         }]);
 
 
-   const [error, setError] = React.useState(null); 
+   const [error, setError] = React.useState(null);
 
    const [storeProjectGuideline, {isLoading}] = useStoreProjectGuidelineMutation();
 
@@ -42,7 +42,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
     const onChange = (e, setState) => {
         setState(e.target.value);
     };
- 
+
 
     // add secondary color
     const addSecondaryColor = (e) => {
@@ -54,7 +54,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
         }])
     }
 
-    // handle secondary color change 
+    // handle secondary color change
     const handleSecondaryColorChange = (e, id) => {
         let newColors = _.map(secondaryColors, item => item.id === id ? {id, color: e.target.value, description: ''} : item);
         setSecondaryColors([...newColors])
@@ -82,7 +82,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                 id: (Math.random() + 1).toString(36).substring(7),
                 url: ''
             }])
-    } 
+    }
 
     // handle on chagne ref url
     const handleRefUrlChange = (e, id) =>{
@@ -95,7 +95,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
 
     // remove design ref
     const removeDesignRef = (e, id) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         let newRef = _.filter(designRefURL, item => item.id !== id);
         setDesignRefURL([...newRef])
     }
@@ -147,7 +147,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                     if(xDOrFigmaFile === ''){
                         err.xdFigma = "You Have to Provide Reference Link!"
                         count++;
-                    }else if(!isURL(xDOrFigmaFile)){ 
+                    }else if(!isURL(xDOrFigmaFile)){
                         err.xdFigma = "Provided Value Must Be an URL!"
                         count++;
                     }
@@ -162,24 +162,24 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                 }else if(designFileType === 'The Reference Site That Has to Be Clone'){
                     _.map(designRefURL, item => {
                         if(item.url === ''){
-                            err.designRef = "You Have to Provide Reference Link!" 
+                            err.designRef = "You Have to Provide Reference Link!"
                             count++;
-                        }else if(!isURL(item.url)){ 
+                        }else if(!isURL(item.url)){
                             err.designRef = "Provided Value Must Be an URL!"
                             count++;
                         }
                     })
 
                     if(designRefDescription === ''){
-                        err.designRefDescripton = "You have to Provide Instruction!" 
+                        err.designRefDescripton = "You have to Provide Instruction!"
                         count++;
                     }
                 }
-            } 
+            }
         }
 
         // color schema
-        
+
         if(colorSchema === ''){
             err.colorSchema = 'You Need to Select An Option';
             count++;
@@ -197,10 +197,10 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                 }
             })
         }
- 
 
-        
-        // plugin 
+
+
+        // plugin
         if(plugin === ''){
             err.plugin = 'You Need to Select An Option';
             count++;
@@ -232,9 +232,9 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                 err.pluginDescription = "You Have to Provide Instruction of This Plugin!"
                 count++;
             }
-        } 
+        }
         setError({...err});
-        return !count; 
+        return !count;
     }
 
 
@@ -247,17 +247,17 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
             theme_name: themeName,
             theme_url: themeUrl,
             design_details: designDetials === 'yes' ? 1 : 0,
-            design: designFileType === '--' ? null : designFileType, 
-            xd_url: xDOrFigmaFile, 
+            design: designFileType === '--' ? null : designFileType,
+            xd_url: xDOrFigmaFile,
             drive_url: photoshopReferenceURL,
             reference_link: _.compact(_.map(designRefURL, item => item.url)),
             instruction: designRefDescription,
             plugin_research: plugin === "yes" ? 1 : 0,
             plugin_name: pluginName,
             plugin_url: pluginURL,
-            google_drive_link: pluginGoogleDrive, 
+            google_drive_link: pluginGoogleDrive,
             instruction_plugin: pluginDescription,
-            color_schema: colorSchema === "yes" ? 1 : 0, 
+            color_schema: colorSchema === "yes" ? 1 : 0,
             primary_color: primaryColor,
             primary_color_description: primaryColorDescription,
             color: _.compact(_.map(secondaryColors, item => item.color)),
@@ -321,7 +321,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                         <div className="d-block pl-3">
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="theme_details"
                                                     className="form-check-input"
                                                     id="themeDetailsYes"
@@ -365,8 +365,10 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                     <div className="col-12 col-md-6">
                                                         <Input
                                                             label="Theme Name"
+                                                            type="text"
                                                             placeholder="Write Theme Name"
                                                             value={themeName}
+                                                            required = {true}
                                                             onChange={(e) =>
                                                                 onChange(e, setThemeName)
                                                             }
@@ -379,6 +381,8 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                             label="Theme URL"
                                                             placeholder="Enter Theme URL"
                                                             value={themeUrl}
+                                                            type="url"
+                                                            required={true}
                                                             onChange={(e) =>
                                                                 onChange( e, setThemeUrl)
                                                             }
@@ -387,14 +391,14 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                     </div>
                                                 </div>
                                             </div>
-                                        )} 
+                                        )}
                                     </div>
                                 </React.Fragment>
                                 {/* end theme details */}
 
                                 {/* design Provide */}
                                 <React.Fragment>
-                                    <div className="form-group">  
+                                    <div className="form-group">
                                         <label
                                             htmlFor=""
                                             className="font-weight-bold"
@@ -402,11 +406,11 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                         >
                                             2. Do You Want to Provide Design
                                             Details ?
-                                        </label> 
+                                        </label>
                                         <div className="d-block pl-3">
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="design_details"
                                                     className="form-check-input"
                                                     id="designDetailsYes"
@@ -425,7 +429,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
 
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="design_details"
                                                     className="form-check-input"
                                                     id="designDetailsNo"
@@ -440,7 +444,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                 >
                                                     No
                                                 </label>
-                                            </div> 
+                                            </div>
                                             {error?.designDetials && <div className='' style={{color: 'red'}}> {error?.designDetials} </div>}
                                         </div>
 
@@ -449,7 +453,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                             <div className="px-3">
                                                 <div className="form-group mt-2">
                                                     <label htmlFor="exampleFormControlSelect1">Select Design Reference Type<sup>*</sup></label>
-                                                    <select className="form-control py-2" value={designFileType} onChange={e => onChange(e, setDesignFileType)} id="exampleFormControlSelect1"> 
+                                                    <select className="form-control py-2" value={designFileType} onChange={e => onChange(e, setDesignFileType)} id="exampleFormControlSelect1">
                                                         <option value="--" disabled>--</option>
                                                         <option value="XD/Figma">XD/Figma</option>
                                                         <option value="Photoshop">Photoshop</option>
@@ -486,6 +490,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                         label="Input Google Drive File / Folder URL"
                                                         placeholder="Input Google Drive File / Folder URL"
                                                         required={true}
+                                                        type="url"
                                                         error={error?.photoshop}
                                                         value={photoshopReferenceURL}
                                                         onChange={e => onChange(e, setPhotoshopReferenceURL)}
@@ -508,6 +513,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                                     required={true}
                                                                     error={error?.designRef}
                                                                     value={item.url}
+                                                                    type="url"
                                                                     onChange={e => handleRefUrlChange(e, item.id)}
                                                                 />
                                                                 {
@@ -518,44 +524,44 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                                 }
                                                             </div>
                                                         ))
-                                                    } 
-                                                    
+                                                    }
+
                                                     <button type="button" onClick={addDesignRefURL} className="bg-transparent text-primary hover-underline">+ Another Reference URL</button>
                                                 </div>
 
-                                                <div className="form-group"> 
+                                                <div className="form-group">
                                                     <label htmlFor="ckeditor">Add Instraction<sup>*</sup></label>
                                                     <div className="ck-editor-holder">
-                                                        <CKEditorComponent 
+                                                        <CKEditorComponent
                                                             onChange={(e, editor) => (
                                                                 setDesignRefDescription(editor.getData())
-                                                            )} 
+                                                            )}
                                                         />
                                                     </div>
-                                                {error?.designRefDescripton && <div className='' style={{color: 'red'}}> {error?.designRefDescripton} </div>}   
+                                                {error?.designRefDescripton && <div className='' style={{color: 'red'}}> {error?.designRefDescripton} </div>}
                                                 </div>
                                             </div>
                                         }
 
-                                        
+
                                     </div>
-                                </React.Fragment> 
+                                </React.Fragment>
                                 {/* end design provide */}
-                                        
+
 
                                 {/* color schema */}
-                                <div className="form-group">  
+                                <div className="form-group">
                                         <label
                                             htmlFor=""
                                             className="font-weight-bold"
                                             style={{ color: "#808080" }}
                                         >
                                             3. Color Schema
-                                        </label> 
+                                        </label>
                                         <div className="d-block pl-3">
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="color_schema"
                                                     className="form-check-input"
                                                     id="colorSchemaYes"
@@ -574,7 +580,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
 
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="color_schema"
                                                     className="form-check-input"
                                                     id="colorSchemaNo"
@@ -589,29 +595,29 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                 >
                                                     No
                                                 </label>
-                                            </div> 
+                                            </div>
                                             {error?.colorSchema && <div className='' style={{color: 'red'}}> {error?.colorSchema} </div>}
                                         </div>
 
-                                        
+
                                         {
                                             colorSchema === 'yes' &&
                                             <React.Fragment>
-                                                {/* priamry color */}
-                                                 <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}> 
+                                                {/* primary color */}
+                                                 <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
                                                     <div className="form-group">
                                                         <label htmlFor="" className="mb-2" style={{fontWeight: 600, color: "#777"}}>1. Primary Color <sup>*</sup> </label>
 
                                                         <div className="form-group px-2">
                                                             <label htmlFor="">Choose Color:</label>
                                                             <div className="input-group mb-3 col-12 col-md-6">
-                                                                <input 
+                                                                <input
                                                                     type="text"
-                                                                    className="form-control" 
-                                                                    placeholder="Recipient's username" 
-                                                                    aria-label="Recipient's username" 
+                                                                    className="form-control"
+                                                                    placeholder="Recipient's username"
+                                                                    aria-label="Recipient's username"
                                                                     aria-describedby="basic-addon2"
-                                                                    value={primaryColor} 
+                                                                    value={primaryColor}
                                                                     onChange={e => onChange(e, setPrimaryColor)}
                                                                 />
                                                                 <div className="input-group-append">
@@ -625,22 +631,22 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                         <div className="form-group pl-2">
                                                             <label htmlFor="">Where Should Developer Use this Color <sup>*</sup></label>
                                                             <div className="ck-editor-holder">
-                                                                <CKEditorComponent 
+                                                                <CKEditorComponent
                                                                     onChange={(e, editor) => (
                                                                         setPrimaryColorDescription(editor.getData())
                                                                     )}
-                                                                /> 
+                                                                />
                                                             </div>
-                                                            
+
                                                             {error?.pColorDesc && <div className='' style={{color: 'red'}}> {error?.pColorDesc} </div>}
                                                         </div>
-                                                    </div> 
+                                                    </div>
                                                 </div>
 
 
 
                                                 {/* secondary color */}
-                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}> 
+                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
                                                     <div className="form-group">
                                                         <label htmlFor="" className="mb-2" style={{fontWeight: 600, color: "#777"}}>2. Secondary Color <sup>*</sup> </label>
 
@@ -650,28 +656,28 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                                     <div className="form-group">
                                                                         <label htmlFor=""><b>{index + 1}.</b> Choose Color:</label>
                                                                         <div className="d-flex align-items-center">
-                                                                            <div className="input-group mb-3 pl-3 col-10 col-md-6"> 
-                                                                                <input 
+                                                                            <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                                                <input
                                                                                     type="text"
-                                                                                    className="form-control" 
-                                                                                    placeholder="Recipient's username" 
-                                                                                    aria-label="Recipient's username" 
+                                                                                    className="form-control"
+                                                                                    placeholder="Recipient's username"
+                                                                                    aria-label="Recipient's username"
                                                                                     aria-describedby="basic-addon2"
                                                                                     value={item.color}
                                                                                     onChange={e => handleSecondaryColorChange(e, item.id)}
-                                                                                />  
-                                                                                
+                                                                                />
+
                                                                                 <div className="input-group-append">
                                                                                     <span className="input-group-text px-1 border-0" id="basic-addon2">
-                                                                                        <input 
-                                                                                            type="color" 
-                                                                                            value={item.color} 
-                                                                                            onChange={e => handleSecondaryColorChange(e, item.id)} 
+                                                                                        <input
+                                                                                            type="color"
+                                                                                            value={item.color}
+                                                                                            onChange={e => handleSecondaryColorChange(e, item.id)}
                                                                                             style={{width: '32px', border: 'none'}}
                                                                                         />
                                                                                     </span>
                                                                                 </div>
-                                                                            </div> 
+                                                                            </div>
 
                                                                             {
                                                                                 _.size(secondaryColors) > 1 &&
@@ -685,42 +691,42 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                                     <div className="form-group pl-3">
                                                                         <label htmlFor="">Where Should Developer Use this Color <sup>*</sup></label>
                                                                         <div className="ck-editor-holder">
-                                                                            <CKEditorComponent onChange={(e, editor) => handleSecondaryColorDescriptionChange(e, editor, item.id)} /> 
+                                                                            <CKEditorComponent onChange={(e, editor) => handleSecondaryColorDescriptionChange(e, editor, item.id)} />
                                                                         </div>
-                                                            
+
                                                                         {error?.sDescription && <div className='' style={{color: 'red'}}> {error?.sDescription} </div>}
                                                                     </div>
                                                                 </div>
                                                             ))
-                                                        }  
-                                                        
+                                                        }
+
                                                         <div className="d-flex align-items-center px-3">
-                                                            <button 
-                                                                type="button" 
-                                                                onClick={addSecondaryColor} 
+                                                            <button
+                                                                type="button"
+                                                                onClick={addSecondaryColor}
                                                                 className="bg-transparent text-primary hover-underline ml-auto"
                                                             >+ Another Color</button>
                                                         </div>
-                                                    </div> 
+                                                    </div>
                                                 </div>
                                             </React.Fragment>
-                                        } 
+                                        }
                                     </div>
                                 {/* end color schema */}
 
-                                {/* Plugin Research */} 
-                                    <div className="form-group">  
+                                {/* Plugin Research */}
+                                    <div className="form-group">
                                         <label
                                             htmlFor=""
                                             className="font-weight-bold"
                                             style={{ color: "#808080" }}
                                         >
                                             4. Plugin Research
-                                        </label> 
+                                        </label>
                                         <div className="d-block pl-3">
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="plugin"
                                                     className="form-check-input"
                                                     id="pluginYes"
@@ -739,7 +745,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
 
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="plugin"
                                                     className="form-check-input"
                                                     id="pluginNo"
@@ -759,8 +765,8 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                         </div>
 
                                         {
-                                            plugin === 'yes' && 
-                                            <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}> 
+                                            plugin === 'yes' &&
+                                            <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
                                                 <div className="row">
                                                     <div className="col-12 col-md-4">
                                                         <Input
@@ -777,8 +783,9 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                         <Input
                                                             label="Plugin URL"
                                                             required={true}
+                                                            type="url"
                                                             placeholder="Enter Plugin URL"
-                                                            error={error?.pluginURL} 
+                                                            error={error?.pluginURL}
                                                             value={pluginURL}
                                                             onChange={e => onChange(e, setPluginURL)}
                                                         />
@@ -787,7 +794,8 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                         <Input
                                                             label="Share Google Drive Link"
                                                             required={true}
-                                                            error={error?.pluginGoogleDrive} 
+                                                            type="url"
+                                                            error={error?.pluginGoogleDrive}
                                                             placeholder="Share Google Drive Link"
                                                             value={pluginGoogleDrive}
                                                             onChange={e => onChange(e, setPluginGoogleDrive)}
@@ -799,7 +807,7 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
                                                             <div className="ck-editor-holder">
                                                                 <CKEditorComponent onChange={(e, editor) => setPluginDescription(editor.getData())} />
                                                             </div>
-                                                            
+
                                                             {error?.pluginDescription && <div className='' style={{color: 'red'}}> {error?.pluginDescription} </div>}
                                                         </div>
                                                     </div>
@@ -809,13 +817,13 @@ const ProjectManagerGuideline = ({ isOpen, close, openTaskForm, projectId }) => 
 
                                     </div>
                                 {/* End Plugin Research */}
-                                
+
 
                                 <div className="d-flex align-items-center justify-content-end">
                                     <Button onClick={close} variant="tertiary" className="mr-2">
                                         Close
                                     </Button>
-                                    
+
                                     <SubmitButton
                                         title="Submit"
                                         onClick={handleSubmit}

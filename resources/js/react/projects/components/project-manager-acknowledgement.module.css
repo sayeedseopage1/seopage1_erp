@@ -38,6 +38,11 @@
     max-height:80vh !important;
     overflow-y: auto;
     color: #232326;
+    font-family: Inter;
+}
+
+.card_body h5{
+    font-family: Inter;
 }
 
 .form_group{

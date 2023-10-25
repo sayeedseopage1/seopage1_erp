@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title" id="exampleModalLabel">
-            <h4>Average tasks completion rate for this cycle: {{round($average_completion_days,2)}} days</h4>
+            <h4>Average Project completion rate for this cycle: {{round($average_completion_days,2)}} days</h4>
           </div>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>

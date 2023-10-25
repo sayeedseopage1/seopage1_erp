@@ -1339,7 +1339,6 @@
 }
 
 .sp1_task-edit-button{
-    margin-left: auto;
     &:hover{
         color: #fff !important;
         background-color: #084bc7 !important;
@@ -1348,4 +1347,58 @@
     @media (max-width: 490px ) {
         margin-left: 0 !important ;
     }
+}
+
+
+
+.single_task_button_group{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+.single_task_three_dot{
+    background-color: #f5f5f5;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.single_task_divider{
+    margin-right: auto;
+}
+
+.single_task_action_dd_item{
+    width: 100%;
+    display: flex;
+    align-items: center ;
+    gap: 10px;
+    padding: 8px 10px;
+    font-family: Inter;
+    font-weight: 400;
+    font-size: 14px;
+    min-width: 130px;
+    border-radius: 4px;
+    color: #777;
+}
+
+.single_task_action_dd_item:hover{
+    background-color: rgb(0 0 0 / 3%);
+    cursor: pointer;
+    color: #333;
+}
+
+
+// .single_task_action_dd_item:not(:last-child){
+//     border-bottom: 1px dashed #ddd;
+// }
+
+
+.single_task_action_dd_menu{
+    border: 1px solid rgb(0 0 0 / 5%) !important;
 }

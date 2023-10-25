@@ -3,11 +3,11 @@
 }
 
 .tooltip{
-    background-color: #1d82f5;
+    background-color: #63646B;
     z-index: 1;
     border-radius: 6px;
     /* border: 1px solid #41c7e2; */
-    box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
+    box-shadow: 0px 3px 10px rgb(29 130 245 / 20%);
 
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -25,7 +25,7 @@
     position: absolute;
     width: 10px;
     height: 10px;
-    background-color: rgb(29, 130, 245);
+    background-color: #63646B;
     content: '';
     /* border: 1px solid #41c7e2; */
     -webkit-transform: rotate(45deg);

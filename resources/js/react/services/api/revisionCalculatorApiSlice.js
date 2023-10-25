@@ -46,6 +46,10 @@ const revisionCalculatorApiSlice = apiSlice.injectEndpoints({
         getRevisionCalculatorDataTotalUnsolveDispute: build.query({
             query: query => `/account/revision-calculator-data/dispute-not-resolve${query}`,
         }),
+
+        getPendingRevisionData: build.query({
+            query: query => `/account/revision-calculator-data/pending-issues${query}`
+        })
     })
 }) ; 
 
@@ -67,5 +71,6 @@ export const {
     useLazyGetRevisionCalculatorDataSalesIssuesQuery,
     useLazyGetRevisionCalculatorDataTotalDisputeQuery,
     useLazyGetRevisionCalculatorDataTotalUnsolveDisputeQuery,
+    useLazyGetPendingRevisionDataQuery
 } = revisionCalculatorApiSlice;
 

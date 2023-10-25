@@ -40,7 +40,7 @@ const useDropdown = () => {
 const DropdownItem = ({children, className, onClick, disabled=false, ...props}) => {
     const {setIsOpen} = useDropdown();
     return(
-        <div 
+        <div
             onMouseUp={() => disabled ? null : setIsOpen(false)}
             onClick={(e) => disabled ? null : onClick ? onClick(e): null}
             className={`cnx_dropdown__item ${disabled ? 'cnx_dropdown__item_disabled}': ''} ${className}`}
@@ -72,7 +72,7 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
     const { reference, setIsOpen, isOpen} = useDropdown();
     const [popperElement , setPopperElement] = React.useState(null);
     const [width, setWidth] = React.useState(100);
-    
+
     // generate random id for dropdown menu
     const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
 
@@ -137,14 +137,14 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
         const el = document.createElement('div');
         el.id = id;
         document.body.appendChild(el);
-        
+
         setPopperElement(el);
         return () => {
             document.body.removeChild(el);
         }
     }, [])
 
-    
+
     if(!DOM) {
         return null
     }
@@ -153,7 +153,7 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
        ReactDOM.createPortal(
             <AnimatePresence>
                 {isOpen && (
-                    <motion.div 
+                    <motion.div
                         initial={{opacity: 0}}
                         animate={{opacity: 1 }}
                         exit={{opacity: 0}}
@@ -166,11 +166,11 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
                         {children}
                     </motion.div>
                 )}
-            </AnimatePresence>, 
+            </AnimatePresence>,
             DOM
        )
     )
-} 
+}
 
 
 
