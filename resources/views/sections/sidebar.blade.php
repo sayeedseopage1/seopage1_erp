@@ -315,9 +315,11 @@
                                 <x-sub-menu-item :link="route('task-report-issues.index')" :text="__('Tasks Reports')" />
                             @endif
 
-
+                            @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 8 || Auth::user()->role_id == 4
+                            )
                                 <x-sub-menu-item :link="route('independent-task.index')" :text="__('Independent Task')" />
-                                <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" />
+                            @endif
+                                {{-- <x-sub-menu-item :link="route('independent-task-show')" :text="__('Single Independent Task')" /> --}}
 
 
                             {{-- @endif --}}

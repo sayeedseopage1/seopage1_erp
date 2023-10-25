@@ -4036,7 +4036,6 @@ class TaskController extends AccountBaseController
             $data = TaskReply::where('comment_id', $id)->get();
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
-
             //    DB::beginTransaction();
                 $data = new TaskComment();
                 $data->comment = $request->comment;
@@ -4049,7 +4048,14 @@ class TaskController extends AccountBaseController
                 $taskID= Task::where('id',$request->task_id)->first();
                 $task_member= TaskUser::where('task_id',$request->task_id)->first();
                 $projectID= Project::where('id',$taskID->project_id)->first();
-                $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$projectID->pm_id)->get();
+                if($projectID != null)
+                {
+                    $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$projectID->pm_id)->get();
+                }else 
+                {
+                    $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->get();
+                }
+              
                 $sender= User::where('id',Auth::id())->first();
 
                 if ($request->hasFile('file')) {
@@ -4078,10 +4084,16 @@ class TaskController extends AccountBaseController
                 $data->updated_at = $data->updated_at;
 
                 $data->save();
-                foreach ($users as $user) {
-                    // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
-                        Notification::send($user, new TaskCommentNotification($taskID,$sender));
-                    }
+                if($taskID->project_id != null)
+                {
+                    foreach ($users as $user) {
+                        // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+                            Notification::send($user, new TaskCommentNotification($taskID,$sender));
+                        }
+
+                }
+               
+                
                 return response()->json($data);
             }  elseif ($request->mode == 'comment_reply_store') {
 
