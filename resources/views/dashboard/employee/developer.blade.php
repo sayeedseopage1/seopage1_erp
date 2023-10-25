@@ -274,8 +274,21 @@
                                                         }
                                                         @endphp
                                                     </td>
-                                                    <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                    <td>{{$value->project->deadline}}</td>
+                                                    <td>
+                                                    @if($value->project_id != null)    
+                                                    <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
+                                                        @else 
+                                                        -- 
+                                                        @endif
+                                                
+                                                </td>
+                                                    <td>
+                                                    @if($value->project_id != null)      
+                                                    {{$value->project->deadline}}
+                                                    @else 
+                                                    -- 
+                                                    @endif
+                                                </td>
                                                 </tr>
                                                 @empty
                                                 <tr>
@@ -354,8 +367,20 @@
                                                         }
                                                         @endphp
                                                     </td>
-                                                    <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                                                    <td>{{$value->project->deadline}}</td>
+                                                    <td>
+                                                    @if($value->project_id != null)        
+                                                    <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
+                                                    @else 
+                                                    -- 
+                                                    @endif
+                                                </td>
+                                                    <td>
+                                                    @if($value->project_id != null)        
+                                                    {{$value->project->deadline}}
+                                                        @else 
+                                                        -- 
+                                                        @endif
+                                                </td>
                                                 </tr>
                                                 @empty
                                                 <tr>

@@ -45,9 +45,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     const [taskObserver, setTaskObserver] = useState("");
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("To Do");
-    const [priority, setPriority] = useState("Medium");
-    const [estimateTimeHour, setEstimateTimeHour] = useState(0);
-    const [estimateTimeMin, setEstimateTimeMin] = useState(0);
+    const [priority, setPriority] = useState("Regular");
+    // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
+    // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
 
     const [pageType, setPageType] = React.useState("");
@@ -77,11 +77,12 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     const navigate = useNavigate();
 
 
-    const [
-        checkRestrictedWords,
-        {isLoading: checking}
-    ] = useCheckRestrictedWordsMutation();
-
+    // const [
+    //     checkRestrictedWords,
+    //     {isLoading: checking}
+    // ] = useCheckRestrictedWordsMutation();
+    const checking = false;
+    
 
     // handle change
     React.useEffect(() => {
@@ -237,8 +238,8 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         fd.append("description", description);
         fd.append("board_column_id", task?.boardColumn?.id);
         fd.append("priority", _.lowerCase(priority));
-        fd.append("estimate_hours", estimateTimeHour);
-        fd.append("estimate_minutes", estimateTimeMin);
+        // fd.append("estimate_hours", estimateTimeHour);
+        // fd.append("estimate_minutes", estimateTimeMin);
         fd.append("image_url", null);
         fd.append("subTaskID", null);
         fd.append("addedFiles", null);
@@ -260,7 +261,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
             fd.append("file[]", file);
         });
 
-        const submit = async () => {
+        // const submit = async () => {
 
             if(isValid()){
                 await createSubtask(fd)
@@ -294,70 +295,70 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                     }
                 });
             }
-        }
+        // }
 
-        const primaryPageConfirmation = () => {
-            if(pageTypePriority === "Primary Page Development"){
-                Swal.fire({
-                    icon: 'info',
-                    html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
-                    showCloseButton: true,
-                    showCancelButton: true,
-                }).then((res => {
-                    if(res.isConfirmed){
-                        submit();
-                    }
-                }))
-            }else{
-                submit()
-            }
-        }
+        // const primaryPageConfirmation = () => {
+        //     if(pageTypePriority === "Primary Page Development"){
+        //         Swal.fire({
+        //             icon: 'info',
+        //             html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
+        //             showCloseButton: true,
+        //             showCancelButton: true,
+        //         }).then((res => {
+        //             if(res.isConfirmed){
+        //                 submit();
+        //             }
+        //         }))
+        //     }else{
+        //         submit()
+        //     }
+        // }
 
 
 
             // check violation words
-            const response = await checkRestrictedWords('').unwrap();
+            // const response = await checkRestrictedWords('').unwrap();
 
-            if(response.status === 400){
-                const error = new Object();
-                const checkViolationWord = (text) => {
-                    const violationWords = ["revision", "fix", "modify", "fixing", "revise", "edit"];
-                    const violationRegex = new RegExp(`\\b(${violationWords.join("|")})\\b`, "i");
-                    return violationRegex.test(_.toLower(text));
-                }
+            // if(response.status === 400){
+            //     const error = new Object();
+            //     const checkViolationWord = (text) => {
+            //         const violationWords = ["revision", "fix", "modify", "fixing", "revise", "edit"];
+            //         const violationRegex = new RegExp(`\\b(${violationWords.join("|")})\\b`, "i");
+            //         return violationRegex.test(_.toLower(text));
+            //     }
 
-                const alert = () => {
-                    Swal.fire({
-                        icon: 'error',
-                        html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> `,
-                        // showCloseButton: true,
-                        showConfirmButton: true,
-                        showCancelButton: true,
-                    }).then((res => {
-                        if(res.isConfirmed){
-                            primaryPageConfirmation();
-                        }
-                    }))
-                }
+            //     const alert = () => {
+            //         Swal.fire({
+            //             icon: 'error',
+            //             html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> `,
+            //             // showCloseButton: true,
+            //             showConfirmButton: true,
+            //             showCancelButton: true,
+            //         }).then((res => {
+            //             if(res.isConfirmed){
+            //                 primaryPageConfirmation();
+            //             }
+            //         }))
+            //     }
 
-                // check title
-                if(checkViolationWord(title)){
-                    setContainViolation(true);
-                    error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
+            //     // check title
+            //     if(checkViolationWord(title)){
+            //         setContainViolation(true);
+            //         error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
 
-                    alert();
-                }else if(checkViolationWord(description)){  // check description
-                    setContainViolation(true);
-                    error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
-                    alert();
-                }else{
-                    primaryPageConfirmation();
-                }
+            //         alert();
+            //     }else if(checkViolationWord(description)){  // check description
+            //         setContainViolation(true);
+            //         error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
+            //         alert();
+            //     }else{
+            //         primaryPageConfirmation();
+            //     }
 
-                setErr(prev => ({...prev, ...error}))
-            }else{
-                primaryPageConfirmation();
-            }
+            //     setErr(prev => ({...prev, ...error}))
+            // }else{
+            //     primaryPageConfirmation();
+            // }
 
     };
 
@@ -391,6 +392,12 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     }, [])
 
 
+
+    useEffect(()=>{
+      console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});
+    },[isWorkingEnvironmentSubmit,isFirstSubtask,task])
+
+
     return (
         <>
             <div className="sp1-subtask-form --modal-panel">
@@ -409,7 +416,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
                     {/* working environment form */}
-                    {isWorkingEnvironmentSubmit &&
+                    {isFirstSubtask &&
                         <WorkingEnvironmentForm
                             task={task}
                             onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
@@ -887,7 +894,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
 
 
                             {/* Set Estimate Time */}
-                            <div className="col-12 col-md-6">
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         htmlFor=""
@@ -928,7 +935,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                     Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
 
 

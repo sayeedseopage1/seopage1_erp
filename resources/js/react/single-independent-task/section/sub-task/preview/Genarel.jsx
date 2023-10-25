@@ -6,6 +6,7 @@ import RevisionText from "../../../components/RevisionText";
 import GenarelLoader from "../../../components/loader/GenarelLoader";
 import ArticleLoader from "../../../components/loader/ArticleLoader";
 import dayjs from "dayjs";
+import { Placeholder } from "../../../../global/Placeholder";
 
 const Genarel = ({task, isFetching}) => { 
     const loggedUser = new User(window?.Laravel?.user);
@@ -37,7 +38,8 @@ const Genarel = ({task, isFetching}) => {
                                 )
                             }
 
-                            <div className="sp1_st-list-item">
+                            {/* project name */}
+                            {/* <div className="sp1_st-list-item">
                                 <div className="sp1_st-list-item-head">Project : </div>
                                 <div className="sp1_st-list-item-value">
                                     <span className="dot-color bg-danger mr-2" />
@@ -45,9 +47,10 @@ const Genarel = ({task, isFetching}) => {
                                         {task?.projectName} 
                                     </a>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            <div className="sp1_st-list-item">
+                            {/* milestone */}
+                            {/* <div className="sp1_st-list-item">
                                 <div className="sp1_st-list-item-head">
                                     Milestone :{" "}
                                 </div>
@@ -55,7 +58,7 @@ const Genarel = ({task, isFetching}) => {
                                     <span className="dot-color bg-primary mr-2" />
                                     {task?.milestoneTitle}
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* asignee to */}
                             <div className="sp1_st-list-item">
@@ -172,7 +175,10 @@ const Genarel = ({task, isFetching}) => {
             >
                 <div className="font-weight-bold d-block"> Status: </div>
 
-                <div
+                {
+                    isFetching ?
+                    <Placeholder width="80px" />:
+                    <div
                     className="d-flex align-items-center"
                     style={{ gap: "6px" }}
                 >
@@ -182,13 +188,16 @@ const Genarel = ({task, isFetching}) => {
                     />
                     <span className="font-weight-bold">{task?.boardColumn.columnName}</span>
                 </div>
+                }
 
                 <div className="row">
                     <div className="col-6 col-sm-5 col-md-3 col-xl-6">
                         Start Date{" "}
                     </div>
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
-                        : {task?.getStartDate("MMM DD, YYYY")}
+                        : {isFetching ?
+                    <Placeholder width="80px" />:
+                    task?.getStartDate("MMM DD, YYYY")}
                     </div>
                 </div>
 
@@ -197,25 +206,30 @@ const Genarel = ({task, isFetching}) => {
                         Due Date{" "}
                     </div>
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
-                        : {task?.getDueDate("MMM DD, YYYY")}
+                        : {isFetching ?
+                    <Placeholder width="80px" />:
+                    task?.getDueDate("MMM DD, YYYY")}
                     </div>
                 </div>
 
-                <div className="row">
+                {/* Time Estimate */}
+                {/* <div className="row">
                     <div className="col-6 col-sm-5 col-md-3 col-xl-6">
                         Time Estimate{" "}
                     </div>
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
                         : {task?.getEstimateTime()}
                     </div>
-                </div>
+                </div> */}
 
                 <div className="row">
                     <div className="col-6 col-sm-5 col-md-3 col-xl-6">
                     Total Hours Logged{" "}
                     </div>
                     <div className="col-6 col-sm-7 col-md-9 col-xl-6">
-                        : {task?.parentTaskTimeLog || "--"}
+                        : {isFetching ?
+                    <Placeholder width="80px" />:
+                    task?.parentTaskTimeLog || "--"}
                     </div>
                 </div>
 

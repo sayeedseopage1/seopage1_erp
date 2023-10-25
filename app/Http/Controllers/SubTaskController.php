@@ -50,8 +50,8 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-        dd($request->all());
- DB::beginTransaction();
+      
+ //DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
 
@@ -145,6 +145,8 @@ class SubTaskController extends AccountBaseController
         $hours = $request->estimate_hours * 60;
         $minutes = $request->estimate_minutes;
         $total_minutes = $hours + $minutes;
+        if($task->independent_task_status != 1)
+        {
         if (($total_parent_tasks_minutes - $total_subtasks_minutes) - $total_minutes < 1) {
 
             return response()->json([
@@ -157,6 +159,7 @@ class SubTaskController extends AccountBaseController
             ], 422);
 
         }
+    }
         $this->addPermission = user()->permission('add_sub_tasks');
         $task = Task::findOrFail($request->task_id);
         $taskUsers = $task->users->pluck('id')->toArray();
@@ -180,7 +183,7 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
-        dd($subTask);
+       // dd($subTask);
 
         $task_id = Task::where('id', $request->task_id)->first();
         $task_s = new Task();
@@ -224,6 +227,12 @@ class SubTaskController extends AccountBaseController
         $task_s->added_by = Auth::id();
         $task_s->created_by= Auth::id();
         $task_s->pp_task_id = $task_id->pp_task_id;
+        if($task->independent_task_status == 1)
+        {
+            $task_s->independent_task_status = 1;
+            $task_s->client_id = $task->client_id;
+            $task_s->client_name = $task->client_name;
+        }  
         $task_s->save();
         $task_type = new TaskType();
         $task_type->task_id= $task_s->id;
@@ -241,9 +250,12 @@ class SubTaskController extends AccountBaseController
         $task_type->existing_design_link = $request->existing_design_link;
         $task_type->number_of_pages= $request->number_of_pages;
         $task_type->save();
-        dd($task_type,$task_s);
+        //dd($task_type,$task_s);
 
+        if($task->independent_task_status != 1)
+        {
 
+        
         $authorization_action = new AuthorizationAction();
         $authorization_action->model_name = $task_s->getMorphClass();
         $authorization_action->model_id = $task_s->id;
@@ -255,6 +267,7 @@ class SubTaskController extends AccountBaseController
         $authorization_action->title = Auth::user()->name . ' assign new task to developer';
         $authorization_action->authorization_for = $request->user_id ;
         $authorization_action->save();
+      
 
         $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
         //dd($parent_task_authorization);
@@ -267,6 +280,7 @@ class SubTaskController extends AccountBaseController
             $task_authorization->save();
 
         }
+    }
 
         // $task_user= new TaskUser();
         // $task_user->task_id= $request->task_id;

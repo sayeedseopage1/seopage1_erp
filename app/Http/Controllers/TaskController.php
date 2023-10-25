@@ -418,6 +418,7 @@ class TaskController extends AccountBaseController
     }
     public function get_subtasks(Request $request)
     {
+        //dd($request);
         $startDate = $request->input('start_date', null);
         $endDate = $request->input('end_date', null);
         $assignee_to = $request->input('assignee_to', null);
@@ -601,7 +602,8 @@ class TaskController extends AccountBaseController
                 }
 
             }
-            if(Auth::user()->role_id == 5)
+           // $tasks = $tasks->orderBy('id','desc')->take(10);
+              if(Auth::user()->role_id == 5)
             {
                 $tasks = $tasks->where('task_users.user_id',Auth::id())->orderBy('tasks.created_at', 'desc')->get();
 
@@ -609,18 +611,9 @@ class TaskController extends AccountBaseController
                 $tasks = $tasks->orderBy('tasks.created_at', 'desc')->get();
             }
 
-            foreach($tasks as $task)
-            {
-                $user= User::where('id',$task->assign_to_id)->first();
-                if($user->role_id == 5)
-                {
-                    $task = $task->where('tasks.subtask_id','!=',null);
-                }
-            }
-
             
 
-
+            
 
                 return response()->json([
                     'status' => 200,

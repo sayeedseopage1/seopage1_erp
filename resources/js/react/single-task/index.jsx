@@ -9,8 +9,9 @@ import Loading from "./components/Loading";
 import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ErrorContextProvider from "../context/ErrorHandleServiceContextProvider";
-import SingleIndependentTask from "../single-independent-task/SingleIndependentTask";
+// import SingleIndependentTask from "../single-independent-task/SingleIndependentTask";
 
+const SingleIndependentTask = React.lazy(() => import("../single-independent-task/SingleIndependentTask"))
 const SingleTask = React.lazy(() => import("./SingleTask"));
 const container = document.getElementById("sp1SingleTaskPage");
 
@@ -23,7 +24,10 @@ const TaskChecker = ()=>{
     //   console.log({taskId});
       fetch(`/account/check-independent-task/${taskId}`)
           .then(res=> res.json())
-          .then(({is_independent})=> setTaskStatus(is_independent))
+          .then(({is_independent})=> {
+            console.log({is_independent});
+            setTaskStatus(is_independent);
+        })
     },[taskId])
   
   

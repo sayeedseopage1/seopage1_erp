@@ -18,23 +18,23 @@ const GenarelLoader = () => {
                         </div>
                     </div> 
 
-                    <div className="sp1_st-list-item">
+                    {/* <div className="sp1_st-list-item">
                         <div className="sp1_st-list-item-head">
                             <Placeholder width="80px" />
                         </div>
                         <div className="sp1_st-list-item-value">
                             <Placeholder width="220px" />
                         </div>
-                    </div>
+                    </div> */}
 
-                    <div className="sp1_st-list-item">
+                    {/* <div className="sp1_st-list-item">
                         <div className="sp1_st-list-item-head">
                             <Placeholder width="80px" />
                         </div>
                         <div className="sp1_st-list-item-value">
                             <Placeholder width="220px" />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* asignee to */}
                     <div className="sp1_st-list-item">
