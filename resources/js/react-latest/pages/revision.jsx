@@ -7,6 +7,7 @@ import DataTable from "../ui/basic-table/DataTable";
 import Toaster from "../ui/Toaster";
 import Filterbar from "../components/revision-page/filterbar/Filterbar";
 import { useGetRevisionsQuery } from "../services/api/revisionApiSlice";
+import {Placeholder} from '../ui/Placeholder';
 
 const Revision = () => {
     const auth = new User(window.Laravel.user);
@@ -14,7 +15,7 @@ const Revision = () => {
 
     const { data, isFetching, isLoading } = useGetRevisionsQuery(
         `${filter.query}`,
-        { 
+        {
             skip: !filter.query,
             refetchOnMountOrArgChange: true,
         }
@@ -36,6 +37,7 @@ const Revision = () => {
                     tableColumns={[...RevisionTableColumns]}
                     state={{ isFetching }}
                     // hideColumns={auth?.getRoleId() === 1 ? ['action']: []}
+                    loader={<TableLoader columns ={RevisionTableColumns} />}
                 />
             </div>
 
@@ -45,3 +47,18 @@ const Revision = () => {
 };
 
 export default Revision;
+
+
+const TableLoader = ({columns}) => {
+    return(
+        _.times(10,item=>(
+           <tr key={item} className="sp1-data-table-tr">
+            {_.map(columns, col => (
+                <td key={col.id} className="sp1-data-table-td">
+                    <Placeholder  />
+                </td>
+            ))}
+           </tr>
+        ) )
+    )
+}
