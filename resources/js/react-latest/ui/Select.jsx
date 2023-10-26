@@ -55,7 +55,7 @@ const Select = ({
                 <div ref={setElementRef}>
                     <div
                         className={`${css.select} ${className}`}
-                        onMouseUp={handleClick}
+                        onMouseDown={handleClick}
                     >
                         <div className={css.content} title={selectedValue}>
                             {selectedValue}

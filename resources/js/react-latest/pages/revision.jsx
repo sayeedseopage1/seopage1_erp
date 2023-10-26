@@ -10,15 +10,21 @@ import { useGetRevisionsQuery } from "../services/api/revisionApiSlice";
 
 const Revision = () => {
     const auth = new User(window.Laravel.user);
+    const [filter, setFilter] = useState({ filter: {}, query: "" });
 
-    const {data, isFetching, isLoading} = useGetRevisionsQuery();
-
+    const { data, isFetching, isLoading } = useGetRevisionsQuery(
+        `${filter.query}`,
+        { 
+            skip: !filter.query,
+            refetchOnMountOrArgChange: true,
+        }
+    );
 
     return (
         <section className={styles.revision_section_container}>
             {/* filter */}
             <div>
-                <Filterbar onFilter={(filters) => console.log(filters)} />
+                <Filterbar onFilter={(filter) => setFilter(filter)} />
             </div>
             {/* end filter */}
             <div className={styles.table_container}>
@@ -28,7 +34,7 @@ const Revision = () => {
                     isLoading={isLoading}
                     tableName="revisionTableColumns"
                     tableColumns={[...RevisionTableColumns]}
-                    state={{isFetching}}
+                    state={{ isFetching }}
                     // hideColumns={auth?.getRoleId() === 1 ? ['action']: []}
                 />
             </div>

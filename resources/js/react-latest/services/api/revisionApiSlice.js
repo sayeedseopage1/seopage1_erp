@@ -4,7 +4,7 @@ const revisionApi = apiSlice.injectEndpoints({
     endpoints: (build) => ({
       // revisions
       getRevisions: build.query({
-        query: () => `/account/tasks/revisions`,
+        query: (query) => `/account/tasks/revisions?${query}`,
         providesTags: ["REVISIONS"]
       }),
 
