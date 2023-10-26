@@ -2904,9 +2904,15 @@ class TaskController extends AccountBaseController
          // dd($task_revision);
          $task_revision->save();
 
-         $clientRevisionCount = TaskRevision::where('acknowledgement_id', 'CPRx06')
-                                 -> where('task_id', $task_revision->id)
-                                 ->count();
+         $startDate = now()->startOfMonth();  // Start of the current month
+        $endDate = now()->endOfMonth();      // End of the current month
+
+        $clientRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
+            ->where('projects.pm_id', Auth::id())
+            ->where('acknowledgement_id', 'CPRx06')
+            ->where('task_id', $task_revision->id)
+            ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+            ->count();
 
          if($clientRevisionCount >= 5){
              $task_revision->dispute_created = true;
