@@ -23,7 +23,7 @@ const ClientRevisionForm = ({
         setReason(e.target.value);
     };
 
-    // editor change text 
+    // editor change text
     const hanldeEditorTextChange= (e, editor) => {
         const data = editor.getData();
         setComment(data);
@@ -32,20 +32,20 @@ const ClientRevisionForm = ({
     // validation
     const validate = () => {
        let errorCount = 0;
-       
+
        if(comment === ""){
-        console.log("open")
+        // console.log("open")
             errorCount++;
-            setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')     
+            setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.')
        }
 
        if(reason === ''){
-        console.log('first')
+        // console.log('first')
             errorCount++;
             setReasonError('You have to select a reason from below options')
        }
 
-       return errorCount === 0; 
+       return errorCount === 0;
     }
 
     // handle submiton
@@ -57,16 +57,16 @@ const ClientRevisionForm = ({
             reason,
             comment
         }
-        
+
         if(validate()){
            onSubmitForm(data);
         }else{
             console.log('Your forgot to fillup some requried fields')
-        } 
+        }
     }
 
     return (
-        <React.Fragment> 
+        <React.Fragment>
                 <form className="px-3">
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold">
@@ -87,14 +87,14 @@ const ClientRevisionForm = ({
                                         height: "16px",
                                         marginTop: "3px",
                                     }}
-                                    
+
                                 />
                                 <label
                                     className="form-check-label"
                                     htmlFor="exampleRadios1"
                                     style={{ marginBottom: "3px", }}
                                 >
-                                   Client's Requirements Are Not Fulfilled As Per Instruction 
+                                   Client's Requirements Are Not Fulfilled As Per Instruction
                                 </label>
                             </div>
 
@@ -118,7 +118,7 @@ const ClientRevisionForm = ({
                                     htmlFor="exampleRadios2"
                                     style={{ marginBottom: "3px" }}
                                 >
-                                   Client Has Changed Previous Requirements Instructions 
+                                   Client Has Changed Previous Requirements Instructions
                                 </label>
                             </div>
 
@@ -142,9 +142,9 @@ const ClientRevisionForm = ({
                                     htmlFor="exampleRadios3"
                                     style={{ marginBottom: "3px" }}
                                 >
-                                   Client Has Added Some Additional Requirements Instructions 
+                                   Client Has Added Some Additional Requirements Instructions
                                 </label>
-                            </div> 
+                            </div>
 
                             {/* <div className="form-check d-flex align-items-start mb-2">
                                 <input
@@ -166,7 +166,7 @@ const ClientRevisionForm = ({
                                     htmlFor="exampleRadios4"
                                     style={{ marginBottom: "3px" }}
                                 >
-                                   Revision Due To The Sales Team 
+                                   Revision Due To The Sales Team
                                 </label>
                             </div>  */}
                         </div>
@@ -174,12 +174,12 @@ const ClientRevisionForm = ({
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="" className="font-weight-bold"> 
+                        <label htmlFor="" className="font-weight-bold">
                             Enter exactly what client said about this revision<sup className="f-16">*</sup> :
                         </label>
                         <div className="ck-editor-holder">
                             <CKEditorComponent onChange={hanldeEditorTextChange}/>
-                        </div> 
+                        </div>
                         {commentError && <small id="emailHelp" className="form-text text-danger">{commentError}</small>}
                     </div>
 
@@ -189,14 +189,14 @@ const ClientRevisionForm = ({
                                 Close
                             </Button>
 
-                            <SubmitButton 
-                                onClick={handleSubmition} 
-                                isLoading={isSubmitting} 
-                                title="Accept & Continue" 
-                            /> 
+                            <SubmitButton
+                                onClick={handleSubmition}
+                                isLoading={isSubmitting}
+                                title="Accept & Continue"
+                            />
                         </div>
                     </div>
-                </form> 
+                </form>
         </React.Fragment>
     );
 };

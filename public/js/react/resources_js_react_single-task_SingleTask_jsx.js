@@ -14052,7 +14052,7 @@ var ClientRevisionForm = function ClientRevisionForm(_ref) {
     setReason(e.target.value);
   };
 
-  // editor change text 
+  // editor change text
   var hanldeEditorTextChange = function hanldeEditorTextChange(e, editor) {
     var data = editor.getData();
     setComment(data);
@@ -14062,12 +14062,12 @@ var ClientRevisionForm = function ClientRevisionForm(_ref) {
   var validate = function validate() {
     var errorCount = 0;
     if (comment === "") {
-      console.log("open");
+      // console.log("open")
       errorCount++;
       setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.');
     }
     if (reason === '') {
-      console.log('first');
+      // console.log('first')
       errorCount++;
       setReasonError('You have to select a reason from below options');
     }
