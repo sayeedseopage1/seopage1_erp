@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Toaster from '../global/Toaster';
-import { useGetTaskDetailsQuery, useGetTaskStatusQuery } from "../services/api/SingleTaskPageApi";
+import { useGetTaskDetailsQuery, useGetTaskStatusQuery, useLazyGetWorkingEnvironmentQuery } from "../services/api/SingleTaskPageApi";
 import { storeTask } from "../services/features/subTaskSlice";
 import { BoardColumn, SingleTask } from "../utils/single-task";
 import { User } from "../utils/user-details";
@@ -42,17 +42,28 @@ const SingleIndependentTask = () => {
     //     taskId : 3047,
     // };
 
-    const { data, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`, { refetchOnMountOrArgChange: true});
+    const { data, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`);
     const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
+
+    const [getWorkingEnv, { data:workingEnvData, isFetching:isWorkingEnvFetching, isLoading:isWorkingEnvLoading }] = useLazyGetWorkingEnvironmentQuery();
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
 
 
     useEffect(()=>{
-    //   console.log(data?.task?.independent_client_name);
-    //   console.log((Task));
-    },[Task])
+        console.log({task});
+        getWorkingEnv(task.subtaskId ? task.parentTaskId : task.id)
+          .unwrap()
+          .then(({task_working_environment})=>{
+            // console.log({task_working_environment});
+          })
+    },[task]);
+
+
+    useEffect(()=>{
+      console.log({workingEnvData,isWorkingEnvFetching,isWorkingEnvLoading});
+    },[workingEnvData,isWorkingEnvFetching,isWorkingEnvLoading])
 
 
     useEffect(() => {
@@ -63,8 +74,8 @@ const SingleIndependentTask = () => {
                     parent_task_title: data?.parent_task_heading?.heading || null,
                     parent_task_action: data?.parent_task_action,
                     subtask: data?.subtasks,
-                    working_environment: data?.working_environment,
-                    working_environment_data: data?.working_environment_data,
+                    // working_environment: data?.working_environment,
+                    working_environment_data: workingEnvData?.task_working_environment,
                     pm_task_guideline: data?.task_guideline,
                     task_revisions: data?.revisions,
                     taskSubTask: data?.Sub_Tasks,
@@ -84,7 +95,7 @@ const SingleIndependentTask = () => {
 
             }
         })()
-    }, [data]);
+    }, [data,isWorkingEnvFetching,isWorkingEnvLoading]);
 
     const loadingClass = isFetching ? "skeleton-loading" : "";
 
@@ -364,13 +375,11 @@ const SingleIndependentTask = () => {
                             <div className="mt-3">
 
                                 {/* project manager guideline */}
-                                {/* <Accordion
+                                <Accordion
                                     expendable={false}
                                     title="General Guidelines"
                                 >
-                                   {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> }
-
-
+                                   {/* {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> } */}
 
                                     {!_.isEmpty(task?.workEnvData)  && (
                                         <div className="sp1_task_card--sub-card">
@@ -402,7 +411,7 @@ const SingleIndependentTask = () => {
                                     ) }
 
                                     <Guideline text={task?.guidelines} workEnv={task?.workEnvData} />
-                                </Accordion> */}
+                                </Accordion>
 
                                 {/* task revision */}
                                 {

@@ -109,7 +109,7 @@ const TaskAuthorization = ({ title }) => {
                                 <Tabs data={_data} setVisibilityOption={setVisibilityOption} visibilityOption={visibilityOption}/>
 
                                 <DataTable
-                                    tableData={_.orderBy(data, 'updated_at', 'desc') || []}
+                                    tableData={_.orderBy(data, ['approval_status','creation_date'], ['desc','desc']) || []}
                                     tableColumns={authorizationColumns()}
                                     tableName="authorize-task-table"
                                     isLoading={false}

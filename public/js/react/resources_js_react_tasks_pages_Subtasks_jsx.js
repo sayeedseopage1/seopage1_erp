@@ -33,11 +33,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _global_Switch__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../global/Switch */ "./resources/js/react/global/Switch.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
@@ -48,6 +43,11 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
 
 
@@ -172,9 +172,15 @@ var SubTasksTableColumns = [{
       style: {
         textDecoration: 'none'
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+      children: data !== null && data !== void 0 && data.milestone_title ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
         className: "multine-ellipsis word-break",
         children: data === null || data === void 0 ? void 0 : data.milestone_title
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+        style: {
+          fontWeight: 'bold',
+          color: 'gray'
+        },
+        children: "N/A"
       })
     });
   }
@@ -183,7 +189,6 @@ var SubTasksTableColumns = [{
   header: 'Deliverable',
   accessorKey: 'deliverable_title',
   cell: function cell(_ref5) {
-    var _data$deliverable_tit;
     var row = _ref5.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("abbr", {
@@ -191,9 +196,15 @@ var SubTasksTableColumns = [{
       style: {
         textDecoration: 'none'
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+      children: data !== null && data !== void 0 && data.deliverable_title ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
         className: "multine-ellipsis word-break",
-        children: (_data$deliverable_tit = data === null || data === void 0 ? void 0 : data.deliverable_title) !== null && _data$deliverable_tit !== void 0 ? _data$deliverable_tit : '--'
+        children: data === null || data === void 0 ? void 0 : data.deliverable_title
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+        style: {
+          fontWeight: 'bold',
+          color: 'gray'
+        },
+        children: "N/A"
       })
     });
   }
@@ -201,7 +212,7 @@ var SubTasksTableColumns = [{
   id: 'project',
   header: 'Project',
   accessorFn: function accessorFn(row) {
-    return "".concat(row === null || row === void 0 ? void 0 : row.project_id).concat(row === null || row === void 0 ? void 0 : row.project_name);
+    return "".concat(row.project_id).concat(row.project_name);
   },
   cell: function cell(_ref6) {
     var row = _ref6.row;
@@ -211,10 +222,16 @@ var SubTasksTableColumns = [{
       style: {
         textDecoration: 'none'
       },
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("a", {
+      children: data !== null && data !== void 0 && data.project_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("a", {
         href: "/account/projects/".concat(data === null || data === void 0 ? void 0 : data.project_id),
         className: "multine-ellipsis",
         children: data === null || data === void 0 ? void 0 : data.project_name
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+        style: {
+          fontWeight: 'bold',
+          color: 'gray'
+        },
+        children: "N/A"
       })
     });
   }
@@ -225,11 +242,34 @@ var SubTasksTableColumns = [{
   cell: function cell(_ref7) {
     var row = _ref7.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
+    var clientSelection = function clientSelection() {
+      var client = {
+        url: null,
+        name: null,
+        avatar: null
+      };
+      if (data.client_id) {
+        client.url = "/account/clients/".concat(data.client_id);
+        client.name = data.client_name;
+        client.avatar = data.client_avatar;
+      } else if (data.ind_client_id) {
+        client.url = "/account/clients/".concat(data.ind_client_id);
+        client.name = data.ind_existing_client_name;
+        client.avatar = null;
+      } else {
+        client.url = "";
+        client.name = data.ind_client_name;
+        client.avatar = null;
+      }
+      return _objectSpread({}, client);
+    };
+
+    // console.log(clientSelection());
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        url: "/account/clients/".concat(data === null || data === void 0 ? void 0 : data.client_id),
-        avatar: data === null || data === void 0 ? void 0 : data.client_avatar,
-        name: data === null || data === void 0 ? void 0 : data.client_name
+        url: clientSelection().url,
+        avatar: clientSelection().avatar,
+        name: clientSelection().name
       })
     });
   }
@@ -240,10 +280,16 @@ var SubTasksTableColumns = [{
   cell: function cell(_ref8) {
     var row = _ref8.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    return data !== null && data !== void 0 && data.project_manager_id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_Person__WEBPACK_IMPORTED_MODULE_2__["default"], {
       url: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.project_manager_id),
       name: data === null || data === void 0 ? void 0 : data.pm_id_name,
       avatar: data === null || data === void 0 ? void 0 : data.pm_id_avatar
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("span", {
+      style: {
+        fontWeight: 'bold',
+        color: 'gray'
+      },
+      children: "N/A"
     });
   }
 }, {

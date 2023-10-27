@@ -826,6 +826,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('task-guideline-store', [TaskController::class, 'storeTaskGuideline'])->name('task-guideline-store');
     Route::get('working-environment/{project_id}', [TaskController::class, 'viewWorkingEnvironment'])->name('working-environment');
     Route::post('working-environment-store', [TaskController::class, 'storeWorkingEnvironment'])->name('working-environment-store');
+    Route::get('working-environment/task/{task_id}', [TaskController::class, 'taskWorkingEnvironment']);
 
      /******* Independent TASK Start ******** */
     Route::resource('independent-task',IndependentTaskController::class);

@@ -3503,6 +3503,7 @@ class TaskController extends AccountBaseController
 
        $working_environment = new WorkingEnvironment();
        $working_environment->project_id = $request->project_id;
+       $working_environment->task_id = $request->task_id;
        $working_environment->site_url = $request->site_url;
        $working_environment->login_url = $request->login_url;
        $working_environment->email = $request->email;
@@ -3514,6 +3515,15 @@ class TaskController extends AccountBaseController
            'status'=>200,
            'redirect' => url('/account/tasks/'.$task_id->id),
        ]);
+   }
+   public function taskWorkingEnvironment($id)
+   {
+    $working_environment= WorkingEnvironment::where('task_id',$id)->first();
+    return response()->json([
+        'status'=>200,
+        'task_working_environment' => $working_environment,
+    ]);
+
    }
 
     public function task_json(Request $request, $id)

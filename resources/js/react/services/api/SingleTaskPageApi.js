@@ -353,7 +353,8 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                         .querySelector("meta[name='csrf-token']")
                         .getAttribute("content"),
                 },
-            })
+            }),
+            invalidatesTags: ["SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT"],
         }),
 
         /**
@@ -492,8 +493,13 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
                 url:  `/account/check-project-first-tasks/${projectId}`,
                 method: "GET",
             })
-        })
+        }),
 
+        // Independent task working environment check
+        getWorkingEnvironment : build.query({
+            query: (independent_task_id)=>`/account/working-environment/task/${independent_task_id}`,
+            providesTags : ["SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT"]
+        }),
 
     }),
 });
@@ -546,5 +552,6 @@ export const {
     useCheckEditableSubTaskQuery,
     useCheckEditableTaskQuery,
     useCheckRestrictedWordsMutation,
-
+    useGetWorkingEnvironmentQuery,
+    useLazyGetWorkingEnvironmentQuery,
 } = singleTaskPageApiSlice;
