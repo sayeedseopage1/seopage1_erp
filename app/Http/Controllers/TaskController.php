@@ -5727,23 +5727,23 @@ class TaskController extends AccountBaseController
 
                 foreach ($request->file as $fileData) {
                     $file = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $file->task_id = $task_s->id;
+                    $file->task_id = $task->id;
 
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task_s->id);
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
 
-                    $file->user_id = $task_s->user_id;
+                    $file->user_id = $task->user_id;
                     $file->filename = $fileData->getClientOriginalName();
                     $file->hashname = $filename;
                     $file->size = $fileData->getSize();
                     $file->save();
 
-                    $this->logTaskActivity($task_s->id, $task_s->user_id, 'fileActivity', $task_s->board_column_id);
+                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
                 }
             }
 
 
             $task_user = new TaskUser();
-            $task_user->task_id = $task_s->id;
+            $task_user->task_id = $task->id;
             $task_user->user_id = $pendingParentTasks->user_id;
             $task_user->save();
 
