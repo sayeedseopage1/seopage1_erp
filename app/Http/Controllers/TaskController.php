@@ -1082,7 +1082,7 @@ class TaskController extends AccountBaseController
             $task_revision->lead_comment = $request->comment;
         }
 
-        if(Auth::user()->role_id == 4){
+        if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8 ){
             $task_revision->revision_status = 'Project Manager Revision';
             $task_revision->pm_comment = $request->comment;
         }
