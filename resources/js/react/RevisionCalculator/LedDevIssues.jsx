@@ -55,7 +55,6 @@ const LeadDevIssue = () => {
     })()
   }, [])
 
-  console.log(data)
   
     return (
       <Modal isOpen={true}> 

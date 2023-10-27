@@ -40,7 +40,7 @@ const NumberOfTask = () => {
         try{
             let res = await getRevisionCalculatorTaskWiseData(`/${pm_id}?${queryString}`).unwrap();
             setData(res);
-            console.log({res})
+           
 
         } catch(err){
             console.log(err)
@@ -48,7 +48,7 @@ const NumberOfTask = () => {
     })()
   }, [])
 
-  console.log({data})
+
   
     return (
       <Modal isOpen={true}> 
