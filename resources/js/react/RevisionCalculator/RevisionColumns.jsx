@@ -244,7 +244,7 @@ export const revisionColumns = [
             },
             {
                 id: 'disputed_not_solved',
-                heading: 'Disputed & not solved',
+                heading: 'Unsolved Dispute',
                 moveable: false,
                 sort: row => row?.total_disputes_not_solved,
                 searchText: (row) => `${row?.total_disputes_not_solved}`,
