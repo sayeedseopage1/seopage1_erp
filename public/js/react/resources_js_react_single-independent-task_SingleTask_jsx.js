@@ -200,7 +200,7 @@ var FilePreview = function FilePreview(_ref3) {
     href: downloadUrl,
     download: downloadAble,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", _objectSpread(_objectSpread({
-      className: "sp1_file_upload--input-preview"
+      className: "sp1_file_upload--input-preview ".concat(classname)
     }, props), {}, {
       children: [deleteAble && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
         type: "button",
@@ -214,7 +214,7 @@ var FilePreview = function FilePreview(_ref3) {
         })
       }), fileType === "images" || fileType.startsWith('image/') ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
         src: previewUrl,
-        alt: fileName,
+        alt: "",
         style: {
           width: "100%",
           height: "100%",

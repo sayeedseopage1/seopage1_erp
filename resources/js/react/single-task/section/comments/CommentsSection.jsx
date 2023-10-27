@@ -5,9 +5,13 @@ import Button from "../../components/Button";
 import CommentWritingModal from "./CommentWritingModal";
 import { useLazyGetTaskDetailsQuery } from "../../../services/api/SingleTaskPageApi";
 import _ from "lodash";
+import Widget from "./Widget";
+import { useGetTaskCommentsQuery } from "../../../services/api/TaskCommentApiSlice";
+
+
 
 const CommentSection = ({ task, isLoading }) => {
-    const [comments, setComments] = React.useState([]);
+    // const [comments, setComments] = React.useState([]);
     const [modalIsOpen, setModalIsOpen] = React.useState(false);
     const [openAddCommentModal, setOpenAddCommentModal] = React.useState(false);
     const [modalToggleRef, setModalToggleRef] = React.useState(null);
@@ -17,29 +21,40 @@ const CommentSection = ({ task, isLoading }) => {
         setOpenAddCommentModal(!openAddCommentModal);
     const closeAddCommentModal = () => setOpenAddCommentModal(false);
 
-    const [getTaskDetails, { isFetching }] = useLazyGetTaskDetailsQuery();
+    // const [getTaskDetails, { isFetching }] = useLazyGetTaskDetailsQuery();
+    const { data, isLoading: isFetching} = useGetTaskCommentsQuery(task.id, {skip: !task.id});
 
-    // if task notes fetch completed store data into redux store
-    React.useEffect(() => {
-        if (task && task.id) {
-            getTaskDetails(`/${task?.id}/json?mode=task_comment`)
-                .unwrap()
-                .then((res) => {
-                    let r = _.orderBy([...res], "id", "desc");
-                    setComments(r);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
-    }, []);
+    const comments = _.orderBy(data, 'id', 'desc');
+
+    // console.log({comments})
+    // // if task notes fetch completed store data into redux store
+    // React.useEffect(() => {
+    //     if (task && task.id) {
+    //         getTaskDetails(`/${task?.id}/json?mode=task_comment`)
+    //             .unwrap()
+    //             .then((res) => {
+    //                 let r = _.orderBy([...res], "id", "desc");
+    //                 setComments(r);
+    //             })
+    //             .catch((err) => {
+    //                 console.log(err);
+    //             });
+    //     }
+    // }, []);
 
     // on comment post
     const onCommentPost = (comment) => {
         const _comments = [...comments];
         _comments.unshift(comment);
-        setComments(_comments);
+        // setComments(_comments);
     };
+
+
+    const updateComments = (comment) => {
+        let _comments = comments;
+        _comments = _.map(_comments, c => c.id === comment.id  ? comment : c)
+        // setComments(_comments);
+    }
 
     return (
         <>
@@ -53,8 +68,10 @@ const CommentSection = ({ task, isLoading }) => {
                     toggleRef={modalToggleRef}
                     comments={comments}
                     task={task}
+                    isLoading={isFetching}
                     close={() => setModalIsOpen(false)}
                     onCommentPost={onCommentPost}
+                    updateComments={updateComments}
                 />
 
                 <button
@@ -105,6 +122,9 @@ const CommentSection = ({ task, isLoading }) => {
                 </div>
 
                 <div className="sp1_task_right_card--body">
+                    <Widget task={task} />
+
+{/*
                     {!isFetching && !isLoading ? (
                         comments?.length > 0 ? (
                             comments?.map((comment) => (
@@ -148,7 +168,7 @@ const CommentSection = ({ task, isLoading }) => {
                             />
                             Loading...
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </>

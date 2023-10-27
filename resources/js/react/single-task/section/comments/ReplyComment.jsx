@@ -4,13 +4,15 @@ import Button from "../../../global/Button";
 import Switch from "../../../global/Switch";
 import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 import _ from 'lodash';
+import { toast } from "react-toastify";
+import { useReplyTaskCommentMutation } from "../../../services/api/TaskCommentApiSlice";
 
-const ReplyComment = ({comment}) => {
+const ReplyComment = ({comment, close, onReply}) => {
     const [text, setText] = React.useState('');
     const [files, setFiles] = React.useState([]);
 
+    const [replyTaskComment, {isLoading}] = useReplyTaskCommentMutation();
 
-    const isLoading = false;
 
     const handleEditor = (e, editor) => {
         const data = editor.getData();
@@ -18,23 +20,26 @@ const ReplyComment = ({comment}) => {
     };
 
     // handle update
-    const onUpdate = (e) => {
+    const onReplied = (e) => {
         const formData = new FormData();
-        formData.append('comment', text);
+        formData.append('reply_text', text);
         formData.append('task_id', comment.task_id);
-        formData.append('parent_comment_id', comment.id)
+        formData.append('parent_comment_id', comment.id);
         formData.append('_token', document.querySelector("meta[name='csrf-token']").getAttribute("content"));
         Array.from(files).forEach((file) => {
             formData.append('file[]', file);
         });
 
-
         // show formData
-        for(const [key, value] of formData.entries()){
-            console.log(key, ': ', value)
-        }
+        // for(const [key, value] of formData.entries()){
+        //     console.log(key, ': ', value)
+        // }
 
-
+        replyTaskComment({formData, commentId: comment.id}).then(res => {
+            toast.success('Your reply has been successfully submitted.');
+            onReply();
+            close();
+        })
     };
 
 
@@ -42,6 +47,7 @@ const ReplyComment = ({comment}) => {
         <div className="mt-3 pl-3 w-100">
             <div className="w-100">
                 <React.Fragment>
+                    <h6>Reply: </h6>
                     <div className="ck-editor-holder">
                         <CKEditorComponent
                             data={text}
@@ -75,10 +81,10 @@ const ReplyComment = ({comment}) => {
 
                     <Switch.Case condition={!isLoading}>
                         <div className="mt-3 d-flex align-items-center">
-                            <Button className="mr-2" onClick={onUpdate}>
+                            <Button className="mr-2" onClick={onReplied}>
                                 Reply
                             </Button>
-                            <Button variant="secondary">Close</Button>
+                            <Button onClick={close} variant="secondary">Close</Button>
                         </div>
                     </Switch.Case>
                 </Switch>

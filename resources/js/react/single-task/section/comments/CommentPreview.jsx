@@ -1,8 +1,13 @@
 import React from "react";
 import Button from "../../components/Button";
 import InnerComment from "./InnerComment";
+import { useGetPreviewCommentDataQuery } from "../../../services/api/TaskCommentApiSlice";
+import PreviewInnerComment from "./PreviewInnerComment";
 
-const CommentPreview = ({ isOpen, close, comment }) => {
+const CommentPreview = ({ isOpen, close, commentId }) => {
+    // get comment details
+    const { data: comment, isLoading } = useGetPreviewCommentDataQuery(commentId);
+
 
     return (
         <div className="sp1_st_comment_preview">
@@ -19,7 +24,12 @@ const CommentPreview = ({ isOpen, close, comment }) => {
 
                 {/* comment */}
                 <div className="_comment_list mt-3">
-                    <InnerComment comment={comment} />
+                    {/* show comment details */}
+                    <PreviewInnerComment
+                        comment={comment}
+                        updateComments={() => null}
+                        isLoading={isLoading}
+                    />
                 </div>
             </div>
         </div>

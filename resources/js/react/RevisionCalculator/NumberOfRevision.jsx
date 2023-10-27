@@ -41,7 +41,7 @@ const NumberOfRevision = () => {
             let res = await getRevisionCalculatorRevisionWiseData(`/${pm_id}?${queryString}`).unwrap();
               
             setData([{...res, id:  Math.random().toString(36).substr(2, 5)}]);
-            console.log()
+
 
         } catch(err){
             console.log(err)
@@ -49,7 +49,7 @@ const NumberOfRevision = () => {
     })()
   }, [])
 
-  console.log({data})
+
   
   
     return (

@@ -80,6 +80,7 @@ use App\Models\DailySubmission;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
+use App\Notifications\TaskCommentNotification;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -108,6 +109,7 @@ class TaskController extends AccountBaseController
             7 => "S",
             8 => "S",
             9 => "UD",
+            10=>"GD",
             "null" => "C"
         ];
     }
@@ -3966,29 +3968,50 @@ class TaskController extends AccountBaseController
             return response()->json($data);
         } elseif ($request->mode == 'comment_store') {
             $data = new TaskComment();
-            $data->comment = $request->comment;
-            $data->user_id = $this->user->id;
-            $data->task_id = $request->task_id;
-            $data->added_by = $this->user->id;
-            $data->last_updated_by = $this->user->id;
+                $data->comment = $request->comment;
+                $data->user_id = $this->user->id;
+                $data->task_id = $request->task_id;
+                $data->added_by = $this->user->id;
+                $data->last_updated_by = $this->user->id;
 
-            $data->save();
-            if ($request->hasFile('file')) {
-                $files = $request->file('file');
-                $destinationPath = storage_path('app/public');
-                $file_name = [];
-                foreach ($files as $file) {
-                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-                    array_push($file_name, $filename);
-                    $file->move($destinationPath, $filename);
-                }
-                $data->files = $file_name;
                 $data->save();
-            }
+                $taskID= Task::where('id',$request->task_id)->first();
+                $task_member= TaskUser::where('task_id',$request->task_id)->first();
+                $projectID= Project::where('id',$taskID->project_id)->first();
+                $users= User::where('id',$taskID->added_by)->orWhere('id',$task_member->user_id)->orWhere('id',$projectID->pm_id)->get();
+                $sender= User::where('id',Auth::id())->first();
 
-            $data = TaskComment::find($data->id);
-            $data->last_updated_at = $data->updated_at;
-            return response()->json($data);
+                if ($request->hasFile('file')) {
+                    $files = $request->file('file');
+                    $destinationPath = storage_path('app/public/');
+                    $file_name = [];
+                    // foreach ($files as $file) {
+                    //     $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    //     array_push($file_name, $filename);
+                    //     $file->move($destinationPath, $filename);
+                    // }
+                    foreach ($files as $file) {
+                        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                        array_push($file_name, $filename);
+
+                        // Store the file in AWS S3 using the 's3' disk
+                        Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                    }
+                    $data->files = $file_name;
+                    $data->save();
+
+                }
+
+                $data = TaskComment::find($data->id);
+                $data->last_updated_by = Auth::id();
+                $data->updated_at = $data->updated_at;
+
+                $data->save();
+                // foreach ($users as $user) {
+                //     // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
+                //         Notification::send($user, new TaskCommentNotification($taskID,$sender));
+                //     }
+                return response()->json($data);
         } elseif ($request->mode == 'comment_reply_store') {
             $data = new TaskReply();
             $data->comment_id = $request->comment_id;
@@ -4040,6 +4063,236 @@ class TaskController extends AccountBaseController
             abort(404);
         }
     }
+
+
+    /********************************************/
+    /*************** TASK COMMENT ***************/
+
+    public function getTaskComments($task_id){
+        $data = TaskComment::where('task_id', $task_id)->where('root', null)->get();
+
+        foreach ($data as $value) {
+
+            $replies = TaskReply::where('comment_id', $value->id)->pluck('user_id');
+            $value->total_replies = $replies->count();
+            $value->last_updated_at = strtotime($value->created_at);
+            $value->replies_users = User::whereIn('id', $replies->unique())->get()->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'image_url' => $row->image_url,
+                    'name' => $row->name
+                ];
+            });
+            $value->replies = [];
+        }
+
+
+        return response()->json($data, 200);
+    }
+
+    public function getTaskCommentReplies($comment_id){
+        $data = TaskComment::where('root', $comment_id)->get();
+        return response()->json($data, 200);
+    }
+
+    // edit comment
+    public function editComment(Request $request) {
+        $comment = TaskComment::where('id', $request->comment_id)->first();
+        $oldFiles = json_decode($comment->files, true);
+        $comment->comment = $request->comment;
+        $comment->task_id = $request->task_id;
+
+        if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
+
+            foreach ($files as $file) {
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+            }
+
+            $comment->files = json_encode(array_merge($oldFiles, $file_name));
+        }
+
+        $comment->save();
+
+        $data = TaskComment::find($request->comment_id);
+
+        return response()->json([
+            'message' => 'Comment Update Successfully.',
+            'data' => $data,
+            'status' => 200
+        ]);
+    }
+
+    // add reply
+    public function commentReply(Request $request){
+        $findTaskComment = TaskComment::where('id',$request->parent_comment_id)->first();
+
+        // if($request->parent_comment_id){
+            $files = '';
+
+            if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public/');
+                $file_name = [];
+                foreach ($files as $file) {
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+
+                    array_push($file_name, $filename);
+
+
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+                }
+                $files = json_encode($file_name);
+
+            }
+
+
+            $taskReplies = new TaskReply();
+            $taskReplies->reply = $request->reply_text;
+            $taskReplies->comment_id = $request->parent_comment_id;
+            $taskReplies->user_id = $findTaskComment->user_id;
+            $taskReplies->task_id = $request->task_id;
+            $taskReplies->added_by = Auth::user()->id;
+            $taskReplies->last_updated_by = Auth::user()->id;
+            // $taskReplies->files = $newTaskComment->files;
+            $taskReplies->files = $files;
+            $taskReplies->save();
+
+            $newTaskComment = new TaskComment();
+            $newTaskComment->comment = $request->reply_text;
+            $newTaskComment->task_id = $request->task_id;
+            $newTaskComment->user_id = $findTaskComment->user_id;
+            $newTaskComment->added_by = Auth::user()->id;
+            $newTaskComment->last_updated_by = Auth::user()->id;
+            $newTaskComment->root = $request->parent_comment_id;
+            $newTaskComment->reply_id = $taskReplies->id;
+            $newTaskComment->reply_status =1;
+            $newTaskComment->files = $files;
+            $newTaskComment->save();
+
+
+
+            $taskReply = DB::table('task_comments')
+                        ->leftJoin('task_replies','task_comments.id','task_replies.comment_id')
+                        ->leftJoin('users','task_comments.user_id','users.id')
+                        ->select('task_comments.*','users.id as addedById','users.name as addedByName','users.image as addedByName')
+                        ->first();
+
+            $data = TaskComment::find($newTaskComment->id);
+            return response()->json([
+                'taskReply'=> $taskReply,
+                'data' => $data,
+                'message'=> "Reply Submit Successfully.",
+                'status'=>200
+            ]);
+
+        // }else{
+        //     $newTaskComment = new TaskComment();
+        //     $newTaskComment->comment = $request->reply_text;
+        //     $newTaskComment->task_id = $request->task_id;
+        //     $newTaskComment->user_id = $findTaskComment->user_id;
+        //     $newTaskComment->added_by = Auth::user()->id;
+        //     $newTaskComment->last_updated_by = Auth::user()->id;
+        //     $newTaskComment->reply_status =1;
+        //     if ($request->hasFile('file')) {
+        //         $files = $request->file('file');
+        //         $destinationPath = storage_path('app/public/');
+        //         $file_name = [];
+        //         foreach ($files as $file) {
+        //             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        //             array_push($file_name, $filename);
+
+        //             Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+        //         }
+        //         $newTaskComment->files = $file_name;
+
+        //     }
+        //     $newTaskComment->save();
+
+        //     $addedBy = User::where('id',$newTaskComment->added_by)->first();
+        //     return response()->json([
+        //         'user'=>$addedBy,
+        //         'message'=>"Comment Reply Submit Successfully.",
+        //         'status'=>200
+        //     ]);
+        // }
+    }
+
+    // delete uploaded files
+    public function deleteOldFile(Request $request, $task_id, $comment_id) {
+        $commentTask = TaskComment::where('id', $request->comment_id)->first();
+
+        $files = json_decode($commentTask->files);
+
+        $indexToRemove = array_search($request->file_details["name"], $files);
+
+        if ($indexToRemove !== false) {
+            array_splice($files, $indexToRemove, 1);
+
+            $commentTask->files = json_encode($files);
+            $commentTask->save();
+        }
+
+        return response()->json([
+            'data'=>$commentTask,
+            'message' => "File Deleted Successfully.",
+            'status' => 200
+        ]);
+    }
+
+
+    // comment widget data
+    public function taskCommentWidgetData($task_id){
+        $comments = TaskComment::where('task_id', $task_id)->get();
+
+        $data = [];
+        $comments->each(function ($comment) use (&$data){
+            $d = [
+                "id" => $comment->id,
+                "user_id" => $comment->user->id,
+                "user_name" => $comment->user->name,
+                "type_is_reply" => $comment->reply_status,
+                "created_at"=> $comment->updated_at,
+                "parent_comment_id" => $comment->root,
+            ];
+
+            array_push($data, $d);
+        });
+
+        return response() ->json($data, 200);
+    }
+
+
+     // comment preview data
+     public function previewTaskComment($comment_id){
+
+        $comment_details = TaskComment::find($comment_id);
+
+        $comment = $comment_details;
+
+
+        if($comment->root != null){
+            // get parent
+            $parent = TaskComment::find($comment->root);
+            $comment = $parent;
+        }
+
+        // get all replies
+        $replies = TaskComment::where('root', $comment->id)->get();
+        $comment->replies = $replies;
+
+        return response() ->json($comment, 200);
+    }
+
+    /*************** END TASK COMMENT ************/
+    /*********************************************/
+
+
     public function DeveloperTask($id)
     {
         // /$id = 225;

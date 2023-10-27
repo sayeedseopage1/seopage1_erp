@@ -1,3 +1,5 @@
+import Switch from "../../global/Switch";
+
 export const PendingRevisionColumns = [
     {
         id: "project_name",
@@ -7,7 +9,7 @@ export const PendingRevisionColumns = [
         rowSpan: 2,
         marge: true,
         searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/accounts/projects/${row?.ProjectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a>
+        row: ({row}) => <a href={`/account/projects/${row?.ProjectId}`} title={row?.project_name} className="multiline-ellipsis"> {row?.project_name} </a>
     },
     {
         id: "client_name",
@@ -25,7 +27,7 @@ export const PendingRevisionColumns = [
                 : "";
 
             return (
-                <a href={`/accounts/clients/${row?.clientId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a href={`/account/clients/${row?.clientId}`} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {client_name}
                 </a>
             );
@@ -46,7 +48,7 @@ export const PendingRevisionColumns = [
                 : "";
 
             return (
-                <span title={task_name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <span title={task_name} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {task_name}
                 </span>
             );
@@ -67,7 +69,7 @@ export const PendingRevisionColumns = [
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
             return (
-                <a href={`/accounts/employees/${row?.revision_raised_by_id}`} title={tv} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a href={`/account/employees/${row?.revision_raised_by_id}`} title={tv} className={`multiline-ellipsis ${isEqual ? "highlight" : ""}`}>
                     {tv}
                 </a>
             );
@@ -75,23 +77,115 @@ export const PendingRevisionColumns = [
     },
     {
         id: "revision_requests_against",
-        heading: "Revision Requests Against",
+        heading: "Responsible Person",
         moveable: false,
-        sort: (row) => `${row?.developer_name}`,
+        sort: (row) => {
+            const shortCode = row?.final_responsible_person;
+            const obj = {
+                C: row.client_name,
+                PM: row.project_manager_name,
+                S: row.sales_name,
+                LD: row.lead_developer_name,
+                D: row.developer_name,
+                UD: row.developer_name,
+                GD: row.developer_name 
+            } 
+            return obj[`${shortCode}`]
+        },
         rowSpan: 2,
         marge: false,
-        searchText: (row) => `${row?.developer_name}`,
-        row: ({ row, table }) => {
-            const search = table.state.search;
-            const tv = row?.developer_name;
-            const isEqual = search
-                ? _.includes(_.lowerCase(tv), _.lowerCase(search))
-                : "";
+        row: ({ row }) => {
+            if (!row) return null;
+  
             return (
-                <a href={`/accounts/employees/${row?.developer_id}`} title={tv} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
-                    {tv}
-                </a>
-            );
+                <Switch>
+                    <Switch.Case
+                        condition={row.final_responsible_person === "PM"}
+                    >
+                        <a
+                            href={`/account/employees/${row.project_manager_id}`}
+                            title={row.project_manager_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.project_manager_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "S"}
+                    >
+                        <a
+                            href={`/account/employees/${row.sales_id}`}
+                            title={row.sales_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.sales_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "C"}
+                    >
+                        <a
+                            href={`/account/clients/${row.clientId}`}
+                            title={row.client_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.client_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "LD"}
+                    >
+                        <a
+                            href={`/account/employees/${row.lead_developer_id}`}
+                            title={row.lead_developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.lead_developer_name}
+                        </a>
+                    </Switch.Case>
+
+                    
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "D"}
+                    >
+                        <a
+                            href={`/account/employees/${row.developer_id}`}
+                            title={row.developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.developer_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "UD"}
+                    >
+                        <a
+                            href={`/account/employees/${row.developer_id}`}
+                            title={row.developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.developer_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "GD"}
+                    >
+                        <a
+                            href={`/account/employees/${row.developer_id}`}
+                            title={row.developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.developer_name}
+                        </a>
+                    </Switch.Case>
+                </Switch>
+            ); 
         },
     },
     {
@@ -101,7 +195,7 @@ export const PendingRevisionColumns = [
         sort: row => row?.reason_for_revision,
         rowSpan: 2,
         searchText: (row) => `${row?.reason_for_revision}`,
-        row: ({row}) => <span title={row?.reason_for_revision} className="singleline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
+        row: ({row}) => <span title={row?.reason_for_revision} className="multiline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
     },
 
     

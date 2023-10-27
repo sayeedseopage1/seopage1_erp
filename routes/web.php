@@ -753,6 +753,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/show-subtask/{id}/{tableView?}/{tableViews?}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
     Route::get('tasks/search-subtask', [TaskController::class, 'searchSubTask'])->name('tasks.search_subtask');
 
+    // TASK COMMENTS
+    Route::get('tasks/{task_id}/comments', [TaskController::class, 'getTaskComments']);
+    Route::get('tasks/comments/{comment_id}/replies', [TaskController::class, 'getTaskCommentReplies']);
+    Route::post('tasks/comment-edit', [TaskController::class, 'editComment']);
+    Route::post('tasks/comment-reply', [TaskController::class, 'commentReply']);
+    Route::get('tasks/comments-widget-data/{task_id}', [TaskController::class, 'taskCommentWidgetData']);
+    Route::get('tasks/comment-preview-data/{comment_id}', [TaskController::class, 'previewTaskComment']);
+    Route::delete('tasks/{task_id}/comments/{comment_id}/delete-attach-file', [TaskController::class, 'deleteOldFile']);
+
     // SUBMIT TASK FOR CLIENT APPROVAL
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
     Route::post('tasks/client-approved-task', [TaskController::class, 'clientApprovedTask'])->name('tasks.client_approved_task');

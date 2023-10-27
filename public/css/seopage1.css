@@ -225,6 +225,8 @@
 .sp1_task_comment_send_box {
   display: flex;
   width: 100%;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
 }
 .sp1_task_comment_send_box .__avatar {
   width: 48px;
@@ -241,7 +243,7 @@
 .sp1_task_comment_send_box .__send-box .__box {
   width: 100%;
   background: #fff;
-  padding: 10px 12px;
+  padding: 5px 12px;
   border: 1px solid #e1e1e1;
   border-radius: 6px;
 }
@@ -249,7 +251,7 @@
   color: #777;
 }
 .sp1_task_comment_send_box .__send-box .__box.__reply_text {
-  background: #f5f9fd;
+  background: #f2f2f2;
   border: none;
   padding-left: 14px;
   border-radius: 0;
@@ -259,10 +261,17 @@
   padding-left: 28px;
 }
 
+.comment_files .comment_file {
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+}
+
 .sp1_comment_user--name {
-  font-weight: 600;
+  font-weight: 500;
   margin-right: 10px;
   font-size: 14px;
+  color: #171F28;
   display: block;
 }
 @media (max-width: 557px) {
@@ -273,7 +282,7 @@
 }
 
 .sp1_comment_time {
-  font-size: 13px;
+  font-size: 12px;
 }
 @media (max-width: 557px) {
   .sp1_comment_time {
@@ -363,12 +372,10 @@
   position: relative;
   display: flex;
   align-items: center;
-  width: 32px;
 }
 .sp1_task_comment_actions .replies_count > .reply_auth_avatar > div {
   display: block;
-  position: absolute;
-  left: 0;
+  float: "left";
   border-radius: 50%;
 }
 .sp1_task_comment_actions .replies_count > .reply_auth_avatar > div img {
@@ -1297,6 +1304,32 @@
 
 .single_task_action_dd_menu {
   border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.border__left {
+  position: relative;
+}
+.border__left::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 30px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid #bababa;
+  z-index: 1;
+}
+.border__left.reply_button.badge {
+  display: flex;
+  align-items: center;
+}
+.border__left.reply_button.badge > .icon {
+  margin-top: -0.25rem;
+}
+.border__left.reply_button::before {
+  top: 10px;
 }
 
 .text-hover-underline:hover {

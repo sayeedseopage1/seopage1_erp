@@ -277,7 +277,7 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                             id="additionalInformation1"
                                             onChange={e => setAdditionalInfo({
                                                 info: e.target.value,
-                                                disputeCreate: false,
+                                                disputeCreate: true,
                                             })}
                                             value="Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction"
                                             style={{
