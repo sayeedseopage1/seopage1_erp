@@ -909,7 +909,27 @@ class TaskController extends AccountBaseController
         $task_status = Task::find($request->task_id);
         $task_status->status = "completed";
         $task_status->task_status = "approved";
-        $task_status->board_column_id = 8;
+        if($task_status->independent_task_status == 1)
+        {
+            $task_status->board_column_id = 4;
+            $subtasks = Subtask::where('task_id',$task_status->id)->get();
+            foreach($subtasks as $subtask)
+            {
+                $task_id= Task::where('subtask_id',$subtask->id)->first();
+                $task= Task::find($task_id->id);
+                $task->status = "completed";
+                $task->task_status = "completed";
+                $task->board_column_id = 4;
+                $task->save();
+    
+            }
+
+        }else 
+        {
+            $task_status->board_column_id = 8;
+
+        }
+       
         $task_status->save();
         $board_column = TaskBoardColumn::where('id',$task_status->board_column_id)->first();
         // dd($task_status);
@@ -972,7 +992,9 @@ class TaskController extends AccountBaseController
 
         $text = Auth::user()->name . ' mark task completed';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+        if($task_status->independent_task_status != 1){
         $this->logProjectActivity($task->task->project->id, $link);
+        }
 
         $this->triggerPusher('notification-channel', 'notification', [
             'user_id' => $task->user_id,
@@ -985,7 +1007,9 @@ class TaskController extends AccountBaseController
         $task_submission = TaskSubmission::where('task_id', $task_status->id)->first();
         $sender = User::where('id', Auth::id())->first();
         $user = User::where('id', $task_submission->user_id)->first();
+        if($task_status->independent_task_status != 1){
         Notification::send($user, new TaskApproveNotification($task_status, $sender));
+    }
         return response()->json([
             'status' => 200,
             'task_status'=> $board_column,
@@ -1016,7 +1040,7 @@ class TaskController extends AccountBaseController
     public function TaskRevision(Request $request)
     {
     //    dd($request);
-    //    DB::beginTransaction();
+      // DB::beginTransaction();
 
         $task_status = Task::find($request->task_id);
         $task_status->status = "incomplete";
@@ -1072,7 +1096,7 @@ class TaskController extends AccountBaseController
         $task_revision->is_deniable = $request->is_deniable;
         $task_revision->dispute_between = explode('x', $request->acknowledgement_id)[0];
         $task_revision->save();
-
+       
         //dd($type);
         //authorizatoin action start here
         if (Auth::user()->role_id == 6) {
@@ -1086,8 +1110,11 @@ class TaskController extends AccountBaseController
         $authorization_action->model_name = $task_status->getMorphClass();
         $authorization_action->model_id = $task_status->id;
         $authorization_action->type = $type;
-        $authorization_action->deal_id = $task_status->project->deal_id;
-        $authorization_action->project_id = $task_status->project->id;
+        if($task_status->project_id != null){
+            $authorization_action->deal_id = $task_status->project->deal_id;
+            $authorization_action->project_id = $task_status->project->id;
+        }
+     
         $authorization_action->task_id = $task_status->id;
         $authorization_action->link = route('tasks.show', $request->task_id);
         $authorization_action->title = Auth::user()->name . ' send task revision request';
@@ -1099,7 +1126,9 @@ class TaskController extends AccountBaseController
 
         $text = Auth::user()->name . ' send revision request';
         $link = '<a href="' . route('tasks.show', $task_status->id) . '">' . $text . '</a>';
+        if($task_status->project_id != null){
         $this->logProjectActivity($task_status->project->id, $link);
+        }
 
         $task_user = TaskUser::where('task_id', $request->task_id)->first();
         $task_user_data = User::find($task_user->user_id);
@@ -1111,10 +1140,13 @@ class TaskController extends AccountBaseController
             'body' => Auth::user()->name . ' send revision request',
             'redirectUrl' => route('tasks.show', $task_status->id)
         ]);
+        // dd($task_revision);
 
         $user = User::where('id', $task_submission->user_id)->first();
         $sender = User::where('id', $request->user_id)->first();
+        if($task_status->project_id != null){
         Notification::send($user, new TaskRevisionNotification($task_status, $sender));
+        }
 
         //Toastr::success('Task Revision Successfully', 'Success', ["positionClass" => "toast-top-right"]);
        // return redirect()->back();
@@ -4325,6 +4357,7 @@ class TaskController extends AccountBaseController
 
     public function GetRevision($id)
     {
+       // dd($id);
         $task_revision= TaskRevision::where('task_id',$id)->orderBy('id','desc')->where('approval_status','pending')->first();
 
         return response()->json($task_revision);

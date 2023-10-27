@@ -1,14 +1,13 @@
-import React, {useState} from 'react'  
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import styles from './styles.module.css';
-import Modal from '../global/Modal';
-import Button from '../global/Button';
-import DataTable from '../global/data-table/table';
-import { ClientIssuesTableColumns } from './ClientIssuesTableColumns';
-import { useLazyGetRevisionCalculatorDataClientIssuesQuery } from '../services/api/revisionCalculatorApiSlice';
-import { useEffect } from 'react';
-import { PMIssuesTableColumns } from './PMIssuesTableColumns';
- 
+import React, { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import styles from "./styles.module.css";
+import Modal from "../global/Modal";
+import Button from "../global/Button";
+import DataTable from "../global/data-table/table";
+import { ClientIssuesTableColumns } from "./ClientIssuesTableColumns";
+import { useLazyGetRevisionCalculatorDataClientIssuesQuery } from "../services/api/revisionCalculatorApiSlice";
+import { useEffect } from "react";
+import { PMIssuesTableColumns } from "./PMIssuesTableColumns";
 
 const ClientIssuesTable = () => {
     const [data, setData] = useState([]);
@@ -17,92 +16,88 @@ const ClientIssuesTable = () => {
     const navigation = useNavigate();
     const [searchParams] = useSearchParams();
 
-    const pm_id = searchParams.get('pm');
-    const start_date = searchParams.get('start_date');
-    const end_date = searchParams.get('end_date');
-    const filter = {pm_id, start_date, end_date} 
-    
-    const goBack = ()=> navigation(`/`);
+    const pm_id = searchParams.get("pm");
+    const start_date = searchParams.get("start_date");
+    const end_date = searchParams.get("end_date");
+    const filter = { pm_id, start_date, end_date };
 
-    const [
-        getRevisionCalculatorDataClientIssues,
-        {isFetching}
-    ] = useLazyGetRevisionCalculatorDataClientIssuesQuery()
+    const goBack = () => navigation(`/`);
 
-    
-  // fetch data 
-  useEffect(() => { 
-    ( async () => {
-        const queryObject = _.pickBy(filter, Boolean);
-        const queryString = new URLSearchParams(queryObject).toString();
+    const [getRevisionCalculatorDataClientIssues, { isFetching }] =
+        useLazyGetRevisionCalculatorDataClientIssuesQuery();
 
-        try{
-            let res = await getRevisionCalculatorDataClientIssues(`/${pm_id}?${queryString}`).unwrap();
-            
-            console.log(res)
-            const arr = [];
-            _.forEach(res.client_issues, d => {
-                arr.push({
-                    ...d,
-                    uid: Math.random().toString(36).substr(2, 5)
-                })
-            })
+    // fetch data
+    useEffect(() => {
+        (async () => {
+            const queryObject = _.pickBy(filter, Boolean);
+            const queryString = new URLSearchParams(queryObject).toString();
 
-            setData(arr); 
+            try {
+                let res = await getRevisionCalculatorDataClientIssues(
+                    `/${pm_id}?${queryString}`
+                ).unwrap();
 
-        } catch(err){
-            console.log(err)
-        }
-    })()
-  }, [])
+                const arr = [];
+                _.forEach(res.client_issues, (d) => {
+                    arr.push({
+                        ...d,
+                        uid: Math.random().toString(36).substr(2, 5),
+                    });
+                });
 
-  console.log(data)
-  
-  
+                setData(arr);
+            } catch (err) {
+                console.log(err);
+            }
+        })();
+    }, []);
+
     return (
-      <Modal isOpen={true}> 
-          <div className="sp1_modal-content-wrapper">
-              <div className={`sp1_modal-panel ${styles.modal_panel}`}>
-                  {/* header */}
-                  <div className={`sp1_modal-head ${styles.modal_title_bar}`}>
-                      <div className="sp1_modal-title pl-2">Client Issues</div>
-                      <Button 
-                        onClick={goBack} 
-                        aria-label="ModalClose" 
-                        variant='tertiary' 
-                        className='sp1_modal-close'
-                    >
-                        <i className='fa-solid fa-xmark'/>
-                      </Button>
-                  </div>
-                  {/* end header */}
-  
-                  {/* body */}
-                  <div className={`sp1_modal-body ${styles.modal_body}`}>
-  
-                  <DataTable
-                          data={data} 
-                          margeRow={true}
-                          tableName='RevisionDevIssuesTableTable'
-                          columns={PMIssuesTableColumns}
-                          pageIndex={pageIndex}
-                          perPageRow={nRows}
-                          onPageChange={(value) => setPageIndex(value)}
-                          onPageRowChange={(n) => setNRows(n)} 
-                          total={data.length}
-                          uniq_id='uid'
-                          isLoading={isFetching}
-                          tableClass={styles.table}
-                          groupBy={(data) => _.groupBy(data, d=>d.projectId)}
-                          tableContainerClass={styles.tableContainer}
-                      /> 
-                  </div>
-                  {/* end body */}
-              </div>  
-          </div>
-       </Modal>
-    )
-}
-  
+        <Modal isOpen={true}>
+            <div className="sp1_modal-content-wrapper">
+                <div className={`sp1_modal-panel ${styles.modal_panel}`}>
+                    {/* header */}
+                    <div className={`sp1_modal-head ${styles.modal_title_bar}`}>
+                        <div className="sp1_modal-title pl-2">
+                            Client Issues
+                        </div>
+                        <Button
+                            onClick={goBack}
+                            aria-label="ModalClose"
+                            variant="tertiary"
+                            className="sp1_modal-close"
+                        >
+                            <i className="fa-solid fa-xmark" />
+                        </Button>
+                    </div>
+                    {/* end header */}
 
-export default ClientIssuesTable 
+                    {/* body */}
+                    <div className={`sp1_modal-body ${styles.modal_body}`}>
+                        <DataTable
+                            data={data}
+                            margeRow={true}
+                            tableName="RevisionDevIssuesTableTable"
+                            columns={PMIssuesTableColumns}
+                            pageIndex={pageIndex}
+                            perPageRow={nRows}
+                            onPageChange={(value) => setPageIndex(value)}
+                            onPageRowChange={(n) => setNRows(n)}
+                            total={data.length}
+                            uniq_id="uid"
+                            isLoading={isFetching}
+                            tableClass={styles.table}
+                            groupBy={(data) =>
+                                _.groupBy(data, (d) => d.projectId)
+                            }
+                            tableContainerClass={styles.tableContainer}
+                        />
+                    </div>
+                    {/* end body */}
+                </div>
+            </div>
+        </Modal>
+    );
+};
+
+export default ClientIssuesTable;

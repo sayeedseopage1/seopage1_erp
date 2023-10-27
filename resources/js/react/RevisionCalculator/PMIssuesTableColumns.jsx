@@ -1,19 +1,30 @@
+import Switch from "../global/Switch";
+
 export const PMIssuesTableColumns = [
     {
         id: "project_name",
         heading: "Project Name",
         moveable: true,
-        sort: row => row?.project_name,
+        sort: (row) => row?.project_name,
         rowSpan: 2,
         marge: true,
-        searchText: (row) =>  `${row?.project_name}`,
-        row: ({row}) => <a href={`/accounts/projects/${row?.ProjectId}`} title={row?.project_name} className="singleline-ellipsis"> {row?.project_name} </a>
+        searchText: (row) => `${row?.project_name}`,
+        row: ({ row }) => (
+            <a
+                href={`/account/projects/${row?.ProjectId}`}
+                title={row?.project_name}
+                className="multiline-ellipsis"
+            >
+                {" "}
+                {row?.project_name}{" "}
+            </a>
+        ),
     },
     {
         id: "client_name",
         heading: "Client Name",
         moveable: false,
-        sort: (row) =>row?.client_name,
+        sort: (row) => row?.client_name,
         rowSpan: 2,
         marge: true,
         searchText: (row) => `${row?.client_name}`,
@@ -25,7 +36,12 @@ export const PMIssuesTableColumns = [
                 : "";
 
             return (
-                <a href={`/accounts/clients/${row?.clientId}`} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a
+                    href={`/account/clients/${row?.clientId}`}
+                    className={`multiline-ellipsis ${
+                        isEqual ? "highlight" : ""
+                    }`}
+                >
                     {client_name}
                 </a>
             );
@@ -46,7 +62,12 @@ export const PMIssuesTableColumns = [
                 : "";
 
             return (
-                <span title={task_name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <span
+                    title={task_name}
+                    className={`multiline-ellipsis ${
+                        isEqual ? "highlight" : ""
+                    }`}
+                >
                     {task_name}
                 </span>
             );
@@ -67,7 +88,13 @@ export const PMIssuesTableColumns = [
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
             return (
-                <a href={`/accounts/employees/${row?.revision_raised_by_id}`} title={tv} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}>
+                <a
+                    href={`/account/employees/${row?.revision_raised_by_id}`}
+                    title={tv}
+                    className={`multiline-ellipsis ${
+                        isEqual ? "highlight" : ""
+                    }`}
+                >
                     {tv}
                 </a>
             );
@@ -75,125 +102,209 @@ export const PMIssuesTableColumns = [
     },
     {
         id: "revision_requests_against",
-        heading: "Revision Requests Against",
+        heading: "Responsible Person",
         moveable: false,
-        sort:  (row) => {
-            const shortCode = row?.dispute_between;
-            if(shortCode === "CPR"){
-                return row.client_name;
-            }else if(shortCode === 'SPR'){
-                return row.sales_name;
-            }else{
-                return row.lead_developer_name;
-            }
+        sort: (row) => {
+            const shortCode = row?.final_responsible_person;
+            const obj = {
+                C: row.client_name,
+                PM: row.project_manager_name,
+                S: row.sales_name,
+                LD: row.lead_developer_name,
+                D: row.developer_name,
+                UD: row.developer_name,
+                GD: row.developer_name 
+            } 
+            return obj[`${shortCode}`]
         },
         rowSpan: 2,
         marge: false,
-        searchText: (row) => {
-            const shortCode = row?.dispute_between;
-            if(shortCode === "CPR"){
-                return row.client_name;
-            }else if(shortCode === 'SPR'){
-                return row.sales_name;
-            }else{
-                return row.lead_developer_name;
-            }
-        },
-        row: ({ row, table }) => {
-            if(!row) return null;
-
-            const search = table.state.search;
-            const shortCode = row?.dispute_between;
-            const tv = "";
-            let against =  {url: '', name: ''};
-
-            if(shortCode === "CPR"){
-                against = {
-                    url: `/accounts/employees/${row?.clientId}`,
-                    name: row.client_name,
-                }
-            }else if(shortCode === 'SPR'){
-                against = {
-                    url: `/accounts/employees/${row?.sales_id}`,
-                    name: row.sales_name,
-                }
-            }else{
-                against = {
-                    url: `/accounts/employees/${row?.lead_developer_id}`,
-                    name: row.lead_developer_name,
-                }
-            }
-
-
-
-            const isEqual = search
-                ? _.includes(_.lowerCase(against.name), _.lowerCase(search))
-                : "";
+        row: ({ row }) => {
+            if (!row) return null;
+  
             return (
-                <a href={against.url}
-                    title={against.name} className={`singleline-ellipsis ${isEqual ? "highlight" : ""}`}
-                >
-                    {against.name}
-                </a>
+                <Switch>
+                    <Switch.Case
+                        condition={row.final_responsible_person === "PM"}
+                    >
+                        <a
+                            href={`/account/employees/${row.project_manager_id}`}
+                            title={row.project_manager_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.project_manager_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "S"}
+                    >
+                        <a
+                            href={`/account/employees/${row.sales_id}`}
+                            title={row.sales_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.sales_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "C"}
+                    >
+                        <a
+                            href={`/account/clients/${row.clientId}`}
+                            title={row.client_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.client_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "LD"}
+                    >
+                        <a
+                            href={`/account/employees/${row.lead_developer_id}`}
+                            title={row.lead_developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.lead_developer_name}
+                        </a>
+                    </Switch.Case>
+
+                    
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "D"}
+                    >
+                        <a
+                            href={`/account/employees/${row.developer_id}`}
+                            title={row.developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.developer_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "UD"}
+                    >
+                        <a
+                            href={`/account/employees/${row.developer_id}`}
+                            title={row.developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.developer_name}
+                        </a>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={row.final_responsible_person === "GD"}
+                    >
+                        <a
+                            href={`/account/employees/${row.developer_id}`}
+                            title={row.developer_name}
+                            className="multiline-ellipsis"
+                        >
+                            {row.developer_name}
+                        </a>
+                    </Switch.Case>
+                </Switch>
+            ); 
+        },
+    },
+    {
+        id: "reason_for_revision",
+        heading: "Reason for revision",
+        moveable: true,
+        sort: (row) => row?.reason_for_revision,
+        rowSpan: 2,
+        searchText: (row) => `${row?.reason_for_revision}`,
+        row: ({ row }) => (
+            <span
+                title={row?.reason_for_revision}
+                className="multiline-ellipsis"
+            >
+                {row?.reason_for_revision ?? "--"}
+            </span>
+        ),
+    },
+    {
+        id: "disputed",
+        heading: "Disputed (Y/N)",
+        moveable: true,
+        sort: (row) => row?.dispute_created,
+        rowSpan: 2,
+        searchText: (row) => `${row?.dispute_created}`,
+        row: ({ row }) => {
+            return (
+                <span className="multiline-ellipsis">
+                    {row?.dispute_created ? "YES" : "NO"}
+                </span>
             );
         },
     },
     {
-        id: 'reason_for_revision',
-        heading: 'Reason for revision',
+        id: "total_comments",
+        heading: "Total comments",
         moveable: true,
-        sort: row => row?.reason_for_revision,
-        rowSpan: 2,
-        searchText: (row) => `${row?.reason_for_revision}`,
-        row: ({row}) => <span title={row?.reason_for_revision} className="singleline-ellipsis">{row?.reason_for_revision ?? '--'}</span>
-    },
-    {
-        id: 'disputed',
-        heading: 'Disputed (Y/N)',
-        moveable: true,
-        sort: row => row?.dispute_created,
-        rowSpan: 2,
-        searchText: (row) => `${row?.dispute_created}`,
-        row: ({row}) =>{
-            return <span className="singleline-ellipsis">{row?.dispute_created ? 'YES' : 'NO'}</span>
-        }
-    },
-    {
-        id: 'total_comments',
-        heading: 'Total comments',
-        moveable: true,
-        sort: row => row?.disputes_comments,
+        sort: (row) => row?.disputes_comments,
         rowSpan: 2,
         searchText: (row) => `${row?.disputes_comments}`,
-        row: ({row}) => <span className="singleline-ellipsis">{row?.disputes_comments}</span>
+        row: ({ row }) => (
+            <span className="multiline-ellipsis">
+                {row?.disputes_comments}
+            </span>
+        ),
     },
     {
-        id: 'verdict',
-        heading: 'Verdict',
+        id: "verdict",
+        heading: "Verdict",
         moveable: true,
-        sort: row => row?.verdict,
+        sort: (row) => row?.verdict,
         rowSpan: 2,
         searchText: (row) => `${row?.verdict}`,
-        row: ({row}) => <Verdict row={row} />
+        row: ({ row }) => <Verdict row={row} />,
     },
-
 ];
 
-
-
-const Verdict = ({row}) => {
-    if(row?.status){
-        if(row?.winner){
-            return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
-        }else{
+const Verdict = ({ row }) => {
+    if (row?.status) {
+        if (row?.winner) {
+            return (
+                <span>
+                    {" "}
+                    Verdict given in favor of{" "}
+                    <a
+                        href={`/account/employees/${row?.winner}`}
+                        className="hover-underline"
+                    >
+                        {" "}
+                        {row?.winner_name}{" "}
+                    </a>{" "}
+                </span>
+            );
+        } else {
             return (
                 <div>
-                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/accounts/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/accounts/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_rasied_against_name}</a> ({row?.raised_against_percent}%)
+                    Both parties were hold partially responsible. Party{" "}
+                    <a
+                        className="hover-underline"
+                        href={`/account/employees/${row?.dispute_raised_by_id}`}
+                    >
+                        {row?.dispute_raised_by_name}
+                    </a>{" "}
+                    ({row?.raised_by_percent}%) & Party{" "}
+                    <a
+                        className="hover-underline"
+                        href={`/account/employees/${row?.dispute_raised_by_id}`}
+                    >
+                        {row?.dispute_rasied_against_name}
+                    </a>{" "}
+                    ({row?.raised_against_percent}%)
                 </div>
-            )
+            );
         }
     }
-    return <span className="singleline-ellipsis">
-        N/A
-    </span>
-}
+    return <span className="multiline-ellipsis">N/A</span>;
+};
