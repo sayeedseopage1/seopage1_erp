@@ -75,6 +75,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
             login_url: loginUrl,
             email: siteLoginCredentialUserNameOrEmail,
             password: password,
+            task_id:task?.id,
             frontend_password: frontendPassword
         }
  

@@ -119,9 +119,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                         timer: 2500,
                     });
                     close();
-                    setTimeout(() => {
-                        setRefresh();
-                    }, 1000);
+                    setRefresh();
                 });
         // } else {
             // Swal.fire({
@@ -139,8 +137,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
     const auth = _.includes([1, 8], user.getRoleId());
 
 
-    // console
-    // console.log({ data, table });
+    console.log(data.heading);
+    console.log({ data, table });
 
 
     return (

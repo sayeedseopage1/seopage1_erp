@@ -64,6 +64,10 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
 
+    useEffect(()=>{
+      console.log({task});
+    },[task])
+
     // const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
     // const {  } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=estimation_time`);
@@ -348,15 +352,15 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
                     {/* working environment form */}
-                    {isWorkingEnvironmentSubmit &&
+                    {!task?.workEnvData &&
                         <WorkingEnvironmentForm
                             task={task}
-                            onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
+                            onSubmit={() =>{}}
                             close={close}
                         /> }
                     {/* end working environment form */}
 
-                    {!isWorkingEnvironmentSubmit &&
+                    {task?.workEnvData &&
                         <LeadConfirmationModal
                             isOpen={!showForm}
                             onConfirm={() => setShowForm(true)}

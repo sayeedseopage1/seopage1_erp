@@ -143,14 +143,16 @@ const SubTaskSection = ({status}) => {
                             close={closeAddModal}
                             formMode={formMode}
                         >
-                            {!edit ? (
+                            {
+                            // !edit ?
                                 <SubTaskForm
                                     close={closeAddModal}
                                     isFirstSubtask={
                                         !isFetching && subTask?.length ? false : true
                                     }
-                                />
-                            ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
+                                /> 
+                            // : <SubtTaskEditForm close={closeEditForm} editId={edit} /> 
+                            }
                         </CustomModal>
                 </React.Fragment>:
                 <React.Fragment>

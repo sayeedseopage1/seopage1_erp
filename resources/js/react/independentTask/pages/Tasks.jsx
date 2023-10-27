@@ -180,7 +180,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                     />
 
                     <TasksTable
-                        tasks={tableData}
+                        tasks={_.orderBy(tableData,['creation_date'],['desc'])}
                         isLoading={isLoading}
                         filter={filter}
                         tableName="independent-task-table"

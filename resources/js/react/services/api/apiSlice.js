@@ -22,6 +22,7 @@ export const apiSlice = createApi({
             "PENDING_TASK_AUTHORIZATION_CONVERSATIONS",
             "INDEPENDENT_TASK",
             "IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS",
+            "SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT",
     ],
     endpoints: () => ({}),
 });
