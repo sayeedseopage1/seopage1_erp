@@ -530,6 +530,7 @@ export const {
     useRevisionAcceptOrDenyMutation,
     useSubmitForClientApprovalMutation,
     useGetTaskStatusQuery,
+    useLazyGetTaskStatusQuery,
     useRevisionAcceptOrDenyByLeadDeveloperMutation,
     useConfirmClientApprovalMutation,
     useStoreClientRevisionTaskMutation,

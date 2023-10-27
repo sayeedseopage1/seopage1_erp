@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Toaster from '../global/Toaster';
-import { useGetTaskDetailsQuery, useGetTaskStatusQuery, useLazyGetWorkingEnvironmentQuery } from "../services/api/SingleTaskPageApi";
+import { useGetTaskDetailsQuery, useGetTaskStatusQuery, useGetWorkingEnvironmentQuery, useLazyGetTaskDetailsQuery, useLazyGetTaskStatusQuery, useLazyGetWorkingEnvironmentQuery } from "../services/api/SingleTaskPageApi";
 import { storeTask } from "../services/features/subTaskSlice";
 import { BoardColumn, SingleTask } from "../utils/single-task";
 import { User } from "../utils/user-details";
@@ -43,27 +43,44 @@ const SingleIndependentTask = () => {
     // };
 
     const { data, isFetching } = useGetTaskDetailsQuery(`/${params?.taskId}/json?mode=basic`);
-    const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
+    // const [ getTaskDetails , { isFetching, isLoading } ] = useLazyGetTaskDetailsQuery();
 
-    const [getWorkingEnv, { data:workingEnvData, isFetching:isWorkingEnvFetching, isLoading:isWorkingEnvLoading }] = useLazyGetWorkingEnvironmentQuery();
+    const { data: taskStatus } = useGetTaskStatusQuery(params?.taskId);
+    // const [ getTaskStatus ,{ isFetching:isTaskStatusFetching, isLoading:isTaskStatusLoading }] = useLazyGetTaskStatusQuery();
+
+    const {data:workingEnvData, isFetching:isWorkingEnvFetching, isLoading:isWorkingEnvLoading} = useGetWorkingEnvironmentQuery();
+    // const [getWorkingEnv, { isFetching:isWorkingEnvFetching, isLoading:isWorkingEnvLoading }] = useLazyGetWorkingEnvironmentQuery();
 
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
 
 
+    // useEffect(()=>{
+    //     console.log({task});
+    //     getWorkingEnv(task.subtaskId ? task.parentTaskId : task.id)
+    //       .unwrap()
+    //       .then(({task_working_environment})=>{
+    //         // console.log({task_working_environment});
+    //       })
+    // },[task.id]);
+
     useEffect(()=>{
-        console.log({task});
-        getWorkingEnv(task.subtaskId ? task.parentTaskId : task.id)
-          .unwrap()
-          .then(({task_working_environment})=>{
-            // console.log({task_working_environment});
-          })
-    },[task]);
+      const task = {};
+
+      getTaskDetails(`/${params?.taskId}/json?mode=basic`)
+        .unwrap()
+        .then((data)=>{
+        //   task.
+        })
+
+
+    },[])
 
 
     useEffect(()=>{
+        console.log({Task,taskStatus});
       console.log({workingEnvData,isWorkingEnvFetching,isWorkingEnvLoading});
-    },[workingEnvData,isWorkingEnvFetching,isWorkingEnvLoading])
+    },[Task,taskStatus,workingEnvData,isWorkingEnvFetching,isWorkingEnvLoading])
 
 
     useEffect(() => {

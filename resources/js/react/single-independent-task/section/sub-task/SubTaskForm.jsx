@@ -339,7 +339,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <h6>
-                        { isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
+                        { !task?.workEnvData ? "Working Environment" : "Create Sub Task"}
                     </h6>
                     <Button
                         aria-label="close-modal"
