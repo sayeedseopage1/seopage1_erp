@@ -254,6 +254,7 @@ export class SingleTask {
         this.subAcknowledgement = task?.sub_acknowledgement;
         this.acknowledgement = task?.acknowledgement;
         this.approvalStatus = task?.approval_status;
+        this.isIndependentTask = !!task?.independent_task_status;
     }
 
     isLeadDeveloperAbleToSubmit () {

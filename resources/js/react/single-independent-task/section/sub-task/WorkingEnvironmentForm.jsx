@@ -5,8 +5,9 @@ import { useWorkingEnvironmentMutation } from "../../../services/api/SingleTaskP
 import SubmitButton from "../../components/SubmitButton";
 import { checkIsURL } from "../../../utils/check-is-url";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
-const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
+const WorkingEnvironmentForm = ({ task, onSubmit, close }) => {
     const [siteUrl, setSiteUrl] = useState("");
     const [frontendPassword, setFrontendPassword] = useState("");
     const [loginUrl, setLoginUrl] = useState("");
@@ -17,56 +18,63 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
     const [password, setPassword] = useState("");
     const [err, setErr] = useState(null);
 
-
-    const [ workingEnvironment, {isLoading}] = useWorkingEnvironmentMutation();
-
+    const [workingEnvironment, { isLoading }] = useWorkingEnvironmentMutation();
 
     // handle input change
     const handleChange = (e, setState) => {
-        e.preventDefault()
+        e.preventDefault();
         setState(e.target.value);
     };
 
     const isValid = () => {
-        let count = 0;     
+        let count = 0;
         const error = new Object();
 
-        if(!siteUrl){
-           count++;
-           error.siteUrl = "You have to provide Working/Staging Site's URL" 
-        }else if(!checkIsURL(siteUrl)){
+        if (!siteUrl) {
+            count++;
+            error.siteUrl = "You have to provide Working/Staging Site's URL";
+        } else if (!checkIsURL(siteUrl)) {
             count++;
             error.siteUrl = "Please enter a valid URL";
-            toast.warn("Please enter a valid Working/Staging Site's URL", {position: 'top-right'})
+            toast.warn("Please enter a valid Working/Staging Site's URL", {
+                position: "top-right",
+            });
         }
-        
-        if(!loginUrl){
-            count++;
-            error.loginUrl = "You have to provide Working/Staging Site's Admin Panel URL" 
-         }else if(!checkIsURL(loginUrl)){
-             count++;
-             error.loginUrl = "Please enter a valid URL";
-             toast.warn("Please enter a valid Working/Staging Site's Admin Panel URL", {position: 'top-right'})
-         }
 
-         if(!siteLoginCredentialUserNameOrEmail){
+        if (!loginUrl) {
             count++;
-            error.username = "You have to provide Working/Staging Site's Admin Username/Email"
-         }
+            error.loginUrl =
+                "You have to provide Working/Staging Site's Admin Panel URL";
+        } else if (!checkIsURL(loginUrl)) {
+            count++;
+            error.loginUrl = "Please enter a valid URL";
+            toast.warn(
+                "Please enter a valid Working/Staging Site's Admin Panel URL",
+                { position: "top-right" }
+            );
+        }
 
-         if(!password){
+        if (!siteLoginCredentialUserNameOrEmail) {
             count++;
-            error.password = "You have to provide Working/Staging Site's Admin Password"
-         }
+            error.username =
+                "You have to provide Working/Staging Site's Admin Username/Email";
+        }
 
-         if(!frontendPassword){
+        if (!password) {
             count++;
-            error.frontendPassword = "You have to provide Working/Staging Site's Frontend Password"
-         }
-         
-        setErr(error);  
+            error.password =
+                "You have to provide Working/Staging Site's Admin Password";
+        }
+
+        if (!frontendPassword) {
+            count++;
+            error.frontendPassword =
+                "You have to provide Working/Staging Site's Frontend Password";
+        }
+
+        setErr(error);
         return !count;
-    }
+    };
 
     const handleSubmit = async (e) => {
         const data = {
@@ -75,22 +83,31 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
             login_url: loginUrl,
             email: siteLoginCredentialUserNameOrEmail,
             password: password,
-            task_id:task?.id,
-            frontend_password: frontendPassword
-        }
- 
-        if(isValid()){ 
-            try{
-                await workingEnvironment(data).unwrap().then(res => {
-                    toast.success('Working environment store successfully', {position: 'top-right'});
-                    onSubmit();
-                    // close();
-                })
-            }catch(err){
-                console.log(err)
+            task_id: task?.id,
+            frontend_password: frontendPassword,
+        };
+
+        if (isValid()) {
+            try {
+                await workingEnvironment(data)
+                    .unwrap()
+                    .then((res) => {
+                        close();
+                        Swal.fire(
+                            "Working environment store successfully",
+                            "You can create subtask now",
+                            "success"
+                        ).then(({isConfirmed})=>{
+                            onSubmit();
+                        });
+                    });
+            } catch (err) {
+                console.log(err);
             }
-        }else{
-            toast.error('Please provide all required fields', {position: 'top-right'});
+        } else {
+            toast.error("Please provide all required fields", {
+                position: "top-right",
+            });
         }
     };
 
@@ -161,7 +178,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                 </div>
 
                 <div className="col-12 col-md-3">
-                   <div className="h-100 d-md-flex align-items-end">
+                    <div className="h-100 d-md-flex align-items-end">
                         <Input
                             id="password"
                             label="Password"
@@ -174,7 +191,7 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                             error={err?.password}
                             onChange={(e) => handleChange(e, setPassword)}
                         />
-                    </div> 
+                    </div>
                 </div>
             </div>
 
@@ -189,8 +206,8 @@ const WorkingEnvironmentForm = ({task, onSubmit, close}) => {
                     </Button>
 
                     <SubmitButton onClick={handleSubmit} isLoading={isLoading}>
-                            <i className="fa-regular fa-paper-plane" />
-                            Create
+                        <i className="fa-regular fa-paper-plane" />
+                        Create
                     </SubmitButton>
 
                     {/* {isLoading ? (

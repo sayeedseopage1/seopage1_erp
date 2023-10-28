@@ -16,6 +16,7 @@ import Loader from "./Loader";
 import { storeSubTasks } from "../../services/features/tasksSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Switch from "../../global/Switch";
+import { User } from "../../utils/user-details";
 
 const compareDate = new CompareDate();
 
@@ -451,7 +452,8 @@ export const SubTasksTableColumns = [
       return <ActionDropdown row={data} />
     },
   }
-]
+];
+
 
 
 

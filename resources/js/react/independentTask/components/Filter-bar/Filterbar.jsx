@@ -47,7 +47,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             assignee_by: _leadDeveloper?.id,
             pm_id: _pm?.id,
             status: _status?.id,
-            date_filter_by,
+            // date_filter_by,
         };
 
         onFilter(filter);
@@ -59,7 +59,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         _leadDeveloper,
         _pm,
         _status,
-        date_filter_by,
+        // date_filter_by,
     ]);
 
     return (
@@ -84,13 +84,13 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
 
-                    <UserFilter
+                    {/* <UserFilter
                         title="Project Manager"
                         state={pm}
                         setState={setPm}
                         roleIds={[4]}
                     />
-                    <HDivider />
+                    <HDivider /> */}
 
                     <UserFilter
                         title="Assigned By"
@@ -120,8 +120,8 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
-                    <HDivider />
-                    <DateTypeFilter state={dateType} setState={setDateType} />
+                    {/* <HDivider />
+                    <DateTypeFilter state={dateType} setState={setDateType} /> */}
                     <HDivider />
                 </React.Fragment>
             )}

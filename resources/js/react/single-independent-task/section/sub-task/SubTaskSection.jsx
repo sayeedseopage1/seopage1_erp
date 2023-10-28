@@ -76,11 +76,11 @@ const SubTaskSection = ({status}) => {
     };
 
     // handle create new subtask
-    const handleCreateSubTask = () => {
-        // if parent task has not already any subtask
-        // show the Working Environment form
-        // else create from
-    };
+    // const handleCreateSubTask = () => {
+    //     // if parent task has not already any subtask
+    //     // show the Working Environment form
+    //     // else create from
+    // };
 
     // edit modal form control end
     // const {
@@ -97,9 +97,9 @@ const SubTaskSection = ({status}) => {
 
 
 
-    useEffect(()=>{
-        console.log({task,subTask,isFetching});
-      },[task,subTask,isFetching])
+    // useEffect(()=>{
+    //     console.log({task,subTask,isFetching});
+    //   },[task,subTask,isFetching])
 
 
 
@@ -147,9 +147,7 @@ const SubTaskSection = ({status}) => {
                             // !edit ?
                                 <SubTaskForm
                                     close={closeAddModal}
-                                    isFirstSubtask={
-                                        !isFetching && subTask?.length ? false : true
-                                    }
+                                    isFirstSubtask={!Task.workEnvData}
                                 /> 
                             // : <SubtTaskEditForm close={closeEditForm} editId={edit} /> 
                             }
@@ -161,9 +159,7 @@ const SubTaskSection = ({status}) => {
                             {!edit ? (
                                 <SubTaskForm
                                     close={closeAddModal}
-                                    isFirstSubtask={
-                                        !isFetching && subTask?.length ? false : true
-                                    }
+                                    isFirstSubtask={!Task.workEnvData}
                                 />
                             ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
                         </Modal>

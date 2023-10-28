@@ -61,7 +61,9 @@ const TaskAuthorization = ({ title, filter }) => {
 
 
      const getData = (type) => {
-            let _data = _.orderBy(data?.data, "updated_at", "desc") || [];
+        // console.log('task[need-authorization]',{data});
+        const newData = _.filter(data?.data, d => !d.independent_task_status);
+            let _data = _.orderBy(newData, "updated_at", "desc") || [];
 
         if (filter && filter.type === "project" && filter.projectId) {
             _data = _.filter(
