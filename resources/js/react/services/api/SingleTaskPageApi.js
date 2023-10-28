@@ -498,7 +498,7 @@ const singleTaskPageApiSlice = apiSlice.injectEndpoints({
         // Independent task working environment check
         getWorkingEnvironment : build.query({
             query: (independent_task_id)=>`/account/working-environment/task/${independent_task_id}`,
-            providesTags : ["SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT"]
+            // providesTags : ["SINGLE_INDEPENDENT_TASK_WORKING_ENVIRONMENT"]
         }),
 
     }),
@@ -530,6 +530,7 @@ export const {
     useRevisionAcceptOrDenyMutation,
     useSubmitForClientApprovalMutation,
     useGetTaskStatusQuery,
+    useLazyGetTaskStatusQuery,
     useRevisionAcceptOrDenyByLeadDeveloperMutation,
     useConfirmClientApprovalMutation,
     useStoreClientRevisionTaskMutation,

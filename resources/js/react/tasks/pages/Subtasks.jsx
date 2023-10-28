@@ -14,6 +14,7 @@ import _ from "lodash";
 import { defaultColumnVisibility } from "../constant";
 
 
+// current user
 const auth = new User(window.Laravel.user);
 
 const Subtasks = () => {
@@ -52,13 +53,24 @@ const Subtasks = () => {
         }
     }
 
-    let tableColumns = SubTasksTableColumns;
+    // let tableColumns = SubTasksTableColumns;
 
-    if(auth?.getRoleId() !== 5){
-        tableColumns = _.filter(SubTasksTableColumns, d => d.id !== "action");
+    const handleFilterColumns = (tableColumns=[],role)=>{
+        let newTableColumns;
+        if (role === 5) {
+            // console.log('if',{role});
+            newTableColumns = tableColumns.filter((d)=>{
+              return d.id !== "action" && d.id !== "milestone" && d.id !== "deliverable" && d.id !== "project" && d.id !== "assigned_to";
+            })
+        }else{
+            // console.log('else',{role});
+            newTableColumns = tableColumns.filter((d)=>{
+              return d.id !== "action";
+            })
+        }
+
+        return newTableColumns;
     }
-
-
 
     return (
         <React.Fragment>
@@ -75,7 +87,7 @@ const Subtasks = () => {
                         <div className="ml-2" style={{marginTop: '2px'}}>
                             <TableFilter
                                 tableName="subTaskTable"
-                                columns = {_.filter(tableColumns, col => col.id !== 'expend')}
+                                columns = {handleFilterColumns(SubTasksTableColumns,auth?.getRoleId())}
                                 columnVisibility={columnVisibility}
                                 setColumnVisibility={setColumnVisibility}
                             />
@@ -90,7 +102,7 @@ const Subtasks = () => {
                         reportPermission = {[1,8,5]}
                         columnVisibility = {columnVisibility}
                         setColumnVisibility={setColumnVisibility}
-                        tableColumns={tableColumns}
+                        tableColumns={handleFilterColumns(SubTasksTableColumns,auth?.getRoleId())}
                     />
                 </div>
             </div>

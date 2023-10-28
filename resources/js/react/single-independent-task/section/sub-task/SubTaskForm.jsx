@@ -27,8 +27,10 @@ import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import LeadConfirmationModal from "./LeadConfirmationModal";
 import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
+import { useRefetchTaskDetails } from "../../SingleIndependentTask";
 
 const SubTaskForm = ({ close, isFirstSubtask = false }) => {
+    const refetchTask = useRefetchTaskDetails();
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
@@ -64,9 +66,6 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
 
-    useEffect(()=>{
-      console.log({task});
-    },[task])
 
     // const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
@@ -297,7 +296,6 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
                     }
                 });
             }
-
     };
 
     React.useEffect(() => {
@@ -319,19 +317,21 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
         return text
     };
 
-
     useEffect(() => {
         // const showEnv = _.size(task?.subtask) === 0 ? true : false;
         if(auth.getRoleId() === 6){
-            dispatch(setWorkingEnvironmentStatus(isFirstSubtask));
+            dispatch(setWorkingEnvironmentStatus(!isFirstSubtask));
         }
     }, [isFirstSubtask])
 
 
-
     useEffect(()=>{
-      console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});
-    },[isWorkingEnvironmentSubmit,isFirstSubtask,task])
+      console.log({isFirstSubtask,isWorkingEnvironmentSubmit});
+    },[isFirstSubtask,isWorkingEnvironmentSubmit]);
+
+    // useEffect(()=>{
+    //   console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});
+    // },[isWorkingEnvironmentSubmit,isFirstSubtask,task])
 
 
     return (
@@ -339,7 +339,7 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <h6>
-                        { isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
+                        { !isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
                     </h6>
                     <Button
                         aria-label="close-modal"
@@ -352,15 +352,17 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
                     {/* working environment form */}
-                    {!task?.workEnvData &&
+                    {!isWorkingEnvironmentSubmit &&
                         <WorkingEnvironmentForm
                             task={task}
-                            onSubmit={() =>{}}
+                            onSubmit={() =>{
+                                refetchTask()
+                            }}
                             close={close}
                         /> }
                     {/* end working environment form */}
 
-                    {task?.workEnvData &&
+                    {isWorkingEnvironmentSubmit &&
                         <LeadConfirmationModal
                             isOpen={!showForm}
                             onConfirm={() => setShowForm(true)}

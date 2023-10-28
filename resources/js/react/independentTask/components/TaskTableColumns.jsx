@@ -38,23 +38,23 @@ export const TaskTableColumns = [
     // },
 
     // unique id
-    {
-      id: 'u_id',
-      header: 'IndependentTaskId',
-      accessorFn: row => `${row.u_id}}`,
-      cell: ({row}) => {
-        const data = row?.original;  
-        return (
-          <>
-              <abbr title={data?.heading} style={{textDecoration: 'none'}}>
-                <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                    <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
-                </div>
-              </abbr>  
-          </>
-        )
-      }
-    },
+    // {
+    //   id: 'u_id',
+    //   header: 'IndependentTaskId',
+    //   accessorFn: row => `${row.u_id}}`,
+    //   cell: ({row}) => {
+    //     const data = row?.original;  
+    //     return (
+    //       <>
+    //           <abbr title={data?.heading} style={{textDecoration: 'none'}}>
+    //             <div className='d-flex align-items-center' style={{gap: '10px'}}>
+    //                 <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
+    //             </div>
+    //           </abbr>  
+    //       </>
+    //     )
+    //   }
+    // },
 
     // task
     {
@@ -65,12 +65,24 @@ export const TaskTableColumns = [
         const data = row?.original;  
         return (
           <>
-              <abbr title={data?.heading} style={{textDecoration: 'none'}}>
-                <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                    <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
-                </div>
-              </abbr>  
-          </>
+          <abbr title={data?.heading} style={{ textDecoration: 'none' }}>
+            <div className='d-flex align-items-center' style={{ gap: '10px',position:'relative' }}>
+              <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
+              {
+                <span
+                className="badge badge-success"
+                style={{
+                  display:`${data?.u_id?'inline-block':'none'}`,
+                  position:'absolute',
+                  top:'-10px',
+                  right:'-5px',
+                  fontSize:'8px'
+                }}>
+                  Parent Task
+                </span>}
+            </div>
+          </abbr>
+        </>
         )
       }
     },
