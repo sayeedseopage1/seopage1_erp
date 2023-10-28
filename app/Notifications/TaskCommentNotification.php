@@ -59,6 +59,7 @@ class TaskCommentNotification extends Notification
         $pm= User::where('id',$project->pm_id)->first();
         $client= User::where('id',$project->client_id)->first();
 
+
         if ($task_comment->files) {
             $files = json_decode($task_comment->files);
              $imgUrls = '';
@@ -68,8 +69,18 @@ class TaskCommentNotification extends Notification
                $imgUrls .= ' <img src="'.$img.'" alt=""><br>';
             }
         }
+        if($task_comment->files != null)
+        {
+            $images = '<p>
+            <b style="color: black">' . __('Attachments') . ': '.'</b><br>' .$imgUrls . '
+        </p>';
+    
 
-
+        }else 
+        {
+            $images = '';
+        }
+       
         $greet= '<p>
            <b style="color: black">'  . '<span style="color:black">'.'Hello '.$notifiable->name. ','.'</span>'.'</b>
        </p>'
@@ -93,9 +104,7 @@ class TaskCommentNotification extends Notification
    '<p>
        <b style="color: black">' . __('Comment') . ': '.'</b>' .$task_comment->comment . '
    </p>'. 
-   '<p>
-       <b style="color: black">' . __('Attachments') . ': '.'</b><br>' .$imgUrls . '
-   </p>'
+   $images
 
 
    ;
