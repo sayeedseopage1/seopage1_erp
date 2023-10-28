@@ -5099,7 +5099,11 @@ class TaskController extends AccountBaseController
             $added_by = User::where('id', $sub_task->added_by)->first();
             $assigned_to = User::where('id', $sub_task->assigned_to)->first();
             $project = Project::where('id', $task->project_id)->first();
-            $client = User::where('id', $project->client_id)->first();
+            if($project != null)
+            {
+                $client = User::where('id', $project->client_id)->first();
+            }
+           
 
             $responseData[] = [
                 'id' => $item->id,
@@ -5115,11 +5119,11 @@ class TaskController extends AccountBaseController
                 'assigned_to_id' => $assigned_to->id,
                 'assigned_to_name' => $assigned_to->name,
                 'assigned_to_image' => $assigned_to->image,
-                'project_id' => $project->id,
-                'project_name' => $project->project_name,
-                'client_id' => $client->id,
-                'client_name' => $client->name,
-                'client_image' => $client->image,
+                'project_id' => $project->id ?? '',
+                'project_name' => $project->project_name ?? '',
+                'client_id' => $client->id ?? '',
+                'client_name' => $client->name ?? '',
+                'client_image' => $client->image ?? '',
                 'authorization_status' => $item->authorization_status,
                 'updated_at' => $item->updated_at
             ];
