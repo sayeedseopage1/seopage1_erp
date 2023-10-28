@@ -4833,6 +4833,7 @@ class TaskController extends AccountBaseController
 
     //  SEND FOR AUTHORIZATION
     public function dispute_send_for_authorization(Request $request){
+       // DB::beginTransaction();
         $id = $request->dispute_id;
         if($request->authorized){
             $query = TaskRevisionDispute::find($id);
@@ -4854,6 +4855,7 @@ class TaskController extends AccountBaseController
             $revision = TaskRevision::find($query->revision_id);
             $revision-> dispute_status = true;
             if($query->winner){
+               // dd($query);
                 $responsible_person = $query->raised_against != $query->winner ? $query->raised_against : $query->raised_by;
                 $responsible_person_role = User::find($responsible_person)->role_id;
                 if($responsible_person_role == null)
