@@ -115,7 +115,7 @@ const IndependentTask = () => {
     // fetching data against dependencies
     useEffect(() => {
         if (filter) {
-            console.log({filter});
+            // console.log({filter});
             getIndependentTask(filter)
                 .unwrap()
                 .then(({ data, status }) => {

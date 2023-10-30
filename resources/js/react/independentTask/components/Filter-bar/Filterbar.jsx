@@ -6,6 +6,7 @@ import StatusFilter from "./StatusFilter";
 import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
+import ClientFilter from "./ClientFilter";
 
 const Filterbar = ({ onFilter }) => {
     const [isOpen, setIsOpen] = React.useState(false);
@@ -43,12 +44,20 @@ const Filterbar = ({ onFilter }) => {
             start_date,
             end_date,
             assignee_to: _developer?.id,
-            client_id: _client?.id,
+            // client_id: _client?.id,
             assignee_by: _leadDeveloper?.id,
             pm_id: _pm?.id,
             status: _status?.id,
             // date_filter_by,
         };
+
+        // console.log({_client});
+        if (client?.id) {
+            filter.client_id = _client?.id;
+            filter.client_name = _client?.name;
+        } else {
+            filter.client_name = _client?.client_name;
+        }
 
         onFilter(filter);
     }, [
@@ -75,7 +84,7 @@ const Filterbar = ({ onFilter }) => {
 
             {width > 1400 && (
                 <React.Fragment>
-                    <UserFilter
+                    <ClientFilter
                         title="Client"
                         state={client}
                         setState={setClient}
