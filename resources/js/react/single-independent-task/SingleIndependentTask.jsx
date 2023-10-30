@@ -42,7 +42,7 @@ const RefetchTaskProvider = React.createContext({});
 export const useRefetchTaskDetails = () => {
     const { setRefetchTask } = React.useContext(RefetchTaskProvider);
     return () => {
-        setRefetchTask(prev=>!prev);
+        setRefetchTask((prev) => !prev);
     };
 };
 
@@ -153,8 +153,10 @@ const SingleIndependentTask = () => {
 
     if (!task) return null;
 
+    console.log("task revision",task?.revisions);
+
     return (
-        <RefetchTaskProvider.Provider value={{setRefetchTask}}>
+        <RefetchTaskProvider.Provider value={{ setRefetchTask }}>
             <div className="position-relative content-wrapper">
                 <div className="mb-3">
                     <div className={`f-18 ${loadingClass}`}>
@@ -506,126 +508,134 @@ const SingleIndependentTask = () => {
 
                                     <div className="mt-3">
                                         {/* project manager guideline */}
-                                        {
-                                            (!_.isEmpty(task?.workEnvData) || !_.isEmpty(task?.guidelines)) &&
+                                        {(!_.isEmpty(task?.workEnvData) ||
+                                            !_.isEmpty(task?.guidelines)) && (
                                             <Accordion
-                                            expendable={false}
-                                            title="General Guidelines"
-                                        >
-                                            {/* {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> } */}
+                                                expendable={false}
+                                                title="General Guidelines"
+                                            >
+                                                {/* {task?.hasProjectManagerGuideline && <PMGuideline guideline={task?.PMTaskGuideline} /> } */}
 
-                                            {!_.isEmpty(task?.workEnvData) && (
-                                                <div className="sp1_task_card--sub-card">
-                                                    <div
-                                                        className="px-4 py-3"
-                                                        style={{
-                                                            background:
-                                                                "#F3F5F9",
-                                                        }}
-                                                    >
-                                                        <h6 className="mb-2">
-                                                            Working Environment
-                                                        </h6>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                <span>
-                                                                    <strong>
-                                                                        Working/Staging
-                                                                        Site's
-                                                                        URL
-                                                                    </strong>
-                                                                    : <br />{" "}
-                                                                    <a
-                                                                        target="__blank"
-                                                                        href={
+                                                {!_.isEmpty(
+                                                    task?.workEnvData
+                                                ) && (
+                                                    <div className="sp1_task_card--sub-card">
+                                                        <div
+                                                            className="px-4 py-3"
+                                                            style={{
+                                                                background:
+                                                                    "#F3F5F9",
+                                                            }}
+                                                        >
+                                                            <h6 className="mb-2">
+                                                                Working
+                                                                Environment
+                                                            </h6>
+                                                            <hr />
+                                                            <div className="row">
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Working/Staging
+                                                                            Site's
+                                                                            URL
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        <a
+                                                                            target="__blank"
+                                                                            href={
+                                                                                task
+                                                                                    ?.workEnvData
+                                                                                    ?.site_url
+                                                                            }
+                                                                        >
+                                                                            View
+                                                                            on
+                                                                            new
+                                                                            tab
+                                                                        </a>
+                                                                    </span>
+                                                                </div>
+
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Frontend
+                                                                            Password
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        {
                                                                             task
                                                                                 ?.workEnvData
-                                                                                ?.site_url
+                                                                                ?.frontend_password
                                                                         }
-                                                                    >
-                                                                        View on
-                                                                        new tab
-                                                                    </a>
-                                                                </span>
-                                                            </div>
+                                                                    </span>
+                                                                </div>
 
-                                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                <span>
-                                                                    <strong>
-                                                                        Frontend
-                                                                        Password
-                                                                    </strong>
-                                                                    : <br />{" "}
-                                                                    {
-                                                                        task
-                                                                            ?.workEnvData
-                                                                            ?.frontend_password
-                                                                    }
-                                                                </span>
-                                                            </div>
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Working/Staging
+                                                                            Site's
+                                                                            Login
+                                                                            URL
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        <a
+                                                                            target="__blank"
+                                                                            href={
+                                                                                task
+                                                                                    ?.workEnvData
+                                                                                    ?.login_url
+                                                                            }
+                                                                        >
+                                                                            View
+                                                                            on
+                                                                            new
+                                                                            tab
+                                                                        </a>{" "}
+                                                                    </span>
+                                                                </div>
 
-                                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                <span>
-                                                                    <strong>
-                                                                        Working/Staging
-                                                                        Site's
-                                                                        Login
-                                                                        URL
-                                                                    </strong>
-                                                                    : <br />{" "}
-                                                                    <a
-                                                                        target="__blank"
-                                                                        href={
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Working/Staging
+                                                                            Site's
+                                                                            Username/Email
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        {
                                                                             task
                                                                                 ?.workEnvData
-                                                                                ?.login_url
+                                                                                ?.email
                                                                         }
-                                                                    >
-                                                                        View on
-                                                                        new tab
-                                                                    </a>{" "}
-                                                                </span>
-                                                            </div>
-
-                                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                <span>
-                                                                    <strong>
-                                                                        Working/Staging
-                                                                        Site's
-                                                                        Username/Email
-                                                                    </strong>
-                                                                    : <br />{" "}
-                                                                    {
-                                                                        task
-                                                                            ?.workEnvData
-                                                                            ?.email
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                            <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
-                                                                <span>
-                                                                    <strong>
-                                                                        Password
-                                                                    </strong>
-                                                                    : <br />{" "}
-                                                                    {
-                                                                        task
-                                                                            ?.workEnvData
-                                                                            ?.password
-                                                                    }
-                                                                </span>
+                                                                    </span>
+                                                                </div>
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Password
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        {
+                                                                            task
+                                                                                ?.workEnvData
+                                                                                ?.password
+                                                                        }
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            )}
+                                                )}
 
-                                            <Guideline
-                                                text={task?.guidelines}
-                                                workEnv={task?.workEnvData}
-                                            />
-                                        </Accordion>}
+                                                <Guideline
+                                                    text={task?.guidelines}
+                                                    workEnv={task?.workEnvData}
+                                                />
+                                            </Accordion>
+                                        )}
 
                                         {/* task revision */}
                                         {_.size(task?.revisions) > 0 && (
