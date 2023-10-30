@@ -184,7 +184,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                 Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: res.message,
+                    title: "Independent Task Created Successfully",
                     showConfirmButton: false,
                     timer: 2500,
                 });

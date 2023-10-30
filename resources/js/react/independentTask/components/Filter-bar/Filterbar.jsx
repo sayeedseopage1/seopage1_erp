@@ -7,7 +7,7 @@ import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
 
-const Filterbar = ({ onFilter, page = "tasks" }) => {
+const Filterbar = ({ onFilter }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
@@ -102,21 +102,21 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
 
-                    {page === "subtasks" ? (
+                    {/* {page === "subtasks" ? ( */}
                         <UserFilter
                             title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
                             roleIds={[5]}
                         />
-                    ) : (
+                    {/* ) : (
                         <UserFilter
                             title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
                             roleIds={[4, 6, 9, 10]}
                         />
-                    )}
+                    )} */}
 
                     <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
