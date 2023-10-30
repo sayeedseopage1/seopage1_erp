@@ -420,5 +420,17 @@ class IndependentTaskController extends AccountBaseController
         ]);
     }
 
+    public function clients()
+    {
+        $clients = Task::where('tasks.client_id','!=',null)->orWhere('tasks.client_name','!=',null)
+        ->select(['tasks.client_name','tasks.client_id','client.id','client.name'])
+        ->leftJoin('users as client','client.id','tasks.client_id')
+        ->get();
+        return response()->json([
+            'data'=>$clients,
+            'status'=>200
+        ]);
+    }
+
 
 }
