@@ -15381,11 +15381,11 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
   };
   var generateModalTitle = function generateModalTitle() {
     if (auth.getRoleId() === 4) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager/Top Management";
     } else if (auth.getRoleId() === 6) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager/Top Management";
     } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
-      return "Revision By Project Manager";
+      return "Revision By Project Manager/Top Management";
     } else return "Revision By Lead Developer";
   };
 
