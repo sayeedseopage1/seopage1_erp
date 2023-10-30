@@ -14499,11 +14499,11 @@ var DeveloperRevisionView = function DeveloperRevisionView(_ref) {
 
   var generateModalTitle = function generateModalTitle() {
     if (auth.getRoleId() === 4) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager/Top Management";
     } else if (auth.getRoleId() === 6) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager";
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager/Top Management";
     } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
-      return "Revision By Project Manager";
+      return "Revision By Project Manager/Top Management";
     } else return "Revision By Lead Developer";
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
