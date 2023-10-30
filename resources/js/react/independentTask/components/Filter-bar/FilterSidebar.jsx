@@ -3,6 +3,7 @@ import Button from "../Button";
 import UserFilter from "./UserFilter";
 import StatusFilter from "./StatusFilter";
 import DateTypeFilter from "./DateTypeFilter";
+import ClientFilter from "./ClientFilter";
 
 const FilterSidebar = ({
     developer,
@@ -34,7 +35,7 @@ const FilterSidebar = ({
             <div className="p-3 d-flex flex-column" style={{ gap: "10px" }}>
                 {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
 
-                <UserFilter
+                <ClientFilter
                     title="Client"
                     state={client}
                     setState={setClient}

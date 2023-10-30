@@ -11,7 +11,18 @@ const AssginedToSelection = ({selected, onSelect}) => {
     const [query, setQuery] = React.useState('');
     const {users, usersIsFetching: isFetching} = useUsers();
 
-    const employees = _.filter(users, user => _.includes([6, 9, 10], Number(user?.role_id)) || user.id === currentUser.id);
+    const employees = _.filter(users, (user)=>{
+
+        if (Number(user.id) === Number(currentUser.id)) {
+            return true;
+        } else if (Number(currentUser.roleId) === 1) {
+            return _.includes([4, 6, 9, 10], Number(user?.role_id));
+        } else if(Number(currentUser.roleId) === 4) {
+            return _.includes([6, 9, 10], Number(user?.role_id))
+        } else {
+            return false;
+        } 
+    });
 
     console.log(employees);
 

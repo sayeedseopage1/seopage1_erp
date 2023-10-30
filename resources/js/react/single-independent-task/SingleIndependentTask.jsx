@@ -506,7 +506,9 @@ const SingleIndependentTask = () => {
 
                                     <div className="mt-3">
                                         {/* project manager guideline */}
-                                        <Accordion
+                                        {
+                                            (!_.isEmpty(task?.workEnvData) || !_.isEmpty(task?.guidelines)) &&
+                                            <Accordion
                                             expendable={false}
                                             title="General Guidelines"
                                         >
@@ -623,7 +625,7 @@ const SingleIndependentTask = () => {
                                                 text={task?.guidelines}
                                                 workEnv={task?.workEnvData}
                                             />
-                                        </Accordion>
+                                        </Accordion>}
 
                                         {/* task revision */}
                                         {_.size(task?.revisions) > 0 && (
