@@ -1082,7 +1082,7 @@ class TaskController extends AccountBaseController
             $task_revision->lead_comment = $request->comment;
         }
 
-        if(Auth::user()->role_id == 4){
+        if(Auth::user()->role_id == 4 || Auth::user()->role_id == 1 || Auth::user()->role_id == 8 ){
             $task_revision->revision_status = 'Project Manager Revision';
             $task_revision->pm_comment = $request->comment;
         }
@@ -4833,6 +4833,7 @@ class TaskController extends AccountBaseController
 
     //  SEND FOR AUTHORIZATION
     public function dispute_send_for_authorization(Request $request){
+       // DB::beginTransaction();
         $id = $request->dispute_id;
         if($request->authorized){
             $query = TaskRevisionDispute::find($id);
@@ -4854,6 +4855,7 @@ class TaskController extends AccountBaseController
             $revision = TaskRevision::find($query->revision_id);
             $revision-> dispute_status = true;
             if($query->winner){
+               // dd($query);
                 $responsible_person = $query->raised_against != $query->winner ? $query->raised_against : $query->raised_by;
                 $responsible_person_role = User::find($responsible_person)->role_id;
                 if($responsible_person_role == null)
@@ -5099,7 +5101,11 @@ class TaskController extends AccountBaseController
             $added_by = User::where('id', $sub_task->added_by)->first();
             $assigned_to = User::where('id', $sub_task->assigned_to)->first();
             $project = Project::where('id', $task->project_id)->first();
-            $client = User::where('id', $project->client_id)->first();
+            if($project != null)
+            {
+                $client = User::where('id', $project->client_id)->first();
+            }
+           
 
             $responseData[] = [
                 'id' => $item->id,
@@ -5115,11 +5121,11 @@ class TaskController extends AccountBaseController
                 'assigned_to_id' => $assigned_to->id,
                 'assigned_to_name' => $assigned_to->name,
                 'assigned_to_image' => $assigned_to->image,
-                'project_id' => $project->id,
-                'project_name' => $project->project_name,
-                'client_id' => $client->id,
-                'client_name' => $client->name,
-                'client_image' => $client->image,
+                'project_id' => $project->id ?? '',
+                'project_name' => $project->project_name ?? '',
+                'client_id' => $client->id ?? '',
+                'client_name' => $client->name ?? '',
+                'client_image' => $client->image ?? '',
                 'authorization_status' => $item->authorization_status,
                 'updated_at' => $item->updated_at
             ];
@@ -5727,23 +5733,23 @@ class TaskController extends AccountBaseController
 
                 foreach ($request->file as $fileData) {
                     $file = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $file->task_id = $task_s->id;
+                    $file->task_id = $task->id;
 
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task_s->id);
+                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
 
-                    $file->user_id = $task_s->user_id;
+                    $file->user_id = $task->user_id;
                     $file->filename = $fileData->getClientOriginalName();
                     $file->hashname = $filename;
                     $file->size = $fileData->getSize();
                     $file->save();
 
-                    $this->logTaskActivity($task_s->id, $task_s->user_id, 'fileActivity', $task_s->board_column_id);
+                    $this->logTaskActivity($task->id, $task->user_id, 'fileActivity', $task->board_column_id);
                 }
             }
 
 
             $task_user = new TaskUser();
-            $task_user->task_id = $task_s->id;
+            $task_user->task_id = $task->id;
             $task_user->user_id = $pendingParentTasks->user_id;
             $task_user->save();
 

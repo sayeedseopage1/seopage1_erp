@@ -2764,8 +2764,8 @@ public function storeClientDeal(Request $request){
     $project->deliverable_authorization = 0;
     $currency = Currency::where('id', $request->original_currency_id)->first();
     //dd($currency);
-    $project->project_budget = ($request->amount) / $currency->exchange_rate;
-    $project->due = $deal->amount;
+    $project->project_budget =  $deal->upsell_amount;
+    $project->due =  $deal->upsell_amount;
 
     $project->completion_percent = 0;
     $project->deal_id = $deal->id;
@@ -2811,11 +2811,11 @@ public function storeClientDeal(Request $request){
                 $pm_project_find = PMAssign::where('pm_id', $find_pm_id->pm_id)->first();
                 $pm_project_update = PMAssign::find($pm_project_find->id);
                 $pm_project_update->project_count = $pm_project_update->project_count + 1;
-                $pm_project_update->amount = $pm_project_update->amount + ($deal->amount / 2);
-                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->amount;
+                $pm_project_update->amount = $pm_project_update->amount + ($deal->upsell_amount / 2);
+                $pm_project_update->actual_amount = $pm_project_update->actual_amount + $deal->upsell_amount;
                 $pm_project_update->monthly_project_count = $pm_project_update->monthly_project_count + 1;
-                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->amount / 2);
-                $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->amount;
+                $pm_project_update->monthly_project_amount = $pm_project_update->monthly_project_amount + ($deal->upsell_amount / 2);
+                $pm_project_update->monthly_actual_project_amount = $pm_project_update->monthly_actual_project_amount + $deal->upsell_amount;
                 $pm_project_update->save();
             }
         }

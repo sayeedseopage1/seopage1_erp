@@ -44,17 +44,28 @@
                     @foreach ($total_tasks_completed_previous_cycle_get as $item)
                         @php
                             $project = \App\Models\Project::where('id',$item->project_id)->first();
+                            if($item->project_id != null)
+                            {
                             $user = \App\Models\User::where('id',$project->client_id)->first();
+                            }
                             $taskboard_column = \App\Models\TaskboardColumn::where('id',$item->board_column_id)->first();
                         @endphp
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->heading }}</td>
                         <td>
+                            @if($item->project_id != null)
                             <a href="{{ route('projects.show',$project->id) }}">{{ $project->project_name }}</a>
+                            @else 
+                            -- 
+                            @endif
                         </td>
                         <td>
+                            @if($item->project_id != null)
                             <a href="{{ route('clients.show',$user->id) }}">{{ $user->name }}</a>
+                            @else 
+                            {{$item->client_name}}
+                            @endif
                         </td>
                         <td>{{ $item->due_date }}</td>
                         <td>
