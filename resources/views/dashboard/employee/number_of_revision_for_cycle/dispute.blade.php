@@ -100,6 +100,7 @@
                                 @endif
                             </td>
                             <td>
+                                @if($win != null || $raised_by != null)
                                 @if ($item->status==1)
                                     <div class="d-flex align-items-center">
                                         <div class="" style="width: 28px;">
@@ -126,6 +127,7 @@
                                     </div>
                                     <a href="{{ route('employees.show',$raised_by->id) }}" class="pl-2 ">{{ $raised_by->name }} <span class="badge badge-primary">{{ $item->raised_by_percent? :'N/A' }}</span></a>
                                 </div>
+                                @endif
                                 @endif
                             </td>
                         </tr>
