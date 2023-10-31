@@ -101,6 +101,8 @@ const InnerComment = ({ comment, updateComments }) => {
     // permission
     const CAN_EDIT_COMMENT = auth.getId() === user.getId();
 
+    // console.log({ comment });
+
     return (
         <div className="sp1_task_comment_send_box sp1_task_comment_replied pl-2 pr-3 pb-2">
             <div
@@ -217,7 +219,11 @@ const InnerComment = ({ comment, updateComments }) => {
                     </Switch.Case>
 
                     <Switch.Case condition={uploadAttachment}>
-                        <AttachmentUpload comment={comment} />
+                        <AttachmentUpload
+                            comment={comment}
+                            onReply={() => setShowReplies(true)}
+                            close={() => setUploadAttachment(false)}
+                        />
                     </Switch.Case>
                 </Switch>
             </div>

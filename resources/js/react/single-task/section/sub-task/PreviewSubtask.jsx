@@ -11,12 +11,14 @@ import SubmittedWork from "./preview/SubmittedWork";
 import TimeLog from "./preview/TimeLog";
 import TaskReview from "./preview/TaskReview";
 import History from "./preview/History";
-import Comments from "./preview/Comments";
+// import Comments from "./preview/Comments";
+const Comments = React.lazy(() => import("./preview/Comments"), { ssr: false });
 import _ from "lodash";
 import { useSingleTask } from "../../../hooks/useSingleTask";
+import Loader from "../../components/Loader";
 
 const PreviewSubtask = ({ parentTask, subTask }) => {
-    const [task, setTask] = React.useState(null)
+    const [task, setTask] = React.useState(null);
     const taskID = subTask?.id;
     const [submittedWork, setSubmittedWork] = React.useState([]);
     const [timeLog, setTimeLog] = React.useState([]);
@@ -24,36 +26,31 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
     const [histories, setHistories] = React.useState([]);
     const [comments, setComments] = React.useState([]);
 
-    const { 
-        getTaskById, 
-        getSubmittionInfo, 
-        taskDetailsIsFetching, 
-        submittionInfoIsFetching
-     } = useSingleTask();
-
+    const {
+        getTaskById,
+        getSubmittionInfo,
+        taskDetailsIsFetching,
+        submittionInfoIsFetching,
+    } = useSingleTask();
 
     const [getTaskDetails, { isFetching: detailFetchingStateLoading }] =
         useLazyGetTaskDetailsQuery();
 
-
     // fetch task details
     React.useEffect(() => {
-        (
-            async () => {
-               let task = await getTaskById(taskID)
-               task = new SingleTask(task)
-               setTask(task);
-            }
-        )()
-    }, [])
-   
+        (async () => {
+            let task = await getTaskById(taskID);
+            task = new SingleTask(task);
+            setTask(task);
+        })();
+    }, []);
 
     //   fetch submitted rtk api
     const fetchData = (url, cb) => {
         getTaskDetails(`/${task?.id}/json?mode=${url}`)
             .unwrap()
-            .then((res) =>{
-                let d = _.orderBy(res, 'id', 'desc');
+            .then((res) => {
+                let d = _.orderBy(res, "id", "desc");
                 cb(d);
             })
             .catch((err) => console.error(err));
@@ -64,7 +61,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         e.preventDefault();
         if (submittedWork.length === 0) {
             const data = await getSubmittionInfo(taskID);
-            console.log({data})
+            console.log({ data });
             setSubmittedWork([...data]);
         }
     };
@@ -101,7 +98,6 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
         _comments.unshift(comment);
         setComments(_comments);
     };
- 
 
     return (
         <React.Fragment>
@@ -143,7 +139,7 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tab"
                     aria-controls="v-pills-comments"
                     aria-selected="false"
-                    onClick={fetchComments}
+                    // onClick={fetchComments}
                 >
                     Comment
                 </a>
@@ -196,7 +192,11 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     aria-labelledby="v-pills-general-tab"
                 >
                     <div className="mr-3">
-                        <Genarel isFetching={taskDetailsIsFetching} taskID={taskID} task={task} />
+                        <Genarel
+                            isFetching={taskDetailsIsFetching}
+                            taskID={taskID}
+                            task={task}
+                        />
                     </div>
                 </div>
                 <div
@@ -220,13 +220,15 @@ const PreviewSubtask = ({ parentTask, subTask }) => {
                     role="tabpanel"
                     aria-labelledby="v-pills-comments-tab"
                 >
-                    <Comments
-                        task={task}
-                        comments={comments}
-                        onCommentPost={onCommentPost}
-                        isLoading={detailFetchingStateLoading}
-                    />
-                </div> 
+                    <React.Suspense fallback={<Loader title="Loading..." />}>
+                        <Comments
+                            task={task}
+                            // comments={comments}
+                            // onCommentPost={onCommentPost}
+                            isLoading={detailFetchingStateLoading}
+                        />
+                    </React.Suspense>
+                </div>
 
                 <div
                     className="tab-pane fade"

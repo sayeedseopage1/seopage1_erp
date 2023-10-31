@@ -140,12 +140,12 @@ const PreviewInnerComment = ({ comment, updateComments, isLoading, close }) => {
                             </a>
                             <span>•</span>
                             <Switch>
-                                <Switch.Case condition={CAN_EDIT_COMMENT}>
+                                {/* <Switch.Case condition={CAN_EDIT_COMMENT}>
                                     <a href="#" onClick={handleEditButton}>
                                         Edit
                                     </a>
                                     <span>•</span>
-                                </Switch.Case>
+                                </Switch.Case> */}
 
                                 <Switch.Case condition={CAN_DELETE_COMMENT}>
                                     <a
@@ -166,13 +166,13 @@ const PreviewInnerComment = ({ comment, updateComments, isLoading, close }) => {
                         </div>
                     </Switch.Case>
 
-                    <Switch.Case condition={activeEditMode}>
+                    {/* <Switch.Case condition={activeEditMode}>
                         <EditComment
                             comment={comment}
                             updateComments={updateComments}
                             close={() => setActiveEditModal(false)}
                         />
-                    </Switch.Case>
+                    </Switch.Case> */}
 
                     <Switch.Case condition={uploadAttachment}>
                         <AttachmentUpload comment={comment} />

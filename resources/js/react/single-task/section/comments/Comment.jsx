@@ -90,16 +90,17 @@ const Comment = ({ comment, onDelete }) => {
                     </Menu>
                 )}
             </div>
+            {comment?.comment ? (
+                <div className="__box __reply_text w-100 my-1 text-dark border-rounded">
+                    <div
+                        className="sp1_ck_content sp1_message--body"
+                        style={{ overflow: "hidden" }}
+                        dangerouslySetInnerHTML={{ __html: comment?.comment }}
+                    />
+                </div>
+            ) : null}
 
-            <div className="__box __reply_text w-100 my-1 text-dark border-rounded">
-                <div
-                    className="sp1_ck_content sp1_message--body"
-                    style={{ overflow: "hidden" }}
-                    dangerouslySetInnerHTML={{ __html: comment?.comment }}
-                />
-            </div>
-
-            <div className="comment_files">
+            <div className="comment_files mt-2">
                 <FileUploader>
                     {comment?.files_data?.map((file) => (
                         <FileUploader.Preview

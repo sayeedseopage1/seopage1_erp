@@ -1,19 +1,28 @@
+import _ from "lodash";
 import React from "react";
-import CKEditorComponent from "../../../ckeditor";
+import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
 import Button from "../../../global/Button";
 import Switch from "../../../global/Switch";
-import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
-import _ from "lodash";
+import { useReplyTaskCommentMutation } from "../../../services/api/TaskCommentApiSlice";
+import { toast } from "react-toastify";
 
-const AttachmentUpload = ({ comment }) => {
+const AttachmentUpload = ({ comment, onReply, close }) => {
     const [files, setFiles] = React.useState([]);
 
-    const isLoading = false;
+    const [replyTaskComment, { isLoading }] = useReplyTaskCommentMutation();
+
+    const visibleToScreenRef = React.useRef(null);
+    // update on layout change
+    React.useLayoutEffect(() => {
+        if (visibleToScreenRef && visibleToScreenRef.current) {
+            visibleToScreenRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, []);
 
     // handle update
-    const onUpdate = (e) => {
-        console.log(files)
+    const onUpdate = async (e) => {
         const formData = new FormData();
+        formData.append("reply_text", "");
         formData.append("task_id", comment.task_id);
         formData.append("parent_comment_id", comment.id);
         formData.append(
@@ -22,14 +31,18 @@ const AttachmentUpload = ({ comment }) => {
                 .querySelector("meta[name='csrf-token']")
                 .getAttribute("content")
         );
+
         Array.from(files).forEach((file) => {
             formData.append("file[]", file);
         });
 
-        // show formData
-        for (const [key, value] of formData.entries()) {
-            console.log(key, ": ", value);
-        }
+        await replyTaskComment({ formData, commentId: comment.id }).then(
+            (res) => {
+                toast.success("Your files has been successfully uploaded.");
+                onReply();
+                close();
+            }
+        );
     };
 
     return (
@@ -65,11 +78,15 @@ const AttachmentUpload = ({ comment }) => {
                             <Button className="mr-2" onClick={onUpdate}>
                                 Reply
                             </Button>
-                            <Button variant="secondary">Close</Button>
+                            <Button variant="secondary" onClick={close}>
+                                Close
+                            </Button>
                         </div>
                     </Switch.Case>
                 </Switch>
             </div>
+
+            <div ref={visibleToScreenRef} />
         </div>
     );
 };

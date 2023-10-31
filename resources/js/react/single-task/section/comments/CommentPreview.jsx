@@ -6,10 +6,8 @@ import PreviewInnerComment from "./PreviewInnerComment";
 
 const CommentPreview = ({ isOpen, close, commentId }) => {
     // get comment details
-    const { data: comment, isLoading } = useGetPreviewCommentDataQuery(commentId);
-
-    console.log({data: comment})
-
+    const { data: comment, isLoading } =
+        useGetPreviewCommentDataQuery(commentId);
 
     return (
         <div className="sp1_st_comment_preview">

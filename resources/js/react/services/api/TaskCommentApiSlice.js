@@ -66,7 +66,8 @@ const taskCommentApiSlice = apiSlice.injectEndpoints({
                 body: data.formData,
                 formData: true,
             }),
-            invalidatesTags: [
+            invalidatesTags: (result, error, arg) => [
+                { type: "TASK_COMMENT", id: arg.commentId },
                 "TASK_COMMENT_REPLIES",
                 "TASK_COMMENTS_WIDGET",
                 "TASK_COMMENT_PREVIEW",
@@ -103,5 +104,5 @@ export const {
     useUpdateCommentMutation,
     useRemoveCommentPreviousUploadedFileMutation,
     useReplyTaskCommentMutation,
-    useDeleteCommentMutation
+    useDeleteCommentMutation,
 } = taskCommentApiSlice;
