@@ -11,7 +11,7 @@
 
 
 
-* [ ] Revision page backend action need to filter data
+* [x] Revision page backend action need to filter data
 
 
 * [x] need to change dispute modal "Review by" text to "Reviewed by"
