@@ -74,8 +74,7 @@ const DropdownMenu = ({children, className, placement="bottom-start", offset=[0,
     const [width, setWidth] = React.useState(100);
 
     // generate random id for dropdown menu
-    const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
-
+    const id = React.useMemo(() => Math.random().toString(36).substr(2, 9), []); 
 
     let DOM = document.getElementById(id);
     const {styles, attributes} = usePopper(reference, popperElement, {

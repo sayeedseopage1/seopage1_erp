@@ -24,6 +24,7 @@ const CommentSection = ({ task, isLoading }) => {
     // const [getTaskDetails, { isFetching }] = useLazyGetTaskDetailsQuery();
     const { data, isLoading: isFetching} = useGetTaskCommentsQuery(task.id, {skip: !task.id});
 
+
     const comments = _.orderBy(data, 'id', 'desc');
 
     // console.log({comments})

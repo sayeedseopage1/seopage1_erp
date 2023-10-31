@@ -759,8 +759,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('tasks/comment-edit', [TaskController::class, 'editComment']);
     Route::post('tasks/comment-reply', [TaskController::class, 'commentReply']);
     Route::get('tasks/comments-widget-data/{task_id}', [TaskController::class, 'taskCommentWidgetData']);
-    Route::get('tasks/comment-preview-data/{comment_id}', [TaskController::class, 'previewTaskComment']);
+    Route::get('tasks/comments/{comment_id}/preview', [TaskController::class, 'previewTaskComment']);
     Route::delete('tasks/{task_id}/comments/{comment_id}/delete-attach-file', [TaskController::class, 'deleteOldFile']);
+    Route::delete('tasks/comments/{comment_id}/delete', [TaskController::class, 'deleteComment']);
 
     // SUBMIT TASK FOR CLIENT APPROVAL
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');

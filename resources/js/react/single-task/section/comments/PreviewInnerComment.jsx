@@ -12,8 +12,15 @@ import EditComment from "./EditComment";
 import ReplyComment from "./ReplyComment";
 import AttachmentUpload from "./AttachmentUpload";
 import { useAuth } from "../../../hooks/useAuth";
+import Comment from "./Comment";
+import AvatarGroup from "../../../global/AvatarGroup";
+import ReplyCommentPreview from "./ReplyCommentPreview";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { useDeleteCommentMutation } from "../../../services/api/TaskCommentApiSlice";
+import { toast } from "react-toastify";
+import Loader from "../../../global/Loader";
 
-const PreviewInnerComment = ({ comment, updateComments, isLoading }) => {
+const PreviewInnerComment = ({ comment, updateComments, isLoading, close }) => {
     const [showReplies, setShowReplies] = React.useState(false);
     const [replyMode, setReplyMode] = React.useState(false);
     const [activeEditMode, setActiveEditModal] = React.useState(false);
@@ -22,12 +29,18 @@ const PreviewInnerComment = ({ comment, updateComments, isLoading }) => {
     const user = comment?.user ? new User(comment.user) : null;
     const auth = useAuth();
 
-    // console.log({comment, user});
-    // return;
+    const refOnView = React.useRef(null);
 
-    if(isLoading) return <>Loading...</>
+    React.useLayoutEffect(() => {
+        refOnView.current &&
+            refOnView.current.scrollIntoView({ behavior: "smooth" });
+    }, [replyMode]);
 
-    const replies = comment?.replies;
+    // handle delete
+    const [deleteComment, { isLoading: isDeleting }] =
+        useDeleteCommentMutation();
+
+    if (isLoading) return <>Loading...</>;
 
     const handleReplyButtonClick = (e) => {
         e.preventDefault();
@@ -51,6 +64,41 @@ const PreviewInnerComment = ({ comment, updateComments, isLoading }) => {
         setUploadAttachment(true);
     };
 
+    // delete comment
+    const handleDeleteComment = (e, commentId) => {
+        e.preventDefault();
+
+        Swal.fire({
+            icon: "warning",
+            title: `Are you sure you want to delete this comment?`,
+            html: "This action cannot be undone. Deleting this comment will permanently remove it from the discussion.",
+            showDenyButton: true,
+            denyButtonText: "Cancel",
+            // denyButtonColor: '#ffffff',
+
+            showConfirmButton: true,
+            confirmButtonText: "Yes, Delete It!",
+            confirmButtonColor: "#E73819",
+            customClass: {
+                confirmButton: "delete-confirm-button",
+                denyButton: "delete-deny-button",
+            },
+            buttonsStyling: false,
+        }).then((res) => {
+            if (res.isConfirmed) {
+                deleteCommentData();
+            }
+        });
+
+        // delete
+        const deleteCommentData = async () => {
+            const response = await deleteComment(commentId).unwrap();
+            if (response) {
+                toast.success("Comment Deleted Successfully");
+            }
+        };
+    };
+
     // emoji selection control
     const handleEmojiSelect = (emojiData, event) => {
         setSelectedEmoji(emojiData.unified);
@@ -58,147 +106,66 @@ const PreviewInnerComment = ({ comment, updateComments, isLoading }) => {
 
     // permission
     const CAN_EDIT_COMMENT = auth?.getId() === user?.getId();
+    const CAN_DELETE_COMMENT = CAN_EDIT_COMMENT;
 
+    // if(!isLoading && comment?.is_deleted) {
+    //     close();
+    //     return null;
+    // }
 
     return (
-        <div className="sp1_task_comment_send_box sp1_task_comment_replied pl-2 pb-2">
+        <div className="sp1_task_comment_send_box sp1_task_comment_replied pl-2 pr-3 pb-2">
             <div
                 className="__send-box flex-column align-items-start"
                 style={{ maxWidth: "100%" }}
             >
-                <div className="w-100 d-flex align-items-center">
-                    <div className="mr-2">
-                        <div className="rounded-circle">
-                            <img
-                                src={user?.getAvatar()}
-                                alt={user?.getName()}
-                                width="32px"
-                                height="32px"
-                                className="rounded-circle"
-                            />
-                        </div>
-                    </div>
-                    <div className="sp1_comment">
-                        <span className="sp1_comment_user--name">
-                            {user?.getName()} ({user?.getDesignationName()})
-                        </span>
-                        <span
-                            className="sp1_comment_time"
-                            style={{ color: "#888" }}
-                        >
-                            {comment?.last_updated_at && (
-                                <>
-                                    {dayjs
-                                        .unix(comment?.last_updated_at)
-                                        .format("MMM DD, YYYY ")}{" "}
-                                    at &nbsp;
-                                    {dayjs
-                                        .unix(comment?.last_updated_at)
-                                        .format("hh:mm a")}
-                                </>
-                            )}
-                        </span>
-                    </div>
-                </div>
-
-                <div className="__box __reply_text w-100 my-1 text-dark">
-                    <div
-                        className="sp1_ck_content sp1_message--body"
-                        style={{ overflow: "hidden" }}
-                        dangerouslySetInnerHTML={{ __html: comment?.comment }}
-                    />
-                </div>
-
-                <div className="files">
-                    <FileUploader>
-                        {comment?.files_data?.map((file) => (
-                            <FileUploader.Preview
-                                key={file?.name}
-                                fileName={file?.name}
-                                downloadAble={true}
-                                deleteAble={false}
-                                downloadUrl={file?.url}
-                                previewUrl={file?.url}
-                                fileType={file?.icon}
-                                ext=""
-                            />
-                        ))}
-                    </FileUploader>
-                </div>
-
-                <div className="sp1_task_comment_actions">
-                    <Dropdown>
-                        <Dropdown.Toggle icon={false}>
-                            <i className="fa-regular fa-face-smile"></i>
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu>
-                            <EmojiPicker lazyLoadEmojis={true} />
-                        </Dropdown.Menu>
-                    </Dropdown>
-
-                    <span>•</span>
-                    <a href="#" onClick={handleReplyButtonClick}>
-                        Reply
-                    </a>
-                    <span>•</span>
-                    <Switch>
-                        <Switch.Case condition={CAN_EDIT_COMMENT}>
-                            <a href="#" onClick={handleEditButton}>
-                                Edit
-                            </a>
-                            <span>•</span>
-                        </Switch.Case>
-                    </Switch>
-
-                    {/* <a href="#">Delete</a>
-                    <span>•</span> */}
-
-                    <a href="#" onClick={handleUploadAttachment}>
-                        <i className="fa-solid fa-paperclip"></i>
-                    </a>
-
-                    {replies?.length > 0 && (
-                        <div
-                            className="replies_count"
-                            onClick={() => setShowReplies(!showReplies)}
-                        >
-                            <div className="reply_auth_avatar">
-                                <div>
-                                    <img
-                                        src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                                        alt="sender_name"
-                                        width="20px"
-                                        height="20px"
-                                        className="rounded-circle"
-                                    />
-                                </div>
-
-                                <div>
-                                    <img
-                                        src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                                        alt="sender_name"
-                                        width="20px"
-                                        height="20px"
-                                        className="rounded-circle ml-2"
-                                    />
-                                </div>
-
-                                <div>
-                                    <img
-                                        src="/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png"
-                                        alt="sender_name"
-                                        width="20px"
-                                        height="20px"
-                                        className="rounded-circle ml-3"
-                                    />
-                                </div>
-                            </div>
-                            <div className="ml-2">3 replies</div>
-                        </div>
-                    )}
-                </div>
+                <Comment comment={comment} onDelete={handleDeleteComment} />
 
                 <Switch>
+                    <Switch.Case condition={!comment.is_deleted}>
+                        <div className="sp1_task_comment_actions">
+                            {/* <Dropdown>
+                                    <Dropdown.Toggle icon={false}>
+                                        <i className="fa-regular fa-face-smile"></i>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <EmojiPicker lazyLoadEmojis={true} />
+                                    </Dropdown.Menu>
+                                </Dropdown>
+
+                                <span>•</span>
+                            */}
+                            <a href="#" onClick={handleReplyButtonClick}>
+                                Reply
+                            </a>
+                            <span>•</span>
+                            <Switch>
+                                <Switch.Case condition={CAN_EDIT_COMMENT}>
+                                    <a href="#" onClick={handleEditButton}>
+                                        Edit
+                                    </a>
+                                    <span>•</span>
+                                </Switch.Case>
+
+                                <Switch.Case condition={CAN_DELETE_COMMENT}>
+                                    <a
+                                        href="#"
+                                        onClick={(e) =>
+                                            handleDeleteComment(e, comment.id)
+                                        }
+                                    >
+                                        Delete
+                                    </a>
+                                    <span>•</span>
+                                </Switch.Case>
+                            </Switch>
+
+                            <a href="#" onClick={handleUploadAttachment}>
+                                <i className="fa-solid fa-paperclip"></i>
+                            </a>
+                        </div>
+                    </Switch.Case>
+
                     <Switch.Case condition={activeEditMode}>
                         <EditComment
                             comment={comment}
@@ -207,31 +174,66 @@ const PreviewInnerComment = ({ comment, updateComments, isLoading }) => {
                         />
                     </Switch.Case>
 
-                    <Switch.Case condition={replyMode}>
-                        <ReplyComment comment={comment} close={() => setReplyMode(false)} />
-                    </Switch.Case>
-
                     <Switch.Case condition={uploadAttachment}>
                         <AttachmentUpload comment={comment} />
                     </Switch.Case>
-                </Switch>
 
-                {/* reply box */}
+                    <Switch.Case
+                        condition={
+                            !comment.is_deleted || auth.getRoleId() === 1
+                        }
+                    >
+                        <Replies
+                            replies={comment.replies}
+                            isRepliedModalOpen={replyMode}
+                            onReplyButtonClick={() => setReplyMode(true)}
+                            handleDeleteComment={handleDeleteComment}
+                        />
+                    </Switch.Case>
 
-                <div className='sp1_task_replies_comment_list w-100'>
-                    { replies ? replies.map((r, i) => (
-                        <div key={i} className='pl-3 border-left mt-3 w-100'>
-                            <PreviewInnerComment
-                                comment={r}
-                                updateComments={updateComments}
-                                isLoading={isLoading}
+                    <Switch.Case condition={replyMode}>
+                        <>
+                            <ReplyComment
+                                comment={comment}
+                                onReply={() => setReplyMode(false)}
+                                close={() => setReplyMode(false)}
                             />
-                        </div>
-                    )) : null}
-                </div>
+
+                            <div ref={refOnView} />
+                        </>
+                    </Switch.Case>
+                </Switch>
             </div>
         </div>
     );
 };
 
 export default PreviewInnerComment;
+
+const Replies = ({
+    replies,
+    isRepliedModalOpen,
+    onReplyButtonClick,
+    handleDeleteComment,
+}) => {
+    return (
+        <div className="sp1_task_replies_comment_list mt-4 ml-3 w-100">
+            {_.map(replies, (r, i) => (
+                <div
+                    key={i}
+                    className="pl-3 pr-3 border-left border__left py-3 w-100"
+                >
+                    <Comment comment={r} onDelete={handleDeleteComment} />
+                </div>
+            ))}
+
+            {replies.length > 0 && !isRepliedModalOpen ? (
+                <div className="border-left border__left reply_button pl-3">
+                    <button onClick={onReplyButtonClick}>
+                        <span>+ Reply</span>
+                    </button>
+                </div>
+            ) : null}
+        </div>
+    );
+};

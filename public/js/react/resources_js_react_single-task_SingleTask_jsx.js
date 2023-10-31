@@ -670,6 +670,7 @@ var useSingleTask = function useSingleTask() {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   useDeleteCommentMutation: () => (/* binding */ useDeleteCommentMutation),
 /* harmony export */   useGetPreviewCommentDataQuery: () => (/* binding */ useGetPreviewCommentDataQuery),
 /* harmony export */   useGetTaskCommentRepliesQuery: () => (/* binding */ useGetTaskCommentRepliesQuery),
 /* harmony export */   useGetTaskCommentWidgetDataQuery: () => (/* binding */ useGetTaskCommentWidgetDataQuery),
@@ -705,7 +706,7 @@ var taskCommentApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inject
           var result = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
           var error = arguments.length > 1 ? arguments[1] : undefined;
           var arg = arguments.length > 2 ? arguments[2] : undefined;
-          return ["TASK_COMMENTS", 'TASK_COMMENT'].concat(_toConsumableArray(result.map(function (_ref) {
+          return ["TASK_COMMENTS", "TASK_COMMENT"].concat(_toConsumableArray(result.map(function (_ref) {
             var id = _ref.id;
             return {
               type: "TASK_COMMENT",
@@ -731,7 +732,7 @@ var taskCommentApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inject
       // preview a comment
       getPreviewCommentData: build.query({
         query: function query(commentId) {
-          return "/account/tasks/comment-preview-data/".concat(commentId);
+          return "/account/tasks/comments/".concat(commentId, "/preview");
         },
         providesTags: ["TASK_COMMENT_PREVIEW"]
       }),
@@ -741,7 +742,7 @@ var taskCommentApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inject
           var data = _ref2.data;
           return {
             url: "/account/tasks/comment-edit",
-            method: 'POST',
+            method: "POST",
             body: data,
             formData: true
           };
@@ -772,6 +773,26 @@ var taskCommentApiSlice = _apiSlice__WEBPACK_IMPORTED_MODULE_0__.apiSlice.inject
           };
         },
         invalidatesTags: ["TASK_COMMENT_REPLIES", "TASK_COMMENTS_WIDGET", "TASK_COMMENT_PREVIEW"]
+      }),
+      deleteComment: build.mutation({
+        query: function query(commentId) {
+          return {
+            url: "/account/tasks/comments/".concat(commentId, "/delete"),
+            method: "DELETE",
+            body: {
+              _token: document.querySelector("meta[name='csrf-token']").getAttribute("content")
+            }
+          };
+        },
+        invalidatesTags: function invalidatesTags() {
+          var _result = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+          var _error = arguments.length > 1 ? arguments[1] : undefined;
+          var arg = arguments.length > 2 ? arguments[2] : undefined;
+          return [{
+            type: "TASK_COMMENT",
+            id: arg
+          }, "TASK_COMMENT_REPLIES", "TASK_COMMENTS_WIDGET", "TASK_COMMENT_PREVIEW"];
+        }
       })
     };
   }
@@ -783,7 +804,8 @@ var useGetTaskCommentsQuery = taskCommentApiSlice.useGetTaskCommentsQuery,
   useGetPreviewCommentDataQuery = taskCommentApiSlice.useGetPreviewCommentDataQuery,
   useUpdateCommentMutation = taskCommentApiSlice.useUpdateCommentMutation,
   useRemoveCommentPreviousUploadedFileMutation = taskCommentApiSlice.useRemoveCommentPreviousUploadedFileMutation,
-  useReplyTaskCommentMutation = taskCommentApiSlice.useReplyTaskCommentMutation;
+  useReplyTaskCommentMutation = taskCommentApiSlice.useReplyTaskCommentMutation,
+  useDeleteCommentMutation = taskCommentApiSlice.useDeleteCommentMutation;
 
 
 /***/ }),
@@ -3405,12 +3427,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
-/* harmony import */ var _CommentPreview__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CommentPreview */ "./resources/js/react/single-task/section/comments/CommentPreview.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
+/* harmony import */ var _utils_timeCalculate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/timeCalculate */ "./resources/js/react/utils/timeCalculate.js");
+/* harmony import */ var _components_Dropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Dropdown */ "./resources/js/react/single-task/components/Dropdown.jsx");
+/* harmony import */ var _headlessui_react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @headlessui/react */ "./node_modules/@headlessui/react/dist/components/menu/menu.js");
+/* harmony import */ var _hooks_useAuth__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../hooks/useAuth */ "./resources/js/react/hooks/useAuth.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -3425,64 +3448,111 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Comment = function Comment(_ref) {
-  var comment = _ref.comment;
+  var _comment$files_data;
+  var comment = _ref.comment,
+    onDelete = _ref.onDelete;
+  var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_5__.useAuth)();
+  var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User(comment.user) : null;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
-    isOpen = _React$useState2[0],
-    setIsOpen = _React$useState2[1];
-  var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(comment.user) : null;
-
-  // handle comment preview
-  var previewComment = function previewComment(e) {
-    e.preventDefault();
-    setIsOpen(!isOpen);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-      className: "d-flex justify-content-between sp1_tark_right_item align-items-start pt-1 pb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "w-100 sp1_st_comment-view",
-        style: {
-          overflow: 'hidden'
+    showDeletedComment = _React$useState2[0],
+    setShowDeletedComment = _React$useState2[1];
+  if (comment.is_deleted && !showDeletedComment) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "sp1_comment_deleted_status w-100",
+      children: ["This Comment has been deleted", auth.getRoleId() === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: function onClick() {
+          return setShowDeletedComment(true);
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("p", {
-          className: "mb-0 pb-0",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-            href: user === null || user === void 0 ? void 0 : user.getUserLink(),
-            className: "hover-underline text-primary",
-            children: user === null || user === void 0 ? void 0 : user.getName()
-          }), " add a comment"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
-          className: "text-ellipsis d-flex align-items-center mb-0 pb-0",
-          style: {
-            color: '#AEAFB9'
-          },
-          children: (comment === null || comment === void 0 ? void 0 : comment.last_updated_at) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-            children: [dayjs__WEBPACK_IMPORTED_MODULE_4___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format('MMM DD, YYYY '), " at \xA0", dayjs__WEBPACK_IMPORTED_MODULE_4___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format('hh:mm a')]
-          })
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-        className: "d-flex align-items-center",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("a", {
-          href: "#",
-          className: "mr-2 py-2 sp1_task_righ_action_btn ".concat(isOpen ? 'text-primary' : ''),
-          onClick: previewComment,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("i", {
-            className: "fa-regular fa-eye"
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+          className: "fa-solid fa-eye"
+        })
+      }) : null]
+    });
+  }
+  var deletedClass = comment.is_deleted ? "sp1_comment_deleted_status" : "";
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "w-100 d-flex align-items-center  ".concat(deletedClass),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "mr-2",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "rounded-circle",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+            src: user === null || user === void 0 ? void 0 : user.getAvatar(),
+            alt: user === null || user === void 0 ? void 0 : user.getName(),
+            width: "32px",
+            height: "32px",
+            className: "rounded-circle"
           })
         })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "sp1_comment",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+          className: "sp1_comment_user--name",
+          children: [user === null || user === void 0 ? void 0 : user.getName(), " (", user === null || user === void 0 ? void 0 : user.getDesignationName(), ")"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "sp1_comment_time",
+          style: {
+            color: "#888"
+          },
+          children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_3__.timeCalculate)(comment.last_updated_date)
+        })]
+      }), comment.is_deleted ? null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu, {
+        as: "div",
+        className: "sp1_comment_extend_menu",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Button, {
+          as: "button",
+          className: "sp1_comment_extend_menu-btn",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+            className: "fa-solid fa-ellipsis"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Items, {
+          as: "div",
+          placement: "bottom-end",
+          className: "sp1_comment_extend_menu__items",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Item, {
+            as: "div",
+            className: "sp1_comment_extend_menu__item --disabled",
+            children: "Edit"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Item, {
+            as: "div",
+            className: "sp1_comment_extend_menu__item --delete",
+            onClick: function onClick(e) {
+              return onDelete(e, comment.id);
+            },
+            children: "Delete"
+          })]
+        })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      Modal: true,
-      className: "sp1_st_cnt_modal",
-      isOpen: isOpen,
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_CommentPreview__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        isOpen: isOpen,
-        close: function close() {
-          return setIsOpen(false);
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "__box __reply_text w-100 my-1 text-dark border-rounded",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "sp1_ck_content sp1_message--body",
+        style: {
+          overflow: "hidden"
         },
-        comment: comment
+        dangerouslySetInnerHTML: {
+          __html: comment === null || comment === void 0 ? void 0 : comment.comment
+        }
+      })
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "comment_files",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: comment === null || comment === void 0 || (_comment$files_data = comment.files_data) === null || _comment$files_data === void 0 ? void 0 : _comment$files_data.map(function (file) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"].Preview, {
+            fileName: file === null || file === void 0 ? void 0 : file.name,
+            downloadAble: true,
+            deleteAble: false,
+            downloadUrl: file === null || file === void 0 ? void 0 : file.url,
+            previewUrl: file === null || file === void 0 ? void 0 : file.url,
+            fileType: file === null || file === void 0 ? void 0 : file.icon,
+            classname: "comment_file",
+            ext: ""
+          }, file === null || file === void 0 ? void 0 : file.name);
+        })
       })
     })]
   });
@@ -3678,6 +3748,9 @@ var CommentPreview = function CommentPreview(_ref) {
   var _useGetPreviewComment = (0,_services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_3__.useGetPreviewCommentDataQuery)(commentId),
     comment = _useGetPreviewComment.data,
     isLoading = _useGetPreviewComment.isLoading;
+  console.log({
+    data: comment
+  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
     className: "sp1_st_comment_preview",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
@@ -3699,7 +3772,8 @@ var CommentPreview = function CommentPreview(_ref) {
           updateComments: function updateComments() {
             return null;
           },
-          isLoading: isLoading
+          isLoading: isLoading,
+          close: close
         })
       })]
     })
@@ -4376,33 +4450,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
-/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var emoji_picker_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! emoji-picker-react */ "./node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js");
-/* harmony import */ var _components_Dropdown__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/Dropdown */ "./resources/js/react/single-task/components/Dropdown.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var _file_upload_UploadFilesInLine__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../file-upload/UploadFilesInLine */ "./resources/js/react/file-upload/UploadFilesInLine.jsx");
-/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _global_Switch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../global/Switch */ "./resources/js/react/global/Switch.jsx");
-/* harmony import */ var _EditComment__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./EditComment */ "./resources/js/react/single-task/section/comments/EditComment.jsx");
-/* harmony import */ var _ReplyComment__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ReplyComment */ "./resources/js/react/single-task/section/comments/ReplyComment.jsx");
-/* harmony import */ var _AttachmentUpload__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./AttachmentUpload */ "./resources/js/react/single-task/section/comments/AttachmentUpload.jsx");
-/* harmony import */ var _hooks_useAuth__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../hooks/useAuth */ "./resources/js/react/hooks/useAuth.jsx");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _global_AvatarGroup__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../global/AvatarGroup */ "./resources/js/react/global/AvatarGroup.jsx");
-/* harmony import */ var _services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../../services/api/TaskCommentApiSlice */ "./resources/js/react/services/api/TaskCommentApiSlice.js");
-/* harmony import */ var _global_Loader__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../../global/Loader */ "./resources/js/react/global/Loader.jsx");
-/* harmony import */ var react_icons_bs__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! react-icons/bs */ "./node_modules/react-icons/bs/index.esm.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var emoji_picker_react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! emoji-picker-react */ "./node_modules/emoji-picker-react/dist/emoji-picker-react.esm.js");
+/* harmony import */ var _components_Dropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Dropdown */ "./resources/js/react/single-task/components/Dropdown.jsx");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var _global_Switch__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../global/Switch */ "./resources/js/react/global/Switch.jsx");
+/* harmony import */ var _EditComment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EditComment */ "./resources/js/react/single-task/section/comments/EditComment.jsx");
+/* harmony import */ var _ReplyComment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ReplyComment */ "./resources/js/react/single-task/section/comments/ReplyComment.jsx");
+/* harmony import */ var _AttachmentUpload__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AttachmentUpload */ "./resources/js/react/single-task/section/comments/AttachmentUpload.jsx");
+/* harmony import */ var _hooks_useAuth__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../hooks/useAuth */ "./resources/js/react/hooks/useAuth.jsx");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _global_AvatarGroup__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../global/AvatarGroup */ "./resources/js/react/global/AvatarGroup.jsx");
+/* harmony import */ var _services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../services/api/TaskCommentApiSlice */ "./resources/js/react/services/api/TaskCommentApiSlice.js");
+/* harmony import */ var _global_Loader__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../global/Loader */ "./resources/js/react/global/Loader.jsx");
+/* harmony import */ var _Comment__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Comment */ "./resources/js/react/single-task/section/comments/Comment.jsx");
+/* harmony import */ var _ReplyCommentPreview__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./ReplyCommentPreview */ "./resources/js/react/single-task/section/comments/ReplyCommentPreview.jsx");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -4429,111 +4502,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-
-var Comment = function Comment(_ref) {
-  var _comment$files_data;
-  var comment = _ref.comment;
-  var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User(comment.user) : null;
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-      className: "w-100 d-flex align-items-center",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "mr-2",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-          className: "rounded-circle",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("img", {
-            src: user === null || user === void 0 ? void 0 : user.getAvatar(),
-            alt: user === null || user === void 0 ? void 0 : user.getName(),
-            width: "32px",
-            height: "32px",
-            className: "rounded-circle"
-          })
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-        className: "sp1_comment",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("span", {
-          className: "sp1_comment_user--name",
-          children: [user === null || user === void 0 ? void 0 : user.getName(), " (", user === null || user === void 0 ? void 0 : user.getDesignationName(), ")"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-          className: "sp1_comment_time",
-          style: {
-            color: "#888"
-          },
-          children: (comment === null || comment === void 0 ? void 0 : comment.last_updated_at) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {
-            children: [dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format("MMM DD, YYYY "), " ", "at \xA0", dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format("hh:mm a")]
-          })
-        })]
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-      className: "__box __reply_text w-100 my-1 text-dark",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "sp1_ck_content sp1_message--body",
-        style: {
-          overflow: "hidden"
-        },
-        dangerouslySetInnerHTML: {
-          __html: comment === null || comment === void 0 ? void 0 : comment.comment
-        }
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-      className: "comment_files",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        children: comment === null || comment === void 0 || (_comment$files_data = comment.files_data) === null || _comment$files_data === void 0 ? void 0 : _comment$files_data.map(function (file) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"].Preview, {
-            fileName: file === null || file === void 0 ? void 0 : file.name,
-            downloadAble: true,
-            deleteAble: false,
-            downloadUrl: file === null || file === void 0 ? void 0 : file.url,
-            previewUrl: file === null || file === void 0 ? void 0 : file.url,
-            fileType: file === null || file === void 0 ? void 0 : file.icon,
-            classname: "comment_file",
-            ext: ""
-          }, file === null || file === void 0 ? void 0 : file.name);
-        })
-      })
-    })]
-  });
-};
-var Replies = function Replies(_ref2) {
-  var comment = _ref2.comment,
-    cb = _ref2.cb,
-    onReply = _ref2.onReply,
-    showReplyButton = _ref2.showReplyButton;
-  var _useGetTaskCommentRep = (0,_services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_16__.useGetTaskCommentRepliesQuery)(comment.id, {
-      refetchOnMountOrArgChange: true
-    }),
-    data = _useGetTaskCommentRep.data,
-    isLoading = _useGetTaskCommentRep.isLoading;
-  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
-    cb(isLoading);
-  }, [isLoading]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-    className: "sp1_task_replies_comment_list ml-3 w-100",
-    children: [lodash__WEBPACK_IMPORTED_MODULE_14___default().map(data, function (r, i) {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-        className: "pl-3 border-left border__left py-3 w-100",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(Comment, {
-          comment: r
-        })
-      }, i);
-    }), showReplyButton ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-      className: "border-left border__left reply_button pl-3",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("button", {
-        className: "badge badge-dark px-3 py-2 fs-14",
-        onClick: onReply,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_icons_bs__WEBPACK_IMPORTED_MODULE_19__.BsFillPlusCircleFill, {
-          className: "fs-16 icon"
-        }), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-          children: "Reply"
-        })]
-      })
-    }) : null]
-  });
-};
-var InnerComment = function InnerComment(_ref3) {
-  var comment = _ref3.comment,
-    updateComments = _ref3.updateComments;
+var InnerComment = function InnerComment(_ref) {
+  var comment = _ref.comment,
+    updateComments = _ref.updateComments;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     showReplies = _React$useState2[0],
@@ -4554,12 +4525,19 @@ var InnerComment = function InnerComment(_ref3) {
     _React$useState10 = _slicedToArray(_React$useState9, 2),
     selectedEmoji = _React$useState10[0],
     setSelectedEmoji = _React$useState10[1];
-  var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User(comment.user) : null;
-  var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_13__.useAuth)();
+  var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(comment.user) : null;
+  var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_8__.useAuth)();
   var _React$useState11 = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState12 = _slicedToArray(_React$useState11, 2),
     isRepliesLoading = _React$useState12[0],
     setIsRepliesLoading = _React$useState12[1];
+
+  // api hook
+  // handle delete
+  var _useDeleteCommentMuta = (0,_services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_11__.useDeleteCommentMutation)(),
+    _useDeleteCommentMuta2 = _slicedToArray(_useDeleteCommentMuta, 2),
+    deleteComment = _useDeleteCommentMuta2[0],
+    isDeleting = _useDeleteCommentMuta2[1].isLoading;
   var handleReplyButtonClick = function handleReplyButtonClick(e) {
     e.preventDefault();
     setReplyMode(true);
@@ -4581,6 +4559,58 @@ var InnerComment = function InnerComment(_ref3) {
     setUploadAttachment(true);
   };
 
+  // handle comment delete
+  // delete comment
+  var handleDeleteComment = function handleDeleteComment(e, commentId) {
+    e.preventDefault();
+    Swal.fire({
+      icon: "warning",
+      title: "Are you sure you want to delete this comment?",
+      html: "This action cannot be undone. Deleting this comment will permanently remove it from the discussion.",
+      showDenyButton: true,
+      denyButtonText: "Cancel",
+      // denyButtonColor: '#ffffff',
+
+      showConfirmButton: true,
+      confirmButtonText: "Yes, Delete It!",
+      confirmButtonColor: "#E73819",
+      customClass: {
+        confirmButton: "delete-confirm-button",
+        denyButton: "delete-deny-button"
+      },
+      buttonsStyling: false
+    }).then(function (res) {
+      if (res.isConfirmed) {
+        deleteCommentData();
+      }
+    });
+
+    // delete
+    var deleteCommentData = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return deleteComment(commentId).unwrap();
+            case 2:
+              response = _context.sent;
+              if (response) {
+                react_toastify__WEBPACK_IMPORTED_MODULE_15__.toast.success("Comment Deleted Successfully");
+              }
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      return function deleteCommentData() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+  };
+
   // emoji selection control
   var handleEmojiSelect = function handleEmojiSelect(emojiData, event) {
     setSelectedEmoji(emojiData.unified);
@@ -4588,87 +4618,84 @@ var InnerComment = function InnerComment(_ref3) {
 
   // permission
   var CAN_EDIT_COMMENT = auth.getId() === user.getId();
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("div", {
-    className: "sp1_task_comment_send_box sp1_task_comment_replied pl-2 pb-2",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("div", {
+    className: "sp1_task_comment_send_box sp1_task_comment_replied pl-2 pr-3 pb-2",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
       className: "__send-box flex-column align-items-start",
       style: {
         maxWidth: "100%"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(Comment, {
-        comment: comment
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-        className: "sp1_task_comment_actions",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Toggle, {
-            icon: false,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("i", {
-              className: "fa-regular fa-face-smile"
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Menu, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              lazyLoadEmojis: true
-            })
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("a", {
-          href: "#",
-          onClick: handleReplyButtonClick,
-          children: "Reply"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("a", {
-          href: "#",
-          onClick: handleUploadAttachment,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)("i", {
-            className: "fa-solid fa-paperclip"
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"], {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
-            condition: (comment === null || comment === void 0 ? void 0 : comment.total_replies) > 0,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-              className: "replies_count",
-              onClick: function onClick() {
-                return setShowReplies(!showReplies);
-              },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_AvatarGroup__WEBPACK_IMPORTED_MODULE_15__["default"], {
-                users: lodash__WEBPACK_IMPORTED_MODULE_14___default().map(comment === null || comment === void 0 ? void 0 : comment.replies_users, function (user) {
-                  return _objectSpread(_objectSpread({}, user), {}, {
-                    src: user.image_url
-                  });
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_Comment__WEBPACK_IMPORTED_MODULE_13__["default"], {
+        comment: comment,
+        onDelete: handleDeleteComment
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"].Case, {
+          condition: !comment.is_deleted || auth.getRoleId() === 1,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+            className: "sp1_task_comment_actions",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"].Case, {
+              condition: !comment.is_deleted,
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("a", {
+                href: "#",
+                onClick: handleReplyButtonClick,
+                children: "Reply"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("span", {
+                children: "\u2022"
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("a", {
+                href: "#",
+                onClick: handleUploadAttachment,
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)("i", {
+                  className: "fa-solid fa-paperclip"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)("div", {
-                className: "ml-1 mr-2",
-                children: [comment.total_replies, " replies"]
-              }), isRepliesLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_Loader__WEBPACK_IMPORTED_MODULE_17__["default"], {
-                title: ""
-              }) : null]
-            })
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"], {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"].Case, {
+                condition: (comment === null || comment === void 0 ? void 0 : comment.total_replies) > 0,
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+                  className: "replies_count",
+                  onClick: function onClick() {
+                    return setShowReplies(!showReplies);
+                  },
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_AvatarGroup__WEBPACK_IMPORTED_MODULE_10__["default"], {
+                    users: lodash__WEBPACK_IMPORTED_MODULE_9___default().map(comment === null || comment === void 0 ? void 0 : comment.replies_users, function (user) {
+                      return _objectSpread(_objectSpread({}, user), {}, {
+                        src: user.image_url
+                      });
+                    })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)("div", {
+                    className: "ml-1 mr-2",
+                    children: [comment.total_replies, " replies"]
+                  }), isRepliesLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Loader__WEBPACK_IMPORTED_MODULE_12__["default"], {
+                    title: ""
+                  }) : null]
+                })
+              })
+            })]
           })
-        })]
-      }), showReplies ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.Fragment, {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(Replies, {
+        })
+      }), showReplies ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.Fragment, {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_ReplyCommentPreview__WEBPACK_IMPORTED_MODULE_14__["default"], {
           comment: comment,
           onReply: handleReplyButtonClick,
           showReplyButton: !replyMode,
+          onDelete: handleDeleteComment,
           cb: function cb(loading) {
             return setIsRepliesLoading(loading);
           }
         })
-      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"], {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+      }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"].Case, {
           condition: activeEditMode,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_EditComment__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_EditComment__WEBPACK_IMPORTED_MODULE_5__["default"], {
             comment: comment,
             updateComments: updateComments,
             close: function close() {
               return setActiveEditModal(false);
             }
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"].Case, {
           condition: replyMode,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_ReplyComment__WEBPACK_IMPORTED_MODULE_11__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_ReplyComment__WEBPACK_IMPORTED_MODULE_6__["default"], {
             comment: comment,
             onReply: function onReply() {
               setShowReplies(true);
@@ -4677,9 +4704,9 @@ var InnerComment = function InnerComment(_ref3) {
               return setReplyMode(false);
             }
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_4__["default"].Case, {
           condition: uploadAttachment,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsx)(_AttachmentUpload__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_16__.jsx)(_AttachmentUpload__WEBPACK_IMPORTED_MODULE_7__["default"], {
             comment: comment
           })
         })]
@@ -4717,7 +4744,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ReplyComment__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ReplyComment */ "./resources/js/react/single-task/section/comments/ReplyComment.jsx");
 /* harmony import */ var _AttachmentUpload__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./AttachmentUpload */ "./resources/js/react/single-task/section/comments/AttachmentUpload.jsx");
 /* harmony import */ var _hooks_useAuth__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../../hooks/useAuth */ "./resources/js/react/hooks/useAuth.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _Comment__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Comment */ "./resources/js/react/single-task/section/comments/Comment.jsx");
+/* harmony import */ var _global_AvatarGroup__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../global/AvatarGroup */ "./resources/js/react/global/AvatarGroup.jsx");
+/* harmony import */ var _ReplyCommentPreview__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./ReplyCommentPreview */ "./resources/js/react/single-task/section/comments/ReplyCommentPreview.jsx");
+/* harmony import */ var _services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../../services/api/TaskCommentApiSlice */ "./resources/js/react/services/api/TaskCommentApiSlice.js");
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/dist/react-toastify.esm.mjs");
+/* harmony import */ var _global_Loader__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../../global/Loader */ "./resources/js/react/global/Loader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -4741,11 +4778,18 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
+
+
+
+
 var PreviewInnerComment = function PreviewInnerComment(_ref) {
-  var _comment$files_data;
   var comment = _ref.comment,
     updateComments = _ref.updateComments,
-    isLoading = _ref.isLoading;
+    isLoading = _ref.isLoading,
+    close = _ref.close;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
     showReplies = _React$useState2[0],
@@ -4768,14 +4812,21 @@ var PreviewInnerComment = function PreviewInnerComment(_ref) {
     setSelectedEmoji = _React$useState10[1];
   var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User(comment.user) : null;
   var auth = (0,_hooks_useAuth__WEBPACK_IMPORTED_MODULE_13__.useAuth)();
+  var refOnView = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);
+  react__WEBPACK_IMPORTED_MODULE_0__.useLayoutEffect(function () {
+    refOnView.current && refOnView.current.scrollIntoView({
+      behavior: "smooth"
+    });
+  }, [replyMode]);
 
-  // console.log({comment, user});
-  // return;
-
-  if (isLoading) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
+  // handle delete
+  var _useDeleteCommentMuta = (0,_services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_17__.useDeleteCommentMutation)(),
+    _useDeleteCommentMuta2 = _slicedToArray(_useDeleteCommentMuta, 2),
+    deleteComment = _useDeleteCommentMuta2[0],
+    isDeleting = _useDeleteCommentMuta2[1].isLoading;
+  if (isLoading) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.Fragment, {
     children: "Loading..."
   });
-  var replies = comment === null || comment === void 0 ? void 0 : comment.replies;
   var handleReplyButtonClick = function handleReplyButtonClick(e) {
     e.preventDefault();
     setReplyMode(true);
@@ -4797,6 +4848,57 @@ var PreviewInnerComment = function PreviewInnerComment(_ref) {
     setUploadAttachment(true);
   };
 
+  // delete comment
+  var handleDeleteComment = function handleDeleteComment(e, commentId) {
+    e.preventDefault();
+    Swal.fire({
+      icon: "warning",
+      title: "Are you sure you want to delete this comment?",
+      html: "This action cannot be undone. Deleting this comment will permanently remove it from the discussion.",
+      showDenyButton: true,
+      denyButtonText: "Cancel",
+      // denyButtonColor: '#ffffff',
+
+      showConfirmButton: true,
+      confirmButtonText: "Yes, Delete It!",
+      confirmButtonColor: "#E73819",
+      customClass: {
+        confirmButton: "delete-confirm-button",
+        denyButton: "delete-deny-button"
+      },
+      buttonsStyling: false
+    }).then(function (res) {
+      if (res.isConfirmed) {
+        deleteCommentData();
+      }
+    });
+
+    // delete
+    var deleteCommentData = /*#__PURE__*/function () {
+      var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var response;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return deleteComment(commentId).unwrap();
+            case 2:
+              response = _context.sent;
+              if (response) {
+                react_toastify__WEBPACK_IMPORTED_MODULE_18__.toast.success("Comment Deleted Successfully");
+              }
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      return function deleteCommentData() {
+        return _ref2.apply(this, arguments);
+      };
+    }();
+  };
+
   // emoji selection control
   var handleEmojiSelect = function handleEmojiSelect(emojiData, event) {
     setSelectedEmoji(emojiData.unified);
@@ -4804,184 +4906,135 @@ var PreviewInnerComment = function PreviewInnerComment(_ref) {
 
   // permission
   var CAN_EDIT_COMMENT = (auth === null || auth === void 0 ? void 0 : auth.getId()) === (user === null || user === void 0 ? void 0 : user.getId());
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-    className: "sp1_task_comment_send_box sp1_task_comment_replied pl-2 pb-2",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
+  var CAN_DELETE_COMMENT = CAN_EDIT_COMMENT;
+
+  // if(!isLoading && comment?.is_deleted) {
+  //     close();
+  //     return null;
+  // }
+
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
+    className: "sp1_task_comment_send_box sp1_task_comment_replied pl-2 pr-3 pb-2",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
       className: "__send-box flex-column align-items-start",
       style: {
         maxWidth: "100%"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-        className: "w-100 d-flex align-items-center",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-          className: "mr-2",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-            className: "rounded-circle",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("img", {
-              src: user === null || user === void 0 ? void 0 : user.getAvatar(),
-              alt: user === null || user === void 0 ? void 0 : user.getName(),
-              width: "32px",
-              height: "32px",
-              className: "rounded-circle"
-            })
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-          className: "sp1_comment",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("span", {
-            className: "sp1_comment_user--name",
-            children: [user === null || user === void 0 ? void 0 : user.getName(), " (", user === null || user === void 0 ? void 0 : user.getDesignationName(), ")"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-            className: "sp1_comment_time",
-            style: {
-              color: "#888"
-            },
-            children: (comment === null || comment === void 0 ? void 0 : comment.last_updated_at) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.Fragment, {
-              children: [dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format("MMM DD, YYYY "), " ", "at \xA0", dayjs__WEBPACK_IMPORTED_MODULE_8___default().unix(comment === null || comment === void 0 ? void 0 : comment.last_updated_at).format("hh:mm a")]
-            })
-          })]
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-        className: "__box __reply_text w-100 my-1 text-dark",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-          className: "sp1_ck_content sp1_message--body",
-          style: {
-            overflow: "hidden"
-          },
-          dangerouslySetInnerHTML: {
-            __html: comment === null || comment === void 0 ? void 0 : comment.comment
-          }
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-        className: "files",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"], {
-          children: comment === null || comment === void 0 || (_comment$files_data = comment.files_data) === null || _comment$files_data === void 0 ? void 0 : _comment$files_data.map(function (file) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_7__["default"].Preview, {
-              fileName: file === null || file === void 0 ? void 0 : file.name,
-              downloadAble: true,
-              deleteAble: false,
-              downloadUrl: file === null || file === void 0 ? void 0 : file.url,
-              previewUrl: file === null || file === void 0 ? void 0 : file.url,
-              fileType: file === null || file === void 0 ? void 0 : file.icon,
-              ext: ""
-            }, file === null || file === void 0 ? void 0 : file.name);
-          })
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-        className: "sp1_task_comment_actions",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"], {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Toggle, {
-            icon: false,
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-              className: "fa-regular fa-face-smile"
-            })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_4__["default"].Menu, {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(emoji_picker_react__WEBPACK_IMPORTED_MODULE_3__["default"], {
-              lazyLoadEmojis: true
-            })
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-          href: "#",
-          onClick: handleReplyButtonClick,
-          children: "Reply"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
-          children: "\u2022"
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"], {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
-            condition: CAN_EDIT_COMMENT,
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_Comment__WEBPACK_IMPORTED_MODULE_14__["default"], {
+        comment: comment,
+        onDelete: handleDeleteComment
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+          condition: !comment.is_deleted,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
+            className: "sp1_task_comment_actions",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
               href: "#",
-              onClick: handleEditButton,
-              children: "Edit"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("span", {
+              onClick: handleReplyButtonClick,
+              children: "Reply"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
               children: "\u2022"
-            })]
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("a", {
-          href: "#",
-          onClick: handleUploadAttachment,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("i", {
-            className: "fa-solid fa-paperclip"
-          })
-        }), (replies === null || replies === void 0 ? void 0 : replies.length) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-          className: "replies_count",
-          onClick: function onClick() {
-            return setShowReplies(!showReplies);
-          },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)("div", {
-            className: "reply_auth_avatar",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle ml-2"
-              })
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("img", {
-                src: "/user-uploads/avatar/40164f31bc7d575c7dbe99b24b408d75.png",
-                alt: "sender_name",
-                width: "20px",
-                height: "20px",
-                className: "rounded-circle ml-3"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"], {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+                condition: CAN_EDIT_COMMENT,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
+                  href: "#",
+                  onClick: handleEditButton,
+                  children: "Edit"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
+                  children: "\u2022"
+                })]
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+                condition: CAN_DELETE_COMMENT,
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
+                  href: "#",
+                  onClick: function onClick(e) {
+                    return handleDeleteComment(e, comment.id);
+                  },
+                  children: "Delete"
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
+                  children: "\u2022"
+                })]
+              })]
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("a", {
+              href: "#",
+              onClick: handleUploadAttachment,
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("i", {
+                className: "fa-solid fa-paperclip"
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-            className: "ml-2",
-            children: "3 replies"
-          })]
-        })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"], {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
           condition: activeEditMode,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_EditComment__WEBPACK_IMPORTED_MODULE_10__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_EditComment__WEBPACK_IMPORTED_MODULE_10__["default"], {
             comment: comment,
             updateComments: updateComments,
             close: function close() {
               return setActiveEditModal(false);
             }
           })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
-          condition: replyMode,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_ReplyComment__WEBPACK_IMPORTED_MODULE_11__["default"], {
-            comment: comment,
-            close: function close() {
-              return setReplyMode(false);
-            }
-          })
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
           condition: uploadAttachment,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_AttachmentUpload__WEBPACK_IMPORTED_MODULE_12__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_AttachmentUpload__WEBPACK_IMPORTED_MODULE_12__["default"], {
             comment: comment
           })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+          condition: !comment.is_deleted || auth.getRoleId() === 1,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(Replies, {
+            replies: comment.replies,
+            isRepliedModalOpen: replyMode,
+            onReplyButtonClick: function onReplyButtonClick() {
+              return setReplyMode(true);
+            },
+            handleDeleteComment: handleDeleteComment
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_global_Switch__WEBPACK_IMPORTED_MODULE_9__["default"].Case, {
+          condition: replyMode,
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.Fragment, {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_ReplyComment__WEBPACK_IMPORTED_MODULE_11__["default"], {
+              comment: comment,
+              onReply: function onReply() {
+                return setReplyMode(false);
+              },
+              close: function close() {
+                return setReplyMode(false);
+              }
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
+              ref: refOnView
+            })]
+          })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-        className: "sp1_task_replies_comment_list w-100",
-        children: replies ? replies.map(function (r, i) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)("div", {
-            className: "pl-3 border-left mt-3 w-100",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(PreviewInnerComment, {
-              comment: r,
-              updateComments: updateComments,
-              isLoading: isLoading
-            })
-          }, i);
-        }) : null
       })]
     })
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (PreviewInnerComment);
+var Replies = function Replies(_ref3) {
+  var replies = _ref3.replies,
+    isRepliedModalOpen = _ref3.isRepliedModalOpen,
+    onReplyButtonClick = _ref3.onReplyButtonClick,
+    handleDeleteComment = _ref3.handleDeleteComment;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsxs)("div", {
+    className: "sp1_task_replies_comment_list mt-4 ml-3 w-100",
+    children: [_.map(replies, function (r, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
+        className: "pl-3 pr-3 border-left border__left py-3 w-100",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_Comment__WEBPACK_IMPORTED_MODULE_14__["default"], {
+          comment: r,
+          onDelete: handleDeleteComment
+        })
+      }, i);
+    }), replies.length > 0 && !isRepliedModalOpen ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("div", {
+      className: "border-left border__left reply_button pl-3",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("button", {
+        onClick: onReplyButtonClick,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)("span", {
+          children: "+ Reply"
+        })
+      })
+    }) : null]
+  });
+};
 
 /***/ }),
 
@@ -5124,6 +5177,69 @@ var ReplyComment = function ReplyComment(_ref) {
   });
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ReplyComment);
+
+/***/ }),
+
+/***/ "./resources/js/react/single-task/section/comments/ReplyCommentPreview.jsx":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/react/single-task/section/comments/ReplyCommentPreview.jsx ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/api/TaskCommentApiSlice */ "./resources/js/react/services/api/TaskCommentApiSlice.js");
+/* harmony import */ var _Comment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Comment */ "./resources/js/react/single-task/section/comments/Comment.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
+
+
+
+
+
+
+var ReplyCommentPreview = function ReplyCommentPreview(_ref) {
+  var comment = _ref.comment,
+    cb = _ref.cb,
+    onReply = _ref.onReply,
+    showReplyButton = _ref.showReplyButton,
+    onDelete = _ref.onDelete;
+  var _useGetTaskCommentRep = (0,_services_api_TaskCommentApiSlice__WEBPACK_IMPORTED_MODULE_2__.useGetTaskCommentRepliesQuery)(comment.id, {
+      refetchOnMountOrArgChange: true
+    }),
+    data = _useGetTaskCommentRep.data,
+    isLoading = _useGetTaskCommentRep.isLoading;
+  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+    cb(isLoading);
+  }, [isLoading]);
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+    className: "sp1_task_replies_comment_list ml-3 w-100",
+    children: [lodash__WEBPACK_IMPORTED_MODULE_1___default().map(data, function (r, i) {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        className: "pl-3 pr-4 border-left border__left py-3 w-100",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_Comment__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          comment: r,
+          onDelete: onDelete
+        })
+      }, i);
+    }), !comment.is_deleted && !isLoading && showReplyButton ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "border-left border__left reply_button pl-3",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+        onClick: onReply,
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+          children: "+ Reply"
+        })
+      })
+    }) : null]
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (ReplyCommentPreview);
 
 /***/ }),
 

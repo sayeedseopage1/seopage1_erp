@@ -8,6 +8,8 @@ const CommentPreview = ({ isOpen, close, commentId }) => {
     // get comment details
     const { data: comment, isLoading } = useGetPreviewCommentDataQuery(commentId);
 
+    console.log({data: comment})
+
 
     return (
         <div className="sp1_st_comment_preview">
@@ -29,6 +31,7 @@ const CommentPreview = ({ isOpen, close, commentId }) => {
                         comment={comment}
                         updateComments={() => null}
                         isLoading={isLoading}
+                        close={close}
                     />
                 </div>
             </div>

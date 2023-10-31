@@ -1798,7 +1798,7 @@ class TaskController extends AccountBaseController
             }
 
 
-        }else{
+        }else{ 
         $task = new Task();
         $task->heading = $request->heading;
 
@@ -4068,7 +4068,7 @@ class TaskController extends AccountBaseController
     /********************************************/
     /*************** TASK COMMENT ***************/
 
-    public function getTaskComments($task_id){
+    public function getTaskComments($task_id){ 
         $data = TaskComment::where('task_id', $task_id)->where('root', null)->get();
 
         foreach ($data as $value) {
@@ -4083,15 +4083,20 @@ class TaskController extends AccountBaseController
                     'name' => $row->name
                 ];
             });
+            $value->last_updated_date = $value->created_at;
             $value->replies = [];
         }
-
-
+        
+        // dd($data);
         return response()->json($data, 200);
     }
 
     public function getTaskCommentReplies($comment_id){
         $data = TaskComment::where('root', $comment_id)->get();
+
+        foreach ($data as $value) { 
+            $value->last_updated_date = $value->created_at; 
+        }
         return response()->json($data, 200);
     }
 
@@ -4259,6 +4264,7 @@ class TaskController extends AccountBaseController
                 "type_is_reply" => $comment->reply_status,
                 "created_at"=> $comment->updated_at,
                 "parent_comment_id" => $comment->root,
+                "is_deleted" => $comment->is_deleted,
             ];
 
             array_push($data, $d);
@@ -4271,22 +4277,64 @@ class TaskController extends AccountBaseController
      // comment preview data
      public function previewTaskComment($comment_id){
 
-        $comment_details = TaskComment::find($comment_id);
+        $comment_details = TaskComment::select(
+                                'task_comments.*', 
+                                'task_comments.updated_at as last_updated_date',
+                            )
+                            ->find($comment_id);
 
         $comment = $comment_details;
 
 
         if($comment->root != null){
             // get parent
-            $parent = TaskComment::find($comment->root);
+            $parent = TaskComment::select(
+                            'task_comments.*', 
+                            'task_comments.updated_at as last_updated_date',
+                        )
+                        ->find($comment->root);
             $comment = $parent;
         }
 
         // get all replies
-        $replies = TaskComment::where('root', $comment->id)->get();
+        $replies = TaskComment::select(
+                            'task_comments.*', 
+                            'task_comments.updated_at as last_updated_date'
+                        )
+                        ->where('root', $comment->id)
+                        ->get();
+                        
         $comment->replies = $replies;
 
         return response() ->json($comment, 200);
+    }
+
+
+    // delete task
+    public function deleteComment($comment_id){
+        
+        // collect data from database
+        $comment_details = TaskComment::find($comment_id);
+
+        if($comment_details->root === null){
+           DB::table('task_comments')->where('root', $comment_details->id)
+            ->update([
+                "status" => 'deleted',
+                "is_deleted" => true,
+                "deleted_by" => Auth::user()->id,
+                "deleted_at" => Carbon::now()
+            ]);
+        }
+
+        $comment_details->status = 'deleted';
+        $comment_details->is_deleted = true;
+        $comment_details->deleted_by = Auth::user()->id;
+        $comment_details->deleted_at = Carbon::now();
+
+        $comment_details->save();
+
+ 
+        return response() ->json(["message"=> 'Comment Deleted Successfully'], 200);
     }
 
     /*************** END TASK COMMENT ************/

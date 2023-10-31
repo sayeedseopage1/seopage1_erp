@@ -10,7 +10,7 @@ import CommentPreview from "./CommentPreview";
 
 const WidgetItem = ({ comment }) => {
     const [isOpen, setIsOpen] = useState(false);
-
+ 
     if (!comment) return null;
     return (
         <React.Fragment>

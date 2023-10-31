@@ -251,10 +251,10 @@
   color: #777;
 }
 .sp1_task_comment_send_box .__send-box .__box.__reply_text {
-  background: #f2f2f2;
+  background: #f5f5f5;
   border: none;
   padding-left: 14px;
-  border-radius: 0;
+  border-radius: 8px;
 }
 .sp1_task_comment_send_box .__send-box .__box.__reply_text div {
   border-left: 1px solid rgba(53, 129, 222, 0.3);
@@ -1321,15 +1321,131 @@
   border: 2px solid #bababa;
   z-index: 1;
 }
-.border__left.reply_button.badge {
+.border__left:hover::before {
+  background-color: #4580ed;
+  border-color: #4580ed;
+  color: #fff;
+}
+.border__left.reply_button > button {
+  display: flex;
+  align-items: center;
+  background: #2c2e30 !important;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: Inter;
+}
+.border__left.reply_button > button:hover {
+  background: #141719 !important;
+}
+.border__left.reply_button::before {
+  content: "+";
+  width: 1.5rem;
+  height: 1.5rem;
+  top: 6px;
+  left: -0.8rem;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  line-height: 1.9px;
+  justify-content: center;
+  font-family: Inter;
+}
+
+.delete-confirm-button,
+.delete-deny-button {
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+.delete-confirm-button {
+  margin-right: 8px;
+  color: #fff;
+  background-color: #E73819;
+  border: 1px solid #E73819;
+}
+.delete-confirm-button:hover {
+  background-color: #DE3112;
+  border: 1px solid #DE3112;
+}
+
+.delete-deny-button {
+  margin-left: 8px;
+  color: rgba(0, 0, 0, 0.8);
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.delete-deny-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sp1_comment_extend_menu {
+  position: relative;
+  margin-left: auto;
+  align-self: flex-start;
+  font-family: Inter;
+}
+
+.sp1_comment_extend_menu__items {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  width: 130px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sp1_comment_extend_menu__item {
+  padding: 6px 10px;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 400;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.sp1_comment_extend_menu__item:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.sp1_comment_extend_menu__item.--delete:hover {
+  background-color: #f5320d;
+  color: #fef3f1;
+}
+.sp1_comment_extend_menu__item.--disabled {
+  color: rgba(0, 0, 0, 0.4);
+  cursor: not-allowed;
+}
+
+.sp1_comment_extend_menu-btn {
+  background-color: transparent;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sp1_comment_extend_menu-btn:hover {
+  background-color: #f3f3f3;
+}
+
+.sp1_comment_deleted_status {
+  padding: 10px 16px;
+  color: #e41212;
+  font-weight: 500;
+  border-radius: 10px;
+  background-color: rgb(255, 243, 244);
   display: flex;
   align-items: center;
 }
-.border__left.reply_button.badge > .icon {
-  margin-top: -0.25rem;
-}
-.border__left.reply_button::before {
-  top: 10px;
+.sp1_comment_deleted_status button {
+  width: 32px;
+  color: #9d9d9d;
+  background-color: transparent;
+  margin-left: auto;
 }
 
 .text-hover-underline:hover {
