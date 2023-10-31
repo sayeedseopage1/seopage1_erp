@@ -76,10 +76,12 @@
                                 <div class="d-flex align-items-center">
                                     <div class="" style="width: 28px;">
                                         <div style="width: 32px; height: 28px;">
+                                            @if($personResponsible != null)
                                             @if ($personResponsible->image)
                                                 <img src="{{ asset('user-uploads/avatar/'.$personResponsible->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
                                             @else
                                                 <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
+                                            @endif
                                             @endif
                                         </div>
                                     </div>
