@@ -110,14 +110,15 @@
                                     <div class="d-flex align-items-center">
                                         <div class="" style="width: 28px;">
                                             <div style="width: 32px; height: 28px;">
-                                                @if ($win->image)
+                                                <!-- @if ($win->image)
                                                     <img src="{{ asset('user-uploads/avatar/'.$win->image) }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
-                                                @else
+                                                @else -->
                                                     <img src="{{ asset('img/avatar.png') }}" alt="" width="24" height="24" style="width: 28px; height: 28px;" class="rounded-circle">
-                                                @endif
+                                                <!-- @endif -->
                                             </div>
                                         </div>
-                                        <a href="{{ route('employees.show',$win->id) }}" class="pl-2 ">{{ $win->name }}</a>
+                                        <!-- <a href="{{ route('employees.show',$win->id) }}" class="pl-2 ">{{ $win->name }}</a> -->
+                                        <a href="#" class="pl-2 ">--</a>
                                     </div>
                                 @else
                                 <div class="d-flex align-items-center">
