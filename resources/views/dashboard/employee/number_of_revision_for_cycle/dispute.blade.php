@@ -85,7 +85,11 @@
                                             @endif
                                         </div>
                                     </div>
+                                    @if($personResponsible !=null)
                                     <a href="{{ route('employees.show',$personResponsible->id) }}" class="pl-2 ">{{ $personResponsible->name }}</a>
+                                    @else
+                                    --
+                                    @endif
                                 </div>
                             </td>
                             <td>
