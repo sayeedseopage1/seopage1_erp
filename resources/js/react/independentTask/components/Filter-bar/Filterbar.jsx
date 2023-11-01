@@ -6,8 +6,9 @@ import StatusFilter from "./StatusFilter";
 import FilterSidebar from "./FilterSidebar";
 import { useWindowSize } from "react-use";
 import DateTypeFilter from "./DateTypeFilter";
+import ClientFilter from "./ClientFilter";
 
-const Filterbar = ({ onFilter, page = "tasks" }) => {
+const Filterbar = ({ onFilter }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const [startDate, setStartDate] = React.useState(null);
     const [endDate, setEndDate] = React.useState(null);
@@ -43,12 +44,20 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
             start_date,
             end_date,
             assignee_to: _developer?.id,
-            client_id: _client?.id,
+            // client_id: _client?.id,
             assignee_by: _leadDeveloper?.id,
             pm_id: _pm?.id,
             status: _status?.id,
-            date_filter_by,
+            // date_filter_by,
         };
+
+        // console.log({_client});
+        if (client?.id) {
+            filter.client_id = _client?.id;
+            filter.client_name = _client?.name;
+        } else {
+            filter.client_name = _client?.client_name;
+        }
 
         onFilter(filter);
     }, [
@@ -59,7 +68,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
         _leadDeveloper,
         _pm,
         _status,
-        date_filter_by,
+        // date_filter_by,
     ]);
 
     return (
@@ -75,7 +84,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
             {width > 1400 && (
                 <React.Fragment>
-                    <UserFilter
+                    <ClientFilter
                         title="Client"
                         state={client}
                         setState={setClient}
@@ -84,13 +93,13 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
 
-                    <UserFilter
+                    {/* <UserFilter
                         title="Project Manager"
                         state={pm}
                         setState={setPm}
                         roleIds={[4]}
                     />
-                    <HDivider />
+                    <HDivider /> */}
 
                     <UserFilter
                         title="Assigned By"
@@ -102,26 +111,26 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
 
                     <HDivider />
 
-                    {page === "subtasks" ? (
+                    {/* {page === "subtasks" ? ( */}
                         <UserFilter
                             title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
                             roleIds={[5]}
                         />
-                    ) : (
+                    {/* ) : (
                         <UserFilter
                             title="Assigned To"
                             state={developer}
                             setState={setDeveloper}
                             roleIds={[4, 6, 9, 10]}
                         />
-                    )}
+                    )} */}
 
                     <HDivider />
                     <StatusFilter state={status} setState={setStatus} />
-                    <HDivider />
-                    <DateTypeFilter state={dateType} setState={setDateType} />
+                    {/* <HDivider />
+                    <DateTypeFilter state={dateType} setState={setDateType} /> */}
                     <HDivider />
                 </React.Fragment>
             )}

@@ -176,8 +176,20 @@
                                 }
                                 @endphp
                             </td>
-                            <td><a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a></td>
-                            <td>{{$value->project->deadline->format('Y-m-d')}}</td>
+                            <td>
+                                @if($value->project_id != null)
+                                <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
+                                @else 
+                                -- 
+                                @endif
+                                </td>
+                            <td>
+                                @if($value->project_id)
+                                {{$value->project->deadline->format('Y-m-d')}}
+                                @else 
+                                -- 
+                                @endif
+                            </td>
                         </tr>
                         @empty
                         <tr>

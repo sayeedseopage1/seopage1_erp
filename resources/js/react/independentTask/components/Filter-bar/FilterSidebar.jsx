@@ -1,8 +1,9 @@
-import React from 'react'
-import Button from '../Button';
-import UserFilter from './UserFilter';
-import StatusFilter from './StatusFilter';
-import DateTypeFilter from './DateTypeFilter';
+import React from "react";
+import Button from "../Button";
+import UserFilter from "./UserFilter";
+import StatusFilter from "./StatusFilter";
+import DateTypeFilter from "./DateTypeFilter";
+import ClientFilter from "./ClientFilter";
 
 const FilterSidebar = ({
     developer,
@@ -20,54 +21,77 @@ const FilterSidebar = ({
     dateType,
     setDateType,
     close,
-    isDev
+    isDev,
 }) => {
-  return (
-    <div className='sp1_filter_sidebar'>
-        <div className='sp1_filter_sidebar_header'>
-            <h4>Filter</h4>
-            <Button variant='tertiary' onClick={close}>
-                <i className='fa-solid fa-xmark' />
-            </Button>
-        </div>
+    return (
+        <div className="sp1_filter_sidebar">
+            <div className="sp1_filter_sidebar_header">
+                <h4>Filter</h4>
+                <Button variant="tertiary" onClick={close}>
+                    <i className="fa-solid fa-xmark" />
+                </Button>
+            </div>
 
+            <div className="p-3 d-flex flex-column" style={{ gap: "10px" }}>
+                {/* <DateTypeFilter state={dateType} setState={setDateType} /> */}
 
-        <div className='p-3 d-flex flex-column' style={{gap: '10px'}}>  
-            <DateTypeFilter state={dateType} setState={setDateType} />
+                <ClientFilter
+                    title="Client"
+                    state={client}
+                    setState={setClient}
+                    roleIds={null}
+                />
 
-            <UserFilter 
-                title="Client" 
-                state={client}
-                setState={setClient}
-                roleIds={null}
-            /> 
-            
-
-            <UserFilter 
+                {/* <UserFilter 
                 title="Project Manager" 
                 state={pm}
                 setState={setPm}
                 roleIds={[4]}
-            /> 
+            />  */}
 
-            <UserFilter 
-                title="Lead Developer" 
-                state={leadDeveloper}
-                setState={setLeadDeveloper}
-                roleIds={[6]}
-            /> 
-            
-            {!isDev &&  <UserFilter 
-                title="Developer" 
-                state={developer}
-                setState={setDeveloper}
-                roleIds={[5, 9, 10]}
-            /> } 
-            
-            <StatusFilter state={status} setState={setStatus} />
+                <UserFilter
+                    title="Assigned By"
+                    state={leadDeveloper}
+                    setState={setLeadDeveloper}
+                    roleIds={[1, 4]}
+                />
+
+                {/* <UserFilter
+                    title="Lead Developer"
+                    state={leadDeveloper}
+                    setState={setLeadDeveloper}
+                    roleIds={[6]}
+                /> */}
+
+                {/* {page === "subtasks" ? ( */}
+                    <UserFilter
+                        title="Assigned To"
+                        state={developer}
+                        setState={setDeveloper}
+                        roleIds={[5]}
+                    />
+                {/* ) : (
+                    <UserFilter
+                        title="Assigned To"
+                        state={developer}
+                        setState={setDeveloper}
+                        roleIds={[4, 6, 9, 10]}
+                    />
+                )} */}
+
+                {/* {!isDev && (
+                    <UserFilter
+                        title="Developer"
+                        state={developer}
+                        setState={setDeveloper}
+                        roleIds={[5, 9, 10]}
+                    />
+                )} */}
+
+                <StatusFilter state={status} setState={setStatus} />
+            </div>
         </div>
-    </div>
-  )
-}
+    );
+};
 
-export default FilterSidebar
+export default FilterSidebar;

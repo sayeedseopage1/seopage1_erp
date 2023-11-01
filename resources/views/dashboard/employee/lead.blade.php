@@ -225,11 +225,12 @@
 			                                    <th>Start Date</th>
 			                                    
 			                                    <th>Estimated Time</th>
-			                                    <th>Hours Logged</th>
+			                                    <!-- <th>Hours Logged</th> -->
 			                                    <th>Project Manager</th>
 			                                    <th>Project Deadline</th>
 												<th>Status</th>
 			                                </thead>
+											
 											@forelse($total_deadline_task_assigned_to_me as $row)
 											
 											<tr>
@@ -238,7 +239,7 @@
 												<td>{{$row->start_date}}</td>
 											
 												<td>{{$row->estimate_hours}} hours {{$row->estimate_minutes}} min</td>
-												<td>
+												{{--<td>
 													@php
 													$total_minutes= App\Models\ProjectTimeLog::where('task_id',$row->id)->sum('total_minutes');
 													$timelog= '';
@@ -267,17 +268,32 @@
 													@endphp
 													{{$timeL}}
 													
-												</td>
+												</td> --}}
 												<td>
 													@php
 													$project= App\Models\Project::where('id',$row->project_id)->first();
-													$pm = App\Models\User::where('id',$project->pm_id)->first();
+													if($project != null)
+													{
+														$pm = App\Models\User::where('id',$project->pm_id)->first();
+
+													}
+													
 
 													@endphp
+													@if($project != null)
 													<a href="{{route('employees.show', $pm->id)}}" title="{{$pm->name}}" class="openRightModal">{{Str::limit($pm->name,15)}}</a>
-													
+													@else 
+													-- 
+
+												@endif
 												</td>
-												<td>{{$project->deadline}}</td>
+												<td>
+												@if($project != null)
+													{{$project->deadline}}
+												@else 
+												--
+												@endif
+											</td>
 												<td>
 													@php
 													$task_status= App\Models\TaskBoardColumn::where('id',$row->board_column_id)->first();
@@ -365,7 +381,13 @@
 													<a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{Str::limit($user->name,10)}}</a>
 													
 												</td>
-												<td>{{$project->deadline}}</td>
+												<td>
+												@if($project != null)	
+												{{$project->deadline}}
+												@else 
+												-- 
+												@endif
+											</td>
 												<td>
 													@php
 													$task_status= App\Models\TaskBoardColumn::where('id',$item->board_column_id)->first();
@@ -694,7 +716,7 @@
 						                        <th>Client</th>
 						                        <th>Due Date</th>
 						                        <th>Estimated Time</th>
-						                        <th>Hours Logged</th>
+						                        <!-- <th>Hours Logged</th> -->
 												<th>Status</th>
 						                    </thead>
 						                    <tbody>
@@ -707,14 +729,29 @@
 						                        	<td>
 														@php
 															$project= App\Models\Project::where('id',$row->project_id)->first();
-															$client= App\Models\User::where('id',$project->client_id)->first();
+															if($project != null)
+															{
+																$client= App\Models\User::where('id',$project->client_id)->first();
+
+															}
+														
 															// $task_user= App\Models\TaskUser::where('task_id',$item->id)->first();
 															// $user = App\Models\User::where('id',$task_user->user_id)->first();
 														@endphp
+														@if($project != null)
 														<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
+														@else 
+														--
+
+														@endif
 													</td>
 						                        	<td>
+													@if($project != null)
 						                        		<a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a>
+														@else 
+														{{$row->client_name}}
+
+														@endif
 						                        	</td>
 						                        	<td>
 														@if($row->due_date != null)
@@ -724,7 +761,7 @@
 														@endif
 													</td>
 						                        	<td>{{$row->estimate_hours}} hours {{$row->estimate_minutes}} min</td>
-						                        	<td>
+						                        {{--	<td>
 														@php
 															$total_minutes= App\Models\ProjectTimeLog::where('task_id',$row->id)->sum('total_minutes');
 															$timelog= '';
@@ -746,7 +783,7 @@
 															}
 														@endphp
 														{{$timeL}}
-													</td>
+													</td> --}}
 													<td>
 														@php
 															$task_status= App\Models\TaskBoardColumn::where('id',$row->board_column_id)->first();
@@ -785,7 +822,7 @@
 												<th>Developer</th>
 						                        <th>Due Date</th>
 						                        <th>Estimated Time</th>
-						                        <th>Hours Logged</th>
+						                        <!-- <th>Hours Logged</th> -->
 												<th>Status</th>
 						                    </thead>
 						                    <tbody>
@@ -798,7 +835,11 @@
 						                        	<td>
 														@php
 															$project= App\Models\Project::where('id',$row->project_id)->first();
-															$client= App\Models\User::where('id',$project->client_id)->first();
+															if($project != null)
+															{
+																$client= App\Models\User::where('id',$project->client_id)->first();
+
+															}
 														 	$task_user= App\Models\TaskUser::where('task_id',$row->id)->first();
 														 	if($task_user != null) {
 														 		$user = App\Models\User::where('id',$task_user->user_id)->first();
@@ -806,11 +847,21 @@
 														 		'no data';
 														 	}
 													 	@endphp
+														 @if($project != null)
 														<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
+														@else 
+														--
+
+														@endif
 													</td>
 						                        	<td>
+														@if($project != null)
 						                        		<a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a>
-						                        	</td>
+															@else 
+
+															{{$row->client_name}}
+															@endif
+													</td>
 													<td>
 														@if($task_user != null)
 														<a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{$user->name}}</a>
@@ -826,7 +877,7 @@
 														@endif
 													</td>
 						                        	<td>{{$row->estimate_hours}} hours {{$row->estimate_minutes}} min</td>
-						                        	<td>
+						                        	{{--<td>
 														@php
 															$total_minutes= App\Models\ProjectTimeLog::where('task_id',$row->id)->sum('total_minutes');
 															$timelog= '';
@@ -849,7 +900,7 @@
 															}
 														@endphp
 														{{$timeL}}
-													</td>
+													</td> --}}
 													<td>
 														@php
 															$task_status= App\Models\TaskBoardColumn::where('id',$row->board_column_id)->first();
@@ -1173,7 +1224,7 @@
 			                                    <th>Client</th>
 			                                    <th>Due Date</th>
 			                                    <th>Estimated Time</th>
-			                                    <th>Hours Logged</th>
+			                                    <!-- <th>Hours Logged</th> -->
 												<th>Status</th>
 			                                </thead>
 			                                <tbody>
@@ -1184,18 +1235,33 @@
 				                                	<td>
 														@php
 													$project= App\Models\Project::where('id',$row->project_id)->first();
-													$client= App\Models\User::where('id',$project->client_id)->first();
+													if($project != null)
+															{
+																$client= App\Models\User::where('id',$project->client_id)->first();
+
+															}
 													// $task_user= App\Models\TaskUser::where('task_id',$item->id)->first();
 													// $user = App\Models\User::where('id',$task_user->user_id)->first();
 
 													@endphp
-													<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
+													@if($project != null)
+														<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
+														@else 
+														--
+
+														@endif
 													
 
 
 
 													</td>
-				                                	<td><a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a></td>
+				                                	<td>
+														@if($project != null)
+														<a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a>
+														@else 
+														{{$row->client_name}}
+														@endif
+													</td>
 				                                	<td>
 														@if($row->due_date != null)
 														{{$row->due_date}}
@@ -1204,7 +1270,7 @@
 														@endif
 												</td>
 				                                	<td>{{$row->estimate_hours}} hours {{$row->estimate_minutes}} min</td>
-				                                	<td>
+				                                {{--	<td>
 														@php
 													$total_minutes= App\Models\ProjectTimeLog::where('task_id',$row->id)->sum('total_minutes');
 													$timelog= '';
@@ -1233,7 +1299,7 @@
 													@endphp
 													{{$timeL}}
 
-													</td>
+													</td> --}}
 													<td>
 														@php
 														$task_status= App\Models\TaskBoardColumn::where('id',$row->board_column_id)->first();
@@ -1284,7 +1350,11 @@
 				                                	<td>
 													@php
 													$project= App\Models\Project::where('id',$row->project_id)->first();
-													$client= App\Models\User::where('id',$project->client_id)->first();
+													if($project != null)
+															{
+																$client= App\Models\User::where('id',$project->client_id)->first();
+
+															}
 												 	$task_user= App\Models\TaskUser::where('task_id',$row->id)->first();
 												 	if($task_user != null) {
 												 		$user = App\Models\User::where('id',$task_user->user_id)->first();
@@ -1293,13 +1363,25 @@
 												 	}
 
 													@endphp
-													<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
+
+													@if($project != null)
+														<a href="{{route('projects.show', $project->id)}}" title="{{$project->project_name}}" class="openRightModal">{{Str::limit($project->project_name,15)}}</a>
+														@else 
+														--
+
+														@endif
 													
 
 
 
 													</td>
-				                                	<td><a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a></td>
+				                                	<td>
+													@if($project != null)	
+													<a href="{{route('clients.show', $project->client_id)}}" title="{{$client->name}}" class="openRightModal">{{$client->name}}</a>
+													@else 
+													{{$row->client_name}}
+													@endif
+												</td>
 													<td><a href="{{route('employees.show', $user->id)}}" title="{{$user->name}}" class="openRightModal">{{$user->name}}</a></td>
 				                                	<td>
 														@if($row->due_date != null)

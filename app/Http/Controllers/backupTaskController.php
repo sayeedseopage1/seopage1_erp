@@ -1760,6 +1760,7 @@ class TaskController extends AccountBaseController
 
         $working_environment = new WorkingEnvironment();
         $working_environment->project_id = $request->project_id;
+        $working_environment->project_id = $request->task_id;
         $working_environment->site_url = $request->site_url;
         $working_environment->login_url = $request->login_url;
         $working_environment->email = $request->email;

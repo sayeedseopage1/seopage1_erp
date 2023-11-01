@@ -27,27 +27,29 @@ import { SingleTask } from "../../../utils/single-task";
 import { User } from "../../../utils/user-details";
 import LeadConfirmationModal from "./LeadConfirmationModal";
 import WorkingEnvironmentForm from "./WorkingEnvironmentForm";
+import { useRefetchTaskDetails } from "../../SingleIndependentTask";
 
-const SubTaskForm = ({ close, isFirstSubtask = true }) => {
+const SubTaskForm = ({ close, isFirstSubtask = false }) => {
+    const refetchTask = useRefetchTaskDetails();
     const { task:taskDetails, subTask, isWorkingEnvironmentSubmit } = useSelector((s) => s.subTask);
     const dispatch = useDispatch();
     const dayjs = new CompareDate();
-    const [showEnvForm, setShowEnvForm] = useState(false);
+
     //   form data
     const [title, setTitle] = useState("");
-    const [milestone, setMilestone] = useState("");
     const [parentTask, setParentTask] = useState("");
     const [startDate, setStateDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);
-    const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
     const [assignedTo, setAssignedTo] = useState(null);
-    const [taskObserver, setTaskObserver] = useState("");
+    // const [taskObserver, setTaskObserver] = useState("");
     const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("To Do");
-    const [priority, setPriority] = useState("Medium");
-    const [estimateTimeHour, setEstimateTimeHour] = useState(0);
-    const [estimateTimeMin, setEstimateTimeMin] = useState(0);
+    // const [status, setStatus] = useState("To Do");
+    const [priority, setPriority] = useState("Regular");
+
+    // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
+    // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
+    
     const [files, setFiles] = React.useState([]);
 
     const [pageType, setPageType] = React.useState("");
@@ -64,7 +66,8 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     const task = new SingleTask(taskDetails);
     const auth = new User(window?.Laravel?.user);
 
-    const params = useParams();
+
+    // const params = useParams();
     const [createSubtask, { isLoading, error }] = useCreateSubtaskMutation();
     // const {  } = useGetTaskDetailsQuery(`/${task?.id}/json?mode=estimation_time`);
     const [ getTaskDetails, {data: estimation, isFetching}] = useLazyGetTaskDetailsQuery();
@@ -77,16 +80,15 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
     const navigate = useNavigate();
 
 
-    const [
-        checkRestrictedWords,
-        {isLoading: checking}
-    ] = useCheckRestrictedWordsMutation();
-
+    // const [
+    //     checkRestrictedWords,
+    //     {isLoading: checking}
+    // ] = useCheckRestrictedWordsMutation();
+    const checking = false;
+    
 
     // handle change
     React.useEffect(() => {
-        setMilestone(task?.milestoneTitle);
-        setProject(task?.projectName);
         setParentTask(task?.title);
     }, [task]);
 
@@ -226,19 +228,19 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         const _dueDate = dayjs.dayjs(dueDate).format("DD-MM-YYYY");
 
         const fd = new FormData();
-        fd.append("milestone_id", task?.milestoneID);
+        // fd.append("milestone_id", task?.milestoneID);
         fd.append("task_id", task?.id);
         fd.append("title", title);
         fd.append("start_date", _startDate);
         fd.append("due_date", _dueDate);
-        fd.append("project_id", task?.projectId);
+        // fd.append("project_id", task?.projectId);
         fd.append("task_category_id", taskCategory?.id);
         fd.append("user_id", assignedTo?.id);
         fd.append("description", description);
         fd.append("board_column_id", task?.boardColumn?.id);
         fd.append("priority", _.lowerCase(priority));
-        fd.append("estimate_hours", estimateTimeHour);
-        fd.append("estimate_minutes", estimateTimeMin);
+        // fd.append("estimate_hours", estimateTimeHour);
+        // fd.append("estimate_minutes", estimateTimeMin);
         fd.append("image_url", null);
         fd.append("subTaskID", null);
         fd.append("addedFiles", null);
@@ -260,7 +262,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
             fd.append("file[]", file);
         });
 
-        const submit = async () => {
+        // const submit = async () => {
 
             if(isValid()){
                 await createSubtask(fd)
@@ -294,71 +296,6 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                     }
                 });
             }
-        }
-
-        const primaryPageConfirmation = () => {
-            if(pageTypePriority === "Primary Page Development"){
-                Swal.fire({
-                    icon: 'info',
-                    html: `<p>All the pages that are money pages (that can generate money/leads) and all the pages that require significant work to develop should go under main page development. Some examples of these pages are homepage (most important page of a website and generate most of the leads), service page (most important page after homepage), Property listing page (most important page for a real estate website) etc.</p> <p>A website usually has not more than 3 primary pages. In a few weeks, we will setup a point system for the developers where developers will get more points for the primary pages when compared to the secondary pages. And when you are declaring a page as a primary page, it will require authorization from the management to ensure its accuracy. Do you still want to declare this as a primary page? </p>`,
-                    showCloseButton: true,
-                    showCancelButton: true,
-                }).then((res => {
-                    if(res.isConfirmed){
-                        submit();
-                    }
-                }))
-            }else{
-                submit()
-            }
-        }
-
-
-
-            // check violation words
-            const response = await checkRestrictedWords(task?.projectId).unwrap();
-
-            if(response.status === 400){
-                const error = new Object();
-                const checkViolationWord = (text) => {
-                    const violationWords = ["revision", "fix", "modify", "fixing", "revise", "edit"];
-                    const violationRegex = new RegExp(`\\b(${violationWords.join("|")})\\b`, "i");
-                    return violationRegex.test(_.toLower(text));
-                }
-
-                const alert = () => {
-                    Swal.fire({
-                        icon: 'error',
-                        html: `<p>In our new system, you should see a <span class="badge badge-info">Revision Button</span> in every task. If there is any revision for that task, you should use that button instead. Creating a new task for the revisions will mean you are going against the company policy and may result in actions from the management if reported.</p> <p><strong>Are you sure this is a new task and not a revision to any other existing tasks?</strong></p> `,
-                        // showCloseButton: true,
-                        showConfirmButton: true,
-                        showCancelButton: true,
-                    }).then((res => {
-                        if(res.isConfirmed){
-                            primaryPageConfirmation();
-                        }
-                    }))
-                }
-
-                // check title
-                if(checkViolationWord(title)){
-                    setContainViolation(true);
-                    error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
-
-                    alert();
-                }else if(checkViolationWord(description)){  // check description
-                    setContainViolation(true);
-                    error.violationWord = `Some violation word found. You do not use <span class="badge badge-danger">revision</span> <span class="badge badge-danger">Fix</span> <span class="badge badge-danger">Modify</span> <span class="badge badge-danger">Fixing</span> <span class="badge badge-danger">Revise</span> <span class="badge badge-danger">Edit</span>`
-                    alert();
-                }else{
-                    primaryPageConfirmation();
-                }
-
-                setErr(prev => ({...prev, ...error}))
-            }else{
-                primaryPageConfirmation();
-            }
-
     };
 
     React.useEffect(() => {
@@ -380,15 +317,21 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
         return text
     };
 
-
     useEffect(() => {
-        const showEnv = task?.workingEnvironment === 0 ? _.size(task?.subtask) === 0 ? true : false : false;
+        // const showEnv = _.size(task?.subtask) === 0 ? true : false;
         if(auth.getRoleId() === 6){
-            if(isWorkingEnvironmentSubmit === undefined){
-                dispatch(setWorkingEnvironmentStatus(showEnv))
-            }
+            dispatch(setWorkingEnvironmentStatus(!isFirstSubtask));
         }
-    }, [])
+    }, [isFirstSubtask])
+
+
+    useEffect(()=>{
+      console.log({isFirstSubtask,isWorkingEnvironmentSubmit});
+    },[isFirstSubtask,isWorkingEnvironmentSubmit]);
+
+    // useEffect(()=>{
+    //   console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});
+    // },[isWorkingEnvironmentSubmit,isFirstSubtask,task])
 
 
     return (
@@ -396,7 +339,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
             <div className="sp1-subtask-form --modal-panel">
                 <div className="sp1-subtask-form --modal-panel-header">
                     <h6>
-                        { isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
+                        { !isWorkingEnvironmentSubmit ? "Working Environment" : "Create Sub Task"}
                     </h6>
                     <Button
                         aria-label="close-modal"
@@ -409,21 +352,23 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
 
                 <div className="sp1-subtask-form --modal-panel-body sp1_subtask_form">
                     {/* working environment form */}
-                    {isWorkingEnvironmentSubmit &&
+                    {!isWorkingEnvironmentSubmit &&
                         <WorkingEnvironmentForm
                             task={task}
-                            onSubmit={() => dispatch(setWorkingEnvironmentStatus(false))}
+                            onSubmit={() =>{
+                                refetchTask()
+                            }}
                             close={close}
                         /> }
                     {/* end working environment form */}
 
-                    {!isWorkingEnvironmentSubmit &&
+                    {isWorkingEnvironmentSubmit &&
                         <LeadConfirmationModal
-                            isOpen={!isWorkingEnvironmentSubmit && !showForm}
+                            isOpen={!showForm}
                             onConfirm={() => setShowForm(true)}
                         />
                     }
-                    {!isWorkingEnvironmentSubmit && showForm && (
+                    {showForm && (
                         <div className="sp1-subtask-form --form row">
                             <div className="col-12 col-md-6">
                                 <Input
@@ -439,7 +384,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                 />
                             </div>
 
-                            <div className="col-12 col-md-6">
+
+                            {/* Milestone */}
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -453,7 +400,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                         defaultValue={milestone}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
@@ -471,7 +418,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                 </div>
                             </div>
 
-                            <div className="col-12 col-md-6">
+
+                            {/* Project */}
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         className={`f-14 text-dark-gray mb-1`}
@@ -485,7 +434,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                         defaultValue={project}
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
@@ -881,7 +830,9 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                 />
                             </div>
 
-                            <div className="col-12 col-md-6">
+
+                            {/* Set Estimate Time */}
+                            {/* <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label
                                         htmlFor=""
@@ -922,7 +873,7 @@ const SubTaskForm = ({ close, isFirstSubtask = true }) => {
                                     Estimation time can't exceed {estimation?.hours_left} hours {estimation?.minutes_left} minutes
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
 
 

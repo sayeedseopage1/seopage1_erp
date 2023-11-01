@@ -55,9 +55,10 @@ class TaskCommentNotification extends Notification
         $task_comment = TaskComment::where('task_id', $task->id)
                         ->orderBy('created_at', 'desc')
                         ->first();
-
+        
         $pm= User::where('id',$project->pm_id)->first();
         $client= User::where('id',$project->client_id)->first();
+
 
         if ($task_comment->files) {
             $files = json_decode($task_comment->files);
@@ -65,11 +66,21 @@ class TaskCommentNotification extends Notification
 
              foreach ($files as $item) {
                 $img = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/' . $item;
-               $imgUrls .= ' <img src="'.$img.'" alt="">';
+               $imgUrls .= ' <img src="'.$img.'" alt=""><br>';
             }
         }
+        if($task_comment->files != null)
+        {
+            $images = '<p>
+            <b style="color: black">' . __('Attachments') . ': '.'</b><br>' .$imgUrls . '
+        </p>';
+    
 
-
+        }else 
+        {
+            $images = '';
+        }
+       
         $greet= '<p>
            <b style="color: black">'  . '<span style="color:black">'.'Hello '.$notifiable->name. ','.'</span>'.'</b>
        </p>'
@@ -92,13 +103,12 @@ class TaskCommentNotification extends Notification
    </p>'.
    '<p>
        <b style="color: black">' . __('Comment') . ': '.'</b>' .$task_comment->comment . '
-   </p>'
+   </p>'. 
+   $images
 
 
    ;
-   $content .=
-   $imgUrls;
-
+ 
 //    dd($imgUrls);
 
 

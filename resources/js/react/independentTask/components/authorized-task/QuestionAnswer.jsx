@@ -1,33 +1,33 @@
 import React, { useState } from "react";
 import styles from "./taskAuthorization.module.css";
 import { toast } from "react-toastify";
-import { useCreatePendingTaskAuthorizationConversationMutation } from "../../../services/api/projectApiSlice";
 import Button from "../Button";
+import { useCreateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
 
-const QuestionAnswer = ({ data, conversations, setConversations }) => {
+const QuestionAnswer = ({ data }) => {
     const [question, setQuestion] = useState("");
     const [err, setErr] = useState(new Object());
 
     const [
-        createPendingTaskAuthorizationConversation,
+        createIndependentTaskAuthorizationConversation,
         {isLoading}
-    ] = useCreatePendingTaskAuthorizationConversationMutation();
+    ] = useCreateIndependentTaskAuthorizationConversationMutation();
 
 
     const handleSubmission = async (e) => {
         e.preventDefault();
 
-        // console.log({question, data});
+        console.log({question, data});
         
-        await createPendingTaskAuthorizationConversation({
+        await createIndependentTaskAuthorizationConversation({
             question,
-            pending_parent_task_id: data?.u_id
+            pending_parent_task_id: data?.id
         })
         .unwrap()
         .then(res => {
             if(res?.status === 200){
                 toast.success('Your question has been submitted successfully.');
-                setConversations([...res.data]);
+                // setConversations([...res.data]);
                 setQuestion('');
             }
         })

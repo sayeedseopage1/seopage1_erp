@@ -45,7 +45,7 @@
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_start_date }}</td>
-                        <td>{{ $item->updated_at }}</td>
+                        <td>{{ $item->project_completion_date }}</td>
 
                         <td>
                             @if ($item->status == 'in progress')

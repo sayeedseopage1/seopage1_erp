@@ -2171,7 +2171,6 @@
             $endDate = \Carbon\Carbon::now()
                 ->startOfMonth()
                 ->addDays(15);
-
         @endphp
         $(function() {
             var format = '{{ global_setting()->moment_format }}';
@@ -2605,7 +2604,7 @@
                     monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
             }
 
-            console.log({monthDate:moment(monthDate).format('DD-MMM-YYYY')});
+           // console.log({monthDate:moment(monthDate).format('DD-MMM-YYYY')});
 
             // previos btn action
             $('.fc-prev-button').click(function() {
@@ -2630,8 +2629,9 @@
                 var mode = $(this).attr('date-mode');
                 var date;
                 if (mode == 'month') {
-                    monthDate = moment(monthDate).add(1, 'month');
 
+                    monthDate = moment(monthDate).add(1, 'month');                 
+                    
                     $(this).prev().text('' + moment(monthDate).format('MMMM, YYYY') + ' - ' +
                     moment(monthDate).add(1, 'month').startOf('month').add(targeted_day-1, 'day').format('MMMM, YYYY'));
                     date = monthDate

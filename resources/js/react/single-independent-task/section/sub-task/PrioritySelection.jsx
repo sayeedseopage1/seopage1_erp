@@ -3,7 +3,7 @@ import { Listbox } from '@headlessui/react'
 
 
 
-const priority = ["High", "Medium", "Low"]
+const priority = ["Emergency", "Urgent", "Regular"]
 
 
 const PrioritySelection = ({selected, setSelected}) => { 

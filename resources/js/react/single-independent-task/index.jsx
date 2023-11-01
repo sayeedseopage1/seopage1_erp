@@ -10,7 +10,7 @@ import { DndProvider, useDragLayer } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ErrorContextProvider from "../context/ErrorHandleServiceContextProvider";
 
-const SingleTask = React.lazy(() => import("./SingleTask"));
+const SingleIndependentTask = React.lazy(() => import("./SingleIndependentTask"));
 const container = document.getElementById("single-independent-task-container");
 
 if (container) {
@@ -26,7 +26,7 @@ if (container) {
                                     index
                                     element={
                                         <React.Suspense fallback={<Loading />}>
-                                            <SingleTask />
+                                            <SingleIndependentTask />
                                         </React.Suspense>
                                     }
                                 />

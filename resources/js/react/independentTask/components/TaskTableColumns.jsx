@@ -21,37 +21,42 @@ import { convertTime } from "../../utils/converTime";
 const compareDate = new CompareDate();
 
 export const TaskTableColumns = [
-    {
-      id:'expend',
-      header: '',
-      cell: ({row, table}) => { 
-        const {pageIndex} = table.getState();
-        return(
-          <ExpandTask
-            row={row} 
-            table={table}
-            pageIndex={pageIndex}
-          />
-        )
-      }
-    },
-    {
-      id: 'u_id',
-      header: 'IndependentTaskId',
-      accessorFn: row => `${row.u_id}}`,
-      cell: ({row}) => {
-        const data = row?.original;  
-        return (
-          <>
-              <abbr title={data?.heading} style={{textDecoration: 'none'}}>
-                <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                    <a href={`/account/tasks/${data?.u_id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
-                </div>
-              </abbr>  
-          </>
-        )
-      }
-    },
+    // expand
+    // {
+    //   id:'expend',
+    //   header: '',
+    //   cell: ({row, table}) => { 
+    //     const {pageIndex} = table.getState();
+    //     return(
+    //       <ExpandTask
+    //         row={row} 
+    //         table={table}
+    //         pageIndex={pageIndex}
+    //       />
+    //     )
+    //   }
+    // },
+
+    // unique id
+    // {
+    //   id: 'u_id',
+    //   header: 'IndependentTaskId',
+    //   accessorFn: row => `${row.u_id}}`,
+    //   cell: ({row}) => {
+    //     const data = row?.original;  
+    //     return (
+    //       <>
+    //           <abbr title={data?.heading} style={{textDecoration: 'none'}}>
+    //             <div className='d-flex align-items-center' style={{gap: '10px'}}>
+    //                 <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.u_id} </a>
+    //             </div>
+    //           </abbr>  
+    //       </>
+    //     )
+    //   }
+    // },
+
+    // task
     {
       id: 'task',
       header: 'Task',
@@ -60,15 +65,26 @@ export const TaskTableColumns = [
         const data = row?.original;  
         return (
           <>
-              <abbr title={data?.heading} style={{textDecoration: 'none'}}>
-                <div className='d-flex align-items-center' style={{gap: '10px'}}>
-                    <a href={`/account/tasks/${data?.u_id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
-                </div>
-              </abbr>  
-          </>
+          <abbr title={data?.heading} style={{ textDecoration: 'none' }}>
+            <div className='d-flex align-items-center' style={{ gap: '10px'}}>
+              <a href={`/account/tasks/${data?.id}`} className='hover-underline multine-ellipsis'> {data?.heading} </a>
+              {
+                <span
+                className="badge badge-success"
+                style={{
+                  display:`${data?.u_id?'inline-block':'none'}`,
+                  fontSize:'8px'
+                }}>
+                  Parent Task
+                </span>}
+            </div>
+          </abbr>
+        </>
         )
       }
     },
+
+    // timer status
     {
       id: 'timer_status',
       header: 'Timer Status',
@@ -105,55 +121,7 @@ export const TaskTableColumns = [
       }
     }, 
 
-    // {
-    //   id: 'milestone',
-    //   header: 'Milestone',
-    //   accessorKey: 'milestone_title',
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     return(
-    //       <abbr title={data?.milestone_title} style={{textDecoration: 'none'}}>
-    //         <span className='multine-ellipsis word-break'>
-    //           {data?.milestone_title}
-    //         </span>
-    //       </abbr>
-    //     )
-    //   }
-    // },
-    
-    // {
-    //   id: 'deliverable',
-    //   header: 'Deliverable',
-    //   accessorKey: 'deliverable_title',
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     return(
-    //       <abbr title={data?.deliverable_title} style={{textDecoration: 'none'}}>
-    //         <span className='multine-ellipsis word-break'>
-    //           {data?.deliverable_title ?? '--'}
-    //         </span>
-    //       </abbr>
-          
-    //     )
-    //   }
-    // },
-    
-    // {
-    //   id: 'project',
-    //   header: 'Project',
-    //   accessorFn: row => `${row.project_id}${row.project_name}`,
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     return(
-    //       <abbr title={data?.project_name} style={{textDecoration: 'none'}}>
-    //         <a href={`/account/projects/${data?.project_id}`} className='multine-ellipsis'>
-    //           {data?.project_name}
-    //         </a>
-    //       </abbr>
-    //     )
-    //   }
-    // },
-
+    // client
     {
       id: 'client',
       header: 'Client',
@@ -163,31 +131,16 @@ export const TaskTableColumns = [
         return(
           <div>
             <Person
-              url={`/account/clients/${data?.client_id}`}
-              avatar={data?.client_avatar}
-              name={data?.client_name}
+              url={data?.existing_client_id?`/account/clients/${data?.existing_client_id}`:''}
+              avatar={data?.existing_client_avator}
+              name={data?.existing_client_name?data?.existing_client_name:data?.new_client}
             /> 
           </div>
         )
       }
     },
-
-    // {
-    //   id: 'project_manager',
-    //   header: 'Project Manager',
-    //   accessorKey: 'pm_id_name',
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     return(
-    //       <Person
-    //         url={`/account/employees/${data?.project_manager_id}`}
-    //         name={data?.pm_id_name}
-    //         avatar={data?.pm_id_avatar}
-    //       /> 
-    //     )
-    //   }
-    // },
     
+    // creation date
     {
       id: 'creation_date',
       header: 'Creation Date',
@@ -200,7 +153,9 @@ export const TaskTableColumns = [
           </span>
         )
       }
-    }, 
+    },
+    
+    // start date
     {
       id: 'start_date',
       header: 'Started Date',
@@ -218,6 +173,8 @@ export const TaskTableColumns = [
         )
       }
     },
+
+    // due date
     {
       id: 'due_date',
       header: 'Due Date',
@@ -246,27 +203,8 @@ export const TaskTableColumns = [
         )
       }
     },
-
-    // {
-    //   id: 'completion_date',
-    //   header: 'Completion Date',
-    //   accessorFn: row => row?.completion_date ? dayjs(row?.completion_date).format('DD-MM-YYYY') : '--',
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     return(
-    //       <strong>
-    //         {Number(data?.board_column_id) === 4 ? 
-    //           data?.completion_date && (
-    //             <>
-    //               {dayjs(data?.completion_date).format('DD-MM-YYYY')} <br/> 
-    //             </>
-    //           ): '--'
-    //         } 
-    //       </strong>
-    //     )
-    //   }
-    // }, 
     
+    // approved on
     {
       id: 'approved_on',
       header: 'Approved On',
@@ -275,31 +213,18 @@ export const TaskTableColumns = [
         const data = row?.original;
         return(
           <strong> 
-            {data?.task_approval_date ? (
+            {/* {data?.task_approval_date ? (
               <>
                 {dayjs(data?.task_approval_date).format('DD-MM-YYYY')}
               </>
-            ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
+            ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>} */}
+            --
           </strong>
         )
       }
-    }, 
-
-    // {
-    //   id: 'estimated_time',
-    //   header: 'Estimated Time',
-    //   accessorKey: 'estimate_hours',
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     return(
-    //       <div>
-    //         {data?.estimate_hours ?? 0} hrs <br/>
-    //         {data?.estimate_minutes ?? 0} mins
-    //       </div>
-    //     )
-    //   }
-    // }, 
+    },
     
+    // hours logged
     {
       id: 'hours_logged',
       header: 'Hours Logged',
@@ -308,7 +233,8 @@ export const TaskTableColumns = [
         const data = row?.original;
         return(
           <div>
-            {convertTime(data?.subtasks_hours_logged)}
+            {/* {convertTime(data?.subtasks_hours_logged)} */}
+            --
           </div>
         )
       }
@@ -316,7 +242,7 @@ export const TaskTableColumns = [
     
     // assigned by
     {
-      id: 'assign_by_id',
+      id: 'assigned_by_id',
       header: 'Assigned By', 
       accessorKey: 'added_by_name',
       cell: ({row}) => {
@@ -324,9 +250,9 @@ export const TaskTableColumns = [
         
         return(
           <Person
-            url={`/account/employees/${data?.assign_by_id}` }
-            avatar={data?.assign_by_avator}
-            name={data?.assign_by_name}
+            url={`/account/employees/${data?.assigned_by_id}` }
+            avatar={data?.assigned_by_avator}
+            name={data?.assigned_by_name}
           /> 
         )
       }
@@ -334,7 +260,7 @@ export const TaskTableColumns = [
 
     // assigned to
     {
-      id: 'assign_to_id',
+      id: 'assigned_to_id',
       header: 'Assigned To',
       accessorKey: 'assigned_to_name',
       cell: ({row}) => {
@@ -342,72 +268,34 @@ export const TaskTableColumns = [
         // console.log(data);
         return( 
           <Person
-            url={`/account/employees/${data?.assign_to_id}` }
-            avatar={data?.assign_to_avator}
-            name={data?.assign_to_name}
+            url={`/account/employees/${data?.assigned_to_id}` }
+            avatar={data?.assigned_to_avator}
+            name={data?.assigned_to_name}
           /> 
         )
       }
     },
 
+    // status
     {
       id: 'status',
       header: 'Task Status',
       accessorKey: 'column_name',
       cell: ({row}) => {
         const data = row?.original;
+        // console.log('from independent task table column',data?.column_name);
         return(
           <span
             className='badge text-white' 
-            style={{background: data?.label_color}}
+            style={{background: data?.board_column_label_color}}
           >
-            {data?.column_name}
+            {data?.board_column_name}
           </span>
         )
       }
-    }, 
+    },
     
-    // {
-    //   id: 'progress',
-    //   header: 'Progress',
-    //   accessorKey: 'subtasks_count',
-    //   cell: ({row}) => {
-    //     const data = row?.original;
-    //     const count = Number(data?.subtasks_count);
-    //     const completed = Number(data?.subtasks_completed_count);
-    //     let bg = 'bg-transparent';
-    //     let percent = 0;
-
-    //     if(count > 0){percent = (completed / count) * 100;}
-    //     else{percent = Number(data?.board_column_id) === 4 ? 100 : 0;}
-
-
-    //     if(percent === 100){
-    //       bg = 'bg-success'
-    //     }else if(percent < 100 && percent >= 75){
-    //       bg = 'bg-info';
-    //     }else if( percent < 75 && percent >= 25){
-    //       bg = 'bg-warning'
-    //     }else bg='bg-danger'
-
-
-    //     return(
-    //       <div>
-    //         <div className="progress" style={{height: '16px'}}>
-    //             <div 
-    //               className={`progress-bar progress-bar-striped progress-bar-animated ${bg}`} 
-    //               role="progressbar" 
-    //               style={{width: `${percent}%`}} 
-    //               aria-valuenow="10" 
-    //               aria-valuemin="0" 
-    //               aria-valuemax="100"
-    //             >{Math.floor(percent)}%</div>
-    //         </div>
-    //       </div>
-    //     )
-    //   }
-    // }, 
-    
+    // report
     {
       id: 'report',
       header: 'Report',
@@ -417,6 +305,7 @@ export const TaskTableColumns = [
       }
     },
      
+    // action
     {
       id: 'action',
       header: 'Action',

@@ -287,3 +287,98 @@
     margin-bottom: 30px;
     width: 100%;
 }
+
+
+/* tabs */
+.tabs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+.tabs li a {
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tabs li a span.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(0 0 0 / 15%);
+}
+
+
+
+.all_btn {
+    background-color: #e9f8fa;
+    color: #24b8cf;
+}
+
+.all_btn:hover {
+    color: #e9f8fa !important;
+    background-color: #24b8cf;
+}
+
+.all_active {
+    color: #e9f8fa !important;
+    background-color: #24b8cf;
+}
+
+
+
+.pending_btn {
+    background-color: rgb(255, 238, 219);
+    color: rgb(255, 145, 20);
+}
+
+.pending_btn:hover {
+    color: rgb(255, 248, 240) !important;
+    background-color: rgb(255, 145, 20);
+}
+
+.pending_active {
+    color: rgb(255, 248, 240) !important;
+    background-color: rgb(255, 145, 20);
+}
+
+
+
+.authorized_btn {
+    color: #119911;
+    background-color: #e7f5e7;
+}
+
+.authorized_btn:hover {
+    background-color: #119911;
+    color: #e7f5e7 !important;
+}
+
+.authorized_active {
+    background-color: #119911;
+    color: #e7f5e7 !important;
+}
+
+
+
+.denied_btn {
+    color: rgb(240, 51, 44);
+    background-color: rgb(250, 221, 220);
+}
+
+.denied_btn:hover {
+    background-color: rgb(240, 51, 44);
+    color: rgb(255, 250, 249) !important;
+}
+
+.denied_active {
+    background-color: rgb(240, 51, 44);
+    color: rgb(255, 250, 249) !important;
+}

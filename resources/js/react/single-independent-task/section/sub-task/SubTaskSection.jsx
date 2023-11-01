@@ -20,6 +20,7 @@ import { SingleTask } from '../../../utils/single-task';
 import { subTaskCreationPermision } from "../../permissions";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
+import { useEffect } from "react";
 
 const SubTaskSection = ({status}) => {
     const { task, subTask } = useSelector((s) => s.subTask);
@@ -32,7 +33,7 @@ const SubTaskSection = ({status}) => {
         React.useState(null);
     const {width} = useWindowSize();
     const auth = new User(window?.Laravel?.user);
-
+    
     // check in progress task history 
     const [getInProgressTaskStatus, { isFetching: inProgressTaskStatus }] = useLazyGetInProgressTaskStatusQuery();
 
@@ -75,11 +76,11 @@ const SubTaskSection = ({status}) => {
     };
 
     // handle create new subtask
-    const handleCreateSubTask = () => {
-        // if parent task has not already any subtask
-        // show the Working Environment form
-        // else create from
-    };
+    // const handleCreateSubTask = () => {
+    //     // if parent task has not already any subtask
+    //     // show the Working Environment form
+    //     // else create from
+    // };
 
     // edit modal form control end
     // const {
@@ -93,6 +94,14 @@ const SubTaskSection = ({status}) => {
     const [getTaskDetails, { isFetching }] = useLazyGetTaskDetailsQuery("", {
         skip: subTask?.length,
     });
+
+
+
+    // useEffect(()=>{
+    //     console.log({task,subTask,isFetching});
+    //   },[task,subTask,isFetching])
+
+
 
     // if task notes fetch completed store data into redux store
     React.useEffect(() => {
@@ -134,14 +143,14 @@ const SubTaskSection = ({status}) => {
                             close={closeAddModal}
                             formMode={formMode}
                         >
-                            {!edit ? (
+                            {
+                            // !edit ?
                                 <SubTaskForm
                                     close={closeAddModal}
-                                    isFirstSubtask={
-                                        !isFetching && subTask?.length ? true : false
-                                    }
-                                />
-                            ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
+                                    isFirstSubtask={!Task.workEnvData}
+                                /> 
+                            // : <SubtTaskEditForm close={closeEditForm} editId={edit} /> 
+                            }
                         </CustomModal>
                 </React.Fragment>:
                 <React.Fragment>
@@ -150,9 +159,7 @@ const SubTaskSection = ({status}) => {
                             {!edit ? (
                                 <SubTaskForm
                                     close={closeAddModal}
-                                    isFirstSubtask={
-                                        !isFetching && subTask?.length ? true : false
-                                    }
+                                    isFirstSubtask={!Task.workEnvData}
                                 />
                             ) : (<SubtTaskEditForm close={closeEditForm} editId={edit} /> )}
                         </Modal>

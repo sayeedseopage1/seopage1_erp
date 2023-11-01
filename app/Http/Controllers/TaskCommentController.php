@@ -36,6 +36,7 @@ class TaskCommentController extends AccountBaseController
      */
     public function store(StoreTaskComment $request)
     {
+        // dd($request);
         $this->addPermission = user()->permission('add_task_comments');
         $task = Task::findOrFail($request->taskId);
         $taskUsers = $task->users->pluck('id')->toArray();

@@ -16,8 +16,9 @@ import DatePickerComponent from "./DatePicker";
 import { useEffect } from "react";
 import Input from "../form/Input";
 import UserSelectionList from "./UserSelectionList";
-import { usePostIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
+import { useGetIndependentTaskAuthorizationConversationsQuery, usePutIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
 import Swal from "sweetalert2";
+import Loader from "../Loader";
 
 const day = new CompareDate();
 
@@ -48,6 +49,11 @@ const TaskAuthorizationForm = ({ data, table }) => {
     const [comment, setComment] = useState("");
     const [hasQuestion, setHasQuestion] = useState(false);
 
+    // get conversation
+    const { data: conversationData, isLoading: isConversationLoading, isFetching } = useGetIndependentTaskAuthorizationConversationsQuery(data.id);
+
+    // console.log({ conversationData, isConversationLoading });
+
     useEffect(() => {
         // console.log({ radio });
         if (radio === 'inHouseWork') {
@@ -58,11 +64,11 @@ const TaskAuthorizationForm = ({ data, table }) => {
     }, [radio])
 
     // console.log({ chat: data?.conversations });
-    const [conversations, setConversations] = React.useState(data.conversations);
+    // const [conversations, setConversations] = React.useState(data.conversations);
 
-    const updateConversation = (entry) => {
-        setConversations([...entry])
-    };
+    // const updateConversation = (entry) => {
+    //     setConversations([...entry])
+    // };
 
     const open = () => setVisible(true);
     const close = () => {
@@ -70,7 +76,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
         setRadio('');
     };
 
-    const [postIndependentAuthorizeTask, { isLoading }] = usePostIndependentTaskMutation();
+    const [putIndependentAuthorizeTask, { isLoading }] = usePutIndependentTaskMutation();
 
     const handleSubmission = async (e, status) => {
 
@@ -88,19 +94,20 @@ const TaskAuthorizationForm = ({ data, table }) => {
             start_date: dayjs(startDate.toString()).format('YYYY-MM-DD'),
             due_date: dayjs(dueDate.toString()).format('YYYY-MM-DD'),
             approval_status: status ? 1 : 2,
-            status: status,
-            client: client instanceof Object ? client.id : client,
+            // status: status,
             comment,
             _token: document.querySelector("meta[name='csrf-token']").getAttribute("content"),
         };
 
-        // console.log('start-date',dayjs(startDate.toString()).format('YYYY-MM-DD'));
-        // console.log('dui-date',dayjs(dueDate.toString()).format('YYYY-MM-DD'));
-        // console.log({client: client instanceof Object? client.id:client});
+        if (client instanceof Object) {
+            _data.client_id = client.id;
+        } else {
+            _data.client = client;
+        }
         console.log(_data);
 
-        if (comment) {
-            await postIndependentAuthorizeTask(data.id,_data)
+        // if (comment) {
+            await putIndependentAuthorizeTask(_data)
                 .unwrap()
                 .then((res) => {
                     console.log(res);
@@ -114,24 +121,24 @@ const TaskAuthorizationForm = ({ data, table }) => {
                     close();
                     setRefresh();
                 });
-        } else {
-            Swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Task authorization unsuccessfull",
-                showConfirmButton: true,
-            });
-        }
+        // } else {
+            // Swal.fire({
+            //     position: "center",
+            //     icon: "error",
+            //     title: "Task authorization unsuccessfull",
+            //     showConfirmButton: true,
+            // });
+        // }
     };
 
     const user = new User(window.Laravel.user);
 
-    const notAnswered = _.filter(conversations, c => !c.replied_by)
+    const notAnswered = _.filter(conversationData?.data, c => !c.replied_by)
     const auth = _.includes([1, 8], user.getRoleId());
 
 
-    // console
-    // console.log({ data, table });
+    console.log(data.heading);
+    console.log({ data, table });
 
 
     return (
@@ -154,7 +161,15 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
                             <Card.Body className={styles.card_body}>
                                 <div className={styles.task_project}>
-                                    <h6>Need to Authorize Task</h6>
+                                    <h2>
+                                        {auth ?
+                                            data?.approval_status ?
+                                                'Authorization Completed' : 'Need to Authorization'
+                                            :
+                                            data?.approval_status ?
+                                                'Authorization Completed' : 'Wait for Authorization'
+                                        }
+                                    </h2>
                                 </div>
 
                                 <div className={styles.task_info}>
@@ -167,7 +182,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             Start Date{" "}
                                         </div>
                                         {
-                                            !data?.approval_status ?
+                                            !data?.approval_status && auth ?
                                                 <div
                                                     className={`${styles.task_info__text} w-100 bg-white py-1 pl-2 pr-1 border d-flex align-items-center justify-content-between`}
                                                 >
@@ -193,7 +208,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             Due Date{" "}
                                         </div>
                                         {
-                                            !data?.approval_status ?
+                                            !data?.approval_status && auth ?
                                                 <div
                                                     className={`${styles.task_info__text} w-100 bg-white py-1 pl-2 pr-1 border d-flex align-items-center justify-content-between`}
                                                 >
@@ -342,7 +357,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
 
                                         {
-                                            !data?.approval_status ?
+                                            !data?.approval_status && auth ?
                                                 <div className={`${styles.task_info__text} ${styles.radio_container}`}>
                                                     {
                                                         clientRadio.map((radio) => {
@@ -356,7 +371,27 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                     }
                                                 </div> :
                                                 <div className={styles.task_info__text}>
-                                                    {'client info have to be updated here'}
+                                                    {
+                                                        (data.existing_client_id || data.new_client) &&
+                                                        <>
+                                                            <Avatar
+                                                                name={data.existing_client_id ? data.existing_client_name : data.new_client}
+                                                                src={
+                                                                    data.existing_client_avator
+                                                                        ? `/user-uploads/avatar/${data.existing_client_avator}`
+                                                                        : null
+                                                                }
+                                                                type="circle"
+                                                                width={32}
+                                                                height={32}
+                                                            />
+                                                            <a
+                                                                href={data.existing_client_id ? `/account/employees/${data.existing_client_id}` : ''}
+                                                            >
+                                                                {data.existing_client_id ? data.existing_client_name : data.new_client}
+                                                            </a>
+                                                        </>
+                                                    }
                                                 </div>
                                         }
                                     </div>
@@ -369,7 +404,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                             {" "}
                                         </div>
                                         {
-                                            !data?.approval_status ?
+                                            !data?.approval_status && auth ?
                                                 <div className={styles.task_info__text}>
                                                     {
                                                         radio === 'inHouseWork' &&
@@ -408,18 +443,18 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                 </div>
                                                 <div className={styles.task_info__text}>
                                                     <Avatar
-                                                        name={data.approved_by_name}
+                                                        name={data.authorize_by_name}
                                                         src={
-                                                            data.approved_by_avatar
-                                                                ? `/user-uploads/avatar/${data.approved_by_avatar}`
+                                                            data.authorize_by_avatar
+                                                                ? `/user-uploads/avatar/${data.authorize_by_avator}`
                                                                 : null
                                                         }
                                                         type="circle"
                                                         width={32}
                                                         height={32}
                                                     />
-                                                    <a href={`/account/employees/${data.authorized_by}`}>
-                                                        {data.approved_by_name}
+                                                    <a href={`/account/employees/${data.authorize_by_id}`}>
+                                                        {data.authorize_by_name}
                                                     </a>
                                                 </div>
                                             </div>
@@ -441,9 +476,14 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
 
                                     <TaskAuthorizationQuestionAnswers
-                                        data={conversations}
-                                        updateConversations={updateConversation}
+                                        data={conversationData?.data}
+                                        isConversationLoading={isConversationLoading || isFetching}
+                                    // updateConversations={updateConversation}
                                     />
+
+                                    <div className="d-flex my-3 justify-content-center">
+                                        {(isConversationLoading || isFetching) && <Loader title="Loading..." />}
+                                    </div>
 
                                     {
                                         (auth && data?.approval_status === null) && <React.Fragment>
@@ -484,8 +524,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                 hasQuestion ?
                                                     <QuestionAnswer
                                                         data={data}
-                                                        conversations={conversations}
-                                                        setConversations={updateConversation}
+                                                    // conversations={conversationData?.data}
+                                                    // setConversations={updateConversation}
                                                     />
                                                     :
                                                     <>
@@ -534,8 +574,8 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                     }
 
                                     {data?.approval_status !== null && <div className={`alert ${data?.approval_status === 1 ? 'alert-success' : 'alert-danger'} text-center`}>
-                                        Authorized by <a href={`/account/employees/${data.authorized_by}`} className="badge badge-success text-white">
-                                            {data.approved_by_name} </a> on <span className="badge badge-success">{dayjs(data.updated_at).format('MMM DD, YYYY hh:mm A')}</span> <span className="badge badge-success">{dayjs(data.updated_at).format('hh:mm A')}</span>
+                                        Authorized by <a href={`/account/employees/${data.authorize_by_id}`} className="badge badge-success text-white">
+                                            {data.authorize_by_name} </a> on <span className="badge badge-success">{dayjs(data.updated_at).format('MMM DD, YYYY hh:mm A')}</span> <span className="badge badge-success">{dayjs(data.updated_at).format('hh:mm A')}</span>
                                     </div>}
                                 </div>
                             </Card.Body>
