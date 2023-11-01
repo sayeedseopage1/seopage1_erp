@@ -23,6 +23,11 @@ const LeadConfirmationModal = ({ isOpen, onConfirm, close }) => {
                 setButtonVisible(true);
                 clearInterval(timeIntervelId);
             }, 22000);
+        } else {
+            if (auth.getRoleId() === 1) {
+                setCountDown(0);
+                setButtonVisible(true);
+            }
         }
 
         return () => {
@@ -119,7 +124,7 @@ const LeadConfirmationModal = ({ isOpen, onConfirm, close }) => {
                             className="ml-auto"
                             disabled={!buttonVisible}
                         >
-                            Yes, I Fully Understand This{" "}
+                            Yes, I Fully Understand This
                             {!buttonVisible && `(${countDown})`}
                         </Button>
                     </div>

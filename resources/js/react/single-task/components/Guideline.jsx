@@ -4,8 +4,9 @@ import Modal from './Modal';
 import { useClickAway } from 'react-use';
 import _ from 'lodash';
 import PMGuideline from './PMGuideline';
+import FileUploader from '../../file-upload/FileUploader';
 
-const Guideline = ({text, task, editorContainerClass, workEnv}) => {
+const Guideline = ({text, task, type="", editorContainerClass, workEnv}) => {
   const [expend, setExpend] = useState(false);
   let isLong = text?.length > 400;
   const showText = isLong ? text.slice(0, 400) + '...' : text;
@@ -37,14 +38,14 @@ const Guideline = ({text, task, editorContainerClass, workEnv}) => {
 
                 <div className='__content'>
                 
-                {task?.hasProjectManagerGuideline &&
+                {task?.hasProjectManagerGuideline && type !== "TASK_DESCRIPTION" ?
                     <div className='mb-3'>
                         <h1>Project Manager Guideline</h1>
                         <PMGuideline guideline={task?.PMTaskGuideline} />
-                    </div> 
+                    </div> :null
                 }
 
-                {!_.isEmpty(workEnv) ? (
+                {!_.isEmpty(workEnv) && type !== "TASK_DESCRIPTION" ? (
                     <div className="sp1_task_card--sub-card m-4">
                         <div className="px-4 py-3" style={{background: '#F3F5F9'}}>
                             <h6 className="mb-2">Working Environment</h6>
@@ -73,6 +74,31 @@ const Guideline = ({text, task, editorContainerClass, workEnv}) => {
                     </div>
                 ) : null}
                     <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
+
+                    {
+                        _.size(task?.attachments) > 0 && type === "TASK_DESCRIPTION"? 
+                        <div className="mt-3">
+                            <h4>Task Attachments: </h4>
+                            <FileUploader>
+                                    {_.map(task?.attachments, attachment => (
+                                        attachment?.task_file_name ?
+                                        <FileUploader.Preview
+                                            key={attachment?.task_file_id}
+                                            fileName={attachment?.task_file_name}
+                                            downloadAble={true}
+                                            deleteAble={false}
+                                            downloadUrl={attachment?.task_file_url}
+                                            previewUrl={attachment?.task_file_url}
+                                            fileType={_.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment?.task_file_icon)? 'images' : 'others'}
+                                            classname="comment_file"
+                                            ext={attachment?.task_file_icon}
+                                        /> : null
+                                    ))}
+                                </FileUploader>
+                            
+                        </div>
+                        : null
+                    }
                 </div>
 
                 <div className=' __footer'>
