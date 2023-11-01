@@ -1,6 +1,6 @@
 # Need to work
 
-* [ ] Single Task page timer not working without need to fixed.
+* [ ] Single Task page timer not working without reload need to fixed.
 * [x] Dispute Authorization not working with 75% + 25%. need to solved it
 
   * showing validatin error

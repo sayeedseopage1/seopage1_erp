@@ -3131,20 +3131,80 @@ var Comment = function Comment(_ref) {
   var comment = _ref.comment;
   var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
-    isOpen = _React$useState2[0],
-    setIsOpen = _React$useState2[1];
-  var user = comment !== null && comment !== void 0 && comment.user ? new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(comment.user) : null;
-
-  // handle comment preview
-  var previewComment = function previewComment(e) {
-    e.preventDefault();
-    setIsOpen(!isOpen);
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-      className: "d-flex justify-content-between sp1_tark_right_item align-items-start pt-1 pb-2",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-        className: "w-100 sp1_st_comment-view",
+    showDeletedComment = _React$useState2[0],
+    setShowDeletedComment = _React$useState2[1];
+  if (comment.is_deleted && !showDeletedComment) {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "sp1_comment_deleted_status w-100",
+      children: ["This Comment has been deleted", auth.getRoleId() === 1 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("button", {
+        onClick: function onClick() {
+          return setShowDeletedComment(true);
+        },
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+          className: "fa-solid fa-eye"
+        })
+      }) : null]
+    });
+  }
+  var deletedClass = comment.is_deleted ? "sp1_comment_deleted_status" : "";
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+      className: "w-100 d-flex align-items-center  ".concat(deletedClass),
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "mr-2",
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+          className: "rounded-circle",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
+            src: user === null || user === void 0 ? void 0 : user.getAvatar(),
+            alt: user === null || user === void 0 ? void 0 : user.getName(),
+            width: "32px",
+            height: "32px",
+            className: "rounded-circle"
+          })
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+        className: "sp1_comment",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
+          className: "sp1_comment_user--name",
+          children: [user === null || user === void 0 ? void 0 : user.getName(), " (", user === null || user === void 0 ? void 0 : user.getDesignationName(), ")"]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
+          className: "sp1_comment_time",
+          style: {
+            color: "#888"
+          },
+          children: (0,_utils_timeCalculate__WEBPACK_IMPORTED_MODULE_3__.timeCalculate)(comment.last_updated_date)
+        })]
+      }), comment.is_deleted || user.getId() !== auth.getId() ? null : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu, {
+        as: "div",
+        className: "sp1_comment_extend_menu",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Button, {
+          as: "button",
+          className: "sp1_comment_extend_menu-btn",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
+            className: "fa-solid fa-ellipsis"
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Items, {
+          as: "div",
+          placement: "bottom-end",
+          className: "sp1_comment_extend_menu__items",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Item, {
+            as: "div",
+            className: "sp1_comment_extend_menu__item --disabled",
+            children: "Edit"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_headlessui_react__WEBPACK_IMPORTED_MODULE_7__.Menu.Item, {
+            as: "div",
+            className: "sp1_comment_extend_menu__item --delete",
+            onClick: function onClick(e) {
+              return onDelete(e, comment.id);
+            },
+            children: "Delete"
+          })]
+        })]
+      })]
+    }), comment !== null && comment !== void 0 && comment.comment ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+      className: "__box __reply_text w-100 my-1 text-dark border-rounded",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+        className: "sp1_ck_content sp1_message--body",
         style: {
           overflow: 'hidden'
         },
@@ -6995,22 +7055,21 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
     setCountDown = _React$useState4[1];
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(window.Laravel.user);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
+    var timeOutId;
+    var timeIntervelId;
     if (auth.getRoleId() && auth.getRoleId() === 6) {
       var count = countDown !== null && countDown !== void 0 ? countDown : 0;
-      var timeIntervelId = setInterval(function () {
+      timeIntervelId = setInterval(function () {
         setCountDown(count--);
       }, 1000);
-      var timeOutId = setTimeout(function () {
+      timeOutId = setTimeout(function () {
         setButtonVisible(true);
         clearInterval(timeIntervelId);
       }, 22000);
-      return function () {
-        clearTimeout(timeOutId);
-        clearInterval(timeIntervelId);
-      };
     }
     return function () {
-      return onConfirm();
+      clearTimeout(timeOutId);
+      clearInterval(timeIntervelId);
     };
   }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
@@ -7020,23 +7079,23 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
       className: "subtask-timer-confirmation--panel",
       children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "subtask-timer-confirmation--content",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h4", {
           className: "mb-3",
-          children: " Do you understand the following things? "
+          children: [" ", "Do you understand the following things?", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("ol", {
           type: "A",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: " Your team's job is not to decide what the look and feel of a website will be based on a few reference websites. "
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: " Your team's job is not to research a theme based on an instruction shared by the PM. "
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: " Your team's job is not to research a plugin based on a problem shared by PM."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: " Your team's job is not to choose the color scheme of a website."
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: [" ", "Your team's job is not to decide what the look and feel of a website will be based on a few reference websites.", " "]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: [" ", "Your team's job is not to research a theme based on an instruction shared by the PM.", " "]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: [" ", "Your team's job is not to research a plugin based on a problem shared by PM."]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: [" ", "Your team's job is not to choose the color scheme of a website."]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: "Your team's job is not to talk to the support. For example: Shopify support team, theme support, plugin support and any other support for any solution."
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
-            children: "Your team's job is not to create training videos for the client after completing a project. "
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
+            children: ["Your team's job is not to create training videos for the client after completing a project.", " "]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("li", {
             children: "You understand that all your team's hours have to be logged/tracked, and your teammates will questioned if each of them doesn\u2019t log at least 7 hours for any reason."
           })]
@@ -7045,19 +7104,19 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
           children: "If, for any reason, the project manager needs your help for any of those things, he will have to create a separate task for each of them, and those tasks have to be authorized by the top management mandatorily."
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("p", {
-          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
+          children: [" ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_5__.Link, {
             to: "?modal=report",
             className: "text-primary font-weight-bold",
             onClick: close,
-            children: " Report "
-          }), " immediately if you are asked to do any of these and if it wasn\u2019t authorized by top management. You should see a text like \u201CAuthorized by top management\u201D at the right side of the task title if it was authorized. In case you don\u2019t report, the extra time taken for these will be considered as your lackings (as they will remain unaccountable), and you will receive negative performance scores.\u201D"]
+            children: [" ", "Report", " "]
+          }), " ", "immediately if you are asked to do any of these and if it wasn\u2019t authorized by top management. You should see a text like \u201CAuthorized by top management\u201D at the right side of the task title if it was authorized. In case you don\u2019t report, the extra time taken for these will be considered as your lackings (as they will remain unaccountable), and you will receive negative performance scores.\u201D"]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "d-flex align-items-center",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             onClick: onConfirm,
             className: "ml-auto",
             disabled: !buttonVisible,
-            children: ["Yes, I Fully Understand This ", !buttonVisible && "(".concat(countDown, ")")]
+            children: ["Yes, I Fully Understand This", " ", !buttonVisible && "(".concat(countDown, ")")]
           })
         })]
       })

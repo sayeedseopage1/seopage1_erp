@@ -60,7 +60,7 @@ const Comment = ({ comment, onDelete }) => {
                         <Dropdown.Item>Delete</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown> */}
-                {comment.is_deleted ? null : (
+                {comment.is_deleted || user.getId() !== auth.getId() ? null : (
                     <Menu as="div" className="sp1_comment_extend_menu">
                         <Menu.Button
                             as="button"
