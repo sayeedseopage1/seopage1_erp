@@ -50,7 +50,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-      
+
  //DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
@@ -67,7 +67,7 @@ class SubTaskController extends AccountBaseController
       return response()->json(['title' => ['Task title should be unique on this project']], 422);
   }
 
-        }else 
+        }else
         {
             $task_title = Task::where('id', $task->id)
             ->where('heading', $request->title)
@@ -78,18 +78,18 @@ class SubTaskController extends AccountBaseController
   }
 
         }
-       
+
         if($task->independent_task_status == 1){
             $rules = [
                 'title' => 'required',
-              
+
                 'description' => 'required',
                 'user_id' => 'required',
-    
-    
+
+
             ];
 
-        }else 
+        }else
         {
             $rules = [
                 'title' => 'required',
@@ -97,12 +97,12 @@ class SubTaskController extends AccountBaseController
                 'estimate_minutes' => 'required',
                 'description' => 'required',
                 'user_id' => 'required',
-    
-    
+
+
             ];
 
         }
-        
+
         $validator = Validator::make($request->all(), $rules);
         if ($request->start_date == "Invalid Date" ) {
             return response($validator->errors(), 422);
@@ -233,7 +233,7 @@ class SubTaskController extends AccountBaseController
             $task_s->independent_task_status = 1;
             $task_s->client_id = $task->client_id;
             $task_s->client_name = $task->client_name;
-        }  
+        }
 
         $task_s->save();
         $task_type = new TaskType();
@@ -257,7 +257,7 @@ class SubTaskController extends AccountBaseController
         if($task->independent_task_status != 1)
         {
 
-        
+
         $authorization_action = new AuthorizationAction();
         $authorization_action->model_name = $task_s->getMorphClass();
         $authorization_action->model_id = $task_s->id;
@@ -269,7 +269,7 @@ class SubTaskController extends AccountBaseController
         $authorization_action->title = Auth::user()->name . ' assign new task to developer';
         $authorization_action->authorization_for = $request->user_id ;
         $authorization_action->save();
-      
+
 
         $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
         //dd($parent_task_authorization);

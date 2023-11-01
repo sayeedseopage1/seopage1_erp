@@ -13,9 +13,7 @@ export const useUsers = () => {
         data,
         isLoading: usersIsLoading,
         isFetching: usersIsFetching,
-    } = useGetAllUsersQuery('', {
-        skip: users?.users?.length
-    })
+    } = useGetAllUsersQuery('')
 
 
     React.useEffect(() => {
@@ -26,11 +24,11 @@ export const useUsers = () => {
 
 
     const getUserById = (id) => {
-         if(!usersObject) return; 
+         if(!usersObject) return;
          return usersObject[Number(id)];
     }
 
 
     return {users, usersObject, usersIsFetching ,usersIsLoading, getUserById}
 
-} 
+}

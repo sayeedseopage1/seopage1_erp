@@ -317,7 +317,7 @@ class RevisionCalculatorController extends AccountBaseController
             'task_revisions.revision_acknowledgement as reason_for_revision','task_revisions.dispute_created','task_revision_disputes.status','task_revision_disputes.winner','winners.name as winner_name',
             'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
             'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
-            'dispute_raised_against.name as dispute_raised_against_name','sales.id as sales_id','sales.name as sales_name','tasks.id as taskId',
+            'dispute_raised_against.name as dispute_raised_against_name','sales.id as sales_id','sales.name as sales_name','tasks.id as taskId','task_revisions.final_responsible_person',
             DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
             )
           
