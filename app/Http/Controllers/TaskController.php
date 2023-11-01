@@ -1785,20 +1785,24 @@ class TaskController extends AccountBaseController
             $pending_parent_tasks->need_authorization = $request->need_authorization ? 1 : 0;
             $pending_parent_tasks->save();
             if ($request->hasFile('file')) {
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public/');
+                $file_name = [];
 
-                foreach ($request->file as $fileData) {
-                    $file = new TaskFile();
-                    $file->task_id = $pending_parent_tasks->id;
+                foreach ($files as $file) {
+                    $taskFile = new TaskFile();
+                    $taskFile->task_id = $pending_parent_tasks->id;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $taskFile->user_id = $this->user->id;
+                    $taskFile->filename = $filename;
+                    $taskFile->hashname = $filename;
+                    $taskFile->size = $file->getSize();
+                    $taskFile->save();
 
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $pending_parent_tasks->id);
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
 
-                    $file->user_id = $pending_parent_tasks->user_id;
-                    $file->filename = $fileData->getClientOriginalName();
-                    $file->hashname = $filename;
-                    $file->size = $fileData->getSize();
-                    $file->save();
-
-                    $this->logTaskActivity($pending_parent_tasks->id, $pending_parent_tasks->user_id, 'fileActivity', $pending_parent_tasks->board_column_id);
+                    $this->logTaskActivity($pending_parent_tasks->id, $this->user->id, 'fileActivity', $pending_parent_tasks->board_column_id);
                 }
             }
 
@@ -1927,18 +1931,22 @@ class TaskController extends AccountBaseController
         $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
         $task->saveQuietly();
         if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
 
-            foreach ($request->file as $fileData) {
-                $file = new TaskFile();
-                $file->task_id = $task->id;
+            foreach ($files as $file) {
+                $taskFile = new TaskFile();
+                $taskFile->task_id = $task->id;
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+                $taskFile->user_id = $this->user->id;
+                $taskFile->filename = $filename;
+                $taskFile->hashname = $filename;
+                $taskFile->size = $file->getSize();
+                $taskFile->save();
 
-                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task->id);
-
-                $file->user_id = $this->user->id;
-                $file->filename = $fileData->getClientOriginalName();
-                $file->hashname = $filename;
-                $file->size = $fileData->getSize();
-                $file->save();
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
 
                 $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
             }

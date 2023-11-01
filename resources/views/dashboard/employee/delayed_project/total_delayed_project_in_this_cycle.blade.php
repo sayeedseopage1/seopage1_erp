@@ -21,6 +21,7 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Start Date</th>
+                    <th scope="col">Project Accept Date</th>
                     <th scope="col">Delayed On</th>
                     <th scope="col">Status</th>
                   </tr>
@@ -42,6 +43,7 @@
                     <td>{{ $deal->project_type }}</td>
                     <td>{{ $item->project_budget }} $</td>
                     <td>{{ $item->project_creation_date }}</td>
+                    <td>{{ $item->project_accept_date }}</td>
                     <td>
                       @php 
                       $delayed_date = App\Models\ProjectRequestTimeExtension::where('project_id',$item->id)->orderBy('id','desc')->first();
