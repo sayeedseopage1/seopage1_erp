@@ -1,0 +1,209 @@
+/* ------------------ action container (start) ------------------ */
+.action_container{
+  /* border: solid; */
+  padding: 15px 0 8px;
+  display: flex;
+  gap: 13px;
+}
+
+.btn{
+  border: solid #1D82F5;
+  border-radius: 4px;
+  padding: 8px;
+  width: 170px;
+  font-size: 20px;
+}
+
+.btn_inactive{
+  background-color: white;
+  color: #1D82F5;
+}
+
+.btn_active{
+  background-color: #1D82F5;
+  color: white;
+}
+/* ------------------ action container (end) ------------------ */
+
+
+
+
+
+/* ------------------ view container (start) ------------------ */
+.outlet_container{
+  /* border: solid; */
+  min-height: 50vh;
+}
+/* ------------------ view container (end) ------------------ */
+
+
+
+/* ------------------ Active action (start) ------------------ */
+.active_action_container{
+  /* border: transparent; */
+  z-index: 1;
+  position: relative;
+}
+.active_action_btn{
+  border: transparent;
+  border-radius: 4px;
+  padding: 8px;
+  width: 170px;
+  font-size: 20px;
+}
+.active_action_btn_active{
+  background-color: #F7FAFF;
+  color: #1D82F5;
+  border: #1D82F5 solid 1px;
+  border-bottom: #F7FAFF solid 5px;
+}
+.active_action_btn_inactive{
+  background-color: white;
+  color: gray;
+}
+/* ------------------ Active action (end) ------------------ */
+
+
+
+/* ------------------ Active outlet container (start) ------------------ */
+.active_outlet_container{
+  transform: translateY(-5px);
+  border: #1D82F5 solid 1px;
+  padding: 10px;
+  /* z-index: ; */
+}
+/* ------------------ Active outlet container (end) ------------------ */
+
+
+
+
+/* ------------------ filter bar (start) ------------------ */
+.filterbar_container{
+  /* border: solid; */
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+
+
+/* ---------- search bar (start) ---------- */
+.search_bar{
+  /* border: solid; */
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  flex: 0 1 400px;
+}
+.search_bar input{
+  width: 100%;
+  min-width: 0;
+  padding: 10px 10px 10px 60px;
+  font-size: 20px;
+  color: #3d3d3d;
+  outline: none;
+  border: none;
+  background-color: #F7F7F7;
+}
+.search_bar input::placeholder{
+  color: #919191;
+}
+.search_icon{
+  /* border: solid; */
+  position: absolute;
+  height: 100%;
+  width: 50px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: #919191;
+  padding: 5px;
+  background-color: transparent;
+}
+/* ---------- search bar (end) ---------- */
+
+
+
+/* ---------- date bar (start) ---------- */
+.date_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-flow: row wrap;
+}
+.date_text{
+  font-size: 20px;
+}
+.date_field{
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 130px;
+  padding: 10px;
+  font-size: 20px;
+  color: #3d3d3d;
+  outline: none;
+  border: none;
+  background-color: #F7F7F7;
+}
+/* ---------- date bar (end) ---------- */
+
+
+
+/* ---------- show bar (start) ---------- */
+.show_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.show_label{
+  font-size: 20px;
+  /* width: 80px; */
+}
+.show_field{
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 130px;
+  padding: 10px;
+  font-size: 20px;
+  color: #3d3d3d;
+  outline: none;
+  border: none;
+  background-color: #F7F7F7;
+}
+/* ---------- show bar (end) ---------- */
+
+
+
+/* ---------- view bar (start) ---------- */
+.view_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.view_label{
+  font-size: 20px;
+  /* width: 80px; */
+}
+.view_field{
+  flex: 0 1 150px;
+  min-width: 0;
+  /* max-width: 150px; */
+  padding: 10px;
+  font-size: 20px;
+  color: #3d3d3d;
+  outline: none;
+  border: none;
+  background-color: #F7F7F7;
+}
+/* ---------- view bar (end) ---------- */
+
+/* ------------------ filter bar (end) ------------------ */
+
+
