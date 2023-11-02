@@ -470,15 +470,15 @@ class DMContractController extends AccountBaseController
                          $pmassign = new PMProject();
                          $pmassign->project_id = $project->id;
                          $pmassign->status = 'pending';
-                         $pmassign->pm_id = 229;
+                         $pmassign->pm_id = 62;
                          $pmassign->deal_id = $deal->id;
                          $pmassign->client_id = $client->id;
                          $pmassign->save();
                          $deal_assign = Deal::find($deal->id);
-                         $deal_assign->pm_id = 229;
+                         $deal_assign->pm_id = 62;
                          $deal_assign->save();
                          $pm_assign_project = Project::find($project->id);
-                         $pm_assign_project->pm_id = 229;
+                         $pm_assign_project->pm_id = 62;
                          $pm_assign_project->save();
                          //$email = $request->email;
 
@@ -495,8 +495,8 @@ class DMContractController extends AccountBaseController
              $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
 
              $project_admin_update = Project::find($project_id->id);
-             $project_admin_update->added_by = 229;
-             $project_admin_update->project_admin = 229;
+             $project_admin_update->added_by = 62;
+             $project_admin_update->project_admin = 62;
              $project_admin_update->save();
 
 
@@ -515,7 +515,7 @@ class DMContractController extends AccountBaseController
              $qualified_sale->client_id = $deal->client_id;
 
              $qualified_sale->client_name = $deal->client_name;
-             $qualified_sale->pm_id = 229;
+             $qualified_sale->pm_id = 62;
 
              $qualified_sale->pm_name = 'Abu Sayeed';
 
@@ -887,17 +887,17 @@ class DMContractController extends AccountBaseController
             //fix pm to admin
             if ($diff_in_days < 90) {
                 $deal_pm_id = Deal::find($deal->id);
-                $deal_pm_id->pm_id = 229;
+                $deal_pm_id->pm_id = 62;
                 $deal_pm_id->save();
                 $project_pm_id = Project::find($project->id);
-                $project_pm_id->pm_id = 229;
+                $project_pm_id->pm_id = 62;
                 $project_pm_id->save();
                 // dd($project_pm_id);
 
                 $pmassign = new PMProject();
                 $pmassign->project_id = $project->id;
                 $pmassign->status = 'pending';
-                $pmassign->pm_id = 229;
+                $pmassign->pm_id = 62;
                 $pmassign->deal_id = $deal->id;
                 $pmassign->client_id = $existing_client->id;
                 $pmassign->save();
@@ -1258,15 +1258,15 @@ class DMContractController extends AccountBaseController
                             $pmassign = new PMProject();
                             $pmassign->project_id = $project->id;
                             $pmassign->status = 'pending';
-                            $pmassign->pm_id = 229;
+                            $pmassign->pm_id = 62;
                             $pmassign->deal_id = $deal->id;
                             $pmassign->client_id = $client->id;
                             $pmassign->save();
                             $deal_assign = Deal::find($deal->id);
-                            $deal_assign->pm_id = 229;
+                            $deal_assign->pm_id = 62;
                             $deal_assign->save();
                             $pm_assign_project = Project::find($project->id);
-                            $pm_assign_project->pm_id = 229;
+                            $pm_assign_project->pm_id = 62;
                             $pm_assign_project->save();
                             //$email = $request->email;
 
@@ -1277,8 +1277,8 @@ class DMContractController extends AccountBaseController
                 $deal_pm_id = Deal::where('id', $request->id)->first();
                 $project_id = Project::where('deal_id', $deal_pm_id->id)->first();
                 $project_admin_update = Project::find($project_id->id);
-                $project_admin_update->added_by = 229;
-                $project_admin_update->project_admin = 229;
+                $project_admin_update->added_by = 62;
+                $project_admin_update->project_admin = 62;
                 $project_admin_update->save();
 
                 $qualified_sale = new QualifiedSale();
@@ -1290,7 +1290,7 @@ class DMContractController extends AccountBaseController
                 $qualified_sale->date = Carbon::now();
                 $qualified_sale->client_id = $deal->client_id;
                 $qualified_sale->client_name = $deal->client_name;
-                $qualified_sale->pm_id = 229;
+                $qualified_sale->pm_id = 62;
                 $qualified_sale->pm_name = "Abu Sayeed";
 
                 $qualified_sale->amount = $deal->amount;
