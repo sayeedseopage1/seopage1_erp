@@ -7,6 +7,7 @@ const FileUploaderContext = React.createContext();
 // render icon
 const RenderIcon = ({ filename, size }) => {
     // get ext
+    if(!filename) return null;
     let arr = filename.split(".");
     let ext = arr[arr.length - 1];
     let _filename =

@@ -34,10 +34,10 @@ const Guideline = ({text, task, type="", editorContainerClass, workEnv}) => {
                     </button>
                 </div>
 
-                
+
 
                 <div className='__content'>
-                
+
                 {task?.hasProjectManagerGuideline && type !== "TASK_DESCRIPTION" ?
                     <div className='mb-3'>
                         <h1>Project Manager Guideline</h1>
@@ -73,10 +73,13 @@ const Guideline = ({text, task, type="", editorContainerClass, workEnv}) => {
                         </div>
                     </div>
                 ) : null}
+
+                    {type === "TASK_DESCRIPTION" ? <h5>Task Description</h5> : null}
+
                     <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
 
                     {
-                        _.size(task?.attachments) > 0 && type === "TASK_DESCRIPTION"? 
+                        _.size(task?.attachments) > 0 && type === "TASK_DESCRIPTION"?
                         <div className="mt-3">
                             <h4>Task Attachments: </h4>
                             <FileUploader>
@@ -95,7 +98,7 @@ const Guideline = ({text, task, type="", editorContainerClass, workEnv}) => {
                                         /> : null
                                     ))}
                                 </FileUploader>
-                            
+
                         </div>
                         : null
                     }

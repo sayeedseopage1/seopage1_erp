@@ -3529,17 +3529,19 @@ class TaskController extends AccountBaseController
                 ->get();
 
             $prefix = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/';
+
             $taskFileData = [];
+                if($taskFileData != []){
+                    foreach ($taskImages as $item) {
+                        $fileUrl = $prefix . $item->task_file_url;
+                        $fileExtension = pathinfo($item->task_file_url, PATHINFO_EXTENSION);
+                        $item->task_file_url = $fileUrl;
+                        $item->task_file_icon = $fileExtension;
+                        $item->task_file_id = $item->task_files_id;
+                        $taskFileData[] = $item;
+                    }
+                }
 
-
-            foreach ($taskImages as $item) {
-                $fileUrl = $prefix . $item->task_file_url;
-                $fileExtension = pathinfo($item->task_file_url, PATHINFO_EXTENSION);
-                $item->task_file_url = $fileUrl;
-                $item->task_file_icon = $fileExtension;
-                $item->task_file_id = $item->task_files_id;
-                $taskFileData[] = $item;
-            }
 
             // if($task->subtask_id !=null){
             //     $ppSubTask = SubTask::where('id',$task->subtask_id)->first();

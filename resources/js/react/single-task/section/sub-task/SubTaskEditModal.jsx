@@ -115,13 +115,15 @@ const SubTaskEditModal = ({ task, onSubmit, isLoading, onClose}) => {
     const required_error = error?.status === 422 ? error?.data : null;
 // attach files
 React.useEffect(() => {
-    const attachments = _.map(task?.attachments, file => (
-        {
+    const attachments = [];
+
+    _.forEach(task?.attachments, file => (
+        file.task_file_name && attachments.push({
             id: file.task_file_id,
             name: file.task_file_name,
             icon: _.includes(['png','jpeg', 'jpg', 'svg', 'gif', 'webp'] , file.task_file_icon) ? 'images' : 'others',
             file_url: file.task_file_url,
-        }
+        })
     ))
 
     setAttachedFiles(attachments)

@@ -607,9 +607,10 @@ const SingleTaskPage = () => {
                                         title="Task Descriptions"
                                     >
                                         <Guideline text={task?.description} task={task} type="TASK_DESCRIPTION" />
-                                        <div className="mt-3">
-                                            <h4>Task Attachments: </h4>
-                                            <FileUploader>
+                                        { _.size(task?.attachments) > 0 ?
+                                            <div className="mt-3">
+                                                <h4 className="mb-2">Task Attachments: </h4>
+                                                <FileUploader>
                                                     {_.map(task?.attachments, attachment => (
                                                         attachment?.task_file_name ?
                                                         <FileUploader.Preview
@@ -625,8 +626,9 @@ const SingleTaskPage = () => {
                                                         /> : null
                                                     ))}
                                                 </FileUploader>
-                                            
-                                        </div>
+                                            </div>
+                                        : null
+                                        }
                                     </Accordion>
                                 </div>
                             </div>

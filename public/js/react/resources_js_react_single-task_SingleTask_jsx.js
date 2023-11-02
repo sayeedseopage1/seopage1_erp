@@ -93,6 +93,7 @@ var RenderIcon = function RenderIcon(_ref) {
   var filename = _ref.filename,
     size = _ref.size;
   // get ext
+  if (!filename) return null;
   var arr = filename.split(".");
   var ext = arr[arr.length - 1];
   var _filename = (filename === null || filename === void 0 ? void 0 : filename.slice(0, 2)) + ".." + (filename === null || filename === void 0 ? void 0 : filename.slice(filename.length - (ext.length + 2), filename === null || filename === void 0 ? void 0 : filename.length));
@@ -524,6 +525,7 @@ var useSingleTask = function useSingleTask() {
               break;
             }
             task = _objectSpread(_objectSpread({}, res.task), {}, {
+              taskFiles: res === null || res === void 0 ? void 0 : res.taskFiles,
               parent_task_action: res.parent_task_action,
               parent_task_title: ((_res$parent_task_head = res.parent_task_heading) === null || _res$parent_task_head === void 0 ? void 0 : _res$parent_task_head.heading) || null,
               working_environment: res.working_environment,
@@ -1326,9 +1328,10 @@ var SingleTaskPage = function SingleTaskPage() {
                   text: task === null || task === void 0 ? void 0 : task.description,
                   task: task,
                   type: "TASK_DESCRIPTION"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsxs)("div", {
+                }), lodash__WEBPACK_IMPORTED_MODULE_1___default().size(task === null || task === void 0 ? void 0 : task.attachments) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsxs)("div", {
                   className: "mt-3",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)("h4", {
+                    className: "mb-2",
                     children: "Task Attachments: "
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_28__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_27__["default"], {
                     children: lodash__WEBPACK_IMPORTED_MODULE_1___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (attachment) {
@@ -1344,7 +1347,7 @@ var SingleTaskPage = function SingleTaskPage() {
                       }, attachment === null || attachment === void 0 ? void 0 : attachment.task_file_id) : null;
                     })
                   })]
-                })]
+                }) : null]
               })]
             })]
           })
@@ -2071,6 +2074,8 @@ var Guideline = function Guideline(_ref) {
                 })]
               })]
             })
+          }) : null, type === "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h5", {
+            children: "Task Description"
           }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "sp1_ck_content word-break ".concat(editorContainerClass),
             dangerouslySetInnerHTML: {
@@ -8881,6 +8886,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
 /* harmony import */ var _PreviewSubtask__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PreviewSubtask */ "./resources/js/react/single-task/section/sub-task/PreviewSubtask.jsx");
 /* harmony import */ var _task_actions_approve_task_ApproveTask__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../task-actions/approve-task/ApproveTask */ "./resources/js/react/single-task/section/task-actions/approve-task/ApproveTask.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -8888,6 +8894,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -8910,6 +8917,7 @@ var SubTask = function SubTask(_ref) {
     isOpen = _useState2[0],
     setIsOpen = _useState2[1];
   var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_4__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useNavigate)();
   var _useLazyCheckSubTaskT = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_2__.useLazyCheckSubTaskTimerQuery)(),
     _useLazyCheckSubTaskT2 = _slicedToArray(_useLazyCheckSubTaskT, 2),
     checkSubTaskTimer = _useLazyCheckSubTaskT2[0],
@@ -8931,7 +8939,8 @@ var SubTask = function SubTask(_ref) {
     e.preventDefault();
     checkSubTaskTimer(subTask === null || subTask === void 0 ? void 0 : subTask.id).unwrap().then(function (res) {
       if ((res === null || res === void 0 ? void 0 : res.status) === 200) {
-        toggleEditForm(e, subTask === null || subTask === void 0 ? void 0 : subTask.id);
+        // toggleEditForm(e, subTask?.id);
+        navigate("/account/tasks/".concat(subTask === null || subTask === void 0 ? void 0 : subTask.id, "?modal=edit&task=").concat(subTask === null || subTask === void 0 ? void 0 : subTask.id));
       } else {
         Swal.fire({
           icon: "error",
@@ -8945,7 +8954,8 @@ var SubTask = function SubTask(_ref) {
     e.preventDefault();
     checkSubTaskTimer(subTask === null || subTask === void 0 ? void 0 : subTask.id).unwrap().then(function (res) {
       if ((res === null || res === void 0 ? void 0 : res.status) === 200) {
-        window.location = "/account/tasks/".concat(subTask === null || subTask === void 0 ? void 0 : subTask.id, "/edit");
+        // window.location = `/account/tasks/${subTask?.id}/edit`;
+        navigate("/account/tasks/".concat(subTask === null || subTask === void 0 ? void 0 : subTask.id, "?modal=edit&task=").concat(subTask === null || subTask === void 0 ? void 0 : subTask.id));
       } else {
         Swal.fire({
           icon: "error",
@@ -9844,13 +9854,14 @@ var SubTaskEditModal = function SubTaskEditModal(_ref2) {
   var required_error = (error === null || error === void 0 ? void 0 : error.status) === 422 ? error === null || error === void 0 ? void 0 : error.data : null;
   // attach files
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    var attachments = lodash__WEBPACK_IMPORTED_MODULE_1___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (file) {
-      return {
+    var attachments = [];
+    lodash__WEBPACK_IMPORTED_MODULE_1___default().forEach(task === null || task === void 0 ? void 0 : task.attachments, function (file) {
+      return file.task_file_name && attachments.push({
         id: file.task_file_id,
         name: file.task_file_name,
         icon: lodash__WEBPACK_IMPORTED_MODULE_1___default().includes(['png', 'jpeg', 'jpg', 'svg', 'gif', 'webp'], file.task_file_icon) ? 'images' : 'others',
         file_url: file.task_file_url
-      };
+      });
     });
     setAttachedFiles(attachments);
   }, []);
@@ -11955,13 +11966,14 @@ var TaskEditForm = function TaskEditForm(_ref2) {
 
   // attach files
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
-    var attachments = lodash__WEBPACK_IMPORTED_MODULE_1___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (file) {
-      return {
+    var attachments = [];
+    lodash__WEBPACK_IMPORTED_MODULE_1___default().forEach(task === null || task === void 0 ? void 0 : task.attachments, function (file) {
+      return file.task_file_name && attachments.push({
         id: file.task_file_id,
         name: file.task_file_name,
         icon: lodash__WEBPACK_IMPORTED_MODULE_1___default().includes(['png', 'jpeg', 'jpg', 'svg', 'gif', 'webp'], file.task_file_icon) ? 'images' : 'others',
         file_url: file.task_file_url
-      };
+      });
     });
     setAttachedFiles(attachments);
   }, []);
@@ -12643,7 +12655,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
 /* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_7__);
 /* harmony import */ var _components_PMGuideline__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../components/PMGuideline */ "./resources/js/react/single-task/components/PMGuideline.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+
 
 
 
@@ -12661,98 +12675,98 @@ var Genarel = function Genarel(_ref) {
   var task = _ref.task,
     isFetching = _ref.isFetching;
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
     className: "row",
-    children: [isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_loader_GenarelLoader__WEBPACK_IMPORTED_MODULE_5__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+    children: [isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_loader_GenarelLoader__WEBPACK_IMPORTED_MODULE_5__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "col-12 col-xl-6 pb-3 pb-xl-0",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "d-flex flex-column",
           style: {
             gap: "10px"
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("h6", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("h6", {
             className: "",
-            children: ["Task: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+            children: ["Task: ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
               target: "__blank",
               href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.id),
               className: "text-primary font-weight-normal",
               children: task === null || task === void 0 ? void 0 : task.getSubtaskTitle()
             })]
-          }), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), (task === null || task === void 0 ? void 0 : task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
               className: "sp1_st-list-item-head",
               children: "Parent Task :"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
               className: "sp1_st-list-item-value",
-              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                 href: "/account/tasks/".concat(task === null || task === void 0 ? void 0 : task.parentTaskId),
                 className: "text-dark text-hover-underline",
                 children: task === null || task === void 0 ? void 0 : task.parentTaskTitle
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
               className: "sp1_st-list-item-head",
               children: "Project : "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                 className: "dot-color bg-danger mr-2"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                 href: "/account/projects/".concat(task === null || task === void 0 ? void 0 : task.projectId),
                 className: "text-dark text-hover-underline",
                 children: task === null || task === void 0 ? void 0 : task.projectName
               })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-head",
               children: ["Milestone :", " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                 className: "dot-color bg-primary mr-2"
               }), task === null || task === void 0 ? void 0 : task.milestoneTitle]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-head",
               children: ["Assigned To :", " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                 style: {
                   width: "32px",
                   height: "32px"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("img", {
                   src: task === null || task === void 0 || (_task$assigneeTo = task.assigneeTo) === null || _task$assigneeTo === void 0 ? void 0 : _task$assigneeTo.getAvatar(),
                   alt: task === null || task === void 0 || (_task$assigneeTo2 = task.assigneeTo) === null || _task$assigneeTo2 === void 0 ? void 0 : _task$assigneeTo2.getName(),
                   width: "32px",
                   height: "32px",
                   className: "rounded-circle"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 className: "ml-2",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
                   className: "d-block f-14 font-weight-bold",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                     href: task === null || task === void 0 || (_task$assigneeTo3 = task.assigneeTo) === null || _task$assigneeTo3 === void 0 ? void 0 : _task$assigneeTo3.getUserLink(),
                     className: "text-dark hover-underline",
                     children: task === null || task === void 0 || (_task$assigneeTo4 = task.assigneeTo) === null || _task$assigneeTo4 === void 0 ? void 0 : _task$assigneeTo4.getName()
-                  }), Number(task === null || task === void 0 || (_task$assigneeTo5 = task.assigneeTo) === null || _task$assigneeTo5 === void 0 ? void 0 : _task$assigneeTo5.getId()) === Number(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("sup", {
+                  }), Number(task === null || task === void 0 || (_task$assigneeTo5 = task.assigneeTo) === null || _task$assigneeTo5 === void 0 ? void 0 : _task$assigneeTo5.getId()) === Number(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("sup", {
                     className: "rounded-pill bg-dark text-white px-1",
                     style: {
                       fontSize: "10px"
                     },
                     children: [" ", "It's You", " "]
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   style: {
                     fontSize: "12px"
                   },
@@ -12760,41 +12774,41 @@ var Genarel = function Genarel(_ref) {
                 })]
               })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-head",
               children: ["Assigned by:", " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                 style: {
                   width: "32px",
                   height: "32px"
                 },
-                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("img", {
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("img", {
                   src: task === null || task === void 0 || (_task$assigneeBy = task.assigneeBy) === null || _task$assigneeBy === void 0 ? void 0 : _task$assigneeBy.getAvatar(),
                   alt: task === null || task === void 0 || (_task$assigneeBy2 = task.assigneeBy) === null || _task$assigneeBy2 === void 0 ? void 0 : _task$assigneeBy2.getName(),
                   width: "32px",
                   height: "32px",
                   className: "rounded-circle"
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 className: "ml-2",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
                   className: "d-block f-14 font-weight-bold",
-                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                     href: task === null || task === void 0 || (_task$assigneeBy3 = task.assigneeBy) === null || _task$assigneeBy3 === void 0 ? void 0 : _task$assigneeBy3.getUserLink(),
                     className: "text-dark hover-underline",
                     children: task === null || task === void 0 || (_task$assigneeBy4 = task.assigneeBy) === null || _task$assigneeBy4 === void 0 ? void 0 : _task$assigneeBy4.getName()
-                  }), Number(task === null || task === void 0 || (_task$assigneeBy5 = task.assigneeBy) === null || _task$assigneeBy5 === void 0 ? void 0 : _task$assigneeBy5.getId()) === Number(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("sup", {
+                  }), Number(task === null || task === void 0 || (_task$assigneeBy5 = task.assigneeBy) === null || _task$assigneeBy5 === void 0 ? void 0 : _task$assigneeBy5.getId()) === Number(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("sup", {
                     className: "rounded-pill bg-dark text-white px-1",
                     style: {
                       fontSize: "10px"
                     },
                     children: "It's You"
                   })]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                   style: {
                     fontSize: "12px"
                   },
@@ -12802,169 +12816,169 @@ var Genarel = function Genarel(_ref) {
                 })]
               })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
               className: "sp1_st-list-item-head",
               children: "Priority : "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-value",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
                 className: "dot-color mr-2",
                 style: {
                   background: "rgba(252, 189, 1, 1)"
                 }
               }), task === null || task === void 0 ? void 0 : task.priority]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
             className: "sp1_st-list-item",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "sp1_st-list-item-head",
               children: ["Task Category :", " "]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
               className: "sp1_st-list-item-value",
               children: task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.name
             })]
           })]
         })
       })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "col-12 col-xl-6 d-flex flex-column py-3 px-3",
       style: {
         gap: "10px",
         background: "#F0F2F6"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
         className: "font-weight-bold d-block",
         children: " Status: "
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "d-flex align-items-center",
         style: {
           gap: "6px"
         },
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           className: "dot-color mr-2",
           style: {
             background: task === null || task === void 0 || (_task$boardColumn = task.boardColumn) === null || _task$boardColumn === void 0 ? void 0 : _task$boardColumn.labelColor
           }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           className: "font-weight-bold",
           children: task === null || task === void 0 ? void 0 : task.boardColumn.columnName
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-5 col-md-3 col-xl-6",
           children: ["Start Date", " "]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
           children: [": ", task === null || task === void 0 ? void 0 : task.getStartDate("MMM DD, YYYY")]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-5 col-md-3 col-xl-6",
           children: ["Due Date", " "]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
           children: [": ", task === null || task === void 0 ? void 0 : task.getDueDate("MMM DD, YYYY")]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-5 col-md-3 col-xl-6",
           children: ["Time Estimate", " "]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
           children: [": ", task === null || task === void 0 ? void 0 : task.getEstimateTime()]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
         className: "row",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-5 col-md-3 col-xl-6",
           children: ["Total Hours Logged", " "]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
           className: "col-6 col-sm-7 col-md-9 col-xl-6",
           children: [": ", (task === null || task === void 0 ? void 0 : task.parentTaskTimeLog) || "--"]
         })]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
       className: "col-12 border-top py-4 mt-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
         expendable: false,
         title: "General Guidelines",
-        children: isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_loader_ArticleLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.Fragment, {
-          children: [(task === null || task === void 0 ? void 0 : task.hasProjectManagerGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+        children: isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_loader_ArticleLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.Fragment, {
+          children: [(task === null || task === void 0 ? void 0 : task.hasProjectManagerGuideline) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "mb-3",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_8__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_PMGuideline__WEBPACK_IMPORTED_MODULE_8__["default"], {
               guideline: task === null || task === void 0 ? void 0 : task.PMTaskGuideline
             })
-          }), !_.isEmpty(task === null || task === void 0 ? void 0 : task.workEnvData) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+          }), !_.isEmpty(task === null || task === void 0 ? void 0 : task.workEnvData) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
             className: "sp1_task_card--sub-card",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
               className: "px-4 py-3",
               style: {
                 background: '#F3F5F9'
               },
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("h6", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h6", {
                 className: "mb-2",
                 children: "Working Environment"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("hr", {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
                 className: "row",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Working/Staging Site's URL"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                       target: "__blank",
                       href: task === null || task === void 0 || (_task$workEnvData = task.workEnvData) === null || _task$workEnvData === void 0 ? void 0 : _task$workEnvData.site_url,
                       children: "View on new tab"
                     })]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Frontend Password"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData2 = task.workEnvData) === null || _task$workEnvData2 === void 0 ? void 0 : _task$workEnvData2.frontend_password]
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData2 = task.workEnvData) === null || _task$workEnvData2 === void 0 ? void 0 : _task$workEnvData2.frontend_password]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Working/Staging Site's Login URL"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("a", {
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("a", {
                       target: "__blank",
                       href: task === null || task === void 0 || (_task$workEnvData3 = task.workEnvData) === null || _task$workEnvData3 === void 0 ? void 0 : _task$workEnvData3.login_url,
                       children: "View on new tab"
                     }), " "]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Working/Staging Site's Username/Email"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData4 = task.workEnvData) === null || _task$workEnvData4 === void 0 ? void 0 : _task$workEnvData4.email]
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData4 = task.workEnvData) === null || _task$workEnvData4 === void 0 ? void 0 : _task$workEnvData4.email]
                   })
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
                   className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("span", {
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("strong", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("span", {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("strong", {
                       children: "Password"
-                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData5 = task.workEnvData) === null || _task$workEnvData5 === void 0 ? void 0 : _task$workEnvData5.password]
+                    }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData5 = task.workEnvData) === null || _task$workEnvData5 === void 0 ? void 0 : _task$workEnvData5.password]
                   })
                 })]
               })]
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
             text: task === null || task === void 0 ? void 0 : task.guidelines,
             task: task,
             workEnv: task === null || task === void 0 ? void 0 : task.workEnvData,
             editorContainerClass: "modal-guideline-editor-text"
           })]
         })
-      }), _.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), _.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: (_$last = _.last(task === null || task === void 0 ? void 0 : task.revisions)) === null || _$last === void 0 ? void 0 : _$last.revisionStatus,
         headingClass: "d-flex align-items-center justify-content-between",
         headingStyle: {
@@ -12972,19 +12986,40 @@ var Genarel = function Genarel(_ref) {
           color: "#fff"
         },
         children: _.map(task === null || task === void 0 ? void 0 : task.revisions, function (revision, index) {
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_RevisionText__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_RevisionText__WEBPACK_IMPORTED_MODULE_4__["default"], {
             index: index + 1,
             date: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format('MMM DD, YYYY'),
             time: dayjs__WEBPACK_IMPORTED_MODULE_7___default()(revision.createdAt).format('hh:mm a'),
             text: revision === null || revision === void 0 ? void 0 : revision.comment
           }, revision.id);
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
         expendable: false,
         title: "Task Descriptions",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          text: task === null || task === void 0 ? void 0 : task.description
-        })
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          text: task === null || task === void 0 ? void 0 : task.description,
+          task: task,
+          type: "TASK_DESCRIPTION"
+        }), _.size(task === null || task === void 0 ? void 0 : task.attachments) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)("div", {
+          className: "mt-3",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("h4", {
+            className: "mb-2",
+            children: "Task Attachments: "
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_9__["default"], {
+            children: _.map(task === null || task === void 0 ? void 0 : task.attachments, function (attachment) {
+              return attachment !== null && attachment !== void 0 && attachment.task_file_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_9__["default"].Preview, {
+                fileName: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_name,
+                downloadAble: true,
+                deleteAble: false,
+                downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_url,
+                previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_url,
+                fileType: _.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon) ? 'images' : 'others',
+                classname: "comment_file",
+                ext: attachment === null || attachment === void 0 ? void 0 : attachment.task_file_icon
+              }, attachment === null || attachment === void 0 ? void 0 : attachment.task_file_id) : null;
+            })
+          })]
+        }) : null]
       })]
     })]
   });
@@ -19237,7 +19272,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".sp1_checkbox--label.disable {\n    color: #aaa;\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/form/checkbox.css"],"names":[],"mappings":"AAAA;IACI,WAAW;AACf","sourcesContent":[".sp1_checkbox--label.disable {\n    color: #aaa;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".sp1_checkbox--label.disable {\r\n    color: #aaa;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/UI/form/checkbox.css"],"names":[],"mappings":"AAAA;IACI,WAAW;AACf","sourcesContent":[".sp1_checkbox--label.disable {\r\n    color: #aaa;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -19263,7 +19298,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.upload-file-modal{ \n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.upload-file-modal .__panel{\n    width: 100%;\n    max-width: 60vw;\n    height: 100%;\n    max-height: 80vh;\n    min-height: 60vh;\n    background-color: #fff;\n    border-radius: 16px;\n    display: -moz-grid;\n    display: grid;\n    grid-template-rows: 48px 1fr;\n}\n\n\n.upload-file-modal .__panel .__navbar{\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 10px 16px 10px 24px;\n    border-bottom: 1px solid #f0f0f0;\n}\n\n.upload-file-modal .__panel .__navbar h5{\n    margin: 0;\n    font-weight: 600;\n    color: #777;\n}\n\n.file_upload_panel__body{\n    padding: 10px 24px;\n    overflow: hidden;\n    display: -moz-grid;\n    display: grid;\n    height: 100%;\n    grid-template-rows: 250px 1fr;\n    padding-bottom: 24px;\n}\n\n\n.file_upload_panel__body .__upload_new{\n    width: 100%;\n    height: 250px;\n    background: #f6f6f6;\n    border-radius: 10px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex-direction: column;\n    position: relative;\n}\n\n.file_upload_panel__body .__upload_new .fa-cloud-arrow-up{\n   font-size: 120px;\n   color: #c4c4c4;\n   display: block;\n}\n\n.file-upload-input{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 1;\n    opacity: 0;\n}\n\n.sp1-uploaded-files_list{\n    display: flex;\n    flex-direction: column;\n    gap: 20px;\n    overflow-y: auto; \n    height: 100%;\n    padding-bottom: 24px;\n}\n\n\n.sp1-uploaded-files .__title{\n    font-weight: 600;\n    color: #777;\n    font-size: 16px;\n}\n\n\n.sp1_uploaded_file{\n    width: 100px;\n    height: 100px;\n    border-radius: 8px;\n    background: #f3f3f3;\n}\n.sp1-uploaded-files .__files_list{\n    display: flex;\n    align-items: center;\n    flex-wrap: wrap;\n    gap: 10px;\n}\n\n\n.sp1_file_upload--input-preview{\n    border: 1px solid rgba(0 0 0 / 10%);\n    padding: 6px 10px;\n    border-radius: 4px;\n    color: #777;\n    width: 100px;\n    height: 100px;\n    position: relative;\n    transition: background .4s ease-in-out;\n}\n\n\n.sp1_file_upload--input-preview:hover{\n    background: rgb(0 0 0 / 5%)\n}\n\n\n.sp1_file_upload--input-preview\n.uploaded-file-ext{\n    font-size: 14px;\n}\n\n.sp1_file_upload--input-preview\n.uploaded-file-ext-sm{\n    padding: 0px 4px; \n    bottom: 15px !important;\n}\n\n\n\n.sp1_file_upload--input-preview  .uploaded-file-name{\n    font-size: 14px; \n    margin-top: 0;\n}\n\n\n\n/* file uploader  */\n\n.sp1_file_upload--input-wrapper{\n    position: relative;\n    width: 100px;\n    height: 100px;\n    border-radius: 8px;\n    background: #f3f3f3;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    color: rgba(77, 86, 105, 0.8);\n    cursor: pointer;\n}\n\n.sp1_file_upload--input-wrapper:hover{\n    color: rgba(14, 21, 36, 0.966) \n}\n\n.sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{\n    font-size: 2.2rem;\n}\n\n.sp1_file_upload--input{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 1;\n    opacity: 0;\n}\n\n.sp1_file_upload--input-preview .__remove--btn{\n    position: absolute;\n    top: 3px;\n    right: 3px;\n    padding: 4px;\n    background-color: #ff401f;\n    color: #fff;\n    cursor: pointer;\n    border-color: #ff401f;\n    z-index: 2;\n}\n\n.sp1_file_upload--input-preview .__remove--btn i{ \n    -moz-user-select: none;\n    -webkit-user-select: none;\n    user-select: none;\n}\n\n/* end file uploader  */", "",{"version":3,"sources":["webpack://./resources/js/react/file-upload/file-upload.css"],"names":[],"mappings":";AACA;IACI,aAAa;IACb,mBAAmB;IACnB,uBAAuB;AAC3B;;AAEA;IACI,WAAW;IACX,eAAe;IACf,YAAY;IACZ,gBAAgB;IAChB,gBAAgB;IAChB,sBAAsB;IACtB,mBAAmB;IAEnB,kBAAkB;IAClB,aAAa;IACb,4BAA4B;AAChC;;;AAGA;IACI,aAAa;IACb,mBAAmB;IACnB,8BAA8B;IAC9B,4BAA4B;IAC5B,gCAAgC;AACpC;;AAEA;IACI,SAAS;IACT,gBAAgB;IAChB,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;IAChB,kBAAkB;IAElB,aAAa;IACb,YAAY;IACZ,6BAA6B;IAC7B,oBAAoB;AACxB;;;AAGA;IACI,WAAW;IACX,aAAa;IACb,mBAAmB;IACnB,mBAAmB;IACnB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IAEvB,sBAAsB;IACtB,kBAAkB;AACtB;;AAEA;GACG,gBAAgB;GAChB,cAAc;GACd,cAAc;AACjB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,UAAU;IACV,UAAU;AACd;;AAEA;IACI,aAAa;IAEb,sBAAsB;IACtB,SAAS;IACT,gBAAgB;IAChB,YAAY;IACZ,oBAAoB;AACxB;;;AAGA;IACI,gBAAgB;IAChB,WAAW;IACX,eAAe;AACnB;;;AAGA;IACI,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,mBAAmB;AACvB;AACA;IACI,aAAa;IACb,mBAAmB;IAEnB,eAAe;IACf,SAAS;AACb;;;AAGA;IACI,mCAAmC;IACnC,iBAAiB;IACjB,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,sCAAsC;AAC1C;;;AAGA;IACI;AACJ;;;AAGA;;IAEI,eAAe;AACnB;;AAEA;;IAEI,gBAAgB;IAChB,uBAAuB;AAC3B;;;;AAIA;IACI,eAAe;IACf,aAAa;AACjB;;;;AAIA,mBAAmB;;AAEnB;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,mBAAmB;IACnB,aAAa;IAEb,sBAAsB;IACtB,mBAAmB;IACnB,uBAAuB;IACvB,6BAA6B;IAC7B,eAAe;AACnB;;AAEA;IACI;AACJ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,UAAU;IACV,UAAU;AACd;;AAEA;IACI,kBAAkB;IAClB,QAAQ;IACR,UAAU;IACV,YAAY;IACZ,yBAAyB;IACzB,WAAW;IACX,eAAe;IACf,qBAAqB;IACrB,UAAU;AACd;;AAEA;IACI,sBAAsB;IACtB,yBAAyB;IACzB,iBAAiB;AACrB;;AAEA,uBAAuB","sourcesContent":["\n.upload-file-modal{ \n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.upload-file-modal .__panel{\n    width: 100%;\n    max-width: 60vw;\n    height: 100%;\n    max-height: 80vh;\n    min-height: 60vh;\n    background-color: #fff;\n    border-radius: 16px;\n    display: -ms-grid;\n    display: -moz-grid;\n    display: grid;\n    grid-template-rows: 48px 1fr;\n}\n\n\n.upload-file-modal .__panel .__navbar{\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 10px 16px 10px 24px;\n    border-bottom: 1px solid #f0f0f0;\n}\n\n.upload-file-modal .__panel .__navbar h5{\n    margin: 0;\n    font-weight: 600;\n    color: #777;\n}\n\n.file_upload_panel__body{\n    padding: 10px 24px;\n    overflow: hidden;\n    display: -moz-grid;\n    display: -ms-grid;\n    display: grid;\n    height: 100%;\n    grid-template-rows: 250px 1fr;\n    padding-bottom: 24px;\n}\n\n\n.file_upload_panel__body .__upload_new{\n    width: 100%;\n    height: 250px;\n    background: #f6f6f6;\n    border-radius: 10px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    -ms-flex-direction: column;\n    flex-direction: column;\n    position: relative;\n}\n\n.file_upload_panel__body .__upload_new .fa-cloud-arrow-up{\n   font-size: 120px;\n   color: #c4c4c4;\n   display: block;\n}\n\n.file-upload-input{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 1;\n    opacity: 0;\n}\n\n.sp1-uploaded-files_list{\n    display: flex;\n    -ms-flex-direction: column;\n    flex-direction: column;\n    gap: 20px;\n    overflow-y: auto; \n    height: 100%;\n    padding-bottom: 24px;\n}\n\n\n.sp1-uploaded-files .__title{\n    font-weight: 600;\n    color: #777;\n    font-size: 16px;\n}\n\n\n.sp1_uploaded_file{\n    width: 100px;\n    height: 100px;\n    border-radius: 8px;\n    background: #f3f3f3;\n}\n.sp1-uploaded-files .__files_list{\n    display: flex;\n    align-items: center;\n    -ms-flex-wrap: wrap;\n    flex-wrap: wrap;\n    gap: 10px;\n}\n\n\n.sp1_file_upload--input-preview{\n    border: 1px solid rgba(0 0 0 / 10%);\n    padding: 6px 10px;\n    border-radius: 4px;\n    color: #777;\n    width: 100px;\n    height: 100px;\n    position: relative;\n    transition: background .4s ease-in-out;\n}\n\n\n.sp1_file_upload--input-preview:hover{\n    background: rgb(0 0 0 / 5%)\n}\n\n\n.sp1_file_upload--input-preview\n.uploaded-file-ext{\n    font-size: 14px;\n}\n\n.sp1_file_upload--input-preview\n.uploaded-file-ext-sm{\n    padding: 0px 4px; \n    bottom: 15px !important;\n}\n\n\n\n.sp1_file_upload--input-preview  .uploaded-file-name{\n    font-size: 14px; \n    margin-top: 0;\n}\n\n\n\n/* file uploader  */\n\n.sp1_file_upload--input-wrapper{\n    position: relative;\n    width: 100px;\n    height: 100px;\n    border-radius: 8px;\n    background: #f3f3f3;\n    display: flex;\n    -ms-flex-direction: column;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    color: rgba(77, 86, 105, 0.8);\n    cursor: pointer;\n}\n\n.sp1_file_upload--input-wrapper:hover{\n    color: rgba(14, 21, 36, 0.966) \n}\n\n.sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{\n    font-size: 2.2rem;\n}\n\n.sp1_file_upload--input{\n    width: 100%;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    left: 0;\n    z-index: 1;\n    opacity: 0;\n}\n\n.sp1_file_upload--input-preview .__remove--btn{\n    position: absolute;\n    top: 3px;\n    right: 3px;\n    padding: 4px;\n    background-color: #ff401f;\n    color: #fff;\n    cursor: pointer;\n    border-color: #ff401f;\n    z-index: 2;\n}\n\n.sp1_file_upload--input-preview .__remove--btn i{ \n    -moz-user-select: none;\n    -webkit-user-select: none;\n    user-select: none;\n}\n\n/* end file uploader  */"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "\r\n.upload-file-modal{ \r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.upload-file-modal .__panel{\r\n    width: 100%;\r\n    max-width: 60vw;\r\n    height: 100%;\r\n    max-height: 80vh;\r\n    min-height: 60vh;\r\n    background-color: #fff;\r\n    border-radius: 16px;\r\n    display: -moz-grid;\r\n    display: grid;\r\n    grid-template-rows: 48px 1fr;\r\n}\r\n\r\n\r\n.upload-file-modal .__panel .__navbar{\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    padding: 10px 16px 10px 24px;\r\n    border-bottom: 1px solid #f0f0f0;\r\n}\r\n\r\n.upload-file-modal .__panel .__navbar h5{\r\n    margin: 0;\r\n    font-weight: 600;\r\n    color: #777;\r\n}\r\n\r\n.file_upload_panel__body{\r\n    padding: 10px 24px;\r\n    overflow: hidden;\r\n    display: -moz-grid;\r\n    display: grid;\r\n    height: 100%;\r\n    grid-template-rows: 250px 1fr;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.file_upload_panel__body .__upload_new{\r\n    width: 100%;\r\n    height: 250px;\r\n    background: #f6f6f6;\r\n    border-radius: 10px;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    flex-direction: column;\r\n    position: relative;\r\n}\r\n\r\n.file_upload_panel__body .__upload_new .fa-cloud-arrow-up{\r\n   font-size: 120px;\r\n   color: #c4c4c4;\r\n   display: block;\r\n}\r\n\r\n.file-upload-input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1-uploaded-files_list{\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 20px;\r\n    overflow-y: auto; \r\n    height: 100%;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.sp1-uploaded-files .__title{\r\n    font-weight: 600;\r\n    color: #777;\r\n    font-size: 16px;\r\n}\r\n\r\n\r\n.sp1_uploaded_file{\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n}\r\n.sp1-uploaded-files .__files_list{\r\n    display: flex;\r\n    align-items: center;\r\n    flex-wrap: wrap;\r\n    gap: 10px;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview{\r\n    border: 1px solid rgba(0 0 0 / 10%);\r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    width: 100px;\r\n    height: 100px;\r\n    position: relative;\r\n    transition: background .4s ease-in-out;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview:hover{\r\n    background: rgb(0 0 0 / 5%)\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext{\r\n    font-size: 14px;\r\n}\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext-sm{\r\n    padding: 0px 4px; \r\n    bottom: 15px !important;\r\n}\r\n\r\n\r\n\r\n.sp1_file_upload--input-preview  .uploaded-file-name{\r\n    font-size: 14px; \r\n    margin-top: 0;\r\n}\r\n\r\n\r\n\r\n/* file uploader  */\r\n\r\n.sp1_file_upload--input-wrapper{\r\n    position: relative;\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: rgba(77, 86, 105, 0.8);\r\n    cursor: pointer;\r\n}\r\n\r\n.sp1_file_upload--input-wrapper:hover{\r\n    color: rgba(14, 21, 36, 0.966) \r\n}\r\n\r\n.sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{\r\n    font-size: 2.2rem;\r\n}\r\n\r\n.sp1_file_upload--input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn{\r\n    position: absolute;\r\n    top: 3px;\r\n    right: 3px;\r\n    padding: 4px;\r\n    background-color: #ff401f;\r\n    color: #fff;\r\n    cursor: pointer;\r\n    border-color: #ff401f;\r\n    z-index: 2;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn i{ \r\n    -moz-user-select: none;\r\n    -webkit-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n/* end file uploader  */", "",{"version":3,"sources":["webpack://./resources/js/react/file-upload/file-upload.css"],"names":[],"mappings":";AACA;IACI,aAAa;IACb,mBAAmB;IACnB,uBAAuB;AAC3B;;AAEA;IACI,WAAW;IACX,eAAe;IACf,YAAY;IACZ,gBAAgB;IAChB,gBAAgB;IAChB,sBAAsB;IACtB,mBAAmB;IAEnB,kBAAkB;IAClB,aAAa;IACb,4BAA4B;AAChC;;;AAGA;IACI,aAAa;IACb,mBAAmB;IACnB,8BAA8B;IAC9B,4BAA4B;IAC5B,gCAAgC;AACpC;;AAEA;IACI,SAAS;IACT,gBAAgB;IAChB,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;IAChB,kBAAkB;IAElB,aAAa;IACb,YAAY;IACZ,6BAA6B;IAC7B,oBAAoB;AACxB;;;AAGA;IACI,WAAW;IACX,aAAa;IACb,mBAAmB;IACnB,mBAAmB;IACnB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IAEvB,sBAAsB;IACtB,kBAAkB;AACtB;;AAEA;GACG,gBAAgB;GAChB,cAAc;GACd,cAAc;AACjB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,UAAU;IACV,UAAU;AACd;;AAEA;IACI,aAAa;IAEb,sBAAsB;IACtB,SAAS;IACT,gBAAgB;IAChB,YAAY;IACZ,oBAAoB;AACxB;;;AAGA;IACI,gBAAgB;IAChB,WAAW;IACX,eAAe;AACnB;;;AAGA;IACI,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,mBAAmB;AACvB;AACA;IACI,aAAa;IACb,mBAAmB;IAEnB,eAAe;IACf,SAAS;AACb;;;AAGA;IACI,mCAAmC;IACnC,iBAAiB;IACjB,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,sCAAsC;AAC1C;;;AAGA;IACI;AACJ;;;AAGA;;IAEI,eAAe;AACnB;;AAEA;;IAEI,gBAAgB;IAChB,uBAAuB;AAC3B;;;;AAIA;IACI,eAAe;IACf,aAAa;AACjB;;;;AAIA,mBAAmB;;AAEnB;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,mBAAmB;IACnB,aAAa;IAEb,sBAAsB;IACtB,mBAAmB;IACnB,uBAAuB;IACvB,6BAA6B;IAC7B,eAAe;AACnB;;AAEA;IACI;AACJ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,UAAU;IACV,UAAU;AACd;;AAEA;IACI,kBAAkB;IAClB,QAAQ;IACR,UAAU;IACV,YAAY;IACZ,yBAAyB;IACzB,WAAW;IACX,eAAe;IACf,qBAAqB;IACrB,UAAU;AACd;;AAEA;IACI,sBAAsB;IACtB,yBAAyB;IACzB,iBAAiB;AACrB;;AAEA,uBAAuB","sourcesContent":["\r\n.upload-file-modal{ \r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.upload-file-modal .__panel{\r\n    width: 100%;\r\n    max-width: 60vw;\r\n    height: 100%;\r\n    max-height: 80vh;\r\n    min-height: 60vh;\r\n    background-color: #fff;\r\n    border-radius: 16px;\r\n    display: -ms-grid;\r\n    display: -moz-grid;\r\n    display: grid;\r\n    grid-template-rows: 48px 1fr;\r\n}\r\n\r\n\r\n.upload-file-modal .__panel .__navbar{\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    padding: 10px 16px 10px 24px;\r\n    border-bottom: 1px solid #f0f0f0;\r\n}\r\n\r\n.upload-file-modal .__panel .__navbar h5{\r\n    margin: 0;\r\n    font-weight: 600;\r\n    color: #777;\r\n}\r\n\r\n.file_upload_panel__body{\r\n    padding: 10px 24px;\r\n    overflow: hidden;\r\n    display: -moz-grid;\r\n    display: -ms-grid;\r\n    display: grid;\r\n    height: 100%;\r\n    grid-template-rows: 250px 1fr;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.file_upload_panel__body .__upload_new{\r\n    width: 100%;\r\n    height: 250px;\r\n    background: #f6f6f6;\r\n    border-radius: 10px;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    position: relative;\r\n}\r\n\r\n.file_upload_panel__body .__upload_new .fa-cloud-arrow-up{\r\n   font-size: 120px;\r\n   color: #c4c4c4;\r\n   display: block;\r\n}\r\n\r\n.file-upload-input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1-uploaded-files_list{\r\n    display: flex;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    gap: 20px;\r\n    overflow-y: auto; \r\n    height: 100%;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.sp1-uploaded-files .__title{\r\n    font-weight: 600;\r\n    color: #777;\r\n    font-size: 16px;\r\n}\r\n\r\n\r\n.sp1_uploaded_file{\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n}\r\n.sp1-uploaded-files .__files_list{\r\n    display: flex;\r\n    align-items: center;\r\n    -ms-flex-wrap: wrap;\r\n    flex-wrap: wrap;\r\n    gap: 10px;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview{\r\n    border: 1px solid rgba(0 0 0 / 10%);\r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    width: 100px;\r\n    height: 100px;\r\n    position: relative;\r\n    transition: background .4s ease-in-out;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview:hover{\r\n    background: rgb(0 0 0 / 5%)\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext{\r\n    font-size: 14px;\r\n}\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext-sm{\r\n    padding: 0px 4px; \r\n    bottom: 15px !important;\r\n}\r\n\r\n\r\n\r\n.sp1_file_upload--input-preview  .uploaded-file-name{\r\n    font-size: 14px; \r\n    margin-top: 0;\r\n}\r\n\r\n\r\n\r\n/* file uploader  */\r\n\r\n.sp1_file_upload--input-wrapper{\r\n    position: relative;\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n    display: flex;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: rgba(77, 86, 105, 0.8);\r\n    cursor: pointer;\r\n}\r\n\r\n.sp1_file_upload--input-wrapper:hover{\r\n    color: rgba(14, 21, 36, 0.966) \r\n}\r\n\r\n.sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{\r\n    font-size: 2.2rem;\r\n}\r\n\r\n.sp1_file_upload--input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn{\r\n    position: absolute;\r\n    top: 3px;\r\n    right: 3px;\r\n    padding: 4px;\r\n    background-color: #ff401f;\r\n    color: #fff;\r\n    cursor: pointer;\r\n    border-color: #ff401f;\r\n    z-index: 2;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn i{ \r\n    -moz-user-select: none;\r\n    -webkit-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n/* end file uploader  */"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -19321,7 +19356,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".eoHA98PbiZH3e7kuUHBbXA\\=\\={\n  /* border: solid; */\n}\n\n._1zCo6n0t5ECGe9jUiig2Hg\\=\\={\n  padding: 1rem;\n  max-width: 90%;\n  margin: 2rem auto;\n  min-height: 10rem;\n}\n\n.QkO5qiJjF91pMnSW9lK-BQ\\=\\={\n  margin: 0 auto;\n}\n\n.S\\+fhbfCMNKc\\+X1paVdIL9g\\=\\= th{\n  background-color: rgb(34, 34, 34);\n  padding: 15px 25px;\n  text-align: center;\n  color: white;\n  font-weight: bold;\n}\n\n.gQvCGT0cMHhrXFICG3amAw\\=\\= tr{\n  /* border-radius: 5px; */\n}\n\n.gQvCGT0cMHhrXFICG3amAw\\=\\= td{\n  text-align: center;\n  padding: 15px;\n}\n\n\n._2NWrj97P3z0uluSGEMsboA\\=\\={\n  /* border: solid; */\n  padding: 15px;\n  padding-top: 2rem;\n  background-color: white;\n}\n\n/* floating .label input field */\n.FZ\\+CLlbHOd7bvd7dF49XgA\\=\\= {\n  margin-bottom: 16px;\n  position: relative;\n  background-color: white;\n  border-radius: 5px;\n}\n.MWGEtMvlLB0Cj6Z8EsDqfg\\=\\= {\n  position: relative;\n  display: block;\n  width: 100%;\n  border: 1px solid rgba(0,0,0,.37);\n  border-radius: 4px;\n  background-color: transparent;\n  margin: 0px auto;\n  padding: 6px 4px 4px 14px;\n  height: 40px;\n  outline: none !important;\n  font-size: 16px;\n  color: rgba(0,0,0,0.85);\n  transition: all .2s ease-in-out;\n}\n\n.sem2B3Y\\+-GGqhkVtfgNJKQ\\=\\= {\n  position: absolute;\n  top: 30%;\n  left: 12px;\n  text-align: left;\n  display: inline-block;\n  padding: 0 4px;\n  height: 14px;\n  line-height: 14px;\n  font-size: 14px;\n  font-weight: bold;\n  background: white;\n  color: rgba(0, 0, 0, 0.519);\n  margin: 0px auto;\n  cursor: text;\n  transition: all .15s ease-in-out;\n}\n.MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:hover, .MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:focus { border: 1px solid #000; }\n\n.MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:valid + .sem2B3Y\\+-GGqhkVtfgNJKQ\\=\\=, .MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:focus + .sem2B3Y\\+-GGqhkVtfgNJKQ\\=\\= {\n  top: -6px;\n  color: #000;\n  font-weight: bold;\n}\n.lpk52NgQOXR7PIyhZPdc-A\\=\\= {\n    background-color: inherit;\n    color: #e32b2b;\n    padding: 0;\n    padding-left: 3px;\n}\n.lpk52NgQOXR7PIyhZPdc-A\\=\\=:after {\n    content: \"*\";\n}\n", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/section/daily-submission/styles/DailySubmission.module.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,cAAc;EACd,iBAAiB;EACjB,iBAAiB;AACnB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,iCAAiC;EACjC,kBAAkB;EAClB,kBAAkB;EAClB,YAAY;EACZ,iBAAiB;AACnB;;AAEA;EACE,wBAAwB;AAC1B;;AAEA;EACE,kBAAkB;EAClB,aAAa;AACf;;;AAGA;EACE,mBAAmB;EACnB,aAAa;EACb,iBAAiB;EACjB,uBAAuB;AACzB;;AAEA,gCAAgC;AAChC;EACE,mBAAmB;EACnB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;AACpB;AACA;EACE,kBAAkB;EAClB,cAAc;EACd,WAAW;EACX,iCAAiC;EACjC,kBAAkB;EAClB,6BAA6B;EAC7B,gBAAgB;EAChB,yBAAyB;EACzB,YAAY;EACZ,wBAAwB;EACxB,eAAe;EACf,uBAAuB;EACvB,+BAA+B;AACjC;;AAEA;EACE,kBAAkB;EAClB,QAAQ;EACR,UAAU;EACV,gBAAgB;EAChB,qBAAqB;EACrB,cAAc;EACd,YAAY;EACZ,iBAAiB;EACjB,eAAe;EACf,iBAAiB;EACjB,iBAAiB;EACjB,2BAA2B;EAC3B,gBAAgB;EAChB,YAAY;EACZ,gCAAgC;AAClC;AACA,uEAA6B,sBAAsB,EAAE;;AAErD;EACE,SAAS;EACT,WAAW;EACX,iBAAiB;AACnB;AACA;IACI,yBAAyB;IACzB,cAAc;IACd,UAAU;IACV,iBAAiB;AACrB;AACA;IACI,YAAY;AAChB","sourcesContent":[".bdr{\n  /* border: solid; */\n}\n\n.container{\n  padding: 1rem;\n  max-width: 90%;\n  margin: 2rem auto;\n  min-height: 10rem;\n}\n\n.myTable{\n  margin: 0 auto;\n}\n\n.headerRow th{\n  background-color: rgb(34, 34, 34);\n  padding: 15px 25px;\n  text-align: center;\n  color: white;\n  font-weight: bold;\n}\n\n.bodyRow tr{\n  /* border-radius: 5px; */\n}\n\n.bodyRow td{\n  text-align: center;\n  padding: 15px;\n}\n\n\n.form{\n  /* border: solid; */\n  padding: 15px;\n  padding-top: 2rem;\n  background-color: white;\n}\n\n/* floating .label input field */\n.wrapper {\n  margin-bottom: 16px;\n  position: relative;\n  background-color: white;\n  border-radius: 5px;\n}\n.input {\n  position: relative;\n  display: block;\n  width: 100%;\n  border: 1px solid rgba(0,0,0,.37);\n  border-radius: 4px;\n  background-color: transparent;\n  margin: 0px auto;\n  padding: 6px 4px 4px 14px;\n  height: 40px;\n  outline: none !important;\n  font-size: 16px;\n  color: rgba(0,0,0,0.85);\n  transition: all .2s ease-in-out;\n}\n\n.label {\n  position: absolute;\n  top: 30%;\n  left: 12px;\n  text-align: left;\n  display: inline-block;\n  padding: 0 4px;\n  height: 14px;\n  line-height: 14px;\n  font-size: 14px;\n  font-weight: bold;\n  background: white;\n  color: rgba(0, 0, 0, 0.519);\n  margin: 0px auto;\n  cursor: text;\n  transition: all .15s ease-in-out;\n}\n.input:hover, .input:focus { border: 1px solid #000; }\n\n.input:valid + .label, .input:focus + .label {\n  top: -6px;\n  color: #000;\n  font-weight: bold;\n}\n.formAsterisk {\n    background-color: inherit;\n    color: #e32b2b;\n    padding: 0;\n    padding-left: 3px;\n}\n.formAsterisk:after {\n    content: \"*\";\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".eoHA98PbiZH3e7kuUHBbXA\\=\\={\r\n  /* border: solid; */\r\n}\r\n\r\n._1zCo6n0t5ECGe9jUiig2Hg\\=\\={\r\n  padding: 1rem;\r\n  max-width: 90%;\r\n  margin: 2rem auto;\r\n  min-height: 10rem;\r\n}\r\n\r\n.QkO5qiJjF91pMnSW9lK-BQ\\=\\={\r\n  margin: 0 auto;\r\n}\r\n\r\n.S\\+fhbfCMNKc\\+X1paVdIL9g\\=\\= th{\r\n  background-color: rgb(34, 34, 34);\r\n  padding: 15px 25px;\r\n  text-align: center;\r\n  color: white;\r\n  font-weight: bold;\r\n}\r\n\r\n.gQvCGT0cMHhrXFICG3amAw\\=\\= tr{\r\n  /* border-radius: 5px; */\r\n}\r\n\r\n.gQvCGT0cMHhrXFICG3amAw\\=\\= td{\r\n  text-align: center;\r\n  padding: 15px;\r\n}\r\n\r\n\r\n._2NWrj97P3z0uluSGEMsboA\\=\\={\r\n  /* border: solid; */\r\n  padding: 15px;\r\n  padding-top: 2rem;\r\n  background-color: white;\r\n}\r\n\r\n/* floating .label input field */\r\n.FZ\\+CLlbHOd7bvd7dF49XgA\\=\\= {\r\n  margin-bottom: 16px;\r\n  position: relative;\r\n  background-color: white;\r\n  border-radius: 5px;\r\n}\r\n.MWGEtMvlLB0Cj6Z8EsDqfg\\=\\= {\r\n  position: relative;\r\n  display: block;\r\n  width: 100%;\r\n  border: 1px solid rgba(0,0,0,.37);\r\n  border-radius: 4px;\r\n  background-color: transparent;\r\n  margin: 0px auto;\r\n  padding: 6px 4px 4px 14px;\r\n  height: 40px;\r\n  outline: none !important;\r\n  font-size: 16px;\r\n  color: rgba(0,0,0,0.85);\r\n  transition: all .2s ease-in-out;\r\n}\r\n\r\n.sem2B3Y\\+-GGqhkVtfgNJKQ\\=\\= {\r\n  position: absolute;\r\n  top: 30%;\r\n  left: 12px;\r\n  text-align: left;\r\n  display: inline-block;\r\n  padding: 0 4px;\r\n  height: 14px;\r\n  line-height: 14px;\r\n  font-size: 14px;\r\n  font-weight: bold;\r\n  background: white;\r\n  color: rgba(0, 0, 0, 0.519);\r\n  margin: 0px auto;\r\n  cursor: text;\r\n  transition: all .15s ease-in-out;\r\n}\r\n.MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:hover, .MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:focus { border: 1px solid #000; }\r\n\r\n.MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:valid + .sem2B3Y\\+-GGqhkVtfgNJKQ\\=\\=, .MWGEtMvlLB0Cj6Z8EsDqfg\\=\\=:focus + .sem2B3Y\\+-GGqhkVtfgNJKQ\\=\\= {\r\n  top: -6px;\r\n  color: #000;\r\n  font-weight: bold;\r\n}\r\n.lpk52NgQOXR7PIyhZPdc-A\\=\\= {\r\n    background-color: inherit;\r\n    color: #e32b2b;\r\n    padding: 0;\r\n    padding-left: 3px;\r\n}\r\n.lpk52NgQOXR7PIyhZPdc-A\\=\\=:after {\r\n    content: \"*\";\r\n}\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/section/daily-submission/styles/DailySubmission.module.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,cAAc;EACd,iBAAiB;EACjB,iBAAiB;AACnB;;AAEA;EACE,cAAc;AAChB;;AAEA;EACE,iCAAiC;EACjC,kBAAkB;EAClB,kBAAkB;EAClB,YAAY;EACZ,iBAAiB;AACnB;;AAEA;EACE,wBAAwB;AAC1B;;AAEA;EACE,kBAAkB;EAClB,aAAa;AACf;;;AAGA;EACE,mBAAmB;EACnB,aAAa;EACb,iBAAiB;EACjB,uBAAuB;AACzB;;AAEA,gCAAgC;AAChC;EACE,mBAAmB;EACnB,kBAAkB;EAClB,uBAAuB;EACvB,kBAAkB;AACpB;AACA;EACE,kBAAkB;EAClB,cAAc;EACd,WAAW;EACX,iCAAiC;EACjC,kBAAkB;EAClB,6BAA6B;EAC7B,gBAAgB;EAChB,yBAAyB;EACzB,YAAY;EACZ,wBAAwB;EACxB,eAAe;EACf,uBAAuB;EACvB,+BAA+B;AACjC;;AAEA;EACE,kBAAkB;EAClB,QAAQ;EACR,UAAU;EACV,gBAAgB;EAChB,qBAAqB;EACrB,cAAc;EACd,YAAY;EACZ,iBAAiB;EACjB,eAAe;EACf,iBAAiB;EACjB,iBAAiB;EACjB,2BAA2B;EAC3B,gBAAgB;EAChB,YAAY;EACZ,gCAAgC;AAClC;AACA,uEAA6B,sBAAsB,EAAE;;AAErD;EACE,SAAS;EACT,WAAW;EACX,iBAAiB;AACnB;AACA;IACI,yBAAyB;IACzB,cAAc;IACd,UAAU;IACV,iBAAiB;AACrB;AACA;IACI,YAAY;AAChB","sourcesContent":[".bdr{\r\n  /* border: solid; */\r\n}\r\n\r\n.container{\r\n  padding: 1rem;\r\n  max-width: 90%;\r\n  margin: 2rem auto;\r\n  min-height: 10rem;\r\n}\r\n\r\n.myTable{\r\n  margin: 0 auto;\r\n}\r\n\r\n.headerRow th{\r\n  background-color: rgb(34, 34, 34);\r\n  padding: 15px 25px;\r\n  text-align: center;\r\n  color: white;\r\n  font-weight: bold;\r\n}\r\n\r\n.bodyRow tr{\r\n  /* border-radius: 5px; */\r\n}\r\n\r\n.bodyRow td{\r\n  text-align: center;\r\n  padding: 15px;\r\n}\r\n\r\n\r\n.form{\r\n  /* border: solid; */\r\n  padding: 15px;\r\n  padding-top: 2rem;\r\n  background-color: white;\r\n}\r\n\r\n/* floating .label input field */\r\n.wrapper {\r\n  margin-bottom: 16px;\r\n  position: relative;\r\n  background-color: white;\r\n  border-radius: 5px;\r\n}\r\n.input {\r\n  position: relative;\r\n  display: block;\r\n  width: 100%;\r\n  border: 1px solid rgba(0,0,0,.37);\r\n  border-radius: 4px;\r\n  background-color: transparent;\r\n  margin: 0px auto;\r\n  padding: 6px 4px 4px 14px;\r\n  height: 40px;\r\n  outline: none !important;\r\n  font-size: 16px;\r\n  color: rgba(0,0,0,0.85);\r\n  transition: all .2s ease-in-out;\r\n}\r\n\r\n.label {\r\n  position: absolute;\r\n  top: 30%;\r\n  left: 12px;\r\n  text-align: left;\r\n  display: inline-block;\r\n  padding: 0 4px;\r\n  height: 14px;\r\n  line-height: 14px;\r\n  font-size: 14px;\r\n  font-weight: bold;\r\n  background: white;\r\n  color: rgba(0, 0, 0, 0.519);\r\n  margin: 0px auto;\r\n  cursor: text;\r\n  transition: all .15s ease-in-out;\r\n}\r\n.input:hover, .input:focus { border: 1px solid #000; }\r\n\r\n.input:valid + .label, .input:focus + .label {\r\n  top: -6px;\r\n  color: #000;\r\n  font-weight: bold;\r\n}\r\n.formAsterisk {\r\n    background-color: inherit;\r\n    color: #e32b2b;\r\n    padding: 0;\r\n    padding-left: 3px;\r\n}\r\n.formAsterisk:after {\r\n    content: \"*\";\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"bdr": "eoHA98PbiZH3e7kuUHBbXA==",
@@ -19359,7 +19394,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".sp1_tlr_tbl_wrapper{\n    overflow-y: auto;\n}\n\n.sp1_tlr_table{\n    width: 100%; \n}\n\n.sp1_tlr_th {\n    height: 36px;\n    padding: 3px 10px;\n    /* background-color: rgb(55, 55, 55); */\n    border-bottom: 2px solid rgb(219, 228, 255);\n    position: sticky;\n    z-index: 10;\n    top: 0;\n    text-align: center;\n    color: rgb(55, 55, 55);\n}\n\n.sp1_tlr_td{\n    padding: 10px;\n    max-width: 350px;\n    min-width: 150px;\n    border-bottom: 1px solid rgb(219, 228, 255);\n    text-align: center;\n}\n\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\n    background-color:rgba(233, 235, 240, 0.349);\n}\n\n.sp1_tlr_tr .sp1_tlr_td_marged{\n    background-color:rgba(243, 244, 248, 0.349);\n    border-inline: 1px solid rgb(219, 228, 255);\n}\n\n.sp1_tlr_tr .sp1_tlr_td_marged:first-child,\n.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){\n    border-left-color: transparent;\n}\n\n.sp1_tlr_td_border{\n    border-bottom: 2px solid rgb(219, 228, 255);\n}\n\n/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\n   background-color: #fff !important; \n} */\n\n\n\n.sp1_drag_th.__dragging {\n    background-color: rgba(170, 173, 180, 0.222);\n}\n\n.sp1_drag_th.__drop-area {\n    background-color: rgba(34, 45, 71, 0.349);\n}\n\n.from_body{\n    padding: 2rem 1rem 3rem;\n}\n\n\n.openRow_bg{\n    background-color:rgba(194, 197, 202, 0.32) !important;\n    border: none !important;\n    overflow: visible;\n}", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/section/daily-submission/styles/DataTable.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,uCAAuC;IACvC,2CAA2C;IAC3C,gBAAgB;IAChB,WAAW;IACX,MAAM;IACN,kBAAkB;IAClB,sBAAsB;AAC1B;;AAEA;IACI,aAAa;IACb,gBAAgB;IAChB,gBAAgB;IAChB,2CAA2C;IAC3C,kBAAkB;AACtB;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;IACI,2CAA2C;IAC3C,2CAA2C;AAC/C;;AAEA;;IAEI,8BAA8B;AAClC;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;;GAEG;;;;AAIH;IACI,4CAA4C;AAChD;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,uBAAuB;AAC3B;;;AAGA;IACI,qDAAqD;IACrD,uBAAuB;IACvB,iBAAiB;AACrB","sourcesContent":[".sp1_tlr_tbl_wrapper{\n    overflow-y: auto;\n}\n\n.sp1_tlr_table{\n    width: 100%; \n}\n\n.sp1_tlr_th {\n    height: 36px;\n    padding: 3px 10px;\n    /* background-color: rgb(55, 55, 55); */\n    border-bottom: 2px solid rgb(219, 228, 255);\n    position: sticky;\n    z-index: 10;\n    top: 0;\n    text-align: center;\n    color: rgb(55, 55, 55);\n}\n\n.sp1_tlr_td{\n    padding: 10px;\n    max-width: 350px;\n    min-width: 150px;\n    border-bottom: 1px solid rgb(219, 228, 255);\n    text-align: center;\n}\n\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\n    background-color:rgba(233, 235, 240, 0.349);\n}\n\n.sp1_tlr_tr .sp1_tlr_td_marged{\n    background-color:rgba(243, 244, 248, 0.349);\n    border-inline: 1px solid rgb(219, 228, 255);\n}\n\n.sp1_tlr_tr .sp1_tlr_td_marged:first-child,\n.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){\n    border-left-color: transparent;\n}\n\n.sp1_tlr_td_border{\n    border-bottom: 2px solid rgb(219, 228, 255);\n}\n\n/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\n   background-color: #fff !important; \n} */\n\n\n\n.sp1_drag_th.__dragging {\n    background-color: rgba(170, 173, 180, 0.222);\n}\n\n.sp1_drag_th.__drop-area {\n    background-color: rgba(34, 45, 71, 0.349);\n}\n\n.from_body{\n    padding: 2rem 1rem 3rem;\n}\n\n\n.openRow_bg{\n    background-color:rgba(194, 197, 202, 0.32) !important;\n    border: none !important;\n    overflow: visible;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".sp1_tlr_tbl_wrapper{\r\n    overflow-y: auto;\r\n}\r\n\r\n.sp1_tlr_table{\r\n    width: 100%; \r\n}\r\n\r\n.sp1_tlr_th {\r\n    height: 36px;\r\n    padding: 3px 10px;\r\n    /* background-color: rgb(55, 55, 55); */\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n    position: sticky;\r\n    z-index: 10;\r\n    top: 0;\r\n    text-align: center;\r\n    color: rgb(55, 55, 55);\r\n}\r\n\r\n.sp1_tlr_td{\r\n    padding: 10px;\r\n    max-width: 350px;\r\n    min-width: 150px;\r\n    border-bottom: 1px solid rgb(219, 228, 255);\r\n    text-align: center;\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\r\n    background-color:rgba(233, 235, 240, 0.349);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged{\r\n    background-color:rgba(243, 244, 248, 0.349);\r\n    border-inline: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged:first-child,\r\n.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){\r\n    border-left-color: transparent;\r\n}\r\n\r\n.sp1_tlr_td_border{\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n}\r\n\r\n/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\r\n   background-color: #fff !important; \r\n} */\r\n\r\n\r\n\r\n.sp1_drag_th.__dragging {\r\n    background-color: rgba(170, 173, 180, 0.222);\r\n}\r\n\r\n.sp1_drag_th.__drop-area {\r\n    background-color: rgba(34, 45, 71, 0.349);\r\n}\r\n\r\n.from_body{\r\n    padding: 2rem 1rem 3rem;\r\n}\r\n\r\n\r\n.openRow_bg{\r\n    background-color:rgba(194, 197, 202, 0.32) !important;\r\n    border: none !important;\r\n    overflow: visible;\r\n}", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/section/daily-submission/styles/DataTable.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;AACpB;;AAEA;IACI,WAAW;AACf;;AAEA;IACI,YAAY;IACZ,iBAAiB;IACjB,uCAAuC;IACvC,2CAA2C;IAC3C,gBAAgB;IAChB,WAAW;IACX,MAAM;IACN,kBAAkB;IAClB,sBAAsB;AAC1B;;AAEA;IACI,aAAa;IACb,gBAAgB;IAChB,gBAAgB;IAChB,2CAA2C;IAC3C,kBAAkB;AACtB;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;IACI,2CAA2C;IAC3C,2CAA2C;AAC/C;;AAEA;;IAEI,8BAA8B;AAClC;;AAEA;IACI,2CAA2C;AAC/C;;AAEA;;GAEG;;;;AAIH;IACI,4CAA4C;AAChD;;AAEA;IACI,yCAAyC;AAC7C;;AAEA;IACI,uBAAuB;AAC3B;;;AAGA;IACI,qDAAqD;IACrD,uBAAuB;IACvB,iBAAiB;AACrB","sourcesContent":[".sp1_tlr_tbl_wrapper{\r\n    overflow-y: auto;\r\n}\r\n\r\n.sp1_tlr_table{\r\n    width: 100%; \r\n}\r\n\r\n.sp1_tlr_th {\r\n    height: 36px;\r\n    padding: 3px 10px;\r\n    /* background-color: rgb(55, 55, 55); */\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n    position: sticky;\r\n    z-index: 10;\r\n    top: 0;\r\n    text-align: center;\r\n    color: rgb(55, 55, 55);\r\n}\r\n\r\n.sp1_tlr_td{\r\n    padding: 10px;\r\n    max-width: 350px;\r\n    min-width: 150px;\r\n    border-bottom: 1px solid rgb(219, 228, 255);\r\n    text-align: center;\r\n}\r\n\r\n.sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td{\r\n    background-color:rgba(233, 235, 240, 0.349);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged{\r\n    background-color:rgba(243, 244, 248, 0.349);\r\n    border-inline: 1px solid rgb(219, 228, 255);\r\n}\r\n\r\n.sp1_tlr_tr .sp1_tlr_td_marged:first-child,\r\n.sp1_tlr_tr .sp1_tlr_td_marged:nth-child(2){\r\n    border-left-color: transparent;\r\n}\r\n\r\n.sp1_tlr_td_border{\r\n    border-bottom: 2px solid rgb(219, 228, 255);\r\n}\r\n\r\n/* .sp1_tlr_tbody > .sp1_tlr_tr:hover .sp1_tlr_td_hover-disable{\r\n   background-color: #fff !important; \r\n} */\r\n\r\n\r\n\r\n.sp1_drag_th.__dragging {\r\n    background-color: rgba(170, 173, 180, 0.222);\r\n}\r\n\r\n.sp1_drag_th.__drop-area {\r\n    background-color: rgba(34, 45, 71, 0.349);\r\n}\r\n\r\n.from_body{\r\n    padding: 2rem 1rem 3rem;\r\n}\r\n\r\n\r\n.openRow_bg{\r\n    background-color:rgba(194, 197, 202, 0.32) !important;\r\n    border: none !important;\r\n    overflow: visible;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -19385,7 +19420,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".Z17V64Im5TbkpHs0nUK6hg\\=\\={\n    max-width: 800px;\n    width: 100%;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    font-family: Inter;\n    font-weight: 400;\n    box-shadow: 0 10px 16px rgb(0 0 0 / 20%);\n}\n\n\n.\\+Xc1MUKBOF3pxDxcG-PkBA\\=\\={\n    background-color: rgb(243, 243, 243);\n}\n\n.\\+Xc1MUKBOF3pxDxcG-PkBA\\=\\= h6{\n    margin: 0;\n    font-weight: 600;\n}\n\n.aHDsbgLTnqKvAwjroJkM-w\\=\\=:not(:last-child){\n    border-bottom: 1px dashed rgb(0 0 0 / 10%);\n}\n", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/section/sub-task/task-edit-form.module.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;IAChB,WAAW;IACX,kBAAkB;IAClB,QAAQ;IACR,SAAS;IACT,gCAAgC;IAChC,kBAAkB;IAClB,gBAAgB;IAChB,wCAAwC;AAC5C;;;AAGA;IACI,oCAAoC;AACxC;;AAEA;IACI,SAAS;IACT,gBAAgB;AACpB;;AAEA;IACI,0CAA0C;AAC9C","sourcesContent":[".form_card{\n    max-width: 800px;\n    width: 100%;\n    position: absolute;\n    top: 50%;\n    left: 50%;\n    transform: translate(-50%, -50%);\n    font-family: Inter;\n    font-weight: 400;\n    box-shadow: 0 10px 16px rgb(0 0 0 / 20%);\n}\n\n\n.form_card_head{\n    background-color: rgb(243, 243, 243);\n}\n\n.form_card_head h6{\n    margin: 0;\n    font-weight: 600;\n}\n\n.list_border:not(:last-child){\n    border-bottom: 1px dashed rgb(0 0 0 / 10%);\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".Z17V64Im5TbkpHs0nUK6hg\\=\\={\r\n    max-width: 800px;\r\n    width: 100%;\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\r\n    font-family: Inter;\r\n    font-weight: 400;\r\n    box-shadow: 0 10px 16px rgb(0 0 0 / 20%);\r\n}\r\n\r\n\r\n.\\+Xc1MUKBOF3pxDxcG-PkBA\\=\\={\r\n    background-color: rgb(243, 243, 243);\r\n}\r\n\r\n.\\+Xc1MUKBOF3pxDxcG-PkBA\\=\\= h6{\r\n    margin: 0;\r\n    font-weight: 600;\r\n}\r\n\r\n.aHDsbgLTnqKvAwjroJkM-w\\=\\=:not(:last-child){\r\n    border-bottom: 1px dashed rgb(0 0 0 / 10%);\r\n}\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/single-task/section/sub-task/task-edit-form.module.css"],"names":[],"mappings":"AAAA;IACI,gBAAgB;IAChB,WAAW;IACX,kBAAkB;IAClB,QAAQ;IACR,SAAS;IACT,gCAAgC;IAChC,kBAAkB;IAClB,gBAAgB;IAChB,wCAAwC;AAC5C;;;AAGA;IACI,oCAAoC;AACxC;;AAEA;IACI,SAAS;IACT,gBAAgB;AACpB;;AAEA;IACI,0CAA0C;AAC9C","sourcesContent":[".form_card{\r\n    max-width: 800px;\r\n    width: 100%;\r\n    position: absolute;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%, -50%);\r\n    font-family: Inter;\r\n    font-weight: 400;\r\n    box-shadow: 0 10px 16px rgb(0 0 0 / 20%);\r\n}\r\n\r\n\r\n.form_card_head{\r\n    background-color: rgb(243, 243, 243);\r\n}\r\n\r\n.form_card_head h6{\r\n    margin: 0;\r\n    font-weight: 600;\r\n}\r\n\r\n.list_border:not(:last-child){\r\n    border-bottom: 1px dashed rgb(0 0 0 / 10%);\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"form_card": "Z17V64Im5TbkpHs0nUK6hg==",

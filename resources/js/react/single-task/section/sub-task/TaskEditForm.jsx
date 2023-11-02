@@ -121,7 +121,7 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
         `/${task.id}/json?mode=estimation_time`
     );
 
-    
+
     const required_error = error?.status === 422 ? error?.data : null;
 
     // handle onchange
@@ -133,15 +133,15 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
 
     // attach files
     React.useEffect(() => {
-        const attachments = _.map(task?.attachments, file => (
-            {
+        const attachments = [];
+        _.forEach(task?.attachments, file => (
+            file.task_file_name && attachments.push({
                 id: file.task_file_id,
                 name: file.task_file_name,
                 icon: _.includes(['png','jpeg', 'jpg', 'svg', 'gif', 'webp'] , file.task_file_icon) ? 'images' : 'others',
                 file_url: file.task_file_url,
-            }
+            })
         ))
-
         setAttachedFiles(attachments)
     }, [])
 
