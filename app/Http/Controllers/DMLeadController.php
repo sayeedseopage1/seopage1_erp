@@ -54,6 +54,7 @@ class DMLeadController extends AccountBaseController
      */
     public function index(DMLeadsDatatable $dataTable)
     {
+        
         $this->viewLeadPermission = $viewPermission = user()->permission('view_lead');
         abort_403(!in_array($viewPermission, ['all', 'added', 'both', 'owned']));
 
