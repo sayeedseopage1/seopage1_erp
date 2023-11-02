@@ -190,7 +190,7 @@
                               @endif
 
                               @if($lead->project_type == 'fixed')
-                              <li><i class="fa-solid fa-file-lines"></i> <span>Total Spen:</span> {{$lead->total_spent}} </li>
+                              <li><i class="fa-solid fa-file-lines"></i> <span>Total Spen:</span> {{$lead->total_spent.$currency->currency_symbol}} </li>
                               @endif
 
                               <li><i class="fa-solid fa-globe"></i> <span>Client Country:</span> {{ucwords($lead->country)}} </li>
