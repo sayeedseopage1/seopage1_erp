@@ -16,11 +16,11 @@ const ActiveRequiredActions = () => {
 
     return (
         <div>
-            <div style={{ backgroundColor: "white" }}>
+            {/* <div style={{ backgroundColor: "white" }}>
                 <FilterBar onFilter={onFilter} />
-            </div>
+            </div> */}
 
-            {/* actions => live , expire */}
+            {/* actions => live , expired */}
             <section className={style.active_action_container}>
                 <button
                     onClick={() => setAction("live")}
@@ -33,20 +33,21 @@ const ActiveRequiredActions = () => {
                     Live
                 </button>
                 <button
-                    onClick={() => setAction("expire")}
+                    onClick={() => setAction("expired")}
                     className={`${style.active_action_btn} ${
-                        action === "expire"
+                        action === "expired"
                             ? style.active_action_btn_active
                             : style.active_action_btn_inactive
                     }`}
                 >
-                    Expire {5}
+                    Expired ({5})
                 </button>
             </section>
 
             <div className={style.active_outlet_container} style={{ backgroundColor: "#F7FAFF" }}>
+                <FilterBar onFilter={onFilter} change={true} />
                 {action === "live" && <LiveRequiredAction />}
-                {action === "expire" && <ExpireRequiredAction />}
+                {action === "expired" && <ExpireRequiredAction />}
             </div>
         </div>
     );

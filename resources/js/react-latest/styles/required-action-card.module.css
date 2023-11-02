@@ -16,11 +16,12 @@
 /* -------------------- card details (start) -------------------- */
 .details_aside {
   display: flex;
+  flex-flow: row wrap-reverse;
 }
 
 /* -------------- card body text (start) -------------- */
 .article {
-  flex: 1 1 auto;
+  flex: 2 1 auto;
   display: flex;
   flex-flow: column nowrap;
   /* justify-content: space-between; */
@@ -58,12 +59,53 @@
 
 /* ------------- clipboard area (start) ------------- */
 .aside {
-  border: solid;
-  width: 200px;
+  /* border: solid; */
+  flex: 0 1 150px;
+  /* width: 150px; */
   min-height: 120px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 20px;
+  margin: 0 5px;
+}
+.action_expire_time, .action_count_down{
+  /* border: solid; */
+  flex: 0 0 150px;
+  /* max-width: 150px; */
+  height: 70px;
+  background-color: #FFFFFF;
+  box-shadow: 10px gray;
+  font-weight: bold;
+  color: rgb(112, 112, 112);
+  border-radius: 5px;
+}
+.action_expire_time{
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  gap: 5px;
+}
+.action_expire_time_icon{
+  height: 20px;
+  width: 20px;
+}
+.action_count_down{
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 /* ------------- clipboard area (end) ------------- */
-
+@media screen and (max-width: 1220px) {
+  .aside{
+    flex: 1 0 150px;
+    margin: 10px 5px;
+  }
+  .action_expire_time, .action_count_down{
+    flex: 1 0 150px;
+  }
+}
 
 /* -------------------- card details (end) -------------------- */
 
@@ -75,7 +117,7 @@
   gap: 10px;
 }
 .action_btn{
-  border: solid #1D82F5;
+  border: solid #1D82F5 2px;
   border-radius: 4px;
   padding: 8px 15px;
   min-width: 150px;
@@ -91,4 +133,20 @@
   /* justify-content: space-between; */
   font-size: 18px;
   margin-top: 10px;
+}
+
+
+@media screen and (max-width: 1220px) {
+  .action{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 5px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .action{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap: 5px;
+  }
 }

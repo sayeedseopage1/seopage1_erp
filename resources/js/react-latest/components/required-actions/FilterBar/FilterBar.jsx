@@ -5,7 +5,7 @@ import Show from './Show';
 import DateField from './DateField';
 import View from './View';
 
-const FilterBar = ({onFilter}) => {
+const FilterBar = ({onFilter,change=false}) => {
   // ------- filter state (start) -------
   const [search,setSearch] = useState('');
   const [date,setDate] = useState('');
@@ -26,10 +26,10 @@ const FilterBar = ({onFilter}) => {
 
   return (
     <div className={style.filterbar_container}>
-       <Search setSearch={setSearch} />
-       <DateField setDate={setDate} />
-       <Show show={show} setShow={setShow} />
-       <View view={view} setView={setView} />
+       <Search setSearch={setSearch} change={change} />
+       <DateField setDate={setDate} change={change} />
+       <Show show={show} setShow={setShow} change={change} />
+       <View view={view} setView={setView} change={change} />
     </div>
   );
 };

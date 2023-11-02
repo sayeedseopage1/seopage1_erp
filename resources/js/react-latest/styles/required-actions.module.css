@@ -7,7 +7,7 @@
 }
 
 .btn{
-  border: solid #1D82F5;
+  border: solid #1D82F5 2px;
   border-radius: 4px;
   padding: 8px;
   width: 170px;
@@ -43,6 +43,7 @@
   /* border: transparent; */
   z-index: 1;
   position: relative;
+  margin-top: 10px;
 }
 .active_action_btn{
   border: transparent;
@@ -50,6 +51,9 @@
   padding: 8px;
   width: 170px;
   font-size: 20px;
+}
+.active_action_btn:first-child{
+  margin-right: 13px;
 }
 .active_action_btn_active{
   background-color: #F7FAFF;
@@ -67,7 +71,7 @@
 
 /* ------------------ Active outlet container (start) ------------------ */
 .active_outlet_container{
-  transform: translateY(-5px);
+  transform: translateY(-3.5px);
   border: #1D82F5 solid 1px;
   padding: 10px;
   /* z-index: ; */
@@ -84,6 +88,7 @@
   flex-flow: row wrap;
   gap: 10px;
   margin: 10px 0;
+  background-color: transparent;
 }
 
 
@@ -104,7 +109,7 @@
   color: #3d3d3d;
   outline: none;
   border: none;
-  background-color: #F7F7F7;
+  /* background-color: #F7F7F7; */
 }
 .search_bar input::placeholder{
   color: #919191;
@@ -146,7 +151,7 @@
   color: #3d3d3d;
   outline: none;
   border: none;
-  background-color: #F7F7F7;
+  /* background-color: #F7F7F7; */
 }
 /* ---------- date bar (end) ---------- */
 
@@ -173,7 +178,7 @@
   color: #3d3d3d;
   outline: none;
   border: none;
-  background-color: #F7F7F7;
+  /* background-color: #F7F7F7; */
 }
 /* ---------- show bar (end) ---------- */
 
@@ -200,10 +205,18 @@
   color: #3d3d3d;
   outline: none;
   border: none;
-  background-color: #F7F7F7;
+  /* background-color: #F7F7F7; */
 }
 /* ---------- view bar (end) ---------- */
-
+.custom_bg{
+  background-color: #F7F7F7;
+  border-radius: 5px;
+}
+.white_bg{
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 10px rgb(94, 94, 94) !important;
+}
 /* ------------------ filter bar (end) ------------------ */
 
 

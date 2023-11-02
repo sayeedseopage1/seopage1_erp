@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../styles/required-actions.module.css'
 import { AiOutlineSearch } from 'react-icons/ai'
 
-const Search = ({setSearch}) => {
+const Search = ({setSearch,change}) => {
   const [text,setText] = useState('');
   const TimeOutRef = useRef();
 
@@ -27,6 +27,7 @@ const Search = ({setSearch}) => {
         placeholder='Search Project what you need'
         type="text"
         onChange={(e)=>setText(e.target.value)}
+        className={change?style.white_bg:style.custom_bg}
         />
     </div>
   );
