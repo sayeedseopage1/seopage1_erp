@@ -1,10 +1,10 @@
-import dayjs from 'dayjs';
-import { User } from './user-details';
-import _ from 'lodash';
+import dayjs from "dayjs";
+import { User } from "./user-details";
+import _ from "lodash";
 
 // board column
-export class BoardColumn{
-    constructor(boardColume){
+export class BoardColumn {
+    constructor(boardColume) {
         this.id = boardColume?.id;
         this.columnName = boardColume?.column_name;
         this.labelColor = boardColume?.label_color;
@@ -12,30 +12,28 @@ export class BoardColumn{
         this.slug = boardColume?.slug;
     }
 
-
-    getTaskStatusName(authRoleId, isSubtask){
-        if(!isSubtask && this.id === 8 && _.includes([1, 4, 6], authRoleId)){
-            return "Awaiting for Client Approval"
-        }else return this.columnName;
+    getTaskStatusName(authRoleId, isSubtask) {
+        if (!isSubtask && this.id === 8 && _.includes([1, 4, 6], authRoleId)) {
+            return "Awaiting for Client Approval";
+        } else return this.columnName;
     }
 }
 
-
 // category
-export class Category{
-    constructor(cat){
-        this.name = _.startCase(cat?.category_name),
-        this.addedBy = cat?.added_by,
-        this.id = cat?.id;
+export class Category {
+    constructor(cat) {
+        (this.name = _.startCase(cat?.category_name)),
+            (this.addedBy = cat?.added_by),
+            (this.id = cat?.id);
     }
 }
 
 // sub task
 export class SubmittedWork {
-    constructor(task){
+    constructor(task) {
         this.id = task?.task_id;
-        this.attaches = _.split(task?.attaches, ',');
-        this.submittedLinkes = _.split(task?.links, ',');
+        this.attaches = _.split(task?.attaches, ",");
+        this.submittedLinkes = _.split(task?.links, ",");
         this.explaination = task?.text;
         this.submittionNo = task?.submission_no;
         this.submittedAt = task?.submission_date;
@@ -43,11 +41,11 @@ export class SubmittedWork {
             id: task?.user_id,
             name: task?.user_name || task?.name,
             avatar: task?.image ? `/user-uploads/avatar/${task?.image}` : null,
-            profile: `/account/employees/${task?.user_id}`
-        }
+            profile: `/account/employees/${task?.user_id}`,
+        };
     }
 
-    getSubmittionDate(format = 'MMM DD, YYYY'){
+    getSubmittionDate(format = "MMM DD, YYYY") {
         return dayjs(this.submittedAt).format(format);
     }
 }
@@ -55,27 +53,27 @@ export class SubmittedWork {
 // comment
 export class Comment {
     constructor(data) {
-      this.id = data?.id;
-      this.comment = data?.comment;
-      this.userId = data?.user_id;
-      this.taskId = data?.task_id;
-      this.addedBy = data?.added_by;
-      this.lastUpdatedBy = data?.last_updated_by;
-      this.totalReplies = data?.total_replies;
-      this.lastUpdatedAt = data?.last_updated_at;
-      this.replies = data?.replies;
-      this.filesData = data?.files_data;
-      this.user = new User(data?.user);
+        this.id = data?.id;
+        this.comment = data?.comment;
+        this.userId = data?.user_id;
+        this.taskId = data?.task_id;
+        this.addedBy = data?.added_by;
+        this.lastUpdatedBy = data?.last_updated_by;
+        this.totalReplies = data?.total_replies;
+        this.lastUpdatedAt = data?.last_updated_at;
+        this.replies = data?.replies;
+        this.filesData = data?.files_data;
+        this.user = new User(data?.user);
     }
 
-    getLastUpdatedAt(format = 'MMM DD, YYYY'){
-        return dayjs(this.lastUpdatedAt).format(format)
+    getLastUpdatedAt(format = "MMM DD, YYYY") {
+        return dayjs(this.lastUpdatedAt).format(format);
     }
 }
 
 // time log
-export class TimeLog{
-    constructor(data){
+export class TimeLog {
+    constructor(data) {
         this.id = data?.id;
         this.projectId = data?.project_id;
         this.taskId = data?.task_id;
@@ -101,26 +99,27 @@ export class TimeLog{
         this.user = new User(data?.user);
     }
 
-    getStartTime(format='MMM DD, YYYY'){
-        return dayjs(this.startTime).format(format)
+    getStartTime(format = "MMM DD, YYYY") {
+        return dayjs(this.startTime).format(format);
     }
 
-    getEndTime(format='MMM DD, YYYY'){
-        return dayjs(this.endTime).format(format)
+    getEndTime(format = "MMM DD, YYYY") {
+        return dayjs(this.endTime).format(format);
     }
 }
-
 
 // project manager guideline
 
 export class ProjectMangerGuideline {
-    constructor(data){
+    constructor(data) {
         this.id = data?.id;
         this.theme_name = data?.theme_name;
         this.theme_details = data?.theme_details;
         this.theme_url = data?.theme_url;
         this.color = data?.color ? JSON.parse(data.color) : [];
-        this.color_description = data?.color_description ? JSON.parse(data.color_description) : [];
+        this.color_description = data?.color_description
+            ? JSON.parse(data.color_description)
+            : [];
         this.color_schema = data?.color_schema;
         this.created_at = data?.created_at;
         this.design = data?.design;
@@ -136,10 +135,9 @@ export class ProjectMangerGuideline {
         this.xd_url = data?.xd_url;
         this.updated_at = data?.updated_at;
         this.primary_color = data?.primary_color;
-        this.primary_color_description = data?.primary_color_description
+        this.primary_color_description = data?.primary_color_description;
     }
 }
-
 
 // task revisions
 // export class TaskRevision {
@@ -201,13 +199,11 @@ export class TaskRevision {
         this.taskId = data.task_id;
         this.updatedAt = data.updated_at;
     }
-  }
-
-
+}
 
 // single task
 export class SingleTask {
-    constructor(task){
+    constructor(task) {
         this.id = task?.id;
         this.title = _.startCase(task?.heading);
         this.parentTaskId = task?.parent_task_id;
@@ -232,15 +228,22 @@ export class SingleTask {
         this.description = task?.description;
         this.subtask = task?.subtask;
         this.isSubtask = this.parentTaskId ? true : false;
-        this.leadDeveloperParentTaskAction =  task?.parent_task_action;
-        this.ranningTimer= task?.running_timer;
+        this.leadDeveloperParentTaskAction = task?.parent_task_action;
+        this.ranningTimer = task?.running_timer;
         this.workingEnvironment = task?.working_environment;
         this.workEnvData = task?.working_environment_data;
-        this.hasProjectManagerGuideline = task?.pm_task_guideline ? true : false;
+        this.hasProjectManagerGuideline = task?.pm_task_guideline
+            ? true
+            : false;
         this.clientName = task?.client_name;
         this.clientId = task?.clientId;
-        this.PMTaskGuideline = new ProjectMangerGuideline(task?.pm_task_guideline);
-        this.revisions = _.map(_.orderBy(task?.task_revisions, 'id', 'desc'), revision => new TaskRevision(revision));
+        this.PMTaskGuideline = new ProjectMangerGuideline(
+            task?.pm_task_guideline
+        );
+        this.revisions = _.map(
+            _.orderBy(task?.task_revisions, "id", "desc"),
+            (revision) => new TaskRevision(revision)
+        );
         this.taskSubTask = task?.taskSubTask;
         this.taskType = task?.task_type;
         this.pageType = task?.page_type;
@@ -255,37 +258,40 @@ export class SingleTask {
         this.acknowledgement = task?.acknowledgement;
         this.approvalStatus = task?.approval_status;
         this.isIndependentTask = !!task?.independent_task_status;
+        this.attachments = task?.taskFiles;
     }
 
-    isLeadDeveloperAbleToSubmit () {
+    isLeadDeveloperAbleToSubmit() {
         let text = "Lead Developer Can not Complete Parent Task";
-        let compareWith = _.lowerCase(text.replace(/\s/g, ''));
-        let compareText  = _.lowerCase(this.leadDeveloperParentTaskAction.replace(/\s/g, ''));
+        let compareWith = _.lowerCase(text.replace(/\s/g, ""));
+        let compareText = _.lowerCase(
+            this.leadDeveloperParentTaskAction.replace(/\s/g, "")
+        );
 
-        return  compareText === compareWith ? false : true
+        return compareText === compareWith ? false : true;
     }
 
-    getSubtaskTitle(){
+    getSubtaskTitle() {
         return this.title;
     }
 
-    getStartDate(format){
-        return this.startDate ? dayjs(this.startDate).format(format) : '--';
+    getStartDate(format) {
+        return this.startDate ? dayjs(this.startDate).format(format) : "--";
     }
 
-    getDueDate(format){
-        return this.dueDate ? dayjs(this.dueDate).format(format) : '--';
+    getDueDate(format) {
+        return this.dueDate ? dayjs(this.dueDate).format(format) : "--";
     }
 
-    getEstimateTime(){
-        if(this.estimateHours && this.estimateMinutes){
+    getEstimateTime() {
+        if (this.estimateHours && this.estimateMinutes) {
             return `${this.estimateHours} hrs ${this.estimateMinutes} mins`;
-        }else if(this.estimateHours && !this.estimateMinutes){
+        } else if (this.estimateHours && !this.estimateMinutes) {
             return `${this.estimateHours} hrs ${this.estimateMinutes} mins`;
-        }else if( !this.estimateHours && this.estimateMinutes){
+        } else if (!this.estimateHours && this.estimateMinutes) {
             return `${this.estimateMinutes} mins`;
-        }else{
-            return `Not Provided!`
+        } else {
+            return `Not Provided!`;
         }
     }
 }

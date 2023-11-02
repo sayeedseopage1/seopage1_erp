@@ -93,6 +93,7 @@ var RenderIcon = function RenderIcon(_ref) {
   var filename = _ref.filename,
     size = _ref.size;
   // get ext
+  if (!filename) return null;
   var arr = filename.split(".");
   var ext = arr[arr.length - 1];
   var _filename = (filename === null || filename === void 0 ? void 0 : filename.slice(0, 2)) + ".." + (filename === null || filename === void 0 ? void 0 : filename.slice(filename.length - (ext.length + 2), filename === null || filename === void 0 ? void 0 : filename.length));
@@ -200,7 +201,7 @@ var FilePreview = function FilePreview(_ref3) {
     href: downloadUrl,
     download: downloadAble,
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", _objectSpread(_objectSpread({
-      className: "sp1_file_upload--input-preview"
+      className: "sp1_file_upload--input-preview ".concat(classname)
     }, props), {}, {
       children: [deleteAble && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
         type: "button",
@@ -214,7 +215,7 @@ var FilePreview = function FilePreview(_ref3) {
         })
       }), fileType === "images" || fileType.startsWith('image/') ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
         src: previewUrl,
-        alt: fileName,
+        alt: "",
         style: {
           width: "100%",
           height: "100%",
@@ -471,6 +472,7 @@ var useSingleTask = function useSingleTask() {
               break;
             }
             task = _objectSpread(_objectSpread({}, res.task), {}, {
+              taskFiles: res === null || res === void 0 ? void 0 : res.taskFiles,
               parent_task_action: res.parent_task_action,
               parent_task_title: ((_res$parent_task_head = res.parent_task_heading) === null || _res$parent_task_head === void 0 ? void 0 : _res$parent_task_head.heading) || null,
               working_environment: res.working_environment,
