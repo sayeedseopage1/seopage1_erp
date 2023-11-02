@@ -42,7 +42,7 @@
             </form>
         </div>
 
-        <div
+        {{-- <div
             class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
             <p class="mb-0 pr-3 f-14 text-dark-grey d-flex align-items-center">@lang('Project Manager')</p>
             <div class="select-status">
@@ -57,7 +57,7 @@
                     @endforeach
                 </select>
             </div>
-        </div>
+        </div> --}}
 
         <div
             class="select-box d-flex py-2 {{ !in_array('client', user_roles()) ? 'px-lg-2 px-md-2 px-0' : '' }}  border-right-grey border-right-grey-sm-0">
@@ -85,7 +85,7 @@
                     data-size="8">
                     <option selected value="all">@lang('All')</option>
                     @php
-                        $project_manager = App\Models\User::whereIn('role_id', ['1', '7', '8'])->get();
+                        $project_manager = App\Models\User::whereIn('role_id', ['1', '11', '12'])->orderBy('id','desc')->get();
                     @endphp
                     @foreach ($project_manager as $value)
                         <option value="{{ $value->id }}">{{ ucfirst($value->name) }}</option>
@@ -207,7 +207,7 @@
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
             var clientID = $('#client_id').val();
-            var pm_id = $('#pm_id').val();
+            // var pm_id = $('#pm_id').val();
             var closed_by = $('#closed_by').val();
             var status = $('#status').val();
             //alert(status);
@@ -224,7 +224,7 @@
             data['startDate'] = startDate;
             data['endDate'] = endDate;
             data['client_id'] = clientID;
-            data['pm_id'] = pm_id;
+            // data['pm_id'] = pm_id;
             data['closed_by'] = closed_by;
             data['status'] = status;
 
@@ -235,14 +235,20 @@
             window.LaravelDataTables["Wondeals-table"].draw();
         }
 
-        $('#pm_id, #client_id, #closed_by, #status, #search-text-field').on('change keyup', function() {
+        // HIDE FOR pm_id (WHEN YOU WANT TO PM SEARCH YOU CAN UNCOMMENT THIS)
+
+        // $('#pm_id, #client_id, #closed_by, #status, #search-text-field').on('change keyup', function() {
+
+        $('#client_id, #closed_by, #status, #search-text-field').on('change keyup', function() {
             if ($('#client_id').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
-            } else if ($('#pm_id').val() != "all") {
-                $('#reset-filters').removeClass('d-none');
-                showTable();
-            } else if ($('#project_link').val() != "all") {
+            }
+            // else if ($('#pm_id').val() != "all") {
+            //     $('#reset-filters').removeClass('d-none');
+            //     showTable();
+            // }
+             else if ($('#project_link').val() != "all") {
                 $('#reset-filters').removeClass('d-none');
                 showTable();
             } else if ($('#closed_by').val() != "all") {
