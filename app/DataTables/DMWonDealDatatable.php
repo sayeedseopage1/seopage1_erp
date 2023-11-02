@@ -60,13 +60,6 @@ class DMWonDealDatatable extends BaseDataTable
                     return '<p title="' . $row->project_name . '">' . $title . '</p>';
                 }
             })
-            ->addColumn('cms_name', function ($row) {
-                if(!is_null($row->cms_name)){
-                    return $row->cms_name;
-                }else{
-                    return '---';
-                }
-            })
             ->addColumn('amount', function ($row) {
                 return $row->actual_amount . ' ' . $row->original_currency->currency_symbol;
             })
@@ -121,12 +114,12 @@ class DMWonDealDatatable extends BaseDataTable
                     $action .= '<a class="dropdown-item" href="dm-deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 }
 
-                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8) {
+                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 11 || Auth::user()->role_id == 12) {
                     $action .= '<a class="dropdown-item" href="/dm-deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
                 }
-                if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
+                if (Auth::user()->role_id == 12 || Auth::user()->role_id == 1) {
                     if ($row->authorization_status == 0 || $row->authorization_status == '2') {
-                        if (Auth::user()->role_id == 8) {
+                        if (Auth::user()->role_id == 12) {
                             $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Need') . '</a>';
                         }
 
@@ -134,7 +127,7 @@ class DMWonDealDatatable extends BaseDataTable
                         $action .= '<a class="dropdown-item bg-success" href="' . route("dm-contracts.show", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Details') . '</a>';
                     }
                 }
-                if (Auth::user()->role_id == 4 && $row->status == 'Denied') {
+                if (Auth::user()->role_id == 1 && $row->status == 'Denied') {
                     $award_time_request = $row->has_award_time_request;
 
                     if ($award_time_request) {
@@ -158,7 +151,7 @@ class DMWonDealDatatable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check', 'short_code', 'project_name','cms_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
+            ->rawColumns(['check', 'short_code', 'project_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
     }
 
     /**
@@ -287,11 +280,6 @@ class DMWonDealDatatable extends BaseDataTable
                 'data' => 'project_name',
                 'name' => 'project_name',
                 'title' => 'Project Name',
-            ],
-            'cms_name' => [
-                'data' => 'cms_name',
-                'name' => 'cms_name',
-                'title' => 'CMS Name',
             ],
             'amount' => [
                 'data' => 'amount',

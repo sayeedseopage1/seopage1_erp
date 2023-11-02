@@ -120,15 +120,23 @@ $createPublicProjectPermission = user()->permission('create_public_project');
                         <x-forms.label class="my-3" fieldId="department" :fieldLabel="__('app.department')">
                         </x-forms.label>
                         <x-forms.input-group>
+                            @if ($project->dept_status =='DM')
+                                @foreach ($teams as $team)
+                                    @if($team->team_name == 'Digital Marketing')
+                                    <input type="text" name="" class="form-control height-35 f-14" id="" value="{{ $team->team_name }}" readonly>
+                                    @endif
+                                @endforeach
+                            @else
                             <select class="form-control select-picker height-35 f-14" name="team_id" id="employee_department"
                                 data-live-search="true">
                                 <option value="">--</option>
-                                @foreach ($teams as $team)
-                                    <option @if ($project->team_id === $team->id) selected @endif value="{{ $team->id }}">
-                                        {{ mb_ucwords($team->team_name) }}
-                                    </option>
-                                @endforeach
+                                    @foreach ($teams as $team)
+                                        <option @if ($project->team_id === $team->id) selected @endif value="{{ $team->id }}">
+                                            {{ mb_ucwords($team->team_name) }}
+                                        </option>
+                                    @endforeach
                             </select>
+                            @endif
                         </x-forms.input-group>
                     </div>
 

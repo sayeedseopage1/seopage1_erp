@@ -1367,7 +1367,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-cards.data>
                     <div class="row">
                         <div class="col">
+                            @if ($deal->dept_status=='DM')
+                            <h4>Profile Link</h4>
+                            @else
                             <h4>Freelancer Profile Link</h4>
+                            @endif
                             <br>
                             <p><a target="_blank" href="{{ $deal->profile_link}}">{{ $deal->profile_link}}</a></p>
 
@@ -1384,7 +1388,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-cards.data>
                     <div class="row">
                         <div class="col">
+                            @if ($deal->dept_status=='DM')
+                            <h4>Message Link</h4>
+                            @else
                             <h4>Freelancer Message Link</h4>
+                            @endif
                             <br>
                             <?php
                             $mystring = $deal->message_link;
@@ -1413,7 +1421,11 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-cards.data>
                     <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                         <div class="col">
+                            @if ($deal->dept_status=='DM')
+                            <h4>Write the what in 2-8 words here (Example: Whole website seo, Google ads, Backlink creation, Basic SEO, Sponsored posts etc.)</h4>
+                            @else
                             <h4>Write the what in 2-8 words here (Examples: Website redesign, Shopify website migration to Wix, Creating a 5 page business website in WordPress, Shopify website creation, etc.)</h4>
+                            @endif
                             <br>
                             <p>{!! $deal->description2 !!}</p>
 
@@ -1430,10 +1442,14 @@ $project->members->pluck('user_id')->toArray(); @endphp
                 <x-cards.data>
                     <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                         <div class="col">
+                            @if ($deal->dept_status=='DM')
+                            <h4>Elaborate the "WHAT" 3-4 lines here (The client created a new website recently and he now wants to start full suite SEO for his website.). Please share all the necessary information you possible can here. The execution team will work based on this instruction primarily.</h4>
+                              @else
                             <h4>
                               Elaborate the "WHAT" 3-4 lines here (The client needs a 5 page static WordPress website for his new design agency.
                               It should include home, about, his services in one page, blog, and contact. The look and feel should be
                               better than the references.)</h4>
+                              @endif
                             <br>
                             <p>{!! $deal->description3 !!}</p>
 
@@ -1444,6 +1460,7 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+        @if ($deal->dept_status !='DM')
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
@@ -1463,15 +1480,19 @@ $project->members->pluck('user_id')->toArray(); @endphp
             </div>
             <!-- BUDGET VS SPENT END -->
         </div>
+        @endif
         <div class="row mb-4" >
             <!-- BUDGET VS SPENT START -->
             <div class="col-md-12">
                 <x-cards.data>
                     <div class="row {{ $projectBudgetPermission == 'all' ? 'row-cols-lg-1' : '' }}">
                         <div class="col">
-                            <h4>
-                              Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work
+                            @if ($deal->dept_status=='DM')
+                            <h4>Any particular focus/concern of the client (Ex: 1. The client is very concerned about his websites current rank drop.  2. The client is frustrated about his google ads campaigns not getting enough returns and desperately wants someone to improve this)</h4>
+                              @else
+                            <h4>Any particular focus/concern of the client (Ex: 1. The client is very concerned about the final look & feel so needs to be careful with the design 2. The client is very concerned if the booking functionality will work
                               the way he wants.)</h4>
+                              @endif
                             <br>
                             <p>{!! $deal->description5 !!}</p>
 
