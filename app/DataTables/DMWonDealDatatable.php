@@ -3,19 +3,18 @@
 namespace App\DataTables;
 
 use App\Models\Deal;
-use App\Models\DealStage;
+use App\Models\Project;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use App\DataTables\BaseDataTable;
+use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Html\Editor\Editor;
 use \Carbon\Carbon;
 use Auth;
 use Str;
 use DB;
-use App\Models\Project;
 
-class WonDealsDataTable extends BaseDataTable
+class DMWonDealDatatable extends BaseDataTable
 {
     /**
      * Build DataTable class.
@@ -23,7 +22,8 @@ class WonDealsDataTable extends BaseDataTable
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
      */
-    private $editContractPermission;
+
+     private $editContractPermission;
     private $deleteContractPermission;
     private $addContractPermission;
     private $viewContractPermission;
@@ -36,6 +36,8 @@ class WonDealsDataTable extends BaseDataTable
         $this->addContractPermission = user()->permission('add_contract');
         $this->viewContractPermission = user()->permission('view_contract');
     }
+
+
     public function dataTable($query)
     {
         return datatables()->eloquent($query)
@@ -43,7 +45,7 @@ class WonDealsDataTable extends BaseDataTable
                 return '<input type="checkbox" class="select-table-row" id="datatable-row-' . $row->id . '"  name="datatable_ids[]" value="' . $row->id . '" onclick="dataTableRowCheck(' . $row->id . ')">';
             })
             ->addColumn('short_code', function ($row) {
-                return '<a target="__blank" href="' . route('contracts.show', $row->id) . '">' . $row->deal_id . '</a>';
+                return '<a target="__blank" href="' . route('dm-contracts.show', $row->id) . '">' . $row->deal_id . '</a>';
             })
             ->addColumn('project_name', function ($row) {
                 $title = Str::limit($row->project_name, 30, ' ...');
@@ -84,10 +86,10 @@ class WonDealsDataTable extends BaseDataTable
             ->addColumn('client_contact_form', function ($row) {
                 if ($row->submission_status == 'Submitted') {
                     return '<span class="badge bg-success text-light">Submitted</span>';
-                } else 
+                } else
                 {
                     return '<span class="badge bg-warning">Awaiting for client Response</span>';
-                } 
+                }
             })
             ->addColumn('added_by', function ($row) {
                 if (!is_null($row->added_by)) {
@@ -114,13 +116,13 @@ class WonDealsDataTable extends BaseDataTable
                 <div class="dropdown-menu dropdown-menu-right border-grey rounded b-shadow-4 p-0" aria-labelledby="dropdownMenuLink" tabindex="0">';
 
                 if ($row->submission_status == "Awaiting for client Response") {
-                    $action .= '<a class="dropdown-item" href="/account/deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
+                    $action .= '<a class="dropdown-item" href="/account/dm-deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 } else {
-                    $action .= '<a class="dropdown-item" href="deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
+                    $action .= '<a class="dropdown-item" href="dm-deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 }
 
                 if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8) {
-                    $action .= '<a class="dropdown-item" href="/deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
+                    $action .= '<a class="dropdown-item" href="/dm-deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
                 }
                 if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
                     if ($row->authorization_status == 0 || $row->authorization_status == '2') {
@@ -129,7 +131,7 @@ class WonDealsDataTable extends BaseDataTable
                         }
 
                     } else {
-                        $action .= '<a class="dropdown-item bg-success" href="' . route("contracts.show", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Details') . '</a>';
+                        $action .= '<a class="dropdown-item bg-success" href="' . route("dm-contracts.show", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Details') . '</a>';
                     }
                 }
                 if (Auth::user()->role_id == 4 && $row->status == 'Denied') {
@@ -162,7 +164,7 @@ class WonDealsDataTable extends BaseDataTable
     /**
      * Get query source of dataTable.
      *
-     * @param \App\Models\WonDeal $model
+     * @param \App\Models\DMWonDealDatatable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Deal $model)
@@ -193,7 +195,7 @@ class WonDealsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
         }
 
-        $model = $model->select('deals.*','deals.status as deal_status')->leftJoin('users', 'users.id', 'deals.added_by')->where('deals.dept_status','WD');
+        $model = $model->select('deals.*','deals.status as deal_status')->leftJoin('users', 'users.id', 'deals.added_by')->where('deals.dept_status','DM');
 
         if ($startDate !== null && $endDate !== null) {
             $model->where(function ($q) use ($startDate, $endDate) {

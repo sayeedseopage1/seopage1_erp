@@ -4,17 +4,21 @@ namespace App\DataTables;
 
 use App\Models\DealStage;
 use App\DataTables\BaseDataTable;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use App\Models\Currency;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use App\Models\Currency;
-use App\Models\Lead;
-use App\Models\User;
+use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Editor\Fields;
+use Yajra\DataTables\Html\Editor\Editor;
 use App\Models\Deal;
+use App\Models\Lead;
 use App\Models\Project;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-class DealsDataTable extends BaseDataTable
+
+class DMDealsDatatable extends BaseDataTable
 {
 
     private $editContractPermission;
@@ -30,6 +34,7 @@ class DealsDataTable extends BaseDataTable
         $this->addContractPermission = user()->permission('add_contract');
         $this->viewContractPermission = user()->permission('view_contract');
     }
+
 
     /**
      * Build DataTable class.
@@ -57,16 +62,6 @@ class DealsDataTable extends BaseDataTable
 
                 $action .= ' <a href="' . route('deals.show', [$row->id]) . '" class="dropdown-item"><i class="fa fa-eye mr-2"></i>' . __('app.view') . '</a>';
 
-                // if (!$row->signature) {
-                //     $action .= '<a class="dropdown-item" href="' . route('front.contract.show', $row->hash) . '" target="_blank"><i class="fa fa-link mr-2"></i>'.__('modules.proposal.publicLink').'</a>';
-                // }
-                //
-                // if ($this->addContractPermission == 'all' || $this->addContractPermission == 'added') {
-                //     $action .= '<a class="dropdown-item openRightModal" href="' . route('contracts.create') . '?id=' . $row->id . '">
-                //             <i class="fa fa-copy mr-2"></i>
-                //             ' . __('app.copy') . ' ' . __('app.menu.contract') . '
-                //         </a>';
-                // }
 
                 if (
                     $this->editContractPermission == 'all'
@@ -107,13 +102,6 @@ class DealsDataTable extends BaseDataTable
                             ' . trans('app.delete') . '
                         </a>';
                 }
-
-                // $action .= '<a class="dropdown-item" href="' . route('contracts.download', $row->id) . '">
-                //                 <i class="fa fa-download mr-2"></i>
-                //                 ' . trans('app.download') . '
-                //             </a>';
-
-
                 $action .= '</div>
                 </div>
             </div>';
@@ -153,7 +141,6 @@ class DealsDataTable extends BaseDataTable
 
             })
             ->addColumn('deal_id', function($row) {
-              //  return ucfirst($row->short_code);
               if($row->won_lost != 'Yes'){
                 return '<div class="media align-items-center">
 
@@ -174,7 +161,6 @@ class DealsDataTable extends BaseDataTable
 
             })
             ->addColumn('project_link', function($row) {
-              //  return ucfirst($row->short_code);
 
               if($row->lead_id != null){
                 $lead= Lead::where('id',$row->lead_id)->first();
@@ -200,47 +186,23 @@ class DealsDataTable extends BaseDataTable
               }
 
             })
-
-            // ->editColumn('subject', function ($row) {
-            //     $signed = '';
-            //
-            //     if ($row->signature) {
-            //         $signed = '<span class="badge badge-secondary"><i class="fa fa-signature"></i> ' . __('app.signed') . '</span>';
-            //     }
-            //
-            //     return '<div class="media align-items-center">
-            //             <div class="media-body">
-            //         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('contracts.show', [$row->id]) . '">' . ucfirst($row->subject) . '</a></h5>
-            //         <p class="mb-0">' . $signed . '</p>
-            //         </div>
-            //       </div>';
-            // })
             ->editColumn('created_at', function ($row) {
                 return $row->created_at->format($this->global->date_format);
             })
 
             ->editColumn('amount', function ($row) {
               $currency= Currency::where('id',$row->currency_id)->first();
-                // $currencySymbol = $row->currency->currency_symbol;
-                //
-                // return currency_formatter($row->amount, $currencySymbol);
               return round($row->amount,2) . $currency->currency_symbol;
 
 
             })
             ->editColumn('actual_amount', function ($row) {
               $currency= Currency::where('id',$row->original_currency_id)->first();
-                // $currencySymbol = $row->currency->currency_symbol;
-                //
-                // return currency_formatter($row->amount, $currencySymbol);
               return $row->actual_amount . $currency->currency_symbol;
 
 
             })
             ->addColumn('status', function($row) {
-
-            //  dd($row->added_by->name);
-                //return $row->won_lost;
                 if ($row->won_lost != null) {
                   if ($row->won_lost== 'Yes') {
 
@@ -270,8 +232,6 @@ class DealsDataTable extends BaseDataTable
             })
             ->addColumn('submission_status', function($row) {
 
-            //  dd($row->added_by->name);
-                //return $row->won_lost;
                 $deal= Deal::where('deal_id',$row->short_code)->first();
                 if ($deal != null) {
                   if ($deal->submission_status == 'pending') {
@@ -293,8 +253,6 @@ class DealsDataTable extends BaseDataTable
                 $pm= Deal::where('deal_id',$row->short_code)->first();
                 if ($pm->pm_id != null) {
                   $user= User::where('id',$pm->pm_id)->first();
-                //  dd($row->added_by->name);
-                    //return ucfirst($user->name);
                     return '<div class="media align-items-center">
                            <a href="' . route('employees.show', [$user->id]) . '">
                            <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
@@ -316,8 +274,6 @@ class DealsDataTable extends BaseDataTable
               if ($row->won_lost == 'Yes') {
                 $client= Deal::where('deal_id',$row->short_code)->first();
                 $user= User::where('id',$client->client_id)->first();
-              //  dd($row->added_by->name);
-                  //return ucfirst($user->name);
                   return '<div class="media align-items-center">
                          <a href="' . route('employees.show', [$user->id]) . '">
                          <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
@@ -339,8 +295,6 @@ class DealsDataTable extends BaseDataTable
             })
             ->addColumn('added_by', function($row) {
               $user= User::where('id',$row->added_by)->first();
-            //  dd($row->added_by->name);
-                //return ucfirst($user->name);
                 return '<div class="media align-items-center">
                        <a href="' . route('employees.show', [$user->id]) . '">
                        <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
@@ -355,8 +309,6 @@ class DealsDataTable extends BaseDataTable
 
                 $deal_id = Deal::where('deal_id',$row->short_code)->first();
                 $user= User::where('id',$deal_id->added_by)->first();
-              //  dd($row->added_by->name);
-                  //return ucfirst($user->name);
                   return '<div class="media align-items-center">
                          <a href="' . route('employees.show', [$user->id]) . '">
                          <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
@@ -370,21 +322,6 @@ class DealsDataTable extends BaseDataTable
               }
 
             })
-            // ->editColumn('added_by.name', function ($row) {
-            //     return '<div class="media align-items-center">
-            //         <a href="' . route('employees.show', [$row->added_by]) . '">
-            //         <img src="' . $row->added_by->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($row->added_by->name) . '" title="' . ucfirst($row->added_by->name) . '"></a>
-            //         <div class="media-body">
-            //         <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('employees.show', [$row->added_by]) . '">' . ucfirst($row->added_by->name) . '</a></h5>
-            //
-            //         </div>
-            //       </div>';
-            // })
-            // ->editColumn('signature', function ($row) {
-            //     if ($row->signature) {
-            //         return __('app.signed');
-            //     }
-            // })
             ->addIndexColumn()
             ->smart(false)
             ->setRowId(function ($row) {
@@ -394,12 +331,13 @@ class DealsDataTable extends BaseDataTable
     }
 
     /**
-     * @param DealStage $model
+     * Get query source of dataTable.
+     *
+     * @param \App\Models\DMDealsDatatable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(DealStage $model)
     {
-        //dd($model);
         $request = $this->request();
         $startDate = null;
         $endDate = null;
@@ -412,23 +350,12 @@ class DealsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
         }
 
-        // $model = $model->with('lead')
-
-        //     // ->join('users', 'users.id', '=', 'contracts.client_id')
-        //     // ->join('client_details', 'users.id', '=', 'client_details.user_id')
-        //     // ->select('deal_stages.*','deal_stages.converted_by as deal_stages_converted_by')
-        //     //   ->leftJoin('leads', 'leads.id', 'deal_stages.lead_id')
-
-        //     //     ->leftJoin('users as lead_added_by', 'lead_added_by.id', 'deal_stages.added_by')
-        //     //     ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', 'deal_stages.converted_by')
-        //     // ;
-
         $model = $model
             ->select('deal_stages.*', 'deal_stages.converted_by as deal_stages_converted_by', 'deal_stages.added_by as lead_added_by')
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by') // Alias added_by from leads table
             ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
-            ->where('deal_stages.convert_ld_status' ,'!=','DM');
+            ->where('deal_stages.convert_ld_status','DM');
 
 
 
@@ -442,17 +369,6 @@ class DealsDataTable extends BaseDataTable
             });
         }
 
-        // if ($request->client != 'all' && !is_null($request->client)) {
-        //     $model = $model->where('contracts.client_id', '=', $request->client);
-        // }
-
-        // if ($request->contract_type != 'all' && !is_null($request->contract_type)) {
-        //     $model = $model->where('contracts.contract_type_id', '=', $request->contract_type);
-        // }
-
-        // if (request('signed') == 'yes') {
-        //     $model = $model->has('signature');
-        // }
         if ($this->request()->searchText != '') {
             $model = $model->where(function ($query) {
                 $query->where('deal_stages.project_name', 'like', '%' . request('searchText') . '%')
@@ -467,20 +383,6 @@ class DealsDataTable extends BaseDataTable
                   ;
             });
         }
-        // if ($this->viewContractPermission == 'added') {
-        //     $model = $model->where('contracts.added_by', '=', user()->id);
-        // }
-        //
-        // if ($this->viewContractPermission == 'owned') {
-        //     $model = $model->where('contracts.client_id', '=', user()->id);
-        // }
-        //
-        // if ($this->viewContractPermission == 'both') {
-        //     $model = $model->where(function ($query) {
-        //         $query->where('contracts.added_by', '=', user()->id)
-        //             ->orWhere('contracts.client_id', '=', user()->id);
-        //     });
-        // }
 
         if ($request->client_id != 'all') {
             if($request->client_id == client_username)
@@ -490,16 +392,10 @@ class DealsDataTable extends BaseDataTable
             }
         }
 
-
-        // Filter by "closed_by" if selected
         if ($request->has('closed_by') && $request->input('closed_by') !== 'all') {
             $model->where('deal_stages.converted_by', $request->input('closed_by'));
         }
 
-        // if ($request->closed_by != 'all') {
-        //     $model->where('deal_stages.converted_by', $request->closed_by);
-        // }
-       // dd($request->status);
         if ($request->status != 'all') {
             if ($request->status == 5) {
                 $model->where('deal_stage', $request->status)->where('won_lost', '=',null);
@@ -528,7 +424,7 @@ class DealsDataTable extends BaseDataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('deals-table')
+            ->setTableId('dm-deals-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
 
@@ -543,7 +439,7 @@ class DealsDataTable extends BaseDataTable
             ->language(__('app.datatable'))
             ->parameters([
                 'initComplete' => 'function () {
-                   window.LaravelDataTables["deals-table"].buttons().container()
+                   window.LaravelDataTables["dm-deals-table"].buttons().container()
                     .appendTo( "#table-actions")
                 }',
                 'fnDrawCallback' => 'function( oSettings ) {
@@ -623,5 +519,4 @@ class DealsDataTable extends BaseDataTable
 
         return $pdf->download($this->getFilename() . '.pdf');
     }
-
 }

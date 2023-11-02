@@ -17,9 +17,8 @@ use App\Models\Currency;
 use Illuminate\Support\Str;
 use App\Models\User;
 
-class LeadsDataTable extends BaseDataTable
+class DMLeadsDatatable extends BaseDataTable
 {
-
     private $addLeadPermission;
     private $editLeadPermission;
     private $deleteLeadPermission;
@@ -46,7 +45,6 @@ class LeadsDataTable extends BaseDataTable
         $this->status = LeadStatus::get();
         $this->myAgentId = LeadAgent::where('user_id', user()->id)->first();
     }
-
     /**
      * Build DataTable class.
      *
@@ -55,7 +53,6 @@ class LeadsDataTable extends BaseDataTable
      */
     public function dataTable($query)
     {
-//      dd($query);
         $currentDate = Carbon::now(global_setting()->timezone)->format('Y-m-d');
         $status = $this->status;
 
@@ -87,7 +84,7 @@ class LeadsDataTable extends BaseDataTable
                     || ($this->editLeadPermission == 'both' && ((!is_null($row->agent_id) && user()->id == $row->leadAgent->user->id)
                     || user()->id == $row->added_by))
                     ) {
-                    $action .= '<a class="dropdown-item" href="' . route('leads.edit', [$row->id]) . '">
+                    $action .= '<a class="dropdown-item" href="' . route('digital-marketing-lead.edit', [$row->id]) . '">
                                 <i class="fa fa-edit mr-2"></i>
                                 ' . trans('app.edit') . '
                             </a>';
@@ -131,21 +128,11 @@ class LeadsDataTable extends BaseDataTable
                     return $row->leadAgent->user->name;
                 }
             });
-
-            // $datatables->addColumn('mobile', function ($row) {
-            //     if ($row->mobile != '') {
-            //         return '<a href="tel:'.$row->mobile.'" class="text-darkest-grey"><u>'.$row->mobile.'</u></a>';
-            //     }
-            //
-            //     return '--';
-            // });
             $datatables->addColumn('lead', function ($row) {
                 return $row->client_name;
             });
             $datatables->addColumn('added_by', function($row) {
               $user= User::where('id',$row->added_by)->first();
-            //  dd($row->added_by->name);
-                //return ucfirst($user->name);
                 return '<div class="media align-items-center">
                        <a href="' . route('employees.show', [$user->id]) . '">
                        <img src="' . $user->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . ucfirst($user->name) . '" title="' . ucfirst($user->name) . '"></a>
@@ -161,7 +148,7 @@ class LeadsDataTable extends BaseDataTable
                 return '<a target="_blank" class="mb-0 f-13 text-darkest-grey" href="' . $row->project_link . '">' . Str::limit($row->project_link,15). '</a>';
             });
             $datatables->addColumn('project_id', function ($row) {
-                  return $row->project_id;
+                  return $row->project_id ?? '--';
             });
             $datatables->addColumn('bid_value', function ($row) {
               $currency= Currency::where('id',$row->original_currency_id)->first();
@@ -234,14 +221,6 @@ class LeadsDataTable extends BaseDataTable
 
                 if (!is_null($row->category_id)) {
                     return $row->category->category_name;
-                }
-            });
-            $datatables->addColumn('bidding_time', function ($row) {
-
-                if (!is_null($row->bidding_minutes)) {
-                    return $row->bidding_minutes . ' mins '. $row->bidding_seconds. ' seconds';
-                }else {
-                return  '--';
                 }
             });
 
@@ -325,7 +304,7 @@ class LeadsDataTable extends BaseDataTable
 
                 return '<div class="media align-items-center">
                         <div class="media-body">
-                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('leads.show', [$row->id]) . '">' . (Str::limit($client_name,40)) . '</a></h5>
+                    <h5 class="mb-0 f-13 text-darkest-grey"><a href="' . route('digital-marketing-lead.show', [$row->id]) . '">' . (Str::limit($client_name,40)) . '</a></h5>
                     <p class="mb-0">' . $label . '</p>
                     </div>
                   </div>';
@@ -377,7 +356,9 @@ class LeadsDataTable extends BaseDataTable
     }
 
     /**
-     * @param Lead $model
+     * Get query source of dataTable.
+     *
+     * @param \App\Models\DMLeadsDatatable $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(Lead $model)
@@ -431,7 +412,7 @@ class LeadsDataTable extends BaseDataTable
         ->leftJoin('users', 'users.id', 'leads.added_by')
         ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
         ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
-        ->where('leads.status','!=','DM')
+        ->where('leads.status','DM')
 
 
         ;
@@ -533,7 +514,7 @@ class LeadsDataTable extends BaseDataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('leads-table')
+            ->setTableId('dm-leads-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->orderBy(1)
@@ -546,7 +527,7 @@ class LeadsDataTable extends BaseDataTable
             ->language(__('app.datatable'))
             ->parameters([
                 'initComplete' => 'function () {
-                   window.LaravelDataTables["leads-table"].buttons().container()
+                   window.LaravelDataTables["dm-leads-table"].buttons().container()
                     .appendTo("#table-actions")
                 }',
                 'fnDrawCallback' => 'function( oSettings ) {
@@ -601,11 +582,6 @@ class LeadsDataTable extends BaseDataTable
                 __('app.added_by') => ['data' => 'added_by', 'name' => 'added_by', 'title' => __('Created By')],
 
 
-            __('app.biding_time') => ['data' => 'bidding_time', 'name' => 'bidding_time', 'title' => __('Bidding Delay Time')],
-
-            __('app.biding_time') => ['data' => 'bidding_time', 'name' => 'bidding_time', 'title' => __('Bidding Delay Time')],
-
-
               __('app.deal_status') => ['data' => 'deal_status', 'name' => 'deal_status', 'exportable' => false, 'title' => __('Staus')],
                   __('app.won_lost') => ['data' => 'won_lost', 'name' => 'won_lost', 'exportable' => false, 'title' => __('Deal Status')],
             __('app.leadStatus') => ['data' => 'leadStatus', 'name' => 'leadStatus', 'visible' => false, 'orderable' => false, 'searchable' => false, 'title' => __('app.status')],
@@ -650,5 +626,4 @@ class LeadsDataTable extends BaseDataTable
 
         return $pdf->download($this->getFilename() . '.pdf');
     }
-
 }

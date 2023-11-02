@@ -1,4 +1,4 @@
-<div class="modal fade" id="milestoneaddmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="add-project-milestone{{$project->deal->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,6 +7,7 @@
             </div>
             <?php
             $currencies= App\Models\Currency::all();
+            $deal = App\Models\Deal::where('id',$project->deal->id)->first();
             ?>
 
             <div class="modal-body">
@@ -17,7 +18,7 @@
 
 
                     <div class="col-md-6">
-
+                        <input type="hidden" name="project_id" id="project_id" value="{{$project->id}}">
                         <div class="form-group">
                             <label for="exampleFormControlInput1">Milestone Title <span style="color:red;">*</span>
                                 <svg class="svg-inline--fa fa-question-circle fa-w-16" data-toggle="popover" data-placement="top" data-content="Write the milestone description here like “Home page development”, “Hosting setup” etc. Don’t put Milestone 1, Milestone 2 etc. here." data-html="true" data-trigger="hover" aria-hidden="true" focusable="false" data-prefix="fa" data-icon="question-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="" data-original-title="" title="">
@@ -65,19 +66,12 @@
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
                             <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
-                                @if ($deal->dept_status=='DM')
-                                <option value="web-content">Webcontent</option>
-                                <option value="blogs-articles">Blogs/articles</option>
-                                <option value="product-description">Product descriptions</option>
-                                <option value="product-category">Product category/collection pages</option>
-                                @else
                                 <option value="web-development">Web Development</option>
                                 <option value="web-content">Webcontent</option>
                                 <option value="blogs-articles">Blogs/articles</option>
                                 <option value="product-description">Product descriptions</option>
                                 <option value="product-category">Product category/collection pages</option>
                                 <option value="basic-seo">Basic SEO</option>
-                                @endif
                             </select>
                         </div>
                     </div>
@@ -190,6 +184,8 @@
         var generatedLinkContainer = document.getElementById('generatedLinkContainer');
         generatedLinkContainer.value = url;
         generatedLinkContainer.setAttribute('data-link-id', randomID);
+
+
     }
 
     const selectElement = document.getElementById("service_type");
@@ -210,7 +206,7 @@
     document.getElementById("copyButton").addEventListener("click", function() {
         var generatedLink = document.getElementById("generatedLinkContainer").value;
 
-        navigator.clipboard.writeText(generatedLink)
+        navigator?.clipboard.writeText(generatedLink)
             .then(function() {
                 alert("Copied: " + generatedLink);
                 document.getElementById("linkSubmit").removeAttribute("disabled");
@@ -219,7 +215,6 @@
                 alert("Unable to copy: " + error);
             });
     });
-
 
     $(document).ready(function() {
     function toggleCreateButton() {
