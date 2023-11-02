@@ -833,7 +833,7 @@ class ProjectController extends AccountBaseController
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
         if ($dealStage != null) {
             if ($find_project_id->status == 'not started') {
-                if ($this->user->role_id == 4) {
+                if ($this->user->role_id == 4 || $this->user->role_id == 1) {
                     $type = 'project_manager_accept_project';
                 }
                 $authorization_action = AuthorizationAction::where([

@@ -189,6 +189,9 @@ use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\CrossDeptWork;
 use App\Http\Controllers\DisputeController;
 use App\Http\Controllers\FilterController;
+use App\Http\Controllers\DMContractController;
+use App\Http\Controllers\DMDealController;
+use App\Http\Controllers\DMLeadController;
 use App\Http\Controllers\IndependentTaskController;
 
 use App\Http\Controllers\RevisionCalculatorController;
@@ -916,6 +919,15 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     );
     Route::resource('leads', LeadController::class);
 
+    /*=========================> DIGITAL MERKTING LEAD START <===========================*/
+
+    Route::resource('digital-marketing-lead',DMLeadController::class);
+    Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
+    Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
+
+
+    /*=========================> DIGITAL MERKTING LEAD END <===========================*/
+
     /* LEAVES */
     Route::get('leaves/leaves-date', [LeaveController::class, 'getDate'])->name('leaves.date');
     Route::get('leaves/personal', [LeaveController::class, 'personalLeaves'])->name('leaves.personal');
@@ -1141,6 +1153,26 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
+
+    /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
+
+    Route::resource('dm-contracts', DMContractController::class);
+    Route::post('dm-contracts/deal-store', [DMContractController::class, 'storeDMDeal'])->name('dm-store-deals');
+    Route::get('dm-deal-url/{id}', [DMContractController::class, 'dmDealUrl']);
+
+    /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
+
+
+
+    /*=========================> DIGITAL MERKTING DEALS START <===========================*/
+
+    Route::resource('digital-marketing-deals',DMDealController::class);
+    Route::post('/digital-marketing-leads/deals/store', [DMDealController::class, 'storeDMLeadDeal'])->name('digital-marketing-store-deals-stage');
+    Route::post('/digital-marketing/deal/stage/lost', [DMDealController::class, 'dmDealStageUpdateLost'])->name('digital-marketing-deal-update-lost');
+
+
+    /*=========================> DIGITAL MERKTING DEALS END <===========================*/
+
     Route::post('deals/apply-quick-action', [DealController::class, 'applyQuickAction'])->name('deals.apply_quick_action');
     Route::post('accounts/deals/store', [DealController::class, 'store'])->name('store.deal');
     Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
@@ -1355,6 +1387,13 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
+
+    /*=========================> DIGITAL MERKTING DEALS DETAILS START <===========================*/
+    Route::get('/dm-deals/details/{id}', [DMContractController::class, 'dmDealDetails'])->name('dm-dealDetails');
+    Route::post('/dm-deals/details/store', [DMContractController::class, 'dmStoredealDetails'])->name('dm-store-deal-details');
+    Route::get('/dm-deals/details/edit/{id}', [DMContractController::class, 'dmDealDetailsedit']);
+    Route::post('/dm-deals/details/update', [DMContractController::class, 'updateDmDealDetails'])->name('dm-update-deal-details');
+        /*=========================> DIGITAL MERKTING DEALS DETAILS END <===========================*/
 
 //Service type section
 Route::get('/deals/service-type/web-content/{id}/{random_id}', [HomeController::class, 'webContent']);

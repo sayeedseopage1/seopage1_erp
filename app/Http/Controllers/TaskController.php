@@ -1894,6 +1894,7 @@ class TaskController extends AccountBaseController
             $task->save();
 
 
+
             $task->task_short_code = ($project) ? $project->project_short_code . '-' . $task->id : null;
             $task->saveQuietly();
             if ($request->hasFile('file')) {
@@ -1913,6 +1914,7 @@ class TaskController extends AccountBaseController
                     $taskFile->save();
 
                     Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+
 
                     $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
                 }

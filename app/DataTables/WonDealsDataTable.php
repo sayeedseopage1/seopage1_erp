@@ -193,7 +193,7 @@ class WonDealsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
         }
 
-        $model = $model->select('deals.*','deals.status as deal_status')->leftJoin('users', 'users.id', 'deals.added_by');
+        $model = $model->select('deals.*','deals.status as deal_status')->leftJoin('users', 'users.id', 'deals.added_by')->where('deals.dept_status','WD');
 
         if ($startDate !== null && $endDate !== null) {
             $model->where(function ($q) use ($startDate, $endDate) {

@@ -708,6 +708,8 @@
 
     $currency = App\Models\Currency::where('id', $deal->original_currency_id)->first();
     $lead_converted_date = $deal->created_at->diffForHumans();
+    $dealStage = App\Models\DealStage::where('id',$deal->id)->first();
+    // dd($dealStage);
     //$value= $deal->actual_amount. $currency->currency_symbol;
     //  $bid_value= $deal->bid_value. $currency->currency_symbol;
     //  dd($deal);
@@ -770,23 +772,34 @@
                                             </div>
                                         </div>
                                         @else
-                                        <div class="sp1_deal-stage-wrapper">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal"
-                                        data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
-                                            <div class="sp1_deal-stage-content text-left">
-                                                <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
-                                            </div>
-                                        </div>
-                                    <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal"
-                                        data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                                         {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
+                                            @if ($dealStage->convert_ld_status == 'DM')
+                                                <div class="sp1_deal-stage-wrapper">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#dm-dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
+                                                    <div class="sp1_deal-stage-content text-left">
+                                                        <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
+                                                    </div>
+                                                </div>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#dm-lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                                            @else
+                                                <div class="sp1_deal-stage-wrapper">
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success wons w-40">Won The Deal</a>
+                                                    <div class="sp1_deal-stage-content text-left">
+                                                        <p>If the deal was won during your shift (When you were on duty), then click on it and complete the next processes.</p>
+                                                    </div>
+                                                </div>
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger loss w-40">Lost The Deal</a>
+                                            @endif
+                                        {{-- WHEN DEGITAL MERKITING IS TRUE  --}}
                                         @endif
                                     {{-- @endif --}}
 
                                 </div>
-
                                 @include('contracts.modals.client_dealaddstagemodal')
                                 @include('contracts.modals.dealaddstagemodal')
                                 @include('contracts.modals.deallostmodal')
+                                @include('contracts.modals.dm-dealaddstagemodal')
+                                @include('contracts.modals.dm-deallostmodal')
                             @else
                                 N\A
                             @endif

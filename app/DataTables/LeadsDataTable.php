@@ -431,6 +431,7 @@ class LeadsDataTable extends BaseDataTable
         ->leftJoin('users', 'users.id', 'leads.added_by')
         ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
         ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+        ->where('leads.status','!=','DM')
 
 
         ;
