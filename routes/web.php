@@ -1340,7 +1340,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
     Route::get('/check-independent-task/{id}',[TaskController::class,'independenttask']);
-   
+
 
 
 

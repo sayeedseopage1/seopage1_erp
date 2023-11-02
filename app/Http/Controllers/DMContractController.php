@@ -241,7 +241,7 @@ class DMContractController extends AccountBaseController
     public function dmStoredealDetails(Request $request)
     {
         // dd($request->all());
-        
+
          $deal_hourly_checked = Deal::where('id', $request->id)->first();
          if ($deal_hourly_checked->project_type != 'hourly') {
              $validated = $request->validate([
@@ -257,7 +257,6 @@ class DMContractController extends AccountBaseController
                  'description8' => 'required',
                  'description9' => 'required',
                  'deal_category' => 'required',
-                 'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
                  'project_summary' => $request->has('project_summary') ? 'required' : '',
 
              ], [
@@ -272,7 +271,6 @@ class DMContractController extends AccountBaseController
                  'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                  'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                  'deal_category.required' => 'This field is required!',
-                 'cms_id.required' => 'This field is required!',
                  'project_summary.required' => 'This field is required!',
              ]);
          } else {
@@ -294,7 +292,6 @@ class DMContractController extends AccountBaseController
                  'description8' => 'required',
                  'description9' => 'required',
                  'deal_category' => 'required',
-                 'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
                  'project_summary' => $request->has('project_summary') ? 'required' : '',
              ], [
                  'project_name.required' => 'Please enter the project name!',
@@ -314,7 +311,6 @@ class DMContractController extends AccountBaseController
                  'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                  'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                  'deal_Category.required' => 'This field is required!',
-                 'cms_id.required' => 'This field is required!',
                  'project_summary.required' => 'This field is required!',
              ]);
          }
@@ -346,7 +342,6 @@ class DMContractController extends AccountBaseController
          DB::beginTransaction();
 
          try {
-             $item = explode("-", $request->input('cms_id'));
              $deal = Deal::find($request->id);
              $deal->project_name = $request->project_name;
              $deal->currency_id = 1;
@@ -368,9 +363,6 @@ class DMContractController extends AccountBaseController
                      $value = $value  . $link . ' <br> ';
                  }
              }
-
-             $deal->cms_id = $item[0];
-             $deal->cms_name = $item[1];
              $deal->deal_category = $request->deal_category;
              $deal->deadline = $request->deadline;
              $deal->estimated_hour_task = $request->estimated_hour_task;
@@ -471,10 +463,10 @@ class DMContractController extends AccountBaseController
 
              // $pm_count = PMAssign::select('project_count')->min('project_count');
              // $pm_user = PMAssign::where('project_count', $pm_count)->first();
-             
-                 
-                 
-                    
+
+
+
+
                          $pmassign = new PMProject();
                          $pmassign->project_id = $project->id;
                          $pmassign->status = 'pending';
@@ -491,11 +483,11 @@ class DMContractController extends AccountBaseController
                          //$email = $request->email;
 
 
-                      
-                     
-                 
-                 
-             
+
+
+
+
+
 
 
              $deal_pm_id = Deal::where('id', $request->id)->first();
@@ -506,7 +498,7 @@ class DMContractController extends AccountBaseController
              $project_admin_update->added_by = 229;
              $project_admin_update->project_admin = 229;
              $project_admin_update->save();
-              
+
 
 
              //qualified sales start from here
@@ -569,13 +561,13 @@ class DMContractController extends AccountBaseController
                      Notification::send($usr, new HourlyDealNotification($deal));
                  }
              }
-             
+
                 $project_member = new ProjectMember();
                 $project_member->user_id = Auth::id();
                 $project_member->added_by = Auth::id();
                 $project_member->project_id = $project->id;
                 $project_member->save();
-            
+
              // $check_new_pm= User::where('id',$deal->pm_id)->first();
              // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
              // $to = Carbon::createFromFormat('Y-m-d H:s:i', Carbon::now());
@@ -947,7 +939,6 @@ class DMContractController extends AccountBaseController
                 'description8' => 'required',
                 'description9' => 'required',
                 'deal_category' => 'required',
-                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
                 'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -961,7 +952,6 @@ class DMContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
-                'cms_id.required' => 'This field is required!',
                 'project_summary.required' => 'This field is required!',
             ]);
         } else {
@@ -983,7 +973,6 @@ class DMContractController extends AccountBaseController
                 'description8' => 'required',
                 'description9' => 'required',
                 'deal_category' => 'required',
-                'cms_id' => $request->input('deal_category') === 'Web Development' ? 'required' : '',
                 'project_summary' => $request->has('project_summary') ? 'required' : '',
             ], [
                 'project_name.required' => 'Please enter the project name!',
@@ -1003,7 +992,6 @@ class DMContractController extends AccountBaseController
                 'description8.required' => 'To ensure all departments are aligned, we kindly request your confirmation on cross-departmental work for this project. Please let us know if cross-departmental work is involved or not.',
                 'description9.required' => 'Notes for the project manager/technical team is required, please write if any notes for manager/technical team are available.',
                 'deal_category.required' => 'This field is required!',
-                'cms_id.required' => 'This field is required!',
                 'project_summary.required' => 'This field is required!',
             ]);
         }
@@ -1033,7 +1021,6 @@ class DMContractController extends AccountBaseController
         DB::beginTransaction();
 
         try {
-            $item = explode("-", $request->input('cms_id'));
             // /dd($request);
             $deal = Deal::find($request->id);
             $deal->project_name = $request->project_name;
@@ -1075,8 +1062,6 @@ class DMContractController extends AccountBaseController
             $deal->description7 = $request->description7;
             $deal->description8 = $request->description8;
             $deal->description9 = $request->description9;
-            $deal->cms_id = $item[0];
-            $deal->cms_name = $item[1];
             $deal->updated_by = Auth::id();
             $deal->dept_status = 'DM';
             $deal->save();
@@ -1265,11 +1250,11 @@ class DMContractController extends AccountBaseController
                 //     }
                 // }
 
-                //fix pm to admin 
+                //fix pm to admin
                 if ($deal->pm_id == null) {
-                    
-                    
-                       
+
+
+
                             $pmassign = new PMProject();
                             $pmassign->project_id = $project->id;
                             $pmassign->status = 'pending';
@@ -1284,7 +1269,7 @@ class DMContractController extends AccountBaseController
                             $pm_assign_project->pm_id = 229;
                             $pm_assign_project->save();
                             //$email = $request->email;
-                    
+
                 }
 
                 //fix pm to admin

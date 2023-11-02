@@ -66,6 +66,7 @@
                             <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
                             <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
                                 @if ($deal->dept_status=='DM')
+                                <option >--</option>
                                 <option value="web-content">Webcontent</option>
                                 <option value="blogs-articles">Blogs/articles</option>
                                 <option value="product-description">Product descriptions</option>
