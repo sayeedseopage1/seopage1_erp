@@ -138,9 +138,9 @@
                         </button>
                         @include('dm-contracts.modals.dealaddmodal')
                         @php
-                            $total_request = App\Models\AwardTimeIncress::where('status', '0')->count();
+                            $total_request = App\Models\AwardTimeIncress::where('status', '0')->where('dept_status','DM')->count();
                         @endphp
-                        <a class="border-secondary btn btn-warning mr-3" href="{{ route('award_time_check.index') }}">
+                        <a class="border-secondary btn btn-warning mr-3" href="{{ route('dm_award_time_check.index') }}">
                             <i class="fa fa-clock"></i>
                             Award Time Extension Requests
                             @if ($total_request > 0)
@@ -191,7 +191,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="award_time_incress_submit">Submit</button>
+                    <button type="button" class="btn btn-primary" id="dm_award_time_incress_submit">Submit</button>
                 </div>
             </div>
         </div>
@@ -371,17 +371,17 @@
         });
 
 
-        $('#award_time_incress_submit').click(function() {
+        $('#dm_award_time_incress_submit').click(function() {
             var task_id = $('#task_id').val();
             var task_hours = $('#task_hours').val();
             var task_description = $('#task_description').val();
 
             $.easyAjax({
-                url: '{{ route('award_time_check.store') }}',
+                url: '{{ route('dm_award_time_check.store') }}',
                 //container: '#quick-action-form',
                 type: "POST",
                 disableButton: true,
-                buttonSelector: "#award_time_incress_submit",
+                buttonSelector: "#dm_award_time_incress_submit",
                 data: {
                     _token: '{{ csrf_token() }}',
                     id: task_id,

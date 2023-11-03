@@ -132,11 +132,11 @@ class DMWonDealDatatable extends BaseDataTable
 
                     if ($award_time_request) {
                         if ($award_time_request->status == '2') {
-                            $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                            $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("dm_award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                         }
                     } else
                     {
-                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("dm_award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                     }
                 }
                 $action .= '

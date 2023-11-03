@@ -89,6 +89,7 @@ class PublicUrlController extends Controller
     }
     public function projectSign(SignRequest $request, $id)
     {
+        dd($request->all());
         //dd($request,$id);
       //  DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
@@ -132,15 +133,15 @@ class PublicUrlController extends Controller
         $deal= Deal::where('id',$project->deal_id)->first();
         $client = new ClientForm();
         $client->deal_id=$project->deal_id;
-       
+
         $client->client_email= $request->email;
         $client->client_phone= $request->phone_no;
         $client->client_whatsapp= $request->phone_no;
-       
+
         $client->save();
         $deal_id= Deal::find($client->deal_id);
         //dd($deal);
-      
+
         $deal_id->submission_status= 'Submitted';
         $deal_id->save();
         $usr= User::where('id',$deal->client_id)->first();
@@ -148,11 +149,11 @@ class PublicUrlController extends Controller
         $user=User::find($usr->id);
         $user->mobile= $request->client_phone;
         $user->email= $request->email;
-      
+
         $user->save();
 
         }
-       
+
        // dd($sign,$client,$deal_id);
 
         $authorization_action= AuthorizationAction::where('project_id',$this->project->id)->where('type','deliverable_modification_by_client')->first();
@@ -166,20 +167,20 @@ class PublicUrlController extends Controller
         }
         $project = Project::findOrFail($this->project->id);
         $global = $settings = global_setting();
-    
+
         $this->invoiceSetting = InvoiceSetting::first();
         $pdf = app('dompdf.wrapper');
         $pdf->getDomPDF()->set_option('enable_php', true);
         App::setLocale($this->invoiceSetting->locale);
         Carbon::setLocale($this->invoiceSetting->locale);
         $pdf->loadView('projects.project-pdf', ['project' => $project, 'global' => $global]);
-    
+
         $dom_pdf = $pdf->getDomPDF();
         $canvas = $dom_pdf->getCanvas();
         $canvas->page_text(530, 820, 'Page {PAGE_NUM} of {PAGE_COUNT}', null, 10);
-    
+
         $filename = str_slug($project->project_name) . '-agreement-' . $project->id;
-    
+
         // Save the PDF to a temporary location
         $tempDirectory = storage_path('app/temp');
 
@@ -200,13 +201,13 @@ class PublicUrlController extends Controller
         {
             $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->orWhere('id',$project->client_id)->get();
 
-        }else 
+        }else
         {
             $users= User::where('role_id',1)->orWhere('id',$this->project->pm_id)->get();
 
         }
 
-      
+
       //  $users= User::where('id',$project->client_id)->get();
         $project_id = Project::where('id',$this->project->id)->first();
        // dd($project_id);
@@ -225,7 +226,7 @@ class PublicUrlController extends Controller
 
     public function contractDownload($id)
     {
-       
+
         $contract = Contract::findOrFail($id);
         $global = global_setting();
 
