@@ -158,6 +158,7 @@
 
 @push('scripts')
     <script>
+        
         $('#search-text-field, #type, #followUp, #sales_executive_id, #category_id, #filter_source_id, #date_filter_on')
             .on('change keyup', function() {
                 if ($('#search-text-field').val() != "") {
