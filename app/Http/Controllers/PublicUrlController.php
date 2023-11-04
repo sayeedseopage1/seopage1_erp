@@ -89,9 +89,7 @@ class PublicUrlController extends Controller
     }
     public function projectSign(SignRequest $request, $id)
     {
-        dd($request->all());
         //dd($request,$id);
-      //  DB::beginTransaction();
         $this->project = Project::with('signature')->findOrFail($id);
         //dd($this->project);
 
@@ -103,7 +101,7 @@ class PublicUrlController extends Controller
         $sign->full_name = $request->first_name . ' ' . $request->last_name;
         $sign->project_id = $this->project->id;
         $sign->email = $request->email;
-        $sign->number= $request->phone_no;
+        $sign->number= $request->country_code . ' ' . $request->phone_no;
         $imageName = null;
 
         if ($request->signature_type == 'signature') {

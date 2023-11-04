@@ -7,23 +7,23 @@
 
     <x-form id="acceptEstimate">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <x-forms.text fieldId="first_name" :fieldLabel="__('modules.estimates.firstName')"
                     fieldName="first_name" fieldRequired="true">
                 </x-forms.text>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <x-forms.text fieldId="last_name" :fieldLabel="__('modules.estimates.lastName')" fieldName="last_name"
                     fieldRequired="true">
                 </x-forms.text>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <x-forms.text fieldId="email" :fieldLabel="__('app.email')" fieldName="email" fieldRequired="true">
                 </x-forms.text>
             </div>
 
 
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <x-forms.phone fieldId="phone_no" :fieldLabel="__('app.phone')" fieldName="phone_no" fieldPlaceholder='tel' fieldRequired="true">
                 </x-forms.phone>
             </div>
@@ -53,7 +53,6 @@
     <x-forms.button-cancel data-dismiss="modal" class="border-0 mr-3">@lang('app.cancel')</x-forms.button-cancel>
     <x-forms.button-primary id="save-signature" icon="check">@lang('app.sign')</x-forms.button-primary>
 </div>
-
 <script>
     $(window).on('load', function() {
         $('.dropify').dropify();

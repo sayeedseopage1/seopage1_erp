@@ -15,11 +15,6 @@
     <!-- Template CSS -->
     <link type="text/css" rel="stylesheet" media="all" href="{{ asset('css/main.css') }}">
 
-    <link rel="stylesheet" href="{{asset('custom/client/css/intlTelInput.css')}}">
-    <link rel="stylesheet" href="{{asset('mobile/css/style.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-
     <title>@lang($pageTitle)</title>
     <link rel="icon" type="image/png" sizes="16x16" href="{{ global_setting()->favicon_url }}">
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -465,6 +460,7 @@ $countries = App\Models\Country::all();
             var last_name = $('#last_name').val();
             var email = $('#email').val();
             var phone_no = $('#phone_no').val();
+            var country_code = $('#country_code').val();
             var signature = signaturePad.toDataURL('image/png');
             var image = $('#image').val();
 
