@@ -126,11 +126,7 @@ class LeadsDataTable extends BaseDataTable
 
                 return $action;
             });
-            $datatables->addColumn('employee_name', function ($row) {
-                if (!is_null($row->agent_id)) {
-                    return $row->leadAgent->user->name;
-                }
-            });
+           
 
             // $datatables->addColumn('mobile', function ($row) {
             //     if ($row->mobile != '') {
@@ -352,16 +348,7 @@ class LeadsDataTable extends BaseDataTable
             $datatables->editColumn('created_at', function ($row) {
                 return $row->created_at->format($this->global->date_format). ' ('.$row->created_at->format('h:i:s A').')';
             });
-            $datatables->editColumn('agent_name', function ($row) {
-
-                if (!is_null($row->agent_id)) {
-                    return view('components.employee-image', [
-                        'user' => $row->leadAgent->user
-                    ]);
-                }
-
-                return '--';
-            });
+           
             $datatables->smart(false);
             $datatables->setRowId(function ($row) {
                 return 'row-' . $row->id;
@@ -369,9 +356,9 @@ class LeadsDataTable extends BaseDataTable
             $datatables->removeColumn('status_id');
             $datatables->removeColumn('client_id');
             $datatables->removeColumn('source');
-            $datatables->removeColumn('next_follow_up');
+           
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','project_id','deal_status','won_lost','added_by']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'check','project_link','project_id','deal_status','won_lost','added_by']);
 
             return $datatables;
     }
@@ -395,10 +382,10 @@ class LeadsDataTable extends BaseDataTable
             $endDate = Carbon::createFromFormat($this->global->date_format, $this->request()->endDate)->toDateString();
         }
         $currentDate = now()->format('Y-m-d');
-        $lead = $model->with(['leadAgent', 'leadAgent.user', 'category','user'])
+        $lead = $model->with(['user'])
         ->select(
             'leads.id',
-            'leads.agent_id',
+            
 
             'leads.added_by',
             'leads.client_id',
@@ -421,15 +408,15 @@ class LeadsDataTable extends BaseDataTable
             'currency_id',
             'original_currency_id',
             'leads.created_at',
-            'lead_sources.type as source',
-            'users.name as agent_name',
+          
+         
             'users.image',
-            DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= '".$currentDate."' ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date")
+          //  DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= '".$currentDate."' ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date")
         )
         ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
-        ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
+        
         ->leftJoin('users', 'users.id', 'leads.added_by')
-        ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
+        
         ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
         ->where('leads.status','!=','DM')
 
