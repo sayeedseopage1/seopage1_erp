@@ -24,6 +24,7 @@
                     <th scope="col">Project Type</th>
                     <th scope="col">Project Budget</th>
                     <th scope="col">Project Start Time</th>
+                    <th scope="col">Project Accept Date</th>
                     <th scope="col">100% in Progress Date</th>
                     <th scope="col">Project Status</th>
 
@@ -46,6 +47,7 @@
                         <td>{{ $deal->project_type }}</td>
                         <td>{{ $item->project_budget }} $</td>
                         <td>{{ $item->project_start_date }}</td>
+                        <td>{{ $item->manager_accept_date }}</td>
                         <td>{{ $item->project_completion_date }}</td>
 
                         <td>
