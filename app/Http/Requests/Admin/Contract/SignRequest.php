@@ -30,6 +30,7 @@ class SignRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email:rfc',
+            'country_code' => 'required',
             'phone_no' => 'required',
         ];
 

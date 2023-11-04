@@ -993,6 +993,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
     Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
 
+    /*=========================> DIGITAL MERKTING AWARD TIME START <===========================*/
+    Route::get('dm-award-time/increase/{id?}', [DMContractController::class, 'dm_award_time_increase_index'])->name('dm_award_time_check.index');
+    Route::post('dm-award-time/increase/store', [DMContractController::class, 'dm_award_time_incress_store'])->name('dm_award_time_check.store');
+    Route::post('dm-award-time/increase/update', [DMContractController::class, 'dm_award_time_incress_update'])->name('dm_award_time_check.update');
+        /*=========================> DIGITAL MERKTING AWARD TIME START <===========================*/
+
 
     //report-central
     Route::get('report-central/performance-predefined-cycle', [ReportCentralController::class, 'performancePredefinedCycle'])->name('performance_predefined_cycle');
