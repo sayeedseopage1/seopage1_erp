@@ -3,7 +3,7 @@
     <div class="input-group">
         <x-forms.select fieldId="{{$fieldId}}__country" fieldName="country_code"
         search="true" id="countrySelect">
-        <option>Select One</option>
+        <option>Country Code</option>
         @foreach ($countries as $country)
             <option data-tokens="{{ $country->iso3 }}"
                 data-content="<span class='flag-icon flag-icon-{{ strtolower($country->iso) }} flag-icon-squared'></span> {{ $country->iso }} (+{{$country->phonecode}})"
