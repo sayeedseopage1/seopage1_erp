@@ -2353,7 +2353,7 @@ class ProjectController extends AccountBaseController
             || ($this->viewPermission == 'both' && (in_array(user()->id, $memberIds) || user()->id == $this->project->added_by) && in_array('employee', user_roles()))
         ));
 
-        $this->pageTitle = ucfirst($this->project->project_name);
+        $this->pageTitle = ucfirst(substr($this->project->project_name,0,30).'...');
 
         if (!empty($this->project->getCustomFieldGroupsWithFields())) {
             $this->fields = $this->project->getCustomFieldGroupsWithFields()->fields;
