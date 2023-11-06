@@ -67,7 +67,7 @@ const SaleActionButton = ({row, table}) => {
     return (
         <div className="d-flex align-items-center">
             {
-                (isLoading) ?
+                (isLoading ) ?
                     <div className="alert alert-warning py-2 px-3 f-14">
                         <Loader />
                     </div>
