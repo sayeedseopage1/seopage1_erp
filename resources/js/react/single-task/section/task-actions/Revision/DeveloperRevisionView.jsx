@@ -8,6 +8,7 @@ import { useGetRevisionDetailsQuery, useRevisionAcceptOrDenyMutation } from '../
 import { useDispatch } from 'react-redux';
 import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 import { User } from '../../../../utils/user-details';
+import { toast } from 'react-toastify';
 
 const DeveloperRevisionView = ({task, close}) => {
   const [show, setShow] = useState("REVISION");
@@ -18,7 +19,7 @@ const DeveloperRevisionView = ({task, close}) => {
   const auth = new User(window?.Laravel?.user);
 
   // handle Accept and continue submission
-  const handleAcceptAndContinueSubmission = (data, type) => {
+  const handleAcceptAndContinueSubmission = async (data, type) => {
 
     const _data = {
         comment: data?.comment ?? '',
@@ -29,13 +30,13 @@ const DeveloperRevisionView = ({task, close}) => {
         mode: data?.continue ? 'continue' : accept
     }
 
-
-    revisionAcceptOrDeny(_data)
+    await revisionAcceptOrDeny(_data)
     .unwrap()
     .then(res => {
         if(_.includes([4, 6], auth?.getRoleId())){
             setShow(type);
         }else{
+            toast.success('Your request has been successfully processed')
             dispatch(setTaskStatus(res?.task_status));
             close();
         }
