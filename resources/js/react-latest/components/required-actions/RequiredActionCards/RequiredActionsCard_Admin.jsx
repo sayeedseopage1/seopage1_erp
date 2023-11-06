@@ -66,7 +66,7 @@ export default function RequiredActionsCard_Admin({ data , temp=true }) {
             <span>
               Authorized By : <span className={style.highlight}>Rajat Chakraborty</span>
             </span>
-            <span>At 20-12-2022 10:20 Pm</span>
+            <span className={style.authorized_time}>At 20-12-2022 10:20 Pm</span>
           </div>
       }
     </div>

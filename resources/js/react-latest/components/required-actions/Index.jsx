@@ -16,7 +16,7 @@ export default function Index() {
                 }}
             >
                 {/* heading */}
-                <h1>Required Actions</h1>
+                <h1 className={style.heading}>Required Actions</h1>
 
                 {/* actions => active , past */}
                 <section className={style.action_container}>

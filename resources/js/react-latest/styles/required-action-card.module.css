@@ -1,16 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz@6..12&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-
+:root {
+  --highlight: #1492E6;
+  --primary: #1492E6;
+  --border_clr: #1D82F5;
+  --secondary_text: #505050;
+}
 
 .card_container {
   /* border: solid; */
-  padding: 15px 0 30px;
+  padding: 10.25px 0 11px;
   /* margin: 8px; */
   border-top: solid #E7EFFC;
-  display: flex;
+  /* display: flex;
   flex-flow: column nowrap;
-  gap: 5px;
-  font-family: 'Nunito Sans', sans-serif !important;
+  gap: 5px; */
+  font-family: 'Poppins', sans-serif !important;
 }
 
 /* -------------------- card details (start) -------------------- */
@@ -22,23 +27,23 @@
 /* -------------- card body text (start) -------------- */
 .article {
   flex: 2 1 auto;
-  display: flex;
-  flex-flow: column nowrap;
   /* justify-content: space-between; */
   /* gap: 10px; */
 }
 
 /* card title */
 .title {
-  font-size: 20px;
-  max-width: 45rem;
-  font-weight: bold;
+  font-size: 14px;
+  max-width: 398px;
+  font-weight: 600;
+  margin-bottom: 7px;
 }
 
 /* card subtitle */
 .subtitle {
-  font-size: 16px;
-  max-width: 40rem;
+  font-size: 12px;
+  max-width: 408px;
+  margin-bottom: 10px;
 }
 
 /* card info */
@@ -48,10 +53,12 @@
   display: flex;
   gap: 1rem;
   /* justify-content: space-between; */
-  font-size: 18px;
+  font-size: 14px;
+  color: var(--secondary_text);
+  margin-bottom: 10px;
 }
 .highlight {
-  color: #1D82F5;
+  color: var(--highlight);
 }
 /* -------------- card body text (end) -------------- */
 
@@ -62,21 +69,21 @@
   /* border: solid; */
   flex: 0 1 150px;
   /* width: 150px; */
-  min-height: 120px;
+  min-height: auto;
   display: flex;
   flex-flow: row wrap;
-  gap: 20px;
+  gap: 10px 20px;
   margin: 0 5px;
 }
 .action_expire_time, .action_count_down{
   /* border: solid; */
   flex: 0 0 150px;
   /* max-width: 150px; */
-  height: 70px;
+  height: 65px;
   background-color: #FFFFFF;
   box-shadow: 10px gray;
-  font-weight: bold;
-  color: rgb(112, 112, 112);
+  /* font-weight: bold; */
+  /* color: #686868; */
   border-radius: 5px;
 }
 .action_expire_time{
@@ -84,10 +91,12 @@
   justify-content: center;
   padding: 15px;
   gap: 5px;
+  color: #686868;
 }
 .action_expire_time_icon{
   height: 20px;
   width: 20px;
+  color: rgba(28, 129, 245, 0.650);
 }
 .action_count_down{
   display: flex;
@@ -95,6 +104,7 @@
   justify-content: center;
   align-items: center;
   gap: 3px;
+  color: black;
 }
 /* ------------- clipboard area (end) ------------- */
 @media screen and (max-width: 1220px) {
@@ -111,30 +121,33 @@
 
 .action {
   /* border: solid; */
-  padding: 10px 0 0;
   display: flex;
   flex-flow: row wrap;
   gap: 10px;
 }
 .action_btn{
-  border: solid #1D82F5 2px;
-  border-radius: 4px;
+  border: solid var(--primary) 1.75px;
+  border-radius: 6px;
   padding: 8px 15px;
   min-width: 150px;
-  font-size: 20px;
+  font-size: 14px;
   background-color: transparent;
-  color: #1D82F5;
+  color: var(--primary);
 }
 .authorized_info{
   /* max-width: 40rem; */
   /* border: solid; */
   display: flex;
-  gap: 1rem;
+  gap: 15px;
   /* justify-content: space-between; */
-  font-size: 18px;
-  margin-top: 10px;
+  font-size: 14px;
+  /* margin-top: 10px; */
+  margin-bottom: 19px;
+  color: var(--secondary_text);
 }
-
+.authorized_time{
+  color: black;
+}
 
 @media screen and (max-width: 1220px) {
   .action{

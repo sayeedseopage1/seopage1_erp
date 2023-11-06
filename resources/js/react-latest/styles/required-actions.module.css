@@ -1,26 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root{
+  --primary : #1D82F5;
+  --secondary : rgba(64, 64, 64, 0.800);
+  --placeholder : rgba(0, 0, 0, 0.450);
+}
+
+
+.heading{
+  font-size: 35px;
+}
+
 /* ------------------ action container (start) ------------------ */
 .action_container{
   /* border: solid; */
-  padding: 15px 0 8px;
+  padding: 15px 0 0;
   display: flex;
-  gap: 13px;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif !important;
 }
 
 .btn{
-  border: solid #1D82F5 2px;
-  border-radius: 4px;
-  padding: 8px;
-  width: 170px;
-  font-size: 20px;
+  border: solid var(--primary) 2px;
+  border-radius: 5px;
+  padding: 7.5px;
+  width: 151px;
+  font-size: 14px;
 }
 
 .btn_inactive{
   background-color: white;
-  color: #1D82F5;
+  color: var(--primary);
 }
 
 .btn_active{
-  background-color: #1D82F5;
+  background-color: var(--primary);
   color: white;
 }
 /* ------------------ action container (end) ------------------ */
@@ -33,6 +47,7 @@
 .outlet_container{
   /* border: solid; */
   min-height: 50vh;
+  margin-top: 15px;
 }
 /* ------------------ view container (end) ------------------ */
 
@@ -43,27 +58,30 @@
   /* border: transparent; */
   z-index: 1;
   position: relative;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 .active_action_btn{
   border: transparent;
-  border-radius: 4px;
-  padding: 8px;
-  width: 170px;
-  font-size: 20px;
+  border-radius: 5px;
+  padding: 11px;
+  width: 151px;
+  /* font-size: 20px; */
+  font-weight: 500;
 }
 .active_action_btn:first-child{
-  margin-right: 13px;
+  margin-right: 10px;
 }
 .active_action_btn_active{
   background-color: #F7FAFF;
-  color: #1D82F5;
-  border: #1D82F5 solid 1px;
+  color: var(--primary);
+  border: var(--primary) solid 1px;
   border-bottom: #F7FAFF solid 5px;
+  font-size: 18px;
 }
 .active_action_btn_inactive{
   background-color: white;
-  color: gray;
+  color: var(--secondary);
+  font-size: 16px;
 }
 /* ------------------ Active action (end) ------------------ */
 
@@ -72,7 +90,7 @@
 /* ------------------ Active outlet container (start) ------------------ */
 .active_outlet_container{
   transform: translateY(-3.5px);
-  border: #1D82F5 solid 1px;
+  border: var(--primary) solid 1px;
   padding: 10px;
   /* z-index: ; */
 }
@@ -105,14 +123,14 @@
   width: 100%;
   min-width: 0;
   padding: 10px 10px 10px 60px;
-  font-size: 20px;
-  color: #3d3d3d;
+  font-size: 16px;
+  color: black;
   outline: none;
   border: none;
   /* background-color: #F7F7F7; */
 }
 .search_bar input::placeholder{
-  color: #919191;
+  color: var(--placeholder);
 }
 .search_icon{
   /* border: solid; */
@@ -122,7 +140,7 @@
   top: 0;
   left: 0;
   bottom: 0;
-  color: #919191;
+  color: var(--placeholder);
   padding: 5px;
   background-color: transparent;
 }
@@ -140,18 +158,21 @@
   flex-flow: row wrap;
 }
 .date_text{
-  font-size: 20px;
+  font-size: 14px;
 }
 .date_field{
   flex: 0 1 auto;
   min-width: 0;
   max-width: 130px;
   padding: 10px;
-  font-size: 20px;
-  color: #3d3d3d;
+  font-size: 14px;
+  color: black;
   outline: none;
   border: none;
   /* background-color: #F7F7F7; */
+}
+.date_field::placeholder{
+  color: var(--placeholder);
 }
 /* ---------- date bar (end) ---------- */
 
@@ -166,7 +187,7 @@
   gap: 5px;
 }
 .show_label{
-  font-size: 20px;
+  font-size: 16px;
   /* width: 80px; */
 }
 .show_field{
@@ -174,8 +195,8 @@
   min-width: 0;
   max-width: 130px;
   padding: 10px;
-  font-size: 20px;
-  color: #3d3d3d;
+  font-size: 16px;
+  color: var(--placeholder);
   outline: none;
   border: none;
   /* background-color: #F7F7F7; */
@@ -193,7 +214,7 @@
   gap: 5px;
 }
 .view_label{
-  font-size: 20px;
+  font-size: 16px;
   /* width: 80px; */
 }
 .view_field{
@@ -201,8 +222,8 @@
   min-width: 0;
   /* max-width: 150px; */
   padding: 10px;
-  font-size: 20px;
-  color: #3d3d3d;
+  font-size: 16px;
+  color: var(--placeholder);
   outline: none;
   border: none;
   /* background-color: #F7F7F7; */
