@@ -1742,7 +1742,7 @@ var DropdownItem = function DropdownItem(_ref2) {
     onClick: function onClick(e) {
       return disabled ? null : _onClick ? _onClick(e) : null;
     },
-    className: "cnx_dropdown__item ".concat(disabled ? 'cnx_dropdown__item_disabled}' : '', " ").concat(className)
+    className: "cnx_dropdown__item ".concat(disabled ? 'cnx_dropdown__item_disabled disabled' : '', " ").concat(className)
   }, props), {}, {
     children: children
   }));
@@ -17367,7 +17367,7 @@ var TaskAction = function TaskAction(_ref) {
         onClick: handleAuthorizedByTopManagementStatus,
         children: "Authorized By Top Management"
       })
-    }) : null, lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 4, 1], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_13__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }) : null, lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_13__["default"], {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_8__["default"], {
       task: task
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"], {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"].Toggle, {
@@ -17390,14 +17390,15 @@ var TaskAction = function TaskAction(_ref) {
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"].Menu, {
         className: "single_task_action_dd_menu",
         placement: "bottom-end",
-        children: [(0,_permissions__WEBPACK_IMPORTED_MODULE_3__.taskEditPermision)({
-          task: task,
-          status: status,
-          auth: loggedUser
-        }) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"].Item, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"].Item, {
           onClick: function onClick(e) {
             onModalEditButtonClick(e);
           },
+          disabled: !(0,_permissions__WEBPACK_IMPORTED_MODULE_3__.taskEditPermision)({
+            task: task,
+            status: status,
+            auth: loggedUser
+          }),
           className: "single_task_action_dd_item",
           children: [isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("div", {
             className: "spinner-border text-dark ml-2",
@@ -17414,10 +17415,11 @@ var TaskAction = function TaskAction(_ref) {
             className: "ml-1 mr-2",
             children: "Edit"
           })]
-        }), lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 5, 9, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"].Item, {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsxs)(_components_Dropdown__WEBPACK_IMPORTED_MODULE_14__["default"].Item, {
           onClick: function onClick() {
             return navigate("?modal=report");
           },
+          disabled: !lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 5, 9, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()),
           className: "single_task_action_dd_item __report",
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_17__.jsx)("i", {
             className: "fa-solid fa-flag"
