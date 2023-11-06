@@ -33,6 +33,7 @@ mix.js("resources/js/app.jsx", "public/js/react")
             "node_modules/quill-emoji/dist/quill-emoji.js",
             "resources/js/main.js",
             "resources/js/custom.js",
+            "resources/js/seopage1.js",
         ],
         "public/js/main.js"
     )

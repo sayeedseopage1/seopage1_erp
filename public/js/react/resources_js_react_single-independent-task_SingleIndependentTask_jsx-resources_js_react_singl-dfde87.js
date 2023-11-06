@@ -368,7 +368,7 @@ var useRevision = function useRevision() {
       isDeniable: false
     }, {
       id: 'PLRx3',
-      revision: "The team lead/project coordinator’s delivered work doesn’t match my shared requirement",
+      revision: "The Lead Developer/project coordinator’s delivered work doesn’t match my shared requirement",
       isDeniable: true
     }, {
       id: 'PLRx04',
@@ -380,7 +380,7 @@ var useRevision = function useRevision() {
   // lead developer acknowladgement Options
   var getLeadDeveloperAcknowladgementOptions = function getLeadDeveloperAcknowladgementOptions() {
     var isAlreadyAccepted = false;
-    // if alreayd accepted 
+    // if alreayd accepted
     if (isAlreadyAccepted) {
       return [];
     } else {

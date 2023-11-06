@@ -3,6 +3,7 @@ import styles from "../../styles/revision-page.module.css";
 import SaleActionButton from "./SaleActionButton";
 import PersonColumn from "../../ui/PersonColumn";
 import Popover from "../../ui/Popover";
+import Switch from "../../ui/Switch";
 
 export const RevisionTableColumns = [
     {
@@ -73,16 +74,21 @@ export const RevisionTableColumns = [
         draggable: true,
         sortable: true,
         accessorFn: (row) => row.heading,
-        cell: (row) => {
+        cell: ({row}) => {
+            const data = row.original;
             return (
                 <Popover>
                     <Popover.Button>
-                        <span className="multiline-ellipsis">{row.getValue()}</span>
+                        <a href={`/account/tasks/${data.task_id}`} className="multiline-ellipsis">
+                            {data.heading}
+                        </a>
                     </Popover.Button>
 
                     <Popover.Panel>
                         <div className={styles.revision_popover_panel}>
-                            {row.getValue()}
+                            <a href={`/account/tasks/${data.task_id}`} >
+                                {data.heading}
+                            </a>
                         </div>
                     </Popover.Panel>
                 </Popover>
@@ -137,7 +143,7 @@ export const RevisionTableColumns = [
                         <div
                             className="multiline-ellipsis"
                             dangerouslySetInnerHTML={{
-                                __html: text?.slice(0, 200) || '--',
+                                __html: text?.slice(0, 200) || "--",
                             }}
                         />
                     </Popover.Button>
@@ -282,55 +288,157 @@ export const RevisionTableColumns = [
             const data = row.original;
             const user = window?.Laravel?.user;
 
-            if (
-                (Number(user.role_id) === 7 &&
-                    (data.sale_accept || data.sale_deny)) ||
-                Number(user.role_id) === 1
-            ) {
-                const status = () => {
-                    if (data.sale_accept) {
-                        console.log("sales accepted")
-                        return (
-                            <div className={`${styles.status} f-12`}>
-                                {`Accepted by ${data?.deal_added_by?.name}`}
-                            </div>
-                        );
-                    } else if (data.sale_deny) {
-                        return (
-                            <div
-                                className={`${styles.status} ${styles.deny} f-12`}
-                            >
-                                {`Denied by ${data?.deal_added_by?.name}`}
-                            </div>
-                        );
-                    } else if (data.is_accept) {
-                        return (
-                            <div className={`${styles.status} f-12`}>
-                                {`Accepted by ${data?.task_assign_to?.name}`}
-                            </div>
-                        );
-                    } else if (data.is_deny) {
-                        return (
-                            <div
-                                className={`${styles.status} ${styles.deny} f-12`}
-                            >
-                                {`Denied by ${data?.task_assign_to?.name}`}
-                            </div>
-                        );
-                    } else
-                        return (
-                            <div
-                                className={`${styles.status} ${styles.pending} f-12`}
-                            >
-                                Pending
-                            </div>
-                        );
-                };
+            // const status = () => {
 
-                return status();
-            } else {
-                return <SaleActionButton row={data} table={table} />;
-            }
+            //     if (data.sale_accept) {
+            //         return (
+            //             <Popover>
+            //                 <Popover.Button>
+            //                     <div className={`${styles.status} f-12`}>
+            //                         {`Accepted by ${data?.deal_added_by?.name}`}
+            //                     </div>
+            //                 </Popover.Button>
+
+            //                 <Popover.Panel>
+            //                     <div className={styles.revision_popover_panel}>
+            //                         <div className={`f-12`}>
+            //                             Accepted by <a href={`/account/employees/${data?.deal_added_by?.id}`}>{data?.deal_added_by?.name}</a>
+            //                         </div>
+            //                     </div>
+            //                 </Popover.Panel>
+            //             </Popover>
+            //         );
+            //     } else if (data.sale_deny) {
+            //         return (
+            //             <div className={`${styles.status} ${styles.deny} f-12`}>
+            //                 {`Denied by ${data?.deal_added_by?.name}`}
+            //             </div>
+            //         );
+            //     } else if (data.is_accept) {
+            //         return (
+            //             <div className={`${styles.status} f-12`}>
+            //                 {`Accepted by ${data?.task_assign_to?.name}`}
+            //             </div>
+            //         );
+            //     } else if (data.is_deny) {
+            //         return (
+            //             <div className={`${styles.status} ${styles.deny} f-12`}>
+            //                 {`Denied by ${data?.task_assign_to?.name}`}
+            //             </div>
+            //         );
+            //     } else
+            //         return (
+            //             <div
+            //                 className={`${styles.status} ${styles.pending} f-12`}
+            //             >
+            //                 Pending
+            //             </div>
+            //         );
+            // };
+
+            const needAction = data.acknowledgement_id === "SPRx02";
+            const actionAlreadyTaken = data.sale_accept || data.sale_deny;
+            const hasPermissionToTakeAction =
+                Number(user.id) === Number(data?.deal_added_by.id);
+
+            return (
+                <Switch>
+                    <Switch.Case condition={!hasPermissionToTakeAction || (!needAction || actionAlreadyTaken)}>
+                       <Switch>
+                            {/* if sales accept */}
+                            <Switch.Case condition={data.sale_accept}>
+                                <Popover>
+                                    <Popover.Button>
+                                        <div className={`${styles.status} f-12`}>
+                                            {`Accepted by ${data?.deal_added_by?.name}`}
+                                        </div>
+                                    </Popover.Button>
+
+                                    <Popover.Panel>
+                                        <div className={styles.revision_popover_panel}>
+                                            <div className={`f-12`}>
+                                                Accepted by <a href={`/account/employees/${data?.deal_added_by?.id}`}>{data?.deal_added_by?.name}</a>
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                </Popover>
+                            </Switch.Case>
+
+                            {/* if sales deny */}
+                            <Switch.Case condition={data.sale_deny}>
+                                <Popover>
+                                    <Popover.Button>
+                                        <div className={`${styles.status} ${styles.deny} f-12`}>
+                                            {`Denied by ${data?.deal_added_by?.name}`}
+                                        </div>
+                                    </Popover.Button>
+
+                                    <Popover.Panel>
+                                        <div className={styles.revision_popover_panel}>
+                                            <div className={`f-12`}>
+                                                Denied by <a href={`/account/employees/${data?.deal_added_by?.id}`}>{data?.deal_added_by?.name}</a>
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                </Popover>
+                            </Switch.Case>
+
+                            {/* if revision accept by assignee */}
+                            <Switch.Case condition={!data.sale_accept && !data.sale_deny && data.is_deny}>
+                                <Popover>
+                                    <Popover.Button>
+                                        <div className={`${styles.status} f-12`}>
+                                            {`Accepted by ${data?.task_assign_to?.name}`}
+                                        </div>
+                                    </Popover.Button>
+
+                                    <Popover.Panel>
+                                        <div className={styles.revision_popover_panel}>
+                                            <div className={`f-12`}>
+                                            Accepted by <a href={`/account/employees/${data?.task_assign_to?.id}`}>{data?.task_assign_to?.name}</a>
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                </Popover>
+                            </Switch.Case>
+
+                            {/* if revision accept by assignee */}
+                            <Switch.Case condition={!data.sale_accept && !data.sale_deny && data.is_deny}>
+                                <Popover>
+                                    <Popover.Button>
+                                        <div className={`${styles.status} ${styles.deny} f-12`}>
+                                            {`Denied by ${data?.task_assign_to?.name}`}
+                                        </div>
+                                    </Popover.Button>
+
+                                    <Popover.Panel>
+                                        <div className={styles.revision_popover_panel}>
+                                            <div className={`f-12`}>
+                                                Denied by <a href={`/account/employees/${data?.task_assign_to?.id}`}>{data?.task_assign_to?.name}</a>
+                                            </div>
+                                        </div>
+                                    </Popover.Panel>
+                                </Popover>
+                            </Switch.Case>
+
+                            {/* Pending */}
+                            <Switch.Case condition={ data?.sale_person ? (!data.sale_accept && !data.sale_deny) : (!data.is_deny && !data.is_accept) }>
+                                <div className={`${styles.status} ${styles.pending} f-12`}> Pending </div>
+                            </Switch.Case>
+                       </Switch>
+                    </Switch.Case>
+
+                    <Switch.Case
+                        condition={
+                            needAction &&
+                            !actionAlreadyTaken &&
+                            hasPermissionToTakeAction
+                        }
+                    >
+                        <SaleActionButton row={data} table={table} />
+                    </Switch.Case>
+                </Switch>
+            );
         },
     },
 ];

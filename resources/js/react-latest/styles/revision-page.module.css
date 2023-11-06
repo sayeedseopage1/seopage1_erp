@@ -65,6 +65,12 @@
     border-color: #f99c9c;
 }
 
+.status.pending{
+    color: #ffa500;
+    background: #fff8e6;
+    border-color: #ffa500;
+}
+
 
 .revision_popover_panel{
     padding: 1rem;

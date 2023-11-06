@@ -421,7 +421,7 @@ var useRevision = function useRevision() {
       isDeniable: false
     }, {
       id: 'PLRx3',
-      revision: "The team lead/project coordinator’s delivered work doesn’t match my shared requirement",
+      revision: "The Lead Developer/project coordinator’s delivered work doesn’t match my shared requirement",
       isDeniable: true
     }, {
       id: 'PLRx04',
@@ -433,7 +433,7 @@ var useRevision = function useRevision() {
   // lead developer acknowladgement Options
   var getLeadDeveloperAcknowladgementOptions = function getLeadDeveloperAcknowladgementOptions() {
     var isAlreadyAccepted = false;
-    // if alreayd accepted 
+    // if alreayd accepted
     if (isAlreadyAccepted) {
       return [];
     } else {
@@ -14554,7 +14554,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var options = [{
   id: "LDRx10",
   revision: "I overlooked a few things while checking",
-  isDeniable: true
+  isDeniable: false
 }, {
   id: "LDRx11",
   revision: "I couldn't understand a few things in the instruction",
@@ -14913,22 +14913,24 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var projectManagerAcknowladgement = [{
   id: "CPRx01",
   title: 'Client added some additional requirements which was not part of the actual job scope',
-  isDeniable: false
+  isDeniable: false,
+  createDispute: true
 }, {
   id: 'PLRx12',
   title: 'I submitted the work without proper checking and overlooked the issues',
-  isDeniable: true
+  isDeniable: false,
+  createDispute: false
 }, {
   id: 'PLRx03',
-  title: 'I couldnt understand clients expectation properly earlier',
+  title: "I couldn't understand clients expectation properly earlier",
   isDeniable: false
 }, {
   id: 'PLRx04',
-  title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
+  title: 'I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success',
   isDeniable: false
 }, {
   id: 'CPRx05',
-  title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
+  title: "The client didn't change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
   isDeniable: false,
   createDispute: true
 }, {
@@ -15038,6 +15040,10 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       setReasonError('You have to select a reason from above options');
     }
     if (reason && (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01') {
+      if (!additionalPaid) {
+        errorCount++;
+        setAdditionalError('You have to select an option.');
+      }
       if (additionalPaid === 'yes' && additionalAmount === 0) {
         errorCount++;
         setAdditionalError('You have to provide amount');
@@ -15064,12 +15070,12 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       additional_amount: Number(additionalAmount),
       additional_status: additionalPaid,
       additional_comment: (_additionalInfo$info = additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.info) !== null && _additionalInfo$info !== void 0 ? _additionalInfo$info : '',
-      dispute_create: (reason === null || reason === void 0 ? void 0 : reason.createDispute) || (additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.disputeCreate) || false
+      dispute_create: (reason === null || reason === void 0 ? void 0 : reason.id) === "CPRx01" ? true : (reason === null || reason === void 0 ? void 0 : reason.createDispute) || (additionalInfo === null || additionalInfo === void 0 ? void 0 : additionalInfo.disputeCreate) || false
     };
     if (validate()) {
       onSubmit(data);
     } else {
-      console.log('Your forgot to fillup some required fields');
+      console.log('Your forgot to fill up some required fields');
     }
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -15138,7 +15144,8 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               id: "createMilestoneYes",
               value: "1",
               onChange: function onChange(e) {
-                return hasAdditionalPayment(true);
+                hasAdditionalPayment(true);
+                setAdditionalError('');
               },
               style: {
                 width: "16px",
@@ -15159,7 +15166,8 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               id: "createMilestoneNo",
               value: "0",
               onChange: function onChange(e) {
-                return hasAdditionalPayment(false);
+                hasAdditionalPayment(false);
+                setAdditionalError('');
               },
               style: {
                 width: "16px",
