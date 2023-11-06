@@ -45,6 +45,7 @@ class DMDealController extends AccountBaseController
      */
     public function index(DMDealsDatatable $dataTable)
     {
+        
         if (!request()->ajax()) {
             if (in_array('client', user_roles())) {
                 $this->clients = User::client();

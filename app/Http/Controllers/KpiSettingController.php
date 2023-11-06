@@ -131,7 +131,7 @@ class KpiSettingController extends AccountBaseController
 
     // phpcs:ignore
     public function update(Request $request,$id)
-    { 
+    {
         $kpi_setting = kpiSetting::find($id);
         $kpi_setting->the_bidder = $request->the_bidder;
         $kpi_setting->qualify = $request->qualify;

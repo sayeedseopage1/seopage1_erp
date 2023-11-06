@@ -2,24 +2,29 @@
 
 namespace App\View\Components\Forms;
 
-use App\Models\Country;
 use Illuminate\View\Component;
+
+use App\Models\Country;
 
 class Phone extends Component
 {
+
     public $fieldLabel;
     public $fieldRequired;
     public $fieldPlaceholder;
     public $fieldValue;
     public $fieldName;
     public $fieldId;
+    public $error;
     public $countries;
+
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($fieldLabel, $fieldPlaceholder, $fieldName, $fieldId, $fieldRequired = false, $fieldValue = null)
+    public function __construct($fieldLabel, $fieldPlaceholder = null, $fieldName, $fieldId, $fieldRequired = false, $fieldValue = null, $error=null)
     {
         $this->fieldLabel = $fieldLabel;
         $this->fieldRequired = $fieldRequired;

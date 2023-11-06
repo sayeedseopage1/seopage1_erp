@@ -104,6 +104,7 @@
 </head>
 <?php
 $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->get();
+$countries = App\Models\Country::all();
 
  ?>
 
@@ -172,8 +173,8 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                                         class="text-dark-grey text-capitalize">@lang("app.client")</span><br>
                                         {{ mb_ucwords($project->client->name) }}<br>
                                           {{ mb_ucwords($project->client->email) }}<br>
-                                       
-                                      
+
+
                             </td>
 
                         </tr>
@@ -213,18 +214,18 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                                 <td>{{$deliverable->title}}</td>
                                 @if($deliverable->milestone_id != null)
                                     <td>{{$deliverable->milestone->milestone_title}}</td>
-                                @else 
+                                @else
                                     <td>--</td>
                                 @endif
                                 <td>{{$deliverable->quantity}}</td>
                                 <td>{!!$deliverable->description!!}</td>
                                 @if($deliverable->to != null)
                                     <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
-                                @else 
+                                @else
                                     <td class="text-center">On {{$deliverable->from}}</td>
                                 @endif
                             </tr>
-                            
+
                             @empty
                             <tr>
                                 No Data
@@ -362,14 +363,14 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
                                             <td>{{$deliverable->title}}</td>
                                             @if($deliverable->milestone_id != null)
                                                 <td>{{$deliverable->milestone->milestone_title}}</td>
-                                            @else 
+                                            @else
                                                 <td>--</td>
                                             @endif
                                             <td>{{$deliverable->quantity}}</td>
                                             <td>{!!$deliverable->description!!}</td>
                                             @if($deliverable->to != null)
                                                 <td class="text-center">Between {{$deliverable->from}} & {{$deliverable->to}}</td>
-                                            @else 
+                                            @else
                                                 <td class="text-center">On {{$deliverable->from}}</td>
                                             @endif
                                             <td>
@@ -459,6 +460,7 @@ $deliverables= App\Models\ProjectDeliverable::where('project_id',$project->id)->
             var last_name = $('#last_name').val();
             var email = $('#email').val();
             var phone_no = $('#phone_no').val();
+            var country_code = $('#country_code').val();
             var signature = signaturePad.toDataURL('image/png');
             var image = $('#image').val();
 

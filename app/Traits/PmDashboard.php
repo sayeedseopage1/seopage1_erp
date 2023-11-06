@@ -18,6 +18,7 @@ use App\Models\LeadAgent;
 use App\Models\Leave;
 use App\Models\Notice;
 use App\Models\Project;
+use App\Models\ProjectMember;
 use App\Models\ProjectTimeLog;
 use App\Models\ProjectTimeLogBreak;
 use App\Models\ProjectMilestone;
@@ -451,6 +452,12 @@ trait PmDashboard
                                     ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
                                     ->where('projects.id', $project->id)
                                         ->first();
+
+                            $manager_accept_date = ProjectMember::where('project_id', $project->id)
+                            ->where('user_id', Auth::id())
+                            ->min('created_at');
+                            $finished_project_this_cycle->manager_accept_date = $manager_accept_date;
+
                                     $finished_project_this_cycle->project_completion_date = $maxEndDate;
         
                                     $no_of_100_finished_project_this_cycle[] = $finished_project_this_cycle;
@@ -499,6 +506,13 @@ trait PmDashboard
                                         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
                                         ->where('projects.id', $project->id)
                                         ->first();
+
+                            $manager_accept_date = ProjectMember::where('project_id', $project->id)
+                            ->where('user_id', Auth::id())
+                            ->min('created_at');
+                            $finished_project_this_cycle->manager_accept_date = $manager_accept_date;
+
+
                                     $finished_project_this_cycle->project_completion_date = $maxEndDate;
         
                                     $no_of_100_finished_project_previous_cycle[] = $finished_project_this_cycle;
@@ -514,6 +528,12 @@ trait PmDashboard
                                         ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
                                         ->where('projects.id', $project->id)
                                         ->first();
+
+                            $manager_accept_date = ProjectMember::where('project_id', $project->id)
+                            ->where('user_id', Auth::id())
+                            ->min('created_at');
+                            $finished_project_this_cycle->manager_accept_date = $manager_accept_date;
+
                                     $finished_project_this_cycle->project_completion_date = $maxEndDate;
         
                                     $no_of_100_finished_project_previous_cycle[] = $finished_project_this_cycle;
@@ -1690,6 +1710,12 @@ trait PmDashboard
                             ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
                             ->where('projects.id', $project->id)
                                 ->first();
+
+                            $manager_accept_date = ProjectMember::where('project_id', $project->id)
+                                ->where('user_id', Auth::id())
+                                ->min('created_at');
+                            $finished_project_this_cycle->manager_accept_date = $manager_accept_date;
+
                             $finished_project_this_cycle->project_completion_date = $maxEndDate;
 
                             $no_of_100_finished_project_this_cycle[] = $finished_project_this_cycle;
@@ -1738,6 +1764,12 @@ trait PmDashboard
                                 ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
                                 ->where('projects.id', $project->id)
                                 ->first();
+
+                            $manager_accept_date = ProjectMember::where('project_id', $project->id)
+                                ->where('user_id', Auth::id())
+                                ->min('created_at');
+                            $finished_project_this_cycle->manager_accept_date = $manager_accept_date;
+
                             $finished_project_this_cycle->project_completion_date = $maxEndDate;
 
                             $no_of_100_finished_project_previous_cycle[] = $finished_project_this_cycle;
@@ -1753,6 +1785,13 @@ trait PmDashboard
                                 ->leftJoin('p_m_projects as pm_projects', 'pm_projects.project_id', 'projects.id')
                                 ->where('projects.id', $project->id)
                                 ->first();
+
+                            $manager_accept_date = ProjectMember::where('project_id', $project->id)
+                                ->where('user_id', Auth::id())
+                                ->min('created_at');
+                            $finished_project_this_cycle->manager_accept_date = $manager_accept_date;
+
+
                             $finished_project_this_cycle->project_completion_date = $maxEndDate;
 
                             $no_of_100_finished_project_previous_cycle[] = $finished_project_this_cycle;

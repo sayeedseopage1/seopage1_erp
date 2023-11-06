@@ -60,26 +60,19 @@ class DMWonDealDatatable extends BaseDataTable
                     return '<p title="' . $row->project_name . '">' . $title . '</p>';
                 }
             })
-            ->addColumn('cms_name', function ($row) {
-                if(!is_null($row->cms_name)){
-                    return $row->cms_name;
-                }else{
-                    return '---';
-                }
-            })
             ->addColumn('amount', function ($row) {
                 return $row->actual_amount . ' ' . $row->original_currency->currency_symbol;
             })
             ->addColumn('client_name', function ($row) {
                 return '<a class="openRightModal" href="' . route('clients.show', $row->client_id) . '"><img src="' . $row->client->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->client->name . '" title="' . $row->client->name . '">' . $row->client_name . '</a>';
             })
-            ->addColumn('project_manager', function ($row) {
-                if (!is_null($row->pm_id)) {
-                    return '<a class="openRightModal" href="' . route('employees.show', $row->pm_id) . '"><img src="' . $row->pm->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->pm->name . '" title="' . $row->pm->name . '">' . $row->pm->name . '</a>';
-                } else {
-                    return '---';
-                }
-            })
+            // ->addColumn('project_manager', function ($row) {
+            //     if (!is_null($row->pm_id)) {
+            //         return '<a class="openRightModal" href="' . route('employees.show', $row->pm_id) . '"><img src="' . $row->pm->image_url . '" class="mr-3 taskEmployeeImg rounded-circle" alt="' . $row->pm->name . '" title="' . $row->pm->name . '">' . $row->pm->name . '</a>';
+            //     } else {
+            //         return '---';
+            //     }
+            // })
             ->addColumn('deal_creation_date', function ($row) {
                 return $row->deal_creation_date;
             })
@@ -121,12 +114,12 @@ class DMWonDealDatatable extends BaseDataTable
                     $action .= '<a class="dropdown-item" href="dm-deal-url/' . $row->id . '"><i class="fa-solid fa-file mr-2"></i>' . trans('Client Form') . '</a>';
                 }
 
-                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 7 || Auth::user()->role_id == 8) {
+                if (Auth::user()->role_id == 1 || Auth::user()->role_id == 11 || Auth::user()->role_id == 12) {
                     $action .= '<a class="dropdown-item" href="/dm-deals/details/edit/' . $row->id . '"><i class="fa-solid fa-pen-to-square mr-2"></i>' . trans('Edit') . '</a>';
                 }
-                if (Auth::user()->role_id == 8 || Auth::user()->role_id == 1) {
+                if (Auth::user()->role_id == 12 || Auth::user()->role_id == 1) {
                     if ($row->authorization_status == 0 || $row->authorization_status == '2') {
-                        if (Auth::user()->role_id == 8) {
+                        if (Auth::user()->role_id == 12) {
                             $action .= '<a class="dropdown-item bg-warning" href="' . route("authorization_request", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Need') . '</a>';
                         }
 
@@ -134,16 +127,16 @@ class DMWonDealDatatable extends BaseDataTable
                         $action .= '<a class="dropdown-item bg-success" href="' . route("dm-contracts.show", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Authorization Details') . '</a>';
                     }
                 }
-                if (Auth::user()->role_id == 4 && $row->status == 'Denied') {
+                if (Auth::user()->role_id == 1 && $row->status == 'Denied') {
                     $award_time_request = $row->has_award_time_request;
 
                     if ($award_time_request) {
                         if ($award_time_request->status == '2') {
-                            $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                            $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("dm_award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                         }
                     } else
                     {
-                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
+                        $action .= '<a class="dropdown-item bg-primary text-light award_time_incress" data-id="' . $row->id . '" href="' . route("dm_award_time_check.index", $row->id) . '"><i class="fa-solid fa-user mr-2' . ($row->auth) . '"></i>' . trans('Request to Increase Accept time') . '</a>';
                     }
                 }
                 $action .= '
@@ -158,7 +151,10 @@ class DMWonDealDatatable extends BaseDataTable
             ->setRowId(function ($row) {
                 return 'row-' . $row->id;
             })
-            ->rawColumns(['check', 'short_code', 'project_name','cms_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
+            // HIDE FOR pm_id (WHEN YOU WANT TO PM SEARCH YOU CAN UNCOMMENT THIS)
+            // ->rawColumns(['check', 'short_code', 'project_name', 'amount', 'client_name', 'project_manager', 'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
+
+            ->rawColumns(['check', 'short_code', 'project_name', 'amount', 'client_name',  'deal_creation_date', 'client_contact_form', 'added_by', 'status', 'action']);
     }
 
     /**
@@ -174,17 +170,17 @@ class DMWonDealDatatable extends BaseDataTable
        // dd($request);
         $startDate = null;
         $endDate = null;
-        if (Auth::user()->role_id == 4) {
+        // if (Auth::user()->role_id == 4) {
 
-            $model = $model->where('pm_id',Auth::id());
-        }
+        //     $model = $model->where('pm_id',Auth::id());
+        // }
         // elseif (Auth::user()->role_id == 7) {
         //     $model = $model->where('added_by',Auth::id());
         // }
-        else {
-            $model = $model->orderBy('id','desc');
+        // else {
+        //     $model = $model->orderBy('id','desc');
 
-        }
+        // }
 
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
@@ -212,9 +208,9 @@ class DMWonDealDatatable extends BaseDataTable
                     ->orWhere('users.name', 'like', '%' . request('searchText') . '%');
             });
         }
-        if ($request->pm_id != 'all') {
-            $model->where('pm_id', $request->pm_id);
-        }
+        // if ($request->pm_id != 'all') {
+        //     $model->where('pm_id', $request->pm_id);
+        // }
         if ($request->client_id != 'all') {
             $model->where('client_id', $request->client_id);
         }
@@ -288,11 +284,6 @@ class DMWonDealDatatable extends BaseDataTable
                 'name' => 'project_name',
                 'title' => 'Project Name',
             ],
-            'cms_name' => [
-                'data' => 'cms_name',
-                'name' => 'cms_name',
-                'title' => 'CMS Name',
-            ],
             'amount' => [
                 'data' => 'amount',
                 'name' => 'amount',
@@ -303,11 +294,11 @@ class DMWonDealDatatable extends BaseDataTable
                 'name' => 'client_name',
                 'title' => 'Client Name',
             ],
-            'project_manager' => [
-                'data' => 'project_manager',
-                'name' => 'project_manager',
-                'title' => 'Project Manager',
-            ],
+            // 'project_manager' => [
+            //     'data' => 'project_manager',
+            //     'name' => 'project_manager',
+            //     'title' => 'Project Manager',
+            // ],
             'deal_creation_date' => [
                 'data' => 'deal_creation_date',
                 'name' => 'deal_creation_date',

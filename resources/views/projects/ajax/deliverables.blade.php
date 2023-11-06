@@ -88,9 +88,9 @@
                             Estimated Hourly Rate</td>
                             <td class="border-left-0">
                                 @if($project->hours_allocated >  0 )
-                               
+
                               {{round(($project->deal->amount+ $project->deal->upsell_amount)/$project->hours_allocated ,0)}}$/hour
-                              @else 
+                              @else
                               --
                               @endif
                             </td>
@@ -141,7 +141,7 @@
                       </table>
 
                   </td>
-    
+
 </div>
 <?php
     $signature= App\Models\ContractSign::where('project_id',$project->id)->first();
@@ -153,7 +153,9 @@
     $pm_project= App\Models\PMProject::where('project_id',$project->id)->first();
 ?>
 @if(($signature == null && $project->authorization_status == 'pending' )  || ($signature != null && $project->deliverable_authorization == 0))
-    @if($project->pm_id == Auth::id())
+
+    @if($project->pm_id == Auth::id() && Auth::user()->role_id != 1)
+
         @if($diff_in_minutes >1440 && $pm_project->deliverable_status == 0)
             <div class="col-md-2 mt-3">
                 <button type="button" class="btn btn-primary"  disabled><i class="fas fa-plus"></i> Add Deliverable</button>
@@ -191,7 +193,7 @@
             </div>
             @endif
         @endif
-   
+
 
 
 
@@ -207,7 +209,7 @@
           @include('projects.modals.clientdeliverableaddmodal')
           @if($pm_project->deliverable_status == 0 && $pm_project->reason != null)
               <button type="button" class="btn btn-success rounded f-14 p-2 my-3"  data-toggle="modal" data-target="#deliverableextensionacceptmodal">
-                  <i class="fas fa-check"></i> 
+                  <i class="fas fa-check"></i>
                   Extend Time
               </button>
               @include('projects.modals.deliverableextensionacceptmodal')
@@ -217,9 +219,9 @@
               <button class="btn btn-success rounded f-14 p-2 my-3" type="button"  data-toggle="modal" data-target="#deliverablesfinalauthorizationacceptModal" aria-haspopup="true" aria-expanded="false" id="acceptBtn">Authorize</button>
               @include('projects.modals.deliverablefinalauthorizationacceptmodal')
           @endif
-          
+
       </div>
-  </div> 
+  </div>
   @endif
     <!-- CARD BODY START -->
     <div class="card-body">
@@ -288,7 +290,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -373,7 +375,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -438,7 +440,7 @@
                                         'column_name' => 'estimation_time',
                                     ])->latest()->first();
                                 @endphp
-                                
+
                                 @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
                                     <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
                                 @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
@@ -470,7 +472,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -527,7 +529,7 @@
                                     'column_name' => 'quantity',
                                 ])->latest()->first();
                             @endphp
-                            
+
                             @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
                                 <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
                             @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
@@ -559,7 +561,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -644,7 +646,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -719,7 +721,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -774,7 +776,7 @@
                                         'column_name' => 'estimation_completed_date',
                                     ])->latest()->first();
                                 @endphp
-                                
+
                                 @if($data && $data->status == '0' && \Auth::user()->role_id == 4)
                                     <i class="fa fa-lightbulb text-danger" title="Admin request to {{$data->comment}}"></i>
                                 @elseif($data && $data->status == '0' && \Auth::user()->role_id == 1)
@@ -806,7 +808,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <table class="table">
@@ -1215,7 +1217,7 @@
                 denyButtonText: `Cancel`,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                   //  $('#sendAuthorizationBtn').attr('disabled','disabld');
                     $("#sendAuthorizationBtn").attr("disabled", true);
                     $("#sendAuthorizationBtn").html("Processing...");

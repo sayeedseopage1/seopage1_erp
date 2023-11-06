@@ -7,6 +7,7 @@
 </style>
 @endpush
 @section('content')
+
     <div class="content-wrapper">
         <div class="row">
             <div class="col-12">
@@ -58,11 +59,11 @@
                                         </td>
                                         <td>{{ $value->created_at->format('d M, Y g:i A') }}</td>
                                         <td>
-                                            <button class="btn btn-success award_time_action" data-id="{{ $value->id }}" data-mode="accept" data-toggle="modal" data-target="#award_time_incress_modal{{ $value->id }}">Accept</button>
-                                            <button class="btn btn-danger award_time_action_reject" data-id="{{ $value->deal_id }}" data-request-id="{{ $value->id }}" data-mode="reject">Reject</button>
+                                            <button class="btn btn-success award_time_action" data-id="{{ $value->id }}" data-mode="accept" data-toggle="modal" data-target="#dm_award_time_incress_modal{{ $value->id }}">Accept</button>
+                                            <button class="btn btn-danger dm_award_time_action_reject" data-id="{{ $value->deal_id }}" data-request-id="{{ $value->id }}" data-mode="reject">Reject</button>
                                         </td>
                                     </tr>
-                                    <div class="modal fade" id="award_time_incress_modal{{ $value->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal fade" id="dm_award_time_incress_modal{{ $value->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -75,11 +76,11 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="form-group height-35 f-14">
-                                                        
+
                                                         <label for="hours">
                                                             Select Hours <strong>(Requested for {{ $value->incress_hours }} Hrs) </strong>
                                                         </label>
-                                                        
+
                                                         <select name="hours" id="task_hours{{ $value->id }}" class="form-control height-35 f-14">
                                                             <option value="">Select Hours</option>
                                                             @for ($i = 1; $i <= 20; $i++)
@@ -88,7 +89,7 @@
                                                                 </option>
                                                             @endfor
                                                         </select>
-                                                    
+
 
                                                     </div>
                                                     <div class="card mt-5">
@@ -103,7 +104,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary award_time_incress_approve" id="award_time_incress_approve{{ $value->id }}" data-deal-id="{{ $value->deal_id }}" data-request-id="{{ $value->id }}" data-mode="approve">
+                                                    <button type="button" class="btn btn-primary dm_award_time_incress_approve" id="dm_award_time_incress_approve{{ $value->id }}" data-deal-id="{{ $value->deal_id }}" data-request-id="{{ $value->id }}" data-mode="approve">
                                                         Approved
                                                     </button>
                                                 </div>
@@ -128,14 +129,14 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('.award_time_incress_approve').click(function(e) {
+            $('.dm_award_time_incress_approve').click(function(e) {
                 var task_id = $(this).data('deal-id');
                 var request_id = $(this).data('request-id');
                 var task_hours = $('#task_hours' + request_id).val();
                 var task_description = $('#task_description' + request_id).val();
                 var mode = $(this).data('mode');
                 $.easyAjax({
-                    url: '{{ route('award_time_check.update') }}',
+                    url: '{{ route('dm_award_time_check.update') }}',
                     type: "POST",
                     disableButton: true,
                     buttonSelector: $(this).attr('id'),
@@ -159,7 +160,7 @@
                 })
             });
 
-            $('.award_time_action_reject').click(function(e) {
+            $('.dm_award_time_action_reject').click(function(e) {
                 var id = $(this).data('id');
                 var request_id = $(this).data('request-id');
                 var mode = $(this).data('mode');
@@ -195,7 +196,7 @@
                         //         Swal.showValidationMessage('Something wrong');
                         //     }
                         // })
-                        return fetch('{{ route('award_time_check.update') }}', {
+                        return fetch('{{ route('dm_award_time_check.update') }}', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',

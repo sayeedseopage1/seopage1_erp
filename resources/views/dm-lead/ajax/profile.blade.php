@@ -189,6 +189,10 @@
                               <li><i class="fa-solid fa-file-lines"></i> <span>Project ID:</span> Not Available </li>
                               @endif
 
+                              @if($lead->project_type == 'fixed')
+                              <li><i class="fa-solid fa-file-lines"></i> <span>Total Spen:</span> {{$lead->total_spent.$currency->currency_symbol}} </li>
+                              @endif
+
                               <li><i class="fa-solid fa-globe"></i> <span>Client Country:</span> {{ucwords($lead->country)}} </li>
                               @if($lead->deal_status == 0)
                               <li><i class="fa-solid fa-square-check"></i> <span>Status:</span> <b class="ssp1" style="background: #D30000;"></b> Not converted to deal </li>
