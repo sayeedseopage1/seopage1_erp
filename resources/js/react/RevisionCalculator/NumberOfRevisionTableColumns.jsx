@@ -1,4 +1,4 @@
-export const NumberOfRevisionTableColumns = [ 
+export const NumberOfRevisionTableColumns = [
     {
         id: "sales_issues",
         heading: "Sales Issues",
@@ -143,28 +143,28 @@ export const NumberOfRevisionTableColumns = [
             );
         },
     },
-    {
-        id: "disputed_not_solved",
-        heading: "Disputed & not solved",
-        moveable: false,
-        sortBy: "disputed_not_solved",
-        searchText: (row) => `${row?.total_disputes_not_solved}`,
-        row: ({ row, table }) => {
-            const search = table.state.search;
-            const usd = row?.total_disputes_not_solved;
-            const isEqual = search
-                ? _.includes(_.lowerCase(usd), _.lowerCase(search))
-                : "";
+    // {
+    //     id: "disputed_not_solved",
+    //     heading: "Disputed & not solved",
+    //     moveable: false,
+    //     sortBy: "disputed_not_solved",
+    //     searchText: (row) => `${row?.total_disputes_not_solved}`,
+    //     row: ({ row, table }) => {
+    //         const search = table.state.search;
+    //         const usd = row?.total_disputes_not_solved;
+    //         const isEqual = search
+    //             ? _.includes(_.lowerCase(usd), _.lowerCase(search))
+    //             : "";
 
-            return (
-                <span
-                    className={`singleline-ellipsis ${
-                        isEqual ? "highlight" : ""
-                    }`}
-                >
-                    {usd}
-                </span>
-            );
-        },
-    },
+    //         return (
+    //             <span
+    //                 className={`singleline-ellipsis ${
+    //                     isEqual ? "highlight" : ""
+    //                 }`}
+    //             >
+    //                 {usd}
+    //             </span>
+    //         );
+    //     },
+    // },
 ];

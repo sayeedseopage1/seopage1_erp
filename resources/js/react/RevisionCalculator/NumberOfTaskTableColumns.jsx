@@ -1,8 +1,8 @@
 import { convertTime } from '../utils/converTime';
 
 
-export const NumberOfTaskTableColumns = [ 
-    
+export const NumberOfTaskTableColumns = [
+
     {
         id: "task_title",
         heading: "Task Title",
@@ -68,7 +68,7 @@ export const NumberOfTaskTableColumns = [
                 </span>
             );
         },
-    }, 
+    },
     {
         id: 'total_revisions',
         heading: 'Total no of revisions',
@@ -77,7 +77,7 @@ export const NumberOfTaskTableColumns = [
         rowSpan: 2,
         searchText: (row) => `${row?.total_revisions}`,
         row: ({row}) => <span className="singleline-ellipsis">{row?.total_revisions}</span>
-    }, 
+    },
     {
         id: "total_time_spent_in_revision",
         heading: "Total time spent in revision",
@@ -249,30 +249,30 @@ export const NumberOfTaskTableColumns = [
                     );
                 },
             },
-            {
-                id: "disputed_not_solved",
-                heading: "Disputed & not solved",
-                moveable: false,
-                sortBy: "disputed_not_solved",
-                searchText: (row) => `${row?.disputes_not_solved}`,
-                row: ({ row, table }) => {
-                    const search = table.state.search;
-                    const usd = row?.disputes_not_solved;
-                    const isEqual = search
-                        ? _.includes(_.lowerCase(usd), _.lowerCase(search))
-                        : "";
+            // {
+            //     id: "disputed_not_solved",
+            //     heading: "Disputed & not solved",
+            //     moveable: false,
+            //     sortBy: "disputed_not_solved",
+            //     searchText: (row) => `${row?.disputes_not_solved}`,
+            //     row: ({ row, table }) => {
+            //         const search = table.state.search;
+            //         const usd = row?.disputes_not_solved;
+            //         const isEqual = search
+            //             ? _.includes(_.lowerCase(usd), _.lowerCase(search))
+            //             : "";
 
-                    return (
-                        <span
-                            className={`singleline-ellipsis ${
-                                isEqual ? "highlight" : ""
-                            }`}
-                        >
-                            {usd}
-                        </span>
-                    );
-                },
-            },
+            //         return (
+            //             <span
+            //                 className={`singleline-ellipsis ${
+            //                     isEqual ? "highlight" : ""
+            //                 }`}
+            //             >
+            //                 {usd}
+            //             </span>
+            //         );
+            //     },
+            // },
         ],
     },
 ];

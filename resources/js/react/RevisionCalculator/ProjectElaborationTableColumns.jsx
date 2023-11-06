@@ -307,30 +307,30 @@ export const ProjectElaborationTableColumns = [
                     );
                 },
             },
-            {
-                id: "disputed_not_solved",
-                heading: "Disputed & not solved",
-                moveable: false,
-                sortBy: "disputed_not_solved",
-                searchText: (row) => `${row?.disputes_not_solved}`,
-                row: ({ row, table }) => {
-                    const search = table.state.search;
-                    const usd = row?.disputes_not_solved;
-                    const isEqual = search
-                        ? _.includes(_.lowerCase(usd), _.lowerCase(search))
-                        : "";
+            // {
+            //     id: "disputed_not_solved",
+            //     heading: "Disputed & not solved",
+            //     moveable: false,
+            //     sortBy: "disputed_not_solved",
+            //     searchText: (row) => `${row?.disputes_not_solved}`,
+            //     row: ({ row, table }) => {
+            //         const search = table.state.search;
+            //         const usd = row?.disputes_not_solved;
+            //         const isEqual = search
+            //             ? _.includes(_.lowerCase(usd), _.lowerCase(search))
+            //             : "";
 
-                    return (
-                        <span
-                            className={`singleline-ellipsis ${
-                                isEqual ? "highlight" : ""
-                            }`}
-                        >
-                            {usd}
-                        </span>
-                    );
-                },
-            },
+            //         return (
+            //             <span
+            //                 className={`singleline-ellipsis ${
+            //                     isEqual ? "highlight" : ""
+            //                 }`}
+            //             >
+            //                 {usd}
+            //             </span>
+            //         );
+            //     },
+            // },
         ],
     },
 ];

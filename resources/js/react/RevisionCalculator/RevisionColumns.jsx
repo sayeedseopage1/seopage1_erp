@@ -205,17 +205,17 @@ export const revisionColumns = [
                     )
                 }
             },
-            
+
             {
                 id: "rev_accept_deny_pending",
                 heading: 'Rev. Accept/Deny Pending',
                 loader: () => <Placeholder />,
                 row: ({row, table}) => {
-                    const count = row?.pending_issues || 0;  
+                    const count = row?.pending_issues || 0;
                     const { startDate, endDate } = table.state;
                     return(
-                        <Link 
-                            to={`pending-revisions?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`} 
+                        <Link
+                            to={`pending-revisions?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
                             className="singleline-ellipsis"
                         >
                             {count}
@@ -242,25 +242,25 @@ export const revisionColumns = [
                     )
                 }
             },
-            {
-                id: 'disputed_not_solved',
-                heading: 'Disputed & not solved',
-                moveable: false,
-                sort: row => row?.total_disputes_not_solved,
-                searchText: (row) => `${row?.total_disputes_not_solved}`,
-                loader: () => <Placeholder />,
-                row: ({row, table}) => {
-                    const { startDate, endDate } = table.state;
-                    return(
-                        <Link
-                            to={`total-unsolved-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
-                            className="singleline-ellipsis"
-                        >
-                            {row?.total_disputes_not_solved}
-                        </Link>
-                    )
-                }
-            }
+            // {
+            //     id: 'disputed_not_solved',
+            //     heading: 'Disputed & not solved',
+            //     moveable: false,
+            //     sort: row => row?.total_disputes_not_solved,
+            //     searchText: (row) => `${row?.total_disputes_not_solved}`,
+            //     loader: () => <Placeholder />,
+            //     row: ({row, table}) => {
+            //         const { startDate, endDate } = table.state;
+            //         return(
+            //             <Link
+            //                 to={`total-unsolved-dispute-table?pm=${row?.project_manager_id}&start_date=${startDate}&end_date=${endDate}`}
+            //                 className="singleline-ellipsis"
+            //             >
+            //                 {row?.total_disputes_not_solved}
+            //             </Link>
+            //         )
+            //     }
+            // }
         ]
     }
 ]
