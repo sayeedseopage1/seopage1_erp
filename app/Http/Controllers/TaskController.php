@@ -809,23 +809,19 @@ class TaskController extends AccountBaseController
                 $task_submit->save();
             }
         }
-
-        if ($request->file('file') != null) {
-            foreach ($request->file('file') as $att) {
+        if ($request->hasFile('file') != null) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
+            foreach ($files as $file) {
                 $task_submit = new TaskSubmission();
-                $filename = null;
-                if ($att) {
-                    $filename = time() . $att->getClientOriginalName();
-
-                    Storage::disk('public')->putFileAs(
-                        'TaskSubmission/',
-                        $att,
-                        $filename
-                    );
-                }
+                $filename = time() . $file->getClientOriginalName();
+                array_push($file_name, $filename);
                 $task_submit->attach = $filename;
                 $task_submit->task_id = $request->task_id;
                 $task_submit->user_id = $request->user_id;
+
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 if ($order == null) {
                     $task_submit->submission_no = 1;
                 } else {
@@ -4306,18 +4302,13 @@ class TaskController extends AccountBaseController
     }
     public function GetTaskSubmission($id)
     {
-        //dd($id);
-
-        //    / $matchingRows = TaskSubmission::whereColumn('task_id', '=', $id)->groupBy('submission_no')->get();
-
-        $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text, GROUP_CONCAT(link) as links, GROUP_CONCAT(attach) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
+        $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text,GROUP_CONCAT(link) as links, GROUP_CONCAT(CONCAT("https://seopage1storage.s3.ap-southeast-1.amazonaws.com/", attach)) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
             ->where('task_id', $id)
             ->join('users', 'users.id', 'task_submissions.user_id')
             ->groupBy('task_id', 'submission_no')
             ->havingRaw('COUNT(*) > 1')
             ->get();
         return response()->json($submissions);
-        // dd($id,$matchingRows);
     }
 
     public function GetRevision($id)
