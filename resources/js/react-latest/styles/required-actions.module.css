@@ -79,7 +79,7 @@
   font-size: 18px;
 }
 .active_action_btn_inactive{
-  background-color: white;
+  background-color: transparent;
   color: var(--secondary);
   font-size: 16px;
 }
@@ -89,9 +89,12 @@
 
 /* ------------------ Active outlet container (start) ------------------ */
 .active_outlet_container{
-  transform: translateY(-3.5px);
+  transform: translateY(-4px);
   border: var(--primary) solid 1px;
   padding: 10px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  /* border-radius: 5px; */
   /* z-index: ; */
 }
 /* ------------------ Active outlet container (end) ------------------ */

@@ -5,7 +5,7 @@ export default function getCardData(size) {
 
   for (let i = 0; i < size; i++) {
     data.push({
-      title: faker.lorem.sentences(2),
+      title: faker.lorem.sentence(10),
       client: faker.person.fullName(),
       pm: "Dinar M Islam",
       deliverables: "Deliverables",

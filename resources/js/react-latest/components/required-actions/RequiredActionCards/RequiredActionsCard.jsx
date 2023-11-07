@@ -1,4 +1,5 @@
 import { User } from "../../../utils/user-details";
+import RequiredActionCard_Loader from "./RequiredActionCard_Loader";
 import RequiredActionsCard_Admin from "./RequiredActionsCard_Admin";
 import RequiredActionsCard_Dev from "./RequiredActionsCard_Dev";
 import RequiredActionsCard_Lead_Dev from "./RequiredActionsCard_Lead_Dev";
@@ -14,6 +15,7 @@ export default function RequiredActionsCard({ data , temp=true }) {
     switch (role) {
       case 1: // management or admin
         return <RequiredActionsCard_Admin data={data} temp={temp} />
+        // return <RequiredActionCard_Loader temp={temp} />
       
       case 8: // team lead
         return <RequiredActionsCard_Admin data={data} temp={temp} />
