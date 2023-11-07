@@ -1,4 +1,4 @@
-import _, { includes } from "lodash";
+import _ from "lodash";
 import React from "react";
 import DataTable from "../global/table/DataTable";
 import { useLazyGetDisputesQuery } from "../services/api/SingleTaskPageApi";
@@ -256,6 +256,7 @@ const Disputes = () => {
                             updateDisputeConversation,
                             updateDisputeById
                         }}
+                        classes={{th: 'dispute_table_th'}}
                         loader={<DisputeTableLoader />}
                     />
                 </div>

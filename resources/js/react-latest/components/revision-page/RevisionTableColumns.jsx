@@ -1,9 +1,8 @@
-import _ from "lodash";
 import styles from "../../styles/revision-page.module.css";
-import SaleActionButton from "./SaleActionButton";
 import PersonColumn from "../../ui/PersonColumn";
 import Popover from "../../ui/Popover";
 import Switch from "../../ui/Switch";
+import SaleActionButton from "./SaleActionButton";
 
 export const RevisionTableColumns = [
     {
@@ -288,54 +287,6 @@ export const RevisionTableColumns = [
             const data = row.original;
             const user = window?.Laravel?.user;
 
-            // const status = () => {
-
-            //     if (data.sale_accept) {
-            //         return (
-            //             <Popover>
-            //                 <Popover.Button>
-            //                     <div className={`${styles.status} f-12`}>
-            //                         {`Accepted by ${data?.deal_added_by?.name}`}
-            //                     </div>
-            //                 </Popover.Button>
-
-            //                 <Popover.Panel>
-            //                     <div className={styles.revision_popover_panel}>
-            //                         <div className={`f-12`}>
-            //                             Accepted by <a href={`/account/employees/${data?.deal_added_by?.id}`}>{data?.deal_added_by?.name}</a>
-            //                         </div>
-            //                     </div>
-            //                 </Popover.Panel>
-            //             </Popover>
-            //         );
-            //     } else if (data.sale_deny) {
-            //         return (
-            //             <div className={`${styles.status} ${styles.deny} f-12`}>
-            //                 {`Denied by ${data?.deal_added_by?.name}`}
-            //             </div>
-            //         );
-            //     } else if (data.is_accept) {
-            //         return (
-            //             <div className={`${styles.status} f-12`}>
-            //                 {`Accepted by ${data?.task_assign_to?.name}`}
-            //             </div>
-            //         );
-            //     } else if (data.is_deny) {
-            //         return (
-            //             <div className={`${styles.status} ${styles.deny} f-12`}>
-            //                 {`Denied by ${data?.task_assign_to?.name}`}
-            //             </div>
-            //         );
-            //     } else
-            //         return (
-            //             <div
-            //                 className={`${styles.status} ${styles.pending} f-12`}
-            //             >
-            //                 Pending
-            //             </div>
-            //         );
-            // };
-
             const needAction = data.acknowledgement_id === "SPRx02";
             const actionAlreadyTaken = data.sale_accept || data.sale_deny;
             const hasPermissionToTakeAction =
@@ -346,7 +297,7 @@ export const RevisionTableColumns = [
                     <Switch.Case condition={!hasPermissionToTakeAction || (!needAction || actionAlreadyTaken)}>
                        <Switch>
                             {/* if sales accept */}
-                            <Switch.Case condition={data.sale_accept}>
+                            <Switch.Case condition={data.dispute_between === 'SPR' && data.sale_accept}>
                                 <Popover>
                                     <Popover.Button>
                                         <div className={`${styles.status} f-12`}>
@@ -365,7 +316,7 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* if sales deny */}
-                            <Switch.Case condition={data.sale_deny}>
+                            <Switch.Case condition={data.dispute_between === 'SPR' && data.sale_deny}>
                                 <Popover>
                                     <Popover.Button>
                                         <div className={`${styles.status} ${styles.deny} f-12`}>
@@ -384,7 +335,7 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* if revision accept by assignee */}
-                            <Switch.Case condition={!data.sale_accept && !data.sale_deny && data.is_deny}>
+                            <Switch.Case condition={data.dispute_between !== 'SPR' && data.is_accept}>
                                 <Popover>
                                     <Popover.Button>
                                         <div className={`${styles.status} f-12`}>
@@ -403,7 +354,7 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* if revision accept by assignee */}
-                            <Switch.Case condition={!data.sale_accept && !data.sale_deny && data.is_deny}>
+                            <Switch.Case condition={data.dispute_between !== 'SPR' && data.is_deny}>
                                 <Popover>
                                     <Popover.Button>
                                         <div className={`${styles.status} ${styles.deny} f-12`}>
@@ -422,7 +373,7 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* Pending */}
-                            <Switch.Case condition={ data?.sale_person ? (!data.sale_accept && !data.sale_deny) : (!data.is_deny && !data.is_accept) }>
+                            <Switch.Case condition={data.dispute_between === 'SPR' ? (!data.sale_accept && !data.sale_deny)   : (!data.is_deny && !data.is_accept)}>
                                 <div className={`${styles.status} ${styles.pending} f-12`}> Pending </div>
                             </Switch.Case>
                        </Switch>

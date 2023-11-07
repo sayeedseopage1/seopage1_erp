@@ -1,12 +1,10 @@
-import * as React from 'react';
-import ResolveButton from "./ResolveButton"
-import DisputeNotificationBadge from './DisputeNotificationBadge';
 import dayjs from 'dayjs';
-import Avatar from '../../global/Avatar';
 import _ from 'lodash';
-import AnsQuestion from './AnsQuestion';
-import { User } from '../../utils/user-details';
+import * as React from 'react';
+import Avatar from '../../global/Avatar';
 import Popover from '../../global/Popover';
+import DisputeNotificationBadge from './DisputeNotificationBadge';
+import ResolveButton from "./ResolveButton";
 
 
 
@@ -74,6 +72,7 @@ export const disputeTableColumn = [
         accessorFn: (row) => `${row.project_id}${row.project_name}`,
         cell: ({row}) => {
             const data = row.original;
+            if(!data.project_name) return <span className='empty_column'>N/A</span>
             return(
                 <abbr title={data?.project_name}>
                     <a href={`/account/projects/${data?.project_id}`} className='multine-ellipsis'> {data.project_name} </a>
@@ -88,6 +87,7 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const task = data?.task?.parent_task ?? data.task;
+            if(!task) return <span className='empty_column'>N/A</span>
             return(
                 <a href={`/account/tasks/${task?.id}`} className='multine-ellipsis'>{task?.title}</a>
             )
@@ -100,6 +100,7 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const task = data.task;
+            if(!task) return <span className='empty_column'>N/A</span>
             return(
                 <a href={`/account/tasks/${task?.id}`} className='multine-ellipsis'>{task.title}</a>
             )
@@ -113,6 +114,7 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const salesPerson = data?.sales_person;
+            if(!salesPerson) return <span className='empty_column'>N/A</span>
             return (
                 <div  className='person_rander'>
                     <Avatar
@@ -136,6 +138,8 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const project_manager = data?.project_manager;
+
+            if(!project_manager) return <span className='empty_column'>N/A</span>
             return (
                 <div className='person_rander'>
                     <Avatar
@@ -160,7 +164,7 @@ export const disputeTableColumn = [
             const data = row.original;
             const lead_developer = data?.task?.lead_developer;
 
-            if(!lead_developer) return <span> --</span>
+            if(!lead_developer) return <span> N/A </span>
 
             return (
                 <div className='person_rander'>
@@ -185,8 +189,10 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const developer = data?.task?.developer;
+
+            if(!developer) return <span className='empty_column'>N/A</span>
+
             return (
-               developer ?
                <div className='person_rander'>
                     <Avatar
                         src={developer?.image ? `/user-uploads/avatar/${developer?.image}` : null}
@@ -198,7 +204,6 @@ export const disputeTableColumn = [
                     />
                     <a href={`/account/employees/${developer?.id}`}>{developer?.name}</a>
                 </div>
-                : '--'
             )
         }
     },
@@ -210,6 +215,7 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const raised_by = data?.raised_by;
+            if(!raised_by) return <span className='empty_column'>N/A</span>
             return (
                 <div className='person_rander'>
                     <Avatar
@@ -233,6 +239,7 @@ export const disputeTableColumn = [
         cell: ({row}) => {
             const data = row.original;
             const raised_against = data?.raised_against;
+            if(!raised_against) return <span className='empty_column'>N/A</span>
             return (
                 <div className='person_rander'>
                     <Avatar
@@ -464,7 +471,7 @@ export const disputeTableColumn = [
                     <span style={{whiteSpace:'nowrap'}}>{dayjs(data.due_date).format('MMM DD, YYYY')}</span> <br/>
                     <span>{dayjs(data.due_date).format('hh:mm a')}</span>
                 </>
-            }else return '--'
+            }else return <span> N/A </span>
         }
     },
     {
