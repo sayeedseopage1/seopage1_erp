@@ -3281,7 +3281,7 @@ class TaskController extends AccountBaseController
         if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
             $name1 = 'Theme Details';
             $name2 = 'Design Details';
-            $name3 = 'Color Schema';
+            $name3 = 'Color Scheme';
             $name4 = 'Plugin Research';
 
             if ($data['theme_details'] == 0) {
