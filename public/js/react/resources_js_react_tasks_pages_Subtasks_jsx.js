@@ -398,7 +398,7 @@ var SubTasksTableColumns = [{
     //       </>
     //     ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
     //   </strong>
-    // ) 
+    // )
     return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_16__["default"], {
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_18__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_16__["default"].Case, {
         condition: (data === null || data === void 0 ? void 0 : data.task_approval_date) && lodash__WEBPACK_IMPORTED_MODULE_7___default().includes([4, 8, 9], data === null || data === void 0 ? void 0 : data.board_column_id),
@@ -415,6 +415,9 @@ var SubTasksTableColumns = [{
 }, {
   id: 'estimated_time',
   header: 'Estimated Time',
+  accessorFn: function accessorFn(row) {
+    return Number(row === null || row === void 0 ? void 0 : row.estimate_hours) * 60 + Number(row === null || row === void 0 ? void 0 : row.estimate_minutes);
+  },
   cell: function cell(_ref15) {
     var _data$estimate_hours, _data$estimate_minute;
     var row = _ref15.row;
@@ -426,6 +429,7 @@ var SubTasksTableColumns = [{
 }, {
   id: 'hours_logged',
   header: 'Hours Logged',
+  accessorKey: 'subtasks_hours_logged',
   cell: function cell(_ref16) {
     var row = _ref16.row;
     var data = row === null || row === void 0 ? void 0 : row.original;
