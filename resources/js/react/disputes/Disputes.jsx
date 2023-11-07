@@ -102,7 +102,7 @@ const Disputes = () => {
         const totalDispute = _.size(disputes);
         // need attention
 
-        // calcualte need my attention item
+        // calculate need my attention item
         let filterData = _.filter(disputes , dispute=> {
             if(dispute && dispute.conversations){
                 let indexOf = dispute.conversations.findIndex( d => !d.replies );

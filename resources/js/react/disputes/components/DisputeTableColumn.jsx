@@ -39,7 +39,7 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row.client.id}${row.client.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const client = data?.client;
             return (
                 <div className='person_rander'>
@@ -52,7 +52,7 @@ export const disputeTableColumn = [
                             height={24}
                         />
                     <a hrev={`account/clients/${client?.id}`}>{client?.name}</a>
-                </div> 
+                </div>
             )
         }
     },
@@ -65,7 +65,7 @@ export const disputeTableColumn = [
             if(data?.status){
                return <span className='badge badge-success font-weight-bold f-12'> Resolved </span>
             }else return <span className='badge badge-warning font-weight-bold text-white f-12'> Pending </span>
-        } 
+        }
     },
     {
         id: 'project',
@@ -87,7 +87,7 @@ export const disputeTableColumn = [
         draggable: true,
         cell: ({row}) => {
             const data = row.original;
-            const task = data?.task?.parent_task ?? data.task; 
+            const task = data?.task?.parent_task ?? data.task;
             return(
                 <a href={`/account/tasks/${task?.id}`} className='multine-ellipsis'>{task?.title}</a>
             )
@@ -99,7 +99,7 @@ export const disputeTableColumn = [
         draggable: true,
         cell: ({row}) => {
             const data = row.original;
-            const task = data.task; 
+            const task = data.task;
             return(
                 <a href={`/account/tasks/${task?.id}`} className='multine-ellipsis'>{task.title}</a>
             )
@@ -111,12 +111,12 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.sales_person?.id}${row?.sales_person?.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const salesPerson = data?.sales_person;
             return (
                 <div  className='person_rander'>
                     <Avatar
-                        src={salesPerson?.image ? `/user-uploads/avatar/${salesPerson?.image}` : null} 
+                        src={salesPerson?.image ? `/user-uploads/avatar/${salesPerson?.image}` : null}
                         alt={salesPerson?.name}
                         name={salesPerson?.name}
                         type='circle'
@@ -134,7 +134,7 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.project_manager?.id}${row?.project_manager?.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const project_manager = data?.project_manager;
             return (
                 <div className='person_rander'>
@@ -157,7 +157,7 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.task?.lead_developer?.id}${row?.task?.lead_developer?.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const lead_developer = data?.task?.lead_developer;
 
             if(!lead_developer) return <span> --</span>
@@ -179,14 +179,14 @@ export const disputeTableColumn = [
     },
     {
         id: 'developer_desiner',
-        header: 'Developer/ Designer',
+        header: 'Developer/Designer',
         draggable: true,
         accessorFn: (row) => `${row?.task?.developer?.id}${row?.task?.developer?.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const developer = data?.task?.developer;
             return (
-               developer ? 
+               developer ?
                <div className='person_rander'>
                     <Avatar
                         src={developer?.image ? `/user-uploads/avatar/${developer?.image}` : null}
@@ -198,7 +198,7 @@ export const disputeTableColumn = [
                     />
                     <a href={`/account/employees/${developer?.id}`}>{developer?.name}</a>
                 </div>
-                : '--' 
+                : '--'
             )
         }
     },
@@ -208,7 +208,7 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.raised_by?.id}${row?.raised_by?.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const raised_by = data?.raised_by;
             return (
                 <div className='person_rander'>
@@ -231,7 +231,7 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.raised_against?.id}${row?.raised_against?.name}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const raised_against = data?.raised_against;
             return (
                 <div className='person_rander'>
@@ -247,17 +247,17 @@ export const disputeTableColumn = [
                 </div>
             )
         }
-    }, 
+    },
     {
         id: 'Winner',
         header: 'Winner',
         draggable: true,
         accessorFn: (row) => `${row?.winner?.id}`,
         cell: ({row}) => {
-            const data = row.original; 
+            const data = row.original;
             const winner = data?.winner;
             const raised_against = data?.raised_against;
-            const raised_by = data?.raised_by; 
+            const raised_by = data?.raised_by;
 
             if(data?.status && !winner) return (
                 <Popover>
@@ -268,7 +268,7 @@ export const disputeTableColumn = [
                     <Popover.Panel>
                         <div className='revision_popover_panel'>
                             <div className="row">
-                                <div className="col"> 
+                                <div className="col">
                                     <div className='partially_responsible_person'>
                                         <Avatar
                                             src={raised_against?.image ? `/user-uploads/avatar/${raised_against?.image}`: null}
@@ -294,14 +294,14 @@ export const disputeTableColumn = [
                                             height={48}
                                         />
                                         <h6>{raised_by?.name}</h6>
-                                        <h3>{data?.raised_by_percent}%</h3> 
+                                        <h3>{data?.raised_by_percent}%</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </Popover.Panel>
                 </Popover>
-            ); 
+            );
             if(!winner) return <span className='badge badge-warning font-weight-bold text-white f-12'> No Decision Yet </span>;
             return (
                 <div className='person_rander'>
@@ -325,17 +325,17 @@ export const disputeTableColumn = [
         accessorFn: (row) => `${row.resolved_on ? dayjs(row.resolved_on).format('MMM DD, YYYY') : ''}`,
         cell: ({row}) => {
             const data = row.original;
-            const resolved_by = data?.resolved_by; 
-            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
-            
+            const resolved_by = data?.resolved_by;
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false))
+
             if(!resolved_by){
                 if( unsolvedQuestion > 0){
                     return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
                 }else if(data?.need_authrization){
                     return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
-                }else { 
+                }else {
                     return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
-                } 
+                }
             }
 
 
@@ -353,18 +353,18 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.resolved_by?.id}`,
         cell: ({row}) => {
-            const data = row.original; 
-            const resolved_by = data?.resolved_by; 
-            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
-            
+            const data = row.original;
+            const resolved_by = data?.resolved_by;
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false))
+
             if(!resolved_by){
                 if( unsolvedQuestion > 0){
                     return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
                 }else if(data?.need_authrization){
                     return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
-                }else { 
+                }else {
                     return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
-                } 
+                }
             }
 
 
@@ -378,7 +378,7 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <a href={`/account/employees/${resolved_by.id}`}>{resolved_by?.name}</a> 
+                    <a href={`/account/employees/${resolved_by.id}`}>{resolved_by?.name}</a>
                 </div>
             )
         }
@@ -390,17 +390,17 @@ export const disputeTableColumn = [
         accessorFn: (row) => `${row.authorize_on ? dayjs(row.authorize_on).format('MMM DD, YYYY') : ''}`,
         cell: ({row}) => {
             const data = row.original;
-            const authorized_by = data?.authorized_by; 
-            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
-            
+            const authorized_by = data?.authorized_by;
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false))
+
             if(!authorized_by && !data?.status){
                 if( unsolvedQuestion > 0){
                     return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
                 }else if(data?.need_authrization){
                     return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
-                }else { 
+                }else {
                     return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
-                } 
+                }
             }
 
             if(!authorized_by && data?.status){
@@ -422,18 +422,18 @@ export const disputeTableColumn = [
         draggable: true,
         accessorFn: (row) => `${row?.authorized_by?.id}`,
         cell: ({row}) => {
-            const data = row.original; 
-            const authorized_by = data?.authorized_by; 
-            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false)) 
-            
+            const data = row.original;
+            const authorized_by = data?.authorized_by;
+            const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false))
+
             if(!authorized_by){
                 if( unsolvedQuestion > 0){
                     return <span className='badge badge-primary font-weight-bold f-12'> In Progress </span>;
                 }else if(data?.need_authrization){
                     return <span className='badge badge-primary font-weight-bold f-12'> Awaiting Authorization </span>;
-                }else { 
+                }else {
                     return <span className='badge badge-light font-weight-bold f-12'> No Activity Yet </span>;
-                } 
+                }
             }
 
 
@@ -447,11 +447,11 @@ export const disputeTableColumn = [
                         width={24}
                         height={24}
                     />
-                    <a href={`/account/employees/${authorized_by.id}`}>{authorized_by?.name}</a> 
+                    <a href={`/account/employees/${authorized_by.id}`}>{authorized_by?.name}</a>
                 </div>
             )
         }
-    }, 
+    },
     {
         id: 'due_date',
         header: 'Due Date',
@@ -466,21 +466,21 @@ export const disputeTableColumn = [
                 </>
             }else return '--'
         }
-    }, 
+    },
     {
         id: 'action',
         header: 'Action',
         draggable: false,
         cell: ({row, table}) => {
-            const data = row.original; 
+            const data = row.original;
             const status = row.status;
             const unsolvedQuestion = _.size(_.filter(data.conversations, conv => !conv.replies ? true : false))
-             
+
             return(
                 <div>
-                    <ResolveButton row={row.original} table={table} /> 
+                    <ResolveButton row={row.original} table={table} />
                 </div>
             )
         }
-    } 
+    }
 ]

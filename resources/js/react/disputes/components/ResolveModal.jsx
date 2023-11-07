@@ -783,6 +783,7 @@ const ResolveModal = ({ state }) => {
                                                                                         0
                                                                                         {index +
                                                                                             1}
+
                                                                                         :
                                                                                     </span>
                                                                                     <span className="px-2 font-medium">
@@ -1039,6 +1040,7 @@ const ResolveModal = ({ state }) => {
                                                                                         0
                                                                                         {index +
                                                                                             1}
+
                                                                                         :
                                                                                     </span>
                                                                                     <span className="px-2 font-medium">
@@ -1300,6 +1302,7 @@ const ResolveModal = ({ state }) => {
                                                                                         0
                                                                                         {index +
                                                                                             1}
+
                                                                                         :
                                                                                     </span>
                                                                                     <span className="px-2 font-medium">
@@ -1553,6 +1556,7 @@ const ResolveModal = ({ state }) => {
                                                                                         Question{" "}
                                                                                         {index +
                                                                                             1}
+
                                                                                         :
                                                                                     </span>
                                                                                     <span className="px-2 font-medium">
@@ -1695,6 +1699,7 @@ const ResolveModal = ({ state }) => {
                                                                                 Q
                                                                                 {i +
                                                                                     1}
+
                                                                                 .
                                                                             </span>
                                                                             <span className="d-block">
@@ -2116,6 +2121,7 @@ const ResolveModal = ({ state }) => {
                                                                                             Q
                                                                                             {index +
                                                                                                 1}
+
                                                                                             :
                                                                                             Write
                                                                                             your
@@ -2760,6 +2766,7 @@ const ResolveModal = ({ state }) => {
                                                                                                 Q
                                                                                                 {index +
                                                                                                     1}
+
                                                                                                 :
                                                                                                 Write
                                                                                                 your

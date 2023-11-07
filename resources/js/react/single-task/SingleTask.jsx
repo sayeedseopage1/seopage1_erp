@@ -31,6 +31,7 @@ import TaskEditForm from "./section/sub-task/TaskEditForm";
 import SubTaskEditModal from "./section/sub-task/SubTaskEditModal";
 import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
 import FileUploader from "../file-upload/FileUploader";
+import Switch from "../global/Switch";
 
 const SingleTaskPage = () => {
     const { task: Task } = useSelector((s) => s.subTask);
@@ -136,21 +137,25 @@ const SingleTaskPage = () => {
                                                 </div>
                                             </div>
                                         )}
+                                        <Switch>
+                                            <Switch.Case condition={loggedUser.getRoleId() !== 5}>
+                                                <div className="sp1_st-list-item">
+                                                    <div className="sp1_st-list-item-head">
+                                                        Project :{" "}
+                                                    </div>
+                                                    <div className="sp1_st-list-item-value">
+                                                        <span className="dot-color bg-danger mr-2" />
+                                                        <a
+                                                            href={`/account/projects/${task?.projectId}`}
+                                                            className="text-hover-underline"
+                                                        >
+                                                            {task?.projectName}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </Switch.Case>
+                                        </Switch>
 
-                                        <div className="sp1_st-list-item">
-                                            <div className="sp1_st-list-item-head">
-                                                Project :{" "}
-                                            </div>
-                                            <div className="sp1_st-list-item-value">
-                                                <span className="dot-color bg-danger mr-2" />
-                                                <a
-                                                    href={`/account/projects/${task?.projectId}`}
-                                                    className="text-hover-underline"
-                                                >
-                                                    {task?.projectName}
-                                                </a>
-                                            </div>
-                                        </div>
                                         <div className="sp1_st-list-item">
                                             <div className="sp1_st-list-item-head">
                                                 Client :{" "}

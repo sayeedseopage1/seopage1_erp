@@ -2,13 +2,18 @@ import React, { useEffect, useLayoutEffect } from "react";
 import Modal from "../../../global/Modal";
 import Button from "../../../global/Button";
 import styles from "./ResolveBtnPopupText.module.css";
+import { useAuth } from '../../../hooks/useAuth'
 
 export default function ResolveBtnPopupText({ isOpen, close, timer = 20 }) {
     const [count, setCount] = React.useState(timer);
+    const auth = useAuth();
+
+    if(auth.getRoleId() !== 1 && auth.getRoleId() !== 8){
+        return null;
+    }
 
     useEffect(() => {
         let c = timer;
-
         const interval = setInterval(() => {
             if(c > 0){
                 c--;
