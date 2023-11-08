@@ -6,6 +6,7 @@ use App\Models\DealStage;
 use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
 use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\ProjectCms;
 use App\Models\ProjectPortfolio;
 use App\Models\ProjectWebsitePlugin;
@@ -3269,6 +3270,26 @@ class ProjectController extends AccountBaseController
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
                 $action->save();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message;
+                $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+                
            
         }
     }
