@@ -32,7 +32,7 @@ const ApproveTask = ({task, status, auth}) => {
 
   const [err, setErr] = useState(null);
 
- 
+
  useEffect(() => {
     if(getSubmittedTask){
         const data = _.sortBy(getSubmittedTask, ['submission_no']);
@@ -48,7 +48,7 @@ const ApproveTask = ({task, status, auth}) => {
     setShowApproveForm(false)
   }
 
-  // editor data 
+  // editor data
   const onWriteOnEditor = (e, editor) => {
     const data = editor.getData();
     setComment(data);
@@ -68,7 +68,7 @@ const ApproveTask = ({task, status, auth}) => {
     return !count;
   }
 
-  // submit 
+  // submit
   const handleOnSubmit = async (e) =>{
     e.preventDefault();
     const data = {
@@ -78,11 +78,11 @@ const ApproveTask = ({task, status, auth}) => {
         comment,
         task_id: task?.id,
         user_id: auth?.getId()
-    }   
+    }
 
-    if(isValid()){ 
+    if(isValid()){
         const cb = () => setShowApproveForm(false);
-        await approveTask(data, cb ); 
+        await approveTask(data, cb );
     }else{
         toast.warn("Please add a comment!");
     }
@@ -115,7 +115,7 @@ const ApproveTask = ({task, status, auth}) => {
                     <div className="px-3">
                          { _.size(oldSubmittion) > 0 &&
                             <div className='mb-3'>
-                                <div className="sp1_st--approve-card"> 
+                                <div className="sp1_st--approve-card">
                                     <div className="sp1_st--approve-card-header" data-toggle="collapse" href="#oldSubmittedSuccess" role="button"   aria-expanded="false" aria-controls="oldSubmittedSuccess">
                                         Old Submitted Works ({_.size(oldSubmittion)})
                                         <button>
@@ -146,7 +146,7 @@ const ApproveTask = ({task, status, auth}) => {
                         <SubmittedWorkCard data={latestSubmittion} latest={true} isLoading={isFetching} />
                     </div>
                     {
-                        !isFetching && 
+                        !isFetching &&
                         <div className="mt-4 px-3">
                             <form action="">
                                 <div className="form-group">
@@ -160,7 +160,7 @@ const ApproveTask = ({task, status, auth}) => {
                                         />
                                     </div>
                                 </div>
-    
+
                                 <div className="form-group">
                                     <label htmlFor="" className='font-weight-bold'>How Beautifully The Task Is Submitted?<sup className='f-16'>*</sup></label>
                                     <div className=''>
@@ -172,8 +172,8 @@ const ApproveTask = ({task, status, auth}) => {
                                         />
                                     </div>
                                 </div>
-    
-    
+
+
                                 <div className="form-group">
                                     <label htmlFor="" className='font-weight-bold'>
                                         How Perfectly The Task Requirements Are Fullfilled?<sup className='f-16'>*</sup>
@@ -187,7 +187,7 @@ const ApproveTask = ({task, status, auth}) => {
                                         />
                                     </div>
                                 </div>
-    
+
                                 <div className="form-group">
                                     <label htmlFor="" className='font-weight-bold'>
                                         Any Recommendations For Developer?<sup className='f-16'>*</sup>
@@ -196,40 +196,21 @@ const ApproveTask = ({task, status, auth}) => {
                                         <CKEditorComponent onChange={onWriteOnEditor} />
                                     </div>
                                 </div>
-    
+
                                 <div className="mt-3 d-flex align-items-center">
                                     <Button onClick={close} variant="tertiary" className="ml-auto mr-2">
-                                       Close 
+                                       Close
                                     </Button>
-    
-                                    {/* {!isLoading ? (
-                                        <React.Fragment>
-                                            <Button onClick={handleOnSubmit}>Approve</Button>
-                                        </React.Fragment>
-                                    ) : (
-                                        <React.Fragment>
-                                            <Button className="cursor-processing">
-                                                <div
-                                                    className="spinner-border text-white"
-                                                    role="status"
-                                                    style={{
-                                                        width: "18px",
-                                                        height: "18px",
-                                                    }}
-                                                />{" "}
-                                                Processing...
-                                            </Button>
-                                        </React.Fragment>
-                                    )} */}
+
                                     <SubmitButton onClick={handleOnSubmit} title="Approve" isLoading={approveTaskLoadingStatus} />
                                 </div>
                             </form>
                         </div>
                     }
-                    
+
                 </div>
             </div>
-        </Modal> 
+        </Modal>
     </React.Fragment>
   )
 }
@@ -243,10 +224,10 @@ const SubmittedWorkCard = ({data, latest=false, className="", style, isLoading =
 
     const links = _.compact(_.split(data?.links, ','));
     const attaches =  _.compact(_.split(data?.attaches, ','));
-   
+
 
     if(isLoading){
-        return <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}> 
+        return <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}>
             <div className="sp1_st--approve-card-header">
                 <Placeholder height="14px" width='80px' className='mb-2' />
                 <Placeholder height="14px" width='50px' className='mb-2' />
@@ -260,7 +241,7 @@ const SubmittedWorkCard = ({data, latest=false, className="", style, isLoading =
                         <Placeholder height="14px" width='100%' className='mb-2'/>
                         <Placeholder height="14px" width='100%' className='mb-2'/>
                         <Placeholder height="14px" width='100%' className='mb-2'/>
-                    </div> 
+                    </div>
                 </div>
 
                 <div className='mb-2'>
@@ -270,15 +251,15 @@ const SubmittedWorkCard = ({data, latest=false, className="", style, isLoading =
                         <Placeholder height="14px" width='100%' className='mb-2'/>
                         <Placeholder height="14px" width='100%' className='mb-2'/>
                         <Placeholder height="14px" width='50%' className='mb-2'/>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
     }
 
-    
+
     return(
-        <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}> 
+        <div className={`sp1_st--approve-card mb-3 ${className}`} style={style}>
             <div className="sp1_st--approve-card-header">
                 <span>{latest ? 'Latest': "Old"} Submittion {!latest && `(${data?.submission_no})`}</span>
                 <span>
@@ -319,8 +300,8 @@ const SubmittedWorkCard = ({data, latest=false, className="", style, isLoading =
                                 fileName={file}
                                 downloadAble={true}
                                 deleteAble={false}
-                                downloadUrl={`/storage/TaskSubmission/${file}`}
-                                previewUrl={`/storage/TaskSubmission/${file}`}
+                                downloadUrl={`${file}`}
+                                previewUrl={`${file}`}
                                 fileType={_.includes(["png","jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others'}
                                 ext=""
                             />

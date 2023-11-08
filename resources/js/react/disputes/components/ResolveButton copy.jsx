@@ -33,24 +33,24 @@ const reducer = (state, action) => {
                 }
             ];
 
-        case 'UPDATE_QUESTION': 
+        case 'UPDATE_QUESTION':
             return _.map(state, question =>  question.id === action.id ? action.data : question);
-        
-        case 'UPDATE_USER': 
+
+        case 'UPDATE_USER':
             return _.map(state, question =>  question.id === action.id ? {...question, user: action.user} : question);
 
         case "REMOVE_QUESTION":
             return state.filter(question => question.id !== action.id);
- 
+
         case 'CLEAR':
             return state = [];
 
-        default: 
+        default:
             return state
     }
   };
-  
- 
+
+
 
 
 const ResolveButton = ({row, table}) => {
@@ -65,13 +65,13 @@ const ResolveButton = ({row, table}) => {
   const [raisedByPercent, setRaisedByPercent] = React.useState(50);
   const [raisedAgainstPercent, setRaisedAgainstPercent] = React.useState(50);
   const [questions, dispatch] = React.useReducer(reducer, []);
-  const [questionFor, setQuestionFor] = React.useState(null); 
-  const [resolveComment, setResolveComment] = React.useState(''); 
+  const [questionFor, setQuestionFor] = React.useState(null);
+  const [resolveComment, setResolveComment] = React.useState('');
   const [needAuthorization, setNeedAuthorization] = React.useState(false);
   const [edit, setEdit] = React.useState(true);
-  
-  const {updateDisputeConversation, updateDisputeById} = table.getState(); 
-  
+
+  const {updateDisputeConversation, updateDisputeById} = table.getState();
+
 
   const auth = new User(window?.Laravel?.user);
   const [disputeAnswerMakeAsRead, {isLoading}] = useDisputeAnswerMakeAsReadMutation();
@@ -97,11 +97,11 @@ const ResolveButton = ({row, table}) => {
   };
 
   // handle add question
-  const addQuestion = () => { 
+  const addQuestion = () => {
     dispatch({ type: 'ADD_QUESTION', question: '', user: questionFor ?? '' })
   }
 
-  // remove question 
+  // remove question
   const removeQuestion = (id) => {
     dispatch({type: 'REMOVE_QUESTION', id })
   }
@@ -118,15 +118,15 @@ const ResolveButton = ({row, table}) => {
   const askQuestionTo = (user, question_id) => {
         setQuestionFor(user);
         dispatch({type: 'UPDATE_USER', user, id: question_id})
-  }  
+  }
   // submitQuestion
   const [askDisputeQuestion, {isLoading:questionSubmitting}] = useAskDisputeQuestionMutation();
 
   const handleQuestionSubmittion = async () => {
     const data = {
         questions: _.map(questions, q => ({
-            question: q.question, 
-            question_for: q?.user?.id, 
+            question: q.question,
+            question_for: q?.user?.id,
             raised_by: window?.Laravel?.user.id,
             dispute_id: row?.id
         })),
@@ -161,9 +161,8 @@ const answerStatus = async() => {
 
   const resolvedBy = new User(getUserById(row?.resolved_by?.id));
 
-    
-  // handle submit for authorization
-  console.log({row})
+
+
 
   const [disputeSubmitToAuthorization, {isLoading: submittingToAuthorization}] = useDisputeSubmitToAuthorizationMutation();
   const handleSubmitForAuthorization = async () =>{
@@ -178,8 +177,8 @@ const answerStatus = async() => {
                 task_id: row?.task_id,
                 authorized: false,
             }
-        
-            try{ 
+
+            try{
                 const res = await disputeSubmitToAuthorization(data).unwrap();
                 console.log(res)
                 updateDisputeById({
@@ -202,9 +201,9 @@ const answerStatus = async() => {
                 authorized_by: row?.need_authrization ? window?.Laravel?.user?.id : null,
                 winner: winner?.id ?? null,
                 authorize_comment: row?.need_authrization ? resolveComment : null,
-            }  
+            }
 
-            try{ 
+            try{
                 const res = await disputeSubmitToAuthorization(data).unwrap();
                 updateDisputeById({
                     disputeId: row?.id,
@@ -213,14 +212,13 @@ const answerStatus = async() => {
             }catch(err){
                 console.log(err)
             }
-        }   
+        }
   }
 
 
-  const task = row?.task?.parent_task ?? row?.task; 
+  const task = row?.task?.parent_task ?? row?.task;
   const resolved = row?.status;
 
-  console.log(row)
 
 
   return (
@@ -252,8 +250,8 @@ const answerStatus = async() => {
                     {/* end header */}
 
                     {/* body */}
-                    <div 
-                        className="sp1_modal-body sp1_task_create_modal_body" 
+                    <div
+                        className="sp1_modal-body sp1_task_create_modal_body"
                         style={{maxHeight: 'calc(100vh - 110px)', overflowY: 'auto'}}
                     >
                         <div className="px-3">
@@ -277,7 +275,7 @@ const answerStatus = async() => {
                                         <a href={`/account/tasks/${task.id}`} className="nav-link badge badge-secondary py-1 px-3">Task</a>
                                     </li>
 
-                                    {row?.task?.parent_task && 
+                                    {row?.task?.parent_task &&
                                         <li className="nav-item">
                                             <a href={`/account/tasks/${row?.task?.id}`} className="nav-link badge badge-secondary py-1 px-3">Subtasks</a>
                                         </li>
@@ -302,7 +300,7 @@ const answerStatus = async() => {
 
                             {/* Revision details */}
                             <table className='dispute-preview-table'>
-                                <tbody>  
+                                <tbody>
                                     <tr>
                                         <td className='whitespace-nowrap py-2'>Revision Given By:</td>
                                         <td className='py-2 px-3'>
@@ -328,7 +326,7 @@ const answerStatus = async() => {
                                     </tr>
 
                                    {
-                                        _.includes(['SPR', "CPR"], row?.dispute_between) ? null : 
+                                        _.includes(['SPR', "CPR"], row?.dispute_between) ? null :
                                         <>
                                              <tr>
                                                 <td className='py-2'>Reason:</td>
@@ -336,7 +334,7 @@ const answerStatus = async() => {
                                                     {row?.revision_acknowledgement}
                                                 </td>
                                             </tr>
-            
+
 
                                             <tr>
                                                 <td className='py-2'>Explanation:</td>
@@ -345,40 +343,40 @@ const answerStatus = async() => {
                                                 </td>
                                             </tr>
 
-                                            {_.size(_.filter(conversations, conv => conv.question_for === row?.raised_against?.id)) ? 
+                                            {_.size(_.filter(conversations, conv => conv.question_for === row?.raised_against?.id)) ?
                                                 <tr>
                                                     <td className='py-2'>Submitted Answer:</td>
-                                                    <td className='px-3 py-2'> 
+                                                    <td className='px-3 py-2'>
                                                         <div className='d-flex flex-column' style={{gap: '16px'}}>
                                                             {_.map([..._.filter(conversations, c => c.question_for === row?.raised_against?.id)], (conv, index) => {
-                                                            
-                                                            const raised_by = new User(getUserById(conv?.raised_by)); 
-                                                            const replied_by = new User(getUserById(conv?.replied_by)); 
+
+                                                            const raised_by = new User(getUserById(conv?.raised_by));
+                                                            const replied_by = new User(getUserById(conv?.replied_by));
 
 
                                                             return (
                                                                 <div key={index} className='d-flex flex-column' style={{gap: 6}}>
-                                                                    <div className="pl-3" > 
-                                                                        <span className='badge badge-primary'>Question 0{index+1}:</span> 
-                                                                        <span className='px-2 font-medium'>{conv?.question}</span> 
+                                                                    <div className="pl-3" >
+                                                                        <span className='badge badge-primary'>Question 0{index+1}:</span>
+                                                                        <span className='px-2 font-medium'>{conv?.question}</span>
                                                                         <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
                                                                     </div>
 
-                                                                    <div className='p-3 position-relative' style={{background: '#f8f8f8'}}> 
-                                                                        <div className=''> 
-                                                                            <p className=''> 
-                                                                                <span className='badge badge-success d-inline mr-1'>Answer:</span>  
+                                                                    <div className='p-3 position-relative' style={{background: '#f8f8f8'}}>
+                                                                        <div className=''>
+                                                                            <p className=''>
+                                                                                <span className='badge badge-success d-inline mr-1'>Answer:</span>
                                                                                 {conv?.replies ?? 'Not answered yet!'}
                                                                             </p>
                                                                             {
-                                                                                conv?.replies && 
-                                                                                <div> 
+                                                                                conv?.replies &&
+                                                                                <div>
                                                                                     <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
                                                                                 </div>
                                                                             }
-                                                                        </div> 
+                                                                        </div>
                                                                     </div>
-                                                                </div> 
+                                                                </div>
                                                                 )
                                                             })}
                                                         </div>
@@ -387,9 +385,9 @@ const answerStatus = async() => {
                                             }
                                         </>
                                    }
-                                    
+
                                 </tbody>
-                            </table>  
+                            </table>
 
                             {/* devider */}
                             <div className='mt-3 pb-2 py-2 position-relative'>
@@ -426,7 +424,7 @@ const answerStatus = async() => {
                                                 </div>
                                             </div>
                                         </td>
-                                    </tr>  
+                                    </tr>
 
                                     <tr>
                                         <td className='py-2'>Reason:</td>
@@ -437,45 +435,45 @@ const answerStatus = async() => {
 
                                     <tr>
                                         <td className='py-2'>Explanation:</td>
-                                        <td className='px-3 py-2'> 
+                                        <td className='px-3 py-2'>
                                         <div className='sp1_ck_content' dangerouslySetInnerHTML={{__html: row?.dev_comment ?? row?.lead_comment }} />
                                         </td>
                                     </tr>
 
-                                    {_.size(_.filter(conversations, conv => conv.question_for === row?.raised_by?.id)) ? 
+                                    {_.size(_.filter(conversations, conv => conv.question_for === row?.raised_by?.id)) ?
                                         <tr>
                                             <td className='py-2'>Submitted Answer:</td>
-                                            <td className='px-3 py-2'> 
+                                            <td className='px-3 py-2'>
                                                 <div className='d-flex flex-column' style={{gap: '16px'}}>
                                                     {_.map(_.filter(conversations, conv => conv.question_for === row?.raised_by?.id), (conv, index) => {
-                                                    const raised_by = new User(getUserById(conv?.raised_by)); 
-                                                    const replied_by = new User(getUserById(conv?.replied_by)); 
+                                                    const raised_by = new User(getUserById(conv?.raised_by));
+                                                    const replied_by = new User(getUserById(conv?.replied_by));
 
 
                                                     return (
                                                         <div key={index} className='d-flex flex-column' style={{gap: 6}}>
-                                                            <div className="pl-3" > 
-                                                                <span className='badge badge-primary'>Question 0{index+1}:</span> 
-                                                                <span className='px-2 font-medium'>{conv?.question}</span> 
+                                                            <div className="pl-3" >
+                                                                <span className='badge badge-primary'>Question 0{index+1}:</span>
+                                                                <span className='px-2 font-medium'>{conv?.question}</span>
                                                                 <span className='d-block text-right question-by f-12' > -by <a href={raised_by.getUserLink()}>{raised_by?.getName()}</a> on {dayjs(conv?.created_at).format('MMM DD, YYYY')} at {dayjs(conv?.created_at).format('hh:mm a')}</span>
                                                             </div>
 
-                                                            <div className='p-3' style={{background: '#f8f8f8'}}> 
-                                                                <div className=''> 
+                                                            <div className='p-3' style={{background: '#f8f8f8'}}>
+                                                                <div className=''>
                                                                     <p>
-                                                                        <span className='badge badge-success d-inline mr-1'>Answer:</span>  
+                                                                        <span className='badge badge-success d-inline mr-1'>Answer:</span>
                                                                         {conv?.replies ?? 'Not answered yet!'}
                                                                     </p>
 
                                                                     {
-                                                                        conv?.replies && 
-                                                                        <div> 
+                                                                        conv?.replies &&
+                                                                        <div>
                                                                             <span className='question-by f-12'> - by <a href={replied_by.getUserLink()}>{replied_by?.getName()}</a> on {dayjs(conv?.replied_date).format('MMM DD, YYYY')} at {dayjs(conv?.replied_date).format('hh:mm a')}</span>
                                                                         </div>
                                                                     }
-                                                                </div> 
+                                                                </div>
                                                             </div>
-                                                        </div> 
+                                                        </div>
                                                         )
                                                     })}
                                                 </div>
@@ -483,27 +481,27 @@ const answerStatus = async() => {
                                         </tr> : null
                                     }
                                 </tbody>
-                            </table> 
-  
+                            </table>
+
                             {/* devider */}
                             <div className='mt-3 pb-2 py-2 position-relative'>
                                 <hr/>
                                 <span className='badge badge-secondary divider-text'>Resolve</span>
-                            </div> 
+                            </div>
 
 
                             {/* authorize details */}
                             {/* Response details */}
-                            
-                            <table className='dispute-preview-table'> 
+
+                            <table className='dispute-preview-table'>
 
                                 {/* question */}
-                               <tbody> 
+                               <tbody>
                                 {(row?.need_authrization || row?.status) ?
                                     <React.Fragment>
                                          <tr>
                                             <td className='py-2'>
-                                                <span className=' py-2 d-block'>Resolve By: </span> 
+                                                <span className=' py-2 d-block'>Resolve By: </span>
                                             </td>
 
                                             <td className='px-3 py-2 w-100'>
@@ -526,18 +524,18 @@ const answerStatus = async() => {
                                                     </div>
                                                 </div>
                                             </td>
-                                        </tr> 
+                                        </tr>
 
                                         <tr>
                                             <td className=' py-2 '>
-                                                <span className='d-block'>The Winner: </span> 
+                                                <span className='d-block'>The Winner: </span>
                                             </td>
 
 
-                                            {row?.winner ? 
-                                                <div className='d-flex align-items-center'> 
+                                            {row?.winner ?
+                                                <div className='d-flex align-items-center'>
                                                     <div className='px-2  py-2 '>
-                                                        <span className="d-block font-weight-bold">{row?.winner?.name}</span> 
+                                                        <span className="d-block font-weight-bold">{row?.winner?.name}</span>
                                                     </div>
                                             </div> :
 
@@ -546,24 +544,24 @@ const answerStatus = async() => {
                                                     <div>{row?.raised_by?.name} : {raisedByPercent}%</div>
                                                     <div>{row?.raised_against?.name} : {raisedAgainstPercent}%</div>
 
-                                                    {!row?.status ? 
+                                                    {!row?.status ?
                                                     <button onClick={() => setEdit(true)} className='dispute-edit-btn'>
                                                     <i className="fa-regular fa-pen-to-square"></i>
                                                 </button> : null}
                                                 </div>
-                                            </td> 
+                                            </td>
                                             }
-                                        </tr> 
+                                        </tr>
 
                                         <tr>
                                             <td className='py-2'>
-                                                <span className='d-block'>Comment: </span> 
+                                                <span className='d-block'>Comment: </span>
                                             </td>
 
                                             <td className='px-3 py-2'>
-                                                {row?.resolve_comment} 
+                                                {row?.resolve_comment}
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     </React.Fragment>
                                     :
                                     <tr>
@@ -574,7 +572,7 @@ const answerStatus = async() => {
                                             <div className='d-flex align-items-center'>
                                                 <div className='form-check form-check-inline'>
                                                     <input
-                                                        type='radio' 
+                                                        type='radio'
                                                         name='authrize_question'
                                                         className='form-check-input'
                                                         value="yes"
@@ -590,7 +588,7 @@ const answerStatus = async() => {
 
                                                 <div className='form-check form-check-inline'>
                                                     <input
-                                                        type='radio' 
+                                                        type='radio'
                                                         name='authrize_question'
                                                         className='form-check-input'
                                                         value="no"
@@ -603,46 +601,46 @@ const answerStatus = async() => {
                                                     <label className='form-check-label'>
                                                         No
                                                     </label>
-                                                </div> 
+                                                </div>
                                             </div>
 
                                             {/* add question */}
 
-                                            {hasQuestion && 
+                                            {hasQuestion &&
                                                 <div>
                                                     {_.map(questions, (question, index) => (
                                                         <div key={question.id} className='mt-3 w-100'>
-                                                            <div className='d-flex align-items-center' style={{gap: '10px'}}>  
+                                                            <div className='d-flex align-items-center' style={{gap: '10px'}}>
                                                                 <Dropdown>
-                                                                    <Dropdown.Toggle className="font-weight-bold py-2 px-3 border rounded-sm toggle-light"> 
-                                                                        { question?.user?.name || questionFor?.name || 'Click to select user'} 
-                                                                    </Dropdown.Toggle> 
+                                                                    <Dropdown.Toggle className="font-weight-bold py-2 px-3 border rounded-sm toggle-light">
+                                                                        { question?.user?.name || questionFor?.name || 'Click to select user'}
+                                                                    </Dropdown.Toggle>
                                                                     <Dropdown.Menu>
                                                                         <Dropdown.Item onClick={() => askQuestionTo(row?.raised_by, question.id)}>
                                                                             {row?.raised_by?.name}
                                                                             {question?.user?.id === row?.raised_by?.id ||
-                                                                            questionFor?.id === row?.raised_by?.id ? 
-                                                                                <i className='fa-solid fa-check ml-2'/> 
+                                                                            questionFor?.id === row?.raised_by?.id ?
+                                                                                <i className='fa-solid fa-check ml-2'/>
                                                                             : null}
                                                                         </Dropdown.Item>
                                                                         <Dropdown.Item onClick={() => askQuestionTo(row?.raised_against, question.id)}>
                                                                             {row?.raised_against?.name}
-                                                                            
+
                                                                             {question?.user?.id === row?.raised_against.id ||
-                                                                            questionFor?.id === row?.raised_against.id ? 
-                                                                                <i className='fa-solid fa-check ml-2'/> 
+                                                                            questionFor?.id === row?.raised_against.id ?
+                                                                                <i className='fa-solid fa-check ml-2'/>
                                                                             : null}
-                                                                        </Dropdown.Item> 
+                                                                        </Dropdown.Item>
                                                                     </Dropdown.Menu>
                                                                 </Dropdown>
-                                                            </div> 
+                                                            </div>
 
-                                                            <div className="form-group w-100 py-2"> 
+                                                            <div className="form-group w-100 py-2">
                                                                 <label htmlFor="" className='d-flex align-items-center justify-content-between'>
                                                                     <span>Q{index + 1}: Write your question here </span>
                                                                     {
-                                                                        _.size(questions) > 1 && 
-                                                                        <button 
+                                                                        _.size(questions) > 1 &&
+                                                                        <button
                                                                             aria-label='removeQuestion'
                                                                             onClick={() => removeQuestion(question.id)}
                                                                             className='remove-question-btn'
@@ -650,21 +648,21 @@ const answerStatus = async() => {
                                                                             <i className='fa-solid fa-trash'/>
                                                                         </button>
                                                                     }
-                                                                </label> 
-                                                                    <DebounceInput 
+                                                                </label>
+                                                                    <DebounceInput
                                                                         defaultValue={question.question}
-                                                                        className="form-control py-2 px-3 w-100" 
+                                                                        className="form-control py-2 px-3 w-100"
                                                                         placeholder="Write your question"
                                                                         onChange={(v) => {
                                                                             updateQuestion({
-                                                                                id: question.id, 
+                                                                                id: question.id,
                                                                                 data: {...question, question: v}
                                                                             });
-                                                                        }} 
-                                                                    /> 
+                                                                        }}
+                                                                    />
                                                             </div>
                                                         </div>
-                                                    ))} 
+                                                    ))}
                                                 </div>
                                             }
 
@@ -672,10 +670,10 @@ const answerStatus = async() => {
 
                                             {/* end question adding */}
                                         </td>
-                                    </tr>  
-                                }  
+                                    </tr>
+                                }
                                </tbody>
-                            </table> 
+                            </table>
 
                             {/* devider */}
                             {row?.need_authrization ? <div className='mt-3 pb-2 py-2 position-relative'>
@@ -683,15 +681,15 @@ const answerStatus = async() => {
                                 <span className='badge badge-secondary divider-text'>Authorize</span>
                             </div>: null}
 
-                            
+
 
                             <table className='dispute-preview-table'>
                                 <tbody>
-                                    {row?.status ? 
+                                    {row?.status ?
                                         row?.need_authrization ?
                                         <tr>
                                             <td className='py-2'>
-                                                <span className='d-block'>Comment: </span> 
+                                                <span className='d-block'>Comment: </span>
                                             </td>
 
                                             <td className='px-3 py-2'>
@@ -704,48 +702,48 @@ const answerStatus = async() => {
                                             <React.Fragment>
                                                 {/* winner */}
                                                     {
-                                                        edit && 
+                                                        edit &&
                                                         <tr>
                                                         <td className='py-2'>
-                                                            <span className='pt-2 d-block'>The Winner: </span> 
+                                                            <span className='pt-2 d-block'>The Winner: </span>
                                                         </td>
                                                         <td className='px-3 py-2 w-100'>
                                                             <Dropdown>
                                                                 <Dropdown.Toggle className="py-2 px-3 border rounded-sm toggle-light">
-                                                                    {finishedPartial ? 'Partially Responsible': (winner?.name ?? '--')}    
-                                                                </Dropdown.Toggle> 
+                                                                    {finishedPartial ? 'Partially Responsible': (winner?.name ?? '--')}
+                                                                </Dropdown.Toggle>
                                                                 <Dropdown.Menu>
                                                                     <Dropdown.Item onClick={() => {setWinner(row?.raised_by); setFinishedPartial(false)}}>
                                                                         {row?.raised_by?.name}
-                                                                        {winner?.id === row?.raised_by?.id && <i className='fa-solid fa-check ml-2'/> } 
+                                                                        {winner?.id === row?.raised_by?.id && <i className='fa-solid fa-check ml-2'/> }
                                                                     </Dropdown.Item>
                                                                     <Dropdown.Item onClick={() => {setWinner(row?.raised_against); setFinishedPartial(false)}}>
                                                                         {row?.raised_against?.name}
                                                                         {winner?.id === row?.raised_against?.id && <i className='fa-solid fa-check ml-2'/> }
-                                                                    </Dropdown.Item> 
-                                                                    
-                                                                    <Dropdown.Item 
+                                                                    </Dropdown.Item>
+
+                                                                    <Dropdown.Item
                                                                         onClick={() => {
                                                                             setFinishedPartial(true);
                                                                             setNeedAuthorization(true);
                                                                             setWinner(false);
                                                                         }}
                                                                     >
-                                                                        Partially Responsible 
+                                                                        Partially Responsible
                                                                         {finishedPartial && <i className='fa-solid fa-check ml-2'/> }
                                                                     </Dropdown.Item>
                                                                 </Dropdown.Menu>
                                                             </Dropdown>
 
                                                         {
-                                                            finishedPartial && 
+                                                            finishedPartial &&
                                                             <div className="d-flex align-items-center mt-3" style={{gap: '10px'}}>
                                                                 <div className="input-group mb-3">
                                                                     <div className="input-group-prepend">
                                                                         <span className="input-group-text f-14">{row?.raised_by?.name}</span>
                                                                     </div>
-                                                                    <input 
-                                                                        type="number" 
+                                                                    <input
+                                                                        type="number"
                                                                         className="form-control"
                                                                         placeholder='50'
                                                                         min={0}
@@ -763,10 +761,10 @@ const answerStatus = async() => {
                                                                     <div className="input-group-prepend">
                                                                         <span className="input-group-text f-14" >{row?.raised_against?.name}</span>
                                                                     </div>
-                                                                    <input 
-                                                                        type="number" 
-                                                                        className="form-control" 
-                                                                        placeholder='50' 
+                                                                    <input
+                                                                        type="number"
+                                                                        className="form-control"
+                                                                        placeholder='50'
                                                                         min={0}
                                                                         max={100}
                                                                         value={raisedAgainstPercent}
@@ -782,15 +780,15 @@ const answerStatus = async() => {
                                                         </td>
                                                     </tr>
                                                     }
-                                                    
+
                                                     {/* Reason */}
                                                     <tr>
                                                         <td className='py-2'>
-                                                            <span className='pt-2 d-block'>Reason: </span> 
+                                                            <span className='pt-2 d-block'>Reason: </span>
                                                         </td>
                                                         <td className='px-3 py-2 w-100'>
-                                                            <textarea 
-                                                                rows={4} 
+                                                            <textarea
+                                                                rows={4}
                                                                 className='form-control p-2 f-14'
                                                                 value={resolveComment}
                                                                 onChange={(e) => setResolveComment(e.target.value)}
@@ -803,48 +801,48 @@ const answerStatus = async() => {
                                         :  <React.Fragment>
                                             {/* winner */}
                                                 {
-                                                    edit && 
+                                                    edit &&
                                                     <tr>
                                                     <td className='py-2'>
-                                                        <span className='pt-2 d-block'>The Winner: </span> 
+                                                        <span className='pt-2 d-block'>The Winner: </span>
                                                     </td>
                                                     <td className='px-3 py-2 w-100'>
                                                         <Dropdown>
                                                             <Dropdown.Toggle className="py-2 px-3 border rounded-sm toggle-light">
-                                                                {finishedPartial ? 'Partially Responsible': (winner?.name ?? '--')}    
-                                                            </Dropdown.Toggle> 
+                                                                {finishedPartial ? 'Partially Responsible': (winner?.name ?? '--')}
+                                                            </Dropdown.Toggle>
                                                             <Dropdown.Menu>
                                                                 <Dropdown.Item onClick={() => {setWinner(row?.raised_by); setFinishedPartial(false)}}>
                                                                     {row?.raised_by?.name}
-                                                                    {winner?.id === row?.raised_by?.id && <i className='fa-solid fa-check ml-2'/> } 
+                                                                    {winner?.id === row?.raised_by?.id && <i className='fa-solid fa-check ml-2'/> }
                                                                 </Dropdown.Item>
                                                                 <Dropdown.Item onClick={() => {setWinner(row?.raised_against); setFinishedPartial(false)}}>
                                                                     {row?.raised_against?.name}
                                                                     {winner?.id === row?.raised_against?.id && <i className='fa-solid fa-check ml-2'/> }
-                                                                </Dropdown.Item> 
-                                                                
-                                                                <Dropdown.Item 
+                                                                </Dropdown.Item>
+
+                                                                <Dropdown.Item
                                                                     onClick={() => {
                                                                         setFinishedPartial(true);
                                                                         setNeedAuthorization(true);
                                                                         setWinner(false);
                                                                     }}
                                                                 >
-                                                                    Partially Responsible 
+                                                                    Partially Responsible
                                                                     {finishedPartial && <i className='fa-solid fa-check ml-2'/> }
                                                                 </Dropdown.Item>
                                                             </Dropdown.Menu>
                                                         </Dropdown>
 
                                                     {
-                                                        finishedPartial && 
+                                                        finishedPartial &&
                                                         <div className="d-flex align-items-center mt-3" style={{gap: '10px'}}>
                                                             <div className="input-group mb-3">
                                                                 <div className="input-group-prepend">
                                                                     <span className="input-group-text f-14">{row?.raised_by?.name}</span>
                                                                 </div>
-                                                                <input 
-                                                                    type="number" 
+                                                                <input
+                                                                    type="number"
                                                                     className="form-control"
                                                                     placeholder='50'
                                                                     min={0}
@@ -865,10 +863,10 @@ const answerStatus = async() => {
                                                                 <div className="input-group-prepend">
                                                                     <span className="input-group-text f-14" >{row?.raised_against?.name}</span>
                                                                 </div>
-                                                                <input 
-                                                                    type="number" 
-                                                                    className="form-control" 
-                                                                    placeholder='50' 
+                                                                <input
+                                                                    type="number"
+                                                                    className="form-control"
+                                                                    placeholder='50'
                                                                     min={0}
                                                                     max={100}
                                                                     value={raisedAgainstPercent}
@@ -887,16 +885,16 @@ const answerStatus = async() => {
                                                     </td>
                                                 </tr>
                                                 }
-                                                
-                                                {row?.need_authrization ?  
+
+                                                {row?.need_authrization ?
                                                     _.includes([1], auth?.getRoleId())?
                                                     <tr>
                                                         <td className='py-2'>
-                                                            <span className='pt-2 d-block'>Reason: </span> 
+                                                            <span className='pt-2 d-block'>Reason: </span>
                                                         </td>
                                                         <td className='px-3 py-2 w-100'>
-                                                            <textarea 
-                                                                rows={4} 
+                                                            <textarea
+                                                                rows={4}
                                                                 className='form-control p-2 f-14'
                                                                 value={resolveComment}
                                                                 onChange={(e) => setResolveComment(e.target.value)}
@@ -907,11 +905,11 @@ const answerStatus = async() => {
                                                 : null
                                                 :<tr>
                                                     <td className='py-2'>
-                                                        <span className='pt-2 d-block'>Reason: </span> 
+                                                        <span className='pt-2 d-block'>Reason: </span>
                                                     </td>
                                                     <td className='px-3 py-2 w-100'>
-                                                        <textarea 
-                                                            rows={4} 
+                                                        <textarea
+                                                            rows={4}
                                                             className='form-control p-2 f-14'
                                                             value={resolveComment}
                                                             onChange={(e) => setResolveComment(e.target.value)}
@@ -922,32 +920,32 @@ const answerStatus = async() => {
                                                 }
                                         </React.Fragment>
                                     )
-                                    } 
+                                    }
                                 </tbody>
                             </table>
-                    
+
 
                             {/* submition button */}
-                            {(!row?.status && (!row?.need_authrization || (row?.need_authrization && auth?.getRoleId() === 1))) ? 
+                            {(!row?.status && (!row?.need_authrization || (row?.need_authrization && auth?.getRoleId() === 1))) ?
                                 <div className='d-flex w-100 '>
                                     <div className='ml-auto d-flex align-items-center justify-end pt-3 mb-4'>
-                                        {hasQuestion ? 
-                                            <SubmitButton 
-                                                onClick={handleQuestionSubmittion} 
-                                                variant="success" 
-                                                title="Submit to ask question" 
+                                        {hasQuestion ?
+                                            <SubmitButton
+                                                onClick={handleQuestionSubmittion}
+                                                variant="success"
+                                                title="Submit to ask question"
                                                 className="ml-auto"
                                                 isLoading={questionSubmitting}
                                             />
-                                        : 
-                                            <SubmitButton 
-                                                variant="success" 
-                                                onClick={handleSubmitForAuthorization} 
+                                        :
+                                            <SubmitButton
+                                                variant="success"
+                                                onClick={handleSubmitForAuthorization}
                                                 title={(!finishedPartial || row?.need_authrization) ? 'Authorize & Resolve' : 'Send for Authorization'}
-                                                className="ml-auto" 
+                                                className="ml-auto"
                                                 isLoading={submittingToAuthorization}
                                             />
-                                            
+
                                         }
                                         <Button onClick={close} className='mr-3 ml-2'> Close </Button>
                                     </div>

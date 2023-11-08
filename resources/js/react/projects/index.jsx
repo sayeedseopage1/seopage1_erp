@@ -1,50 +1,47 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { DndProvider, useDragLayer } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
-import { useMouse } from 'react-use';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { store } from '../services/store';
-import Loading from '../tasks/components/Loading';
-import Tasks from '../tasks/pages/Tasks';
 import '../tasks/table.css';
 import '../tasks/tasks.css';
 import './project.css';
 import ProjectTasks from './pages/ProjectTasksTable';
 import Toaster from '../global/Toaster';
- 
 
-const Subtasks = React.lazy(() => import('../tasks/pages/Subtasks')) 
+
+const Subtasks = React.lazy(() => import('../tasks/pages/Subtasks'))
 
 const container = document.getElementById("projectTasksTableContainer");
 
 
 
-// custom drag layer 
+// custom drag layer
 const DragLayer = () => {
   const { item, itemType, currentOffset } = useDragLayer((monitor) => ({
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     currentOffset: monitor.getClientOffset(),
   }));
- 
+
   if (!currentOffset) {
     return null;
-  }  
+  }
   return (
-    <div 
-      style={{ 
-        position: 'fixed', 
-        pointerEvents: 'none', 
-        zIndex: 999999, 
-        left: currentOffset.x, 
-        top: currentOffset.y, 
+    <div
+      style={{
+        position: 'fixed',
+        pointerEvents: 'none',
+        zIndex: 999999,
+        left: currentOffset.x,
+        top: currentOffset.y,
       }}>
-      {/* Render your custom preview here based on the dragged item */} 
-      {itemType === 'column' && 
+      {/* Render your custom preview here based on the dragged item */}
+      {itemType === 'column' &&
         <div  className='py-2 px-2 pl-3 bg-white shadow border' style={{width: item.columnDef.size}}>
-          {item.columnDef.header} 
+          {item.columnDef.header}
         </div>
       }
     </div>
@@ -80,7 +77,7 @@ if(container){
             <Routes>
                 <Route path='/:projectId' element={<Container />} />
             </Routes>
-        </BrowserRouter> 
+        </BrowserRouter>
       </DndProvider>
      </Provider>
     </React.StrictMode>

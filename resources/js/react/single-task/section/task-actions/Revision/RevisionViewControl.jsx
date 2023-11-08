@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import Button from '../../../components/Button';
 import Modal from '../../../components/Modal';
-import { SingleTask } from '../../../../utils/single-task';
 import RevisionViewModal from './RevisionViewModal';
 import _ from 'lodash';
 import DeveloperRevisionView from './DeveloperRevisionView';
-import { revisionButtonPermission } from '../../../permissions';
 
 const RevisionViewControl = ({task, auth, status}) => {
     const [revisionModal, setRevisionModal] = useState(false);

@@ -1,23 +1,22 @@
-import React, { useState } from "react";
-import Button from "../../../components/Button";
 import { Listbox } from "@headlessui/react";
+import _ from "lodash";
+import React, { useState } from "react";
 import { HiOutlineSelector } from "react-icons/hi";
 import CKEditorComponent from "../../../../ckeditor";
-import SubmitButton from "../../../components/SubmitButton";
-import _ from "lodash";
+import Button from "../../../components/Button";
 
-const options = [
-    {
-        id: "LDRx10",
-        revision: "I overlooked a few things while checking",
-        isDeniable: false,
-    },
-    {
-        id: "LDRx11",
-        revision: "I couldn't understand a few things in the instruction",
-        isDeniable: false,
-    },
-];
+// const options = [
+//     {
+//         id: "LDRx10",
+//         revision: "I overlooked a few things while checking",
+//         isDeniable: false,
+//     },
+//     {
+//         id: "LDRx11",
+//         revision: "I couldn't understand a few things in the instruction",
+//         isDeniable: false,
+//     },
+// ];
 
 const AssigneeRevisionToDev = ({
     task,
@@ -51,14 +50,14 @@ const AssigneeRevisionToDev = ({
                 id: id,
                 subtask_id: id,
                 comment: data,
-                acknowledgement_id: reason?.id ?? "",
+                acknowledgement_id: null,
             });
         } else {
             _comments[index] = {
                 id: id,
                 subtask_id: id,
                 comment: data,
-                acknowledgement_id: reason?.id ?? "",
+                acknowledgement_id: null,
             };
         }
 
@@ -68,16 +67,16 @@ const AssigneeRevisionToDev = ({
     // validation
     const validate = () => {
         let errorCount = 0;
-        if (reason === null && revision?.is_deniable && type) {
-            errorCount++;
-            setReasonError("You have to select a reason from below options");
-        }
+        // if (reason === null && revision?.is_deniable && type) {
+        //     errorCount++;
+        //     setReasonError("You have to select a reason from below options");
+        // }
 
         if (_.size(task?.subtask) > 0) {
             if (subtasks.length === 0) {
                 errorCount++;
                 setSubtaskError(
-                    "You need to selecd at least one sub task to continue."
+                    "You need to select at least one sub task to continue."
                 );
             }
 
@@ -121,7 +120,7 @@ const AssigneeRevisionToDev = ({
     return (
         <React.Fragment>
             <form action="">
-                {revision?.is_deniable !== 0 && type ? (
+                {/* {revision?.is_deniable !== 0 && type ? (
                     <div className="form-group">
                         <label htmlFor="" className="font-weight-bold">
                             Revision Acknowledgement
@@ -166,7 +165,7 @@ const AssigneeRevisionToDev = ({
                             </small>
                         )}
                     </div>
-                ) : null}
+                ) : null} */}
 
                 {task?.taskSubTask?.length > 0 && (
                     <div className="form-group">

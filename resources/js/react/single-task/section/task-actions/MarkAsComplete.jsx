@@ -26,22 +26,20 @@ const MarkAsComplete = ({task, auth}) => {
 
     const [markAsComplete, {isLoading: isSubmitting}] = useMarkAsCompleteMutation();
     const [ checkSubTaskState, {isFetching} ] = useLazyCheckSubTaskStateQuery();
-   
+
     const [markAsCompleteModaIsOpen, setMarkAsCompleteModalIsOpen] =
         useState(false);
-  
-
     // toggle
     const toggle = () => {
         navigate(`${location.pathname}?modal=complete-task`);
     };
 
     const [err, setErr] = useState(null);
- 
+
 
     useEffect(()=>{
         const url = new URLSearchParams(location.search);
-        
+
         if (url.get('modal')==='complete-task') {
             if (auth.getRoleId() === 6) {
                 checkSubTaskState(task?.id)
@@ -51,28 +49,28 @@ const MarkAsComplete = ({task, auth}) => {
                         const htmlContent =  <div className="__tostar_modal">
                         <strong>You can't complete this task because you have some pending subtask?</strong>
                         <ul className="py-1">
-                            {res.subtasks.map((el, idx) => 
-                                <li 
-                                    key={el.id} 
+                            {res.subtasks.map((el, idx) =>
+                                <li
+                                    key={el.id}
                                     style={{listStyle: 'unset', fontSize: '13px'}}
-                                > 
-                                    <a href={`/account/tasks/${el.id}`}> 
-                                       {idx + 1}. {el.heading} 
+                                >
+                                    <a href={`/account/tasks/${el.id}`}>
+                                       {idx + 1}. {el.heading}
                                     </a> (<a href={`/account/clients/${el.clientId}`}>{el.client_name}</a>)
                                 </li>
                             )}
-                        </ul> 
+                        </ul>
                     </div>
                     ;
 
                     toast.warn(htmlContent, {
-                        position: 'top-center', 
+                        position: 'top-center',
                         icon: false,
                     });
                     }else {
                         setMarkAsCompleteModalIsOpen(true);
-                    } 
-                }) 
+                    }
+                })
             } else {
                 setMarkAsCompleteModalIsOpen(true);
             };
@@ -138,13 +136,13 @@ const MarkAsComplete = ({task, auth}) => {
         return valid;
     }
 
-    // handle submit 
+    // handle submit
     const handleSubmit = (e) => {
-        const formData = new FormData(); 
+        const formData = new FormData();
         formData.append('text', comment);
         formData.append('user_id', auth?.getId());
         formData.append('task_id', task?.id);
-        links.map( link => formData.append('link[]', link)); 
+        links.map( link => formData.append('link[]', link));
         files?.map(file => formData.append('file[]', file));
         formData.append('_token', document
         .querySelector("meta[name='csrf-token']")
@@ -161,7 +159,7 @@ const MarkAsComplete = ({task, auth}) => {
                     timer: 3000,
                     timerProgressBar: true,
                 })
-                
+
                 Toast.fire({
                     icon: 'success',
                     title: 'Task submitted successfully'
@@ -171,6 +169,7 @@ const MarkAsComplete = ({task, auth}) => {
             .catch(err => console.log(err))
         }
     }
+
 
     return (
         <>
@@ -183,7 +182,7 @@ const MarkAsComplete = ({task, auth}) => {
                 <span className="d-inline ml-1"> {isFetching? '': "Mark As Complete" }</span>
             </Button>
 
-            <Modal isOpen={markAsCompleteModaIsOpen} className="sp1_mark-as--modal"> 
+            <Modal isOpen={markAsCompleteModaIsOpen} className="sp1_mark-as--modal">
                 <div className="sp1_single_task--modal-panerl-wrapper">
 
                 <div className="sp1_mark-as--modal-panel">
@@ -308,6 +307,7 @@ const MarkAsComplete = ({task, auth}) => {
 
                                 <div className="ck-editor-holder stop-timer-options">
                                     <CKEditorComponent
+                                        data={comment}
                                         onChange={handleEditorChange}
                                     />
                                 </div>
@@ -321,7 +321,7 @@ const MarkAsComplete = ({task, auth}) => {
                                     onClick={close}
                                 >
                                     Close
-                                </Button> 
+                                </Button>
                                 <SubmitButton onClick={handleSubmit} isLoading={isSubmitting} title="Submit" />
                             </div>
                         </form>

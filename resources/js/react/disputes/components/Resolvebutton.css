@@ -6,7 +6,7 @@
     color: white;
     background-color: rgb(235, 43, 43);
     font-weight: bold;
-} 
+}
 
 .resolve-btn:hover{
     background: rgb(254, 14, 14);
@@ -14,16 +14,16 @@
 }
 
 .resolve-btn.solved{
-    color: #fff; 
+    color: #fff;
     background-color: rgb(0, 163, 54);
     border: 1px solid rgb(0, 163, 54);
-} 
+}
 
 a.badge.badge-info:hover{
     color: #fff !important;
 }
 
-a.nav-link.badge{ 
+a.nav-link.badge{
     font-size: 12px;
     letter-spacing: 0.12px;
 }
@@ -32,7 +32,7 @@ a.nav-link.badge:hover{
     color: #fff !important;
 }
 
-span.divider-text{ 
+span.divider-text{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -42,8 +42,8 @@ span.divider-text{
     -moz-user-select: none;
 }
 
-/* 
-table.dispute-preview-table{ 
+/*
+table.dispute-preview-table{
    border: 1px solid #d3d3d3;
    border-collapse: collapse;
 } */
@@ -61,7 +61,7 @@ table.dispute-preview-table tr td:first-child{
     width: 120px;
     min-width: 120px;
     vertical-align: top;
-    text-align: right; 
+    text-align: right;
     color: #7a808f;
     white-space: pre-wrap;
 }
@@ -113,13 +113,13 @@ button.remove-question-btn:hover{
     position: relative;
 }
 
-.dispute-tooltip{  
+.dispute-tooltip{
     background-color: #1d82f5;
     z-index: 1;
     border-radius: 6px;
     /* border: 1px solid #41c7e2; */
     box-shadow: 0px 3px 10px rgb(29 130 245 / 10%);
-    
+
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -127,7 +127,7 @@ button.remove-question-btn:hover{
 
 
 .dispute-notif-arrow{
-    overflow: hidden;  
+    overflow: hidden;
     width: 12px;
     height: 10px;
 }
@@ -142,7 +142,7 @@ button.remove-question-btn:hover{
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
-    transform-origin: center; 
+    transform-origin: center;
     top: -7px;
     left: 1px;
 }
@@ -188,4 +188,13 @@ button.remove-question-btn:hover{
     align-items: center;
     -ms-flex-direction: column;
     flex-direction: column;
+}
+
+
+.empty_column{
+    color: #a8a8a8 !important;
+}
+
+.dispute_table_th{
+    width: 200px;
 }
