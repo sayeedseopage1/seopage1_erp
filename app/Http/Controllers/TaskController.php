@@ -5130,7 +5130,9 @@ class TaskController extends AccountBaseController
 
     public function getTasksType()
     {
-        $tasksType = TaskType::all();
+        $tasksType = TaskType::where('page_type','Primary Page Development')
+                                ->orWhere('authorization_status',2)
+                                ->get();
         $responseData = [];
 
         foreach ($tasksType as $item) {
@@ -5175,7 +5177,7 @@ class TaskController extends AccountBaseController
 
     public function taskTypeAuthorization(Request $request, $id)
     {
-
+        // dd($$request->all());
         if ($request->status == 'approved') {
             $taskType = TaskType::find($id);
             $taskType->authorization_status = 1;
@@ -5183,6 +5185,7 @@ class TaskController extends AccountBaseController
             $taskType->save();
         } else {
             $taskType = TaskType::find($id);
+            $taskType->page_type = 'Secondary Page Development';
             $taskType->authorization_status = 2;
             $taskType->comment = $request->comment;
             $taskType->save();
