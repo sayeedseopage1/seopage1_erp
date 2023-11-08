@@ -319,7 +319,7 @@ export const TaskTableColumns = [
   {
     id: 'estimated_time',
     header: 'Estimated Time',
-    accessorKey: 'estimate_hours',
+    accessorFn: row => ((Number(row?.estimate_hours)* 60) + Number(row?.estimate_minutes)),
     cell: ({ row }) => {
       const data = row?.original;
       return (

@@ -139,6 +139,7 @@ const ProjectTasks = () => {
 
     const singleTask = _.head(tasks);
 
+
     return (
         <React.Fragment>
             {/* task creation form */}
@@ -247,6 +248,7 @@ const ProjectTasks = () => {
                                     className="mb-1"
                                 />
                             </div>
+
                         </div>
                     </div>
                     {/* table nav bar */}

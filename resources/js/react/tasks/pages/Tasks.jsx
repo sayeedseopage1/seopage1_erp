@@ -1,31 +1,29 @@
 import _ from "lodash";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetTaskTypeDataQuery, useLazyGetTasksQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
+import { useSearchParams } from "react-router-dom";
+import Loader from "../../global/Loader";
+import TaskAuthorization from "../../projects/components/TaskAuthorization";
+import { useCheckUnAuthorizedTaskTypeQuery, useLazyGetTasksQuery } from "../../services/api/tasksApiSlice";
 import { storeTasks } from "../../services/features/tasksSlice";
+import { User } from "../../utils/user-details";
 import Button from "../components/Button";
 import FilterContainer from "../components/Filter-bar/FilterContainer";
 import Filterbar from "../components/Filter-bar/Filterbar";
-import Modal from "../components/Modal";
+import PrimaryPageAuthorizationTable from "../components/PrimaryPageAuthorizationTable";
 import SearchBox from "../components/Searchbox";
 import Tabbar from "../components/Tabbar";
 import { TaskTableColumns } from "../components/TaskTableColumns";
 import TasksTable from "../components/TasksTable";
-import { User } from "../../utils/user-details";
-import CKEditorComponent from "../../ckeditor";
-import Loader from "../components/Loader";
-import TaskAuthorization from "../../projects/components/TaskAuthorization";
 import TableFilter from "../components/table/TableFilter";
 import { defaultColumnVisibility } from "../constant";
-import PrimaryPageAuthorizationTable from "../components/PrimaryPageAuthorizationTable";
-import { useSearchParams } from "react-router-dom";
 
 const auth = new User(window.Laravel.user);
 
 const Tasks = () => {
     const {tasks} = useSelector(s => s.tasks)
     const dispatch = useDispatch();
-    const [getTasks, {isFetching}] = useLazyGetTasksQuery();
+    const [getTasks, {isFetching, isLoading}] = useLazyGetTasksQuery();
     const [filter, setFilter] = React.useState(null);
     const [search,setSearch] = React.useState('');
     const [columnVisibility, setColumnVisibility] = React.useState(new Object(defaultColumnVisibility(auth)))
@@ -35,14 +33,14 @@ const Tasks = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const onFilter = (filter) => {
+    const onFilter = async (filter) => {
 
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
 
         if(filter?.start_date && filter?.end_date){
-            getTasks(`?${queryString}`)
+            await getTasks(`?${queryString}`)
             .unwrap()
             .then(res => {
                 let _data = res?.tasks
@@ -57,6 +55,12 @@ const Tasks = () => {
             })
             .catch(err => console.log(err))
         }
+    }
+
+    // handle refresh button
+    const onRefreshButtonClick = (e) => {
+        e.preventDefault();
+        onFilter(filter);
     }
 
 
@@ -108,6 +112,12 @@ const Tasks = () => {
 
                         <div className="mr-auto ml-2 mb-2 ">
                             <TaskAuthorization  />
+                        </div>
+
+                        <div className="mr-2 mb-2">
+                            <Button onClick={onRefreshButtonClick}>
+                                {isFetching ? <Loader title="Loading..." borderRightColor="white" /> : 'Refresh'}
+                            </Button>
                         </div>
                         <div className="mr-2 mb-2" style={{maxWidth: '300px'}}>
                             <SearchBox

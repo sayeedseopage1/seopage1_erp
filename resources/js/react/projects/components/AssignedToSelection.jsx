@@ -1,15 +1,17 @@
 import { Combobox } from '@headlessui/react'
-import * as React from 'react' 
+import * as React from 'react'
 import _  from 'lodash';
 import { useUsers } from '../../hooks/useUsers';
 import Loader from '../../tasks/components/Loader';
+import { useAuth } from '../../hooks/useAuth';
 
 
 const AssginedToSelection = ({selected, onSelect}) => {
     const [query, setQuery] = React.useState('');
     const {users, usersIsFetching: isFetching} = useUsers();
+    const auth = useAuth();
 
-    const employees = _.filter(users, user => _.includes([6, 9, 10, 4], Number(user?.role_id)))
+    const employees = _.filter(users, user => _.includes([6, 9, 10], Number(user?.role_id)) || Number(user?.id) === auth.getId() )
 
     const filteredData =
     query === ''
@@ -23,17 +25,17 @@ const AssginedToSelection = ({selected, onSelect}) => {
         <div className="form-group position-relative my-3">
             <label htmlFor="">Assigned To <sup>*</sup></label>
             <Combobox.Button className="d-flex align-items-center w-100 sp1-selection-display-button">
-                <Combobox.Input 
-                    onChange={e => setQuery(e.target.value)} 
+                <Combobox.Input
+                    onChange={e => setQuery(e.target.value)}
                     placeholder='--'
                     displayValue={(value) => value?.name || ''}
-                    className="form-control height-35 f-14 sp1-selection-display w-100" 
+                    className="form-control height-35 f-14 sp1-selection-display w-100"
                 />
                 <div className='__icon'>
                     <i className="fa-solid fa-sort"></i>
                 </div>
             </Combobox.Button>
-                 
+
             <Combobox.Options className="sp1-select-options">
 
                 {isFetching && (
@@ -41,8 +43,8 @@ const AssginedToSelection = ({selected, onSelect}) => {
                         <Loader />
                     </div>
                 )}
-                
-                {filteredData?.length===0 ? 
+
+                {filteredData?.length===0 ?
                     <div className='sp1-select-option-nodata'>
                          Nothing found.
                     </div>
@@ -54,7 +56,7 @@ const AssginedToSelection = ({selected, onSelect}) => {
                 >
                     {({ selected }) => (
                         <div className="d-flex align-items-center" style={{gap: '10px'}}>
-                            <div 
+                            <div
                                 className="rounded-circle"
                                 style={{
                                     width: '28px',
@@ -62,11 +64,11 @@ const AssginedToSelection = ({selected, onSelect}) => {
                                     overflow: 'hidden',
                                 }}
                             >
-                                <img 
-                                    src={employee?.image_url} 
-                                    alt={employee?.name} 
-                                    width={100} 
-                                    height={100} 
+                                <img
+                                    src={employee?.image_url}
+                                    alt={employee?.name}
+                                    width={100}
+                                    height={100}
                                     className="rounded-circle"
                                     style={{
                                         width: '100%',
@@ -79,14 +81,14 @@ const AssginedToSelection = ({selected, onSelect}) => {
                                 className={`block truncate ${
                                 selected ? 'font-medium' : 'font-normal'
                                 }`}
-                            >   
+                            >
                                 <span className='mr-2'>{employee?.name}</span>
                                 {
                                     employee?.developer_status === 1 ?
                                     <span className='badge badge-warning'>Working...</span> :
-                                    <span className='badge badge-primary'>Open to Work</span> 
+                                    <span className='badge badge-primary'>Open to Work</span>
                                 }
-                                 
+
 
                             </span>
                             {selected ? (
@@ -104,4 +106,4 @@ const AssginedToSelection = ({selected, onSelect}) => {
   )
 }
 
-export default AssginedToSelection 
+export default AssginedToSelection

@@ -1,28 +1,32 @@
+import dayjs from "dayjs";
 import _, { forEach } from "lodash";
 import React from "react";
-import "./Resolvebutton.css";
-import Modal from "../../global/Modal";
-import Button from "../../global/Button";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Avatar from "../../global/Avatar";
+import Button from "../../global/Button";
 import Dropdown from "../../global/Dropdown";
+import Loader from "../../global/Loader";
+import Modal from "../../global/Modal";
 import SubmitButton from "../../global/SubmitButton";
-import DebounceInput from "../../global/form/DebounceTextarea";
+import Switch from '../../global/Switch';
+import {
+    default as DebounceInput,
+    default as DebounceTextarea,
+} from "../../global/form/DebounceTextarea";
+import { useUsers } from "../../hooks/useUsers";
 import {
     useAnswerDisputeQuestionMutation,
     useAskDisputeQuestionMutation,
     useDisputeAnswerMakeAsReadMutation,
     useDisputeSubmitToAuthorizationMutation,
 } from "../../services/api/SingleTaskPageApi";
-import { useUsers } from "../../hooks/useUsers";
-import dayjs from "dayjs";
-import { User } from "../../utils/user-details";
-import Loader from "../../global/Loader";
-import DebounceTextarea from "../../global/form/DebounceTextarea";
-import { useDispute } from "../context";
 import { CompareDate } from "../../utils/dateController";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { User } from "../../utils/user-details";
+import { useDispute } from "../context";
 import ResolveBtnPopupText from "./Resolve-Btn/ResolveBtnPopupText";
+import "./Resolvebutton.css";
+import UserSection from "./UserSection";
 
 const compareDate = new CompareDate();
 
@@ -568,1077 +572,91 @@ const ResolveModal = ({ state }) => {
                                     </ul>
                                 </div>
 
-                                {/* CLIENT */}
-                                {_.includes(["CPR"], row?.dispute_between) ? (
-                                    <React.Fragment>
-                                        <div className="mt-3 pb-2 py-2 position-relative">
-                                            <hr />
-                                            <span className="badge badge-secondary divider-text">
-                                                Client
-                                            </span>
-                                        </div>
 
-                                        <table className="dispute-preview-table">
-                                            <tbody>
-                                                <tr>
-                                                    <td className="whitespace-nowrap py-2">
-                                                        Client:
-                                                    </td>
-                                                    <td className="py-2 px-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row?.client
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.client?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row?.client
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row?.client
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
+                                <Switch>
+                                    <Switch.Case condition={row &&!isLoading && row?.raised_against && row?.task}>
+                                        {/* Client */}
+                                        <Switch.Case condition={row && _.includes(["CPR"], row?.dispute_between)}>
+                                            <UserSection
+                                                row={row}
+                                                sectionTitle="Client"
+                                                user = {{
+                                                    ...row?.client,
+                                                    avatar: row?.client?.image ? `/user-uploads/avatar/${row?.client?.image}` : null
+                                                }}
+                                                comment = ""
+                                                questions = {[...filterQuestion(conversations, row?.client?.id)]}
+                                                reason=""
+                                                getUserById={getUserById}
+                                            />
+                                        </Switch.Case>
 
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/clients/${row?.client?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.client
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </React.Fragment>
-                                ) : null}
-                                {/* END CLIENT */}
+                                        {/* Sale */}
+                                        <Switch.Case condition={row && _.includes(["SPR"], row?.dispute_between)}>
+                                            <UserSection
+                                                row={row}
+                                                sectionTitle="Sale"
+                                                user = {{
+                                                    ...row?.sales_person,
+                                                    avatar: row?.sales_person?.image ? `/user-uploads/avatar/${row?.sales_person?.image}` : null
+                                                }}
+                                                comment = {row?.pm_comment}
+                                                questions = {[...filterQuestion(conversations, row?.sales_person?.id)]}
+                                                reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
+                                                getUserById={getUserById}
+                                            />
+                                        </Switch.Case>
 
-                                {/* SALES */}
-                                {_.includes(["SPR"], row?.dispute_between) ? (
-                                    <React.Fragment>
-                                        <div className="mt-3 pb-2 py-2 position-relative">
-                                            <hr />
-                                            <span className="badge badge-secondary divider-text">
-                                                Sales
-                                            </span>
-                                        </div>
+                                        {/* Project Manager */}
+                                        <Switch.Case condition={row && _.includes(["SPR", "CPR", "PLR"], row?.dispute_between)}>
+                                            <UserSection
+                                                row={row}
+                                                sectionTitle="Project Manager"
+                                                user = {{
+                                                    ...row?.project_manager,
+                                                    avatar: row?.project_manager?.image ? `/user-uploads/avatar/${row?.project_manager?.image}` : null
+                                                }}
+                                                comment = {row?.pm_comment}
+                                                questions = {[...filterQuestion(conversations, row?.project_manager?.id)]}
+                                                reason={row?.revision_acknowledgement}
+                                                getUserById={getUserById}
+                                            />
+                                        </Switch.Case>
 
-                                        <table className="dispute-preview-table">
-                                            <tbody>
-                                                <tr>
-                                                    <td className="whitespace-nowrap py-2">
-                                                        Sales:
-                                                    </td>
-                                                    <td className="py-2 px-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row
-                                                                        ?.sales_person
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.sales_person?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row
-                                                                        ?.sales_person
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row
-                                                                        ?.sales_person
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
+                                        {/* Lead Developer */}
+                                        <Switch.Case condition={row && _.includes(["PLR", "LDR"], row?.dispute_between)}>
+                                            <UserSection
+                                                row={row}
+                                                sectionTitle="Lead Developer"
+                                                user = {{
+                                                    ...row?.task?.lead_developer,
+                                                    avatar: row?.task?.lead_developer?.image ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}` : null
+                                                }}
+                                                comment = {row?.lead_comment}
+                                                questions = {[...filterQuestion(conversations, row?.task?.lead_developer?.id)]}
+                                                reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
+                                                getUserById={getUserById}
+                                            />
+                                        </Switch.Case>
 
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.sales_person?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.sales_person
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.sales_person
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                        {/* Developer */}
+                                        <Switch.Case condition={_.includes(["LDR"], row?.dispute_between)} >
+                                            <UserSection
+                                                row={row}
+                                                sectionTitle="Developer"
+                                                user = {{
+                                                    ...row?.task?.developer,
+                                                    avatar: row?.task?.developer?.image ? `/user-uploads/avatar/${row?.task?.developer?.image}` : null
+                                                }}
+                                                comment = {row?.dev_comment}
+                                                questions = {[...filterQuestion(conversations, row?.task?.developer?.id)]}
+                                                reason={row?.deny_reason}
+                                                getUserById={getUserById}
+                                            />
+                                        </Switch.Case>
+                                    </Switch.Case>
+                                </Switch>
 
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Explanation:
-                                                    </td>
-                                                    <td className="px-3 py-2">
-                                                        <div
-                                                            className="sp1_ck_content"
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: row?.sale_comment,
-                                                            }}
-                                                        />
-                                                    </td>
-                                                </tr>
-
-                                                {_.size(
-                                                    filterQuestion(
-                                                        conversations,
-                                                        row?.sales_person?.id
-                                                    )
-                                                ) ? (
-                                                    <tr>
-                                                        <td className="py-2">
-                                                            Submitted Answer:
-                                                        </td>
-                                                        <td className="px-3 py-2">
-                                                            <div
-                                                                className="d-flex flex-column"
-                                                                style={{
-                                                                    gap: "16px",
-                                                                }}
-                                                            >
-                                                                {_.map(
-                                                                    _.filter(
-                                                                        filterQuestion(
-                                                                            conversations,
-                                                                            row
-                                                                                ?.sales_person
-                                                                                ?.id
-                                                                        ),
-                                                                        (f) =>
-                                                                            _.includes(
-                                                                                [
-                                                                                    1,
-                                                                                    8,
-                                                                                ],
-                                                                                auth?.getRoleId()
-                                                                            )
-                                                                                ? true
-                                                                                : f.replies
-                                                                    ),
-                                                                    (
-                                                                        conv,
-                                                                        index
-                                                                    ) => {
-                                                                        const raised_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.raised_by
-                                                                                )
-                                                                            );
-                                                                        const replied_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.replied_by
-                                                                                )
-                                                                            );
-
-                                                                        return (
-                                                                            <div
-                                                                                key={
-                                                                                    index
-                                                                                }
-                                                                                className="d-flex flex-column"
-                                                                                style={{
-                                                                                    gap: 6,
-                                                                                }}
-                                                                            >
-                                                                                <div className="pl-3">
-                                                                                    <span className="badge badge-primary">
-                                                                                        Question
-                                                                                        0
-                                                                                        {index +
-                                                                                            1}
-                                                                                        :
-                                                                                    </span>
-                                                                                    <span className="px-2 font-medium">
-                                                                                        {
-                                                                                            conv?.question
-                                                                                        }
-                                                                                    </span>
-                                                                                    <span className="d-block text-right question-by f-12">
-                                                                                        {" "}
-                                                                                        -by{" "}
-                                                                                        <a
-                                                                                            href={raised_by.getUserLink()}
-                                                                                        >
-                                                                                            {raised_by?.getName()}
-                                                                                        </a>{" "}
-                                                                                        on{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "MMM DD, YYYY"
-                                                                                        )}{" "}
-                                                                                        at{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "hh:mm a"
-                                                                                        )}
-                                                                                    </span>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    className="p-3 position-relative"
-                                                                                    style={{
-                                                                                        background:
-                                                                                            "#f8f8f8",
-                                                                                    }}
-                                                                                >
-                                                                                    <div className="">
-                                                                                        <p className="">
-                                                                                            <span className="badge badge-success d-inline mr-1">
-                                                                                                Answer:
-                                                                                            </span>
-                                                                                            {conv?.replies ??
-                                                                                                "Not answered yet!"}
-                                                                                        </p>
-                                                                                        {conv?.replies && (
-                                                                                            <div>
-                                                                                                <span className="question-by f-12">
-                                                                                                    {" "}
-                                                                                                    -
-                                                                                                    by{" "}
-                                                                                                    <a
-                                                                                                        href={replied_by.getUserLink()}
-                                                                                                    >
-                                                                                                        {replied_by?.getName()}
-                                                                                                    </a>{" "}
-                                                                                                    on{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "MMM DD, YYYY"
-                                                                                                    )}{" "}
-                                                                                                    at{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "hh:mm a"
-                                                                                                    )}
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        )}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        );
-                                                                    }
-                                                                )}
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ) : null}
-                                            </tbody>
-                                        </table>
-                                    </React.Fragment>
-                                ) : null}
-                                {/* END SALES */}
-
-                                {/* PROJECT MANAGER DISCRIPTIN */}
-                                {_.includes(
-                                    ["SPR", "CPR", "PLR"],
-                                    row?.dispute_between
-                                ) ? (
-                                    <React.Fragment>
-                                        <div className="mt-3 pb-2 py-2 position-relative">
-                                            <hr />
-                                            <span className="badge badge-secondary divider-text">
-                                                Project Manager
-                                            </span>
-                                        </div>
-
-                                        <table className="dispute-preview-table">
-                                            <tbody>
-                                                <tr>
-                                                    <td className="whitespace-nowrap py-2">
-                                                        Project Manager:
-                                                    </td>
-                                                    <td className="py-2 px-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row
-                                                                        ?.project_manager
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.project_manager?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row
-                                                                        ?.project_manager
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row
-                                                                        ?.project_manager
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
-
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.project_manager?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.project_manager
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.project_manager
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Reason:
-                                                    </td>
-                                                    <td className="px-3 py-2 ">
-                                                        {
-                                                            row?.revision_acknowledgement
-                                                        }
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Explanation:
-                                                    </td>
-                                                    <td className="px-3 py-2">
-                                                        <div
-                                                            className="sp1_ck_content"
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: row?.pm_comment,
-                                                            }}
-                                                        />
-                                                    </td>
-                                                </tr>
-
-                                                {_.size(
-                                                    filterQuestion(
-                                                        conversations,
-                                                        row?.project_manager?.id
-                                                    )
-                                                ) ? (
-                                                    <tr>
-                                                        <td className="py-2">
-                                                            Submitted Answer:
-                                                        </td>
-                                                        <td className="px-3 py-2">
-                                                            <div
-                                                                className="d-flex flex-column"
-                                                                style={{
-                                                                    gap: "16px",
-                                                                }}
-                                                            >
-                                                                {_.map(
-                                                                    _.filter(
-                                                                        filterQuestion(
-                                                                            conversations,
-                                                                            row
-                                                                                ?.project_manager
-                                                                                ?.id
-                                                                        ),
-                                                                        (f) =>
-                                                                            _.includes(
-                                                                                [
-                                                                                    1,
-                                                                                    8,
-                                                                                ],
-                                                                                auth?.getRoleId()
-                                                                            )
-                                                                                ? true
-                                                                                : f.replies
-                                                                    ),
-                                                                    (
-                                                                        conv,
-                                                                        index
-                                                                    ) => {
-                                                                        const raised_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.raised_by
-                                                                                )
-                                                                            );
-                                                                        const replied_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.replied_by
-                                                                                )
-                                                                            );
-
-                                                                        return (
-                                                                            <div
-                                                                                key={
-                                                                                    index
-                                                                                }
-                                                                                className="d-flex flex-column"
-                                                                                style={{
-                                                                                    gap: 6,
-                                                                                }}
-                                                                            >
-                                                                                <div className="pl-3">
-                                                                                    <span className="badge badge-primary">
-                                                                                        Question
-                                                                                        0
-                                                                                        {index +
-                                                                                            1}
-                                                                                        :
-                                                                                    </span>
-                                                                                    <span className="px-2 font-medium">
-                                                                                        {
-                                                                                            conv?.question
-                                                                                        }
-                                                                                    </span>
-                                                                                    <span className="d-block text-right question-by f-12">
-                                                                                        {" "}
-                                                                                        -by{" "}
-                                                                                        <a
-                                                                                            href={raised_by.getUserLink()}
-                                                                                        >
-                                                                                            {raised_by?.getName()}
-                                                                                        </a>{" "}
-                                                                                        on{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "MMM DD, YYYY"
-                                                                                        )}{" "}
-                                                                                        at{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "hh:mm a"
-                                                                                        )}
-                                                                                    </span>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    className="p-3 position-relative"
-                                                                                    style={{
-                                                                                        background:
-                                                                                            "#f8f8f8",
-                                                                                    }}
-                                                                                >
-                                                                                    <div className="">
-                                                                                        <p className="">
-                                                                                            <span className="badge badge-success d-inline mr-1">
-                                                                                                Answer:
-                                                                                            </span>
-                                                                                            {conv?.replies ??
-                                                                                                "Not answered yet!"}
-                                                                                        </p>
-                                                                                        {conv?.replies && (
-                                                                                            <div>
-                                                                                                <span className="question-by f-12">
-                                                                                                    {" "}
-                                                                                                    -
-                                                                                                    by{" "}
-                                                                                                    <a
-                                                                                                        href={replied_by.getUserLink()}
-                                                                                                    >
-                                                                                                        {replied_by?.getName()}
-                                                                                                    </a>{" "}
-                                                                                                    on{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "MMM DD, YYYY"
-                                                                                                    )}{" "}
-                                                                                                    at{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "hh:mm a"
-                                                                                                    )}
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        )}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        );
-                                                                    }
-                                                                )}
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ) : null}
-                                            </tbody>
-                                        </table>
-                                    </React.Fragment>
-                                ) : null}
-                                {/* END PROJECT MANAGER DISCRIPTION */}
-
-                                {/* LEAD DEVELOPER STATEMENT */}
-                                {_.includes(
-                                    ["PLR", "LDR"],
-                                    row?.dispute_between
-                                ) ? (
-                                    <React.Fragment>
-                                        <div className="mt-3 pb-2 py-2 position-relative">
-                                            <hr />
-                                            <span className="badge badge-secondary divider-text">
-                                                Lead Developer
-                                            </span>
-                                        </div>
-
-                                        <table className="dispute-preview-table">
-                                            <tbody>
-                                                <tr>
-                                                    <td className="whitespace-nowrap py-2">
-                                                        Lead Developer:
-                                                    </td>
-                                                    <td className="py-2 px-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row?.task
-                                                                        ?.lead_developer
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row?.task
-                                                                        ?.lead_developer
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row?.task
-                                                                        ?.lead_developer
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
-
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.task?.lead_developer?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.task
-                                                                            ?.lead_developer
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.task
-                                                                            ?.lead_developer
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Reason:
-                                                    </td>
-                                                    <td className="px-3 py-2 ">
-                                                        {row?.dispute_between ===
-                                                        "LDR"
-                                                            ? row?.revision_acknowledgement
-                                                            : row?.deny_reason}
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Explanation:
-                                                    </td>
-                                                    <td className="px-3 py-2">
-                                                        <div
-                                                            className="sp1_ck_content"
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: row?.lead_comment,
-                                                            }}
-                                                        />
-                                                    </td>
-                                                </tr>
-
-                                                {_.size(
-                                                    filterQuestion(
-                                                        conversations,
-                                                        row?.task
-                                                            ?.lead_developer?.id
-                                                    )
-                                                ) ? (
-                                                    <tr>
-                                                        <td className="py-2">
-                                                            Submitted Answer:
-                                                        </td>
-                                                        <td className="px-3 py-2">
-                                                            <div
-                                                                className="d-flex flex-column"
-                                                                style={{
-                                                                    gap: "16px",
-                                                                }}
-                                                            >
-                                                                {_.map(
-                                                                    _.filter(
-                                                                        filterQuestion(
-                                                                            conversations,
-                                                                            row
-                                                                                ?.task
-                                                                                ?.lead_developer
-                                                                                ?.id
-                                                                        ),
-                                                                        (f) =>
-                                                                            _.includes(
-                                                                                [
-                                                                                    1,
-                                                                                    8,
-                                                                                ],
-                                                                                auth?.getRoleId()
-                                                                            )
-                                                                                ? true
-                                                                                : f.replies
-                                                                    ),
-                                                                    (
-                                                                        conv,
-                                                                        index
-                                                                    ) => {
-                                                                        const raised_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.raised_by
-                                                                                )
-                                                                            );
-                                                                        const replied_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.replied_by
-                                                                                )
-                                                                            );
-
-                                                                        return (
-                                                                            <div
-                                                                                key={
-                                                                                    index
-                                                                                }
-                                                                                className="d-flex flex-column"
-                                                                                style={{
-                                                                                    gap: 6,
-                                                                                }}
-                                                                            >
-                                                                                <div className="pl-3">
-                                                                                    <span className="badge badge-primary">
-                                                                                        Question
-                                                                                        0
-                                                                                        {index +
-                                                                                            1}
-                                                                                        :
-                                                                                    </span>
-                                                                                    <span className="px-2 font-medium">
-                                                                                        {
-                                                                                            conv?.question
-                                                                                        }
-                                                                                    </span>
-                                                                                    <span className="d-block text-right question-by f-12">
-                                                                                        {" "}
-                                                                                        -by{" "}
-                                                                                        <a
-                                                                                            href={raised_by.getUserLink()}
-                                                                                        >
-                                                                                            {raised_by?.getName()}
-                                                                                        </a>{" "}
-                                                                                        on{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "MMM DD, YYYY"
-                                                                                        )}{" "}
-                                                                                        at{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "hh:mm a"
-                                                                                        )}
-                                                                                    </span>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    className="p-3 position-relative"
-                                                                                    style={{
-                                                                                        background:
-                                                                                            "#f8f8f8",
-                                                                                    }}
-                                                                                >
-                                                                                    <div className="">
-                                                                                        <p className="">
-                                                                                            <span className="badge badge-success d-inline mr-1">
-                                                                                                Answer:
-                                                                                            </span>
-                                                                                            {conv?.replies ??
-                                                                                                "Not answered yet!"}
-                                                                                        </p>
-                                                                                        {conv?.replies && (
-                                                                                            <div>
-                                                                                                <span className="question-by f-12">
-                                                                                                    {" "}
-                                                                                                    -
-                                                                                                    by{" "}
-                                                                                                    <a
-                                                                                                        href={replied_by.getUserLink()}
-                                                                                                    >
-                                                                                                        {replied_by?.getName()}
-                                                                                                    </a>{" "}
-                                                                                                    on{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "MMM DD, YYYY"
-                                                                                                    )}{" "}
-                                                                                                    at{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "hh:mm a"
-                                                                                                    )}
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        )}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        );
-                                                                    }
-                                                                )}
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ) : null}
-                                            </tbody>
-                                        </table>
-                                    </React.Fragment>
-                                ) : null}
-                                {/* END LEAD DEVELOPER STATEMENT */}
-
-                                {/* DEVELOPER */}
-                                {_.includes(["LDR"], row?.dispute_between) ? (
-                                    <React.Fragment>
-                                        <div className="mt-3 pb-2 py-2 position-relative">
-                                            <hr />
-                                            <span className="badge badge-secondary divider-text">
-                                                Developer
-                                            </span>
-                                        </div>
-
-                                        <table className="dispute-preview-table">
-                                            <tbody>
-                                                <tr>
-                                                    <td className="whitespace-nowrap py-2">
-                                                        Developer:
-                                                    </td>
-                                                    <td className="py-2 px-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row?.task
-                                                                        ?.developer
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.task?.developer?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row?.task
-                                                                        ?.developer
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row?.task
-                                                                        ?.developer
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
-
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.task?.developer?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.task
-                                                                            ?.developer
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.task
-                                                                            ?.developer
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Reason:
-                                                    </td>
-                                                    <td className="px-3 py-2 ">
-                                                        {row?.deny_reason}
-                                                    </td>
-                                                </tr>
-
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Explanation:
-                                                    </td>
-                                                    <td className="px-3 py-2">
-                                                        <div
-                                                            className="sp1_ck_content"
-                                                            dangerouslySetInnerHTML={{
-                                                                __html: row?.dev_comment,
-                                                            }}
-                                                        />
-                                                    </td>
-                                                </tr>
-
-                                                {_.size(
-                                                    filterQuestion(
-                                                        conversations,
-                                                        row?.task?.developer?.id
-                                                    )
-                                                ) ? (
-                                                    <tr>
-                                                        <td className="py-2">
-                                                            Submitted Answer:
-                                                        </td>
-                                                        <td className="px-3 py-2">
-                                                            <div
-                                                                className="d-flex flex-column"
-                                                                style={{
-                                                                    gap: "16px",
-                                                                }}
-                                                            >
-                                                                {_.map(
-                                                                    _.filter(
-                                                                        filterQuestion(
-                                                                            conversations,
-                                                                            row
-                                                                                ?.task
-                                                                                ?.developer
-                                                                                ?.id
-                                                                        ),
-                                                                        (f) =>
-                                                                            _.includes(
-                                                                                [
-                                                                                    1,
-                                                                                    8,
-                                                                                ],
-                                                                                auth?.getRoleId()
-                                                                            )
-                                                                                ? true
-                                                                                : f.replies
-                                                                    ),
-                                                                    (
-                                                                        conv,
-                                                                        index
-                                                                    ) => {
-                                                                        const raised_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.raised_by
-                                                                                )
-                                                                            );
-                                                                        const replied_by =
-                                                                            new User(
-                                                                                getUserById(
-                                                                                    conv?.replied_by
-                                                                                )
-                                                                            );
-
-                                                                        return (
-                                                                            <div
-                                                                                key={
-                                                                                    index
-                                                                                }
-                                                                                className="d-flex flex-column"
-                                                                                style={{
-                                                                                    gap: 6,
-                                                                                }}
-                                                                            >
-                                                                                <div className="pl-3">
-                                                                                    <span className="badge badge-primary">
-                                                                                        Question{" "}
-                                                                                        {index +
-                                                                                            1}
-                                                                                        :
-                                                                                    </span>
-                                                                                    <span className="px-2 font-medium">
-                                                                                        {
-                                                                                            conv?.question
-                                                                                        }
-                                                                                    </span>
-                                                                                    <span className="d-block text-right question-by f-12">
-                                                                                        {" "}
-                                                                                        -by{" "}
-                                                                                        <a
-                                                                                            href={raised_by.getUserLink()}
-                                                                                        >
-                                                                                            {raised_by?.getName()}
-                                                                                        </a>{" "}
-                                                                                        on{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "MMM DD, YYYY"
-                                                                                        )}{" "}
-                                                                                        at{" "}
-                                                                                        {dayjs(
-                                                                                            conv?.created_at
-                                                                                        ).format(
-                                                                                            "hh:mm a"
-                                                                                        )}
-                                                                                    </span>
-                                                                                </div>
-
-                                                                                <div
-                                                                                    className="p-3 position-relative"
-                                                                                    style={{
-                                                                                        background:
-                                                                                            "#f8f8f8",
-                                                                                    }}
-                                                                                >
-                                                                                    <div className="">
-                                                                                        <p className="">
-                                                                                            <span className="badge badge-success d-inline mr-1">
-                                                                                                Answer:
-                                                                                            </span>
-                                                                                            {conv?.replies ??
-                                                                                                "Not answered yet!"}
-                                                                                        </p>
-                                                                                        {conv?.replies && (
-                                                                                            <div>
-                                                                                                <span className="question-by f-12">
-                                                                                                    {" "}
-                                                                                                    -
-                                                                                                    by{" "}
-                                                                                                    <a
-                                                                                                        href={replied_by.getUserLink()}
-                                                                                                    >
-                                                                                                        {replied_by?.getName()}
-                                                                                                    </a>{" "}
-                                                                                                    on{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "MMM DD, YYYY"
-                                                                                                    )}{" "}
-                                                                                                    at{" "}
-                                                                                                    {dayjs(
-                                                                                                        conv?.replied_date
-                                                                                                    ).format(
-                                                                                                        "hh:mm a"
-                                                                                                    )}
-                                                                                                </span>
-                                                                                            </div>
-                                                                                        )}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        );
-                                                                    }
-                                                                )}
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                ) : null}
-                                            </tbody>
-                                        </table>
-                                    </React.Fragment>
-                                ) : null}
-                                {/* END DEVELOPER */}
 
                                 {/* QUESTION AND ANSWER */}
                                 {mode === "QUESTION_AND_ANSWER" ? (
@@ -1695,6 +713,7 @@ const ResolveModal = ({ state }) => {
                                                                                 Q
                                                                                 {i +
                                                                                     1}
+
                                                                                 .
                                                                             </span>
                                                                             <span className="d-block">
@@ -2116,6 +1135,7 @@ const ResolveModal = ({ state }) => {
                                                                                             Q
                                                                                             {index +
                                                                                                 1}
+
                                                                                             :
                                                                                             Write
                                                                                             your
@@ -2760,6 +1780,7 @@ const ResolveModal = ({ state }) => {
                                                                                                 Q
                                                                                                 {index +
                                                                                                     1}
+
                                                                                                 :
                                                                                                 Write
                                                                                                 your

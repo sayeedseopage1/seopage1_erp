@@ -224,3 +224,20 @@
 .sp1_tasks_tbl_action_dd_menu{
     min-width: 150px !important;
 }
+
+
+.sp1_tasks_th{
+    min-width: 150px;
+    max-width: 150px;
+    width: 150px;
+}
+
+.sp1_tasks_th--timer_status{
+    min-width: 110px;
+    min-width: 110px;
+    width: 110px;
+}
+
+.sp1_tasks_td{
+    border-bottom-color: rgb(0 0  0/ 5%);
+}

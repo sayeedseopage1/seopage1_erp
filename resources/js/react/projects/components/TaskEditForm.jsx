@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CKEditorComponent from "../../ckeditor";
 import UploadFilesInLine from "../../file-upload/UploadFilesInLine";
+import { useDeleteUplaodedFileMutation } from "../../services/api/SingleTaskPageApi";
 import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
 import { useLazyGetTasksQuery, useUpdateTaskMutation } from "../../services/api/tasksApiSlice";
+import { updateTasks } from "../../services/features/tasksSlice";
 import DatePickerComponent from "../../single-task/section/comments/DatePicker";
 import PrioritySelection from "../../single-task/section/sub-task/PrioritySelection";
 import TaskCategorySelectionBox from "../../single-task/section/sub-task/TaskCategorySelectionBox";
@@ -15,11 +17,8 @@ import Modal from "../../tasks/components/Modal";
 import Input from "../../tasks/components/form/Input";
 import { convertTime } from '../../utils/converTime';
 import { CompareDate } from "../../utils/dateController";
-import { SingleTask } from "../../utils/single-task";
 import { User } from "../../utils/user-details";
 import AssignedToSelection from "./AssignedToSelection";
-import { useDeleteUplaodedFileMutation } from "../../services/api/SingleTaskPageApi";
-import { storeTasks, updateTasks } from "../../services/features/tasksSlice";
 
 const TaskEditForm = ({ isOpen, close, row, table }) => {
     const { tasks, filter } = useSelector(s => s.tasks);
@@ -288,7 +287,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
         setAttachedFiles(previousFile);
     }
 
- 
+
 
     return (
         <Modal isOpen={isOpen}>
@@ -544,7 +543,7 @@ const TaskEditForm = ({ isOpen, close, row, table }) => {
                                     </div>
                                     <div style={{ color: "red" }}>
                                         Estimation time can't exceed{" "}
-                                        {convertTime((Number(projectInfo?.minutes_left) + row.estimate_minutes + (row.estimate_hours* 60)) - (Number(estimateTimeMin) + (Number(estimateTimeHour) * 60)))} 
+                                        {convertTime((Number(projectInfo?.minutes_left) + row.estimate_minutes + (row.estimate_hours* 60)) - (Number(estimateTimeMin) + (Number(estimateTimeHour) * 60)))}
                                     </div>
                                 </div>
                             </div>
