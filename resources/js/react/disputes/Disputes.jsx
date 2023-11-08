@@ -1,4 +1,4 @@
-import _, { includes } from "lodash";
+import _ from "lodash";
 import React from "react";
 import DataTable from "../global/table/DataTable";
 import { useLazyGetDisputesQuery } from "../services/api/SingleTaskPageApi";
@@ -102,7 +102,7 @@ const Disputes = () => {
         const totalDispute = _.size(disputes);
         // need attention
 
-        // calcualte need my attention item
+        // calculate need my attention item
         let filterData = _.filter(disputes , dispute=> {
             if(dispute && dispute.conversations){
                 let indexOf = dispute.conversations.findIndex( d => !d.replies );
@@ -256,6 +256,7 @@ const Disputes = () => {
                             updateDisputeConversation,
                             updateDisputeById
                         }}
+                        classes={{th: 'dispute_table_th'}}
                         loader={<DisputeTableLoader />}
                     />
                 </div>

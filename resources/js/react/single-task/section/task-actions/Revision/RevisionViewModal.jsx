@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setTaskStatus } from '../../../../services/features/subTaskSlice';
 import _ from 'lodash';
 import { User } from '../../../../utils/user-details';
+import { toast } from 'react-toastify';
 
 
 const RevisionViewModal = ({task, close}) => {
@@ -39,7 +40,7 @@ const RevisionViewModal = ({task, close}) => {
   }
 
 
-  const handleOnSubmit = (data, type) =>{
+  const handleOnSubmit = async (data, type) =>{
     let fdata ={
         comment: comment?.comment ?? '',
         task_id: data?.task_id,
@@ -56,10 +57,10 @@ const RevisionViewModal = ({task, close}) => {
 
     const params = (!data?.continue && accept==="deny") ? 'deny-continue' :'accept-continue';
 
-
-    revisionAcceptOrDeny({fdata, params})
+    await revisionAcceptOrDeny({fdata, params})
     .unwrap()
     .then(res => {
+        toast.success('Your request has been successfully processed')
         close();
     })
     .catch(err => console.log(err))
@@ -76,7 +77,7 @@ const RevisionViewModal = ({task, close}) => {
     }
   }
 
-  
+
   const generateModalTitle = () => {
     if(auth.getRoleId() === 4){
         return show === "ASSIGNEE_TO_DEV"  ? "Revision For Lead Developer":"Revision By Project Manager";

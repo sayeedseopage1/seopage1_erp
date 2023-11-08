@@ -36,8 +36,8 @@
                                     <option value="Speed optimization">Speed optimization</option>
                                     <option value="Fixing Issues/Bugs">Fixing Issues/Bugs</option>
                                     <option value="Fixing Responsiveness/Making something responsive">Fixing Responsiveness/Making something responsive</option>
-                                  
-                                   
+
+
                                     <option value="Others">Others</option>
                                 </select>
                             </div>
@@ -101,6 +101,7 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        @if ($deliverable->to)
                         <div class="col-md-4">
                             <div class="form-group my-3">
                                 <label class="f-14 text-dark-grey mb-12" data-label="true" for="from146">To
@@ -115,6 +116,7 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        @endif
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Description</label>

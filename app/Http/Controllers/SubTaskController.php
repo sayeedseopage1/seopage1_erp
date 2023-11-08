@@ -17,7 +17,9 @@ use App\Helper\Files;
 use App\Models\TaskFile;
 use Validator;
 use App\Models\AuthorizationAction;
+use App\Notifications\PrimaryPageNotification;
 use Illuminate\Support\Facades\Storage;
+use Notification;
 
 class SubTaskController extends AccountBaseController
 {
@@ -51,8 +53,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-
- //DB::beginTransaction();
+        // DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
 
@@ -253,7 +254,12 @@ class SubTaskController extends AccountBaseController
         $task_type->existing_design_link = $request->existing_design_link;
         $task_type->number_of_pages= $request->number_of_pages;
         $task_type->save();
-        //dd($task_type,$task_s);
+
+        $topManagement = User::where('role_id', 1)->get();
+
+        foreach ($topManagement as $user) {
+            Notification::send($user, new PrimaryPageNotification($task_type));
+        }
 
         if($task->independent_task_status != 1)
         {
@@ -301,7 +307,7 @@ class SubTaskController extends AccountBaseController
         $parent_task_update->estimate_time_left_minutes = $parent_task->estimate_time_left_minutes - $total_minutes_s;
         $parent_task_update->save();
 
-        
+
         if ($request->hasFile('file')) {
             $files = $request->file('file');
             $destinationPath = storage_path('app/public/');

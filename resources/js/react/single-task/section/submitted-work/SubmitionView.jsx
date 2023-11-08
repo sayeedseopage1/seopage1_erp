@@ -1,15 +1,14 @@
-import React from "react";
-import CustomModal from "../../components/CustomModal";
-import Button from "../../components/Button";
-import { User } from "../../../utils/user-details";
 import dayjs from "dayjs";
+import React from "react";
+import { useWindowSize } from 'react-use';
 import FileUploader from "../../../file-upload/FileUploader";
-import { useWindowSize } from 'react-use'
+import Button from "../../components/Button";
+import CustomModal from "../../components/CustomModal";
 import Modal from "../../components/Modal";
 
 const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
     const links = _.compact(_.split(data?.links, ','));
-    const attaches = _.compact(_.split(data?.attaches, ',')); 
+    const attaches = _.compact(_.split(data?.attaches, ','));
     const { width: deviceWidth } = useWindowSize();
 
     const content = () => {
@@ -110,8 +109,8 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                                             fileName={file}
                                             downloadAble={true}
                                             deleteAble={false}
-                                            downloadUrl={`/storage/TaskSubmission/${file}`}
-                                            previewUrl={`/storage/TaskSubmission/${file}`}
+                                            downloadUrl={file}
+                                            previewUrl={file}
                                             fileType={_.includes(["png","jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others'}
                                             ext=""
                                         />
@@ -141,7 +140,7 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
     }else{
         return (
             <React.Fragment>
-                <Modal isOpen={isOpen}> { content() } </Modal> 
+                <Modal isOpen={isOpen}> { content() } </Modal>
             </React.Fragment>
         );
     }
