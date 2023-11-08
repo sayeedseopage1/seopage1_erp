@@ -28,13 +28,13 @@ class HelperPendingActionController extends AccountBaseController
             $button = [
                 [
                     'button_name' => 'Review',
-                    'button_color' => 'success',
+                    'button_color' => 'primary',
                     'button_type' => 'redirect_url',
                     'button_url' => route('projects.show', $project->id),
                 ],
                 [
                     'button_name' => 'View',
-                    'button_color' => 'primary',
+                    'button_color' => 'warning',
                     'button_type' => 'modal',
                     'button_url' => route('project-challenge', $project->id),
                     'modal_form'=> true,
@@ -50,6 +50,7 @@ class HelperPendingActionController extends AccountBaseController
                              'value'=> $project->id,
                              'readonly'=> true,
                             'label'=>'Write a comment',
+                            'name'=>'project_id',
                             'required'=> true,
                         ], 
                         
@@ -74,6 +75,39 @@ class HelperPendingActionController extends AccountBaseController
                         
                     ]
                 ],
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+          //  dd($action);
+       //    dd(json_decode($action->button));
+
+           }
+          
+    }
+    public function OthersDeliverableAuthorization($project)
+    {
+        $client= User::where('id',$project->client_id)->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizers= User::where('role_id',1)->get();
+           foreach ($authorizers as $key => $authorizer) {
+            $action = new PendingAction();
+            $action->code = 'DOA';
+            $action->serial = 'DOA'.'x'.$key;
+            $action->item_name= 'Deliverables “Other” authorization';
+            $action->heading= 'Deliverables “Other” authorization';
+            $action->message = '"Other" type of <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> require authorization (Project manager: <a href="'.route('projects.show',$project->id).'">'.$project_manager->name.'</a>)';
+            $action->timeframe= 12;
+            $action->project_id = $project->id;
+            $action->client_id = $client->id;
+            $action->authorization_for= $authorizer->id;
+            $button = [
+                [
+                    'button_name' => 'Review',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
+                ],
+              
             ];
             $action->button = json_encode($button);
             $action->save();

@@ -531,9 +531,16 @@ class PendingActionController extends AccountBaseController
     }
     public function get_pending_active_live_action()
     {
-        $action = PendingAction::where('authorization_for',Auth::id())->get();
+        $actions = PendingAction::
+        select('pending_actions.*')->
+        where('authorization_for',Auth::id())
+        ->where('past_status',0)
+        ->get();
+        foreach ($actions as $key => $action) {
+            $action->button = json_decode($action->button);
+        }
         return response()->json([
-            'pending_actions' => $action,
+            'pending_actions' => $actions,
             'status' => 200,
         ]);
     }

@@ -3076,17 +3076,15 @@ class ProjectController extends AccountBaseController
             }
 
             if ($request->deliverable_type == 'Others' || $request->deliverable_type == 'Fixing Issues/Bugs') {
-                $authorization_action = new AuthorizationAction();
-                $authorization_action->model_name = $deliverable->getMorphClass();
-                $authorization_action->model_id = $deliverable->id;
-                $authorization_action->type = 'other_type_deliverable';
-                $authorization_action->deal_id = $project_id->deal_id;
-                $authorization_action->project_id = $project_id->id;
-                $authorization_action->link = route('projects.show', $project_id->id) . '?tab=deliverable';
-                $authorization_action->title = Auth::user()->name . '  send '.$request->deliverable_type.' delivarable authorization request ';
-                $authorization_action->authorization_for = 62;
-                $authorization_action->save();
-                //end authorization action
+
+                //need pending action
+              
+            $helper = new HelperPendingActionController();
+
+
+            $helper->OthersDeliverableAuthorization($project);
+
+                //need pending action
 
                 $project_id = Project::where('id', $project->id)->first();
                 foreach ($users as $user) {
@@ -4976,11 +4974,13 @@ public function updatePmBasicSEO(Request $request){
     }
     public function ProjectAccept(Request $request)
     {
+        DB::beginTransaction();
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
         $project->admin_comment = $request->admin_comment;
         $project->save();
+        dd($project);
         $user = User::where('id', $project->pm_id)->first();
 
         //if request comes from original authrization serction then data will be update form authorizatin action
