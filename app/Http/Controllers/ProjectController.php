@@ -5278,18 +5278,14 @@ public function updatePmBasicSEO(Request $request){
         $project_id = Project::where('id', $request->project_id)->first();
         $log_user = Auth::user();
 
-        //authorizatoin action start here
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $pm_project->getMorphClass();
-        $authorization_action->model_id = $pm_project->id;
-        $authorization_action->type = 'project_deliverable_time_extention';
-        $authorization_action->deal_id = $project_id->deal_id;
-        $authorization_action->project_id = $project_id->id;
-        $authorization_action->link = route('projects.show', $project_id->id) . '?tab=deliverables';
-        $authorization_action->title = Auth::user()->name . ' send project deliverable time extention request ';
-        $authorization_action->authorization_for = 62;
-        $authorization_action->save();
-        //end authorization action here
+        //need pending action
+        
+        $helper = new HelperPendingActionController();
+
+
+        $helper->DeliverableDeadlineAuthorization($project_id);
+
+        //need pending action
 
         $text = Auth::user()->name . '  send project deliverable time extention request ';
         $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';
@@ -5317,6 +5313,40 @@ public function updatePmBasicSEO(Request $request){
         $pm_project = PMProject::find($project->id);
         $pm_project->deliverable_status = 1;
         $pm_project->save();
+        $actions = PendingAction::where('code','DDA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message;
+                $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+                
+           
+        }
+    }
+
+
 
         $project_id = Project::where('id', $request->project_id)->first();
         $log_user = Auth::user();
