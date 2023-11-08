@@ -747,12 +747,14 @@
                                                 </p>
                                             </a>
 
-                                            <a href="{{ route('leads.index') . '?assignee=me&type=client' }}">
+                                            {{-- <a href="{{ route('leads.index') . '?assignee=me&type=client' }}">
                                                 <p class="mb-0 f-21 font-weight-bold text-success d-grid">
-                                                    {{ $convertedLead }}<span
-                                                        class="f-12 font-weight-normal text-lightest">@lang('modules.lead.convertedLead')</span>
+                                                    @if ($convertedLead != [])
+                                                        {{ $convertedLead }}
+                                                    @endif
+                                                    <span class="f-12 font-weight-normal text-lightest">@lang('modules.lead.convertedLead')</span>
                                                 </p>
-                                            </a>
+                                            </a> --}}
                                         </div>
                                     </div>
                                     <div class="d-block">

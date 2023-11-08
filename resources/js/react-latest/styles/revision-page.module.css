@@ -12,7 +12,7 @@
     max-height: calc(100vh - 300px);
     overflow: auto;
 }
-.table{ 
+.table{
     border-color: #ffffff00 !important;
 }
 .table thead tr th{
@@ -29,7 +29,7 @@
 .table tbody tr td:first-child,
 .table thead tr th:first-child{
     border-left: 1px solid #ececec !important;
-} 
+}
 
 .pm_comment{
     padding: 10px;
@@ -65,12 +65,21 @@
     border-color: #f99c9c;
 }
 
+.status.pending{
+    color: #ffa500;
+    background: #fff8e6;
+    border-color: #ffa500;
+}
+
 
 .revision_popover_panel{
     padding: 1rem;
     border-radius: 8px;
     background-color: #fff;
+    font-size: 13px;
     box-shadow: 0 0 10px rgb(0 0 0 / 15%);
     /* width: clamp(255px, 100%, 350px); */
     max-width: 350px;
+    max-height: 450px;
+    overflow: auto;
 }

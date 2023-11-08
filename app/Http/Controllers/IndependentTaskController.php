@@ -334,7 +334,7 @@ class IndependentTaskController extends AccountBaseController
         $assignee_by = $request->input('assignee_by', null);
 
        
-       // $clientId = $request->input('client_id', null);
+        $clientId = $request->input('client_name', null);
       //  $projectId = $request->input('project_id', null);
         $status = $request->input('status', null);
       //  $date_filter_by = $request->input('date_filter_by', null);
@@ -375,9 +375,9 @@ class IndependentTaskController extends AccountBaseController
                             // if (!is_null($pmId)) {
                             //     $tasks = $tasks->where('projects.pm_id', $pmId);
                             // }
-                            // if (!is_null($clientId)) {
-                            //     $tasks = $tasks->where('projects.client_id', $clientId);
-                            // }
+                            if (!is_null($clientId)) {
+                                $tasks = $tasks->where('tasks.client_name', $clientId)->orWhere('client.name',$clientId);
+                            }
                            
                             if(!is_null($status))
                             {
@@ -425,6 +425,7 @@ class IndependentTaskController extends AccountBaseController
         $clients = Task::where('tasks.client_id','!=',null)->orWhere('tasks.client_name','!=',null)
         ->select(['tasks.client_name','tasks.client_id','client.id','client.name'])
         ->leftJoin('users as client','client.id','tasks.client_id')
+        ->groupBy('tasks.client_name','tasks.client_id')
         ->get();
         return response()->json([
             'data'=>$clients,

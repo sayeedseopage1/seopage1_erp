@@ -8,14 +8,23 @@ import styles from '../../styles/revision-page.module.css';
 import { toast } from "react-toastify";
 import { useSaleRevisionActionMutation } from "../../services/api/revisionApiSlice";
 import Loader from "../../ui/Loader";
+import Switch from "../../ui/Switch";
 
 const SaleActionButton = ({row, table}) => {
-    const [isOpen, setIsOpen] = useState(false); 
+    const [isOpen, setIsOpen] = useState(false);
     const [comment, setComment] = useState('');
     const [err, setErr] = useState(null);
 
-    const toggle = () => setIsOpen(!isOpen);
-    const close = () => setIsOpen(false);
+    const clearState = () => {
+        setComment('');
+        setErr('');
+    }
+
+    const toggle = () => {
+        setIsOpen(!isOpen);
+        clearState();
+    };
+    const close = () => {setIsOpen(false), clearState()};
 
     const { isFetching } = table.getState();
 
@@ -23,24 +32,24 @@ const SaleActionButton = ({row, table}) => {
         saleRevisionAction,
         {isLoading}
     ] = useSaleRevisionActionMutation();
-        
 
-    const handleSubmit = (e , type) => {
+
+    const handleSubmit = async (e , type) => {
         e.preventDefault();
         if(comment == ''){
-           toast.warn(`You have to explaine the reason!`, {
+           toast.warn(`You have to explain the reason!`, {
                 autoClose: 1000
-           }) 
+           })
 
          setErr({
-            comment: 'You have to explaine the reason!'
+            comment: 'You have to explain the reason!'
           })
 
           return;
         }
 
         try{
-            let res = saleRevisionAction({
+            let res = await saleRevisionAction({
                 sale_comment: comment,
                 action_type: type,
                 revision_id: row.id,
@@ -58,47 +67,37 @@ const SaleActionButton = ({row, table}) => {
     return (
         <div className="d-flex align-items-center">
             {
-                (isLoading || isFetching) ?
-                    <div className="alert alert-warning py-2 px-3 f-14"> 
+                (isLoading ) ?
+                    <div className="alert alert-warning py-2 px-3 f-14">
                         <Loader />
                     </div>
                 : <>
                     <Button
                         size="sm"
-                        variant="success"
+                        variant="primary"
                         onClick={toggle}
                         className="py-1 font-weight-normal mr-1"
                     >
-                        Accept
-                    </Button>
-
-                    <Button
-                        size="sm"
-                        variant="danger"
-                        onClick={toggle}
-                        className="py-1 font-weight-normal"
-                        
-                    >
-                        Deny
+                        Accept/Deny
                     </Button>
                 </>
 
             }
-            
+
 
             <React.Fragment>
                  <Modal isOpen={isOpen} closeModal={close} className="bg-transparent">
                     <div className="pt-3">
                         <Card>
-                            <Card.Head onClose={close}>Revison review</Card.Head>
+                            <Card.Head onClose={close}>Revision review</Card.Head>
                             <Card.Body style={{width: '540px'}}>
                                 <div>
-                                    <p> <span className="text-danger">Reson : </span> {row?.revision_acknowledgement} </p>
+                                    <p> <span className="text-danger">Reason : </span> {row?.revision_acknowledgement} </p>
                                     <div className={styles.pm_comment} dangerouslySetInnerHTML={{__html: row?.pm_comment}} />
                                 </div>
 
 
-                                <label htmlFor="" className="font-weight-bold mb-2"> ## Please explaine here! <sup>*</sup></label>
+                                <label htmlFor="" className="font-weight-bold mb-2"> ## Please explain here! <sup>*</sup></label>
                                 <Editor
                                     data={comment}
                                     onChange={(_event, editor) => {
@@ -111,24 +110,43 @@ const SaleActionButton = ({row, table}) => {
                             </Card.Body>
                             <Card.Footer>
                                 <Button onClick={close} variant="tertiary" className="font-weight-normal mr-auto"> Close</Button>
-                                <Button 
-                                    variant="danger" 
-                                    onClick={e => handleSubmit(e, 'deny')} 
-                                    className="font-weight-normal"
-                                    isLoading={isLoading || isFetching}
-                                > 
-                                    Deny 
-                                </Button>
-                                <Button 
-                                    variant="success" 
-                                    onClick={e => handleSubmit(e, 'accept')} 
-                                    className="font-weight-normal"
-                                    isLoading={isLoading || isFetching}
-                                > 
-                                    Accept 
-                                </Button>
+                                <Switch>
+                                    <Switch.Case condition={!isLoading && !isFetching}>
+                                        <>
+                                            <Button
+                                                variant="danger"
+                                                onClick={e => handleSubmit(e, 'deny')}
+                                                className="font-weight-normal"
+                                                isLoading={isLoading || isFetching}
+                                            >
+                                                Deny
+                                            </Button>
+                                            <Button
+                                                variant="success"
+                                                onClick={e => handleSubmit(e, 'accept')}
+                                                className="font-weight-normal"
+                                                isLoading={isLoading || isFetching}
+                                            >
+                                                Accept
+                                            </Button>
+                                        </>
+                                    </Switch.Case>
+
+                                    <Switch.Case condition={isLoading || isFetching}>
+                                        <>
+                                            <Button
+                                                variant="primary"
+                                                className="font-weight-normal"
+                                                isLoading={isLoading || isFetching}
+                                            >
+                                                Loading...
+                                            </Button>
+                                        </>
+                                    </Switch.Case>
+                                </Switch>
+
                             </Card.Footer>
-                        </Card>  
+                        </Card>
                     </div>
                  </Modal>
             </React.Fragment>

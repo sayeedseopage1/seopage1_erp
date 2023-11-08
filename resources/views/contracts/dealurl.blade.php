@@ -113,7 +113,7 @@
                         <p>{{$client->client_phone}}</p>
                       </div>
 
-                      <div class="details-seopage1">
+                      {{-- <div class="details-seopage1">
                         <h4>WhatsApp ID (For Future Communation)!</h4>
                         <p>{{$client->client_whatsapp}}</p>
                       </div>
@@ -133,11 +133,11 @@
                       <div class="details-seopage1">
                         <h4>Client IMO ID</h4>
                         <p>{{$client->client_imo}}</p>
-                      </div>
+                      </div> --}}
                       @endif
 
 
-                      <div class="details-seopage1">
+                      {{-- <div class="details-seopage1">
                         <h4>Timezone</h4>
                         <p>{{$client->timezone}}</p>
                       </div>
@@ -167,7 +167,7 @@
                           @endif
                         </p>
 
-                      </div>
+                      </div> --}}
 
                       <div class="details-seopage1 py-4">
                           <h4>Public Url</h4>

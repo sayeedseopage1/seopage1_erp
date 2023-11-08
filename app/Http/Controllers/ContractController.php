@@ -2489,8 +2489,6 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
-    //    /
-   //  dd($request);
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
         $data->deal_id = $request->id;
@@ -2519,8 +2517,6 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_update(Request $request)
     {
-       // dd($request);
-       // DB::beginTransaction();
         $deal = Deal::find($request->id);
 //    / dd($deal->id);
         if ($deal) {

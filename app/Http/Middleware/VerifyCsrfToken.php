@@ -15,7 +15,7 @@ class VerifyCsrfToken extends Middleware
         '/paypal_webhook',
         '/verify_webhook',
         '/*-webhook',
-        '/lead-form/leadStore',
+        // '/lead-form/leadStore',
         '/lead-form/ticket-store',
         '/paystack_webhook',
         '/mollie_webhook',

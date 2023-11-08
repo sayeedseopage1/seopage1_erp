@@ -65,12 +65,20 @@
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Service Type <span style="color:red;">*</span></label>
                             <select class="form-control milestone_type height-35 f-14" name="service_type" id="service_type" onchange="generateURL()">
+                                @if ($deal->dept_status=='DM')
+                                <option >--</option>
+                                <option value="web-content">Webcontent</option>
+                                <option value="blogs-articles">Blogs/articles</option>
+                                <option value="product-description">Product descriptions</option>
+                                <option value="product-category">Product category/collection pages</option>
+                                @else
                                 <option value="web-development">Web Development</option>
                                 <option value="web-content">Webcontent</option>
                                 <option value="blogs-articles">Blogs/articles</option>
                                 <option value="product-description">Product descriptions</option>
                                 <option value="product-category">Product category/collection pages</option>
                                 <option value="basic-seo">Basic SEO</option>
+                                @endif
                             </select>
                         </div>
                     </div>

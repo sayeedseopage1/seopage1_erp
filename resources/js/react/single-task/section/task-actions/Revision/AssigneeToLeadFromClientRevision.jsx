@@ -14,25 +14,27 @@ const projectManagerAcknowladgement = [
         id: "CPRx01",
         title: 'Client added some additional requirements which was not part of the actual job scope',
         isDeniable: false,
+        createDispute: true,
     },
     {
         id: 'PLRx12',
         title: 'I submitted the work without proper checking and overlooked the issues',
-        isDeniable: true,
+        isDeniable: false,
+        createDispute: false,
     },
     {
         id: 'PLRx03',
-        title: 'I couldnt understand clients expectation properly earlier',
+        title: "I couldn't understand clients expectation properly earlier",
         isDeniable: false
     },
     {
         id: 'PLRx04',
-        title: 'I didnt understand the job properly as it’s very technical in nature and relied fully on technical team for success',
+        title: 'I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success',
         isDeniable: false,
     },
     {
         id: 'CPRx05',
-        title: "The client didnt change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
+        title: "The client didn't change his instruction but his interpretation of the original instruction now is weird and nobody could have interpreted it this way from his instruction",
         isDeniable: false,
         createDispute: true,
     },
@@ -122,6 +124,11 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
 
 
        if(reason && reason?.id === 'CPRx01'){
+            if(!additionalPaid){
+                errorCount++;
+                setAdditionalError('You have to select an option.')
+            }
+
             if(additionalPaid === 'yes' && additionalAmount === 0){
                 errorCount++;
                 setAdditionalError('You have to provide amount')
@@ -142,7 +149,6 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
         e.preventDefault();
 
 
-
         const data = {
             acknowledgement_id: reason?.id ,
             task_id: task?.id,
@@ -153,13 +159,13 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
             additional_amount: Number(additionalAmount),
             additional_status: additionalPaid,
             additional_comment: additionalInfo?.info ?? '',
-            dispute_create: reason?.createDispute || additionalInfo?.disputeCreate || false
+            dispute_create: reason?.id === "CPRx01" ? true : (reason?.createDispute || additionalInfo?.disputeCreate || false)
         }
 
         if(validate()){
             onSubmit(data);
         }else{
-            console.log('Your forgot to fillup some required fields')
+            console.log('Your forgot to fill up some required fields')
         }
     }
 
@@ -216,7 +222,10 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                             type="radio"
                                             id="createMilestoneYes"
                                             value="1"
-                                            onChange={(e)=>hasAdditionalPayment(true)}
+                                            onChange={(e)=>{
+                                                hasAdditionalPayment(true);
+                                                setAdditionalError('');
+                                            }}
                                             style={{
                                                 width: "16px",
                                                 height: "16px",
@@ -232,7 +241,10 @@ const AssigneeToLeadFromClientRevision = ({ close, onBack, onSubmit, task, auth,
                                             type="radio"
                                             id="createMilestoneNo"
                                             value="0"
-                                            onChange={(e) => hasAdditionalPayment(false)}
+                                            onChange={(e) => {
+                                                hasAdditionalPayment(false);
+                                                setAdditionalError('');
+                                            }}
                                             style={{
                                                 width: "16px",
                                                 height: "16px",

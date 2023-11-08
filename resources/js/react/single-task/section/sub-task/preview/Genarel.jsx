@@ -7,10 +7,10 @@ import GenarelLoader from "../../../components/loader/GenarelLoader";
 import ArticleLoader from "../../../components/loader/ArticleLoader";
 import dayjs from "dayjs";
 import PMGuideline from "../../../components/PMGuideline";
+import FileUploader from "../../../../file-upload/FileUploader";
 
 const Genarel = ({task, isFetching}) => {
     const loggedUser = new User(window?.Laravel?.user);
-
 
     return (
         <div className="row">
@@ -318,7 +318,29 @@ const Genarel = ({task, isFetching}) => {
                 }
 
                 <Accordion expendable={false} title="Task Descriptions">
-                    <Guideline text={task?.description} />
+                    <Guideline text={task?.description} task={task} type="TASK_DESCRIPTION"/>
+                    { _.size(task?.attachments) > 0 ?
+                            <div className="mt-3">
+                                <h4 className="mb-2">Task Attachments: </h4>
+                                <FileUploader>
+                                    {_.map(task?.attachments, attachment => (
+                                        attachment?.task_file_name ?
+                                        <FileUploader.Preview
+                                            key={attachment?.task_file_id}
+                                            fileName={attachment?.task_file_name}
+                                            downloadAble={true}
+                                            deleteAble={false}
+                                            downloadUrl={attachment?.task_file_url}
+                                            previewUrl={attachment?.task_file_url}
+                                            fileType={_.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment?.task_file_icon)? 'images' : 'others'}
+                                            classname="comment_file"
+                                            ext={attachment?.task_file_icon}
+                                        /> : null
+                                    ))}
+                                </FileUploader>
+                            </div>
+                        : null
+                    }
                 </Accordion>
             </div>
         </div>

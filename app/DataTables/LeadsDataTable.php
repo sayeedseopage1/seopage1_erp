@@ -41,7 +41,7 @@ class LeadsDataTable extends BaseDataTable
         $this->deleteLeadPermission = user()->permission('delete_lead');
         $this->addFollowUpPermission = user()->permission('add_lead_follow_up');
         $this->changeLeadStatusPermission = user()->permission('change_lead_status');
-        $this->viewLeadFollowUpPermission = user()->permission('view_lead_follow_up');
+        // $this->viewLeadFollowUpPermission = user()->permission('view_lead_follow_up');
         $this->viewLeadPermission = user()->permission('view_lead');
         $this->status = LeadStatus::get();
         $this->myAgentId = LeadAgent::where('user_id', user()->id)->first();
@@ -126,11 +126,11 @@ class LeadsDataTable extends BaseDataTable
 
                 return $action;
             });
-            $datatables->addColumn('employee_name', function ($row) {
-                if (!is_null($row->agent_id)) {
-                    return $row->leadAgent->user->name;
-                }
-            });
+            // $datatables->addColumn('employee_name', function ($row) {
+            //     if (!is_null($row->agent_id)) {
+            //         return $row->leadAgent->user->name;
+            //     }
+            // });
 
             // $datatables->addColumn('mobile', function ($row) {
             //     if ($row->mobile != '') {
@@ -368,10 +368,10 @@ class LeadsDataTable extends BaseDataTable
             });
             $datatables->removeColumn('status_id');
             $datatables->removeColumn('client_id');
-            $datatables->removeColumn('source');
-            $datatables->removeColumn('next_follow_up');
+            // $datatables->removeColumn('source');
+            // $datatables->removeColumn('next_follow_up');
             $datatables->removeColumn('statusName');
-            $datatables->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date', 'agent_name', 'check','project_link','project_id','deal_status','won_lost','added_by']);
+            $datatables->rawColumns(['status', 'action', 'client_name', 'check','project_link','project_id','deal_status','won_lost','added_by']);
 
             return $datatables;
     }
@@ -398,12 +398,11 @@ class LeadsDataTable extends BaseDataTable
         $lead = $model->with(['leadAgent', 'leadAgent.user', 'category','user'])
         ->select(
             'leads.id',
-            'leads.agent_id',
+           
 
             'leads.added_by',
             'leads.client_id',
-            'leads.next_follow_up',
-            'leads.salutation',
+           
             'leads.category_id',
             'client_name',
             'actual_value',
@@ -421,16 +420,17 @@ class LeadsDataTable extends BaseDataTable
             'currency_id',
             'original_currency_id',
             'leads.created_at',
-            'lead_sources.type as source',
+           // 'lead_sources.type as source',
             'users.name as agent_name',
             'users.image',
-            DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= '".$currentDate."' ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date")
+          //  DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= '".$currentDate."' ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date")
         )
         ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
-        ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
+      //  ->leftJoin('lead_agents', 'lead_agents.id', 'leads.agent_id')
         ->leftJoin('users', 'users.id', 'leads.added_by')
-        ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
+      //  ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id')
         ->leftJoin('currencies', 'currencies.id', 'leads.currency_id')
+        ->where('leads.status','!=','DM')
 
 
         ;
@@ -464,9 +464,9 @@ class LeadsDataTable extends BaseDataTable
 
         if (($this->request()->agent != 'all' && $this->request()->agent != '') || $this->viewLeadPermission == 'added') {
             $lead = $lead->where(function ($query) {
-                if ($this->request()->agent != 'all' && $this->request()->agent != '') {
-                    $query->where('agent_id', $this->request()->agent);
-                }
+                // if ($this->request()->agent != 'all' && $this->request()->agent != '') {
+                //     $query->where('agent_id', $this->request()->agent);
+                // }
 
                 if ($this->viewLeadPermission == 'added') {
                     $query->orWhere('leads.added_by', user()->id);
@@ -474,17 +474,17 @@ class LeadsDataTable extends BaseDataTable
             });
         }
 
-        if ($this->viewLeadPermission == 'owned' && !is_null($this->myAgentId)) {
-            $lead = $lead->where(function ($query) {
-                $query->where('agent_id', $this->myAgentId->id);
-            });
-        }
+        // if ($this->viewLeadPermission == 'owned' && !is_null($this->myAgentId)) {
+        //     $lead = $lead->where(function ($query) {
+        //         $query->where('agent_id', $this->myAgentId->id);
+        //     });
+        // }
 
         if ($this->viewLeadPermission == 'both') {
             $lead = $lead->where(function ($query) {
-                if(!is_null($this->myAgentId)) {
-                    $query->where('agent_id', $this->myAgentId->id);
-                }
+                // if(!is_null($this->myAgentId)) {
+                //     $query->where('agent_id', $this->myAgentId->id);
+                // }
 
                 $query->orWhere('leads.added_by', user()->id);
             });
@@ -494,9 +494,9 @@ class LeadsDataTable extends BaseDataTable
             $lead = $lead->where('category_id', $this->request()->category_id);
         }
 
-        if ($this->request()->source_id != 'all' && $this->request()->source_id != '') {
-            $lead = $lead->where('source_id', $this->request()->source_id);
-        }
+        // if ($this->request()->source_id != 'all' && $this->request()->source_id != '') {
+        //     $lead = $lead->where('source_id', $this->request()->source_id);
+        // }
 
         if ($this->request()->searchText != '') {
             $lead = $lead->where(function ($query) {

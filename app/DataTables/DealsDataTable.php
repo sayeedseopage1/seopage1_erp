@@ -427,7 +427,8 @@ class DealsDataTable extends BaseDataTable
             ->select('deal_stages.*', 'deal_stages.converted_by as deal_stages_converted_by', 'deal_stages.added_by as lead_added_by')
             ->leftJoin('leads', 'leads.id', '=', 'deal_stages.lead_id')
             ->leftJoin('users as lead_added_by', 'lead_added_by.id', '=', 'leads.added_by') // Alias added_by from leads table
-            ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by');
+            ->leftJoin('users as deal_stages_converted_by', 'deal_stages_converted_by.id', '=', 'deal_stages.converted_by')
+            ->where('deal_stages.convert_ld_status' ,'!=','DM');
 
 
 

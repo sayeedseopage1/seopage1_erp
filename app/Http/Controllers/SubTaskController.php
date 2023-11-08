@@ -17,6 +17,7 @@ use App\Helper\Files;
 use App\Models\TaskFile;
 use Validator;
 use App\Models\AuthorizationAction;
+use Illuminate\Support\Facades\Storage;
 
 class SubTaskController extends AccountBaseController
 {
@@ -50,7 +51,7 @@ class SubTaskController extends AccountBaseController
      */
     public function store(Request $request)
     {
-      
+
  //DB::beginTransaction();
         $setting = global_setting();
         $task = Task::find(request()->task_id);
@@ -67,7 +68,7 @@ class SubTaskController extends AccountBaseController
       return response()->json(['title' => ['Task title should be unique on this project']], 422);
   }
 
-        }else 
+        }else
         {
             $task_title = Task::where('id', $task->id)
             ->where('heading', $request->title)
@@ -78,18 +79,18 @@ class SubTaskController extends AccountBaseController
   }
 
         }
-       
+
         if($task->independent_task_status == 1){
             $rules = [
                 'title' => 'required',
-              
+
                 'description' => 'required',
                 'user_id' => 'required',
-    
-    
+
+
             ];
 
-        }else 
+        }else
         {
             $rules = [
                 'title' => 'required',
@@ -97,12 +98,12 @@ class SubTaskController extends AccountBaseController
                 'estimate_minutes' => 'required',
                 'description' => 'required',
                 'user_id' => 'required',
-    
-    
+
+
             ];
 
         }
-        
+
         $validator = Validator::make($request->all(), $rules);
         if ($request->start_date == "Invalid Date" ) {
             return response($validator->errors(), 422);
@@ -233,7 +234,7 @@ class SubTaskController extends AccountBaseController
             $task_s->independent_task_status = 1;
             $task_s->client_id = $task->client_id;
             $task_s->client_name = $task->client_name;
-        }  
+        }
 
         $task_s->save();
         $task_type = new TaskType();
@@ -257,7 +258,7 @@ class SubTaskController extends AccountBaseController
         if($task->independent_task_status != 1)
         {
 
-        
+
         $authorization_action = new AuthorizationAction();
         $authorization_action->model_name = $task_s->getMorphClass();
         $authorization_action->model_id = $task_s->id;
@@ -269,7 +270,7 @@ class SubTaskController extends AccountBaseController
         $authorization_action->title = Auth::user()->name . ' assign new task to developer';
         $authorization_action->authorization_for = $request->user_id ;
         $authorization_action->save();
-      
+
 
         $parent_task_authorization= AuthorizationAction::where('task_id',$request->task_id)->first();
         //dd($parent_task_authorization);
@@ -300,19 +301,24 @@ class SubTaskController extends AccountBaseController
         $parent_task_update->estimate_time_left_minutes = $parent_task->estimate_time_left_minutes - $total_minutes_s;
         $parent_task_update->save();
 
+        
         if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
 
-            foreach ($request->file as $fileData) {
-                $file = new TaskFile();
-                $file->task_id = $task_s->id;
+            foreach ($files as $file) {
+                $taskFile = new TaskFile();
+                $taskFile->task_id = $task_s->id;
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+                $taskFile->user_id = $this->user->id;
+                $taskFile->filename = $filename;
+                $taskFile->hashname = $filename;
+                $taskFile->size = $file->getSize();
+                $taskFile->save();
 
-                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $task_s->id);
-
-                $file->user_id = $this->user->id;
-                $file->filename = $fileData->getClientOriginalName();
-                $file->hashname = $filename;
-                $file->size = $fileData->getSize();
-                $file->save();
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
 
                 $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
             }
@@ -458,18 +464,22 @@ class SubTaskController extends AccountBaseController
         $task_s->save();
 
         if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
 
-            foreach ($request->file as $fileData) {
-                $file = new TaskFile();
-                $file->task_id = $id;
+            foreach ($files as $file) {
+                $taskFile = new TaskFile();
+                $taskFile->task_id = $id;
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+                $taskFile->user_id = $this->user->id;
+                $taskFile->filename = $filename;
+                $taskFile->hashname = $filename;
+                $taskFile->size = $file->getSize();
+                $taskFile->save();
 
-                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $id);
-
-                $file->user_id = $this->user->id;
-                $file->filename = $fileData->getClientOriginalName();
-                $file->hashname = $filename;
-                $file->size = $fileData->getSize();
-                $file->save();
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
 
                 $this->logTaskActivity($task->id, $this->user->id, 'fileActivity', $task->board_column_id);
             }
@@ -491,3 +501,6 @@ class SubTaskController extends AccountBaseController
         ]);
     }
 }
+
+
+

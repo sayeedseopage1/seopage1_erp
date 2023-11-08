@@ -188,7 +188,10 @@ use App\Http\Controllers\NonCashPointSettingsController;
 use App\Http\Controllers\ClientReviewController;
 use App\Http\Controllers\CrossDeptWork;
 use App\Http\Controllers\DisputeController;
-
+use App\Http\Controllers\FilterController;
+use App\Http\Controllers\DMContractController;
+use App\Http\Controllers\DMDealController;
+use App\Http\Controllers\DMLeadController;
 use App\Http\Controllers\IndependentTaskController;
 
 use App\Http\Controllers\RevisionCalculatorController;
@@ -353,9 +356,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('/incentives/held-amounts/held-get', [IncentiveController::class, 'HeldAmount'])->name('held-amount');
     Route::get('/incentives/{any?}/', [IncentiveController::class, 'index'])->where('any', '.*')->name('incentives.index');
 
-
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
+    Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
         Route::post('app-settings/deleteSessions', [AppSettingController::class, 'deleteSessions'])->name('app-settings.delete_sessions');
@@ -508,6 +511,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
+      
+   
+
     });
 
 
@@ -754,6 +760,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('tasks/show-subtask/{id}/{tableView?}/{tableViews?}', [TaskController::class, 'show_subtask'])->name('tasks.show_subtask');
     Route::get('tasks/search-subtask', [TaskController::class, 'searchSubTask'])->name('tasks.search_subtask');
 
+    // TASK COMMENTS
+    Route::get('tasks/{task_id}/comments', [TaskController::class, 'getTaskComments']);
+    Route::get('tasks/comments/{comment_id}/replies', [TaskController::class, 'getTaskCommentReplies']);
+    Route::post('tasks/comment-edit', [TaskController::class, 'editComment']);
+    Route::post('tasks/comment-reply', [TaskController::class, 'commentReply']);
+    Route::get('tasks/comments-widget-data/{task_id}', [TaskController::class, 'taskCommentWidgetData']);
+    Route::get('tasks/comments/{comment_id}/preview', [TaskController::class, 'previewTaskComment']);
+    Route::delete('tasks/{task_id}/comments/{comment_id}/delete-attach-file', [TaskController::class, 'deleteOldFile']);
+    Route::delete('tasks/comments/{comment_id}/delete', [TaskController::class, 'deleteComment']);
+
     // SUBMIT TASK FOR CLIENT APPROVAL
     Route::post('tasks/client-approval', [TaskController::class, 'clientApproval'])->name('tasks.client_approval');
     Route::post('tasks/client-approved-task', [TaskController::class, 'clientApprovedTask'])->name('tasks.client_approved_task');
@@ -905,7 +921,16 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::post('import/process', [LeadController::class, 'importProcess'])->name('leads.import.process');
         }
     );
-    Route::resource('leads', LeadController::class);
+    Route::resource('leads', LeadController::class)->middleware('clearCookies');
+
+    /*=========================> DIGITAL MERKTING LEAD START <===========================*/
+
+    Route::resource('digital-marketing-lead',DMLeadController::class);
+    Route::post('/digital-marketing-lead/update', [DMLeadController::class, 'updateDMLead'])->name('digital-marketing-lead-update');
+    Route::post('/digital-marketing-deal/stage', [DMLeadController::class, 'dmDealStageChange'])->name('dm-deal-stage');
+
+
+    /*=========================> DIGITAL MERKTING LEAD END <===========================*/
 
     /* LEAVES */
     Route::get('leaves/leaves-date', [LeaveController::class, 'getDate'])->name('leaves.date');
@@ -971,6 +996,12 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('award-time/increase/{id?}', [ContractController::class, 'award_time_increase_index'])->name('award_time_check.index');
     Route::post('award-time/increase/store', [ContractController::class, 'award_time_incress_store'])->name('award_time_check.store');
     Route::post('award-time/increase/update', [ContractController::class, 'award_time_incress_update'])->name('award_time_check.update');
+
+    /*=========================> DIGITAL MERKTING AWARD TIME START <===========================*/
+    Route::get('dm-award-time/increase/{id?}', [DMContractController::class, 'dm_award_time_increase_index'])->name('dm_award_time_check.index');
+    Route::post('dm-award-time/increase/store', [DMContractController::class, 'dm_award_time_incress_store'])->name('dm_award_time_check.store');
+    Route::post('dm-award-time/increase/update', [DMContractController::class, 'dm_award_time_incress_update'])->name('dm_award_time_check.update');
+        /*=========================> DIGITAL MERKTING AWARD TIME START <===========================*/
 
 
     //report-central
@@ -1132,6 +1163,26 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('contracts', ContractController::class);
     Route::resource('contract-renew', ContractRenewController::class);
     Route::resource('deals', DealController::class);
+
+    /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
+
+    Route::resource('dm-contracts', DMContractController::class);
+    Route::post('dm-contracts/deal-store', [DMContractController::class, 'storeDMDeal'])->name('dm-store-deals');
+    Route::get('dm-deal-url/{id}', [DMContractController::class, 'dmDealUrl']);
+
+    /*=========================> DIGITAL MERKTING CONTRACT OR WONDEAL START <===========================*/
+
+
+
+    /*=========================> DIGITAL MERKTING DEALS START <===========================*/
+
+    Route::resource('digital-marketing-deals',DMDealController::class);
+    Route::post('/digital-marketing-leads/deals/store', [DMDealController::class, 'storeDMLeadDeal'])->name('digital-marketing-store-deals-stage');
+    Route::post('/digital-marketing/deal/stage/lost', [DMDealController::class, 'dmDealStageUpdateLost'])->name('digital-marketing-deal-update-lost');
+
+
+    /*=========================> DIGITAL MERKTING DEALS END <===========================*/
+
     Route::post('deals/apply-quick-action', [DealController::class, 'applyQuickAction'])->name('deals.apply_quick_action');
     Route::post('accounts/deals/store', [DealController::class, 'store'])->name('store.deal');
     Route::post('accounts/deals/update', [DealController::class, 'update'])->name('update.deal');
@@ -1299,7 +1350,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
     Route::get('/check-independent-task/{id}',[TaskController::class,'independenttask']);
-   
+
 
 
 
@@ -1346,6 +1397,13 @@ Route::post('/deals/deny', [ContractController::class, 'DealDeny'])->name('deny-
 Route::post('/deals/client-form', [HomeController::class, 'ClientForm'])->name('client-submission');
 Route::post('/deals/client-form-submit', [ContractController::class, 'ClientFormSubmit'])->name('form-submit-to-client');
 Route::get('/thankyou', [HomeController::class, 'Thankyou']);
+
+    /*=========================> DIGITAL MERKTING DEALS DETAILS START <===========================*/
+    Route::get('/dm-deals/details/{id}', [DMContractController::class, 'dmDealDetails'])->name('dm-dealDetails');
+    Route::post('/dm-deals/details/store', [DMContractController::class, 'dmStoredealDetails'])->name('dm-store-deal-details');
+    Route::get('/dm-deals/details/edit/{id}', [DMContractController::class, 'dmDealDetailsedit']);
+    Route::post('/dm-deals/details/update', [DMContractController::class, 'updateDmDealDetails'])->name('dm-update-deal-details');
+        /*=========================> DIGITAL MERKTING DEALS DETAILS END <===========================*/
 
 //Service type section
 Route::get('/deals/service-type/web-content/{id}/{random_id}', [HomeController::class, 'webContent']);
@@ -1514,7 +1572,7 @@ Route::put('/projects/update-sales-basic-seo-google-search/{id}', [ProjectContro
 Route::put('/projects/update-sales-basic-seo-google-analytic/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleAnalytic']);
 Route::put('/projects/update-sales-basic-seo-google-account-info/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleAccountInfo']);
 Route::put('/projects/update-sales-basic-seo-cms/{id}', [ProjectController::class, 'updateSalesBasicSeoShareCms']);
-
+Route::get('/project-challenge/{id}', [ProjectController::class, 'ProjectChallenge'])->name('project-challenge');
 
 
 
@@ -1597,3 +1655,4 @@ Route::get('/task-guideline-approved-authorization/{id}', [TaskController::class
 Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 'taskGuidelineDenyAuthorization']);
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
+

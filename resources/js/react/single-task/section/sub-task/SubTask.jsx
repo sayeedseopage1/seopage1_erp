@@ -10,11 +10,12 @@ import Button from "../../components/Button";
 import Modal from "../../components/Modal";
 import PreviewSubtask from "./PreviewSubtask";
 import ApproveTask from "../task-actions/approve-task/ApproveTask";
+import { useNavigate } from "react-router-dom";
 
 const SubTask = ({ subTask, task, status, toggleEditForm }) => {
     const [isOpen, setIsOpen] = useState(false);
     const auth = new User(window?.Laravel?.user);
-
+    const navigate = useNavigate();
     const [checkSubTaskTimer, { isFetching }] = useLazyCheckSubTaskTimerQuery();
     // check task edit
 
@@ -40,7 +41,8 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
             .unwrap()
             .then((res) => {
                 if (res?.status === 200) {
-                    toggleEditForm(e, subTask?.id);
+                    // toggleEditForm(e, subTask?.id);
+                    navigate(`/account/tasks/${subTask?.id}?modal=edit&task=${subTask?.id}`);
                 } else {
                     Swal.fire({
                         icon: "error",
@@ -57,7 +59,8 @@ const SubTask = ({ subTask, task, status, toggleEditForm }) => {
             .unwrap()
             .then((res) => {
                 if (res?.status === 200) {
-                    window.location = `/account/tasks/${subTask?.id}/edit`;
+                    // window.location = `/account/tasks/${subTask?.id}/edit`;
+                    navigate(`/account/tasks/${subTask?.id}?modal=edit&task=${subTask?.id}`);
                 } else {
                     Swal.fire({
                         icon: "error",

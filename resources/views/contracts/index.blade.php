@@ -138,7 +138,7 @@
                         </button>
                         @include('contracts.modals.dealaddmodal')
                         @php
-                            $total_request = App\Models\AwardTimeIncress::where('status', '0')->count();
+                            $total_request = App\Models\AwardTimeIncress::where('status', '0')->where('dept_status','WD')->count();
                         @endphp
                         <a class="border-secondary btn btn-warning mr-3" href="{{ route('award_time_check.index') }}">
                             <i class="fa fa-clock"></i>

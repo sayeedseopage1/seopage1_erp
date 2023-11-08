@@ -7,6 +7,7 @@ const FileUploaderContext = React.createContext();
 // render icon
 const RenderIcon = ({ filename, size }) => {
     // get ext
+    if(!filename) return null;
     let arr = filename.split(".");
     let ext = arr[arr.length - 1];
     let _filename =
@@ -108,25 +109,25 @@ const FilePreview = ({
 }) => {
     return (
         <a href={downloadUrl} download={downloadAble}>
-            <div className="sp1_file_upload--input-preview" {...props}>  
+            <div className={`sp1_file_upload--input-preview ${classname}`} {...props}>
                 {/* delete button */}
                 {deleteAble  && (
-                    <Button 
-                        type="button" 
+                    <Button
+                        type="button"
                         onClick={(e) => {
                             e.stopPropagation();
                             onRemove(e, id)
-                        }} 
+                        }}
                         className='__remove--btn'
-                    > 
-                        <i className="fa-regular fa-trash-can"></i> 
+                    >
+                        <i className="fa-regular fa-trash-can"></i>
                     </Button>
                 )}
                 {/* end delete button */}
                 {(fileType === "images" || fileType.startsWith('image/')) ? (
                     <img
                         src={previewUrl}
-                        alt={fileName}
+                        alt=""
                         style={{
                             width: "100%",
                             height: "100%",
@@ -138,7 +139,7 @@ const FilePreview = ({
                 ) : (
                     <RenderIcon filename={fileName} size={size} />
                 )}
-                
+
             </div>
         </a>
     );
@@ -151,19 +152,19 @@ const SelectedFilePreveiw = ({children}) => {
     const onDelete = (e, index) => {
         // e.stopPropagation();
         const updatePreview = [...previews];
-        const updatedFiles = [...files];  
-        updatedFiles.splice(index, 1);  
-        updatePreview.splice(index, 1); 
-        setFiles(updatedFiles);   
+        const updatedFiles = [...files];
+        updatedFiles.splice(index, 1);
+        updatePreview.splice(index, 1);
+        setFiles(updatedFiles);
         setPreviews(updatePreview)
     }
-    
+
     return children({previews, onDelete})
 }
 
 // file uploader
 const FileUploader = ({ files, setFiles, children, className = "" }) => {
-    const [previews, setPreviews] = React.useState(""); 
+    const [previews, setPreviews] = React.useState("");
     return (
         <FileUploaderContext.Provider
             value={{

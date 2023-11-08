@@ -312,7 +312,7 @@ class TaskController extends AccountBaseController
     }
     public function TaskRevision(Request $request)
     {
-        //DB::beginTransaction();
+        DB::beginTransaction();
         $request->validate([
             'comments2' => 'required',
         ], [
@@ -386,7 +386,7 @@ class TaskController extends AccountBaseController
         $user= User::where('id',$task_submission->user_id)->first();
         $sender= User::where('id',$request->user_id)->first();
         Notification::send($user, new TaskRevisionNotification($task_status, $sender));
-        
+
         Toastr::success('Task Revision Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return redirect()->back();
     }

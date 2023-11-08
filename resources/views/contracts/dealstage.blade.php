@@ -200,15 +200,15 @@ crossorigin="anonymous" referrerpolicy="no-referrer"/>
                         </div>
                         @if($deal->won_lost == null)
                         @if($deal->deal_stage == 3)
-                        <div class="col-sm-6 col-md-4 text-end">
-                            <div class="info_dets" style="margin-top: -5px;">
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success">Won</a>
+                            <div class="col-sm-6 col-md-4 text-end">
+                                <div class="info_dets" style="margin-top: -5px;">
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#dealaddstagemodal" data-bs-whatever="@mdo" class="btn btn-success">Won</a>
 
-                                <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger">Lost</a>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#lostmodal" data-bs-whatever="@mdo" class="btn btn-danger">Lost</a>
+                                </div>
                             </div>
-                        </div>
-                          @include('contracts.modals.dealaddstagemodal')
-                        @include('contracts.modals.deallostmodal')
+                            @include('contracts.modals.dealaddstagemodal')
+                            @include('contracts.modals.deallostmodal')
                         @endif
                         @else
                         @if($deal->won_lost == 'Yes')

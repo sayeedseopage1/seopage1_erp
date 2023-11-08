@@ -1,9 +1,9 @@
 import * as React from 'react';
 import _ from 'lodash';
-import { 
-    useApproveSubmittedTaskMutation, 
-    useLazyGetSubmittedTaskQuery, 
-    useLazyGetTaskDetailsQuery 
+import {
+    useApproveSubmittedTaskMutation,
+    useLazyGetSubmittedTaskQuery,
+    useLazyGetTaskDetailsQuery
 } from '../services/api/SingleTaskPageApi';
 import { User } from '../utils/user-details';
 
@@ -24,6 +24,7 @@ export const useSingleTask = () => {
             if(res){
                 const task = {
                     ...res.task,
+                    taskFiles: res?.taskFiles,
                     parent_task_action: res.parent_task_action,
                     parent_task_title: res.parent_task_heading?.heading || null,
                     working_environment: res.working_environment,
@@ -32,7 +33,7 @@ export const useSingleTask = () => {
                     task_revisions: res.revisions,
                     taskSubTask: res.Sub_Tasks,
                 }
-                return task; 
+                return task;
             }
         }catch(err) {
             console.log(err)
@@ -50,22 +51,22 @@ export const useSingleTask = () => {
         try{
             const res = await getSubmittedTask(taskId).unwrap();
             if(res){
-                let data = _.orderBy(res, ['task_id', 'submission_no'], ['desc', 'desc']); 
+                let data = _.orderBy(res, ['task_id', 'submission_no'], ['desc', 'desc']);
                 return data;
-            } 
+            }
         }catch(err) {
             console.log(err)
         }
     }
-     
+
 
     /* ********************************** */
     /* ********* Approved Task ********* */
     const [
-        approveSubmittedTask, 
+        approveSubmittedTask,
         {isLoading: approveTaskLoadingStatus}
     ] = useApproveSubmittedTaskMutation();
-    
+
     // method
     const approveTask = async (data, callback) => {
         if(!data || _.isEmpty(data)) return;
@@ -73,7 +74,7 @@ export const useSingleTask = () => {
             const res = await approveSubmittedTask(data).unwrap();
 
             if(res){
-                callback &&callback(); 
+                callback &&callback();
                 const Toast = Swal.mixin({
                     toast: true,
                     position: 'top-end',
@@ -81,7 +82,7 @@ export const useSingleTask = () => {
                     timer: 3000,
                     timerProgressBar: true,
                 })
-                
+
                 Toast.fire({
                     icon: 'success',
                     title: 'Task Approved Successfully'

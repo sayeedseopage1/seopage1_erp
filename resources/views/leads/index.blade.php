@@ -98,10 +98,10 @@ $addLeadCustomFormPermission = user()->permission('manage_lead_custom_forms');
 
             var dateRangePicker = $('#datatableRange').data('daterangepicker');
             var startDate = $('#datatableRange').val();
-
+        //    / console.log(moment().format('DD-MM-YYYY'), moment().subtract(30, 'days').format('DD-MM-YYYY'));
             if (startDate == '') {
-                startDate = null;
-                endDate = null;
+                startDate = moment().subtract(30, 'days').format('DD-MM-YYYY');
+                endDate = moment().format('DD-MM-YYYY');
             } else {
                 startDate = dateRangePicker.startDate.format('{{ global_setting()->moment_date_format }}');
                 endDate = dateRangePicker.endDate.format('{{ global_setting()->moment_date_format }}');

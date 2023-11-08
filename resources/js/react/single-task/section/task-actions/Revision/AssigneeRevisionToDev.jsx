@@ -10,7 +10,7 @@ const options = [
     {
         id: "LDRx10",
         revision: "I overlooked a few things while checking",
-        isDeniable: true,
+        isDeniable: false,
     },
     {
         id: "LDRx11",
@@ -116,7 +116,7 @@ const AssigneeRevisionToDev = ({
         e.preventDefault();
         onBack();
     };
- 
+
 
     return (
         <React.Fragment>

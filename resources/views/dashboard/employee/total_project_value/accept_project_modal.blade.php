@@ -25,6 +25,7 @@
                                 <th scope="col">Project Type</th>
                                 <th scope="col">Project Budget</th>
                                 <th scope="col">Project Start Time</th>
+                                <th scope="col">Project Accept Time</th>
                                 <th scope="col">Project Status</th>
                                 <th scope="col">Status</th>
                               </tr>
@@ -46,6 +47,7 @@
                                     <td>{{ $deal->project_type }}</td>
                                     <td>{{ $item->project_budget }} $</td>
                                     <td>{{ $item->project_start_date }} </td>
+                                    <td>{{ $item->project_accept_date }} </td>
                                     <td>{{ $item->project_status }}</td>
                                     <td>
                                         @if ($item->status == 'in progress')
