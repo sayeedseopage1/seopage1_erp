@@ -23,6 +23,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->message = 'Project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has challenge (Project manager: <a href="'.route('projects.show',$project->id).'">'.$project_manager->name.'</a>)';
             $action->timeframe= 6;
             $action->project_id = $project->id;
+           
             $action->client_id = $client->id;
             $action->authorization_for= $authorizer->id;
             $button = [
@@ -49,9 +50,15 @@ class HelperPendingActionController extends AccountBaseController
                             'type'=> 'hidden',
                              'value'=> $project->id,
                              'readonly'=> true,
-                            'label'=>'Write a comment',
+                           
                             'name'=>'project_id',
                             'required'=> true,
+                        ], 
+                         [
+                            'type'=> 'hidden',
+                            
+                            'name'=>'authorization_id',
+                            
                         ], 
                         
                     ], 
@@ -84,7 +91,7 @@ class HelperPendingActionController extends AccountBaseController
            }
           
     }
-    public function OthersDeliverableAuthorization($project)
+    public function OthersDeliverableAuthorization($project,$id)
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
@@ -99,6 +106,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->timeframe= 12;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
+            $action->deliverable_id = $id;
             $action->authorization_for= $authorizer->id;
             $button = [
                 [

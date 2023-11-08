@@ -3082,7 +3082,7 @@ class ProjectController extends AccountBaseController
             $helper = new HelperPendingActionController();
 
 
-            $helper->OthersDeliverableAuthorization($project);
+            $helper->OthersDeliverableAuthorization($project,$deliverable->id);
 
                 //need pending action
 
