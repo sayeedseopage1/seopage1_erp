@@ -358,6 +358,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
+    Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
         Route::post('app-settings/deleteSessions', [AppSettingController::class, 'deleteSessions'])->name('app-settings.delete_sessions');
@@ -510,6 +511,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
+      
+   
+
     });
 
 
@@ -917,7 +921,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
             Route::post('import/process', [LeadController::class, 'importProcess'])->name('leads.import.process');
         }
     );
-    Route::resource('leads', LeadController::class);
+    Route::resource('leads', LeadController::class)->middleware('clearCookies');
 
     /*=========================> DIGITAL MERKTING LEAD START <===========================*/
 
@@ -1568,7 +1572,7 @@ Route::put('/projects/update-sales-basic-seo-google-search/{id}', [ProjectContro
 Route::put('/projects/update-sales-basic-seo-google-analytic/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleAnalytic']);
 Route::put('/projects/update-sales-basic-seo-google-account-info/{id}', [ProjectController::class, 'updateSalesBasicSeoGoogleAccountInfo']);
 Route::put('/projects/update-sales-basic-seo-cms/{id}', [ProjectController::class, 'updateSalesBasicSeoShareCms']);
-
+Route::get('/project-challenge/{id}', [ProjectController::class, 'ProjectChallenge'])->name('project-challenge');
 
 
 
@@ -1651,3 +1655,4 @@ Route::get('/task-guideline-approved-authorization/{id}', [TaskController::class
 Route::get('/task-guideline-deny-authorization/{id}', [TaskController::class, 'taskGuidelineDenyAuthorization']);
 Route::put('/task-guideline-update/{id}', [TaskController::class, 'updateTaskGuideline']);
 Route::get('/task-guideline-authorization/{id}', [TaskController::class, 'taskGuidelineAuthorization']);
+

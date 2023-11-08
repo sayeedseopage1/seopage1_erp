@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\PendingAction;
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\ProjectDeliverablesClientDisagree;
 use App\Models\AuthorizationAction;
@@ -526,5 +528,13 @@ class PendingActionController extends AccountBaseController
     public function destroy($id)
     {
         //
+    }
+    public function get_pending_active_live_action()
+    {
+        $action = PendingAction::where('authorization_for',Auth::id())->get();
+        return response()->json([
+            'pending_actions' => $action,
+            'status' => 200,
+        ]);
     }
 }

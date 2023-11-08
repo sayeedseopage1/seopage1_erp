@@ -4561,14 +4561,15 @@ class TaskController extends AccountBaseController
                     'tasks.id as id',
                     'tasks.heading as title',
                     'tasks.subtask_id',
-                    'project_members.lead_developer_id as lead_developer',
+                  
                     'task_users.user_id as task_user_id'
                 )
                 ->first();
+            $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
 
 
             if ($task->lead_developer) {
-                $task->lead_developer = get_user($task->lead_developer, false);
+                $task->lead_developer = $lead_dev->id;
             }
 
             if ($task->subtask_id) {

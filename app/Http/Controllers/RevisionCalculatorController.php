@@ -125,6 +125,25 @@ class RevisionCalculatorController extends AccountBaseController
               
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
+                $developer_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','LDR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_against_percent');
+                $lead_developer_dev_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','LDR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_by_percent');
+                $lead_developer_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','PLR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_against_percent');
+
 
             $pm->total_projects = $total_projects;
             $pm->total_project_value= $total_project_value;
@@ -134,8 +153,8 @@ class RevisionCalculatorController extends AccountBaseController
             $pm->sales_issues= $sales_issues;
             $pm->pm_issues= $pm_issues;
             $pm->client_issues= $client_issues;
-            $pm->lead_developer_issues= $lead_developer_issues;
-            $pm->developer_issues= $developer_issues;
+            $pm->lead_developer_issues= $lead_developer_issues + (($lead_developer_dev_percentage+$lead_developer_percentage) /100);
+            $pm->developer_issues= $developer_issues + ($developer_percentage/100) ;
             $pm->pending_issues= $pending_issues;
             $pm->total_disputes_not_solved= $total_disputes_not_solved;
             $pm->total_disputes= $total_disputes;
