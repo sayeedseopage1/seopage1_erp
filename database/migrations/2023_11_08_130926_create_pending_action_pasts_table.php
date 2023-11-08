@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pending_actions', function (Blueprint $table) {
+        Schema::create('pending_action_pasts', function (Blueprint $table) {
             $table->id();
             $table->string('item_name');
             $table->string('code');
+            $table->integer('action_id');
             $table->string('serial');
             $table->string('heading');
             $table->text('message');
@@ -44,6 +45,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pending_actions');
+        Schema::dropIfExists('pending_action_pasts');
     }
 };
