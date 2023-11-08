@@ -3260,6 +3260,20 @@ class ProjectController extends AccountBaseController
         $project = ProjectDeliverable::find($deliverable_id->id);
         $project->authorization = 1;
         $project->save();
+        $actions = PendingAction::where('code','DOA')->where('past_status',0)->where('deliverable_id',$id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+           
+        }
+    }
+       
+       
 
         $project_id = Project::where('id', $deliverable_id->project_id)->first();
 
