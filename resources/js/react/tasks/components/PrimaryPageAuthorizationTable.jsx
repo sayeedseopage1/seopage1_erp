@@ -1,16 +1,17 @@
-import React from "react";
-import Table from "../../global/table/DataTable";
-import Modal from "../../global/Modal";
-import Card from "../../global/Card";
-import styles from "./PrimaryPageAuthorization.module.css";
-import { Link, useSearchParams } from "react-router-dom";
-import Button from "../../global/Button";
-import { useGetTaskTypeDataQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
-import CKEditorComponent from "../../ckeditor";
+import dayjs from "dayjs";
 import _ from "lodash";
-import { Placeholder } from "../../global/Placeholder";
+import React from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import CKEditorComponent from "../../ckeditor";
+import Button from "../../global/Button";
+import Card from "../../global/Card";
 import Spinner from "../../global/Loader";
+import Modal from "../../global/Modal";
+import { Placeholder } from "../../global/Placeholder";
+import Table from "../../global/table/DataTable";
+import { useGetTaskTypeDataQuery, useUpdateTasktypeAuthStatusMutation } from "../../services/api/tasksApiSlice";
+import styles from "./PrimaryPageAuthorization.module.css";
 
 const PrimaryPageAuthorizationTable = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -29,15 +30,15 @@ const PrimaryPageAuthorizationTable = () => {
     // filter data
     const getData = (type) => {
         let _data = _.orderBy(tasksType, 'authorization_status', 'asc');
-        switch (type) { 
+        switch (type) {
             case 'all':
                 return _data;
             case 'pending':
                 return _.filter(_data, d => !d.authorization_status);
             case 'denied':
-                return _.filter(_data, d => d.authorization_status === 2);        
+                return _.filter(_data, d => d.authorization_status === 2);
             case 'authorized':
-                return _.filter(_data, d => d.authorization_status === 1);        
+                return _.filter(_data, d => d.authorization_status === 1);
             default:
                 return _data;
         }
@@ -56,7 +57,7 @@ const PrimaryPageAuthorizationTable = () => {
             return _.orderBy(_data[type], ['authorization_status', 'updated_at'], ['asc', 'desc'])
         }else return []
     }
-   
+
 
     return (
         <Modal isOpen={isOpen}>
@@ -168,7 +169,8 @@ export const Columns = [
         header: "#",
         cell: ({ row }) => {
             const data = row.original;
-            return `P${data?.project_id}T${data?.task_id}S${data?.sub_task_id}O${data?.id}`;
+            // return `P${data?.project_id}T${data?.task_id}S${data?.sub_task_id}O${data?.id}`;
+            return <span className="d-block" style={{width: '120px'}}>{dayjs(data.updated_at).format('MMM DD, YYYY [at] hh:mm A')}</span>
         },
     },
     {
@@ -240,7 +242,7 @@ export const Columns = [
 
     {
         id: "assigned_by",
-        header: "Assignee By",
+        header: "Assigned By",
         accessorKey: 'added_by_name',
         draggable: true,
         cell: ({ row }) => {
@@ -259,7 +261,7 @@ export const Columns = [
     },
     {
         id: "assigned_to",
-        header: "Assignee To",
+        header: "Assigned To",
         accessorKey: 'assigned_to_name',
         draggable: true,
         cell: ({ row }) => {
@@ -343,7 +345,7 @@ const ActionButton = ({ ...props }) => {
     const handleSubmission = (type) => {
         if(comment){
             updateTasktypeAuthStatus({status: type, task_type_id: row.id, comment })
-            .then(res => ( 
+            .then(res => (
                 toast.success('Action taken successfully')
             )).catch(err => console.log(err))
             .finally(() => {
@@ -352,9 +354,9 @@ const ActionButton = ({ ...props }) => {
         }else{
             setError({comment: 'You have to write a comment'})
         }
-        
-    } 
-   
+
+    }
+
     const approve = (e) => {
         e.preventDefault;
         handleSubmission('approved')
@@ -364,7 +366,7 @@ const ActionButton = ({ ...props }) => {
         e.preventDefault;
         handleSubmission('denied')
     }
-    
+
     return (
         <React.Fragment>
             {authorization_status ? (
@@ -387,7 +389,7 @@ const ActionButton = ({ ...props }) => {
                         Primary Page Development
                     </Card.Head>
                     <Card.Body className={`${styles.card_body} pt-3 px-4`}>
-                        <div className={styles.items}> 
+                        <div className={styles.items}>
 
                             <div className={styles.item}>
                                 <div data-type='label'>Page Name: </div>
@@ -396,16 +398,16 @@ const ActionButton = ({ ...props }) => {
 
                             <div className={styles.item}>
                                 <div data-type='label'>Page URL </div>
-                                <div data-type="data"> 
+                                <div data-type="data">
                                     <a href={row?.page_url}>
                                         {row?.page_url}
                                     </a>
                                 </div>
-                            </div> 
-                            
+                            </div>
+
                             <div className={styles.item}>
                                 <div data-type='label'>Task </div>
-                                <div data-type="data"> 
+                                <div data-type="data">
                                     <a href={row?.task_id}>
                                         {row?.task}
                                     </a>
@@ -414,7 +416,7 @@ const ActionButton = ({ ...props }) => {
 
                             <div className={styles.item}>
                                 <div data-type='label'>Subtask </div>
-                                <div data-type="data"> 
+                                <div data-type="data">
                                     <a href={row?.task_id}>
                                         {row?.sub_task}
                                     </a>
@@ -422,41 +424,41 @@ const ActionButton = ({ ...props }) => {
                             </div>
 
                             <div className={styles.item}>
-                                <div data-type='label'>Assignee By </div>
-                                <div data-type="data"> 
+                                <div data-type='label'>Assigned By </div>
+                                <div data-type="data">
                                     <a href={row?.task_id}>
                                         {row?.added_by_name}
                                     </a>
                                 </div>
                             </div>
-     
+
                             <div className={styles.item}>
-                                <div data-type='label'>Assignee To </div>
-                                <div data-type="data"> 
+                                <div data-type='label'>Assigned To </div>
+                                <div data-type="data">
                                     <a href={row?.task_id}>
                                     {row?.assigned_to_name}
                                     </a>
                                 </div>
-                            </div> 
+                            </div>
 
                             <div className={styles.item}>
                                 <div data-type='label'>Project Name </div>
-                                <div data-type="data"> 
+                                <div data-type="data">
                                     <a href={row?.task_id}>
                                         {row?.project_name}
                                     </a>
                                 </div>
                             </div>
 
-                            
+
                             <div className={styles.item}>
                                 <div data-type='label'>Client Name </div>
-                                <div data-type="data"> 
+                                <div data-type="data">
                                     <a href={row?.task_id}>
                                     {row?.client_name}
                                     </a>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
 
                         <div className="form-group pt-4">

@@ -86,17 +86,19 @@ const UserSection = ({
                         </tr>
                     ) : null}
 
-                    <tr>
-                        <td className="py-2">Explanation:</td>
-                        <td className="px-3 py-2">
-                            <div
-                                className="sp1_ck_content"
-                                dangerouslySetInnerHTML={{
-                                    __html: comment,
-                                }}
-                            />
-                        </td>
-                    </tr>
+                    {comment ?
+                        <tr>
+                            <td className="py-2">Explanation:</td>
+                            <td className="px-3 py-2">
+                                <div
+                                    className="sp1_ck_content"
+                                    dangerouslySetInnerHTML={{
+                                        __html: comment,
+                                    }}
+                                />
+                            </td>
+                        </tr>
+                    :null }
 
                     {_.size(questions) ? (
                         <tr>

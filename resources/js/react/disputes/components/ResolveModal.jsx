@@ -581,11 +581,11 @@ const ResolveModal = ({ state }) => {
                                                 row={row}
                                                 sectionTitle="Client"
                                                 user = {{
-                                                    ...row?.task?.client,
-                                                    avatar: row?.task?.client?.image ? `/user-uploads/avatar/${row?.task?.client?.image}` : null
+                                                    ...row?.client,
+                                                    avatar: row?.client?.image ? `/user-uploads/avatar/${row?.client?.image}` : null
                                                 }}
                                                 comment = ""
-                                                questions = {[...filterQuestion(conversations, row?.task?.client?.id)]}
+                                                questions = {[...filterQuestion(conversations, row?.client?.id)]}
                                                 reason=""
                                                 getUserById={getUserById}
                                             />
@@ -597,11 +597,11 @@ const ResolveModal = ({ state }) => {
                                                 row={row}
                                                 sectionTitle="Sale"
                                                 user = {{
-                                                    ...row?.task?.sales_person,
-                                                    avatar: row?.task?.sales_person?.image ? `/user-uploads/avatar/${row?.task?.sales_person?.image}` : null
+                                                    ...row?.sales_person,
+                                                    avatar: row?.sales_person?.image ? `/user-uploads/avatar/${row?.sales_person?.image}` : null
                                                 }}
                                                 comment = {row?.pm_comment}
-                                                questions = {[...filterQuestion(conversations, row?.task?.sales_person?.id)]}
+                                                questions = {[...filterQuestion(conversations, row?.sales_person?.id)]}
                                                 reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
                                                 getUserById={getUserById}
                                             />
@@ -613,11 +613,11 @@ const ResolveModal = ({ state }) => {
                                                 row={row}
                                                 sectionTitle="Project Manager"
                                                 user = {{
-                                                    ...row?.task?.project_manager,
-                                                    avatar: row?.task?.project_manager?.image ? `/user-uploads/avatar/${row?.task?.project_manager?.image}` : null
+                                                    ...row?.project_manager,
+                                                    avatar: row?.project_manager?.image ? `/user-uploads/avatar/${row?.project_manager?.image}` : null
                                                 }}
                                                 comment = {row?.pm_comment}
-                                                questions = {[...filterQuestion(conversations, row?.task?.project_manager?.id)]}
+                                                questions = {[...filterQuestion(conversations, row?.project_manager?.id)]}
                                                 reason={row?.revision_acknowledgement}
                                                 getUserById={getUserById}
                                             />
