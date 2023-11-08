@@ -1,0 +1,246 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+:root{
+  --primary : #1D82F5;
+  --secondary : rgba(64, 64, 64, 0.800);
+  --placeholder : rgba(0, 0, 0, 0.450);
+}
+
+
+.heading{
+  font-size: 35px;
+}
+
+/* ------------------ action container (start) ------------------ */
+.action_container{
+  /* border: solid; */
+  padding: 15px 0 0;
+  display: flex;
+  gap: 10px;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.btn{
+  border: solid var(--primary) 2px;
+  border-radius: 5px;
+  padding: 7.5px;
+  width: 151px;
+  font-size: 14px;
+}
+
+.btn_inactive{
+  background-color: white;
+  color: var(--primary);
+}
+
+.btn_active{
+  background-color: var(--primary);
+  color: white;
+}
+/* ------------------ action container (end) ------------------ */
+
+
+
+
+
+/* ------------------ view container (start) ------------------ */
+.outlet_container{
+  /* border: solid; */
+  min-height: 50vh;
+  margin-top: 15px;
+}
+/* ------------------ view container (end) ------------------ */
+
+
+
+/* ------------------ Active action (start) ------------------ */
+.active_action_container{
+  /* border: transparent; */
+  z-index: 1;
+  position: relative;
+  /* margin-top: 10px; */
+}
+.active_action_btn{
+  border: transparent;
+  border-radius: 5px;
+  padding: 11px;
+  width: 151px;
+  /* font-size: 20px; */
+  font-weight: 500;
+}
+.active_action_btn:first-child{
+  margin-right: 10px;
+}
+.active_action_btn_active{
+  background-color: #F7FAFF;
+  color: var(--primary);
+  border: var(--primary) solid 1px;
+  border-bottom: #F7FAFF solid 5px;
+  font-size: 18px;
+}
+.active_action_btn_inactive{
+  background-color: transparent;
+  color: var(--secondary);
+  font-size: 16px;
+}
+/* ------------------ Active action (end) ------------------ */
+
+
+
+/* ------------------ Active outlet container (start) ------------------ */
+.active_outlet_container{
+  transform: translateY(-4px);
+  border: var(--primary) solid 1px;
+  padding: 10px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  /* border-radius: 5px; */
+  /* z-index: ; */
+}
+/* ------------------ Active outlet container (end) ------------------ */
+
+
+
+
+/* ------------------ filter bar (start) ------------------ */
+.filterbar_container{
+  /* border: solid; */
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+  margin: 10px 0;
+  background-color: transparent;
+}
+
+
+
+/* ---------- search bar (start) ---------- */
+.search_bar{
+  /* border: solid; */
+  position: relative;
+  border-radius: 5px;
+  overflow: hidden;
+  flex: 0 1 400px;
+}
+.search_bar input{
+  width: 100%;
+  min-width: 0;
+  padding: 10px 10px 10px 60px;
+  font-size: 16px;
+  color: black;
+  outline: none;
+  border: none;
+  /* background-color: #F7F7F7; */
+}
+.search_bar input::placeholder{
+  color: var(--placeholder);
+}
+.search_icon{
+  /* border: solid; */
+  position: absolute;
+  height: 100%;
+  width: 50px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  color: var(--placeholder);
+  padding: 5px;
+  background-color: transparent;
+}
+/* ---------- search bar (end) ---------- */
+
+
+
+/* ---------- date bar (start) ---------- */
+.date_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-flow: row wrap;
+}
+.date_text{
+  font-size: 14px;
+}
+.date_field{
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 130px;
+  padding: 10px;
+  font-size: 14px;
+  color: black;
+  outline: none;
+  border: none;
+  /* background-color: #F7F7F7; */
+}
+.date_field::placeholder{
+  color: var(--placeholder);
+}
+/* ---------- date bar (end) ---------- */
+
+
+
+/* ---------- show bar (start) ---------- */
+.show_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.show_label{
+  font-size: 16px;
+  /* width: 80px; */
+}
+.show_field{
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 130px;
+  padding: 10px;
+  font-size: 16px;
+  color: var(--placeholder);
+  outline: none;
+  border: none;
+  /* background-color: #F7F7F7; */
+}
+/* ---------- show bar (end) ---------- */
+
+
+
+/* ---------- view bar (start) ---------- */
+.view_container{
+  /* border: solid; */
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.view_label{
+  font-size: 16px;
+  /* width: 80px; */
+}
+.view_field{
+  flex: 0 1 150px;
+  min-width: 0;
+  /* max-width: 150px; */
+  padding: 10px;
+  font-size: 16px;
+  color: var(--placeholder);
+  outline: none;
+  border: none;
+  /* background-color: #F7F7F7; */
+}
+/* ---------- view bar (end) ---------- */
+.custom_bg{
+  background-color: #F7F7F7;
+  border-radius: 5px;
+}
+.white_bg{
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 10px rgb(94, 94, 94) !important;
+}
+/* ------------------ filter bar (end) ------------------ */
+
+

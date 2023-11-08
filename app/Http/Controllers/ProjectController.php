@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DealStage;
 use App\Models\DealStageChange;
 use App\Models\kpiSettingGenerateSale;
+use App\Models\PendingAction;
 use App\Models\ProjectCms;
 use App\Models\ProjectPortfolio;
 use App\Models\ProjectWebsitePlugin;
@@ -827,29 +828,13 @@ class ProjectController extends AccountBaseController
         //        dd($request->all());
 
         //kpi distribution start from here
-        //DB::beginTransaction();
+      //  DB::beginTransaction();
         $find_project_id = Project::where('id', $id)->first();
         $find_deal_id = Deal::where('id', $find_project_id->deal_id)->first();
         $dealStage = DealStage::where('short_code', $find_deal_id->deal_id)->first();
         if ($dealStage != null) {
             if ($find_project_id->status == 'not started') {
-                if ($this->user->role_id == 4 || $this->user->role_id == 1) {
-                    $type = 'project_manager_accept_project';
-                }
-                $authorization_action = AuthorizationAction::where([
-                    'deal_id' => $find_deal_id->id,
-                    'project_id' => $find_project_id->id,
-                    'type' => $type,
-                    'authorization_for' => $this->user->id,
-                    'status' => '0'
-                ])->first();
-
-                if ($authorization_action) {
-                    $authorization_action->authorization_by = Auth::id();
-                    $authorization_action->approved_at = Carbon::now();
-                    $authorization_action->status = '1';
-                    $authorization_action->save();
-                }
+               
 
                 $kpi = kpiSetting::where('kpi_status', '1')->first();
 
@@ -2040,21 +2025,23 @@ class ProjectController extends AccountBaseController
 
         $project->comments = $request->comments;
         $project->save();
+       // dd($project);
+        
         if ($request->project_challenge != 'No Challenge') {
             $project_update = Project::find($request->project_id);
              $project->status = 'in progress';
             $project_update->save();
+            
 
-             $authorization_action = new AuthorizationAction();
-             $authorization_action->model_name = $project->getMorphClass();
-             $authorization_action->model_id = $project->id;
-             $authorization_action->type = 'project_challenge';
-             $authorization_action->deal_id = $project_update->deal_id;
-             $authorization_action->project_id = $project_update->id;
-             $authorization_action->link = route('projects.show', $project_update->id);
-             $authorization_action->title = 'Project Challenge Authorization';
-             $authorization_action->authorization_for = 62;
-             $authorization_action->save();
+            $helper = new HelperPendingActionController();
+
+
+            $helper->ProjectChallengeAuthorization($project);
+
+           // pending action 
+          
+
+           //pending action
              $users = User::where('role_id', 1)->get();
              foreach ($users as $user) {
                  Notification::send($user, new ProjectReviewNotification($project));
@@ -2076,18 +2063,7 @@ class ProjectController extends AccountBaseController
                 ]);
             }
         } else {
-            //authorizatoin action start here
-            // $authorization_action = new AuthorizationAction();
-            // $authorization_action->model_name = $project->getMorphClass();
-            // $authorization_action->model_id = $project->id;
-            // $authorization_action->type = 'project_challenge';
-            // $authorization_action->deal_id = $project->deal_id;
-            // $authorization_action->project_id = $project->id;
-            // $authorization_action->link = route('projects.show', $project->id);
-            // $authorization_action->title = 'Project Challenge Authorization';
-            // $authorization_action->authorization_for = 1;
-            // $authorization_action->save();
-            //end authorization action here
+          
             $users = User::where('role_id', 1)->get();
             foreach ($users as $user) {
                 $this->triggerPusher('notification-channel', 'notification', [
@@ -2128,116 +2104,6 @@ class ProjectController extends AccountBaseController
         $pmproject->status = 'Accepted';
         $pmproject->save();
 
-        if ($request->graphics_design != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->graphics_design;
-            $deliverable->title = $request->graphics_title;
-            $deliverable->quantity = $request->graphics_quantity;
-            $deliverable->from = $request->graphics_from;
-            $deliverable->to = $request->graphics_to;
-            $deliverable->description = $request->graphics_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->ux_design != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->ux_design;
-            $deliverable->title = $request->ux_title;
-            $deliverable->quantity = $request->ux_quantity;
-            $deliverable->from = $request->ux_from;
-            $deliverable->to = $request->ux_to;
-            $deliverable->description = $request->ux_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->main_page_development != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->title = $request->main_title;
-            $deliverable->deliverable_type = $request->main_page_development;
-            $deliverable->quantity = $request->main_quantity;
-            $deliverable->from = $request->main_from;
-            $deliverable->to = $request->main_to;
-            $deliverable->description = $request->main_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->secondary_page_development != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->secondary_page_development;
-            $deliverable->title = $request->secondary_title;
-            $deliverable->quantity = $request->secondary_quantity;
-            $deliverable->from = $request->secondary_from;
-            $deliverable->to = $request->secondary_to;
-            $deliverable->description = $request->secondary_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->content_creation != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->content_creation;
-            $deliverable->title = $request->content_title;
-            $deliverable->quantity = $request->content_quantity;
-            $deliverable->from = $request->content_from;
-            $deliverable->to = $request->content_to;
-            $deliverable->description = $request->content_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->marketing != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->marketing;
-            $deliverable->title = $request->marketing_title;
-            $deliverable->quantity = $request->marketing_quantity;
-            $deliverable->from = $request->marketing_from;
-            $deliverable->to = $request->marketing_to;
-            $deliverable->description = $request->marketing_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->domain_hosting != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->domain_hosting;
-            $deliverable->title = $request->domain_title;
-            $deliverable->quantity = $request->domain_quantity;
-            $deliverable->from = $request->domain_from;
-            $deliverable->to = $request->domain_to;
-            $deliverable->description = $request->domain_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->products != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->products;
-            $deliverable->title = $request->products_title;
-            $deliverable->from = $request->products_from;
-            $deliverable->to = $request->products_to;
-            $deliverable->quantity = $request->products_quantity;
-            $deliverable->description = $request->products_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->collection != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->collection;
-            $deliverable->title = $request->collection_title;
-            $deliverable->quantity = $request->collection_quantity;
-            $deliverable->from = $request->collection_from;
-            $deliverable->to = $request->collection_to;
-            $deliverable->description = $request->collection_deliverable_description;
-            $deliverable->save();
-        }
-        if ($request->others != null) {
-            $deliverable = new ProjectDeliverable();
-            $deliverable->project_id = $project->id;
-            $deliverable->deliverable_type = $request->others;
-            $deliverable->title = $request->others_title;
-            $deliverable->quantity = $request->others_quantity;
-            $deliverable->from = $request->others_from;
-            $deliverable->to = $request->others_to;
-            $deliverable->description = $request->others_deliverable_description;
-            $deliverable->save();
-        }
 
 
         // To add custom fields data
@@ -3210,17 +3076,15 @@ class ProjectController extends AccountBaseController
             }
 
             if ($request->deliverable_type == 'Others' || $request->deliverable_type == 'Fixing Issues/Bugs') {
-                $authorization_action = new AuthorizationAction();
-                $authorization_action->model_name = $deliverable->getMorphClass();
-                $authorization_action->model_id = $deliverable->id;
-                $authorization_action->type = 'other_type_deliverable';
-                $authorization_action->deal_id = $project_id->deal_id;
-                $authorization_action->project_id = $project_id->id;
-                $authorization_action->link = route('projects.show', $project_id->id) . '?tab=deliverable';
-                $authorization_action->title = Auth::user()->name . '  send '.$request->deliverable_type.' delivarable authorization request ';
-                $authorization_action->authorization_for = 62;
-                $authorization_action->save();
-                //end authorization action
+
+                //need pending action
+              
+            $helper = new HelperPendingActionController();
+
+
+            $helper->OthersDeliverableAuthorization($project,$deliverable->id);
+
+                //need pending action
 
                 $project_id = Project::where('id', $project->id)->first();
                 foreach ($users as $user) {
@@ -3396,6 +3260,20 @@ class ProjectController extends AccountBaseController
         $project = ProjectDeliverable::find($deliverable_id->id);
         $project->authorization = 1;
         $project->save();
+        $actions = PendingAction::where('code','DOA')->where('past_status',0)->where('deliverable_id',$id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+           
+        }
+    }
+       
+       
 
         $project_id = Project::where('id', $deliverable_id->project_id)->first();
 
@@ -5110,11 +4988,13 @@ public function updatePmBasicSEO(Request $request){
     }
     public function ProjectAccept(Request $request)
     {
+        DB::beginTransaction();
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
         $project->admin_comment = $request->admin_comment;
         $project->save();
+        dd($project);
         $user = User::where('id', $project->pm_id)->first();
 
         //if request comes from original authrization serction then data will be update form authorizatin action
@@ -5879,5 +5759,19 @@ public function updatePmBasicSEO(Request $request){
         $delayed_project->save();
 
         return response()->json(['status'=>200]);
+    }
+    public function ProjectChallenge($id)
+    {
+        $challenge = Project::select('projects.id','projects.project_name','projects.comments','projects.project_challenge',
+        'pm.id as project_manager_id','pm.name as project_manager_name','client.id as clientId','client.name as client_name'
+        )
+        ->leftJoin('users as pm','pm.id','projects.pm_id')
+        ->leftJoin('users as client','client.id','projects.client_id')
+        ->where('projects.id',$id)
+        ->first();
+        return response()->json([
+            'challenge' => $challenge,
+            'status' => 200,
+        ]);
     }
 }

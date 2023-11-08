@@ -818,6 +818,7 @@ var SingleIndependentTask = function SingleIndependentTask() {
   }
   var _taskStatus = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.BoardColumn(taskStatus);
   if (!task) return null;
+  console.log("task revision", task === null || task === void 0 ? void 0 : task.revisions);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)(RefetchTaskProvider.Provider, {
     value: {
       setRefetchTask: setRefetchTask
