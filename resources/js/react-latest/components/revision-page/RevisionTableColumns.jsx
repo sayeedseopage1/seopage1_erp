@@ -136,13 +136,15 @@ export const RevisionTableColumns = [
         accessorFn: (row) => row.revision_acknowledgement,
         cell: (row) => {
             const text = row.getValue();
+
+            if(!text) return <span> -- </span>
             return (
                 <Popover>
                     <Popover.Button>
                         <div
                             className="multiline-ellipsis"
                             dangerouslySetInnerHTML={{
-                                __html: text?.slice(0, 200) || "--",
+                                __html: text?.slice(0, 200),
                             }}
                         />
                     </Popover.Button>
@@ -196,7 +198,7 @@ export const RevisionTableColumns = [
         cell: ({ row }) => {
             const d = row.original;
 
-            const person = d?.sale_person || d?.task_assign_to;
+            const person = d.dispute_between ? (d?.sale_person ? d?.sale_person : d?.task_assign_to) : null
 
             if (person) {
                 return (
@@ -287,14 +289,16 @@ export const RevisionTableColumns = [
             const data = row.original;
             const user = window?.Laravel?.user;
 
-            const needAction = data.acknowledgement_id === "SPRx02";
-            const actionAlreadyTaken = data.sale_accept || data.sale_deny;
+            const actionAlreadyTaken = data.dispute_between === "SPR" ?
+                                (data.sale_accept || data.sale_deny) :
+                                (data.is_accept || data.is_deny);
+
             const hasPermissionToTakeAction =
                 Number(user.id) === Number(data?.deal_added_by.id);
 
             return (
                 <Switch>
-                    <Switch.Case condition={!hasPermissionToTakeAction || (!needAction || actionAlreadyTaken)}>
+                    <Switch.Case condition={!hasPermissionToTakeAction || actionAlreadyTaken}>
                        <Switch>
                             {/* if sales accept */}
                             <Switch.Case condition={data.dispute_between === 'SPR' && data.sale_accept}>
@@ -373,7 +377,11 @@ export const RevisionTableColumns = [
                             </Switch.Case>
 
                             {/* Pending */}
-                            <Switch.Case condition={data.dispute_between === 'SPR' ? (!data.sale_accept && !data.sale_deny)   : (!data.is_deny && !data.is_accept)}>
+                            <Switch.Case condition={
+                                data.dispute_between === 'SPR' ?
+                                (!data.sale_accept && !data.sale_deny) :
+                                (!data.is_deny && !data.is_accept)
+                            }>
                                 <div className={`${styles.status} ${styles.pending} f-12`}> Pending </div>
                             </Switch.Case>
                        </Switch>
@@ -381,7 +389,6 @@ export const RevisionTableColumns = [
 
                     <Switch.Case
                         condition={
-                            needAction &&
                             !actionAlreadyTaken &&
                             hasPermissionToTakeAction
                         }

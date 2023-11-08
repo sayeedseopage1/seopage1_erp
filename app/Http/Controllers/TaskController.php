@@ -810,22 +810,19 @@ class TaskController extends AccountBaseController
             }
         }
 
-        if ($request->file('file') != null) {
-            foreach ($request->file('file') as $att) {
+        if ($request->hasFile('file') != null) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
+            foreach ($files as $file) {
                 $task_submit = new TaskSubmission();
-                $filename = null;
-                if ($att) {
-                    $filename = time() . $att->getClientOriginalName();
-
-                    Storage::disk('public')->putFileAs(
-                        'TaskSubmission/',
-                        $att,
-                        $filename
-                    );
-                }
+                $filename = time() . $file->getClientOriginalName();
+                array_push($file_name, $filename);
                 $task_submit->attach = $filename;
                 $task_submit->task_id = $request->task_id;
                 $task_submit->user_id = $request->user_id;
+
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
                 if ($order == null) {
                     $task_submit->submission_no = 1;
                 } else {
@@ -2849,12 +2846,12 @@ class TaskController extends AccountBaseController
     public function clientHasRevision(Request $request)
     {
         // DB::beginTransaction();
+
         $dispute_between = explode('x', $request->acknowledgement_id)[0];
 
         $auth = Auth::user();
 
-
-        // chagne board column status
+        // change board column status
         $task_status = Task::find($request->task_id);
         $task_status->task_status = "revision";
         $task_status->board_column_id = 1;
@@ -2875,7 +2872,19 @@ class TaskController extends AccountBaseController
         $task_revision->task_id = $request->task_id;
         $task_revision->is_deniable = $request->is_deniable;
 
-        if (($dispute_between != 'CPR' ) && $dispute_between != 'SPR' && $request->is_deniable == false && $auth->role_id != 1) {
+
+        /**
+         * * if dispute didn't create between
+         * * "Client vs Project Manager" (shortened as 'CPR') or
+         * * "Sale vs Project Manager" (shortened as 'SPR')
+         * * initially responsible person is the "current user"
+         */
+        if (
+            $dispute_between != 'CPR' &&
+            $dispute_between != 'SPR' &&
+            $request->is_deniable == false &&
+            $auth->role_id != 1
+        ){
             $task_revision->final_responsible_person = $this->role[$auth->role_id];
         }
 
@@ -2895,12 +2904,35 @@ class TaskController extends AccountBaseController
         $task_revision->dispute_created = $request->dispute_create;
         $task_revision->dispute_between = $dispute_between;
 
-        if ($request->acknowledgement_id == 'CPRx06') {
-            $task_revision->final_responsible_person = 'C';
-        }else if ($request->acknowledgement_id == 'SPRx01' || $request->acknowledgement_id == 'SPRx03') {
-            $task_revision->sale_accept = true;
-            $task_revision->final_responsible_person = 'S';
+        /**
+         * * If the requested "acknowledgement_id" is "CPRx06"
+         * * initially, the final responsible person is the "client" (shortened as 'C').
+         * * If this occurs more than 5 times in a month for an individual "Project Manager"
+         * * it goes to the 'dispute' column.
+         */
+
+        $startDate = now()->startOfMonth();  //* Start of the current month
+        $endDate = now()->endOfMonth();      //* End of the current month
+
+        // * Count the total number of rows created with 'acknowledgement_id' equal to 'CPRx06'.
+        $clientRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
+            ->where('projects.pm_id', Auth::id())
+            ->where('acknowledgement_id', 'CPRx06')
+            ->where('task_id', $task_revision->id)
+            ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+            ->count();
+
+
+        if ($clientRevisionCount >= 5) {
+            $task_revision->dispute_created = true; // create dispute
+        }else if ($request->acknowledgement_id == 'CPRx06') {
+            $task_revision->final_responsible_person = 'C'; // final responsible person "client"
         }
+
+        // else if ($request->acknowledgement_id == 'SPRx01' || $request->acknowledgement_id == 'SPRx03') {
+        //     $task_revision->sale_accept = true;
+        //     $task_revision->final_responsible_person = 'S';
+        // }
 
         $task_revision->added_by = Auth::id();
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
@@ -2921,20 +2953,7 @@ class TaskController extends AccountBaseController
         // dd($task_revision);
         $task_revision->save();
 
-        $startDate = now()->startOfMonth();  // Start of the current month
-        $endDate = now()->endOfMonth();      // End of the current month
 
-        $clientRevisionCount = TaskRevision::leftJoin('projects', 'task_revisions.project_id', 'projects.id')
-            ->where('projects.pm_id', Auth::id())
-            ->where('acknowledgement_id', 'CPRx06')
-            ->where('task_id', $task_revision->id)
-            ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
-            ->count();
-
-        if ($clientRevisionCount >= 5) {
-            $task_revision->dispute_created = true;
-            $task_revision->save();
-        }
         // CREATE DISPUTE
         if ($task_revision->dispute_created) {
             $this->create_dispute($task_revision);
@@ -4306,18 +4325,13 @@ class TaskController extends AccountBaseController
     }
     public function GetTaskSubmission($id)
     {
-        //dd($id);
-
-        //    / $matchingRows = TaskSubmission::whereColumn('task_id', '=', $id)->groupBy('submission_no')->get();
-
-        $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text, GROUP_CONCAT(link) as links, GROUP_CONCAT(attach) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
+        $submissions = TaskSubmission::selectRaw('task_id, submission_no, user_id, text,GROUP_CONCAT(link) as links, GROUP_CONCAT(CONCAT("https://seopage1storage.s3.ap-southeast-1.amazonaws.com/", attach)) as attaches, MAX(task_submissions.created_at) as submission_date, users.user_name, users.name, users.image, users.role_id')
             ->where('task_id', $id)
             ->join('users', 'users.id', 'task_submissions.user_id')
             ->groupBy('task_id', 'submission_no')
             ->havingRaw('COUNT(*) > 1')
             ->get();
         return response()->json($submissions);
-        // dd($id,$matchingRows);
     }
 
     public function GetRevision($id)
@@ -4566,10 +4580,12 @@ class TaskController extends AccountBaseController
                 )
                 ->first();
 
+                $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
 
-            if ($task->lead_developer) {
-                $task->lead_developer = get_user($task->lead_developer, false);
-            }
+
+                if ($task->lead_developer) {
+                    $task->lead_developer = get_user($lead_dev->id, false);
+                }
 
             if ($task->subtask_id) {
                 $subtask = DB::table('sub_tasks')

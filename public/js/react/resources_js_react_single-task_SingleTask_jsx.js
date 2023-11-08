@@ -2447,7 +2447,7 @@ var PMGuideline = function PMGuideline(_ref2) {
             color: '#878E97'
           },
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("strong", {
-            children: "Color Schema: "
+            children: "Color Scheme: "
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("ul", {
           className: "pl-2 ml-0",
@@ -13442,18 +13442,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/CustomModal */ "./resources/js/react/single-task/components/CustomModal.jsx");
-/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
-/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
-/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
-/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! dayjs */ "./node_modules/dayjs/dayjs.min.js");
+/* harmony import */ var dayjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(dayjs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_use__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-use */ "./node_modules/react-use/esm/useWindowSize.js");
+/* harmony import */ var _file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../file-upload/FileUploader */ "./resources/js/react/file-upload/FileUploader.jsx");
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
+/* harmony import */ var _components_CustomModal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/CustomModal */ "./resources/js/react/single-task/components/CustomModal.jsx");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 
 
 
@@ -13471,19 +13469,19 @@ var SubmitionView = function SubmitionView(_ref) {
     isLoading = _ref.isLoading;
   var links = _.compact(_.split(data === null || data === void 0 ? void 0 : data.links, ','));
   var attaches = _.compact(_.split(data === null || data === void 0 ? void 0 : data.attaches, ','));
-  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_8__["default"])(),
+  var _useWindowSize = (0,react_use__WEBPACK_IMPORTED_MODULE_7__["default"])(),
     deviceWidth = _useWindowSize.width;
   var content = function content() {
     var _data$name;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
       className: "sp1-subtask-form --modal-panel --modal-submitted",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
         className: "sp1-subtask-form --modal-panel-header",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "d-flex align-items-center",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("h6", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("h6", {
             children: "Submitted Task "
-          }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          }), isLoading && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
             className: "spinner-border text-dark ml-2",
             role: "status",
             style: {
@@ -13493,44 +13491,44 @@ var SubmitionView = function SubmitionView(_ref) {
               borderRightColor: "transparent"
             }
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
           "aria-label": "close-modal",
           className: "_close-modal",
           onClick: close,
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("i", {
             className: "fa-solid fa-xmark"
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
         className: "sp1-subtask-form --modal-panel-body --modal-submitted-body",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
           className: "mt-3 d-flex flex-column",
           style: {
             gap: "10px"
           },
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               className: "fs-14 font-weight-bold d-block mb-3",
               style: {
                 color: "#767581"
               },
               children: "Submitted By"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
               className: "d-flex align-items-center",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-                children: data !== null && data !== void 0 && data.image ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("img", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
+                children: data !== null && data !== void 0 && data.image ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("img", {
                   src: "/user-uploads/avatar/".concat(data === null || data === void 0 ? void 0 : data.image),
                   alt: data === null || data === void 0 ? void 0 : data.name,
                   width: 32,
                   height: 32,
                   className: "rounded-circle"
-                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+                }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
                   className: "sp1-item-center rounded-circle border",
                   style: {
                     width: '32px',
                     height: '32px'
                   },
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
                     className: "font-weight-bold",
                     style: {
                       fontSize: '1.2rem'
@@ -13538,46 +13536,46 @@ var SubmitionView = function SubmitionView(_ref) {
                     children: data === null || data === void 0 || (_data$name = data.name) === null || _data$name === void 0 ? void 0 : _data$name.slice(0, 1)
                   })
                 })
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
                 className: "d-flex flex-column px-2",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("a", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("a", {
                   className: "text-underline text-primary",
                   href: "/account/employees/".concat(data === null || data === void 0 ? void 0 : data.user_id),
                   style: {
                     color: "#767581"
                   },
                   children: [" ", data === null || data === void 0 ? void 0 : data.name, " "]
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("span", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("span", {
                   className: "d-block",
                   style: {
                     color: "#767581"
                   },
-                  children: [dayjs__WEBPACK_IMPORTED_MODULE_4___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("MMM DD, YYYY"), " at ", dayjs__WEBPACK_IMPORTED_MODULE_4___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("hh:mm a")]
+                  children: [dayjs__WEBPACK_IMPORTED_MODULE_0___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("MMM DD, YYYY"), " at ", dayjs__WEBPACK_IMPORTED_MODULE_0___default()(data === null || data === void 0 ? void 0 : data.submission_date).format("hh:mm a")]
                 })]
               })]
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "d-flex flex-column mt-3",
             style: {
               gap: "10px"
             },
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               className: "d-block fs-14 font-weight-bold",
               style: {
                 color: "#767581"
               },
               children: " Links "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("ul", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("ul", {
               style: {
                 listStyle: "unset",
                 marginLeft: "30px"
               },
               children: links === null || links === void 0 ? void 0 : links.map(function (link, i) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("li", {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("li", {
                   style: {
                     listStyle: "unset"
                   },
-                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("a", {
+                  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("a", {
                     className: "hover-underline text-primary",
                     target: "_blank",
                     href: link,
@@ -13586,46 +13584,46 @@ var SubmitionView = function SubmitionView(_ref) {
                 }, link + i);
               })
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "mt-2 mt-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               className: "d-block fs-12 font-weight-bold mb-2",
               style: {
                 color: "#767581"
               },
               children: "Description"
-            }), data !== null && data !== void 0 && data.text ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            }), data !== null && data !== void 0 && data.text ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
               className: "sp1_ck_content",
               dangerouslySetInnerHTML: {
                 __html: data === null || data === void 0 ? void 0 : data.text
               }
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               style: {
                 color: "rgb(180, 188, 196)"
               },
               children: "No description is available"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)("div", {
             className: "mt-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               className: "d-block fs-12 font-weight-bold mb-2",
               style: {
                 color: "#767581"
               },
               children: "Attached Files"
-            }), _.size(attaches) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            }), _.size(attaches) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"], {
               children: _.map(attaches, function (file, index) {
-                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_5__["default"].Preview, {
+                return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_file_upload_FileUploader__WEBPACK_IMPORTED_MODULE_2__["default"].Preview, {
                   fileName: file,
                   downloadAble: true,
                   deleteAble: false,
-                  downloadUrl: "/storage/TaskSubmission/".concat(file),
-                  previewUrl: "/storage/TaskSubmission/".concat(file),
+                  downloadUrl: file,
+                  previewUrl: file,
                   fileType: _.includes(["png", "jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others',
                   ext: ""
                 }, "".concat(file, "_").concat(index));
               })
-            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("span", {
+            }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("span", {
               className: "",
               style: {
                 color: "rgb(180, 188, 196)"
@@ -13638,14 +13636,14 @@ var SubmitionView = function SubmitionView(_ref) {
     });
   };
   if (deviceWidth > 1200) {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_CustomModal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)(_components_CustomModal__WEBPACK_IMPORTED_MODULE_4__["default"], {
       isOpen: isOpen,
       toggleRef: toggle,
       children: content()
     });
   } else {
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)(_components_Modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsxs)(_components_Modal__WEBPACK_IMPORTED_MODULE_5__["default"], {
         isOpen: isOpen,
         children: [" ", content(), " "]
       })
@@ -17923,7 +17921,7 @@ var ApproveTask = function ApproveTask(_ref) {
     setShowApproveForm(false);
   };
 
-  // editor data 
+  // editor data
   var onWriteOnEditor = function onWriteOnEditor(e, editor) {
     var data = editor.getData();
     setComment(data);
@@ -17939,7 +17937,7 @@ var ApproveTask = function ApproveTask(_ref) {
     return !count;
   };
 
-  // submit 
+  // submit
   var handleOnSubmit = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
       var data, cb;
@@ -18296,8 +18294,8 @@ var SubmittedWorkCard = function SubmittedWorkCard(_ref3) {
               fileName: file,
               downloadAble: true,
               deleteAble: false,
-              downloadUrl: "/storage/TaskSubmission/".concat(file),
-              previewUrl: "/storage/TaskSubmission/".concat(file),
+              downloadUrl: "".concat(file),
+              previewUrl: "".concat(file),
               fileType: _.includes(["png", "jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others',
               ext: ""
             }, "".concat(file, "_").concat(index));
