@@ -34,8 +34,8 @@ class HelperPendingActionController extends AccountBaseController
                     'button_url' => route('projects.show', $project->id),
                 ],
                 [
-                    'button_name' => 'View',
-                    'button_color' => 'warning',
+                    'button_name' => 'Authorize',
+                    'button_color' => 'success',
                     'button_type' => 'modal',
                     'button_url' => route('project-challenge', $project->id),
                     'modal_form'=> true,
