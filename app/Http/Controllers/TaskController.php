@@ -81,6 +81,7 @@ use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
 use App\Notifications\TaskCommentNotification;
+use App\Notifications\TaskCommentReplyNotification;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -4111,6 +4112,7 @@ class TaskController extends AccountBaseController
             $data->save();
             if ($taskID->project_id != null) {
                 foreach ($users as $user) {
+                    // dd($user);
                     // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
                     Notification::send($user, new TaskCommentNotification($taskID, $sender));
                 }
@@ -5949,7 +5951,7 @@ class TaskController extends AccountBaseController
     // add reply
     public function commentReply(Request $request)
     {
-
+        // DB::beginTransaction();
         // if($request->parent_comment_id){
         $files = '';
 
@@ -5991,6 +5993,17 @@ class TaskController extends AccountBaseController
         $newTaskComment->reply_status = 1;
         $newTaskComment->files = $files;
         $newTaskComment->save();
+
+        // replied mail send to comment added user
+        $parantComment = TaskComment::find($request->parent_comment_id);
+        $mailTo = $parantComment->added_by;
+        $user = User::where('id',$mailTo)->first();
+        $task_ID = Task::where('id',$newTaskComment->task_id)->first();
+
+            Notification::send($user, new TaskCommentReplyNotification($task_ID, $mailTo));
+
+
+
 
 
 
