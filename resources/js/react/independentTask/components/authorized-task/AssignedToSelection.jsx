@@ -13,18 +13,14 @@ const AssginedToSelection = ({selected, onSelect}) => {
 
     const employees = _.filter(users, (user)=>{
 
-        if (Number(user.id) === Number(currentUser.id)) {
-            return true;
-        } else if (Number(currentUser.roleId) === 1) {
-            return _.includes([4, 6, 9, 10], Number(user?.role_id));
-        } else if(Number(currentUser.roleId) === 4) {
-            return _.includes([6, 9, 10], Number(user?.role_id))
+         if (_.includes([1, 8, 4], Number(currentUser.roleId))) {
+            return _.includes([ 6, 9, 10], Number(user?.role_id));
         } else {
             return false;
         } 
     });
 
-    console.log(employees);
+    // console.log(employees);
 
     const filteredData =
     query === ''

@@ -180,7 +180,6 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             .then((res) => {
                 onSuccess();
                 close();
-
                 Swal.fire({
                     position: "center",
                     icon: "success",
