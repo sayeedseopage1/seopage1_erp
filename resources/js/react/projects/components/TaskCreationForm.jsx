@@ -1,27 +1,25 @@
 import { Listbox } from "@headlessui/react";
 import _ from "lodash";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import CKEditorComponent from "../../ckeditor";
 import UploadFilesInLine from "../../file-upload/UploadFilesInLine";
+import Button from "../../global/Button";
+import { useCheckRestrictedWordsMutation } from "../../services/api/SingleTaskPageApi";
 import { useLazyGetMilestoneDetailsQuery } from "../../services/api/projectApiSlice";
 import { useStoreProjectTaskMutation } from "../../services/api/tasksApiSlice";
 import DatePickerComponent from "../../single-task/section/comments/DatePicker";
 import PrioritySelection from "../../single-task/section/sub-task/PrioritySelection";
 import TaskCategorySelectionBox from "../../single-task/section/sub-task/TaskCategorySelectionBox";
-import Button from "../../global/Button";
+import Loader from "../../tasks/components/Loader";
 import Modal from "../../tasks/components/Modal";
 import Input from "../../tasks/components/form/Input";
 import { convertTime } from '../../utils/converTime';
 import { CompareDate } from "../../utils/dateController";
-import { SingleTask } from "../../utils/single-task";
-import { User } from "../../utils/user-details";
 import AssginedToSelection from "./AssignedToSelection";
-import Loader from "../../tasks/components/Loader";
 import ProjectManagerAcknowledgementModal from "./ProjectManagerAcknowledgementModal";
-import { toast } from "react-toastify";
-import { useCheckRestrictedWordsMutation } from "../../services/api/SingleTaskPageApi";
 
 const TaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const dispatch = useDispatch();

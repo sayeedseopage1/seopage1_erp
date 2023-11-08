@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root {
+  --highlight: #1492E6;
+  --primary: #1492E6;
+  --border_clr: #1D82F5;
+  --secondary_text: #505050;
+}
+
+.card_container {
+  /* border: solid; */
+  padding: 10.25px 0 11px;
+  /* margin: 8px; */
+  border-top: solid #E7EFFC;
+  /* display: flex;
+  flex-flow: column nowrap;
+  gap: 5px; */
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* -------------------- card details (start) -------------------- */
+.details_aside {
+  display: flex;
+  flex-flow: row wrap-reverse;
+}
+
+/* -------------- card body text (start) -------------- */
+.article {
+  flex: 2 1 auto;
+  /* justify-content: space-between; */
+  /* gap: 10px; */
+}
+
+/* card title */
+.title {
+  font-size: 14px;
+  max-width: 398px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+
+/* card subtitle */
+.subtitle {
+  font-size: 12px;
+  max-width: 408px;
+  margin-bottom: 10px;
+}
+
+/* card info */
+.info {
+  /* max-width: 40rem; */
+  /* border: solid; */
+  display: flex;
+  gap: 1rem;
+  /* justify-content: space-between; */
+  font-size: 14px;
+  color: var(--secondary_text);
+  margin-bottom: 10px;
+}
+.highlight {
+  color: var(--highlight);
+}
+/* -------------- card body text (end) -------------- */
+
+
+
+/* ------------- clipboard area (start) ------------- */
+.aside {
+  /* border: solid; */
+  flex: 0 1 150px;
+  /* width: 150px; */
+  min-height: auto;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px 20px;
+  margin: 0 5px;
+}
+.action_expire_time, .action_count_down{
+  /* border: solid; */
+  flex: 0 0 150px;
+  /* max-width: 150px; */
+  height: 65px;
+  background-color: #FFFFFF;
+  box-shadow: 10px gray;
+  /* font-weight: bold; */
+  /* color: #686868; */
+  border-radius: 5px;
+}
+.action_expire_time{
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  gap: 5px;
+  color: #686868;
+}
+.action_expire_time_icon{
+  height: 20px;
+  width: 20px;
+  color: rgba(28, 129, 245, 0.650);
+}
+.action_count_down{
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  color: black;
+}
+/* ------------- clipboard area (end) ------------- */
+@media screen and (max-width: 1220px) {
+  .aside{
+    flex: 1 0 150px;
+    margin: 10px 5px;
+  }
+  .action_expire_time, .action_count_down{
+    flex: 1 0 150px;
+  }
+}
+
+/* -------------------- card details (end) -------------------- */
+
+.action {
+  /* border: solid; */
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+}
+.action_btn{
+  border: solid var(--primary) 1.75px;
+  border-radius: 6px;
+  padding: 8px 15px;
+  min-width: 150px;
+  font-size: 14px;
+  background-color: transparent;
+  color: var(--primary);
+}
+.authorized_info{
+  /* max-width: 40rem; */
+  /* border: solid; */
+  display: flex;
+  gap: 15px;
+  /* justify-content: space-between; */
+  font-size: 14px;
+  /* margin-top: 10px; */
+  margin-bottom: 19px;
+  color: var(--secondary_text);
+}
+.authorized_time{
+  color: black;
+}
+
+@media screen and (max-width: 1220px) {
+  .action{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 5px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .action{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap: 5px;
+  }
+}

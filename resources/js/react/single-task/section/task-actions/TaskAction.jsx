@@ -142,13 +142,18 @@ const TaskAction = ({ task, status }) => {
             {
                 task?.approvalStatus ?
                 <div className="">
-                <Button variant="success" onClick={handleAuthorizedByTopManagementStatus}>Authorized By Top Management</Button>
+                <Button
+                    variant="success"
+                    onClick={handleAuthorizedByTopManagementStatus}
+                >
+                    Authorized By Top Management
+                </Button>
                 </div> : null
             }
 
 
             {/* Subtask creation guideline */}
-            {_.includes([6, 4, 1], loggedUser?.getRoleId()) && (
+            {_.includes([6], loggedUser?.getRoleId()) && (
                 <SubtaskCreationControl />
             )}
 
@@ -158,17 +163,18 @@ const TaskAction = ({ task, status }) => {
             <Dropdown>
                 <Dropdown.Toggle icon={false}>
                     <div className="single_task_three_dot">
-                        {isFetching ? <div
-                                    className="spinner-border text-dark"
-                                    role="status"
-                                    style={{
-                                        width: "16px",
-                                        height: "16px",
-                                        border: "0.14em solid rgb(77, 77, 77)",
-                                        borderRightColor: "transparent",
-                                    }}
-                                />:
-                        <i className="fa-solid fa-ellipsis" />
+                        {isFetching ?
+                            <div
+                                className="spinner-border text-dark"
+                                role="status"
+                                style={{
+                                    width: "16px",
+                                    height: "16px",
+                                    border: "0.14em solid rgb(77, 77, 77)",
+                                    borderRightColor: "transparent",
+                                }}
+                            />:
+                            <i className="fa-solid fa-ellipsis" />
                         }
                     </div>
                 </Dropdown.Toggle>
@@ -176,11 +182,12 @@ const TaskAction = ({ task, status }) => {
                     className="single_task_action_dd_menu"
                     placement="bottom-end"
                 >
-                    {taskEditPermision({ task, status, auth: loggedUser }) && (
+                    {/* {taskEditPermision({ task, status, auth: loggedUser }) && ( */}
                         <Dropdown.Item
                             onClick={(e) => {
                                 onModalEditButtonClick(e);
                             }}
+                            disabled={!taskEditPermision({task,status, auth: loggedUser})}
                             className="single_task_action_dd_item"
                         >
                             {isFetching ? (
@@ -199,17 +206,18 @@ const TaskAction = ({ task, status }) => {
                             )}
                             <span className="ml-1 mr-2">Edit</span>
                         </Dropdown.Item>
-                    )}
+                    {/* )} */}
 
-                    {_.includes([6, 5, 9, 10], loggedUser?.getRoleId()) && (
-                        <Dropdown.Item
-                            onClick={() => navigate("?modal=report")}
-                            className="single_task_action_dd_item __report"
-                        >
-                            <i className="fa-solid fa-flag"></i>
-                            <span className="d-inline ml-1">Report</span>
-                        </Dropdown.Item>
-                    )}
+
+                    <Dropdown.Item
+                        onClick={() => navigate("?modal=report")}
+                        disabled={!_.includes([6, 5, 9, 10], loggedUser?.getRoleId())}
+                        className="single_task_action_dd_item __report"
+                    >
+                        <i className="fa-solid fa-flag"></i>
+                        <span className="d-inline ml-1">Report</span>
+                    </Dropdown.Item>
+
 
                     <ReportControl task={task} />
                 </Dropdown.Menu>
@@ -219,3 +227,5 @@ const TaskAction = ({ task, status }) => {
 };
 
 export default TaskAction;
+
+

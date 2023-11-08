@@ -1,16 +1,18 @@
-import React, {useState, useEffect, useContext} from "react";
-import Tabbar from "../components/Tabbar";
-import SubTasksTable from "../components/SubtaskTable";
-import FilterContainer from "../components/Filter-bar/FilterContainer";
-import Filterbar from "../components/Filter-bar/Filterbar";
+import _ from "lodash";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import SearchBox from "../components/Searchbox";
+import Button from "../../global/Button";
+import Loader from "../../global/Loader";
 import { useLazyGetAllSubtaskQuery } from "../../services/api/tasksApiSlice";
 import { storeSubTasks } from "../../services/features/tasksSlice";
-import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
 import { User } from "../../utils/user-details";
+import FilterContainer from "../components/Filter-bar/FilterContainer";
+import Filterbar from "../components/Filter-bar/Filterbar";
+import SearchBox from "../components/Searchbox";
+import SubTasksTable from "../components/SubtaskTable";
+import { SubTasksTableColumns } from "../components/SubtaskTableColumns";
+import Tabbar from "../components/Tabbar";
 import TableFilter from "../components/table/TableFilter";
-import _ from "lodash";
 import { defaultColumnVisibility } from "../constant";
 
 
@@ -26,14 +28,14 @@ const Subtasks = () => {
 
     const [getAllSubtask, {isFetching}] = useLazyGetAllSubtaskQuery();
 
-    const onFilter = (filter) => {
+    const onFilter = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
         setFilter(queryObject);
 
 
         if(filter?.start_date && filter?.end_date){
-            getAllSubtask(`${queryString}`)
+            await getAllSubtask(`${queryString}`)
             .unwrap()
             .then(res => {
 
@@ -53,6 +55,11 @@ const Subtasks = () => {
         }
     }
 
+    // handle refresh button
+    const onRefreshButtonClick = (e) => {
+        e.preventDefault();
+        onFilter(filter);
+    }
     // let tableColumns = SubTasksTableColumns;
 
     const handleFilterColumns = (tableColumns=[],role)=>{
@@ -81,7 +88,14 @@ const Subtasks = () => {
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         <Tabbar/>
-                        <div className="ml-auto" style={{maxWidth: '300px'}}>
+
+
+                        <div className="ml-auto mr-2">
+                            <Button onClick={onRefreshButtonClick}>
+                                {isFetching ? <Loader title="Loading..." borderRightColor="white" /> : 'Refresh'}
+                            </Button>
+                        </div>
+                        <div style={{maxWidth: '300px'}}>
                             <SearchBox value={search} onChange={setSearch} />
                         </div>
                         <div className="ml-2" style={{marginTop: '2px'}}>

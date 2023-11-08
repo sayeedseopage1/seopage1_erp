@@ -16,17 +16,11 @@ const TasksTablePagination = ({
     const [renderButtons, setRenderButtons] = React.useState([]);
     // const [totalPages, setTotalPages] = React.useState(1);
 
-    // const entryChagne = React.useMemo(() => totalEntry, [totalEntry])
-    const isTotalPagesChange = React.useMemo(() => totalPages, [totalPages]); 
+    // const entryChange = React.useMemo(() => totalEntry, [totalEntry])
+    const isTotalPagesChange = React.useMemo(() => totalPages, [totalPages]);
     const showingFrom = (currentPage - 1) * perpageRow;
-
-    // // count total pages
-    // React.useEffect(() => {
-    //     const tPages = Math.ceil(entryChagne / rowNumber);
-    //     setTotalPages(tPages);
-
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [entryChagne, rowNumber])
+    const sum = showingFrom + perpageRow;
+    const showingTo = sum < totalEntry ? sum : totalEntry
 
     // render buttons
     const handleRenderButtons = React.useCallback(() => {
@@ -62,6 +56,9 @@ const TasksTablePagination = ({
         };
     }, [currentPage, isTotalPagesChange]);
 
+
+
+
     return (
         <div className="cnx__table_footer mt-3">
             <div className="__show_entries">
@@ -80,7 +77,7 @@ const TasksTablePagination = ({
             </div>
 
             <div className="__total_entries">
-                Showing {showingFrom + 1} to {showingFrom + perpageRow} of{" "}
+                Showing {showingFrom + 1} to {showingTo} of{" "}
                 {totalEntry} entries
             </div>
 

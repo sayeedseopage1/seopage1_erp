@@ -305,7 +305,7 @@ export const SubTasksTableColumns = [
       //       </>
       //     ): <span className='badge text-white word-break' style={{background: '#f5c308'}}>Not Completed Yet!</span>}
       //   </strong>
-      // ) 
+      // )
       return (
         <Switch>
           <Switch.Case condition={data?.task_approval_date && _.includes([4, 8, 9], data?.board_column_id)}>
@@ -328,6 +328,7 @@ export const SubTasksTableColumns = [
   {
     id: 'estimated_time',
     header: 'Estimated Time',
+    accessorFn: row => ((Number(row?.estimate_hours)* 60) + Number(row?.estimate_minutes)),
     cell: ({ row }) => {
       const data = row?.original;
       return (
@@ -341,6 +342,7 @@ export const SubTasksTableColumns = [
   {
     id: 'hours_logged',
     header: 'Hours Logged',
+    accessorKey: 'subtasks_hours_logged',
     cell: ({ row }) => {
       const data = row?.original;
       return (

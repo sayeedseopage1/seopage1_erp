@@ -138,6 +138,7 @@ const Filterbar = ({ onFilter, page = "tasks" }) => {
                             roleIds={[4, 6, 9, 10]}
                         />
                     )}
+                    <HDivider />
 
                     <StatusFilter state={status} setState={setStatus} />
                     <HDivider />

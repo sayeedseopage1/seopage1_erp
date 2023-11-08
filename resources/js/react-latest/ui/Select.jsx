@@ -1,10 +1,9 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
-import styles from "./select.module.css";
-import { useClickAway } from "react-use";
 import _ from "lodash";
+import PropTypes from "prop-types";
+import * as React from "react";
+import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
+import styles from "./select.module.css";
 const css = styles;
 
 const SelectionCtx = React.createContext(null);
@@ -34,6 +33,7 @@ const Select = ({
 
     const handleClick = (e) => {
         e.preventDefault()
+        // e.stopPropagation();
         toggle();
         onClick && onClick();
     };
@@ -55,7 +55,7 @@ const Select = ({
                 <div ref={setElementRef}>
                     <div
                         className={`${css.select} ${className}`}
-                        onMouseDown={handleClick}
+                        onClick={handleClick}
                     >
                         <div className={css.content} title={selectedValue}>
                             {selectedValue}
@@ -161,7 +161,8 @@ const Option = ({ value, className = "", children }) => {
     };
 
     // handle click
-    const onClick = () => {
+    const onClick = (e) => {
+        e.stopPropagation();
         onSelect(value);
         close();
     };
@@ -171,7 +172,7 @@ const Option = ({ value, className = "", children }) => {
             className={`${css.option} ${visible ? css.visible : ""} ${
                 active ? css.selected : ""
             } ${classes()}`}
-            onMouseDown={onClick}
+            onClick={onClick}
         >
             {childNode()}
         </div>

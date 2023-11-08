@@ -1,6 +1,6 @@
-import _ from 'lodash'
-import React, { useState } from 'react'
-import { useCopyToClipboard, useCss } from 'react-use';
+import _ from 'lodash';
+import React, { useState } from 'react';
+import { useCopyToClipboard } from 'react-use';
 
 
 const ColorItem = ({color, desc}) => {
@@ -92,7 +92,7 @@ const PMGuideline = ({guideline}) => {
                 {
                     guideline?.color_schema ?
                     <div className='mb-3'>
-                        <div className='mb-2 f-16' style={{color: '#878E97'}}><strong>Color Schema: </strong></div>
+                        <div className='mb-2 f-16' style={{color: '#878E97'}}><strong>Color Scheme: </strong></div>
                         <ul className='pl-2 ml-0'>
                             <li className='d-flex flex-column'>
                                 <span className='font-weight-bold mr-2 mb-2'>Primary Color: </span>

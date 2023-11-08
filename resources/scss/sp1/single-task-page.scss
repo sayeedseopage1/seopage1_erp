@@ -1392,6 +1392,15 @@
     min-width: 130px;
     border-radius: 4px;
     color: #777;
+    &.disabled{
+        background: #fff;
+        opacity: .7;
+        &:hover{
+            color: #777;
+            cursor: not-allowed;
+            background: white;
+        }
+    }
 }
 
 .single_task_action_dd_item:hover{
@@ -1407,6 +1416,7 @@
 
 
 .single_task_action_dd_menu{
+    padding: 0;
     border: 1px solid rgb(0 0 0 / 5%) !important;
 }
 

@@ -171,13 +171,12 @@ export default function TasksTable({
       {!isLoading && _.size(table.getRowModel().rows) === 0  && <EmptyTable />}
     </div>
 
-
       <TasksTablePagination
         currentPage = {pageIndex + 1}
         perpageRow= {pageSize}
         onPageSize = {(size) => table.setPageSize(size)}
         onPaginate = {(page) => table.setPageIndex(page - 1)}
-        totalEntry= {table.getPageCount() * pageSize}
+        totalEntry= {_.size(data)}
         onNext = {() => table.getCanNextPage() && table.nextPage()}
         disableNext = {!table.getCanNextPage()}
         onPrevious = {() => table.getCanPreviousPage() && table.previousPage()}
