@@ -46,7 +46,7 @@ const ExpireRequiredAction = () => {
         <div>
             <FilterBar onFilter={onFilter} change={true} />
             {slicedData.map((data, i) => {
-                return <RequiredActionsCard key={i} data={data} />;
+                return <RequiredActionsCard key={i} data={data}  status={"expire"} />;
             })}
         </div>
     );
