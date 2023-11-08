@@ -45,6 +45,14 @@
   max-width: 408px;
   margin-bottom: 10px;
 }
+.subtitle a{
+  color: var(--highlight);
+}
+.subtitle a:hover{
+  color: var(--highlight) !important;
+  text-decoration: underline var(--highlight);
+  text-underline-offset: 2px;
+}
 
 /* card info */
 .info {
@@ -60,6 +68,11 @@
 .highlight {
   color: var(--highlight);
 }
+.highlight:hover {
+  color: var(--highlight) !important;
+  text-decoration: underline var(--highlight);
+  text-underline-offset: 2px;
+}
 /* -------------- card body text (end) -------------- */
 
 
@@ -67,7 +80,7 @@
 /* ------------- clipboard area (start) ------------- */
 .aside {
   /* border: solid; */
-  flex: 0 1 150px;
+  flex: 0 1 350px;
   /* width: 150px; */
   min-height: auto;
   display: flex;
@@ -162,4 +175,19 @@
     grid-template-columns: repeat(1,1fr);
     gap: 5px;
   }
+}
+
+
+/* dynamic btn color */
+.primary{
+  background-color: transparent;
+}
+.success{
+  background-color: transparent;
+}
+.warning{
+  background-color: transparent;
+}
+.danger{
+  background-color: transparent;
 }
