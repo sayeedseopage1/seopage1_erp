@@ -3,12 +3,28 @@ import style from "../../styles/required-actions.module.css";
 import { useState } from "react";
 import ActiveRequiredActions from "./ActiveRequiredActions";
 import PastRequiredActions from "./PastRequiredActions";
-import Pagination from "./Pagination";
+import Pagination, { PaginationContext } from "./Pagination";
 
 export default function Index() {
+    // pagination related state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalItem, setTotalItem] = useState(1);
+    const [perPageItem, setPerPageItem] = useState(1);
+    
     const [action, setAction] = useState("active");
 
+
     return (
+        <PaginationContext.Provider
+            value={{
+                currentPage,
+                setCurrentPage,
+                totalItem,
+                setTotalItem,
+                perPageItem,
+                setPerPageItem,
+            }}
+        >
             <div
                 className="sp1_tlr_tbl_container"
                 style={{
@@ -57,5 +73,6 @@ export default function Index() {
                     <Pagination />
                 </div>
             </div>
+            </PaginationContext.Provider>
     );
 }

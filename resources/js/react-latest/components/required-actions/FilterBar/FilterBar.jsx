@@ -4,8 +4,11 @@ import Search from './Search';
 import Show from './Show';
 import DateField from './DateField';
 import View from './View';
+import { usePagination } from '../Pagination';
 
 const FilterBar = ({onFilter,change=false}) => {
+  const {setPerPageItem} = usePagination();
+
   // ------- filter state (start) -------
   const [search,setSearch] = useState('');
   const [date,setDate] = useState('');
@@ -18,10 +21,14 @@ const FilterBar = ({onFilter,change=false}) => {
     onFilter({
       search,
       date,
-      show,
-      view
+      // view
     })
-  },[search,date,show,view]);
+  },[search,date]);
+
+
+  useEffect(()=>{
+    setPerPageItem(show);
+  },[show])
 
 
   return (
