@@ -5595,7 +5595,7 @@ class TaskController extends AccountBaseController
 
             ->whereIn('tasks.board_column_id', [2, 3])
             ->count();
-        if ($tasks > 4) {
+        if ($tasks > 3) {
             return response()->json([
                 'tasks' => $tasks,
                 'message' => 'error',
