@@ -4,6 +4,7 @@ import { useState } from "react";
 import ActiveRequiredActions from "./ActiveRequiredActions";
 import PastRequiredActions from "./PastRequiredActions";
 import Pagination, { PaginationContext } from "./Pagination";
+import { ToastContainer } from "react-toastify";
 
 const RefreshContext = createContext({
     refresh: false,
@@ -11,7 +12,7 @@ const RefreshContext = createContext({
 });
 export function useRefresh() {
     const { refresh, setRefresh } = useContext(RefreshContext);
-    return { refresh, setRefresh };
+    return { refresh, setRefresh:()=>setRefresh(prev=>!prev) };
 }
 
 export default function Index() {
@@ -83,6 +84,7 @@ export default function Index() {
                         <Pagination />
                     </div>
                 </div>
+                <ToastContainer />
             </PaginationContext.Provider>
         </RefreshContext.Provider>
     );
