@@ -81,6 +81,7 @@ use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
 use App\Notifications\TaskCommentNotification;
+use App\Notifications\TaskCommentReplyNotification;
 
 use function Symfony\Component\Cache\Traits\role;
 use function Symfony\Component\Cache\Traits\select;
@@ -3300,7 +3301,7 @@ class TaskController extends AccountBaseController
         if ($data['theme_details'] == 0 || $data['design_details'] == 0 || $data['color_schema'] == 0 || $data['plugin_research'] == 0) {
             $name1 = 'Theme Details';
             $name2 = 'Design Details';
-            $name3 = 'Color Schema';
+            $name3 = 'Color Scheme';
             $name4 = 'Plugin Research';
 
             if ($data['theme_details'] == 0) {
@@ -4134,6 +4135,7 @@ class TaskController extends AccountBaseController
             $data->save();
             if ($taskID->project_id != null) {
                 foreach ($users as $user) {
+                    // dd($user);
                     // Mail::to($user->email)->send(new ClientSubmitMail($client,$user));
                     Notification::send($user, new TaskCommentNotification($taskID, $sender));
                 }
@@ -4579,14 +4581,12 @@ class TaskController extends AccountBaseController
                     'task_users.user_id as task_user_id'
                 )
                 ->first();
-            $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
-
                 $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
 
-            if ($task->lead_developer) {
-                $task->lead_developer = $lead_dev->id;
-            }
 
+                if ($task->lead_developer) {
+                    $task->lead_developer = get_user($lead_dev->id, false);
+                }
             if ($task->subtask_id) {
                 $subtask = DB::table('sub_tasks')
                     ->select('sub_tasks.task_id as parent_task_id')
@@ -5153,7 +5153,9 @@ class TaskController extends AccountBaseController
 
     public function getTasksType()
     {
-        $tasksType = TaskType::all();
+        $tasksType = TaskType::where('page_type','Primary Page Development')
+                                ->orWhere('authorization_status',2)
+                                ->get();
         $responseData = [];
 
         foreach ($tasksType as $item) {
@@ -5198,7 +5200,7 @@ class TaskController extends AccountBaseController
 
     public function taskTypeAuthorization(Request $request, $id)
     {
-
+        // dd($$request->all());
         if ($request->status == 'approved') {
             $taskType = TaskType::find($id);
             $taskType->authorization_status = 1;
@@ -5206,6 +5208,7 @@ class TaskController extends AccountBaseController
             $taskType->save();
         } else {
             $taskType = TaskType::find($id);
+            $taskType->page_type = 'Secondary Page Development';
             $taskType->authorization_status = 2;
             $taskType->comment = $request->comment;
             $taskType->save();
@@ -5974,7 +5977,7 @@ class TaskController extends AccountBaseController
     // add reply
     public function commentReply(Request $request)
     {
-
+        // DB::beginTransaction();
         // if($request->parent_comment_id){
         $files = '';
 
@@ -6016,6 +6019,17 @@ class TaskController extends AccountBaseController
         $newTaskComment->reply_status = 1;
         $newTaskComment->files = $files;
         $newTaskComment->save();
+
+        // replied mail send to comment added user
+        $parantComment = TaskComment::find($request->parent_comment_id);
+        $mailTo = $parantComment->added_by;
+        $user = User::where('id',$mailTo)->first();
+        $task_ID = Task::where('id',$newTaskComment->task_id)->first();
+
+            Notification::send($user, new TaskCommentReplyNotification($task_ID, $mailTo));
+
+
+
 
 
 

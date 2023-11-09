@@ -31,6 +31,7 @@ return new class extends Migration
             $table->integer('task_id')->nullable();
             $table->integer('client_id')->nullable();
             $table->integer('deliverable_id')->nullable();
+            $table->integer('milestone_id')->nullable();
 
             $table->timestamps();
         });
