@@ -7,6 +7,8 @@ import useTimer from "../../../../../hooks/useTimer";
 import Modal from "../../../../../ui/Modal";
 import { useState } from "react";
 import Button from "../../../../../ui/Button";
+import { useGetFormDataQuery } from "../../../../../services/api/requiredActionApiSlice";
+import Loader from "../../../../../ui/Loader";
 
 export default function RequiredActionsCard_Admin_Live({ data }) {
     console.log("active card");
@@ -129,26 +131,50 @@ const ActionsButton = ({ data }) => {
                         </button>
                     );
                 } else if (btn.button_type === "modal") {
-                    return <ModalWithBtnAndForm key={i} data={data} btn={btn} />;
+                    return (
+                        <ModalWithBtnTemplate
+                            key={i}
+                            btn_color={btn.button_color}
+                            btn_name={btn.button_name}
+                            modal_heading={data.heading}
+                        >
+                            {(() => {
+                                if (btn?.modal_form) {
+                                    return (setIsOpen) => (
+                                        <ModalForm
+                                            setIsOpen={setIsOpen}
+                                            btn_data={btn}
+                                        />
+                                    );
+                                }
+                            })()}
+                        </ModalWithBtnTemplate>
+                    );
                 }
             })}
         </>
     );
 };
 
-const ModalWithBtnAndForm = ({ data, btn }) => {
-  const [isOpen,setIsOpen] = useState(false);
+// modal showing btn and form (it's an UI template)
+const ModalWithBtnTemplate = ({
+    btn_color,
+    btn_name,
+    modal_heading,
+    children,
+}) => {
+    const [isOpen, setIsOpen] = useState(false);
 
-  const open = ()=>setIsOpen(true);
-  const close = ()=>setIsOpen(false);
+    const open = () => setIsOpen(true);
+    const close = () => setIsOpen(false);
 
     return (
         <>
             <button
                 onClick={open}
-                className={`${style.action_btn} ${style[btn.button_color]}`}
+                className={`${style.action_btn} ${style[btn_color]}`}
             >
-                {btn.button_name}
+                {btn_name}
             </button>
 
             <Modal
@@ -163,9 +189,7 @@ const ModalWithBtnAndForm = ({ data, btn }) => {
                     >
                         {/* heading bar */}
                         <div className="sp1_mark-as--modal-heading">
-                            <h6 className="mb-0">
-                                {data.heading}
-                            </h6>
+                            <h6 className="mb-0">{modal_heading}</h6>
 
                             <Button aria-label="closeModal" onClick={close}>
                                 <i className="fa-solid fa-xmark" />
@@ -177,31 +201,16 @@ const ModalWithBtnAndForm = ({ data, btn }) => {
                             className="sp1_mark-as--modal-body px-3"
                             style={{ overflow: "visible" }}
                         >
-                            {/* <div className="alert alert-warning text-center">
-                  If you don't submit the daily submission, you
-                  won't be able to start any task on next day.
-                </div> */}
+                            {/* modal body  */}
+                            {children(setIsOpen)}
 
-                            {/* <div style={{border:'solid 1px gray', borderRadius:'2px'}}>
-                <CKEditorComponent
-                  onChange={(e, editor) => setText(editor.getData())}
-                  placeholder='Write your comment here!' />
-                </div> */}
-
-                            {/* {
-                  showError &&
-                  <div className="alert alert-danger mt-3" role="alert">
-                    Please write a comment
-                  </div>
-                } */}
-
-                            {/* <Button
-                    variant="tertiary"
-                    className="ml-auto mr-2"
-                    onClick={close}
-                  >
-                    Close
-                  </Button> */}
+                            <Button
+                                variant="tertiary"
+                                className="ml-auto mr-2"
+                                onClick={close}
+                            >
+                                Close
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -209,4 +218,20 @@ const ModalWithBtnAndForm = ({ data, btn }) => {
             </Modal>
         </>
     );
+};
+
+// modal form
+const ModalForm = ({ setIsOpen, btn_data }) => {
+    const { data, isFetching, isLoading } = useGetFormDataQuery(
+        data.button_url
+    );
+    return <form>{(isFetching || isLoading) && <Loader />}
+        {
+            // [...data.form].map((input)=>{
+            //   if (input.type==="textarea") {
+            //     input
+            //   }
+            // })
+        }
+    </form>;
 };
