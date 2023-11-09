@@ -583,7 +583,7 @@ public function DevIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','D')
-        ->orWhere('task_revisions.dispute_between','LDR')
+        // ->Where('task_revisions.dispute_between','LDR')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
