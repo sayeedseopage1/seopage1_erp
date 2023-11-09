@@ -26,6 +26,9 @@ class HelperPendingActionController extends AccountBaseController
            
             $action->client_id = $client->id;
             $action->authorization_for= $authorizer->id;
+            $button= '';
+           
+            $action->save();
             $button = [
                 [
                     'button_name' => 'Review',
@@ -56,8 +59,12 @@ class HelperPendingActionController extends AccountBaseController
                         ], 
                          [
                             'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
                             
                             'name'=>'authorization_id',
+                           
+                            'required'=> true,
                             
                         ], 
                         
@@ -85,6 +92,8 @@ class HelperPendingActionController extends AccountBaseController
             ];
             $action->button = json_encode($button);
             $action->save();
+
+
           //  dd($action);
        //    dd(json_decode($action->button));
 
