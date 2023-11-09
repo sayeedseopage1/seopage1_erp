@@ -2934,8 +2934,15 @@ class TaskController extends AccountBaseController
         //     $task_revision->sale_accept = true;
         //     $task_revision->final_responsible_person = 'S';
         // }
-
-        $task_revision->added_by = Auth::id();
+        $project= Project::where('id',$task_status->project_id)->first();
+        if($dispute_between == 'CPR')
+        {
+            $task_revision->added_by = $project->client_id;
+        }else 
+        {
+            $task_revision->added_by = Auth::id();
+        }
+       
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
             $taskRevision->revision_no = $taskRevision->revision_no + 1;

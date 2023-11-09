@@ -143,6 +143,36 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('task_revisions.dispute_between','PLR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->sum('task_revisions.raised_against_percent');
+                $project_manager_lead_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','PLR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_by_percent');
+                $project_manager_client_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','CPR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_against_percent');
+                $project_manager_sales_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','SPR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_by_percent');
+                $client_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','CPR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_by_percent');
+                $project_manager_sales_percentage=TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
+                ->where('projects.pm_id',$pm->project_manager_id)
+              
+                ->where('task_revisions.dispute_between','SPR')
+                ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
+                ->sum('task_revisions.raised_against_percent');
 
 
             $pm->total_projects = $total_projects;
@@ -150,9 +180,9 @@ class RevisionCalculatorController extends AccountBaseController
             $pm->total_tasks= $total_tasks;
             $pm->total_revisions= $tasks_revisions;
             $pm->minutes_spent= $project_timelogs;
-            $pm->sales_issues= $sales_issues;
-            $pm->pm_issues= $pm_issues;
-            $pm->client_issues= $client_issues;
+            $pm->sales_issues= $sales_issues+($project_manager_sales_percentage/100);
+            $pm->pm_issues= $pm_issues + (($project_manager_lead_percentage+$project_manager_sales_percentage+$project_manager_client_percentage )/100);
+            $pm->client_issues= $client_issues +($client_percentage/100);
             $pm->lead_developer_issues= $lead_developer_issues + (($lead_developer_dev_percentage+$lead_developer_percentage) /100);
             $pm->developer_issues= $developer_issues + ($developer_percentage/100) ;
             $pm->pending_issues= $pending_issues;
