@@ -584,7 +584,7 @@ public function DevIssue(Request $request, $id)
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','D')
         ->orwhere('task_revisions.dispute_between','LDR')
-        ->orWhereNotNull('task_revisions.revision_against_percent')
+        // ->orWhereNotNull('task_revisions.raised_against_percent')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
