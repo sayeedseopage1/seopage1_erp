@@ -389,6 +389,11 @@ class RevisionCalculatorController extends AccountBaseController
             
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','S')
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'SPR')
+                    ->where('task_revisions.raised_against_percent', '!=', null);
+            })
+           
             // ->orWhere('task_revisions.dispute_between','SPR')
             ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
@@ -438,9 +443,18 @@ public function PMIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','PM')
-        // ->orWhere('task_revisions.dispute_between','SPR')
-        // ->orWhere('task_revisions.dispute_between','PLR')
-        // ->orWhere('task_revisions.dispute_between','CPR')
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'SPR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'PLR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'CPR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
@@ -487,6 +501,11 @@ public function ClientIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')          
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','C')
+       
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'CPR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
         // ->where('task_revisions.dispute_between','CPR')
         // ->orWhereNotNull('task_revisions.raised_against_percent')
         // ->orWhere('task_revisions.dispute_between','CPR')
@@ -537,6 +556,15 @@ public function LeadDevIssue(Request $request, $id)
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_between','!=','')
         ->where('task_revisions.final_responsible_person','LD')
+      
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'PLR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'LDR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
         // ->orWhere('task_revisions.dispute_between','PLR')
         // ->orWhere('task_revisions.dispute_between','LDR')
         ->where('task_revisions.dispute_between','LDR')
@@ -587,6 +615,12 @@ public function DevIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','D')
+       
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'LDR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+       
         // ->orWhereNull('task_revisions.raised_against_percent')
         //  ->where('task_revisions.dispute_between','LDR')
         //  ->orWhereNotNull('task_revisions.raised_against_percent')
