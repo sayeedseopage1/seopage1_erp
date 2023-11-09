@@ -26,6 +26,9 @@ class HelperPendingActionController extends AccountBaseController
            
             $action->client_id = $client->id;
             $action->authorization_for= $authorizer->id;
+            $button= '';
+           
+            $action->save();
             $button = [
                 [
                     'button_name' => 'Review',
@@ -34,8 +37,8 @@ class HelperPendingActionController extends AccountBaseController
                     'button_url' => route('projects.show', $project->id),
                 ],
                 [
-                    'button_name' => 'View',
-                    'button_color' => 'warning',
+                    'button_name' => 'Authorize',
+                    'button_color' => 'success',
                     'button_type' => 'modal',
                     'button_url' => route('project-challenge', $project->id),
                     'modal_form'=> true,
@@ -56,8 +59,12 @@ class HelperPendingActionController extends AccountBaseController
                         ], 
                          [
                             'type'=> 'hidden',
+                            'value'=> $action->id,
+                            'readonly'=> true,
                             
                             'name'=>'authorization_id',
+                           
+                            'required'=> true,
                             
                         ], 
                         
@@ -85,6 +92,8 @@ class HelperPendingActionController extends AccountBaseController
             ];
             $action->button = json_encode($button);
             $action->save();
+
+
           //  dd($action);
        //    dd(json_decode($action->button));
 
@@ -171,7 +180,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->item_name= 'Deliverables general authorization';
             $action->heading= 'Deliverables authorization';
             $action->message = '<a href="'.route('projects.show', $project->id.'?tab=deliverables').'">Deliverables</a> for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> require authorization (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
-            $action->timeframe= 12;
+            $action->timeframe= 48;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
            // $action->deliverable_id = $id;

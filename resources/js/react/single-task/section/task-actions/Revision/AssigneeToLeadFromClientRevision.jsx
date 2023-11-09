@@ -1,9 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import CKEditorComponent from "../../../../ckeditor";
 import Button from "../../../components/Button";
-import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
-import { useDispatch } from "react-redux";
-import { setTaskStatus } from "../../../../services/features/subTaskSlice";
 import SubmitButton from "../../../components/SubmitButton";
 
 
@@ -17,18 +14,18 @@ const projectManagerAcknowladgement = [
         createDispute: true,
     },
     {
-        id: 'PLRx12',
+        id: 'CPRx12',
         title: 'I submitted the work without proper checking and overlooked the issues',
         isDeniable: false,
         createDispute: false,
     },
     {
-        id: 'PLRx03',
+        id: 'CPRx03',
         title: "I couldn't understand clients expectation properly earlier",
         isDeniable: false
     },
     {
-        id: 'PLRx04',
+        id: 'CPRx04',
         title: 'I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success',
         isDeniable: false,
     },

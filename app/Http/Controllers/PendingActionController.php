@@ -538,6 +538,7 @@ class PendingActionController extends AccountBaseController
         ->leftJoin('users as pm','pm.id','projects.pm_id')
         ->where('pending_actions.authorization_for',Auth::id())
         ->where('pending_actions.past_status',0)
+        ->orderBy('pending_actions.id','desc')
         ->get();
         foreach ($actions as $key => $action) {
             $action->button = json_decode($action->button);
