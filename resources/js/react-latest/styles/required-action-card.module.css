@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   --highlight: #1492E6;
   --primary: #1492E6;
@@ -9,8 +15,7 @@
 
 .card_container {
   /* border: solid; */
-  padding: 10.25px 12px 11px;
-  /* margin: 8px; */
+  padding: 10.25px 12px 21px;
   border-top: solid #E7EFFC;
   /* display: flex;
   flex-flow: column nowrap;
@@ -21,29 +26,31 @@
 /* -------------------- card details (start) -------------------- */
 .details_aside {
   display: flex;
+  justify-content: space-between;
   flex-flow: row wrap-reverse;
 }
 
 /* -------------- card body text (start) -------------- */
 .article {
-  flex: 2 1 auto;
+  flex: 0 1 calc(100% - 350px);
+  /* border: solid; */
   /* justify-content: space-between; */
   /* gap: 10px; */
 }
 
 /* card title */
 .title {
-  font-size: 14px;
-  max-width: 398px;
+  font-size: 20px;
   font-weight: 600;
-  margin-bottom: 7px;
 }
 
 /* card subtitle */
 .subtitle {
-  font-size: 12px;
-  max-width: 408px;
-  margin-bottom: 10px;
+  /* border: solid; */
+  font-size: 18px;
+  /* max-width: 408px; */
+  margin: 10px 0 15px;
+  color: var(--secondary_text);
 }
 .subtitle a{
   color: var(--highlight);
@@ -80,7 +87,7 @@
 /* ------------- clipboard area (start) ------------- */
 .aside {
   /* border: solid; */
-  flex: 0 1 320px;
+  flex: 0 1 310px;
   align-self: self-start;
   justify-content: space-between;
   /* width: 150px; */
@@ -103,10 +110,14 @@
 }
 .action_expire_time{
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
+  justify-items: center;
+  align-items: center;
   padding: 15px;
   gap: 5px;
   color: #686868;
+  font-size: 12px;
 }
 .action_expire_time_icon{
   height: 20px;
@@ -120,6 +131,10 @@
   align-items: center;
   gap: 3px;
   color: black;
+  font-size: 12px;
+}
+.action_count_down article{
+  font-size: 10px;
 }
 /* ------------- clipboard area (end) ------------- */
 @media screen and (max-width: 1220px) {
@@ -199,14 +214,14 @@
 /* css for dynamic component */
 /* .form_text_container{
 
-}
+} */
 .form_input_container{
-
+  margin-bottom: 5px;
 }
-.form_textArea{
+/* .form_textArea{
 
-}
-.form_textField{
+} */
+/* .form_textField{
 
 } */
 
