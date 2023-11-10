@@ -367,6 +367,7 @@ class RevisionCalculatorController extends AccountBaseController
             'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
             'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
             'dispute_raised_against.name as dispute_raised_against_name','sales.id as sales_id','sales.name as sales_name','tasks.id as taskId','task_revisions.final_responsible_person',
+            'task_revisions.raised_by_percent as raised_percent','task_revisions.raised_against_percent as raised_against',
             DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
             )
           
@@ -423,6 +424,7 @@ public function PMIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','sales.id as sales_id','sales.name as sales_name','tasks.id as taskId','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_percent','task_revisions.raised_against_percent as raised_against',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -483,6 +485,7 @@ public function ClientIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_percent','task_revisions.raised_against_percent as raised_against',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -537,6 +540,7 @@ public function LeadDevIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_percent','task_revisions.raised_against_percent as raised_against',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -597,6 +601,7 @@ public function DevIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_percent','task_revisions.raised_against_percent as raised_against',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
