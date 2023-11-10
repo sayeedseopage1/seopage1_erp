@@ -270,5 +270,39 @@ class HelperPendingActionController extends AccountBaseController
            }
 
     }
+    public function MilestoneCancelAuthorization($project)
+    {
+        $client= User::where('id',$project->client_id)->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizers= User::where('role_id',1)->get();
+           foreach ($authorizers as $key => $authorizer) {
+            $action = new PendingAction();
+            $action->code = 'MCA';
+            $action->serial = 'MCA'.'x'.$key;
+            $action->item_name= 'Milestone cancel authorization!';
+            $action->heading= 'Milestone cancel authorization needed!';
+            $action->message = '<a href="'.route('projects.show', $project->id.'?tab=milestones').'">Milestone</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+            $action->timeframe= 24;
+            $action->project_id = $project->id;
+            $action->client_id = $client->id;
+           // $action->deliverable_id = $id;
+            $action->authorization_for= $authorizer->id;
+            $button = [
+                [
+                    'button_name' => 'Review',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('projects.show', $project->id.'?tab=milestones'),
+                ],
+              
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+          //  dd($action);
+       //    dd(json_decode($action->button));
+
+           }
+
+    }
     
 }
