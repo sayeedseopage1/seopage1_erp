@@ -153,10 +153,10 @@ class ClientsDataTable extends BaseDataTable
         if(Auth::user()->role_id == 4)
         {
             $users = $model->withoutGlobalScope('active')->with('session', 'clientDetails', 'clientDetails.addedBy')
-            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+            ->leftjoin('role_user', 'role_user.user_id', '=', 'users.id')
 
             ->leftJoin('client_details', 'users.id', '=', 'client_details.user_id')
-            ->join('roles', 'roles.id', '=', 'role_user.role_id')
+            ->leftjoin('roles', 'roles.id', '=', 'role_user.role_id')
             ->select('users.id', 'users.name', 'client_details.company_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
             ->join('projects','projects.client_id','users.id')
             ->groupBy('users.id')
@@ -165,10 +165,10 @@ class ClientsDataTable extends BaseDataTable
 
         }else {
             $users = $model->withoutGlobalScope('active')->with('session', 'clientDetails', 'clientDetails.addedBy')
-            ->join('role_user', 'role_user.user_id', '=', 'users.id')
+            ->leftjoin('role_user', 'role_user.user_id', '=', 'users.id')
 
             ->leftJoin('client_details', 'users.id', '=', 'client_details.user_id')
-            ->join('roles', 'roles.id', '=', 'role_user.role_id')
+            ->leftjoin('roles', 'roles.id', '=', 'role_user.role_id')
             ->select('users.id', 'users.name', 'client_details.company_name', 'users.email', 'users.mobile', 'users.image', 'users.created_at', 'users.status', 'client_details.added_by', 'users.admin_approval')
 
             ->where('roles.name', 'client');
