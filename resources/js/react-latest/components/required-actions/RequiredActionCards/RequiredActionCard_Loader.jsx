@@ -2,7 +2,7 @@ import React from "react";
 import { Placeholder } from "../../../ui/Placeholder";
 import style from "../../../styles/required-action-card.module.css";
 
-const RequiredActionCard_Loader = ({ temp = true }) => {
+const RequiredActionCard_Loader = () => {
     return (
         <div className={style.card_container}>
             {/* card details */}
@@ -10,20 +10,15 @@ const RequiredActionCard_Loader = ({ temp = true }) => {
                 {/* card body text */}
                 <article className={style.article}>
                     {/* card title */}
-                    <p className={style.title}>
+                    <div className={style.title}>
                         <Placeholder />
-                    </p>
+                    </div>
 
                     {/* card subtitle */}
-                    <p className={style.subtitle}>
+                    <div className={style.subtitle}>
                         <Placeholder />
-<<<<<<< Updated upstream
                         {/* <Placeholder /> */}
                     </div>
-=======
-                        <Placeholder />
-                    </p>
->>>>>>> Stashed changes
 
                     {/* card info */}
                     {/* <div className={style.info}>
@@ -52,28 +47,12 @@ const RequiredActionCard_Loader = ({ temp = true }) => {
                 </aside>
             </div>
 
-<<<<<<< Updated upstream
             <div className={style.action}>
                 <Placeholder width="100px" height="30px" />
                 <Placeholder width="100px" height="30px" />
                 <Placeholder width="100px" height="30px" />
                 <Placeholder width="100px" height="30px" />
             </div>
-=======
-            {temp ? (
-                <div className={style.action}>
-                    <Placeholder width="50px" />
-                    <Placeholder width="50px" />
-                    <Placeholder width="50px" />
-                    <Placeholder width="50px" />
-                </div>
-            ) : (
-                <div className={style.authorized_info}>
-                    <Placeholder width="50px" />
-                    <Placeholder width="50px" />
-                </div>
-            )}
->>>>>>> Stashed changes
         </div>
     );
 };

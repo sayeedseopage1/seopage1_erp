@@ -5,6 +5,9 @@
   padding: 0;
   box-sizing: border-box;
 }
+p{
+  margin: 0;
+}
 
 :root {
   --highlight: #1492E6;
@@ -15,7 +18,7 @@
 
 .card_container {
   /* border: solid; */
-  padding: 10.25px 12px 21px;
+  padding: 7.25px 10px 10px;
   border-top: solid #E7EFFC;
   /* display: flex;
   flex-flow: column nowrap;
@@ -28,29 +31,38 @@
   display: flex;
   justify-content: space-between;
   flex-flow: row wrap-reverse;
+  gap: 10px;
 }
 
 /* -------------- card body text (start) -------------- */
 .article {
-  flex: 0 1 calc(100% - 350px);
+  flex: 1 1 647px;
   /* border: solid; */
   /* justify-content: space-between; */
-  /* gap: 10px; */
+  gap: 10px 30px;
 }
 
 /* card title */
 .title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 /* card subtitle */
 .subtitle {
   /* border: solid; */
-  font-size: 18px;
+  font-size: 16px;
   /* max-width: 408px; */
-  margin: 10px 0 15px;
+  margin: 10px 0;
   color: var(--secondary_text);
+}
+.subtitle a{
+  color: var(--highlight);
+}
+.subtitle a:hover{
+  color: var(--highlight) !important;
+  text-decoration: underline var(--highlight);
+  text-underline-offset: 2px;
 }
 
 /* card info */
@@ -67,6 +79,11 @@
 .highlight {
   color: var(--highlight);
 }
+.highlight:hover {
+  color: var(--highlight) !important;
+  text-decoration: underline var(--highlight);
+  text-underline-offset: 2px;
+}
 /* -------------- card body text (end) -------------- */
 
 
@@ -74,25 +91,21 @@
 /* ------------- clipboard area (start) ------------- */
 .aside {
   /* border: solid; */
-<<<<<<< Updated upstream
-  flex: 0 1 310px;
+  flex: 0 1 243px;
   align-self: self-start;
   justify-content: space-between;
-=======
-  flex: 0 1 150px;
->>>>>>> Stashed changes
   /* width: 150px; */
   min-height: auto;
   display: flex;
   flex-flow: row wrap;
-  gap: 10px 0;
+  gap: 10px;
   margin: 0 5px;
 }
 .action_expire_time, .action_count_down{
   /* border: solid; */
-  flex: 0 0 150px;
+  flex: 0 0 115px;
   /* max-width: 150px; */
-  height: 65px;
+  height: 59px;
   background-color: #FFFFFF;
   box-shadow: 10px gray;
   /* font-weight: bold; */
@@ -105,7 +118,7 @@
   justify-content: center;
   justify-items: center;
   align-items: center;
-  padding: 15px;
+  padding: 3px;
   gap: 5px;
   color: #686868;
   font-size: 12px;
@@ -183,7 +196,6 @@
     grid-template-columns: repeat(1,1fr);
     gap: 5px;
   }
-<<<<<<< Updated upstream
 }
 
 
@@ -221,6 +233,4 @@
   display: flex;
   /* border: solid; */
   gap: 0 10px;
-=======
->>>>>>> Stashed changes
 }

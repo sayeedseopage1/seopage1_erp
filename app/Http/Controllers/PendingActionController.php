@@ -532,7 +532,6 @@ class PendingActionController extends AccountBaseController
     public function get_pending_active_live_action()
     {
         $actions = PendingAction::
-<<<<<<< Updated upstream
         select('pending_actions.*','client.name as client_name','pm.name as pm_name','projects.project_name')
         ->leftJoin('projects','projects.id','pending_actions.project_id')
         ->leftJoin('users as client','client.id','pending_actions.client_id')
@@ -540,11 +539,6 @@ class PendingActionController extends AccountBaseController
         ->where('pending_actions.authorization_for',Auth::id())
         ->where('pending_actions.past_status',0)
         ->orderBy('pending_actions.id','desc')
-=======
-        select('pending_actions.*')->
-        where('authorization_for',Auth::id())
-        ->where('past_status',0)
->>>>>>> Stashed changes
         ->get();
         foreach ($actions as $key => $action) {
             $action->button = json_decode($action->button);
