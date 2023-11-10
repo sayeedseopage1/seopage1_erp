@@ -3277,7 +3277,7 @@ class ProjectController extends AccountBaseController
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5029,7 +5029,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+             //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5086,7 +5086,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5134,7 +5134,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+             //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5286,7 +5286,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5423,7 +5423,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5545,7 +5545,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
