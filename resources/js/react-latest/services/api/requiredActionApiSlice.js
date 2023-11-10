@@ -5,11 +5,17 @@ const requiredActionApiSlice = apiSlice.injectEndpoints({
   endpoints:(build)=>({
     getLiveRequiredAction : build.query({
       query: (query)=>`account/get-pending-active-live-action?${query}`,
+    }),
+
+    getFormData: build.query({
+      query: (url)=>url,
     })
+
   })
 })
 
 
 export const {
   useLazyGetLiveRequiredActionQuery,
+  useGetFormDataQuery,
 } = requiredActionApiSlice; 

@@ -8,9 +8,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useLazyGetLiveRequiredActionQuery } from "../../../services/api/requiredActionApiSlice";
 import RequiredActionCard_Loader from "../RequiredActionCards/RequiredActionCard_Loader";
+import { useRefresh } from "../Index";
 
 const LiveRequiredAction = () => {
     const { currentPage, perPageItem, setTotalItem } = usePagination();
+    const {refresh} = useRefresh();
     const [data, setData] = useState([]);
     const [slicedData, setSlicedData] = useState([]);
     const [filter, setFilter] = useState("");
@@ -30,7 +32,7 @@ const LiveRequiredAction = () => {
                 console.log({ pending_actions });
                 setData(pending_actions);
             });
-    }, [filter]);
+    }, [filter,refresh]);
 
     // slicing data according to paginate
     useEffect(() => {
