@@ -15,9 +15,15 @@ export default function useTimer(
     intervalRef.current = setInterval(() => {
       setTime(() => {
         const time = convertTime(getTime(targetTime).diff(dayjs()));
-        if (!stopOnExpire) {
-          return time;
+        if (stopOnExpire) {
+          if (time[2] < 0) {
+            clearInterval(intervalRef.current);
+            return [0, 0, 0];
+          } else {
+            return time;
+          }
         } else {
+          return time
           clearInterval(intervalRef.current);
           return [0, 0, 0];
         }

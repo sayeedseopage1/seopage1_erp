@@ -1,5 +1,4 @@
 import React from "react";
-import { MdPendingActions } from "react-icons/md";
 import style from "../../../../../styles/required-action-card.module.css";
 import dayjs from "dayjs";
 import ShowTimer from "./admin-components/ShowTimer";
