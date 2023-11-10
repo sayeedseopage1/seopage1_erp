@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use Auth;
 use Illuminate\Http\Request;
 use App\Models\ProjectDeliverablesClientDisagree;
@@ -539,6 +540,27 @@ class PendingActionController extends AccountBaseController
         ->where('pending_actions.authorization_for',Auth::id())
         ->where('pending_actions.past_status',0)
         ->orderBy('pending_actions.id','desc')
+        ->get();
+        foreach ($actions as $key => $action) {
+            $action->button = json_decode($action->button);
+        }
+        return response()->json([
+            'pending_actions' => $actions,
+            'status' => 200,
+        ]);
+    }
+    public function get_pending_past_action()
+    {
+        $actions = PendingActionPast::
+        select('pending_action_pasts.*','client.name as client_name','pm.name as pm_name','projects.project_name',
+        'authorize_by.name as authorize_by_name')
+        ->leftJoin('projects','projects.id','pending_action_pasts.project_id')
+        ->leftJoin('users as client','client.id','pending_action_pasts.client_id')
+        ->leftJoin('users as pm','pm.id','projects.pm_id')
+        ->leftJoin('users as authorize_by','authorize_by.id','pending_action_pasts.authorized_by')
+        ->where('pending_action_pasts.authorization_for',Auth::id())
+        ->where('pending_action_pasts.past_status',1)
+        ->orderBy('pending_action_pasts.id','desc')
         ->get();
         foreach ($actions as $key => $action) {
             $action->button = json_decode($action->button);

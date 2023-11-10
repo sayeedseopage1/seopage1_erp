@@ -359,6 +359,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
+    Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
         Route::post('app-settings/deleteSessions', [AppSettingController::class, 'deleteSessions'])->name('app-settings.delete_sessions');
