@@ -270,7 +270,7 @@ class HelperPendingActionController extends AccountBaseController
            }
 
     }
-    public function MilestoneCancelAuthorization($project)
+    public function MilestoneCancelAuthorization($project,$milestone)
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
@@ -285,7 +285,7 @@ class HelperPendingActionController extends AccountBaseController
             $action->timeframe= 24;
             $action->project_id = $project->id;
             $action->client_id = $client->id;
-           // $action->deliverable_id = $id;
+            $action->milestone_id = $milestone->id;
             $action->authorization_for= $authorizer->id;
             $button = [
                 [

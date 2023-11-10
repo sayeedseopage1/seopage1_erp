@@ -734,7 +734,7 @@ class ProjectMilestoneController extends AccountBaseController
         $helper = new HelperPendingActionController();
 
 
-        $helper->MilestoneCancelAuthorization($project);
+        $helper->MilestoneCancelAuthorization($project,$milestone);
         //need pending action
 
         $users= User::where('role_id',1)->get();
@@ -811,7 +811,7 @@ class ProjectMilestoneController extends AccountBaseController
 
         //update authoziation action
        
-        $actions = PendingAction::where('code','MCA')->where('past_status',0)->where('project_id',$project->id)->get();
+        $actions = PendingAction::where('code','MCA')->where('past_status',0)->where('milestone_id',$milestone->id)->get();
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
@@ -830,7 +830,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $past_action->serial = $action->serial;
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
-                $action->message = '<a href="'.route('projects.show', $project->id.'?tab=milestones').'">Milestone</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) was authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+                $past_action->message = '<a href="'.route('projects.show', $project->id.'?tab=milestones').'">Milestone</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) was authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
              //   $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
@@ -841,7 +841,7 @@ class ProjectMilestoneController extends AccountBaseController
                 $past_action->project_id = $action->project_id;
                 $past_action->task_id = $action->task_id;
                 $past_action->client_id = $action->client_id;
-               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->milestone_id = $action->milestone_id;
                 $past_action->save();
                 
            
