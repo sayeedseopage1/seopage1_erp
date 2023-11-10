@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 // timer showing clipboard
 export default function ShowTimer({ targetTime }){
   const { time } = useTimer(targetTime, {
-      stopOnExpire: false,
+      stopOnExpire: true,
   });
 
   useEffect(() => {
