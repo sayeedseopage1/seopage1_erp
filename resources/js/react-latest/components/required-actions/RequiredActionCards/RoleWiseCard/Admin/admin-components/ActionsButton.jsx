@@ -17,7 +17,7 @@ export default function ActionsButton({ data }){
 
   return (
       <>
-          {data?.button.map((btn, i) => {
+          {data?.button?.map((btn, i) => {
               if (btn.button_type === "redirect_url") {
                   return (
                       <button
