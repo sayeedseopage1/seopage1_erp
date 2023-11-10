@@ -52,14 +52,6 @@
   margin: 10px 0 15px;
   color: var(--secondary_text);
 }
-.subtitle a{
-  color: var(--highlight);
-}
-.subtitle a:hover{
-  color: var(--highlight) !important;
-  text-decoration: underline var(--highlight);
-  text-underline-offset: 2px;
-}
 
 /* card info */
 .info {
@@ -75,11 +67,6 @@
 .highlight {
   color: var(--highlight);
 }
-.highlight:hover {
-  color: var(--highlight) !important;
-  text-decoration: underline var(--highlight);
-  text-underline-offset: 2px;
-}
 /* -------------- card body text (end) -------------- */
 
 
@@ -87,9 +74,13 @@
 /* ------------- clipboard area (start) ------------- */
 .aside {
   /* border: solid; */
+<<<<<<< Updated upstream
   flex: 0 1 310px;
   align-self: self-start;
   justify-content: space-between;
+=======
+  flex: 0 1 150px;
+>>>>>>> Stashed changes
   /* width: 150px; */
   min-height: auto;
   display: flex;
@@ -192,6 +183,7 @@
     grid-template-columns: repeat(1,1fr);
     gap: 5px;
   }
+<<<<<<< Updated upstream
 }
 
 
@@ -229,4 +221,6 @@
   display: flex;
   /* border: solid; */
   gap: 0 10px;
+=======
+>>>>>>> Stashed changes
 }
