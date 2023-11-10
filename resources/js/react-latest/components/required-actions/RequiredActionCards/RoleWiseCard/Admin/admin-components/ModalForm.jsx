@@ -50,19 +50,19 @@ export default function ModalForm({ setIsOpen, form_data }) {
         }
 
         console.log({ url, method, formData });
-        setIsOpen(false);
-        setLoading(false);
+        // setIsOpen(false);
+        // setLoading(false);
 
-        // try {
-        //     await axios[method.toLowerCase()](url, formData);
-        //     toast.success("Submitted Sucessfully");
-        // } catch (err) {
-        //     toast.error("Not submitted");
-        // } finally {
-        //     setRefresh();
-        //     setIsOpen(false);
-        //     setLoading(false);
-        // }
+        try {
+            await axios[method.toLowerCase()](url, formData);
+            toast.success("Submitted Sucessfully");
+        } catch (err) {
+            toast.error("Not submitted");
+        } finally {
+            setRefresh();
+            setIsOpen(false);
+            setLoading(false);
+        }
     };
 
     const handleEditorText = (e, editor, key_name) => {
@@ -90,7 +90,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
                 {[...form_data.form].map((input, i) => {
                     if (input.type === "textarea") {
                         return (
-                            <label
+                            <div
                                 key={i}
                                 className={style.form_textArea_label}
                             >
@@ -117,7 +117,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
                                         }
                                     />
                                 </div>
-                            </label>
+                            </div>
                         );
                     }
                 })}
