@@ -5423,7 +5423,7 @@ public function updatePmBasicSEO(Request $request){
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
 
-//        dd($request->all());
+    //    dd($request->all());
         if ($request->denyAuthorization) {
             $project = Project::find($request->project_id);
             $project->authorization_status = 'canceled';
