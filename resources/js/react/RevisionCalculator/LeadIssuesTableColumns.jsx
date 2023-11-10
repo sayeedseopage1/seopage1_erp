@@ -122,45 +122,12 @@ export const LeadIssuesTableColumns = [
         marge: false,
         row: ({ row }) => {
             if (!row) return null;
+            const rPerson = row?.final_responsible_person;
+            const disputed = row?.dispute_created;
+            const disputeBetween = row?.dispute_between;
 
             return (
                 <Switch>
-                    <Switch.Case
-                        condition={row.final_responsible_person === "PM"}
-                    >
-                        <a
-                            href={`/account/employees/${row.project_manager_id}`}
-                            title={row.project_manager_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.project_manager_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "S"}
-                    >
-                        <a
-                            href={`/account/employees/${row.sales_id}`}
-                            title={row.sales_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.sales_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "C"}
-                    >
-                        <a
-                            href={`/account/clients/${row.clientId}`}
-                            title={row.client_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.client_name}
-                        </a>
-                    </Switch.Case>
-
                     <Switch.Case
                         condition={row.final_responsible_person === "LD"}
                     >
@@ -174,39 +141,23 @@ export const LeadIssuesTableColumns = [
                     </Switch.Case>
 
                     <Switch.Case
-                        condition={row.final_responsible_person === "D"}
+                        condition={!rPerson && disputed && row.raised_against_p }
                     >
                         <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
+                            href={`/account/employees/${row.lead_developer_id}`}
+                            title={row.lead_developer_name}
                             className="multiline-ellipsis"
                         >
-                            {row.developer_name}
-                        </a>
-                    </Switch.Case>
+                            {row.lead_developer_name}
+                        </a> 
 
-                    <Switch.Case
-                        condition={row.final_responsible_person === "UD"}
-                    >
-                        <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.developer_name}
-                        </a>
-                    </Switch.Case>
+                        <Switch.Case condition={disputeBetween === "PLR"}>
+                        <span>({row.raised_against_p}%)</span>
+                        </Switch.Case>
 
-                    <Switch.Case
-                        condition={row.final_responsible_person === "GD"}
-                    >
-                        <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.developer_name}
-                        </a>
+                        <Switch.Case condition={disputeBetween === "LDR"}>
+                        <span>({row.raised_by_p}%)</span>
+                        </Switch.Case>
                     </Switch.Case>
                 </Switch>
             );
@@ -272,36 +223,20 @@ const Verdict = ({ row }) => {
     if (row?.status) {
         if (row?.winner) {
             return (
-                <span>
-                    {" "}
-                    Verdict given in favor of{" "}
+                <span> 
+                    Verdict given in favor of
                     <a
                         href={`/account/employees/${row?.winner}`}
                         className="hover-underline"
-                    >
-                        {" "}
-                        {row?.winner_name}{" "}
-                    </a>{" "}
+                    > 
+                        {row?.winner_name}
+                    </a>
                 </span>
             );
         } else {
             return (
                 <div>
-                    Both parties were hold partially responsible. Party{" "}
-                    <a
-                        className="hover-underline"
-                        href={`/account/employees/${row?.dispute_raised_by_id}`}
-                    >
-                        {row?.dispute_raised_by_name}
-                    </a>{" "}
-                    ({row?.raised_by_percent}%) & Party{" "}
-                    <a
-                        className="hover-underline"
-                        href={`/account/employees/${row?.dispute_raised_by_id}`}
-                    >
-                        {row?.dispute_rasied_against_name}
-                    </a>{" "}
-                    ({row?.raised_against_percent}%)
+                    Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             );
         }

@@ -83,13 +83,15 @@ export const PMIssuesTableColumns = [
         searchText: (row) => `${row?.revision_raised_by_name}`,
         row: ({ row, table }) => {
             const search = table.state.search;
-            const tv = row?.revision_raised_by_name;
+            const between = row.dispute_between;
+            const tv = between === 'CPR' ? row?.client_name : row?.revision_raised_by_name;
+            const id = between === 'CPR' ? row?.clientId : row?.revision_raised_by_id; 
             const isEqual = search
                 ? _.includes(_.lowerCase(tv), _.lowerCase(search))
                 : "";
             return (
                 <a
-                    href={`/account/employees/${row?.revision_raised_by_id}`}
+                    href={`/account/${between === 'CPR' ? 'clients': 'employees'}/${id}`}
                     title={tv}
                     className={`multiline-ellipsis ${
                         isEqual ? "highlight" : ""
@@ -121,93 +123,25 @@ export const PMIssuesTableColumns = [
         marge: false,
         row: ({ row }) => {
             if (!row) return null;
-  
+            const rPerson = row?.final_responsible_person;
+            const disputed = row?.dispute_created;
+            const between = row?.dispute_between;
+            
             return (
-                <Switch>
-                    <Switch.Case
-                        condition={row.final_responsible_person === "PM"}
+                <Switch> 
+                    <a
+                        href={`/account/employees/${row.project_manager_id}`}
+                        title={row.project_manager_name}
+                        className="multiline-ellipsis"
                     >
-                        <a
-                            href={`/account/employees/${row.project_manager_id}`}
-                            title={row.project_manager_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.project_manager_name}
-                        </a>
+                        {row.project_manager_name}
+                    </a>
+                    <Switch.Case condition={!rPerson && disputed }>
+                        <span>({row.raised_against_p}%)</span>
                     </Switch.Case>
 
-                    <Switch.Case
-                        condition={row.final_responsible_person === "S"}
-                    >
-                        <a
-                            href={`/account/employees/${row.sales_id}`}
-                            title={row.sales_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.sales_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "C"}
-                    >
-                        <a
-                            href={`/account/clients/${row.clientId}`}
-                            title={row.client_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.client_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "LD"}
-                    >
-                        <a
-                            href={`/account/employees/${row.lead_developer_id}`}
-                            title={row.lead_developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.lead_developer_name}
-                        </a>
-                    </Switch.Case>
-
-                    
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "D"}
-                    >
-                        <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.developer_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "UD"}
-                    >
-                        <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.developer_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "GD"}
-                    >
-                        <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.developer_name}
-                        </a>
+                    <Switch.Case condition={!rPerson && disputed && between === 'PLD' }>
+                        <span>({row.raised_by_p}%)</span>
                     </Switch.Case>
                 </Switch>
             ); 
@@ -271,37 +205,11 @@ export const PMIssuesTableColumns = [
 const Verdict = ({ row }) => {
     if (row?.status) {
         if (row?.winner) {
-            return (
-                <span>
-                    {" "}
-                    Verdict given in favor of{" "}
-                    <a
-                        href={`/account/employees/${row?.winner}`}
-                        className="hover-underline"
-                    >
-                        {" "}
-                        {row?.winner_name}{" "}
-                    </a>{" "}
-                </span>
-            );
+            return <span> Verdict given in favor of <a href={`/account/employees/${row?.winner}`}  className="hover-underline"> {row?.winner_name}  </a> </span>
         } else {
             return (
                 <div>
-                    Both parties were hold partially responsible. Party{" "}
-                    <a
-                        className="hover-underline"
-                        href={`/account/employees/${row?.dispute_raised_by_id}`}
-                    >
-                        {row?.dispute_raised_by_name}
-                    </a>{" "}
-                    ({row?.raised_by_percent}%) & Party{" "}
-                    <a
-                        className="hover-underline"
-                        href={`/account/employees/${row?.dispute_raised_by_id}`}
-                    >
-                        {row?.dispute_rasied_against_name}
-                    </a>{" "}
-                    ({row?.raised_against_percent}%)
+                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             );
         }
