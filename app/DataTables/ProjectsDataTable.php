@@ -195,11 +195,11 @@ class ProjectsDataTable extends BaseDataTable
             //dd($deal);
             if ($deal->upsell_amount == 0) {
                 $project_value = $deal->actual_amount . $currency->currency_symbol ;
-            }else 
+            }else
             {
                 $project_value = $deal->actual_amount+ $deal->upsell_actual_amount . $currency->currency_symbol . ('<span class="badge badge-success">Upsold Amount ('.$deal->upsell_actual_amount.$currency->currency_symbol.')</span>');
             }
-           
+
 
             return $project_value;
         });
@@ -368,7 +368,7 @@ class ProjectsDataTable extends BaseDataTable
                 ]);
             });
         $datatables->editColumn('status', function ($row) {
-           
+
            // dd($row);
 
             $projectStatus = ProjectStatusSetting::all();
@@ -379,11 +379,11 @@ class ProjectsDataTable extends BaseDataTable
                     $delayed_status = '';
                     $delayed_status .= '<br><span class="badge badge-danger">Delayed</span>' ;
                     # code...
-                }else 
+                }else
                 {
                     $delayed_status = '';
                 }
-                
+
 
                 if ($row->status == $status->status_name) {
                     $color = $status->color;
@@ -686,7 +686,7 @@ class ProjectsDataTable extends BaseDataTable
             __('app.customers')  => ['data' => 'client_name', 'name' => 'client_id', 'visible' => false, 'title' => __('app.customers')],
             __('app.project_value') => ['data' => 'project_value', 'name' => 'project_value',  'title' => __('Project Value')],
             __('app.project_manager') => ['data' => 'project_manager', 'name' => 'project_manager',  'title' => __('Project Manager')],
-            
+
             __('modules.projects.startDate')  => ['data' => 'start_date', 'name' => 'start_date', 'visible' => true, 'title' => __('modules.projects.startDate')],
             __('modules.project_award_time')  => ['data' => 'project_award_time', 'name' => 'project_award_time', 'visible' => true, 'title' => __('Project Award Time')],
             __('app.deadline') => ['data' => 'deadline', 'name' => 'deadline', 'title' => __('app.deadline')],
@@ -694,7 +694,7 @@ class ProjectsDataTable extends BaseDataTable
             __('app.hours_logged') => ['data' => 'hours_logged', 'name' => 'hours_logged',  'title' => __('Total Hours Logged')],
             __('app.tasks') => ['data' => 'tasks', 'name' => 'tasks',  'title' => __('Tasks')],
             __('app.milestone') => ['data' => 'milestone', 'name' => 'milestone',  'title' => __('Milestones')],
-            #delivarable 
+            #delivarable
             __('app.progress') => ['data' => 'completion_percent', 'name' => 'completion_percent', 'exportable' => false, 'title' => __('app.progress')],
             __('app.deliverable_sign') => ['data' => 'deliverable_sign', 'name' => 'deliverable_sign',  'title' => __('Deliverable Signed')],
             __('app.status') => ['data' => 'status', 'name' => 'status', 'width' => '16%', 'exportable' => false, 'title' => __('app.status')],
