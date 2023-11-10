@@ -54,7 +54,7 @@ const ExpireRequiredAction = () => {
                 _.fill(Array(perPageItem), "*").map((v, i) => (
                     <RequiredActionCard_Loader key={i} />
                 ))}
-            {!(isLoading && isFetching) && slicedData.map((data, i) => {
+            {(!isLoading && !isFetching) && slicedData.map((data, i) => {
                 return (
                     <RequiredActionsCard
                         key={i}
