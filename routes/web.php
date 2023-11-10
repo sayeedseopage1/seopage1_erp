@@ -198,6 +198,7 @@ use App\Http\Controllers\RevisionCalculatorController;
 use App\Http\Controllers\PmPaymentReleaseHistory;
 use App\Http\Controllers\RevisionController;
 use App\Http\Controllers\IssuedTaskReportController;
+use App\Http\Controllers\PmGoalSetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -1030,6 +1031,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::resource('policy', PolicyController::class);
     //Incentives Settings
     Route::resource('incentive-settings', IncentiveSettingController::class);
+
+    //Pm goal Settings
+    Route::resource('pm-goal-setting', PmGoalSetingController::class);
     //Monthly Incentive Settings
     Route::resource('monthly-incentive', MonthlyIncentiveController::class);
     Route::get('monthly-incentive/download/{id}', [MonthlyIncentiveController::class, 'download'])->name('monthly-incentive.download');

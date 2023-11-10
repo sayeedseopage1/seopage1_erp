@@ -275,18 +275,18 @@
                                                         @endphp
                                                     </td>
                                                     <td>
-                                                    @if($value->project_id != null)    
+                                                    @if($value->project_id != null)
                                                     <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
-                                                        @else 
-                                                        -- 
+                                                        @else
+                                                        --
                                                         @endif
-                                                
+
                                                 </td>
                                                     <td>
-                                                    @if($value->project_id != null)      
+                                                    @if($value->project_id != null)
                                                     {{$value->project->deadline}}
-                                                    @else 
-                                                    -- 
+                                                    @else
+                                                    --
                                                     @endif
                                                 </td>
                                                 </tr>
@@ -368,17 +368,17 @@
                                                         @endphp
                                                     </td>
                                                     <td>
-                                                    @if($value->project_id != null)        
+                                                    @if($value->project_id != null)
                                                     <a href="{{route('employees.show', $value->project_id)}}">{{$value->project->pm->name}}</a>
-                                                    @else 
-                                                    -- 
+                                                    @else
+                                                    --
                                                     @endif
                                                 </td>
                                                     <td>
-                                                    @if($value->project_id != null)        
+                                                    @if($value->project_id != null)
                                                     {{$value->project->deadline}}
-                                                        @else 
-                                                        -- 
+                                                        @else
+                                                        --
                                                         @endif
                                                 </td>
                                                 </tr>
@@ -574,20 +574,20 @@
                                                     <td>
                                                         @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
-                                                        -- 
+                                                        @else
+                                                        --
                                                         @endif
-                                                   
+
                                                     </td>
                                                     <td>
                                                         <span class="text-primary">
                                                             @if($value->project_id != null)
-                                                            
+
                                                         {{$value->project->client->name}}
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
-                                                    
+
                                                     </span>
                                                     </td>
                                                     <td>{{$value->due_date->format('Y-m-d')}}</td>
@@ -678,7 +678,7 @@
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
@@ -764,15 +764,15 @@
                                                     <td>
                                                         @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
+                                                        @else
                                                         --
                                                         @endif
-                                                    
+
                                                     </td>
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
@@ -856,14 +856,14 @@
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
+                                                        @else
                                                         --
                                                         @endif
                                                     </td>
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
@@ -1055,14 +1055,14 @@
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
+                                                        @else
                                                         --
                                                         @endif
                                                     </td>
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
@@ -1146,14 +1146,14 @@
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
+                                                        @else
                                                         --
                                                         @endif
                                                     </td>
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
@@ -1239,14 +1239,14 @@
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
+                                                        @else
                                                         --
                                                         @endif
                                                     </td>
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
@@ -1330,14 +1330,14 @@
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <a href="{{route('projects.show', $value->project_id)}}" title="{{$value->project->project_name}}">{{Str::limit($value->project->project_name, 20, ' ...')}}</a>
-                                                        @else 
+                                                        @else
                                                         --
                                                         @endif
                                                     </td>
                                                     <td>
                                                     @if($value->project_id != null)
                                                         <span class="text-primary">{{$value->project->client->name}}</span>
-                                                        @else 
+                                                        @else
                                                         {{$value->client_name}}
                                                         @endif
                                                     </td>
