@@ -7,6 +7,10 @@ const requiredActionApiSlice = apiSlice.injectEndpoints({
       query: (query)=>`/account/get-pending-active-live-action?${query}`,
     }),
 
+    getExpiredRequiredAction : build.query({
+      query : (query)=>`/account/get-pending-expired-live-action?${query}`,
+    }),
+
     getPastRequiredAction : build.query({
       query: (query)=>`/account/get-pending-past-action?${query}`,
     }),
@@ -21,6 +25,7 @@ const requiredActionApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLazyGetLiveRequiredActionQuery,
+  useLazyGetExpiredRequiredActionQuery,
   useLazyGetPastRequiredActionQuery,
   useGetFormDataQuery,
 } = requiredActionApiSlice; 
