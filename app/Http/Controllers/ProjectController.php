@@ -5167,18 +5167,14 @@ public function updatePmBasicSEO(Request $request){
             $project->agree = $request->agree;
             $project->status = 'pending';
             if ($project->save()) {
-                $deal = Project::find($request->project_id);
+                $project_id = Project::find($request->project_id);
 
-                $authorization_action = new AuthorizationAction();
-                $authorization_action->model_name = $project->getMorphClass();
-                $authorization_action->model_id = $project->id;
-                $authorization_action->type = 'project_qc';
-                $authorization_action->deal_id = $deal->deal_id;
-                $authorization_action->project_id = $project->project_id;
-                $authorization_action->link = route('projects.show', $project->project_id);
-                $authorization_action->title = Auth::user()->name . ' send QC form authorization request ';
-                $authorization_action->authorization_for = 62;
-                $authorization_action->save();
+               //need pedning action 
+               $helper = new HelperPendingActionController();
+
+
+               $helper->QcSubmissionAuthorization($project_id);
+               //need pending action
 
                 $milestone = ProjectMilestone::where('id', $request->milestone_id)->first();
                 //dd($milestone);
