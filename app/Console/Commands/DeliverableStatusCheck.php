@@ -72,7 +72,7 @@ class DeliverableStatusCheck extends Command
                     {
                      // dd("true");
                        $project_id = Project::where('id',$pm_project->project_id)->first();
-                      if($project_id->deliverable_authorization == 0)
+                      if($project_id->deliverable_authorization == 0 && $project_id->authorization_status == 'pending')
                       {
                        $pmproject_update= PMProject::find($pm_project->id);
                       $pmproject_update->deliverable_status= 0;

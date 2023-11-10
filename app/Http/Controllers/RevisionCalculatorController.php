@@ -367,6 +367,7 @@ class RevisionCalculatorController extends AccountBaseController
             'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
             'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
             'dispute_raised_against.name as dispute_raised_against_name','sales.id as sales_id','sales.name as sales_name','tasks.id as taskId','task_revisions.final_responsible_person',
+            'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
             DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
             )
           
@@ -389,6 +390,12 @@ class RevisionCalculatorController extends AccountBaseController
             
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','S')
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'SPR')
+                    ->where('task_revisions.raised_against_percent', '!=', null);
+            })
+           
+            // ->orWhere('task_revisions.dispute_between','SPR')
             ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->get();
@@ -417,6 +424,7 @@ public function PMIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','sales.id as sales_id','sales.name as sales_name','tasks.id as taskId','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -437,6 +445,18 @@ public function PMIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','PM')
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'SPR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'PLR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'CPR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
@@ -465,6 +485,7 @@ public function ClientIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -483,6 +504,14 @@ public function ClientIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')          
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','C')
+       
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'CPR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+        // ->where('task_revisions.dispute_between','CPR')
+        // ->orWhereNotNull('task_revisions.raised_against_percent')
+        // ->orWhere('task_revisions.dispute_between','CPR')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
@@ -511,6 +540,7 @@ public function LeadDevIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -530,6 +560,19 @@ public function LeadDevIssue(Request $request, $id)
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_between','!=','')
         ->where('task_revisions.final_responsible_person','LD')
+      
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'PLR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'LDR')
+                ->where('task_revisions.raised_by_percent', '!=', null);
+        })
+        // ->orWhere('task_revisions.dispute_between','PLR')
+        // ->orWhere('task_revisions.dispute_between','LDR')
+        ->where('task_revisions.dispute_between','LDR')
+        // ->orWhereNotNull('task_revisions.raised_by_percent')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
@@ -558,6 +601,7 @@ public function DevIssue(Request $request, $id)
         'task_revision_disputes.raised_by_percent','task_revision_disputes.raised_against_percent','developer.id as assign_to','developer.name as developer_name',
         'lead_developer.id as lead_developer_id','lead_developer.name as lead_developer_name','dispute_raised_by.id as dispute_raised_by_id','dispute_raised_by.name as dispute_raised_by_name','dispute_raised_against.id as dispute_raised_against_id',
         'dispute_raised_against.name as dispute_raised_against_name','task_revisions.final_responsible_person',
+        'task_revisions.raised_by_percent as raised_by_p','task_revisions.raised_against_percent as raised_against_p',
         DB::raw('(SELECT COUNT(task_dispute_questions.id) FROM task_dispute_questions WHERE task_dispute_questions.dispute_id = task_revision_disputes.id AND DATE(task_dispute_questions.created_at) >= "'.$startDate.'" AND DATE(task_dispute_questions.created_at) <= "'.$endDate.'") as disputes_comments'),
         )
       
@@ -576,6 +620,15 @@ public function DevIssue(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')         
         ->where('projects.pm_id',$id)
         ->where('task_revisions.final_responsible_person','D')
+       
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'LDR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+       
+        // ->orWhereNull('task_revisions.raised_against_percent')
+        //  ->where('task_revisions.dispute_between','LDR')
+        //  ->orWhereNotNull('task_revisions.raised_against_percent')
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();

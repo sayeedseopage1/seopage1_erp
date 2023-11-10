@@ -2935,13 +2935,9 @@ class TaskController extends AccountBaseController
         //     $task_revision->final_responsible_person = 'S';
         // }
         $project= Project::where('id',$task_status->project_id)->first();
-        if($dispute_between == 'CPR')
-        {
-            $task_revision->added_by = $project->client_id;
-        }else 
-        {
+        
             $task_revision->added_by = Auth::id();
-        }
+        
        
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
@@ -4589,9 +4585,9 @@ class TaskController extends AccountBaseController
                 )
                 ->first();
                 $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
+                $task->lead_developer = null;
 
-
-                if ($task->lead_developer) {
+                if ($lead_dev) {
                     $task->lead_developer = get_user($lead_dev->id, false);
                 }
             if ($task->subtask_id) {
@@ -5595,7 +5591,7 @@ class TaskController extends AccountBaseController
 
             ->whereIn('tasks.board_column_id', [2, 3])
             ->count();
-        if ($tasks > 4) {
+        if ($tasks > 3) {
             return response()->json([
                 'tasks' => $tasks,
                 'message' => 'error',

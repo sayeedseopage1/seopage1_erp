@@ -3277,7 +3277,7 @@ class ProjectController extends AccountBaseController
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -3562,18 +3562,16 @@ class ProjectController extends AccountBaseController
 
         // authorization action section
         $project_id = Project::find($project->project_id);
+        //need pending action 
+         
+         $helper = new HelperPendingActionController();
 
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $milestone->getMorphClass();
-        $authorization_action->model_id = $milestone->id;
-        $authorization_action->type = 'project_completion';
-        $authorization_action->deal_id = $project_id->deal_id;
-        $authorization_action->project_id = $project_id->id;
-        $authorization_action->link = route('projects.show', $project_id->id);
-        $authorization_action->title = Auth::user()->name . ' send project completion authorization request ';
-        $authorization_action->authorization_for = 62;
-        $authorization_action->save();
-        //end authorization action
+
+         $helper->ProjectCompletionAuthorization($project_id);
+        //need pending action
+
+      
+       
         $users = User::where('role_id', 1)->get();
         foreach ($users as $user) {
 
@@ -5009,32 +5007,48 @@ public function updatePmBasicSEO(Request $request){
     }
     public function ProjectAccept(Request $request)
     {
-        DB::beginTransaction();
+       // DB::beginTransaction();
         $project = Project::find($request->project_id);
         $project->status = 'in progress';
         $project->project_status = 'Accepted';
         $project->admin_comment = $request->admin_comment;
         $project->save();
-        dd($project);
+        $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message;
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+                
+           
+        }
+    }
         $user = User::where('id', $project->pm_id)->first();
 
         //if request comes from original authrization serction then data will be update form authorizatin action
-        if (is_null($request->authorization_form)) {
-            $authorization_action = AuthorizationAction::where([
-                'project_id' => $project->id,
-                'type' => 'project_challenge',
-                'authorization_for' => $this->user->id,
-                'status' => '0'
-            ])->first();
-
-            if ($authorization_action) {
-                $authorization_action->description = $request->admin_comment;
-                $authorization_action->authorization_by = $this->user->id;
-                $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
-                $authorization_action->save();
-            }
-        }
+       
 
         Notification::send($user, new ProjectReviewAcceptNotification($project));
 
@@ -5056,21 +5070,38 @@ public function updatePmBasicSEO(Request $request){
         $user = User::where('id', $project->pm_id)->first();
 
 
-        if (is_null($request->authorization_form)) {
-            $authorization_action = AuthorizationAction::where([
-                'project_id' => $project->id,
-                'type' => 'project_challenge',
-                'authorization_for' => $this->user->id,
-                'status' => '0'
-            ])->first();
-            if ($authorization_action) {
-                $authorization_action->description = $request->admin_comment;
-                $authorization_action->authorization_by = $this->user->id;
-                $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
-                $authorization_action->save();
-            }
+        $actions = PendingAction::where('code','CHA')->where('past_status',0)->where('project_id',$project->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message;
+              //  $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+                
+           
         }
+    }
 
         Notification::send($user, new ProjectReviewAcceptNotification($project));
         Toastr::success('Project Canceled Successfully', 'Success', ["positionClass" => "toast-top-right"]);
@@ -5087,6 +5118,38 @@ public function updatePmBasicSEO(Request $request){
             $project->status = 'accepted';
         }
         $project->save();
+        $actions = PendingAction::where('code','PCA')->where('past_status',0)->where('project_id',$project->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message;
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+                
+           
+        }
+    }
         if ($request->deny != null) {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
             $mile = ProjectMilestone::find($milestone->id);
@@ -5167,18 +5230,14 @@ public function updatePmBasicSEO(Request $request){
             $project->agree = $request->agree;
             $project->status = 'pending';
             if ($project->save()) {
-                $deal = Project::find($request->project_id);
+                $project_id = Project::find($request->project_id);
 
-                $authorization_action = new AuthorizationAction();
-                $authorization_action->model_name = $project->getMorphClass();
-                $authorization_action->model_id = $project->id;
-                $authorization_action->type = 'project_qc';
-                $authorization_action->deal_id = $deal->deal_id;
-                $authorization_action->project_id = $project->project_id;
-                $authorization_action->link = route('projects.show', $project->project_id);
-                $authorization_action->title = Auth::user()->name . ' send QC form authorization request ';
-                $authorization_action->authorization_for = 62;
-                $authorization_action->save();
+               //need pedning action 
+               $helper = new HelperPendingActionController();
+
+
+               $helper->QcSubmissionAuthorization($project_id);
+               //need pending action
 
                 $milestone = ProjectMilestone::where('id', $request->milestone_id)->first();
                 //dd($milestone);
@@ -5209,6 +5268,41 @@ public function updatePmBasicSEO(Request $request){
             $project->status = 'accepted';
         }
         $project->save();
+
+        // pending action
+        $actions = PendingAction::where('code','QCA')->where('past_status',0)->where('project_id',$project->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message;
+              //  $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+                
+           
+        }
+    }
+        // pending action
 
         if ($request->deny != null) {
             $milestone = ProjectMilestone::where('id', $project->milestone_id)->first();
@@ -5329,7 +5423,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
@@ -5451,7 +5545,7 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->action_id = $action->id;
                 $past_action->heading = $action->heading;
                 $past_action->message = $action->message;
-                $past_action->button = $action->button;
+              //  $past_action->button = $action->button;
                 $past_action->timeframe = $action->timeframe;
                 $past_action->authorization_for = $action->authorization_for;
                 $past_action->authorized_by = $action->authorized_by;
