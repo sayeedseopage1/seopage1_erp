@@ -25,6 +25,7 @@ const requiredActionApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLazyGetLiveRequiredActionQuery,
+  useGetExpiredRequiredActionQuery,
   useLazyGetExpiredRequiredActionQuery,
   useLazyGetPastRequiredActionQuery,
   useGetFormDataQuery,

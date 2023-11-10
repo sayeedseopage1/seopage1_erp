@@ -57,7 +57,7 @@ const PastRequiredActions = () => {
                 _.fill(Array(perPageItem),"*").map((v, i) => (
                     <RequiredActionCard_Loader key={i} />
             ))}
-            {!(isLoading && isFetching) &&
+            {(!isLoading && !isFetching) &&
             slicedData.map((data, i) => {
                 return <RequiredActionsCard key={i} data={data} status={"past"} />;
             })}
