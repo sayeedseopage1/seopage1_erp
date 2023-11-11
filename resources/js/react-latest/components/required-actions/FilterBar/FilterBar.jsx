@@ -53,7 +53,7 @@ const FilterBar = ({onFilter,change=false}) => {
        <Search search={search} setSearch={setSearch} change={change} />
        <DateField setDate={setDate} change={change} />
        <Show show={show} setShow={setShow} change={change} />
-       <View view={view} setView={setView} change={change} />
+       {/* <View view={view} setView={setView} change={change} /> */}
     </div>
   );
 };
