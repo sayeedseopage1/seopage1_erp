@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Deal;
 use App\Models\PendingAction;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -13,7 +15,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'CHA';
@@ -104,7 +106,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'DOA';
@@ -138,7 +140,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'DDA';
@@ -172,7 +174,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'DGA';
@@ -206,7 +208,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'QCA';
@@ -240,7 +242,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'PCA';
@@ -274,7 +276,7 @@ class HelperPendingActionController extends AccountBaseController
     {
         $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizers= User::where('role_id',1)->get();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
            foreach ($authorizers as $key => $authorizer) {
             $action = new PendingAction();
             $action->code = 'MCA';
@@ -304,5 +306,120 @@ class HelperPendingActionController extends AccountBaseController
            }
 
     }
+    public function  ProjectAcceptTimeExtensionAuthorization($project)
+    {
+        $deal= Deal::where('id',$project->id)->first();
+        $client= User::where('id',$project->client_id)->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+           foreach ($authorizers as $key => $authorizer) {
+            $action = new PendingAction();
+            $action->code = 'WDADA';
+            $action->serial = 'WDADA'.'x'.$key;
+            $action->item_name= 'Won deals acceptance delay authorization';
+            $action->heading= 'Project acceptance deadline authorization needed';
+            $action->message = 'PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> requested more time to accept deal <a href="'.route('contracts.show', $project->deal_id).'">'.$project->project_name.'</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>(Deal awarded on: '.$deal->award_time.')';
+            $action->timeframe= 12;
+            $action->project_id = $project->id;
+            $action->client_id = $client->id;
+          //  $action->milestone_id = $milestone->id;
+            $action->authorization_for= $authorizer->id;
+            $button = [
+                [
+                    'button_name' => 'Review',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('award_time_check.index'),
+                ],
+              
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+          //  dd($action);
+       //    dd(json_decode($action->button));
+
+           }
+
+    }
+    public function TaskGuidelineAuthorization($project)
+    {
+        $deal= Deal::where('id',$project->id)->first();
+        $client= User::where('id',$project->client_id)->first();
+        $project_manager= User::where('id',$project->pm_id)->first();
+        $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+           foreach ($authorizers as $key => $authorizer) {
+            $action = new PendingAction();
+            $action->code = 'TGA';
+            $action->serial = 'TGAA'.'x'.$key;
+            $action->item_name= 'Pm task guideline authorization!';
+            $action->heading= 'Task guideline authorization needed!';
+            $action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+            $action->timeframe= 24;
+            $action->project_id = $project->id;
+            $action->client_id = $client->id;
+          //  $action->milestone_id = $milestone->id;
+            $action->authorization_for= $authorizer->id;
+            $button = [
+                [
+                    'button_name' => 'Review',
+                    'button_color' => 'primary',
+                    'button_type' => 'redirect_url',
+                    'button_url' => route('projects.show',$project->id),
+                ],
+              
+            ];
+            $action->button = json_encode($button);
+            $action->save();
+          //  dd($action);
+       //    dd(json_decode($action->button));
+
+           }
+
+    }
+    public function PrimaryPageAuthorization($task)
+    {
+        if($task->independent_task_status == 0)
+        {
+            $project= Project::where('id',$task->project_id)->first();
+            $deal= Deal::where('id',$project->id)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
+            $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+               foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'PPA';
+                $action->serial = 'PPA'.'x'.$key;
+                $action->item_name= 'Primary page task authorization!';
+                $action->heading= 'Primary page authorization needed!';
+                $action->message = 'Primary page authorization needed from lead developer <a href="'.route('employees.show',$lead_developer->id).'">'.$lead_developer->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+                $action->timeframe= 24;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('tasks.index'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+              //  dd($action);
+           //    dd(json_decode($action->button));
+    
+               }
+    
+
+        }
+       
+    }
+    
+   
+   
     
 }

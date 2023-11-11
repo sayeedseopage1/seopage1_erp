@@ -245,6 +245,10 @@ class SubTaskController extends AccountBaseController
         if($request->page_type == 'Primary Page Development')
         {
             $task_type->authorization_status= 0;
+            $helper = new HelperPendingActionController();
+
+
+            $helper->PrimaryPageAuthorization($task_s);
 
         }
         $task_type->page_name= $request->page_name;
