@@ -9,6 +9,8 @@ use App\Models\CashPoint;
 use App\Models\Currency;
 use App\Models\DealStageChange;
 use App\Models\Lead;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\Project;
 use App\Models\ProjectMilestone;
 use App\Models\ProjectTimeLogBreak;
@@ -728,18 +730,12 @@ class ProjectMilestoneController extends AccountBaseController
         $milestone->save();
         $project= Project::where('id',$milestone->project_id)->first();
 
-        //authorizatoin action start here
-        $authorization_action = new AuthorizationAction();
-        $authorization_action->model_name = $milestone->getMorphClass();
-        $authorization_action->model_id = $milestone->id;
-        $authorization_action->type = 'milestone_cancel';
-        $authorization_action->deal_id = $project->deal_id;
-        $authorization_action->project_id = $project->id;
-        $authorization_action->link = route('projects.show', $project->id).'?tab=milestones';
-        $authorization_action->title = Auth::user()->name.' send milestone canceled request ';
-        $authorization_action->authorization_for = 62;
-        $authorization_action->save();
-        //end authorization action here
+        //need pending action
+        $helper = new HelperPendingActionController();
+
+
+        $helper->MilestoneCancelAuthorization($project,$milestone);
+        //need pending action
 
         $users= User::where('role_id',1)->get();
         foreach ($users as $user) {
@@ -814,21 +810,44 @@ class ProjectMilestoneController extends AccountBaseController
         $activity->save();
 
         //update authoziation action
-        if (is_null($request->authorization_form)) {
-            $authorization_action = AuthorizationAction::where([
-                'project_id' => $project->id,
-                'type' => 'project_deliverable_time_extention',
-                'authorization_for' => $this->user->id,
-                'status' => '0'
-            ])->first();
-            if ($authorization_action) {
-                $authorization_action->description = $this->user->name.' Accept this request';
-                $authorization_action->authorization_by = $this->user->id;
-                $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
-                $authorization_action->save();
-            }
+       
+        $actions = PendingAction::where('code','MCA')->where('past_status',0)->where('milestone_id',$milestone->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = '<a href="'.route('projects.show', $project->id.'?tab=milestones').'">Milestone</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>) was authorized by <a href="'.route('employees.show',$authorize_by->id).'">'.$authorize_by->name.'</a>';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+                
+           
         }
+    }
+
         //end authorization action
 
         $project_update_status= Project::find($update_project->id);
