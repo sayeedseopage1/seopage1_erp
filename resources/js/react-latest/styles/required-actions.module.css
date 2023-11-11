@@ -46,7 +46,7 @@
 /* ------------------ view container (start) ------------------ */
 .outlet_container{
   /* border: solid; */
-  /* min-height: 50vh; */
+  min-height: 50vh;
   margin-top: 15px;
 }
 /* ------------------ view container (end) ------------------ */
