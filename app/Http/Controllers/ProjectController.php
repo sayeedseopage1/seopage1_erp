@@ -109,6 +109,7 @@ use App\Models\AuthorizationAction;
 use App\Models\ProjectRequestTimeExtension;
 use App\Models\BasicSeo;
 use App\Models\BlogArticle;
+use App\Models\DeliverableReAuthorization;
 use App\Models\PmBasicSeo;
 use App\Models\PmBlogArticle;
 use App\Models\PmProductCategory;
@@ -741,7 +742,6 @@ class ProjectController extends AccountBaseController
         $dispute->pm_id = Auth::id();
         $dispute->save();
         $project = Project::find($dispute->project_id);
-        $project->status = 'canceled';
         $project_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
         foreach ($project_milestones as $milestone) {
             $milestone_update= ProjectMilestone::find($milestone->id);
@@ -815,6 +815,21 @@ class ProjectController extends AccountBaseController
         $this->view = 'projects.modals.final_dispute_view';
 
         return view('projects.create', $this->data);
+    }
+    public function storeDisputeAuthorization(Request $request){
+        $validator =  $request->validate([
+            'dispute_admin_comment' => 'required',
+
+        ], [
+            'dispute_admin_comment.required' => 'This field is required!',
+        ]);
+
+        $project = Project::find($request->project_id);
+        $project->dispute_admin_comment = $request->dispute_admin_comment;
+        $project->status = 'canceled';
+        $project->save();
+
+        return response()->json(['status'=>400]);
     }
 
 
@@ -5423,7 +5438,6 @@ public function updatePmBasicSEO(Request $request){
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
 
-    //    dd($request->all());
         if ($request->denyAuthorization) {
             $project = Project::find($request->project_id);
             $project->authorization_status = 'canceled';
@@ -5532,6 +5546,19 @@ public function updatePmBasicSEO(Request $request){
         }
 
         $log_user = Auth::user();
+
+        // // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
+        // if($request->project_id){
+        //     $oldDeliverable = ProjectDeliverable::where('project_id',$request->project_id)->first();
+
+        //     $deliverableReAuth = new DeliverableReAuthorization();
+        //     $deliverableReAuth->deliverable_id = $oldDeliverable->id;
+        //     $deliverableReAuth->project_id = $request->project_id;
+        //     $deliverableReAuth->comment = $request->admin_authorization_comment;
+        //     $deliverableReAuth->save();
+        // }
+        // // 2ND TIME TOM MANAGEMENT AUTHORIZ END
+
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
         $link = '<a style="color:blue" href="' . route('projects.show', $project->id) . '?tab=deliverable">' . $text . '</a>';

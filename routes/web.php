@@ -512,8 +512,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
-      
-   
+
+
 
     });
 
@@ -1480,6 +1480,7 @@ Route::post('update-items', [ProjectBoardController::class, 'updateItems'])->nam
 Route::get('/projects/dispute/{id}', [ProjectController::class, 'Dispute'])->name('projects.dispute');
 Route::get('/projects/dispute/view/{id}', [ProjectController::class, 'DisputeView'])->name('projects.dispute.form');
 Route::post('/projects/dispute/store', [ProjectController::class, 'storeDispute'])->name('store-dispute');
+Route::post('/projects/dispute/authorization', [ProjectController::class, 'storeDisputeAuthorization'])->name('dispute-authorization');
 // deal comments store
 Route::post('/deals/comments', [DealController::class, 'comments'])->name('post-comment');
 
