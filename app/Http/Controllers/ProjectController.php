@@ -741,7 +741,6 @@ class ProjectController extends AccountBaseController
         $dispute->pm_id = Auth::id();
         $dispute->save();
         $project = Project::find($dispute->project_id);
-        $project->status = 'canceled';
         $project_milestones= ProjectMilestone::where('project_id',$project->id)->where('status','incomplete')->get();
         foreach ($project_milestones as $milestone) {
             $milestone_update= ProjectMilestone::find($milestone->id);
@@ -815,6 +814,22 @@ class ProjectController extends AccountBaseController
         $this->view = 'projects.modals.final_dispute_view';
 
         return view('projects.create', $this->data);
+    }
+
+    public function storeDisputeAuthorization(Request $request){
+        $validator =  $request->validate([
+            'dispute_admin_comment' => 'required',
+
+        ], [
+            'dispute_admin_comment.required' => 'This field is required!',
+        ]);
+
+        $project = Project::find($request->project_id);
+        $project->dispute_admin_comment = $request->dispute_admin_comment;
+        $project->status = 'canceled';
+        $project->save();
+
+        return response()->json(['status'=>400]);
     }
 
 

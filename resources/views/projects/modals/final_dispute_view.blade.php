@@ -1,8 +1,9 @@
 <div class="modal fade" id="final_dispute_view" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
+        <form action="#"  method="post" id="authForm">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">See Dispute</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -106,13 +107,72 @@
                        {{ $dispute->pm_email }}
                     </p>
                 </div>
+                @php
+                    $canceledProject = App\Models\Project::where('id',$project->id)->first();
+                @endphp
+                @if ($canceledProject->status=='canceled')
+                <hr>
+                <div class="col-12 px-0 pb-3 d-block d-lg-flex d-md-flex">
+                    <p class="mb-0 text-lightest f-14 w-30 d-inline-block text-capitalize">@lang('Admin Comment')</p>
+                    <p class="mb-0 text-dark-grey f-14 w-70">
+                       {!! $canceledProject->dispute_admin_comment !!}
+                    </p>
+                </div>
+                @endif
+                @if (Auth::user()->role_id==1 && $canceledProject->dispute_admin_comment == null)
+                <div class="form-group mt-3">
+                    <label class="text-dark-grey" data-label="true" for="dispute_admin_comment">Comment
+                        <sup class="mr-1">*</sup>
+                    </label>
+                    <textarea name="dispute_admin_comment" id="dispute_admin_comment" class="form-control"></textarea>
+                   <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                    <script>
+                        CKEDITOR.replace('dispute_admin_comment');
+                    </script>
+                    <label id="dispute_admin_commentError" class="error" for="dispute_admin_comment"></label>
+                </div>
+                @endif
 
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            @if (Auth::user()->role_id==1 && $canceledProject->dispute_admin_comment == null)
+                <button type="button" class="btn btn-primary" id="authBtn">Authorized</button>
+            @endif
         </div>
+        </form>
       </div>
     </div>
   </div>
+<script>
+     $('#authBtn').click(function(e){
+        e.preventDefault();
+        var dispute_admin_comment = CKEDITOR.instances.dispute_admin_comment.getData();
+        var data= {
+            '_token': "{{ csrf_token() }}",
+            'project_id': {{$project->id}},
+            'dispute_admin_comment': dispute_admin_comment,
+        }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.easyAjax({
+            blockUI: true,
+            disableButton: true,
+            buttonSelector: "#authBtn",
+            type: "POST",
+            url: "{{route('dispute-authorization')}}",
+            data: data,
+            dataType: "json",
+            success: function (response) {
+                if (response.status == 400) {
+                    toastr.success('Authorization request send successfully');
+                    window.location.reload();
+                }
+            },
+        });
+    });
+</script>
