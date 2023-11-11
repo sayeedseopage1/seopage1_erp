@@ -130,7 +130,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
                         <Button
                             key={i}
                             variant={btn.color}
-                            disabled={loading}
+                            isLoading={loading}
                             size="sm"
                             onClick={() =>
                                 handleSubmit({

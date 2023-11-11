@@ -5,11 +5,7 @@ import ShowTimer from "./admin-components/ShowTimer";
 import ActionsButton from "./admin-components/ActionsButton";
 
 export default function RequiredActionsCard_Admin_Live({ data }) {
-    console.log("active card");
-    console.log({
-        created_at: dayjs(data.created_at).format("DD-MM-YYYY HH:mm:ss"),
-    });
-
+    
     return (
         <div className={style.card_container}>
             {/* card details */}
@@ -60,7 +56,7 @@ export default function RequiredActionsCard_Admin_Live({ data }) {
 
                     {/* action count down */}
                     <ShowTimer
-                        targetTime={dayjs(data.created_at).add(6, "hours")}
+                        targetTime={dayjs(data.created_at).add(Number(data.timeframe), "hours")}
                     />
                 </aside>
             </div>

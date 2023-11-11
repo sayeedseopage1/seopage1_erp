@@ -11,19 +11,36 @@ const FilterBar = ({onFilter,change=false}) => {
 
   // ------- filter state (start) -------
   const [search,setSearch] = useState('');
-  const [date,setDate] = useState('');
+  const [date,setDate] = useState({});
   const [show,setShow] = useState(6);
   const [view,setView] = useState('all');
   // ------- filter state (end) -------
 
 
   useEffect(()=>{
+    // console.log({search});
     onFilter({
       search,
       date,
-      // view
+      view
     })
-  },[search,date]);
+  },[search,date,view]);
+
+
+  useEffect(()=>{
+    if (search) {
+      setView('all');
+    }
+  },[search])
+
+  useEffect(()=>{
+    setSearch('');
+    setView('all');
+  },[date])
+
+  useEffect(()=>{
+    setSearch('');
+  },[view])
 
 
   useEffect(()=>{
@@ -33,7 +50,7 @@ const FilterBar = ({onFilter,change=false}) => {
 
   return (
     <div className={style.filterbar_container}>
-       <Search setSearch={setSearch} change={change} />
+       <Search search={search} setSearch={setSearch} change={change} />
        <DateField setDate={setDate} change={change} />
        <Show show={show} setShow={setShow} change={change} />
        <View view={view} setView={setView} change={change} />

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import React from "react";
 import FilterBar from "./FilterBar/FilterBar";
-import getCardData from "../../__fake_data__/required-actions/data";
 import RequiredActionsCard from "./RequiredActionCards/RequiredActionsCard";
 import { usePagination } from "./Pagination";
 import { useState } from "react";
@@ -11,56 +10,90 @@ import { useLazyGetPastRequiredActionQuery } from "../../services/api/requiredAc
 import RequiredActionCard_Loader from "./RequiredActionCards/RequiredActionCard_Loader";
 
 const PastRequiredActions = () => {
-    const {currentPage,perPageItem,setTotalItem} = usePagination();
-    const {refresh} = useRefresh();
+    const { currentPage, perPageItem, setTotalItem } = usePagination();
+    const { refresh } = useRefresh();
     const [data, setData] = useState([]);
+    const [filterData, setFilterData] = useState([]);
     const [slicedData, setSlicedData] = useState([]);
-    const [filter, setFilter] = useState('');
-    const [getPastRequiredAction , { isLoading, isFetching }] = useLazyGetPastRequiredActionQuery();
+    const [dateFilter, setDateFilter] = useState({});
+    const [searchFilter, setSearchFilter] = useState("");
+    const [viewFilter, setViewFilter] = useState("");
+    const [getPastRequiredAction, { isLoading, isFetching }] =
+        useLazyGetPastRequiredActionQuery();
 
-    // data fetching according to filter
-    useEffect(()=>{
-        getPastRequiredAction(filter)
+    // data fetching according to dateFilter
+    useEffect(() => {
+        const queryObj = _.pickBy(dateFilter, Boolean);
+        const query = new URLSearchParams(queryObj).toString();
+        getPastRequiredAction(query)
             .unwrap()
             .then(({ pending_actions }) => {
-                console.log({ pending_actions });
                 setData(pending_actions);
             });
-    },[filter,refresh])
+    }, [dateFilter, refresh]);
+
+    // filter data according to search
+    useEffect(() => {
+        if (searchFilter) {
+            const newData = data.filter((d) => {
+                return d?.heading
+                    ?.toLowerCase()
+                    ?.includes(searchFilter.toLowerCase());
+            });
+            setFilterData(newData);
+        } else {
+            setFilterData(data);
+        }
+    }, [searchFilter, data]);
+
+    // filter data according to view
+    useEffect(() => {
+        if (viewFilter === "all") {
+            setFilterData(data);
+        }
+        console.log({ viewFilter });
+    }, [viewFilter, data]);
 
     // slicing data according to paginate
-    useEffect(()=>{
-      if (data.length) {
-          setTotalItem(data.length);
-          const startIndex = (currentPage-1) * perPageItem;
-          const endIndex = currentPage * perPageItem;
-        //   console.log('data exist',{currentPage,perPageItem,startIndex,endIndex,data:data.slice(startIndex,endIndex) });
-        setSlicedData(data.slice(startIndex,endIndex));
-      }
-    },[currentPage,perPageItem,data])
+    useEffect(() => {
+        if (filterData.length) {
+            setTotalItem(filterData.length);
+            const startIndex = (currentPage - 1) * perPageItem;
+            const endIndex = currentPage * perPageItem;
+            setSlicedData(filterData.slice(startIndex, endIndex));
+        }else{
+            setTotalItem(prev=>prev);
+            setSlicedData([]);
+        }
+    }, [currentPage, perPageItem, filterData]);
 
-
-
-
-
-    const onFilter = (filter) => {
-        const queryObj = _.pickBy(filter, Boolean);
-        const query = new URLSearchParams(queryObj).toString();
-        setFilter(query);
-        console.log({query});
+    // on filter function
+    const onFilter = ({ search, date, view }) => {
+        if (JSON.stringify(date) !== JSON.stringify(dateFilter)) {
+            setDateFilter({ ...date });
+        }
+        setSearchFilter(search);
+        setViewFilter(view);
     };
 
     return (
         <div>
             <FilterBar onFilter={onFilter} change={true} />
             {(isLoading || isFetching) &&
-                _.fill(Array(perPageItem),"*").map((v, i) => (
+                _.fill(Array(perPageItem), "*").map((v, i) => (
                     <RequiredActionCard_Loader key={i} />
-            ))}
-            {(!isLoading && !isFetching) &&
-            slicedData.map((data, i) => {
-                return <RequiredActionsCard key={i} data={data} status={"past"} />;
-            })}
+                ))}
+            {!isLoading &&
+                !isFetching &&
+                slicedData.map((data, i) => {
+                    return (
+                        <RequiredActionsCard
+                            key={i}
+                            data={data}
+                            status={"past"}
+                        />
+                    );
+                })}
         </div>
     );
 };

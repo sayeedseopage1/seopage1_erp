@@ -9,13 +9,6 @@ export default function ShowTimer({ targetTime }) {
         stopOnExpire: true,
     });
 
-    useEffect(() => {
-        console.log({
-            targetTime: dayjs(targetTime).format("DD-MM-YYYY HH:mm:ss"),
-        });
-        // console.log(time);
-    }, []);
-
     return (
         <div className={`${style.action_count_down} shadow-sm`}>
             <span className={style.highlight}>Time Left</span>
