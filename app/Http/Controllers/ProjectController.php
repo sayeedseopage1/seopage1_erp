@@ -5547,17 +5547,17 @@ public function updatePmBasicSEO(Request $request){
 
         $log_user = Auth::user();
 
-        // // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
-        // if($request->project_id){
-        //     $oldDeliverable = ProjectDeliverable::where('project_id',$request->project_id)->first();
+        // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
+        if($request->project_id){
+            $oldDeliverable = ProjectDeliverable::where('project_id',$request->project_id)->first();
 
-        //     $deliverableReAuth = new DeliverableReAuthorization();
-        //     $deliverableReAuth->deliverable_id = $oldDeliverable->id;
-        //     $deliverableReAuth->project_id = $request->project_id;
-        //     $deliverableReAuth->comment = $request->admin_authorization_comment;
-        //     $deliverableReAuth->save();
-        // }
-        // // 2ND TIME TOM MANAGEMENT AUTHORIZ END
+            $deliverableReAuth = new DeliverableReAuthorization();
+            $deliverableReAuth->deliverable_id = $oldDeliverable->id;
+            $deliverableReAuth->project_id = $request->project_id;
+            $deliverableReAuth->comment = $request->admin_authorization_comment;
+            $deliverableReAuth->save();
+        }
+        // 2ND TIME TOM MANAGEMENT AUTHORIZ END
 
 
         $text = Auth::user()->name . ' finally authorized project deliverable';
