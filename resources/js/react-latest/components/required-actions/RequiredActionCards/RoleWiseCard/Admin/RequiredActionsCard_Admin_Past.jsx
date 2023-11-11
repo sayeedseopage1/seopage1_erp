@@ -5,7 +5,8 @@ import ActionsButton from "./admin-components/ActionsButton";
 import dayjs from "dayjs";
 
 export default function RequiredActionsCard_Admin_Past({ data }) {
-    console.log({ data });
+
+
     return (
         <div className={style.card_container}>
             {/* card details */}

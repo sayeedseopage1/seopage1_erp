@@ -38,9 +38,7 @@ export default function Index() {
             >
                 <div
                     className="sp1_tlr_tbl_container"
-                    style={{
-                        minHeight: "50vh",
-                    }}
+                    
                 >
                     {/* heading */}
                     {/* <h1 className={style.heading}>Required Actions</h1> */}
