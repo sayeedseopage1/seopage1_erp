@@ -104,7 +104,7 @@ export default function ProjectChallenge({ data, loading }){
                       Comments :
                   </div>
                   <div
-                      className="sp1_ck_content py-2 px-1"
+                      className="sp1_ck_content py-2"
                       dangerouslySetInnerHTML={{
                           __html: data.comments,
                       }}/>
@@ -118,7 +118,7 @@ export default function ProjectChallenge({ data, loading }){
                       Project Challenge :
                   </div>
                   <div
-                      className="sp1_ck_content py-2 px-1"
+                      className="sp1_ck_content py-2"
                       dangerouslySetInnerHTML={{
                           __html: data?.project_challenge ?? '<span>No project challange available</span>',
                       }}/>
