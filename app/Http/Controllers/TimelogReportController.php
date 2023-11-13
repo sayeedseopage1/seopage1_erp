@@ -583,22 +583,7 @@ class TimelogReportController extends AccountBaseController
         
         $data = $filteredData->groupBy('project_time_logs.user_id')->get();
        // dd($data);
-       foreach ($data as $item) {
-        $total_minutes_progress = ProjectTimelog::
-            where('user_id', $item->employee_id)
-            ->where('start_time', '!=', null)
-            ->where('end_time', null)
-            ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
-            ->first();
-        
-        if ($total_minutes_progress) {
-            $item->total_minutes = $item->total_minutes + $total_minutes_progress->total_minutes_progress;
-          
-        } else {
-            $item->total_minutes = $item->total_minutes;
-           
-        }
-    }
+       
        
         
         
@@ -638,7 +623,23 @@ class TimelogReportController extends AccountBaseController
             return $item;
           
         });
-    //   /  dd($data);
+      dd($data);
+    foreach ($data as $item) {
+        $total_minutes_progress = ProjectTimelog::
+            where('user_id', $item->employee_id)
+            ->where('start_time', '!=', null)
+            ->where('end_time', null)
+            ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
+            ->first();
+        
+        if ($total_minutes_progress) {
+            $item->total_minutes = $item->total_minutes + $total_minutes_progress->total_minutes_progress;
+          
+        } else {
+            $item->total_minutes = $item->total_minutes;
+           
+        }
+    }
     
        
         //$data->missed_hours_count = $missedNumber;
