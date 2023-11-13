@@ -7,6 +7,7 @@ import TaskWiseLogTable from '../components/TaskWiseLogTable'
 import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { convertTime } from "../../utils/converTime";
+import Button from '../../global/Button';
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
@@ -15,6 +16,7 @@ const TaskWiseLogReport = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
     const [trackedTime, setTrackedTime] = useState(0);
+    const [filterData, setFilterData] = useState(null);
 
     const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
 
@@ -27,8 +29,10 @@ const TaskWiseLogReport = () => {
     }
 
     // handle fetch data
-    const handleFetchData = (filter) => {
-        getTaskWiseData(filter)
+    const handleFetchData = async (filter) => {
+        setFilterData(filter);
+
+        await getTaskWiseData(filter)
         .unwrap()
         .then(res => {
             setCurrentPage(1);
@@ -59,11 +63,21 @@ const TaskWiseLogReport = () => {
         handleData(data, currentPage, number);
     }
 
+    // refresh page
+    const onRefresh = () => {
+        handleFetchData(filterData);
+    }
+
     return (
         <div className="sp1_tlr_container">
             <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="mb-2"> <Tabbar/></div>
+                <div className="mb-2"> 
+                    <Tabbar/>
+                    <Button onClick={onRefresh}>
+                        Refresh
+                    </Button>
+                </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
                     <span className="mx-auto">
                         Total Tracked Time: <strong>{convertTime(trackedTime)}</strong>
