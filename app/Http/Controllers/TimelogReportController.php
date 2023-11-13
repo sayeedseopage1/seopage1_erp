@@ -582,7 +582,7 @@ class TimelogReportController extends AccountBaseController
         }
         
         $data = $filteredData->groupBy('project_time_logs.user_id')->get();
-        dd($data);
+       // dd($data);
        foreach ($data as $item) {
         $total_minutes_progress = ProjectTimelog::
             where('user_id', $item->employee_id)
