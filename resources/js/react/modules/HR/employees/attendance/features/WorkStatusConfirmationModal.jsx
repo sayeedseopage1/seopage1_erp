@@ -30,18 +30,18 @@ export const WorkStatusConfirmationModal = () => {
                         <Switch>
                             <Switch.Case condition={!checkIn}>
                             <div>
-                                    <div className='text-center'>
-                                        <i className={`fa-solid fa-cloud-moon-rain ${styles.cloud}`}></i>
-                                        <ShowClock className={styles.clock} />
-                                    </div>
-                                    <Switch.Case condition={true}>
-                                        <CheckInForm onCheckIn={() => setCheckIn(true)}/>
-                                    </Switch.Case>
-                                    <Switch.Case condition={false}>
-                                        <Button className='mt-3 mx-auto font-weight-normal'>
-                                            <i className="fa-solid fa-arrow-right-from-bracket fa-rotate-180" /> Clock Out
-                                        </Button>
-                                    </Switch.Case>
+                                <div className='text-center'>
+                                    <i className={`fa-solid fa-cloud-moon-rain ${styles.cloud}`}></i>
+                                    <ShowClock className={styles.clock} />
+                                </div>
+                                <Switch.Case condition={true}>
+                                    <CheckInForm onCheckIn={() => setCheckIn(true)}/>
+                                </Switch.Case>
+                                <Switch.Case condition={false}>
+                                    <Button className='mt-3 mx-auto font-weight-normal'>
+                                        <i className="fa-solid fa-arrow-right-from-bracket fa-rotate-180" /> Clock Out
+                                    </Button>
+                                </Switch.Case>
                             </div>
                             </Switch.Case>
                             <Switch.Case condition={checkIn}>
