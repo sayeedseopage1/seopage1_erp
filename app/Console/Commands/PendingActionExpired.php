@@ -31,7 +31,7 @@ class PendingActionExpired extends Command
     public function handle()
     {
        // DB::begintransaction();
-        $actions= PendingAction::where('past_status',0)->where('expired_status',0)->where('authorization_for',62)->get();
+        $actions= PendingAction::where('past_status',0)->where('expired_status',0)->get();
        // dd($actions);
         foreach($actions as $action)
         {
