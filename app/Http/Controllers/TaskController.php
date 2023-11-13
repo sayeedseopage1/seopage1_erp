@@ -2958,7 +2958,8 @@ class TaskController extends AccountBaseController
         // }
         // dd($task_revision);
         $task_revision->save();
-
+        
+      
 
         // CREATE DISPUTE
         if ($task_revision->dispute_created) {
@@ -4571,6 +4572,13 @@ class TaskController extends AccountBaseController
         }
 
         $dispute->save();
+        $task= Task::where('id',$dispute->task_id)->first();
+        $disputes= TaskRevisionDispute::where('id',$dispute->id)->first();
+        $helper = new HelperPendingActionController();
+
+
+        $helper->TaskDisputeAuthorization($task,$disputes);
+
         // dd($revision, $dispute);
     }
 
@@ -4939,6 +4947,44 @@ class TaskController extends AccountBaseController
             $query->resolved_on = Carbon::now();
             $query->has_update = true;
             $query->save();
+
+            $actions = PendingAction::where('code','TDA')->where('past_status',0)->where('task_id',$query->task_id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+                    $task= Task::where('id',$query->task_id)->first();
+                    $project= Project::where('id',$task->project_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$project->pm_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = $action->message;
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->milestone_id = $action->milestone_id;
+                    $past_action->save();
+                    
+               
+            }
+        }
 
             $filter = [
                 "dispute_id" => $request->dispute_id ?? NULL,

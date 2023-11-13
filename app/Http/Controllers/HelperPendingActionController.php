@@ -458,6 +458,49 @@ class HelperPendingActionController extends AccountBaseController
         
        
     }
+    public function TaskDisputeAuthorization($task,$disputes)
+    {
+  
+            $project= Project::where('id',$task->id)->first();
+            $raised_by= User::where('id',$disputes->raised_by)->first();
+            $raised_against= User::where('id',$disputes->raised_against)->first();
+            $client= User::where('id',$project->client_id)->first();
+            $project_manager= User::where('id',$project->pm_id)->first();
+            $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
+            $authorizers= User::where('role_id',1)->orWhere('role_id',8)->get();
+               foreach ($authorizers as $key => $authorizer) {
+                $action = new PendingAction();
+                $action->code = 'TDA';
+                $action->serial = 'TDA'.'x'.$key;
+                $action->item_name= 'Dispute Expiry Warning!';
+                $action->heading= 'Dispute Expiry Warning!';
+                $action->message = 'Dispute for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> between <a href="'.route('employees.show',$raised_by->id).'">'.$raised_by->name.'</a> & <a href="'.route('employees.show,$raised_against->id').'">'.$raised_against->name.'</a> will be expired in the next 48 hours if it is not resolved then!';
+                $action->timeframe= 48;
+                $action->project_id = $project->id;
+                $action->client_id = $client->id;
+                $action->task_id = $task->id;
+                $action->authorization_for= $authorizer->id;
+                $button = [
+                    [
+                        'button_name' => 'Review',
+                        'button_color' => 'primary',
+                        'button_type' => 'redirect_url',
+                        'button_url' => route('disputes.index'),
+                    ],
+                  
+                ];
+                $action->button = json_encode($button);
+                $action->save();
+              //  dd($action);
+           //    dd(json_decode($action->button));
+    
+               }
+    
+
+        
+       
+    }
+    
    
     
    
