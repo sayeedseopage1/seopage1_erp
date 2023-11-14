@@ -3623,6 +3623,31 @@ class TaskController extends AccountBaseController
                 ->where('tasks.id', $id)
                 ->first();
 
+                // ONLY FOR PENDIN PERENT TASK FILE START
+
+            $ppTaskImages = DB::table('tasks')
+            ->leftJoin('task_files', 'tasks.pp_task_id', 'task_files.task_id')
+            ->select('task_files.filename as pp_task_file_url', 'task_files.filename as pp_task_file_name','task_files.id as pp_task_files_id')
+            ->where('tasks.id', $id)
+            ->get();
+
+            $pp_prefix = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/';
+
+            $ppTaskFileData = [];
+
+            foreach($ppTaskImages as $item){
+                if($item->pp_task_file_url != null){
+                    $fileUrl = $pp_prefix . $item->pp_task_file_url;
+                    $fileExtension = pathinfo($item->pp_task_file_url, PATHINFO_EXTENSION);
+                    $item->pp_task_file_url = $fileUrl;
+                    $item->pp_task_file_icon = $fileExtension;
+                    $item->pp_task_file_id = $item->pp_task_files_id;
+                    array_push($ppTaskFileData, $item);
+                }
+            }
+
+            // ONLY FOR PENDIN PERENT TASK FILE END
+
 
             $taskImages = DB::table('tasks')
                 ->leftJoin('task_files', 'tasks.id', 'task_files.task_id')
@@ -3764,6 +3789,7 @@ class TaskController extends AccountBaseController
             }
             return response()->json([
                 'task' => $task,
+                'ppTaskFiles' => $ppTaskFileData,
                 'taskFiles' => $taskFileData,
                 'parent_task_heading' => $parent_task_heading,
                 'parent_task_action' => $parent_task_action,

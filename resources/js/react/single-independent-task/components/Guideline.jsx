@@ -118,57 +118,53 @@ const Guideline = ({ text, editorContainerClass, workEnv }) => {
                             className={`sp1_ck_content word-break ${editorContainerClass}`}
                             dangerouslySetInnerHTML={{ __html: text }}
                         />
-                        <div style={{border:'solid',padding:'10px'}}>
-                            {_.size(task?.attachments) > 0 &&
-                            type === "TASK_DESCRIPTION" ? (
-                                <div className="mt-3">
-                                    <h4>Task Attachments: </h4>
-                                    <FileUploader>
-                                        {_.map(
-                                            task?.attachments,
-                                            (attachment) =>
-                                                attachment?.task_file_name ? (
-                                                    <FileUploader.Preview
-                                                        key={
-                                                            attachment?.task_file_id
-                                                        }
-                                                        fileName={
-                                                            attachment?.task_file_name
-                                                        }
-                                                        downloadAble={true}
-                                                        deleteAble={false}
-                                                        downloadUrl={
-                                                            attachment?.task_file_url
-                                                        }
-                                                        previewUrl={
-                                                            attachment?.task_file_url
-                                                        }
-                                                        fileType={
-                                                            _.includes(
-                                                                [
-                                                                    "png",
-                                                                    "jpeg",
-                                                                    "jpg",
-                                                                    "svg",
-                                                                    "webp",
-                                                                    "gif",
-                                                                ],
-                                                                attachment?.task_file_icon
-                                                            )
-                                                                ? "images"
-                                                                : "others"
-                                                        }
-                                                        classname="comment_file"
-                                                        ext={
-                                                            attachment?.task_file_icon
-                                                        }
-                                                    />
-                                                ) : null
-                                        )}
-                                    </FileUploader>
-                                </div>
-                            ) : null}
-                        </div>
+                        {_.size(task?.attachments) > 0 &&
+                        type === "TASK_DESCRIPTION" ? (
+                            <div className="mt-3">
+                                <h4>Task Attachments: </h4>
+                                <FileUploader>
+                                    {_.map(task?.attachments, (attachment) =>
+                                        attachment?.pp_task_file_name ? (
+                                            <FileUploader.Preview
+                                                key={
+                                                    attachment?.pp_task_file_id
+                                                }
+                                                fileName={
+                                                    attachment?.pp_task_file_name
+                                                }
+                                                downloadAble={true}
+                                                deleteAble={false}
+                                                downloadUrl={
+                                                    attachment?.pp_task_file_url
+                                                }
+                                                previewUrl={
+                                                    attachment?.pp_task_file_url
+                                                }
+                                                fileType={
+                                                    _.includes(
+                                                        [
+                                                            "png",
+                                                            "jpeg",
+                                                            "jpg",
+                                                            "svg",
+                                                            "webp",
+                                                            "gif",
+                                                        ],
+                                                        attachment?.pp_task_file_icon
+                                                    )
+                                                        ? "images"
+                                                        : "others"
+                                                }
+                                                classname="comment_file"
+                                                ext={
+                                                    attachment?.pp_task_file_icon
+                                                }
+                                            />
+                                        ) : null
+                                    )}
+                                </FileUploader>
+                            </div>
+                        ) : null}
                     </div>
 
                     <div className=" __footer">
