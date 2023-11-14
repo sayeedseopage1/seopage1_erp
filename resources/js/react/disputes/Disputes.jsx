@@ -8,6 +8,8 @@ import DisputeTableLoader from "./components/DisputeTableLoader";
 import FilterContainer from './components/Filter-bar/FilterContainer';
 import Filterbar from "./components/Filter-bar/Filterbar";
 import ResolveModal from "./components/ResolveModal";
+import { RefreshButton } from "./components/RefreshButton";
+import Loader from "../global/Loader";
 
 
 const reducer = (state=[], action) => {
@@ -89,6 +91,11 @@ const Disputes = () => {
     }
 
     const defString = JSON.stringify(disputes);
+
+    // handle refresh button
+    const handleRefresh = () => {
+        onFilter(filters);
+    }
 
     React.useEffect(() => {
 
@@ -242,6 +249,14 @@ const Disputes = () => {
                     {/* end card */}
                 </div>
 
+                <div className="w-100 d-flex align-items-center">
+                    <RefreshButton onClick={handleRefresh}>
+                        {isFetching ? 
+                            <Loader title="Loading..." borderRightColor="white" />:
+                            "Refresh"
+                        }
+                    </RefreshButton>
+                </div>
                 {/* disputes table */}
                 <div className="mt-3 p-3 bg-white">
                     <DataTable

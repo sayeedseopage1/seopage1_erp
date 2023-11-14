@@ -127,7 +127,7 @@ const Tasks = () => {
                             />
                         </div>
 
-                        <div className="" style={{marginTop: '3px'}}>
+                        <div className="mb-2" style={{marginTop: '3px'}}>
                             <TableFilter
                                 tableName="tasksTable"
                                 columns = {tableColumns}

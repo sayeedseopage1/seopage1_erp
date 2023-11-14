@@ -102,12 +102,19 @@ const CheckInForm = ({onCheckIn}) => {
     const [location, setLocation] = React.useState("erp");
     const [workFrom, setWorkForm] = React.useState("office");
 
+    // handle user clock in form submit
+    const onClockIn = (e) => {
+        const data = {
+            location,
+            workFrom,
+        }
+    }
 
     return(
        <div className='w-100'>
             <Flex justifyContent="space-between" width="100%">
                 <FormGroup className='w-100'>
-                    <Label>Location</Label>
+                    <Label>Location <sup>*</sup></Label>
                     <Listbox value={location} onChange={setLocation}>
                         <div className={styles.list_container}>
                             <Listbox.Button className={styles.display_selected_list}>
