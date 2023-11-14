@@ -555,6 +555,7 @@
 }
 .sp1_ck_content a {
   color: var(--header_color);
+  word-break: break-all;
 }
 .sp1_ck_content a:hover {
   color: var(--header_color);
@@ -563,6 +564,11 @@
 
 .ck.ck-powered-by {
   display: none !important;
+}
+
+.word-break {
+  color: red !important;
+  word-break: break-all !important;
 }
 
 /*# sourceMappingURL=ck-editor.css.map*/

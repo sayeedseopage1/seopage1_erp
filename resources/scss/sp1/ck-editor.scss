@@ -25,7 +25,7 @@
 .ck-content{
     min-height: 100px;
 }
-
+ 
 /* @ckeditor/ckeditor5-basic-styles/theme/code.css */
 .ck-content code {
     background-color: hsla(0, 0%, 78%, 0.3);
@@ -482,6 +482,7 @@
     h1{font-size: 2rem !important;}
     a{
         color: var(--header_color);
+        word-break: break-all;
         &:hover{
             color: var(--header_color);
             text-decoration: underline;
@@ -492,4 +493,9 @@
 
 .ck.ck-powered-by {
     display: none !important;
+}
+
+.word-break{
+    color: red !important;
+    word-break: break-all !important;
 }

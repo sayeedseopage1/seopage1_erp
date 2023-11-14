@@ -23,7 +23,7 @@ export const WorkStatusConfirmationModal = () => {
   const [checkIn, setCheckIn] = React.useState(false);
 
   return (
-    <Modal isOpen={true}>
+    <Modal isOpen={false}>
        <React.Fragment>
             <div style={styles.modal_container}>
                     <div className={styles.work_status_confirmation_modal}>
@@ -75,12 +75,20 @@ export const WorkStatusConfirmationModal = () => {
 
             {/* Acknowledgement Modal */}
             <Modal isOpen={showAcknowledgementReminder}>
-                <AcknowledgementReminderModal close={() => setShowAcknowledgementReminder(false)} />
+                <AcknowledgementReminderModal 
+                    close={() => setShowAcknowledgementReminder(false)} 
+                    reminderType="Minimum tracked hours not met"
+                    reminderDate="2021-09-01"
+                />
             </Modal>
 
             {/* Daily submission */}
             <Modal isOpen={showDailySubmissionForm}>
-                <DailyReportSubmissionEnforcer close={() => setShowDailySubmissionForm(false)} />
+                <DailyReportSubmissionEnforcer 
+                    close={() => setShowDailySubmissionForm(false)} 
+                    reminderType="daily_report"     
+                    reminderDate="2021-09-01"
+                />
             </Modal>
        </React.Fragment>
     </Modal>

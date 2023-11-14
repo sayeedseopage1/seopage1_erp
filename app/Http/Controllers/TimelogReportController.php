@@ -460,6 +460,7 @@ class TimelogReportController extends AccountBaseController
      //   $status = $request->input('status', null);
      //   $project_id = $request->input('project_id', null);
 
+       
 
         $users = DB::table('users')->select(['id'])->whereIn('role_id', [5, 9, 10])->get()->toArray();
         $filtered_array = array_filter($users, function($item) {
@@ -542,7 +543,8 @@ class TimelogReportController extends AccountBaseController
             return $item;
           
         });
-    //   /  dd($data);
+        
+        // dd($data);
        
         //$data->missed_hours_count = $missedNumber;
         return response()->json([
@@ -552,6 +554,8 @@ class TimelogReportController extends AccountBaseController
         
         
     }
+
+
 
     public function timelogChartData(Request $request)
     {

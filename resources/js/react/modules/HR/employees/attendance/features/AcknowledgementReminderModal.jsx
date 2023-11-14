@@ -8,12 +8,24 @@ import Option3 from "./helper/acknowledgement-options/Option3";
 import Option4 from "./helper/acknowledgement-options/Option4";
 import Option5 from "./helper/acknowledgement-options/Option5";
 import Option6 from "./helper/acknowledgement-options/Option6";
+import { CompareDate } from "../../../../../utils/dateController";
 
 /**
  * * This components responsible for showing daily working report to developer
  */
 
-const AcknowledgementReminderModal = ({ close, title = "Stop timer" }) => {
+const dayjs = new CompareDate();
+
+const DateFormat = (date) => {
+    const d = {
+    unFormatted: date,
+    formatted: dayjs.dayjs(date).isSame(dayjs.dayjs(), 'day') ? 'Today' : dayjs.dayjs(date).format('MMM DD, YYYY')
+    }
+
+    return d;
+};
+
+const AcknowledgementReminderModal = ({ close, title = "Stop timer", reminderDate, reminderType }) => {
     const [step, setStep] = React.useState(0);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -40,8 +52,7 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer" }) => {
             setIsSubmitting(false);
         }catch(error){
             console.log(error)
-        }
-
+        } 
     }
 
     return (
@@ -53,8 +64,8 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer" }) => {
                 >
                     {/* modal header */}
                     <div className="border-bottom pb-2 px-3 d-flex align-items-center justify-content-between">
-                        <div className="font-weight-bold f-16">{title}</div>
-                        <Button variant="tertiary" onClick={close} className="">
+                        <div className="font-weight-bold f-16">{reminderType} on <span style={{color: 'red'}}>{DateFormat(reminderDate).formatted}</span></div>
+                        <Button variant="tertiary" onClick={close}>
                             <i className="fa-solid fa-xmark" />
                         </Button>
                     </div>
@@ -62,7 +73,7 @@ const AcknowledgementReminderModal = ({ close, title = "Stop timer" }) => {
                     {/* modal body */}
                     <div className="sp1_single_task--modal-body sp1_single_task-modal-body-options p-3">
                         <div className="alert alert-warning">
-                            Your tracked time for <strong>Nov 09, 2023</strong> is <strong> 0 hours </strong>and <strong> 0
+                            Your tracked time for <strong>{DateFormat(reminderDate).formatted}</strong> is <strong> 0 hours </strong>and <strong> 0
                             minutes</strong>. Your minimum tracked hours should have been <strong> 7 hours </strong>and <strong> 0 minutes</strong>, and it is <strong> 7 hours </strong>and <strong> 0
                             minutes</strong> less.
                         </div>
