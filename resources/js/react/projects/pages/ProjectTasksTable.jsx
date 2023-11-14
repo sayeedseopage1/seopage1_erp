@@ -27,6 +27,10 @@ import TaskCreationForm from "../components/TaskCreationForm";
 import { toast } from "react-toastify";
 import EditProjectManagerGuideline from "../components/EditProjectManagerGuideline";
 import TaskAuthorization from "../components/TaskAuthorization";
+import TableColumnSetting from "../components/TableColumnSetting";
+import { projectTaskTableDefaultVisibleColumns } from "../constants";
+import { RefreshButton } from "../components/RefreshButton";
+import Loader from "../../global/Loader";
 
 const ProjectTasks = () => {
     const { tasks } = useSelector((s) => s.tasks);
@@ -57,6 +61,7 @@ const ProjectTasks = () => {
 
     const projectId = params?.projectId;
     const auth = new User(window?.Laravel?.user);
+    const [columnVisibility, setColumnVisibility] = React.useState(new Object(projectTaskTableDefaultVisibleColumns(auth, tableType.toLowerCase())));
 
     // handle table filter
     const onFilter = (query) => {
@@ -139,6 +144,11 @@ const ProjectTasks = () => {
 
     const singleTask = _.head(tasks);
 
+
+    // handle refresh button
+    const handleRefresh = () => {
+        onFilter(filter);
+    }
 
     return (
         <React.Fragment>
@@ -241,11 +251,30 @@ const ProjectTasks = () => {
                                 setStartDate={setStartDate}
                             />
 
-                            <div className="">
+                            <div>
                                 <SearchBox
                                     value={search}
                                     onChange={setSearch}
                                     className="mb-1"
+                                />
+                            </div>
+
+                            {/* refresh button */}
+                            <div>
+                                <RefreshButton onClick={handleRefresh}>
+                                    {isFetching ? 
+                                        <Loader title="" /> :
+                                        <i className="fa-solid fa-arrows-rotate"></i>
+                                    }
+                                </RefreshButton>
+                            </div>
+                            {/* column setting button */}
+                            <div>
+                                <TableColumnSetting
+                                    tableName={tableType.toLowerCase() === "tasks" ? "projectTasksTable": "projectSubTasksTable"}
+                                    columns = {tableType.toLowerCase() === "tasks" ? ProjectTableColumns : _SubTasksTableColumns}
+                                    columnVisibility={columnVisibility}
+                                    setColumnVisibility={setColumnVisibility}
                                 />
                             </div>
 
@@ -300,6 +329,8 @@ const ProjectTasks = () => {
                                     "client",
                                     "project_manager",
                                 ]}
+                                columnVisibility={columnVisibility}
+                                setColumnVisibility={setColumnVisibility}
                                 tableColumns={ProjectTableColumns}
                             />
                         ) : (

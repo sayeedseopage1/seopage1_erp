@@ -249,6 +249,17 @@ export class SingleTask {
         this.pageType = task?.page_type;
         this.pageName = task?.page_name;
         this.pageUrl = task?.page_url;
+        this.taskTypeDetails = new Object({
+            taskType: task?.task_type,
+            pageType: task?.page_type,
+            pageName: task?.page_name,
+            pageUrl: task?.page_url,
+            taskTypeOther: task?.task_type_other,
+            taskTypeName: task?.page_type_name,
+            existingDesignLink: task?.existing_design_link,
+            numberOfPages: task?.number_of_pages,
+        });
+        
         this.subtaskId = task?.subtask_id;
         this.projectManagerId = task?.project_manager_id;
         this.projectManagerAvatar = task?.project_manager_avatar;
