@@ -1937,32 +1937,14 @@ var Guideline = function Guideline(_ref) {
               })]
             })]
           })
-        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "__content",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "sp1_ck_content word-break ".concat(editorContainerClass),
             dangerouslySetInnerHTML: {
               __html: text
             }
-          }), lodash__WEBPACK_IMPORTED_MODULE_2___default().size(task === null || task === void 0 ? void 0 : task.attachments) > 0 && type === "TASK_DESCRIPTION" ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
-            className: "mt-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
-              children: "Task Attachments: "
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(FileUploader, {
-              children: lodash__WEBPACK_IMPORTED_MODULE_2___default().map(task === null || task === void 0 ? void 0 : task.attachments, function (attachment) {
-                return attachment !== null && attachment !== void 0 && attachment.pp_task_file_name ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(FileUploader.Preview, {
-                  fileName: attachment === null || attachment === void 0 ? void 0 : attachment.pp_task_file_name,
-                  downloadAble: true,
-                  deleteAble: false,
-                  downloadUrl: attachment === null || attachment === void 0 ? void 0 : attachment.pp_task_file_url,
-                  previewUrl: attachment === null || attachment === void 0 ? void 0 : attachment.pp_task_file_url,
-                  fileType: lodash__WEBPACK_IMPORTED_MODULE_2___default().includes(["png", "jpeg", "jpg", "svg", "webp", "gif"], attachment === null || attachment === void 0 ? void 0 : attachment.pp_task_file_icon) ? "images" : "others",
-                  classname: "comment_file",
-                  ext: attachment === null || attachment === void 0 ? void 0 : attachment.pp_task_file_icon
-                }, attachment === null || attachment === void 0 ? void 0 : attachment.pp_task_file_id) : null;
-              })
-            })]
-          }) : null]
+          })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: " __footer",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
