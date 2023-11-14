@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./taskAuthorization.module.css";
 import { toast } from "react-toastify";
 import Button from "../Button";
@@ -6,7 +6,7 @@ import { useCreateIndependentTaskAuthorizationConversationMutation } from "../..
 
 const QuestionAnswer = ({ data }) => {
     const [question, setQuestion] = useState("");
-    const [err, setErr] = useState(new Object());
+    const [err, setErr] = useState("");
 
     const [
         createIndependentTaskAuthorizationConversation,
@@ -14,10 +14,22 @@ const QuestionAnswer = ({ data }) => {
     ] = useCreateIndependentTaskAuthorizationConversationMutation();
 
 
+    useEffect(()=>{
+      if (!question) {
+        setErr("Question is required.");
+      }else{
+        setErr("");
+      }
+    },[question])
+
     const handleSubmission = async (e) => {
         e.preventDefault();
 
         console.log({question, data});
+        if (!question) {
+            toast.warning("Please enter your question.");
+            return ;
+        }
         
         await createIndependentTaskAuthorizationConversation({
             question,
@@ -29,6 +41,7 @@ const QuestionAnswer = ({ data }) => {
                 toast.success('Your question has been submitted successfully.');
                 // setConversations([...res.data]);
                 setQuestion('');
+                setLocalRefresh(prev=>!prev);
             }
         })
         .catch(err => console.log(err))
@@ -37,19 +50,17 @@ const QuestionAnswer = ({ data }) => {
     return (
         <div>
             <div className={styles.comment_field}>
-                <label className="task_info__label">Question:</label>
+                <label className="task_info__label">Question: <span className="text-danger">*</span>{err && (
+                    <span className="text-danger">
+                        <small>{err}</small>
+                    </span>
+                )}</label>
                 <textarea
                     rows={3}
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     placeholder="Write your question here."
                 />
-
-                {err?.comment && (
-                    <span className="text-danger">
-                        <small>{err?.comment}</small>
-                    </span>
-                )}
 
                 <div className={`${styles.button_group} mt-2`}>
                     {false ? (
@@ -61,6 +72,7 @@ const QuestionAnswer = ({ data }) => {
                             <Button
                                 variant="success"
                                 isLoading={isLoading}
+                                // disabled
                                 onClick={handleSubmission}
                             >
                                 <i className="fa-solid fa-paper-plane" />

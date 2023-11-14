@@ -140,7 +140,7 @@ const TaskAction = ({ task, status }) => {
                     </Link>
                 )} */}
 
-                {task &&  task.boardColumn.id === 2  &&
+                {task &&  task.boardColumn.id === 2 && !(_.includes([5, 6], loggedUser?.getRoleId()))  &&
                     <Link
                         to={`?modal=edit&task=${task?.id}`}
                         className="cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button"

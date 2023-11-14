@@ -21,22 +21,34 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const dayjs = new CompareDate();
     //   form data
     const [title, setTitle] = useState("");
-    const [milestone, setMilestone] = useState(null);
-    const [startDate, setStateDate] = useState(null);
+    // const [milestone, setMilestone] = useState(null);
+    const [startDate, setStartDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);
-    const [project, setProject] = useState("");
+    // const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
     const [priority, setPriority] = useState("Regular");
-    const [estimateTimeHour, setEstimateTimeHour] = useState(0);
-    const [estimateTimeMin, setEstimateTimeMin] = useState(0);
+    // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
+    // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
 
     const [formError, setFormError] = React.useState(null);
 
     const auth = new User(window?.Laravel?.user);
+
+    const handleResetForm = ()=>{
+      setTitle("");
+      setStartDate(null);
+      setDueDate(null);
+      setTaskCategory("");
+      setAssignedTo(null);
+      setDescription("");
+      setPriority("Regular");
+      setFiles([]);
+      setFormError(null);
+    }
 
     const params = useParams();
     const [postIndependentTask, { isLoading, error }] = usePostIndependentTaskMutation();
@@ -54,16 +66,16 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     // }, milestoneDataIsFetching = false;
 
     // handle change
-    React.useEffect(() => {
-        if(isOpen){
-            // getMilestoneDetails(params?.projectId).unwrap()
-            // .then(res => {
-            //     let project = _.head(res?.milestones);
-            //     setProject(project?.project_name ?? '')
-            // })
-            setProject('Project_Name')
-        }
-    }, [isOpen]);
+    // React.useEffect(() => {
+    //     if(isOpen){
+    //         // getMilestoneDetails(params?.projectId).unwrap()
+    //         // .then(res => {
+    //         //     let project = _.head(res?.milestones);
+    //         //     setProject(project?.project_name ?? '')
+    //         // })
+    //         setProject('Project_Name')
+    //     }
+    // }, [isOpen]);
 
     // handle onchange
     const handleChange = (e, setState) => {
@@ -180,10 +192,11 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             .then((res) => {
                 onSuccess();
                 close();
+                handleResetForm();
                 Swal.fire({
                     position: "center",
                     icon: "success",
-                    title: "Independent Task Created Successfully",
+                    title: "Independent task creation request submitted for authorization successfully!",
                     showConfirmButton: false,
                     timer: 2500,
                 });
@@ -367,7 +380,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                             minDate={dayjs.dayjs().toDate()}
                                             maxDate={dueDate}
                                             date={startDate}
-                                            setDate={setStateDate}
+                                            setDate={setStartDate}
                                         />
                                     </div>
                                     {formError?.startDate && (

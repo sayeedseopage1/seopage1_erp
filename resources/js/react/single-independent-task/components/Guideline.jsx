@@ -22,7 +22,7 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
   return (
     <div className='sp1_task_card--sub-card'>
        <div className={`sp1_ck_content sp1_guideline_text ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: showText}}></div>
-       {isLong ? <a href="#" onClick={handleExpend} className=''> Read full guideline </a> : ''}
+       {isLong ? <a href="#" onClick={handleExpend} className=''> Read full description </a> : ''}
 
        <Modal className="sp1_task_card--sub-card-modal" isOpen={expend}>
             <div ref={ref} className='sp1_task_card--sub-card-modal-content'>
@@ -64,6 +64,30 @@ const Guideline = ({text, editorContainerClass, workEnv}) => {
 
                 <div className='__content'>
                     <div className={`sp1_ck_content word-break ${editorContainerClass}`} dangerouslySetInnerHTML={{__html: text}} />
+                    {/* {
+                        _.size(task?.attachments) > 0 && type === "TASK_DESCRIPTION"?
+                        <div className="mt-3">
+                            <h4>Task Attachments: </h4>
+                            <FileUploader>
+                                    {_.map(task?.attachments, attachment => (
+                                        attachment?.task_file_name ?
+                                        <FileUploader.Preview
+                                            key={attachment?.task_file_id}
+                                            fileName={attachment?.task_file_name}
+                                            downloadAble={true}
+                                            deleteAble={false}
+                                            downloadUrl={attachment?.task_file_url}
+                                            previewUrl={attachment?.task_file_url}
+                                            fileType={_.includes(['png', 'jpeg', 'jpg', 'svg', 'webp', 'gif'], attachment?.task_file_icon)? 'images' : 'others'}
+                                            classname="comment_file"
+                                            ext={attachment?.task_file_icon}
+                                        /> : null
+                                    ))}
+                                </FileUploader>
+
+                        </div>
+                        : null
+                    } */}
                 </div>
 
                 <div className=' __footer'>

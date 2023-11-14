@@ -422,6 +422,23 @@ const SingleIndependentTask = () => {
                                                 </div>
                                             </div>
 
+                                            {/* TASK CATEGORY */}
+                                            <div className="sp1_st-list-item">
+                                                <div className="sp1_st-list-item-head">
+                                                    Task Category :{" "}
+                                                </div>
+                                                <div className="sp1_st-list-item-value">
+                                                    {/* <span
+                                                        className="dot-color mr-2"
+                                                        style={{
+                                                            background:
+                                                                "rgba(252, 189, 1, 1)",
+                                                        }}
+                                                    /> */}
+                                                    {task.category.name}
+                                                </div>
+                                            </div>
+
                                             {/* PRIORITY */}
                                             <div className="sp1_st-list-item">
                                                 <div className="sp1_st-list-item-head">

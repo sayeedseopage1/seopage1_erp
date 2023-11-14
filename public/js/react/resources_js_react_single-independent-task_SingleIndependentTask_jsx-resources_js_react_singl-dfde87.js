@@ -976,6 +976,15 @@ var SingleIndependentTask = function SingleIndependentTask() {
                     className: "sp1_st-list-item",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
                       className: "sp1_st-list-item-head",
+                      children: ["Task Category :", " "]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsx)("div", {
+                      className: "sp1_st-list-item-value",
+                      children: task.category.name
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
+                    className: "sp1_st-list-item",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
+                      className: "sp1_st-list-item-head",
                       children: ["Priority :", " "]
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_30__.jsxs)("div", {
                       className: "sp1_st-list-item-value",
@@ -1820,7 +1829,7 @@ var Guideline = function Guideline(_ref) {
       href: "#",
       onClick: handleExpend,
       className: "",
-      children: " Read full guideline "
+      children: " Read full description "
     }) : '', /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
       className: "sp1_task_card--sub-card-modal",
       isOpen: expend,
@@ -11502,14 +11511,7 @@ var Genarel = function Genarel(_ref) {
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsxs)("div", {
       className: "col-12 border-top py-4 mt-4",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        expendable: false,
-        title: "General Guidelines",
-        children: isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_loader_ArticleLoader__WEBPACK_IMPORTED_MODULE_6__["default"], {}) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Guideline__WEBPACK_IMPORTED_MODULE_3__["default"], {
-          text: task === null || task === void 0 ? void 0 : task.guidelines,
-          editorContainerClass: "modal-guideline-editor-text"
-        })
-      }), _.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      children: [_.size(task === null || task === void 0 ? void 0 : task.revisions) > 0 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(_components_Accordion__WEBPACK_IMPORTED_MODULE_2__["default"], {
         title: (_$last = _.last(task === null || task === void 0 ? void 0 : task.revisions)) === null || _$last === void 0 ? void 0 : _$last.revisionStatus,
         headingClass: "d-flex align-items-center justify-content-between",
         headingStyle: {
@@ -15811,7 +15813,7 @@ var TaskAction = function TaskAction(_ref) {
       },
       children: [lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 4, 1], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && !(task !== null && task !== void 0 && task.isSubtask) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_SubtaskCreationControl__WEBPACK_IMPORTED_MODULE_13__["default"], {}), lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([6, 5, 9, 10], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsx)(_report_Report__WEBPACK_IMPORTED_MODULE_8__["default"], {
         task: task
-      }), task && task.boardColumn.id === 2 && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Link, {
+      }), task && task.boardColumn.id === 2 && !lodash__WEBPACK_IMPORTED_MODULE_10___default().includes([5, 6], loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getRoleId()) && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_14__.jsxs)(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Link, {
         to: "?modal=edit&task=".concat(task === null || task === void 0 ? void 0 : task.id),
         className: "cnx__btn cnx__btn_sm cnx__btn_primary sp1_task-edit-button",
         style: {

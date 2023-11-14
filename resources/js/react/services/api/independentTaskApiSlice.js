@@ -82,9 +82,11 @@ export const {
   useGetIndependentTaskQuery,
   useLazyGetIndependentTaskQuery,
   useGetIndependentAuthorizeTaskQuery,
+  useLazyGetIndependentAuthorizeTaskQuery,
   usePostIndependentTaskMutation,
   usePutIndependentTaskMutation,
   useGetIndependentTaskAuthorizationConversationsQuery,
+  useLazyGetIndependentTaskAuthorizationConversationsQuery,
   useCreateIndependentTaskAuthorizationConversationMutation,
   useUpdateIndependentTaskAuthorizationConversationMutation,
 } = independentTaskApiSlice;

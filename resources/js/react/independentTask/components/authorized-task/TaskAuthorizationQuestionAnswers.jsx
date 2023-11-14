@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useUpdateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
 import Loader from "../../../global/Loader";
 
-const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading }) => {
+const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLocalRefresh }) => {
     const [conversations, setConversations] = useState([]);
     const [err, setErr] = useState(null);
 
@@ -60,6 +60,7 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading }) => {
                 .then(res => {
                     toast.success('Your answer has been submitted successfully.');
                     console.log(res);
+                    setLocalRefresh(prev=>!prev);
                     setConversations(res.data);
                 })
         }
