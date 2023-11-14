@@ -1,14 +1,13 @@
-import React, {useState, useMemo, useEffect} from 'react'
-import {Outlet} from 'react-router-dom';
-import DataTable from '../global/data-table/table';
-import { revisionColumns } from './RevisionColumns';
-import { fakeData } from './faker';
-import styles from './styles.module.css';
-import JqueryDateRangePicker from './JqueryDateRangePicker';
-import { useLazyGetRevisionCalculatorDataQuery } from '../services/api/revisionCalculatorApiSlice';
-import { Flex } from '../global/styled-component/Flex'
-import { RefreshButton } from './RefreshButton';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import Loader from '../global/Loader';
+import DataTable from '../global/data-table/table';
+import { Flex } from '../global/styled-component/Flex';
+import { useLazyGetRevisionCalculatorDataQuery } from '../services/api/revisionCalculatorApiSlice';
+import JqueryDateRangePicker from './JqueryDateRangePicker';
+import { RefreshButton } from './RefreshButton';
+import { revisionColumns } from './RevisionColumns';
+import styles from './styles.module.css';
 
 // const data = fakeData(300);
 
