@@ -1,21 +1,18 @@
 import React, { useState } from 'react';
 
-import { paginate } from '../../utils/paginate';
 import _, { groupBy, orderBy } from 'lodash';
-import Tabbar from '../components/Tabbar';
+import { paginate } from '../../utils/paginate';
 import DailySubmissionWiseTable from '../components/DailySubmission/DailySubmissionWiseTable';
+import Tabbar from '../components/Tabbar';
 
-import DailySubmissionTableFilter from '../components/DailySubmission/DailySubmissionTableFilter';
-import { convertTime } from '../../utils/converTime';
+import Loader from '../../global/Loader';
+import { useLazyGetAllDailySubmissionQuery } from '../../services/api/dailySubmissionApiSlice';
 import { DailySubmissionTableColumn } from '../components/DailySubmission/DailySubmissionTableColumn';
-import get_submission_table_data from '../components/DailySubmission/fake_data/get_submission_table_data';
-import { useEffect } from 'react';
+import DailySubmissionTableFilter from '../components/DailySubmission/DailySubmissionTableFilter';
+import { RefreshButton } from '../components/RefreshButton';
+import '../components/data-table.css';
 import '../styles/time-log-history.css';
 import '../styles/time-log-table.css';
-import '../components/data-table.css';
-import { useLazyGetAllDailySubmissionQuery } from '../../services/api/dailySubmissionApiSlice';
-import { RefreshButton } from '../components/RefreshButton';
-import Loader from '../../global/Loader';
 
 const DailySubmission_Page = () => {
     const [data, setData] = useState([]);
@@ -24,7 +21,7 @@ const DailySubmission_Page = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
     const [trackedTime, setTractedTime] = useState(0);
-    const [getAllDailySubmission,{isLoading}] = useLazyGetAllDailySubmissionQuery();
+    const [getAllDailySubmission,{isLoading, isFetching}] = useLazyGetAllDailySubmissionQuery();
     const [filter, setFilter] = useState(null);
 
 
@@ -60,7 +57,7 @@ const DailySubmission_Page = () => {
     }
 
 
-    // data sort handle 
+    // data sort handle
     const handleSorting = (sort) => {
         // console.log('handleSorting',{sort});
         const sortData = orderBy(data, ...sort);
@@ -92,9 +89,9 @@ const DailySubmission_Page = () => {
             <DailySubmissionTableFilter onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
-                    <Tabbar/> 
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
-                        {isLoading ?
+                    <Tabbar/>
+                    <RefreshButton onClick={handleRefresh} isLoading={isFetching} >
+                        {isFetching ?
                             <Loader title="Refreshing..."  borderRightColor="white" />
                         : 'Refresh'}
                     </RefreshButton>
@@ -116,7 +113,7 @@ const DailySubmission_Page = () => {
                     handlePerPageData={handlePerPageData}
                     currentPage={currentPage}
                     totalEntry={data.length}
-                    isLoading={isLoading}
+                    isLoading={isFetching}
                 />
             </div>
         </div>

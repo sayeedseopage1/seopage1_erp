@@ -8240,10 +8240,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
-/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -8270,7 +8270,7 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     countDown = _React$useState4[0],
     setCountDown = _React$useState4[1];
-  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(window.Laravel.user);
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User(window.Laravel.user);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     var timeOutId;
     var timeIntervelId;
@@ -8294,7 +8294,7 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
       clearInterval(timeIntervelId);
     };
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
     isOpen: isOpen,
     className: "subtask-timer-confirmation--modal",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
@@ -8306,6 +8306,9 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
           children: [" ", "Do you understand the following things?", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("ol", {
           type: "A",
+          style: {
+            marginLeft: '32px'
+          },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
             children: [" ", "Your team's job is not to decide what the look and feel of a website will be based on a few reference websites.", " "]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {

@@ -564,17 +564,24 @@ class DashboardController extends AccountBaseController
 
         $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
         $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        $userDailyTaskReport = DeveloperStopTimer::where('user_id',$userDailyTaskSubmission->user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        // dd($userDailyTaskReport);
+        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
 
-        $currentDateTime = Carbon::now();
-        $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
-        $current_day = Carbon::now();
-        // dd($current_day->dayOfWeek);
-        $dayOfWeek = $current_day->dayOfWeek;
-        if ($dayOfWeek === Carbon::SATURDAY) {
-            // It's Monday
-            $desiredTime = Carbon::createFromTime(13, 00, 0);
+
+        $createdAt = Carbon::parse($userClockIn->created_at);
+        $logStatus = true;
+
+        $minimum_log_hours = 0;
+
+        if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+            $minimum_log_hours = 240;
+            if($userTotalMin < 240){
+                $logStatus = false;
+            }
+        } else {
+            $minimum_log_hours = 420;
+            if($userTotalMin < 420){
+                $logStatus = false;
+            }
         }
 
         return response()->json([
@@ -588,8 +595,13 @@ class DashboardController extends AccountBaseController
                     'data' => $userDailyTaskSubmission,
                 ],
                 'hours_log_report' => [
-                    'hours_log_report_status' => $userDailyTaskReport ? true : false,
-                    'data' => $userDailyTaskReport,
+                    'hours_log_report_status' => $logStatus,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                        'complete_hours'=> $userTotalMin,
+                        'target_minimum_log_hours'=> $minimum_log_hours,
+                        'incomplete_hours'=> $minimum_log_hours - $userTotalMin,
+                    ]
                 ]
             ],
         ]);

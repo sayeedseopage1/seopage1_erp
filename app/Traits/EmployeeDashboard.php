@@ -551,7 +551,7 @@ public function clockInModal()
 
 public function storeClockIn(ClockInRequest $request)
 {
-
+    // dd($request->all());
     $now = now();
 // dd($now);
 
