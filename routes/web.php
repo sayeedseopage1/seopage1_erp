@@ -359,6 +359,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
+   
+    Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
+    Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
     Route::get('check-in-check-out-status', [DashboardController::class, 'clockInStatus']);
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
