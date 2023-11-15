@@ -526,7 +526,6 @@ class TimelogReportController extends AccountBaseController
     }
     public function timelog_history(Request $request)
     {
-        dd($request->all());
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page_row', 10);
         $offset = ($page - 1) * $perPage;
@@ -583,35 +582,52 @@ class TimelogReportController extends AccountBaseController
         } else {
             $filteredData = $data;
         }
+        if(!is_null($startDate) && !is_null($endDate) &&  $startDate == $endDate)
+        {
+           
+
+            $data = $data->whereDate('project_time_logs.start_time', '=', Carbon::parse($startDate)->format('Y-m-d'));
+
+        }else 
+        {
+            if (!is_null($startDate)) {
+                $data = $data->whereDate('project_time_logs.start_time', '>=', Carbon::parse($startDate)->format('Y-m-d'));
+            }
+            if (!is_null($endDate)) {
+                $data = $data->whereDate('project_time_logs.end_time', '<=', Carbon::parse($endDate)->format('Y-m-d'));
+            }
+        }
         
         $data = $filteredData->groupBy('project_time_logs.user_id')->get();
        // dd($data);
+      
        
        
         
         
         // Calculate the ideal tracked hours
-        
-    //    $currentDate = $startDate->copy();
+        $startDate = Carbon::createFromFormat('Y-m-d', $startDate);
+        $endDate = Carbon::createFromFormat('Y-m-d', $endDate);
+        $currentDate = $startDate->copy();
         $idealTrackedMinutes = 0;
         
-        // while ($currentDate->lte($endDate)) {
-        //     if ($currentDate->isWeekday()) {
-        //         // Monday to Friday (weekdays)
-        //         $idealTrackedMinutes += (7 * 60 ); // Convert 7 hours 15 minutes to minutes
-        //     } elseif ($currentDate->isSaturday()) {
-        //         // Saturday
-        //         $idealTrackedMinutes += (4 * 60 + 30); // Convert 4 hours 30 minutes to minutes
-        //     }
-        //     // Sunday is skipped as it's 0 hours
+        while ($currentDate->lte($endDate)) {
+            if ($currentDate->isWeekday()) {
+                // Monday to Friday (weekdays)
+                $idealTrackedMinutes += (7 * 60 ); // Convert 7 hours 15 minutes to minutes
+            } elseif ($currentDate->isSaturday()) {
+                // Saturday
+                $idealTrackedMinutes += (4 * 60 + 30); // Convert 4 hours 30 minutes to minutes
+            }
+            // Sunday is skipped as it's 0 hours
         
-        //     // Move to the next day
-        //     $currentDate->addDay();
-        // }
+            // Move to the next day
+            $currentDate->addDay();
+        }
        
         
-        // // Convert the result into a collection
-        // $data = collect($data);
+        // Convert the result into a collection
+        $data = collect($data);
         
         
         
@@ -619,12 +635,12 @@ class TimelogReportController extends AccountBaseController
        // dd($data);
         
         // Calculate the `missed_hours` and `missed_hours_count` attributes for each item in $data
-        // $data = $data->map(function ($item) use ($idealTrackedMinutes) {
-        //     $item->ideal_minutes = $idealTrackedMinutes;
-        //     $item->missed_hours = max($idealTrackedMinutes - $item->total_minutes, 0); 
-        //     return $item;
+        $data = $data->map(function ($item) use ($idealTrackedMinutes) {
+            $item->ideal_minutes = $idealTrackedMinutes;
+            $item->missed_hours = max($idealTrackedMinutes - $item->total_minutes, 0); 
+            return $item;
           
-        // });
+        });
      dd($data);
     foreach ($data as $item) {
         if($item->end_time == null)
