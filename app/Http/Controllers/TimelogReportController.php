@@ -90,6 +90,7 @@ class TimelogReportController extends AccountBaseController
 
         if ($type == 'employees') {
             $data = DB::table('project_time_logs')->select([
+                'project_time_logs.id as log_id',
                 'employee.id as employee_id',
                 'employee.name as employee_name',
                 'employee.image as employee_image',
@@ -131,9 +132,9 @@ class TimelogReportController extends AccountBaseController
 
 
            
-                ->whereIn('project_time_logs.user_id', $id_array);
+                ->whereIn('project_time_logs.user_id', $id_array)
              //   ->where('total_minutes', '>', 0)
-              //  ->groupBy('project_time_logs.user_id', 'employee.id');
+                ->groupBy('project_time_logs.user_id', 'employee.id');
 
             if (is_null($project_id)) {
                 $data = $data->groupBy('project_time_logs.project_id');
@@ -204,22 +205,29 @@ class TimelogReportController extends AccountBaseController
           ->get();
         }
         
-    //   /  dd($data);
-        foreach ($data as $item) {
-            if($item->time_log_end_time == null)
-            {
-  
-                $current_time= Carbon::now();
-                $minutesDifference = $current_time->diffInMinutes($item->time_log_start_time);
-          
-            
-                $item->total_minutes = $item->total_minutes + $minutesDifference;
-                $item->number_of_session = $item->number_of_session + 1;
-           
+      //dd($data);
+    
+      foreach ($data as $item) {
+        $timer= ProjectTimeLog::where('project_id',$item->project_id)->where('user_id',$item->employee_id)
+        ->where('start_time','!=', null)->where('end_time',null)
+        ->orderBy('id','desc')->first();
+       
+        
+         if($timer != null )
+         {
+           //  dd($data);
 
-            }
-           
-        }
+             $current_time= Carbon::now();
+             $minutesDifference = $current_time->diffInMinutes($item->time_log_start_time);
+       
+         
+             $item->total_minutes = $item->total_minutes + $minutesDifference;
+             $item->number_of_session = $item->number_of_session + 1;
+        
+
+         }
+        
+     }
         //timelog end
 
 
@@ -359,22 +367,25 @@ class TimelogReportController extends AccountBaseController
            
         //   }
         }
-       // dd($data);
-       foreach ($data as $item) {
-        if($item->end_time == null)
-        {
-
-            $current_time= Carbon::now();
-            $minutesDifference = $current_time->diffInMinutes($item->start_time);
-      
-        
-            $item->total_minutes = $item->total_minutes + $minutesDifference;
-            $item->number_of_session = $item->number_of_session + 1;
        
-
-        }
-       
-    }
+        foreach ($data as $item) {
+            $timer= ProjectTimeLog::where('project_id',$item->project_id)->where('user_id',$item->employee_id)->orderBy('id','desc')->first();
+           // dd($timer);
+             if($timer->end_time == null)
+             {
+               //  dd($data);
+   
+                 $current_time= Carbon::now();
+                 $minutesDifference = $current_time->diffInMinutes($item->start_time);
+           
+             
+                 $item->total_minutes = $item->total_minutes + $minutesDifference;
+                 $item->number_of_session = $item->number_of_session + 1;
+            
+ 
+             }
+            
+         }
     //    / dd($data);
           
         } 
@@ -487,10 +498,14 @@ class TimelogReportController extends AccountBaseController
            else {
             $data = $data->where('project_time_logs.user_id',Auth::id())->get();
            }
-         //  dd($data);
+         
+         
            foreach ($data as $item) {
-            if($item->end_time == null)
+           $timer= ProjectTimeLog::where('project_id',$item->project_id)->where('user_id',$item->employee_id)->orderBy('id','desc')->first();
+          // dd($timer);
+            if($timer->end_time == null)
             {
+              //  dd($data);
   
                 $current_time= Carbon::now();
                 $minutesDifference = $current_time->diffInMinutes($item->start_time);
@@ -635,19 +650,31 @@ class TimelogReportController extends AccountBaseController
         
         
         $data->ideal_tracked_minutes = $idealTrackedMinutes;
+    //    / dd($data);
         foreach ($data as $item) {
-            if($item->end_time == null)
-            {
-    
-                $current_time= Carbon::now();
-                $minutesDifference = $current_time->diffInMinutes($item->start_time);
-          
+            $timer= ProjectTimeLog::where('user_id',$item->employee_id)
+            ->where('start_time','!=', null)->where('end_time',null)
+            ->orderBy('id','desc')->first();
             
-                $item->total_minutes = $item->total_minutes + $minutesDifference;
-              //  $item->number_of_session = $item->number_of_session + 1;
            
+            
+             if($timer != null )
+             {
+               //  dd($data);
     
-            }
+                 $current_time= Carbon::now();
+                 $minutesDifference = $current_time->diffInMinutes($timer->start_time);
+                // / dd($minutesDifference);
+           
+             
+                 $item->total_minutes = $item->total_minutes + $minutesDifference;
+                //  $item->number_of_session = $item->number_of_session + 1;
+            
+    
+             }
+            
+         }
+        
        // dd($data);
         
         // Calculate the `missed_hours` and `missed_hours_count` attributes for each item in $data
@@ -660,7 +687,7 @@ class TimelogReportController extends AccountBaseController
     // dd($data);
    
        
-    }
+    
     
        
         //$data->missed_hours_count = $missedNumber;
