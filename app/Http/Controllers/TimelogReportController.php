@@ -365,7 +365,7 @@ class TimelogReportController extends AccountBaseController
                 ->first();
                 $current_time= Carbon::now();
                 $minutesDifference = $current_time->diffInMinutes($total_minutes_progress->start_time);
-            
+            dd($minutesDifference);
             if ($total_minutes_progress) {
                 $item->total_minutes = $item->total_minutes + $minutesDifference;
             } else {
