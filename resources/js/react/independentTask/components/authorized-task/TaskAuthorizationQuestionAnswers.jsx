@@ -9,7 +9,11 @@ import { useState } from "react";
 import { useUpdateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
 import Loader from "../../../global/Loader";
 
-const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLocalRefresh }) => {
+const TaskAuthorizationQuestionAnswers = ({
+    data,
+    isConversationLoading,
+    refresh,
+}) => {
     const [conversations, setConversations] = useState([]);
     const [err, setErr] = useState(null);
 
@@ -19,14 +23,12 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLoca
     useEffect(() => {
         // console.log({"taskAuth:L19":data});
         setConversations(data);
-    }, [data])
+    }, [data]);
 
     // console.log({isConversationLoading});
 
-    const [
-        updateIndependentTaskAuthorizationConversation,
-        { isLoading }
-    ] = useUpdateIndependentTaskAuthorizationConversationMutation();
+    const [updateIndependentTaskAuthorizationConversation, { isLoading }] =
+        useUpdateIndependentTaskAuthorizationConversationMutation();
 
     const updateConversation = (e, prevData) => {
         const shadow = _.map(conversations, (c) => {
@@ -38,18 +40,18 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLoca
         // updateConversations(shadow);
     };
 
-
     const handleSubmission = async (e) => {
         e.preventDefault();
         let error = new Object();
         let count = 0;
 
-        _.forEach(conversations, c => {
+        _.forEach(conversations, (c) => {
             if (!c.answer) {
-                error[c.id] = "Please answer the above question, as your response is essential."
+                error[c.id] =
+                    "Please answer the above question, as your response is essential.";
                 count++;
             }
-        })
+        });
         // console.log({conversations});
 
         setErr(error ?? null);
@@ -57,17 +59,20 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLoca
         if (count === 0) {
             await updateIndependentTaskAuthorizationConversation(conversations)
                 .unwrap()
-                .then(res => {
-                    toast.success('Your answer has been submitted successfully.');
+                .then((res) => {
+                    toast.success(
+                        "Your answer has been submitted successfully."
+                    );
                     console.log(res);
-                    setLocalRefresh(prev=>!prev);
+                    refresh();
                     setConversations(res.data);
-                })
+                });
         }
+    };
 
-    }
-
-    const countNotAnsweredQuestion = _.size(_.filter(conversations, c => !c.replied_by));
+    const countNotAnsweredQuestion = _.size(
+        _.filter(conversations, (c) => !c.replied_by)
+    );
 
     if (!conversations?.length) return null;
 
@@ -84,25 +89,77 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLoca
                     <div
                         className={styles.ques_ans_wrapper}
                         key={conversation.id}
+                        style={{
+                            backgroundColor: "#F2F4F7",
+                            padding: "3px",
+                            borderRadius: "3px",
+                        }}
                     >
                         <div className={styles.ques}>
                             <span>
-                                Q{index + 1}. {conversation.question}
+                                <span
+                                    style={{
+                                        fontWeight: "bold",
+                                        color: "black",
+                                    }}
+                                >
+                                    Q{index + 1}.{" "}
+                                </span>
+                                {conversation.question}
                                 <span className={styles.ques_by}>
                                     -by
-                                    <a href={`/account/employees/${conversation?.created_by_id}`}><strong>{" " + conversation.created_by_name + " "}</strong></a>
-                                    (<span>{dayjs(conversation.created_at).format('MMM DD, YYYY hh:mm A')}</span>)
+                                    <a
+                                        href={`/account/employees/${conversation?.created_by_id}`}
+                                    >
+                                        <strong>
+                                            {" " +
+                                                conversation.created_by_name +
+                                                " "}
+                                        </strong>
+                                    </a>
+                                    (
+                                    <span>
+                                        {dayjs(conversation.created_at).format(
+                                            "MMM DD, YYYY hh:mm A"
+                                        )}
+                                    </span>
+                                    )
                                 </span>
                             </span>
                         </div>
-                        <div className={styles.ans}>
+                        <div style={{ borderBottom: "dashed 1px #d1d1d1" }} />
+                        <div className={styles.ans} style={{paddingLeft:'0'}}>
                             {conversation.replied_by ? (
                                 <>
-                                    <p>- {conversation.answer}</p>
+                                    <p>
+                                        <span
+                                            style={{
+                                                fontWeight: "bold",
+                                                color: "black",
+                                            }}
+                                        >
+                                            Answer :
+                                        </span>{" "}
+                                        {conversation.answer}
+                                    </p>
                                     <span className={styles.ques_by}>
                                         -by
-                                        <a href={`/account/employees/${conversation?.replied_by}`}><strong>{" " + conversation.replied_by_name + " "}</strong></a>
-                                        (<span>{dayjs(conversation.updated_at).format('MMM DD, YYYY hh:mm A')}</span>)
+                                        <a
+                                            href={`/account/employees/${conversation?.replied_by}`}
+                                        >
+                                            <strong>
+                                                {" " +
+                                                    conversation.replied_by_name +
+                                                    " "}
+                                            </strong>
+                                        </a>
+                                        (
+                                        <span>
+                                            {dayjs(
+                                                conversation.updated_at
+                                            ).format("MMM DD, YYYY hh:mm A")}
+                                        </span>
+                                        )
                                     </span>
                                 </>
                             ) : auth ? (
@@ -120,17 +177,20 @@ const TaskAuthorizationQuestionAnswers = ({ data, isConversationLoading, setLoca
                 {/* <div className="d-flex my-3 justify-content-center">
                     {isConversationLoading && <Loader title="Loading..." />}
                 </div> */}
-                {
-                    countNotAnsweredQuestion && !auth ?
-                        <div className={styles.comment_field}>
-                            <div className={styles.button_group}>
-                                <Button isLoading={isLoading} variant="success" onClick={handleSubmission}>
-                                    <i className="fa-solid fa-paper-plane" />
-                                    Submit Answers
-                                </Button>
-                            </div>
-                        </div> : null
-                }
+                {countNotAnsweredQuestion && !auth ? (
+                    <div className={styles.comment_field}>
+                        <div className={styles.button_group}>
+                            <Button
+                                isLoading={isLoading}
+                                variant="success"
+                                onClick={handleSubmission}
+                            >
+                                <i className="fa-solid fa-paper-plane" />
+                                Submit Answers
+                            </Button>
+                        </div>
+                    </div>
+                ) : null}
                 {/* end item */}
             </div>
         </div>
@@ -145,14 +205,13 @@ const Answer = ({ conversation, updateConversation, error }) => {
             <label className="task_info__label mt-2">Answer:</label>
             <textarea
                 rows={3}
+                style={{ overflowY: "auto" }}
                 value={conversation.answer || ""}
                 onChange={(e) => updateConversation(e, conversation)}
                 placeholder="Write your answer here."
             />
             {error && error[conversation.id] && (
-                <span className="text-danger">
-                    {error[conversation.id]}
-                </span>
+                <span className="text-danger">{error[conversation.id]}</span>
             )}
         </div>
     );

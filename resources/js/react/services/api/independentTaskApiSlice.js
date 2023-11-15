@@ -41,7 +41,7 @@ const independentTaskApiSlice = apiSlice.injectEndpoints({
     // get conversations
     getIndependentTaskAuthorizationConversations: builder.query({
       query: (id) => `/account/independent-task-conversations/${id}`,
-      providesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS"]
+      // providesTags: ["IDNEDPENDENT_TASK_AUTHORIZATION_CONVERSATIONS"]
     }),
 
     // create independent task conversation

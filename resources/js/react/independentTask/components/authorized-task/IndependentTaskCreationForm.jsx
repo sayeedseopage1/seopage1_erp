@@ -16,6 +16,7 @@ import AssginedToSelection from "./AssignedToSelection";
 import { usePostIndependentTaskMutation } from "../../../services/api/independentTaskApiSlice";
 import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import Input from "../form/Input";
+import validator from "validator";
 
 const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const dayjs = new CompareDate();
@@ -24,12 +25,17 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     // const [milestone, setMilestone] = useState(null);
     const [startDate, setStartDate] = useState(null);
     const [dueDate, setDueDate] = useState(null);
-    // const [project, setProject] = useState("");
     const [taskCategory, setTaskCategory] = useState("");
     const [assignedTo, setAssignedTo] = useState(null);
     const [description, setDescription] = useState("");
     const [status, setStatus] = useState("");
     const [priority, setPriority] = useState("Regular");
+
+    const [loginUrl, setLoginUrl] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [refPage, setRefPage] = useState("");
+    
     // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
@@ -38,26 +44,25 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
     const auth = new User(window?.Laravel?.user);
 
-    const handleResetForm = ()=>{
-      setTitle("");
-      setStartDate(null);
-      setDueDate(null);
-      setTaskCategory("");
-      setAssignedTo(null);
-      setDescription("");
-      setPriority("Regular");
-      setFiles([]);
-      setFormError(null);
-    }
+    const handleResetForm = () => {
+        setTitle("");
+        setStartDate(null);
+        setDueDate(null);
+        setTaskCategory("");
+        setAssignedTo(null);
+        setDescription("");
+        setPriority("Regular");
+        setFiles([]);
+        setFormError(null);
+    };
 
     const params = useParams();
-    const [postIndependentTask, { isLoading, error }] = usePostIndependentTaskMutation();
+    const [postIndependentTask, { isLoading, error }] =
+        usePostIndependentTaskMutation();
 
     // const required_error = error?.status === 422 ? error?.data : null;
 
     // const [getMilestoneDetails, {data:projectInfo ,isFetching: milestoneDataIsFetching}] = useLazyGetMilestoneDetailsQuery();
-
-
 
     // // test variable
     // const projectInfo = {
@@ -89,12 +94,11 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         let err = new Object();
         let errCount = 0;
 
-        if(title === ''){
-            err.title = "This field is required!",
-            errCount++;
+        if (title === "") {
+            (err.title = "This field is required!"), errCount++;
         }
 
-        if(taskCategory === ''){
+        if (taskCategory === "") {
             err.taskCategory = "Select a category";
             errCount++;
         }
@@ -104,67 +108,84 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         //     errCount++;
         // }
 
-        if(!startDate){
+        if (!startDate) {
             err.startDate = "Start date is required";
             errCount++;
         }
 
-        if(!dueDate){
-            err.dueDate = "Due date is required",
-            errCount++;
+        if (!dueDate) {
+            (err.dueDate = "Due date is required"), errCount++;
         }
 
-        if(!assignedTo?.id){
+        if (!assignedTo?.id) {
             err.assignedTo = "Select a user.";
             errCount++;
         }
 
-        if(description === ''){
-            err.description = 'Write a Description';
+        if (description === "") {
+            err.description = "Write a Description";
             errCount++;
         }
 
-        // if(Number(estimateTimeHour) < 0 || estimateTimeMin < 0){
-        //     err.estimateError = "Estimate time not less than 0";
-        //     errCount++;
-        // }
+        if (!validator.isURL(loginUrl)) {
+            err.loginUrl = "Enter a valid URL";
+            errCount++;
+        }
 
-        // if((Number(estimateTimeHour) + Number(estimateTimeMin))  > Number(projectInfo?.minutes_left)){
-        //     err.estimateError = "Estimate time not greater than " + projectInfo?.minutes_left;
-        //     errCount++;
-        // }
+        if (!username) {
+            err.username = "Enter a username";
+            errCount++;
+        }
 
+        if (!password) {
+            err.password = "Enter a password";
+            errCount++;
+        }
+
+        if (refPage && !validator.isURL(refPage)) {
+            err.refPage = "Enter a valid reference page URL";
+            errCount++;
+        }
 
         setFormError(err);
         return !errCount;
-
-    }
-
+    };
 
     // handle sumition
     const handleSubmit = (e) => {
         e.preventDefault();
-        const _startDate = startDate ? dayjs.dayjs(startDate).format("DD-MM-YYYY") : '';
-        const _dueDate = dueDate ? dayjs.dayjs(dueDate).format("DD-MM-YYYY") : '';
+        const _startDate = startDate
+            ? dayjs.dayjs(startDate).format("DD-MM-YYYY")
+            : "";
+        const _dueDate = dueDate
+            ? dayjs.dayjs(dueDate).format("DD-MM-YYYY")
+            : "";
 
         const fd = new FormData();
-        fd.append('heading', title ?? '');
-        fd.append('description', description ?? '');
-        fd.append("start_date", _startDate ?? '');
-        fd.append("due_date", _dueDate ?? '');
+        fd.append("heading", title ?? "");
+        fd.append("description", description ?? "");
+        fd.append("start_date", _startDate ?? "");
+        fd.append("due_date", _dueDate ?? "");
         // fd.append("project_id", params?.projectId ?? '');
-        fd.append("category_id", taskCategory?.id ?? '');
+        fd.append("category_id", taskCategory?.id ?? "");
         fd.append("priority", _.lowerCase(priority));
         fd.append("board_column_id", 2);
+
+        // newly added field and data 
+        fd.append("login_url",loginUrl ?? "");
+        fd.append("user_name",username ?? "");
+        fd.append("frontend_password",password ?? "");
+        fd.append("reference_site",refPage ?? "");
+
+        
         // fd.append("estimate_hours", estimateTimeHour ?? 0);
         // fd.append("estimate_minutes", estimateTimeMin ?? 0);
         // fd.append("deliverable_id", milestone?.deliverable_type ?? '');
         // fd.append("milestone_id", milestone?.id ?? '');
-        fd.append("user_id", assignedTo?.id ?? '');
-        fd.append("id",`U${window.Laravel.user.id}T${Date.now()}`);
-        fd.append("isIndependent",1);
+        fd.append("user_id", assignedTo?.id ?? "");
+        fd.append("id", `U${window.Laravel.user.id}T${Date.now()}`);
+        fd.append("isIndependent", 1);
         // fd.append("_method", "POST");
-
 
         Array.from(files).forEach((file) => {
             fd.append("file[]", file);
@@ -177,41 +198,40 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                 .getAttribute("content")
         );
 
-
         const result = {};
 
         for (const pair of fd.entries()) {
-          result[pair[0]] = pair[1];
+            result[pair[0]] = pair[1];
         }
 
         console.log(result);
 
-        if(isValid()){
+        if (isValid()) {
             postIndependentTask(fd)
-            .unwrap()
-            .then((res) => {
-                onSuccess();
-                close();
-                handleResetForm();
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Independent task creation request submitted for authorization successfully!",
-                    showConfirmButton: false,
-                    timer: 2500,
-                });
-            })
-            .catch((err) => {
-                if (err?.status === 422) {
+                .unwrap()
+                .then((res) => {
+                    onSuccess();
+                    close();
+                    handleResetForm();
                     Swal.fire({
                         position: "center",
-                        icon: "error",
-                        title: "Please fillup all required fields",
-                        showConfirmButton: true,
+                        icon: "success",
+                        title: "Independent task creation request submitted for authorization successfully!",
+                        showConfirmButton: false,
+                        timer: 2500,
                     });
-                }
-            });
-        }else {
+                })
+                .catch((err) => {
+                    if (err?.status === 422) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Please fillup all required fields",
+                            showConfirmButton: true,
+                        });
+                    }
+                });
+        } else {
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -267,7 +287,6 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                     {/* body */}
                     <div className="sp1_modal-body sp1_task_create_modal_body">
                         <div className="sp1-subtask-form --form sp1_task_create_modal_body_form row">
-
                             {/* Task Title */}
                             <div className="col-12 col-md-6">
                                 <Input
@@ -290,29 +309,12 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     onSelect={setTaskCategory}
                                     taskId={params?.projectId}
                                 />
-                                {formError?.taskCategory  && (
+                                {formError?.taskCategory && (
                                     <div style={{ color: "red" }}>
-                                        {formError?.taskCategory }
+                                        {formError?.taskCategory}
                                     </div>
                                 )}
                             </div>
-
-                            {/* Project Name */}
-                            {/* <div className="col-12 col-md-6">
-                                <div className="form-group my-3">
-                                    <label
-                                        className={`f-14 text-dark-gray mb-1`}
-                                        data-label="true"
-                                    >
-                                        Project <sup>*</sup>
-                                    </label>
-                                    <input
-                                        className={`form-control height-35 f-14`}
-                                        readOnly
-                                        defaultValue={project}
-                                    />
-                                </div>
-                            </div> */}
 
                             {/* Project Milestone Selection Menu */}
                             {/* <div className="col-12 col-md-6">
@@ -403,9 +405,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                                 .format("DD-MM-YYYY")}`}
                                             minDate={
                                                 startDate ||
-                                                dayjs
-                                                    .dayjs()
-                                                    .toDate()
+                                                dayjs.dayjs().toDate()
                                             }
                                             date={dueDate}
                                             setDate={setDueDate}
@@ -418,7 +418,6 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     )}
                                 </div>
                             </div>
-
 
                             {/* Project Deliverable */}
                             {/* <div className="col-12 col-md-6">
@@ -510,10 +509,92 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     }
                                 </div>
                             </div> */}
+                            <section
+                                className="d-flex col-12"
+                                style={{
+                                    // borderBottom: "dashed 1px #d1d1d1",
+                                    // borderTop: "dashed 1px #d1d1d1",
+                                    padding: "0",
+                                    // backgroundColor:'#F2F4F7',
+                                    flexWrap:'wrap',
+                                }}
+                            >
+                                {/* Login url */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="login-url"
+                                        label="Login URL"
+                                        type="text"
+                                        placeholder="Enter the login url"
+                                        name="login-url"
+                                        required={true}
+                                        value={loginUrl}
+                                        error={formError?.loginUrl}
+                                        onChange={(e) =>
+                                            handleChange(e, setLoginUrl)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Username */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="username"
+                                        label="Username"
+                                        type="text"
+                                        placeholder="Enter the username"
+                                        name="username"
+                                        required={true}
+                                        value={username}
+                                        error={formError?.username}
+                                        onChange={(e) =>
+                                            handleChange(e, setUsername)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Password */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="password"
+                                        label="Password Field"
+                                        type="password"
+                                        placeholder="Enter the password"
+                                        name="password"
+                                        required={true}
+                                        value={password}
+                                        error={formError?.password}
+                                        onChange={(e) =>
+                                            handleChange(e, setPassword)
+                                        }
+                                    />
+                                </div>
+                                
+                                {/* Reference Page */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="ref-page"
+                                        label="Reference Page (Optional)"
+                                        type="text"
+                                        placeholder="Enter the reference page"
+                                        name="ref-page"
+                                        required={false}
+                                        value={refPage}
+                                        error={formError?.refPage}
+                                        onChange={(e) =>
+                                            handleChange(e, setRefPage)
+                                        }
+                                    />
+                                </div>
+
+                            </section>
 
                             <div className="col-12">
                                 <div className="form-group my-3">
-                                    <label htmlFor=""> Description <sup>*</sup> </label>
+                                    <label htmlFor="">
+                                        {" "}
+                                        Description <sup>*</sup>{" "}
+                                    </label>
                                     <div
                                         className="sp1_st_write_comment_editor"
                                         style={{ minHeight: "100px" }}

@@ -4799,7 +4799,8 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_5__.User((_window$Laravel = window.Laravel) === null || _window$Laravel === void 0 ? void 0 : _window$Laravel.user);
   var _useGetDailySubmissio = (0,_services_api_dailySubmissionApiSlice__WEBPACK_IMPORTED_MODULE_4__.useGetDailySubmissionQuery)("".concat(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.id, "?date_type=").concat(date_type)),
     data = _useGetDailySubmissio.data,
-    isLoading = _useGetDailySubmissio.isLoading;
+    isLoading = _useGetDailySubmissio.isLoading,
+    refetch = _useGetDailySubmissio.refetch;
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_6__.jsx)("div", {
     className: "sp1_tlr_tbl_wrapper",
     style: {
@@ -4845,7 +4846,8 @@ var TodaysUpdateModalTable = function TodaysUpdateModalTable() {
             index: i,
             open: open,
             setOpen: setOpen,
-            loading: isLoading
+            loading: isLoading,
+            refetch: refetch
           }, i);
         })
       })]
@@ -4905,7 +4907,8 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
     index = _ref.index,
     open = _ref.open,
     setOpen = _ref.setOpen,
-    loading = _ref.loading;
+    loading = _ref.loading,
+    refetch = _ref.refetch;
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_10__.useLocation)();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
@@ -5009,6 +5012,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
         title: 'Submitted successfully'
       });
       setOpen(null);
+      refetch();
     })["catch"](function (err) {
       return console.log(err);
     });
@@ -12157,8 +12161,8 @@ var SubmitionView = function SubmitionView(_ref) {
                   fileName: file,
                   downloadAble: true,
                   deleteAble: false,
-                  downloadUrl: "/storage/TaskSubmission/".concat(file),
-                  previewUrl: "/storage/TaskSubmission/".concat(file),
+                  downloadUrl: "".concat(file),
+                  previewUrl: "".concat(file),
                   fileType: _.includes(["png", "jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others',
                   ext: ""
                 }, "".concat(file, "_").concat(index));
@@ -12689,6 +12693,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+// import Swal from "sweetalert2";
 
 
 
@@ -12701,22 +12706,26 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     _useState2 = _slicedToArray(_useState, 2),
     links = _useState2[0],
     setLinks = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
     linkErr = _useState4[0],
     setLinkErr = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
-    files = _useState6[0],
-    setFiles = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    isModalUrl = _useState6[0],
+    setIsModalUrl = _useState6[1];
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]),
     _useState8 = _slicedToArray(_useState7, 2),
-    comment = _useState8[0],
-    setComment = _useState8[1];
-  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(''),
+    files = _useState8[0],
+    setFiles = _useState8[1];
+  var _useState9 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
     _useState10 = _slicedToArray(_useState9, 2),
-    commentErr = _useState10[0],
-    setCommentErr = _useState10[1];
+    comment = _useState10[0],
+    setComment = _useState10[1];
+  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(""),
+    _useState12 = _slicedToArray(_useState11, 2),
+    commentErr = _useState12[0],
+    setCommentErr = _useState12[1];
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useNavigate)();
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.useLocation)();
   var _useMarkAsCompleteMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_6__.useMarkAsCompleteMutation)(),
@@ -12727,25 +12736,39 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     _useLazyCheckSubTaskS2 = _slicedToArray(_useLazyCheckSubTaskS, 2),
     checkSubTaskState = _useLazyCheckSubTaskS2[0],
     isFetching = _useLazyCheckSubTaskS2[1].isFetching;
-  var _useState11 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
-    _useState12 = _slicedToArray(_useState11, 2),
-    markAsCompleteModaIsOpen = _useState12[0],
-    setMarkAsCompleteModalIsOpen = _useState12[1];
+  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
+    _useState14 = _slicedToArray(_useState13, 2),
+    markAsCompleteModaIsOpen = _useState14[0],
+    setMarkAsCompleteModalIsOpen = _useState14[1];
 
-  // toggle
-  var toggle = function toggle() {
+  // open modal
+  var open = function open() {
     navigate("".concat(location.pathname, "?modal=complete-task"));
   };
-  var _useState13 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
-    _useState14 = _slicedToArray(_useState13, 2),
-    err = _useState14[0],
-    setErr = _useState14[1];
+
+  // close modal
+  var close = function close() {
+    navigate("".concat(location.pathname));
+  };
+
+  // const [err, setErr] = useState(null);
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var url = new URLSearchParams(location.search);
-    if (url.get('modal') === 'complete-task') {
-      if (auth.getRoleId() === 6) {
+    if (url.get("modal") === "complete-task") {
+      setIsModalUrl(true);
+    } else {
+      setIsModalUrl(false);
+    }
+  }, [location]);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    // const url = new URLSearchParams(location.search);
+
+    // if (url.get('modal')==='complete-task') {
+    if (isModalUrl) {
+      if (Number(auth.getRoleId()) === 6) {
         checkSubTaskState(task === null || task === void 0 ? void 0 : task.id).unwrap().then(function (res) {
-          if (res.status === 'true' || res.status === true) {
+          if (res.status === "true" || res.status === true) {
             var htmlContent = /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
               className: "__tostar_modal",
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("strong", {
@@ -12755,13 +12778,13 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                 children: res.subtasks.map(function (el, idx) {
                   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("li", {
                     style: {
-                      listStyle: 'unset',
-                      fontSize: '13px'
+                      listStyle: "unset",
+                      fontSize: "13px"
                     },
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("a", {
                       href: "/account/tasks/".concat(el.id),
                       children: [idx + 1, ". ", el.heading]
-                    }), " (", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
+                    }), " ", "(", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("a", {
                       href: "/account/clients/".concat(el.clientId),
                       children: el.client_name
                     }), ")"]
@@ -12770,9 +12793,10 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
               })]
             });
             react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn(htmlContent, {
-              position: 'top-center',
+              position: "top-center",
               icon: false
             });
+            close();
           } else {
             setMarkAsCompleteModalIsOpen(true);
           }
@@ -12780,16 +12804,14 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
       } else {
         setMarkAsCompleteModalIsOpen(true);
       }
-      ;
     } else {
       setMarkAsCompleteModalIsOpen(false);
     }
-  }, [location]);
-
-  // close
-  var close = function close() {
-    navigate("".concat(location.pathname));
-  };
+    // }
+    // else{
+    //     setMarkAsCompleteModalIsOpen(false);
+    // }
+  }, [isModalUrl]);
 
   // handle editor change
   var handleEditorChange = function handleEditorChange(e, editor) {
@@ -12813,21 +12835,21 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
   // check validation
   var isValid = function isValid() {
     var valid = true;
-    if (!lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links) || links[0] === '') {
-      setLinkErr('You must provide at least one link to your work');
-      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn('You must provide at least one link to your work');
+    if (!lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links) || links[0] === "") {
+      setLinkErr("You must provide at least one link to your work");
+      react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("You must provide at least one link to your work");
       valid = false;
     }
     if (lodash__WEBPACK_IMPORTED_MODULE_0___default().size(links)) {
       lodash__WEBPACK_IMPORTED_MODULE_0___default().forEach(links, function (link) {
         if (!(0,_utils_check_is_url__WEBPACK_IMPORTED_MODULE_11__.checkIsURL)(link)) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn('Please provide a valid url');
-          setLinkErr('Please provide a valid url');
+          react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please provide a valid url");
+          setLinkErr("Please provide a valid url");
           valid = false;
         }
       });
     }
-    if (comment === '') {
+    if (comment === "") {
       setCommentErr("Please describe what you've done !");
       react_toastify__WEBPACK_IMPORTED_MODULE_3__.toast.warn("Please describe what you've done!");
       valid = false;
@@ -12835,31 +12857,43 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
     return valid;
   };
 
-  // handle submit 
+  // handle submit
   var handleSubmit = function handleSubmit(e) {
     var formData = new FormData();
-    formData.append('text', comment);
-    formData.append('user_id', auth === null || auth === void 0 ? void 0 : auth.getId());
-    formData.append('task_id', task === null || task === void 0 ? void 0 : task.id);
+    formData.append("text", comment);
+    formData.append("user_id", auth === null || auth === void 0 ? void 0 : auth.getId());
+    formData.append("task_id", task === null || task === void 0 ? void 0 : task.id);
     links.map(function (link) {
-      return formData.append('link[]', link);
+      return formData.append("link[]", link);
     });
     files === null || files === void 0 || files.map(function (file) {
-      return formData.append('file[]', file);
+      return formData.append("file[]", file);
     });
-    formData.append('_token', document.querySelector("meta[name='csrf-token']").getAttribute("content"));
+    formData.append("_token", document.querySelector("meta[name='csrf-token']").getAttribute("content"));
     if (isValid()) {
       markAsComplete(formData).unwrap().then(function (res) {
+        // const Toast = Swal.mixin({
+        //     toast: true,
+        //     position: 'top-end',
+        //     showConfirmButton: false,
+        //     timer: 3000,
+        //     timerProgressBar: true,
+        // })
+
+        // Toast.fire({
+        //     icon: 'success',
+        //     title: 'Task submitted successfully'
+        // })
         var Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: "top-end",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true
         });
         Toast.fire({
-          icon: 'success',
-          title: 'Task submitted successfully'
+          icon: "success",
+          title: "Task submitted successfully"
         });
         close();
       })["catch"](function (err) {
@@ -12870,7 +12904,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.Fragment, {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
       variant: "tertiary",
-      onClick: toggle,
+      onClick: open,
       className: "d-flex align-items-center btn-outline-dark text-dark",
       children: [isFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Loader__WEBPACK_IMPORTED_MODULE_8__["default"], {
         title: "Processing..."
@@ -12878,7 +12912,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
         className: "fa-solid fa-check"
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("span", {
         className: "d-inline ml-1",
-        children: [" ", isFetching ? '' : "Mark As Complete"]
+        children: [" ", isFetching ? "" : "Mark As Complete"]
       })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_9__["default"], {
       isOpen: markAsCompleteModaIsOpen,
@@ -12902,7 +12936,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("div", {
             className: "sp1_mark-as--modal-body px-3",
             style: {
-              overflow: 'unset'
+              overflow: "unset"
             },
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("form", {
               children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("div", {
@@ -13006,7 +13040,7 @@ var MarkAsComplete = function MarkAsComplete(_ref) {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsxs)("label", {
                   htmlFor: "exampleFormControlInput1",
                   style: {
-                    maxWidth: '95%'
+                    maxWidth: "95%"
                   },
                   children: ["Mention clearly if anything asked in the instruction couldn't be done or if there is anything else your reporting boss should know while approving or rejecting this task", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_12__.jsx)("sup", {
                     children: "*"
@@ -14847,6 +14881,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-independent-task/components/Button.jsx");
 /* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-independent-task/components/SubmitButton.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -14854,6 +14889,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -14891,6 +14927,12 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
   var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(),
     getLeadDeveloperAcknowladgementOptions = _useRevision.getLeadDeveloperAcknowladgementOptions,
     getProjectManagerAcknowladgementOptions = _useRevision.getProjectManagerAcknowladgementOptions;
+  var _useLocation = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useLocation)(),
+    pathname = _useLocation.pathname;
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useNavigate)();
+  console.log({
+    pathname: pathname
+  });
   var role = auth.getRoleId();
   var revisionOptions = role === 4 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
   var _useCreateRevisionMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_4__.useCreateRevisionMutation)(),
@@ -14914,11 +14956,11 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     var errorCount = 0;
     if (comment === "") {
       errorCount++;
-      setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.');
+      setCommentError("You have to explain the revision in details, so that lead developer/developer can understand where they need to work.");
     }
     if (!reason) {
       errorCount++;
-      setReasonError('You have to select a reason from above options');
+      setReasonError("You have to select a reason from above options");
     }
     return errorCount === 0;
   };
@@ -14930,7 +14972,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     var data = {
       task_id: task === null || task === void 0 ? void 0 : task.id,
       user_id: auth === null || auth === void 0 ? void 0 : auth.id,
-      revision_acknowledgement: (_reason$revision = reason === null || reason === void 0 ? void 0 : reason.revision) !== null && _reason$revision !== void 0 ? _reason$revision : '',
+      revision_acknowledgement: (_reason$revision = reason === null || reason === void 0 ? void 0 : reason.revision) !== null && _reason$revision !== void 0 ? _reason$revision : "",
       acknowledgement_id: reason === null || reason === void 0 ? void 0 : reason.id,
       comment: comment,
       is_deniable: (_reason$isDeniable = reason === null || reason === void 0 ? void 0 : reason.isDeniable) !== null && _reason$isDeniable !== void 0 ? _reason$isDeniable : false
@@ -14939,21 +14981,22 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
       createRevision(data).unwrap().then(function (res) {
         var Toast = Swal.mixin({
           toast: true,
-          position: 'top-end',
+          position: "top-end",
           showConfirmButton: false,
           timer: 3000,
           timerProgressBar: true
         });
         Toast.fire({
-          icon: 'success',
-          title: 'Task submitted for Revision successfully'
+          icon: "success",
+          title: "Task submitted for Revision successfully"
         });
+        navigate("".concat(pathname));
         close();
       })["catch"](function (err) {
         return console.log(err);
       });
     } else {
-      console.log('Your forgot to fill up some required fields');
+      console.log("Your forgot to fill up some required fields");
     }
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import Button from "../Button";
 import { useCreateIndependentTaskAuthorizationConversationMutation } from "../../../services/api/independentTaskApiSlice";
 
-const QuestionAnswer = ({ data }) => {
+const QuestionAnswer = ({ data, refresh }) => {
     const [question, setQuestion] = useState("");
     const [err, setErr] = useState("");
 
@@ -41,7 +41,7 @@ const QuestionAnswer = ({ data }) => {
                 toast.success('Your question has been submitted successfully.');
                 // setConversations([...res.data]);
                 setQuestion('');
-                setLocalRefresh(prev=>!prev);
+                refresh();
             }
         })
         .catch(err => console.log(err))
@@ -58,6 +58,7 @@ const QuestionAnswer = ({ data }) => {
                 <textarea
                     rows={3}
                     value={question}
+                    style={{overflowY:'auto'}}
                     onChange={(e) => setQuestion(e.target.value)}
                     placeholder="Write your question here."
                 />

@@ -57,7 +57,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
         data: conversationData,
         isLoading: isConversationLoading,
         isFetching,
-        refetch
+        refetch,
     } = useGetIndependentTaskAuthorizationConversationsQuery(data.id);
 
     // console.log({ conversationData, isConversationLoading });
@@ -638,6 +638,11 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                         isConversationLoading={
                                             isConversationLoading || isFetching
                                         }
+                                        refresh={() => {
+                                            setRefresh();
+                                            refreshing();
+                                            refetch();
+                                        }}
                                         // updateConversations={updateConversation}
                                     />
 
@@ -709,6 +714,11 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             {hasQuestion ? (
                                                 <QuestionAnswer
                                                     data={data}
+                                                    refresh={() => {
+                                                        setRefresh();
+                                                        refreshing();
+                                                        refetch();
+                                                    }}
                                                     // conversations={conversationData?.data}
                                                     // setConversations={updateConversation}
                                                 />
@@ -730,9 +740,11 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                             value={comment}
                                                             style={{
                                                                 // resize:'none',
-                                                                minHeight:'10rem',
-                                                                height:'auto',
-                                                                overflowY:'auto',
+                                                                minHeight:
+                                                                    "10rem",
+                                                                height: "auto",
+                                                                overflowY:
+                                                                    "auto",
                                                             }}
                                                             onChange={(e) =>
                                                                 setComment(

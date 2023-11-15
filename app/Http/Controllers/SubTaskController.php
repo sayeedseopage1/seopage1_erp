@@ -261,9 +261,9 @@ class SubTaskController extends AccountBaseController
 
         $topManagement = User::where('role_id', 1)->get();
 
-        foreach ($topManagement as $user) {
-            Notification::send($user, new PrimaryPageNotification($task_type));
-        }
+        // foreach ($topManagement as $user) {
+        //     Notification::send($user, new PrimaryPageNotification($task_type));
+        // }
 
         if($task->independent_task_status != 1)
         {

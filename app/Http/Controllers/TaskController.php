@@ -858,7 +858,9 @@ class TaskController extends AccountBaseController
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-        $this->logProjectActivity($task->project->id, $link);
+        if($task->independent_task_status == 0)
+        {
+            $this->logProjectActivity($task->project->id, $link);
 
         $this->triggerPusher('notification-channel', 'notification', [
             'user_id' => $task->project->pm_id,
@@ -870,6 +872,9 @@ class TaskController extends AccountBaseController
         //dd("hdbjasdbjasd");
 
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
+
+        }
+        
 
         //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return response()->json([
