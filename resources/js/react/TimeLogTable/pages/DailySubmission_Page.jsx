@@ -24,7 +24,7 @@ const DailySubmission_Page = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
     const [trackedTime, setTractedTime] = useState(0);
-    const [getAllDailySubmission,{isLoading}] = useLazyGetAllDailySubmissionQuery();
+    const [getAllDailySubmission,{isLoading, isFetching}] = useLazyGetAllDailySubmissionQuery();
     const [filter, setFilter] = useState(null);
 
 
@@ -93,8 +93,8 @@ const DailySubmission_Page = () => {
             <div className="sp1_tlr_tbl_container">
                 <div className="d-flex align-items-center justify-content-between mb-2">
                     <Tabbar/> 
-                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
-                        {isLoading ?
+                    <RefreshButton onClick={handleRefresh} isLoading={isFetching} > 
+                        {isFetching ?
                             <Loader title="Refreshing..."  borderRightColor="white" />
                         : 'Refresh'}
                     </RefreshButton>
@@ -116,7 +116,7 @@ const DailySubmission_Page = () => {
                     handlePerPageData={handlePerPageData}
                     currentPage={currentPage}
                     totalEntry={data.length}
-                    isLoading={isLoading}
+                    isLoading={isFetching}
                 />
             </div>
         </div>
