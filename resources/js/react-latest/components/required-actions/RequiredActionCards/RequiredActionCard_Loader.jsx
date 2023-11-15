@@ -17,44 +17,41 @@ const RequiredActionCard_Loader = () => {
                     {/* card subtitle */}
                     <div className={style.subtitle}>
                         <Placeholder />
-                        <Placeholder />
+                        {/* <Placeholder /> */}
                     </div>
 
                     {/* card info */}
-                    <div className={style.info}>
+                    {/* <div className={style.info}>
                         <span>
                             <Placeholder width="200px" />
                         </span>
-                    </div>
+                    </div> */}
 
-                    <Placeholder width="500px" />
-                    <Placeholder width="500px" />
+                    {/* <Placeholder width="500px" /> */}
+                    {/* <Placeholder width="500px" /> */}
                 </article>
 
                 {/* clipboard area */}
                 <aside className={style.aside}>
                     {/* action expire time  */}
                     <div className={`${style.action_expire_time} shadow-sm`}>
-                        <Placeholder width="10px" />
-                        <article>
-                            <Placeholder width="20px" />
-                            <Placeholder width="40px" />
-                        </article>
+                        <Placeholder width="50px" />
+                        <Placeholder width="100px" />
                     </div>
 
                     {/* action count down */}
                     <div className={`${style.action_count_down} shadow-sm`}>
-                        <Placeholder width="20px" />
-                        <Placeholder width="40px" />
+                        <Placeholder width="50px" />
+                        <Placeholder width="100px" />
                     </div>
                 </aside>
             </div>
 
             <div className={style.action}>
-                <Placeholder width="50px" />
-                <Placeholder width="50px" />
-                <Placeholder width="50px" />
-                <Placeholder width="50px" />
+                <Placeholder width="100px" height="30px" />
+                <Placeholder width="100px" height="30px" />
+                <Placeholder width="100px" height="30px" />
+                <Placeholder width="100px" height="30px" />
             </div>
         </div>
     );

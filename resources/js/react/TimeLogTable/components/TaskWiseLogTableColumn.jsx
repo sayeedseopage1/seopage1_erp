@@ -121,10 +121,14 @@ export const TaskWiseTableColumn = [
         sorted: false,
         group: false,
         cell: ({row, className}) =>{
-            return <td className={className}>
-                {dayjs(row?.end_time).format('MMM DD, YYYY')} <br/>
-                at {dayjs(row?.end_time).format('hh:mm A')}
-            </td>
+            return(
+                <td className={className}>
+                    {row?.end_time ? 
+                        dayjs(row?.end_time).format('MMM DD, YYYY [at] hh:mm A'):
+                        <span className="text-success">Active</span>
+                    }
+                </td>
+            ) 
         }
     },
     {

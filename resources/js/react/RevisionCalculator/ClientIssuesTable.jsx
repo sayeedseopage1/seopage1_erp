@@ -3,11 +3,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./styles.module.css";
 import Modal from "../global/Modal";
 import Button from "../global/Button";
-import DataTable from "../global/data-table/table";
-import { ClientIssuesTableColumns } from "./ClientIssuesTableColumns";
+import DataTable from "../global/data-table/table"; 
 import { useLazyGetRevisionCalculatorDataClientIssuesQuery } from "../services/api/revisionCalculatorApiSlice";
 import { useEffect } from "react";
-import { PMIssuesTableColumns } from "./PMIssuesTableColumns";
+import { ClientIssuesTableColumns } from "./ClientIssuesTableColumns";
+ 
 
 const ClientIssuesTable = () => {
     const [data, setData] = useState([]);
@@ -78,7 +78,7 @@ const ClientIssuesTable = () => {
                             data={data}
                             margeRow={true}
                             tableName="RevisionDevIssuesTableTable"
-                            columns={PMIssuesTableColumns}
+                            columns={ClientIssuesTableColumns}
                             pageIndex={pageIndex}
                             perPageRow={nRows}
                             onPageChange={(value) => setPageIndex(value)}

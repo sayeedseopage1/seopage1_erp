@@ -91,7 +91,7 @@
 .active_outlet_container{
   transform: translateY(-4px);
   border: var(--primary) solid 1px;
-  padding: 10px;
+  padding: 10px 0;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   /* border-radius: 5px; */

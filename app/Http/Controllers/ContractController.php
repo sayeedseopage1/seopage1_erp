@@ -15,6 +15,8 @@ use App\Models\ContractTemplate;
 use App\Models\ContractType;
 use App\Models\Currency;
 use App\Models\kpiSettingGenerateSale;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTime;
@@ -65,6 +67,7 @@ use App\Models\ProductDescription;
 use App\Models\WebContent;
 use App\Notifications\HourlyDealNotification;
 use App\Notifications\WonDealNotification;
+use App\Http\Controllers\HelperPendingActionController;
 
 class ContractController extends AccountBaseController
 {
@@ -2489,6 +2492,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_store(Request $request)
     {
+       // dd($request);
         $data = new AwardTimeIncress();
         $data->request_from = Auth::id();
         $data->deal_id = $request->id;
@@ -2497,17 +2501,13 @@ class ContractController extends AccountBaseController
 
         if ($data->save()) {
 
-            $authorization_action = new AuthorizationAction();
-            $authorization_action->model_name = $data->getMorphClass();
-            $authorization_action->model_id = $data->id;
-            $authorization_action->type = 'award_time_extension';
-            $authorization_action->deal_id = $data->deal_id;
-            $project= Project::where('deal_id',$data->deal_id)->first();
-            $authorization_action->project_id = $project->id;
-            $authorization_action->link = route('deals.show', $data->id);
-            $authorization_action->title = 'Won deal award time extension';
-            $authorization_action->authorization_for = 62;
-            $authorization_action->save();
+           //need pending action 
+           $project= Project::where('deal_id',$request->id)->first();
+           $helper = new HelperPendingActionController();
+
+
+           $helper->ProjectAcceptTimeExtensionAuthorization($project);
+           //need pending action
 
             return response()->json([
                 'status' => 'success'
@@ -2517,6 +2517,7 @@ class ContractController extends AccountBaseController
 
     public function award_time_incress_update(Request $request)
     {
+      //  DB::beginTransaction();
         $deal = Deal::find($request->id);
 //    / dd($deal->id);
         if ($deal) {
@@ -2570,6 +2571,45 @@ class ContractController extends AccountBaseController
                 $award_time_request->approved_by = $this->user->id;
                 $award_time_request->status = $mode;
                 if ($award_time_request->save()) {
+                    
+                    $project= Project::where('deal_id',$award_time_request->deal_id)->first();
+                    $actions = PendingAction::where('code','WDADA')->where('past_status',0)->where('project_id',$project->id)->get();
+                    if($actions != null)
+                    {
+                    foreach ($actions as $key => $action) {
+                       
+                            $action->authorized_by= Auth::id();
+                            $action->authorized_at= Carbon::now();
+                            $action->past_status = 1;
+                            $action->save();
+                            $project_manager= User::where('id',$project->pm_id)->first();
+                            $client= User::where('id',$project->client_id)->first();
+                            $authorize_by= User::where('id',$action->authorized_by)->first();
+            
+                            $past_action= new PendingActionPast();
+                            $past_action->item_name = $action->item_name;
+                            $past_action->code = $action->code;
+                            $past_action->serial = $action->serial;
+                            $past_action->action_id = $action->id;
+                            $past_action->heading = $action->heading;
+                            $past_action->message = 'PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> requested more time to accept deal <a href="'.route('contracts.show', $project->deal_id).'">'.$project->project_name.'</a> cancel authorization for project <a href="'.route('projects.show',$project->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>(Deal awarded on: '.$deal->award_time.') (Extended by: '.$authorize_by->name.')';
+                         //   $past_action->button = $action->button;
+                            $past_action->timeframe = $action->timeframe;
+                            $past_action->authorization_for = $action->authorization_for;
+                            $past_action->authorized_by = $action->authorized_by;
+                            $past_action->authorized_at = $action->authorized_at;
+                            $past_action->expired_status = $action->expired_status;
+                            $past_action->past_status = $action->past_status;
+                            $past_action->project_id = $action->project_id;
+                            $past_action->task_id = $action->task_id;
+                            $past_action->client_id = $action->client_id;
+                            $past_action->milestone_id = $action->milestone_id;
+                            $past_action->save();
+                          //  dd($past_action);
+                            
+                       
+                    }
+                }
                     return response()->json([
                         'status' => 'success'
                     ]);

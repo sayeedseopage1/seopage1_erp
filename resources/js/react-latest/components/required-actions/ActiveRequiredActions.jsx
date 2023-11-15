@@ -6,9 +6,11 @@ import RequiredActionsCard from "./RequiredActionCards/RequiredActionsCard";
 import LiveRequiredAction from "./ActiveRequiredAction/LiveRequiredAction";
 import ExpireRequiredAction from "./ActiveRequiredAction/ExpireRequiredAction";
 import style from "../../styles/required-actions.module.css";
+import { useGetExpiredRequiredActionQuery } from "../../services/api/requiredActionApiSlice";
 
 const ActiveRequiredActions = () => {
     const [action, setAction] = useState("live");
+    const { data } = useGetExpiredRequiredActionQuery();
 
     return (
         <div>
@@ -32,7 +34,7 @@ const ActiveRequiredActions = () => {
                             : style.active_action_btn_inactive
                     }`}
                 >
-                    Expired ({5})
+                    Expired ({data?.pending_actions?.length || 0})
                 </button>
             </section>
 
