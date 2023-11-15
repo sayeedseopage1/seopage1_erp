@@ -365,7 +365,7 @@ class TimelogReportController extends AccountBaseController
                 ->first();
             
             if ($total_minutes_progress) {
-                $item->total_minutes = $item->total_minutes + $total_minutes_progress->total_minutes_progress;
+                $item->total_minutes =  $total_minutes_progress->total_minutes_progress;
             } else {
                 $item->total_minutes = $item->total_minutes;
             }
