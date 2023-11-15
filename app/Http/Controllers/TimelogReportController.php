@@ -591,7 +591,7 @@ class TimelogReportController extends AccountBaseController
         
         // Calculate the ideal tracked hours
         
-        $currentDate = $startDate->copy();
+    //    $currentDate = $startDate->copy();
         $idealTrackedMinutes = 0;
         
         // while ($currentDate->lte($endDate)) {
