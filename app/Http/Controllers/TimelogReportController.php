@@ -651,7 +651,7 @@ class TimelogReportController extends AccountBaseController
       
         
             $item->total_minutes = $item->total_minutes + $minutesDifference;
-            $item->number_of_session = $item->number_of_session + 1;
+          //  $item->number_of_session = $item->number_of_session + 1;
        
 
         }
