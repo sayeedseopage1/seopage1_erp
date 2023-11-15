@@ -1,4 +1,5 @@
 import { Listbox } from '@headlessui/react';
+import axios from 'axios';
 import _ from 'lodash';
 import React from 'react';
 import ReactDOM from "react-dom/client";
@@ -75,8 +76,8 @@ export const WorkStatusConfirmationModal = () => {
 
             {/* Acknowledgement Modal */}
             <Modal isOpen={showAcknowledgementReminder}>
-                <AcknowledgementReminderModal 
-                    close={() => setShowAcknowledgementReminder(false)} 
+                <AcknowledgementReminderModal
+                    close={() => setShowAcknowledgementReminder(false)}
                     reminderType="Minimum tracked hours not met"
                     reminderDate="2021-09-01"
                 />
@@ -84,9 +85,9 @@ export const WorkStatusConfirmationModal = () => {
 
             {/* Daily submission */}
             <Modal isOpen={showDailySubmissionForm}>
-                <DailyReportSubmissionEnforcer 
-                    close={() => setShowDailySubmissionForm(false)} 
-                    reminderType="daily_report"     
+                <DailyReportSubmissionEnforcer
+                    close={() => setShowDailySubmissionForm(false)}
+                    reminderType="daily_report"
                     reminderDate="2021-09-01"
                 />
             </Modal>
@@ -103,11 +104,24 @@ const CheckInForm = ({onCheckIn}) => {
     const [workFrom, setWorkForm] = React.useState("office");
 
     // handle user clock in form submit
-    const onClockIn = (e) => {
+    const onClockIn = async (e) => {
         const data = {
+            clock_status: true,
+            type: "CLOCK_IN",
             location,
             workFrom,
         }
+
+        const URL =  '/account/';
+
+        // request to store
+        await axios.post(URL, data)
+            .then(res => (
+                console.log(res)
+            ))
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     return(

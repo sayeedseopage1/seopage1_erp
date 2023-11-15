@@ -41,6 +41,9 @@ use App\Models\User;
 use App\Traits\PmDashboardAdminView;
 use App\Models\PmCoreMetric;
 use App\Models\DeveloperStopTimer;
+use Auth;
+use App\Models\Attendance;
+use App\Models\DailySubmission;
 
 class DashboardController extends AccountBaseController
 {
@@ -552,6 +555,43 @@ class DashboardController extends AccountBaseController
             'stop_time' => $stop_time,
 
           
+        ]);
+    }
+    public function clockInStatus(){
+        $user_id = Auth::user()->id;
+        $today = Carbon::now();
+        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
+
+        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        $userDailyTaskReport = DeveloperStopTimer::where('user_id',$userDailyTaskSubmission->user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        // dd($userDailyTaskReport);
+
+        $currentDateTime = Carbon::now();
+        $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
+        $current_day = Carbon::now();
+        // dd($current_day->dayOfWeek);
+        $dayOfWeek = $current_day->dayOfWeek;
+        if ($dayOfWeek === Carbon::SATURDAY) {
+            // It's Monday
+            $desiredTime = Carbon::createFromTime(13, 00, 0);
+        }
+
+        return response()->json([
+            'data' => [
+                'check_in_check_out' => [
+                    'check_in_status' => $user ? true : false,
+                    'data' => $user,
+                ],
+                'daily_task_report' => [
+                    'daily_submission_status' => $userDailyTaskSubmission ? true : false,
+                    'data' => $userDailyTaskSubmission,
+                ],
+                'hours_log_report' => [
+                    'hours_log_report_status' => $userDailyTaskReport ? true : false,
+                    'data' => $userDailyTaskReport,
+                ]
+            ],
         ]);
     }
   }

@@ -25,7 +25,7 @@
 .ck-content{
     min-height: 100px;
 }
- 
+
 /* @ckeditor/ckeditor5-basic-styles/theme/code.css */
 .ck-content code {
     background-color: hsla(0, 0%, 78%, 0.3);
@@ -496,6 +496,5 @@
 }
 
 .word-break{
-    color: red !important;
     word-break: break-all !important;
 }
