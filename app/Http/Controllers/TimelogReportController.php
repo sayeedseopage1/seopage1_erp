@@ -484,23 +484,23 @@ class TimelogReportController extends AccountBaseController
            else {
             $data = $data->where('project_time_logs.user_id',Auth::id())->get();
            }
-           foreach ($data as $item) {
-            $total_minutes_progress = ProjectTimelog::where('project_id', $item->project_id)
-                ->where('user_id', $item->employee_id)
-                ->where('start_time', '!=', null)
-                ->where('end_time', null)
-            //   /  ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
-                ->first();
+        //    foreach ($data as $item) {
+        //     $total_minutes_progress = ProjectTimelog::where('project_id', $item->project_id)
+        //         ->where('user_id', $item->employee_id)
+        //         ->where('start_time', '!=', null)
+        //         ->where('end_time', null)
+        //     //   /  ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
+        //         ->first();
             
-                $current_time= Carbon::now();
-                $minutesDifference = $current_time->diffInMinutes($total_minutes_progress->start_time);
+        //         $current_time= Carbon::now();
+        //         $minutesDifference = $current_time->diffInMinutes($total_minutes_progress->start_time);
           
-            if ($total_minutes_progress) {
-                $item->total_minutes = $item->total_minutes + $minutesDifference;
-            } else {
-                $item->total_minutes = $item->total_minutes;
-            }
-        }
+        //     if ($total_minutes_progress) {
+        //         $item->total_minutes = $item->total_minutes + $minutesDifference;
+        //     } else {
+        //         $item->total_minutes = $item->total_minutes;
+        //     }
+        // }
         }
        
        // dd($data);
