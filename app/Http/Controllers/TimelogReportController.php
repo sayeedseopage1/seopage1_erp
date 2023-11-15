@@ -526,6 +526,7 @@ class TimelogReportController extends AccountBaseController
     }
     public function timelog_history(Request $request)
     {
+        dd($request->all());
         $page = $request->input('page', 1);
         $perPage = $request->input('per_page_row', 10);
         $offset = ($page - 1) * $perPage;
