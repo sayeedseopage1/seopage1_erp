@@ -136,9 +136,9 @@ class TimelogReportController extends AccountBaseController
                 ->groupBy('project_time_logs.user_id', 'employee.id');
 
             if (is_null($project_id)) {
-                $data = $data->where('project_time_logs.project_id');
+                $data = $data->groupBy('project_time_logs.project_id');
             } else {
-                $data = $data->where('project_time_logs.' . $project_id);
+                $data = $data->groupBy('project_time_logs.' . $project_id);
             }
 
 
