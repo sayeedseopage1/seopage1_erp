@@ -114,20 +114,20 @@ class TimelogReportController extends AccountBaseController
                 DB::raw('(SELECT COUNT(project_time_logs.id) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as number_of_session'),
                 DB::raw('(SELECT SUM(total_minutes) FROM project_time_logs WHERE projects.id = project_time_logs.project_id AND employee.id = project_time_logs.user_id AND DATE(project_time_logs.start_time) >= "'.$startDate.'" AND DATE(project_time_logs.end_time) <= "'.$endDate.'") as total_minutes'),
             ])
-                ->join('projects', 'project_time_logs.project_id', '=', 'projects.id')
+                ->leftJoin('projects', 'project_time_logs.project_id', '=', 'projects.id')
 
 
-                ->join('users as pm', 'projects.pm_id', '=', 'pm.id')
-                ->join('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
-                ->join('employee_details as pm_emp_details', 'pm.id', '=', 'pm_emp_details.user_id')
-                ->join('designations as pm_employee_designations', 'pm_emp_details.designation_id', '=', 'pm_employee_designations.id')
+                ->leftJoin('users as pm', 'projects.pm_id', '=', 'pm.id')
+                ->leftJoin('roles as pm_roles', 'pm.role_id', 'pm_roles.id')
+                ->leftJoin('employee_details as pm_emp_details', 'pm.id', '=', 'pm_emp_details.user_id')
+                ->leftJoin('designations as pm_employee_designations', 'pm_emp_details.designation_id', '=', 'pm_employee_designations.id')
 
-                ->join('users as client', 'projects.client_id', '=', 'client.id')
-                ->join('deals', 'client.id', '=', 'deals.client_id')
+                ->leftJoin('users as client', 'projects.client_id', '=', 'client.id')
+                ->leftJoin('deals', 'client.id', '=', 'deals.client_id')
 
-                ->join('users as employee', 'project_time_logs.user_id', '=', 'employee.id')
-                ->join('employee_details', 'employee.id', '=', 'employee_details.user_id')
-                ->join('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
+                ->leftJoin('users as employee', 'project_time_logs.user_id', '=', 'employee.id')
+                ->leftJoin('employee_details', 'employee.id', '=', 'employee_details.user_id')
+                ->leftJoin('designations as employee_designations', 'employee_details.designation_id', '=', 'employee_designations.id')
 
 
            
@@ -203,12 +203,13 @@ class TimelogReportController extends AccountBaseController
          // ->orderBy('project_time_logs.id', 'desc')
           ->get();
         }
+      //  dd($data);
         foreach ($data as $item) {
-            if($item->end_time == null)
+            if($item->time_log_end_time == null)
             {
   
                 $current_time= Carbon::now();
-                $minutesDifference = $current_time->diffInMinutes($item->start_time);
+                $minutesDifference = $current_time->diffInMinutes($item->time_log_start_time);
           
             
                 $item->total_minutes = $item->total_minutes + $minutesDifference;
