@@ -595,23 +595,23 @@ class TimelogReportController extends AccountBaseController
         $currentDate = $startDate->copy();
         $idealTrackedMinutes = 0;
         
-        while ($currentDate->lte($endDate)) {
-            if ($currentDate->isWeekday()) {
-                // Monday to Friday (weekdays)
-                $idealTrackedMinutes += (7 * 60 ); // Convert 7 hours 15 minutes to minutes
-            } elseif ($currentDate->isSaturday()) {
-                // Saturday
-                $idealTrackedMinutes += (4 * 60 + 30); // Convert 4 hours 30 minutes to minutes
-            }
-            // Sunday is skipped as it's 0 hours
+        // while ($currentDate->lte($endDate)) {
+        //     if ($currentDate->isWeekday()) {
+        //         // Monday to Friday (weekdays)
+        //         $idealTrackedMinutes += (7 * 60 ); // Convert 7 hours 15 minutes to minutes
+        //     } elseif ($currentDate->isSaturday()) {
+        //         // Saturday
+        //         $idealTrackedMinutes += (4 * 60 + 30); // Convert 4 hours 30 minutes to minutes
+        //     }
+        //     // Sunday is skipped as it's 0 hours
         
-            // Move to the next day
-            $currentDate->addDay();
-        }
+        //     // Move to the next day
+        //     $currentDate->addDay();
+        // }
        
         
-        // Convert the result into a collection
-        $data = collect($data);
+        // // Convert the result into a collection
+        // $data = collect($data);
         
         
         
@@ -619,12 +619,12 @@ class TimelogReportController extends AccountBaseController
        // dd($data);
         
         // Calculate the `missed_hours` and `missed_hours_count` attributes for each item in $data
-        $data = $data->map(function ($item) use ($idealTrackedMinutes) {
-            $item->ideal_minutes = $idealTrackedMinutes;
-            $item->missed_hours = max($idealTrackedMinutes - $item->total_minutes, 0); 
-            return $item;
+        // $data = $data->map(function ($item) use ($idealTrackedMinutes) {
+        //     $item->ideal_minutes = $idealTrackedMinutes;
+        //     $item->missed_hours = max($idealTrackedMinutes - $item->total_minutes, 0); 
+        //     return $item;
           
-        });
+        // });
      dd($data);
     foreach ($data as $item) {
         if($item->end_time == null)
