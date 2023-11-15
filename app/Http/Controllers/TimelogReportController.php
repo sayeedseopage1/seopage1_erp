@@ -204,18 +204,19 @@ class TimelogReportController extends AccountBaseController
           ->get();
         }
         foreach ($data as $item) {
-            $total_minutes_progress = ProjectTimelog::where('project_id', $item->project_id)
-                ->where('user_id', $item->employee_id)
-                ->where('start_time', '!=', null)
-                ->where('end_time', null)
-                ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
-                ->first();
+            if($item->end_time == null)
+            {
+  
+                $current_time= Carbon::now();
+                $minutesDifference = $current_time->diffInMinutes($item->start_time);
+          
             
-            if ($total_minutes_progress) {
-                $item->total_minutes = $item->total_minutes + $total_minutes_progress->total_minutes_progress;
-            } else {
-                $item->total_minutes = $item->total_minutes;
+                $item->total_minutes = $item->total_minutes + $minutesDifference;
+                $item->number_of_session = $item->number_of_session + 1;
+           
+
             }
+           
         }
 
 
@@ -356,22 +357,21 @@ class TimelogReportController extends AccountBaseController
         //   }
         }
        // dd($data);
-        foreach ($data as $item) {
-            $total_minutes_progress = ProjectTimelog::where('project_id', $item->project_id)
-                ->where('user_id', $item->employee_id)
-                ->where('start_time', '!=', null)
-                ->where('end_time', null)
-            //    ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
-                ->first();
-                $current_time= Carbon::now();
-                $minutesDifference = $current_time->diffInMinutes($total_minutes_progress->start_time);
-          
-            if ($total_minutes_progress) {
-                $item->total_minutes = $item->total_minutes + $minutesDifference;
-            } else {
-                $item->total_minutes = $item->total_minutes;
-            }
+       foreach ($data as $item) {
+        if($item->end_time == null)
+        {
+
+            $current_time= Carbon::now();
+            $minutesDifference = $current_time->diffInMinutes($item->start_time);
+      
+        
+            $item->total_minutes = $item->total_minutes + $minutesDifference;
+            $item->number_of_session = $item->number_of_session + 1;
+       
+
         }
+       
+    }
     //    / dd($data);
           
         } 
@@ -494,6 +494,7 @@ class TimelogReportController extends AccountBaseController
           
             
                 $item->total_minutes = $item->total_minutes + $minutesDifference;
+                $item->number_of_session = $item->number_of_session + 1;
            
 
             }
