@@ -641,7 +641,7 @@ class TimelogReportController extends AccountBaseController
             return $item;
           
         });
-     dd($data);
+    // dd($data);
     foreach ($data as $item) {
         if($item->end_time == null)
         {
