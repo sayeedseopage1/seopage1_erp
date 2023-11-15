@@ -632,6 +632,19 @@ class TimelogReportController extends AccountBaseController
         
         
         $data->ideal_tracked_minutes = $idealTrackedMinutes;
+        foreach ($data as $item) {
+            if($item->end_time == null)
+            {
+    
+                $current_time= Carbon::now();
+                $minutesDifference = $current_time->diffInMinutes($item->start_time);
+          
+            
+                $item->total_minutes = $item->total_minutes + $minutesDifference;
+              //  $item->number_of_session = $item->number_of_session + 1;
+           
+    
+            }
        // dd($data);
         
         // Calculate the `missed_hours` and `missed_hours_count` attributes for each item in $data
@@ -642,19 +655,7 @@ class TimelogReportController extends AccountBaseController
           
         });
     // dd($data);
-    foreach ($data as $item) {
-        if($item->end_time == null)
-        {
-
-            $current_time= Carbon::now();
-            $minutesDifference = $current_time->diffInMinutes($item->start_time);
-      
-        
-            $item->total_minutes = $item->total_minutes + $minutesDifference;
-          //  $item->number_of_session = $item->number_of_session + 1;
-       
-
-        }
+   
        
     }
     
