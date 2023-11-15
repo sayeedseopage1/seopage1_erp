@@ -7,6 +7,9 @@ import TaskWiseLogTable from '../components/TaskWiseLogTable'
 import { TaskWiseTableColumn } from "../components/TaskWiseLogTableColumn";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { convertTime } from "../../utils/converTime";
+import Button from "../../global/Button";
+import { RefreshButton } from "../components/RefreshButton";
+import Loader from "../../global/Loader";
 
 const TaskWiseLogReport = () => {
     const [data, setData] = useState([]);
@@ -15,7 +18,7 @@ const TaskWiseLogReport = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
     const [trackedTime, setTrackedTime] = useState(0);
-
+    const [filter, setFilter] = useState(null);
     const [getTaskWiseData, {isLoading}] = useGetTaskWiseDataMutation();
 
     // handle data
@@ -27,17 +30,18 @@ const TaskWiseLogReport = () => {
     }
 
     // handle fetch data
-    const handleFetchData = (filter) => {
-        getTaskWiseData(filter)
-        .unwrap()
-        .then(res => {
-            setCurrentPage(1);
-            const sortedData = orderBy(res?.data, ["task_id"], ["desc"]);
-            handleData(sortedData, 1, perPageData);
-            setData(sortedData);
-            const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
-            setTrackedTime(totalTrackTime);
-        })
+    const handleFetchData = async (filter) => {
+        setFilter(filter);
+        await getTaskWiseData(filter)
+            .unwrap()
+            .then(res => {
+                setCurrentPage(1);
+                const sortedData = orderBy(res?.data, ["task_id"], ["desc"]);
+                handleData(sortedData, 1, perPageData);
+                setData(sortedData);
+                const totalTrackTime = _.sumBy(sortedData, (d) => Number(d.total_minutes));
+                setTrackedTime(totalTrackTime);
+            })
     }
  
 
@@ -59,11 +63,23 @@ const TaskWiseLogReport = () => {
         handleData(data, currentPage, number);
     }
 
+    // handle refresh button
+    const handleRefresh = () => {
+        handleFetchData(filter);
+    }
+
     return (
         <div className="sp1_tlr_container">
             <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="mb-2"> <Tabbar/></div>
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                    <Tabbar/>
+                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                        {isLoading ?
+                            <Loader title="Refreshing..."  borderRightColor="white" />
+                        : 'Refresh'}
+                    </RefreshButton>
+                </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
                     <span className="mx-auto">
                         Total Tracked Time: <strong>{convertTime(trackedTime)}</strong>

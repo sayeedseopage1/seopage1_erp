@@ -37,10 +37,9 @@ const UploadFilesInLine = ({onPreviousFileDelete, previous, files, setFiles, mod
   };
 
 
-  const RenderIcon = ({_file, type=''}) => {
-
+  const RenderIcon = ({_file, type=''}) => { 
     if(type === 'previous' && !_file?.filename){
-      throw new Error('Filename not found on provided files');
+        throw new Error('Filename not found on provided files');
     }
     // console.log({_file})
     let filename ='';

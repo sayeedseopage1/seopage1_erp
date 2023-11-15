@@ -295,6 +295,7 @@
 
         <!-- REACT COMPONENT MASTER ACCESS -->
         <div id="react-root-container" ></div>
+        <div id="react-features-container" ></div>
         <!-- REACT COMPONENT MASTER ACCESS -->
         <!-- MAIN CONTAINER START -->
         <section class="main-container bg-additional-grey" id="fullscreen">

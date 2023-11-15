@@ -359,8 +359,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
-    Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
-    Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
+    Route::get('check-in-check-out-status', [DashboardController::class, 'clockInStatus']);
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
         Route::post('app-settings/deleteSessions', [AppSettingController::class, 'deleteSessions'])->name('app-settings.delete_sessions');
@@ -1352,6 +1351,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
 
     Route::get('/check-project-first-tasks/{id}',[TaskController::class,'checkfirstTask']);
     Route::get('/check-independent-task/{id}',[TaskController::class,'independenttask']);
+    Route::post('/developer/checkout',[DashboardController::class,'DeveloperCheckOut'])->name('developer-check-out');
 
 
 
@@ -1478,7 +1478,6 @@ Route::post('update-items', [ProjectBoardController::class, 'updateItems'])->nam
 Route::get('/projects/dispute/{id}', [ProjectController::class, 'Dispute'])->name('projects.dispute');
 Route::get('/projects/dispute/view/{id}', [ProjectController::class, 'DisputeView'])->name('projects.dispute.form');
 Route::post('/projects/dispute/store', [ProjectController::class, 'storeDispute'])->name('store-dispute');
-Route::post('/projects/dispute/authorization', [ProjectController::class, 'storeDisputeAuthorization'])->name('dispute-authorization');
 // deal comments store
 Route::post('/deals/comments', [DealController::class, 'comments'])->name('post-comment');
 

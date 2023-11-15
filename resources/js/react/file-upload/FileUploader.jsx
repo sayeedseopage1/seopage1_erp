@@ -1,6 +1,6 @@
 import * as React from "react";
-import "./file-upload.css";
 import Button from "./Button";
+import "./file-upload.css";
 
 const FileUploaderContext = React.createContext();
 
@@ -108,13 +108,14 @@ const FilePreview = ({
     ...props
 }) => {
     return (
-        <a href={downloadUrl} download={downloadAble}>
+        <a href={downloadUrl} onClick={e => !downloadAble && e.preventDefault()} download={downloadAble}>
             <div className={`sp1_file_upload--input-preview ${classname}`} {...props}>
                 {/* delete button */}
                 {deleteAble  && (
                     <Button
                         type="button"
                         onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             onRemove(e, id)
                         }}
@@ -150,7 +151,7 @@ const SelectedFilePreveiw = ({children}) => {
     const { previews, files, setFiles, setPreviews } = React.useContext(FileUploaderContext);
 
     const onDelete = (e, index) => {
-        // e.stopPropagation();
+        e.stopPropagation();
         const updatePreview = [...previews];
         const updatedFiles = [...files];
         updatedFiles.splice(index, 1);
