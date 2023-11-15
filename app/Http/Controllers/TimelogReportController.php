@@ -218,6 +218,7 @@ class TimelogReportController extends AccountBaseController
             }
            
         }
+        //timelog end
 
 
         }else if($type == 'tasks') {
