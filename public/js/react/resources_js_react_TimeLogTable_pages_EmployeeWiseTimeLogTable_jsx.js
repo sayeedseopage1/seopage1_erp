@@ -198,9 +198,12 @@ var EmployeeSessionTableColumn = [{
   cell: function cell(_ref7) {
     var row = _ref7.row,
       className = _ref7.className;
-    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("td", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
       className: className,
-      children: [dayjs__WEBPACK_IMPORTED_MODULE_2___default()(row === null || row === void 0 ? void 0 : row.end_time).format('MMM DD, YYYY'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("br", {}), dayjs__WEBPACK_IMPORTED_MODULE_2___default()(row === null || row === void 0 ? void 0 : row.end_time).format('hh:mm A')]
+      children: row !== null && row !== void 0 && row.end_time ? dayjs__WEBPACK_IMPORTED_MODULE_2___default()(row === null || row === void 0 ? void 0 : row.end_time).format('MMM DD, YYYY [at] hh:mm A') : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
+        className: "text-success",
+        children: "Active"
+      })
     });
   }
 }, {
