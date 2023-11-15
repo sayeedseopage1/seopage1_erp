@@ -215,10 +215,10 @@ class TimelogReportController extends AccountBaseController
         
          if($timer != null )
          {
-             dd($timer);
+            // dd($timer);
 
              $current_time= Carbon::now();
-             $minutesDifference = $current_time->diffInMinutes($timer->time_log_start_time);
+             $minutesDifference = $current_time->diffInMinutes($timer->start_time);
        
        
          
