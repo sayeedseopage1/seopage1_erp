@@ -808,23 +808,20 @@ class TimelogReportController extends AccountBaseController
         
         $data = $data->get();
         foreach ($data as $item) {
-            $timer= ProjectTimeLog::where('project_id',$project_id)->where('user_id',$employee_id)->orderBy('id','desc')->first();
-           // dd($timer);
-             if($timer->end_time == null)
-             {
-               //  dd($data);
-   
-                 $current_time= Carbon::now();
-                 $minutesDifference = $current_time->diffInMinutes($timer->start_time);
+            if($item->end_time == null)
+            {
+  
+                $current_time= Carbon::now();
+                $minutesDifference = $current_time->diffInMinutes($item->start_time);
+          
+            
+                $item->total_minutes = $item->total_minutes + $minutesDifference;
+                $item->number_of_session = $item->number_of_session + 1;
            
-             
-                 $item->total_minutes = $item->total_minutes + $minutesDifference;
-                 $item->number_of_session = $item->number_of_session + 1;
-            
- 
-             }
-            
-         }
+
+            }
+           
+        }
 
         return response()->json($data);
     }
