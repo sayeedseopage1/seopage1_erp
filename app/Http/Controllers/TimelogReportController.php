@@ -590,8 +590,7 @@ class TimelogReportController extends AccountBaseController
         
         
         // Calculate the ideal tracked hours
-        $startDate = Carbon::createFromFormat('Y-m-d', $startDate);
-        $endDate = Carbon::createFromFormat('Y-m-d', $endDate);
+        
         $currentDate = $startDate->copy();
         $idealTrackedMinutes = 0;
         
