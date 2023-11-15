@@ -627,20 +627,19 @@ class TimelogReportController extends AccountBaseController
         });
     //  / dd($data);
     foreach ($data as $item) {
-        $total_minutes_progress = ProjectTimelog::
-            where('user_id', $item->employee_id)
-            ->where('start_time', '!=', null)
-            ->where('end_time', null)
-            ->selectRaw('CAST(TIME_TO_SEC(TIMEDIFF(NOW(), start_time)) / 60 AS SIGNED) AS total_minutes_progress')
-            ->first();
+        if($item->end_time == null)
+        {
+
+            $current_time= Carbon::now();
+            $minutesDifference = $current_time->diffInMinutes($item->start_time);
+      
         
-        if ($total_minutes_progress) {
-            $item->total_minutes = $item->total_minutes + $total_minutes_progress->total_minutes_progress;
-          
-        } else {
-            $item->total_minutes = $item->total_minutes;
-           
+            $item->total_minutes = $item->total_minutes + $minutesDifference;
+            $item->number_of_session = $item->number_of_session + 1;
+       
+
         }
+       
     }
     
        
@@ -733,7 +732,7 @@ class TimelogReportController extends AccountBaseController
             'project_time_logs.start_time',
             'project_time_logs.end_time',
             'project_time_logs.total_minutes',
-            \DB::raw('(select sum(total_minutes) from project_time_logs where project_id = '.$project_id.') as project_total_time_log')
+             DB::raw('(select sum(total_minutes) from project_time_logs where project_id = '.$project_id.') as project_total_time_log')
         ])
        
         ->join('projects','project_time_logs.project_id','projects.id')
@@ -760,6 +759,21 @@ class TimelogReportController extends AccountBaseController
         }
         
         $data = $data->get();
+        foreach ($data as $item) {
+            if($item->end_time == null)
+            {
+  
+                $current_time= Carbon::now();
+                $minutesDifference = $current_time->diffInMinutes($item->start_time);
+          
+            
+                $item->total_minutes = $item->total_minutes + $minutesDifference;
+                $item->number_of_session = $item->number_of_session + 1;
+           
+
+            }
+           
+        }
 
         return response()->json($data);
     }
