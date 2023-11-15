@@ -567,7 +567,6 @@
 }
 
 .word-break {
-  color: red !important;
   word-break: break-all !important;
 }
 
