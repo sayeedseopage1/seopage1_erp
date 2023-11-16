@@ -563,7 +563,9 @@ class DashboardController extends AccountBaseController
         $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
 
         $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+        // $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','=',$today)->orderBy('created_at','desc')->first();
+        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
         $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
 
 
@@ -583,6 +585,8 @@ class DashboardController extends AccountBaseController
                 $logStatus = false;
             }
         }
+
+        $logStatus = $userDeveloperHoursTrack ? true : false ;
 
         return response()->json([
             'data' => [
@@ -605,5 +609,31 @@ class DashboardController extends AccountBaseController
                 ]
             ],
         ]);
+    }
+    public function developerDailytrackHoursLog(Request $request)
+    {
+        // dd($request->all());
+        $stop_time = new DeveloperStopTimer();
+        $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+        $stop_time->durations = $request->durations;
+        $stop_time->comment = $request->comment;
+        $stop_time->leave_period = $request->leave_period;
+        $stop_time->child_reason = $request->child_reason;
+        $stop_time->responsible_person = $request->responsible_person;
+        $stop_time->related_to_any_project = $request->related_to_any_project;
+        $stop_time->responsible_person_id = $request->responsible_person_id;
+        $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+        $stop_time->user_id = Auth::user()->id;
+        $stop_time->transition_hours = $request->transition_hours;
+        $stop_time->transition_minutes = $request->transition_minutes;
+        $stop_time->date = $request->date;
+
+        $stop_time->save();
+
+        return response()->json(['status'=>200]);
+    }
+
+    public function clockOutStatus(){
+        dd('ok');
     }
   }

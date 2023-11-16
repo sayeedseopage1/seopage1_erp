@@ -1,4 +1,4 @@
 
-import './HR/employees/attendance/features/AttendanceControlButton';
-import './HR/employees/attendance/features/WorkStatusConfirmationModal';
+import './HR/employees/attendance/features/clock-in-out/AttendanceControlButton';
+import './HR/employees/attendance/features/clock-in-out/WorkStatusConfirmationModal';
 

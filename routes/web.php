@@ -362,7 +362,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
    
     Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
     Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
-    Route::get('check-in-check-out-status', [DashboardController::class, 'clockInStatus']);
+    
+    /** DEVELOPER CHECK IN CHECK OUT START*/
+    Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
+    Route::post('/developer/daily-minimum-track-hours-log/acknowledgement',[DashboardController::class,'developerDailytrackHoursLog']);
+    Route::get('check-out-in-status', [DashboardController::class, 'clockOutStatus']);
+    /** DEVELOPER CHECK IN CHECK OUT START*/
+
     /* Setting menu routes starts from here */
     Route::group(['prefix' => 'settings'], function () {
         Route::post('app-settings/deleteSessions', [AppSettingController::class, 'deleteSessions'])->name('app-settings.delete_sessions');
