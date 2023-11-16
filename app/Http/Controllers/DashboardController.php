@@ -606,26 +606,32 @@ class DashboardController extends AccountBaseController
 
         $minimum_log_hours = 0;
 
-        if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
-            $minimum_log_hours = 240;
-            if($userTotalMin < 240){
-                $logStatus = false;
-            }
-        } else {
-            $minimum_log_hours = 420;
-            if($userTotalMin < 420){
-                $logStatus = false;
+        if($userDeveloperHoursTrack){
+            $logStatus = true;
+        }else{
+
+            if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+                $minimum_log_hours = 240;
+                if($userTotalMin < 240){
+                    $logStatus = false;
+                }else{
+                    $logStatus = true;
+                }
+            } else {
+                $minimum_log_hours = 420;
+                if($userTotalMin < 420){
+                    $logStatus = false;
+                }else $logStatus = true;
             }
         }
 
 
-        $logStatus = $userDeveloperHoursTrack ? true : false ;
     }else{
         $logStatus = true;
         $userDailyTaskSubmission = true;
     }
 
-
+        $incomplete_hours = $minimum_log_hours - $userTotalMin;
 
         return response()->json([
             'data' => [
@@ -645,7 +651,7 @@ class DashboardController extends AccountBaseController
                         'checking_date'=> $userClockIn->created_at,
                         'complete_hours'=> $userTotalMin,
                         'target_minimum_log_hours'=> $minimum_log_hours,
-                        'incomplete_hours'=> $minimum_log_hours - $userTotalMin,
+                        'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
                 ]
             ],
@@ -713,6 +719,9 @@ class DashboardController extends AccountBaseController
 
         $logStatus = $userDeveloperHoursTrack ? true : false ;
     }
+
+        $incomplete_hours = $minimum_log_hours - $userTotalMin;
+
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
@@ -731,7 +740,7 @@ class DashboardController extends AccountBaseController
                         'checking_date'=> $userClockIn->created_at,
                         'complete_hours'=> $userTotalMin,
                         'target_minimum_log_hours'=> $minimum_log_hours,
-                        'incomplete_hours'=> $minimum_log_hours - $userTotalMin,
+                        'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
                     ]
                 ]
             ],

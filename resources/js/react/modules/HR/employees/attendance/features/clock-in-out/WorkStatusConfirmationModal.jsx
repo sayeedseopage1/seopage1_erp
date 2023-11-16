@@ -11,6 +11,7 @@ import { Flex } from '../../../../../../global/styled-component/Flex';
 import { FormGroup, Label } from '../../../../../../global/styled-component/Form';
 import { useAuth } from '../../../../../../hooks/useAuth';
 import { convertTime } from '../../../../../../utils/converTime';
+import { CompareDate } from '../../../../../../utils/dateController';
 import ShowClock from '../../components/ShowClock';
 import AcknowledgementReminderModal from './AcknowledgementReminderModal';
 import DailyReportSubmissionEnforcer from './DailyReportSubmissionEnforcer';
@@ -19,6 +20,18 @@ import styles from './WorkStatusConfirmationModal.module.css';
  * * Individual features component
  * * Responsible for displays a modal for confirming the status of work hours and daily reports.
  */
+
+const dayjs = new CompareDate();
+
+const DateFormat = (date) => {
+    const d = {
+        unFormatted: date,
+        formatted: dayjs.dayjs(date).isSame(dayjs.dayjs(), 'day') ? 'Today' : dayjs.dayjs(date).format('MMM DD, YYYY')
+    }
+
+    return d;
+};
+
 
 export const WorkStatusConfirmationModal = ({
     showAcknowledgementReminder,
@@ -89,7 +102,7 @@ export const WorkStatusConfirmationModal = ({
                                     <li className={`alert ${data?.hours_log_report.hours_log_report_status ? 'alert-success': 'alert-danger'}`}>
                                         <div>
                                             Your minimum tracked hours should have been <strong>{convertTime(data?.hours_log_report.data.target_minimum_log_hours)}</strong>,
-                                            and it is <strong>{convertTime(data?.hours_log_report.data.incomplete_hours)}</strong> less.
+                                            and it is <strong>{convertTime(data?.hours_log_report.data.incomplete_hours)}</strong> less on  <strong>{DateFormat(data?.hours_log_report.data.checking_date).formatted}</strong>
                                             <Switch.Case condition={!data?.hours_log_report.hours_log_report_status}>
                                                 <button
                                                     onClick={() => setShowAcknowledgementReminder(true)}
@@ -217,6 +230,19 @@ const CheckInForm = ({onCheckIn}) => {
         }
     }
 
+    // on Log out
+    const handleLogOut = async () => {
+        try {
+           await axios.post('/logout', {
+            _token: document.querySelector("meta[name='csrf-token']").getAttribute('content')
+           }).then(() => {
+            window.location = '/';
+           })
+        } catch (error) {
+           console.log(error)
+        }
+    }
+
     return(
        <div className='w-100'>
             <Flex justifyContent="space-between" width="100%">
@@ -260,6 +286,16 @@ const CheckInForm = ({onCheckIn}) => {
                     className='mt-auto font-weight-normal height-40'
                 >
                     <i className="fa-solid fa-arrow-right-to-bracket" /> Clock In
+                </Button>
+
+                <Button
+                    onClick={handleLogOut}
+                    isLoading={isSubmitting}
+                    loaderTitle=''
+                    variant='danger'
+                    className='mt-auto font-weight-normal height-40 px-3'
+                >
+                    <i className="fa-solid fa-power-off" />
                 </Button>
             </Flex>
        </div>
