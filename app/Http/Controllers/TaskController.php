@@ -858,6 +858,7 @@ class TaskController extends AccountBaseController
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
+        
         $this->logProjectActivity($task->project->id, $link);
 
         $this->triggerPusher('notification-channel', 'notification', [
