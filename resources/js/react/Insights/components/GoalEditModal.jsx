@@ -323,7 +323,7 @@ const GoalType = ({ goalType, setGoalType }) => {
 // period
 const Period = ({ period, recurringValue, defaultValue, setRecurringValue, trackingType }) => {
     const [value, setValue] = React.useState(period.value);
-    console.log(period)
+    // console.log(period)
 
     React.useEffect(() => {
         setValue(period.value);

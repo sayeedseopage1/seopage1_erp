@@ -21,7 +21,7 @@ const PDFExporter = ({children, toggleRef, filename}) => {
 
 
     React.useEffect(() => {
-        console.log({toggleRef})
+        // console.log({toggleRef})
         if(toggleRef && toggleRef.current){
             toggleRef.current.addEventListener('click', exportToPDF)
         }

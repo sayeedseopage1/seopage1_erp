@@ -51,7 +51,7 @@ const LiveRequiredAction = () => {
         if (viewFilter === "all") {
             setFilterData(data);
         }
-        console.log({ viewFilter });
+        // console.log({ viewFilter });
     }, [viewFilter, data]);
 
     // slicing data according to paginate

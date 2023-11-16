@@ -35,11 +35,11 @@ export default function ModalForm({ setIsOpen, form_data }) {
         let emptyRequiredField = 0;
         [...form_data.form].forEach((input) => {
             if (input?.type !== "hidden" && input?.required) {
-                console.log({ [input.name]: formData[input.name] });
+                // console.log({ [input.name]: formData[input.name] });
                 if (!formData[input.name]) {
                     emptyRequiredField++;
                 }
-                console.log({ emptyRequiredField });
+                // console.log({ emptyRequiredField });
             }
         });
 
@@ -49,7 +49,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
             return;
         }
 
-        console.log({ url, method, formData });
+        // console.log({ url, method, formData });
         // setIsOpen(false);
         // setLoading(false);
 
@@ -66,7 +66,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
     };
 
     const handleEditorText = (e, editor, key_name) => {
-        console.log({ e, editor });
+        // console.log({ e, editor });
         const text = editor.getData();
         setFormData((prev) => ({ ...prev, [key_name]: text }));
     };
@@ -125,7 +125,7 @@ export default function ModalForm({ setIsOpen, form_data }) {
 
             <section className={style.form_btn_container}>
                 {[...form_data.form_action].map((btn, i) => {
-                    console.log({ btn });
+                    // console.log({ btn });
                     return (
                         <Button
                             key={i}

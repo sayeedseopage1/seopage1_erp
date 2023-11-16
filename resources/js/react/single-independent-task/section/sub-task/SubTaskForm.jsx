@@ -325,9 +325,9 @@ const SubTaskForm = ({ close, isFirstSubtask = false }) => {
     }, [isFirstSubtask])
 
 
-    useEffect(()=>{
-      console.log({isFirstSubtask,isWorkingEnvironmentSubmit});
-    },[isFirstSubtask,isWorkingEnvironmentSubmit]);
+    // useEffect(()=>{
+    //   console.log({isFirstSubtask,isWorkingEnvironmentSubmit});
+    // },[isFirstSubtask,isWorkingEnvironmentSubmit]);
 
     // useEffect(()=>{
     //   console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});

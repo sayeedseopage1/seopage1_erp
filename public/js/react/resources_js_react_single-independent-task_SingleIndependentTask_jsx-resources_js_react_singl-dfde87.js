@@ -4994,7 +4994,7 @@ var TodaysUpdateModalTableRow = function TodaysUpdateModalTableRow(_ref) {
       return formData.append('file[]', file);
     });
     submitDailySubmission(formData).unwrap().then(function (res) {
-      console.log(res);
+      // console.log(res);
       if (res.mark_as_complete === "true" || res.mark_as_complete === true) {
         navigate("".concat(location.pathname, "?modal=complete-task"));
       }
@@ -5281,7 +5281,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var timeFormatter = function timeFormatter() {
   var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-  console.log(time);
+  // console.log(time);
   var _time$split$0$split = time.split(" ")[0].split("-"),
     _time$split$0$split2 = _slicedToArray(_time$split$0$split, 3),
     year = _time$split$0$split2[0],
@@ -9413,12 +9413,10 @@ var SubTaskForm = function SubTaskForm(_ref) {
       dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_13__.setWorkingEnvironmentStatus)(!isFirstSubtask));
     }
   }, [isFirstSubtask]);
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
-    console.log({
-      isFirstSubtask: isFirstSubtask,
-      isWorkingEnvironmentSubmit: isWorkingEnvironmentSubmit
-    });
-  }, [isFirstSubtask, isWorkingEnvironmentSubmit]);
+
+  // useEffect(()=>{
+  //   console.log({isFirstSubtask,isWorkingEnvironmentSubmit});
+  // },[isFirstSubtask,isWorkingEnvironmentSubmit]);
 
   // useEffect(()=>{
   //   console.log({isWorkingEnvironmentSubmit,isFirstSubtask,task});
@@ -10916,9 +10914,7 @@ var TaskEditForm = function TaskEditForm(_ref2) {
               style: {
                 color: "red"
               },
-              children: [console.log({
-                a: projects === null || projects === void 0 ? void 0 : projects.minutes_left
-              }), "Estimation time can't exceed", " ", (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_21__.convertTime)(Number(projects === null || projects === void 0 ? void 0 : projects.minutes_left) > 0 ? Number(projects === null || projects === void 0 ? void 0 : projects.minutes_left) : 0)]
+              children: ["Estimation time can't exceed", " ", (0,_utils_converTime__WEBPACK_IMPORTED_MODULE_21__.convertTime)(Number(projects === null || projects === void 0 ? void 0 : projects.minutes_left) > 0 ? Number(projects === null || projects === void 0 ? void 0 : projects.minutes_left) : 0)]
             })]
           })
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_22__.jsx)("div", {
@@ -14123,12 +14119,12 @@ var ClientRevisionForm = function ClientRevisionForm(_ref) {
   var validate = function validate() {
     var errorCount = 0;
     if (comment === "") {
-      console.log("open");
+      // console.log("open")
       errorCount++;
       setCommentError('You have to explain the revision in details, so that lead developer/developer can understand where they need to work.');
     }
     if (reason === '') {
-      console.log('first');
+      // console.log('first')
       errorCount++;
       setReasonError('You have to select a reason from below options');
     }
@@ -14146,7 +14142,7 @@ var ClientRevisionForm = function ClientRevisionForm(_ref) {
     if (validate()) {
       onSubmitForm(data);
     } else {
-      console.log('Your forgot to fillup some requried fields');
+      // console.log('Your forgot to fillup some requried fields')
     }
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {

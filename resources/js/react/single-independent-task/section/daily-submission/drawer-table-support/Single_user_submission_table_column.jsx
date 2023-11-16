@@ -1,7 +1,7 @@
 import { convertTime } from "../../../../utils/converTime";
 
 const timeFormatter = (time = '') => {
-    console.log(time);
+    // console.log(time);
     const [year, month, date] = time.split(" ")[0].split("-");
     let month_name = '';
     switch (month) {

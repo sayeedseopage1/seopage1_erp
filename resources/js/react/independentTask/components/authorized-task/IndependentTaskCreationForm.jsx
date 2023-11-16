@@ -52,6 +52,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setAssignedTo(null);
         setDescription("");
         setPriority("Regular");
+        setLoginUrl("");
+        setUsername("");
+        setPassword("");
+        setRefPage("");
         setFiles([]);
         setFormError(null);
     };

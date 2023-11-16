@@ -121,13 +121,13 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
         } else {
             _data.client = client;
         }
-        console.log(_data);
+        // console.log(_data);
 
         // if (comment) {
         await putIndependentAuthorizeTask(_data)
             .unwrap()
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 if (status) {
                     Swal.fire({
                         position: "center",
@@ -164,8 +164,8 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
     const notAnswered = _.filter(conversationData?.data, (c) => !c.replied_by);
     const auth = _.includes([1, 8], user.getRoleId());
 
-    console.log(data.heading);
-    console.log({ data, table });
+    // console.log(data.heading);
+    // console.log({ data, table });
 
     return (
         <div>

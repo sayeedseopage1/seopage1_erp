@@ -27,7 +27,7 @@ const EditComment = ({ comment, updateComments, close }) => {
 
     // handle previous uploaded file delete
     const handlePreviousFileDeleted = (e, file) => {
-        console.log("deleted: ", file);
+        // console.log("deleted: ", file);
         const data = {
             task_id: comment.task_id,
             comment_id: comment.id,
@@ -36,7 +36,7 @@ const EditComment = ({ comment, updateComments, close }) => {
         removeCommentPreviousUploadedFile(data)
         .unwrap()
         .then(res => {
-            console.log(res)
+            // console.log(res)
         })
         .catch(err => {console.log(err)})
     };
@@ -61,7 +61,7 @@ const EditComment = ({ comment, updateComments, close }) => {
         updateComment({ data: formData, commentId: comment.id })
             .unwrap()
             .then((res) => {
-                console.log("log")
+                // console.log("log")
                 toast.success("Successfully Updated!");
                 updateComments(res.data);
 
