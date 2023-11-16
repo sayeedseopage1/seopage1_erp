@@ -2,10 +2,8 @@ import { Listbox } from '@headlessui/react';
 import axios from 'axios';
 import _ from 'lodash';
 import React from 'react';
-import ReactDOM from "react-dom/client";
 import { LuChevronsUpDown } from 'react-icons/lu';
 import Button from '../../../../../../global/Button';
-import Loader from '../../../../../../global/Loader';
 import Modal from '../../../../../../global/Modal';
 import Switch from '../../../../../../global/Switch';
 import Toaster from '../../../../../../global/Toaster';
@@ -21,49 +19,19 @@ import styles from './WorkStatusConfirmationModal.module.css';
  * * Responsible for displays a modal for confirming the status of work hours and daily reports.
  */
 
-export const WorkStatusConfirmationModal = () => {
-  const [showAcknowledgementReminder, setShowAcknowledgementReminder] = React.useState(false);
+export const WorkStatusConfirmationModal = ({
+    showAcknowledgementReminder,
+    setShowAcknowledgementReminder,
+    workStatusConfirmationModalIsOpen,
+    setWorkStatusConfirmationModalIsOpen,
+    checkIn,
+    setCheckIn,
+    data,
+    setData,
+}) => {
   const [showDailySubmissionForm, setShowDailySubmissionForm] = React.useState(false);
-  const [checkIn, setCheckIn] = React.useState(false);
-  const [data, setData] = React.useState(null);
   const [isUILoading, setIsUILoading] = React.useState(true);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [workStatusConfirmationModalIsOpen, setWorkStatusConfirmationModalIsOpen] = React.useState(false);
-
-  // first check user clock in status
-  const fetchClockInData = async () => {
-    try {
-       await axios.get('/account/check-in-status')
-            .then(response => {
-                // check clock in form already submitted
-                if(response.data.data.check_in_check_out.check_in_status){
-                    setCheckIn(true);
-                }
-                setData(response.data.data);
-
-                const cookData = {
-                    checkInStatus: response.data.data.check_in_check_out.check_in_status,
-                    dailyTaskReport: response.data.data.daily_task_report.daily_submission_status,
-                    hourLogStatus: response.data.data.hours_log_report.hours_log_report_status,
-                }
-
-                // store on local store
-                localStorage.setItem('clock_in', JSON.stringify(cookData))
-
-                // check all submitted
-                if(cookData.checkInStatus && cookData.dailyTaskReport && cookData.hourLogStatus){
-                    setWorkStatusConfirmationModalIsOpen(false);
-                }else{
-                    setWorkStatusConfirmationModalIsOpen(true);
-                }
-            })
-            .catch(err => console.log(err));
-
-        setIsUILoading(false);
-    } catch (error) {
-       console.log(error)
-    }
-  }
 
   // handle checkout button
   const onCheckOutButtonClick = async (e) => {
@@ -102,35 +70,17 @@ export const WorkStatusConfirmationModal = () => {
 
   }
 
-  // layout effect
-  React.useEffect(() => {
-    fetchClockInData();
-  }, [])
-
   // handle continue button
   const handleContinue = () => {
     setWorkStatusConfirmationModalIsOpen(false);
   }
-
-
-  if(isUILoading){
-    return (
-        <Modal isOpen={isUILoading}>
-            <div className={styles.global_loader}>
-                <div className={styles.loader}>
-                    <Loader title='Loading...' />
-                </div>
-            </div>
-        </Modal>
-    )
-  }
-
 
   return (
     <Modal isOpen={workStatusConfirmationModalIsOpen}>
        <React.Fragment>
             <div style={styles.modal_container}>
                     <div className={styles.work_status_confirmation_modal}>
+                        <Toaster />
                         <Switch>
                             <Switch.Case condition={!checkIn}>
                                 <React.Fragment>
@@ -330,15 +280,15 @@ const CheckInForm = ({onCheckIn}) => {
 }
 
 // append into container
-const container = document.getElementById("react-features-container");
+// const container = document.getElementById("react-features-container");
 
-if (container) {
-    ReactDOM.createRoot(container).render(
-        <React.StrictMode>
-            <>
-                <Toaster/>
-                <WorkStatusConfirmationModal />
-            </>
-        </React.StrictMode>
-    );
-}
+// if (container) {
+//     ReactDOM.createRoot(container).render(
+//         <React.StrictMode>
+//             <>
+//                 <Toaster/>
+//                 <WorkStatusConfirmationModal />
+//             </>
+//         </React.StrictMode>
+//     );
+// }
