@@ -257,7 +257,7 @@ class ContractController extends AccountBaseController
             ], 422);
         }
 
-        DB::beginTransaction();
+       
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
