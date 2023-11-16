@@ -557,18 +557,22 @@ class DashboardController extends AccountBaseController
           
         ]);
     }
-    public function clockInStatus(){
+    public function clockInStatus()
+    {
         $user_id = Auth::user()->id;
         $today = Carbon::now();
         $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
-
         $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
-        // $userDailyTaskSubmission = DailySubmission::where('user_id',$userClockIn->user_id)->whereDate('created_at','=',$today)->orderBy('created_at','desc')->first();
+        $userTaskTimer = ProjectTimeLog::where('user_id', $userClockIn->user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
+        $userTaskCount = $userTaskTimer->count();
+
+        $userDailyTaskSubmission = null;
+        if ($userTaskCount > 0) {
+            $userDailyTaskSubmission = DailySubmission::where('user_id', $userClockIn->user_id)->where('task_id', $userTaskTimer->first()->task_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
+        }
+
         $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
         $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
-
-
         $createdAt = Carbon::parse($userClockIn->created_at);
         $logStatus = true;
 
