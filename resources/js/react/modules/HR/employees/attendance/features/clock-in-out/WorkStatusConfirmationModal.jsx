@@ -93,54 +93,75 @@ export const WorkStatusConfirmationModal = ({
                                 </React.Fragment>
                             </Switch.Case>
                             <Switch.Case condition={showReminder && data}>
-                                <div className={styles.work_status_modal_title}>
-                                    <h4>Working Status Confirmation</h4>
-                                </div>
-                                <ul className={styles.work_status_list}>
-
-                                    {/* Daily working hours report */}
-                                    <li className={`alert ${data?.hours_log_report.hours_log_report_status ? 'alert-success': 'alert-danger'}`}>
-                                        <div>
-                                            Your minimum tracked hours should have been <strong>{convertTime(data?.hours_log_report.data.target_minimum_log_hours)}</strong>,
-                                            and it is <strong>{convertTime(data?.hours_log_report.data.incomplete_hours)}</strong> less on  <strong>{DateFormat(data?.hours_log_report.data.checking_date).formatted}</strong>
-                                            <Switch.Case condition={!data?.hours_log_report.hours_log_report_status}>
-                                                <button
-                                                    onClick={() => setShowAcknowledgementReminder(true)}
-                                                    className={styles.submit_reason}
-                                                >
-                                                    Submit Reason
-                                                </button>
-                                            </Switch.Case>
-                                        </div>
-                                    </li>
-
-                                    {/* Daily Task Progress report */}
-                                    <li className={`alert ${data?.daily_task_report.daily_submission_status ? 'alert-success': 'alert-danger'}`}>
-                                        <div>
-                                            Your Didn't submit last date daily report
-                                            <Switch.Case condition={!data?.daily_task_report.daily_submission_status}>
-                                                <button
-                                                    onClick={() => setShowDailySubmissionForm(true)}
-                                                    className={styles.submit_reason}
-                                                >
-                                                    Submit Reason
-                                                </button>
-                                            </Switch.Case>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                                {/* Continue button */}
-                                <button
-                                    disabled={
+                                <Switch.Case
+                                    condition={
                                         !data?.hours_log_report.hours_log_report_status ||
                                         !data?.daily_task_report.daily_submission_status
                                     }
-                                    onClick={handleContinue}
-                                    className={styles.work_status_button}
                                 >
-                                    Continue
-                                </button>
+                                    <div className={styles.work_status_modal_title}>
+                                        <h4>Working Status Confirmation</h4>
+                                    </div>
+
+                                    <ul className={styles.work_status_list}>
+
+                                        {/* Daily working hours report */}
+                                        <li className={`alert ${data?.hours_log_report.hours_log_report_status ? 'alert-success d-none': 'alert-danger'}`}>
+                                            <div>
+                                                Your minimum tracked hours should have been <strong>{convertTime(data?.hours_log_report.data.target_minimum_log_hours)}</strong>,
+                                                and it is <strong>{convertTime(data?.hours_log_report.data.incomplete_hours)}</strong> less on  <strong>{DateFormat(data?.hours_log_report.data.checking_date).formatted}</strong>
+                                                <Switch.Case condition={!data?.hours_log_report.hours_log_report_status}>
+                                                    <button
+                                                        onClick={() => setShowAcknowledgementReminder(true)}
+                                                        className={styles.submit_reason}
+                                                    >
+                                                        Submit Reason
+                                                    </button>
+                                                </Switch.Case>
+                                            </div>
+                                        </li>
+
+                                        {/* Daily Task Progress report */}
+                                        <li className={`alert ${data?.daily_task_report.daily_submission_status ? 'alert-success d-none': 'alert-danger'}`}>
+                                            <div>
+                                                Your Didn't submit last date daily report
+                                                <Switch.Case condition={!data?.daily_task_report.daily_submission_status}>
+                                                    <button
+                                                        onClick={() => setShowDailySubmissionForm(true)}
+                                                        className={styles.submit_reason}
+                                                    >
+                                                        Submit Reason
+                                                    </button>
+                                                </Switch.Case>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </Switch.Case>
+
+                                <Switch.Case
+                                    condition={
+                                        data?.hours_log_report.hours_log_report_status &&
+                                        data?.daily_task_report.daily_submission_status
+                                    }
+                                >
+                                    <>
+
+                                        <p className={styles.thank_you_message}><i className="fa-regular fa-circle-check"></i>Thanks for submitting the required details</p>
+                                        {/* Continue button */}
+                                        <Flex alignItem='center' justifyContent="center">
+                                            <button
+                                                disabled={
+                                                    !data?.hours_log_report.hours_log_report_status ||
+                                                    !data?.daily_task_report.daily_submission_status
+                                                }
+                                                onClick={handleContinue}
+                                                className={styles.work_status_button}
+                                            >
+                                                Continue
+                                            </button>
+                                        </Flex>
+                                    </>
+                                </Switch.Case>
                             </Switch.Case>
                         </Switch>
                     </div>

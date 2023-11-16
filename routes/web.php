@@ -984,7 +984,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('invoices/add-item', [InvoiceController::class, 'addItem'])->name('invoices.add_item');
     Route::get('invoices/update-status/{invoiceID}', [InvoiceController::class, 'cancelStatus'])->name('invoices.update_status');
     Route::get('invoices/get-client-company/{projectID?}', [InvoiceController::class, 'getClientOrCompanyName'])->name('invoices.get_client_company');
-    Route::post('invoices/fetchTimelogs', [InvoiceController::class, 'fetchTimelogs'])->name('invoices.fetch_timelogs');
+    Route::post('invoices/fetchTimetart-timers', [InvoiceController::class, 'fetchTimelogs'])->name('invoices.fetch_timelogs');
     Route::get('invoices/check-shipping-address', [InvoiceController::class, 'checkShippingAddress'])->name('invoices.check_shipping_address');
 
     Route::get('invoices/toggle-shipping-address/{invoice}', [InvoiceController::class, 'toggleShippingAddress'])->name('invoices.toggle_shipping_address');

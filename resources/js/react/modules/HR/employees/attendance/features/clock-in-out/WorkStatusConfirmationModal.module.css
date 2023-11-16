@@ -53,6 +53,7 @@
 
 .work_status_list li[data-completed='true']{
     background-color: rgb(205, 253, 209) ;
+    display: none;
 }
 
 .work_status_list li[data-completed='false']{
@@ -89,7 +90,7 @@
 
 .work_status_button{
     margin-top: 1rem;
-    float: right;
+    margin-inline: center;
     padding: 8px 14px;
     border-radius: 6px;
     transition: all 0.3s linear;
@@ -178,4 +179,17 @@
     padding: 1rem 2rem;
     border-radius: 10px;
     background-color: #fff;
+}
+
+.thank_you_message{
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.thank_you_message i {
+    display: block;
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    color: #27AE60;
 }
