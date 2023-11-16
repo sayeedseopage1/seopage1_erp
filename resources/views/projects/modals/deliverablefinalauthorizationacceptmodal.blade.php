@@ -65,7 +65,7 @@
                                 </tbody>
                             </table>
                         @endif
-                        @if (count($deliverables) >= 0)
+                        @if (count($deliverables) <= 0)
                             <h4 class="text-red mb-4">PM added a milestone but didnt add a deliverable. Do you still want to authorize?</h4>
                         @endif
                         @if (count($deliverables) > 0)
