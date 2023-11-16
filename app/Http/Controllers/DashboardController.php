@@ -45,6 +45,8 @@ use Auth;
 use App\Models\Attendance;
 use App\Models\DailySubmission;
 
+use function PHPUnit\Framework\isNull;
+
 class DashboardController extends AccountBaseController
 {
     use AppBoot, CurrencyExchange, OverviewDashboard, EmployeeDashboard, ProjectDashboard, ClientDashboard, HRDashboard,webdevelopmentDashboard, TicketDashboard, FinanceDashboard, ClientPanelDashboard, LeadDashboard, DeveloperDashboard, UxUiDashboard, GraphicsDashboard, SalesDashboard, PmDashboard, PmDashboardAdminView;
@@ -554,21 +556,140 @@ class DashboardController extends AccountBaseController
         return response()->json([
             'stop_time' => $stop_time,
 
-          
+
         ]);
     }
     public function clockInStatus()
     {
         $user_id = Auth::user()->id;
         $today = Carbon::now();
-        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
-        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
-        $userTaskTimer = ProjectTimeLog::where('user_id', $userClockIn->user_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->get();
-        $userTaskCount = $userTaskTimer->count();
 
-        $userDailyTaskSubmission = null;
+        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+
+        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
+
+
+        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+                            ->whereDate('created_at', $userClockIn->created_at)
+                            ->orderBy('created_at', 'desc')
+                            ->groupBy('task_id')
+                            ->get('task_id');
+        $userTaskCount = $userGetTasks->count();
+
+        $userDailyTaskSubmission = true;
         if ($userTaskCount > 0) {
-            $userDailyTaskSubmission = DailySubmission::where('user_id', $userClockIn->user_id)->where('task_id', $userTaskTimer->first()->task_id)->whereDate('created_at', $userClockIn->created_at)->orderBy('created_at', 'desc')->first();
+            $arr = [];
+            foreach($userGetTasks as $userGetTask){
+                array_push($arr, $userGetTask->task_id);
+            }
+            $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                                    -> whereIn('task_id', array_values($arr))
+                                    -> whereDate('report_date', $userClockIn->created_at)
+                                    -> get();
+
+
+            if($report->count() === $userTaskCount){
+                $userDailyTaskSubmission = true;
+            }else {
+                $userDailyTaskSubmission = false;
+            }
+
+        }else{
+            $userDailyTaskSubmission = true;
+        }
+
+        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
+        $createdAt = Carbon::parse($userClockIn->created_at);
+        $logStatus = true;
+
+        $minimum_log_hours = 0;
+
+        if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+            $minimum_log_hours = 240;
+            if($userTotalMin < 240){
+                $logStatus = false;
+            }
+        } else {
+            $minimum_log_hours = 420;
+            if($userTotalMin < 420){
+                $logStatus = false;
+            }
+        }
+
+
+        $logStatus = $userDeveloperHoursTrack ? true : false ;
+    }else{
+        $logStatus = true;
+        $userDailyTaskSubmission = true;
+    }
+
+
+
+        return response()->json([
+            'data' => [
+                'check_in_check_out' => [
+                    'check_in_status' => $user ? true : false,
+                    'data' => $user,
+                ],
+                'daily_task_report' => [
+                    'daily_submission_status' => $userDailyTaskSubmission,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                    ],
+                ],
+                'hours_log_report' => [
+                    'hours_log_report_status' => $logStatus,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                        'complete_hours'=> $userTotalMin,
+                        'target_minimum_log_hours'=> $minimum_log_hours,
+                        'incomplete_hours'=> $minimum_log_hours - $userTotalMin,
+                    ]
+                ]
+            ],
+        ]);
+    }
+
+    public function clockOutStatus()
+    {
+        $user_id = Auth::user()->id;
+        $today = Carbon::now();
+
+        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+
+        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
+        $user->clock_out_time = Carbon::now();
+        $user->save();
+
+        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('created_at','desc')->first();
+        $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+                            ->whereDate('created_at', $userClockIn->created_at)
+                            ->orderBy('created_at', 'desc')
+                            ->groupBy('task_id')
+                            ->get();
+        $userTaskCount = $userGetTasks->count();
+
+        $userDailyTaskSubmission = true;
+        if ($userTaskCount > 0) {
+            $arr = [];
+            foreach($userGetTasks as $userGetTask){
+                array_push($arr, $userGetTask->task_id);
+            }
+            $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                                    -> whereIn('task_id', array_values($arr))
+                                    -> whereDate('report_date', $userClockIn->created_at)
+                                    -> get();
+
+
+            if($report->count() === $userTaskCount){
+                $userDailyTaskSubmission = true;
+            }else {
+                $userDailyTaskSubmission = false;
+            }
+        }else{
+            $userDailyTaskSubmission = true;
         }
 
         $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
@@ -591,16 +712,18 @@ class DashboardController extends AccountBaseController
         }
 
         $logStatus = $userDeveloperHoursTrack ? true : false ;
-
+    }
         return response()->json([
             'data' => [
                 'check_in_check_out' => [
-                    'check_in_status' => $user ? true : false,
+                    'check_in_status' => false,
                     'data' => $user,
                 ],
                 'daily_task_report' => [
                     'daily_submission_status' => $userDailyTaskSubmission ? true : false,
-                    'data' => $userDailyTaskSubmission,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                    ],
                 ],
                 'hours_log_report' => [
                     'hours_log_report_status' => $logStatus,
@@ -614,6 +737,9 @@ class DashboardController extends AccountBaseController
             ],
         ]);
     }
+
+
+
     public function developerDailytrackHoursLog(Request $request)
     {
         // dd($request->all());
@@ -635,9 +761,5 @@ class DashboardController extends AccountBaseController
         $stop_time->save();
 
         return response()->json(['status'=>200]);
-    }
-
-    public function clockOutStatus(){
-        dd('ok');
     }
   }

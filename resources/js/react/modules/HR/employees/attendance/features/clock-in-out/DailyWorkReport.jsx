@@ -1,8 +1,11 @@
 import axios from 'axios';
+import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Loader from '../../../../../../global/Loader';
 import Modal from '../../../../../../global/Modal';
+import Toaster from '../../../../../../global/Toaster';
+import { useAuth } from '../../../../../../hooks/useAuth';
 import { WorkStatusConfirmationModal } from './WorkStatusConfirmationModal';
 import styles from './WorkStatusConfirmationModal.module.css';
 
@@ -11,7 +14,9 @@ export const DailyWorkReport = () => {
     const [checkIn, setCheckIn] = React.useState(false);
     const [data, setData] = React.useState(null);
     const [isUILoading, setIsUILoading] = React.useState(true);
+    const [showReminder, setShowReminder] = React.useState(false);
     const [workStatusConfirmationModalIsOpen, setWorkStatusConfirmationModalIsOpen] = React.useState(false);
+    const auth = useAuth();
 
     // first check user clock in status
     const fetchClockInData = async () => {
@@ -33,9 +38,19 @@ export const DailyWorkReport = () => {
                 // store on local store
                 localStorage.setItem('clock_in', JSON.stringify(cookData))
 
-                // check all submitted
-                if(cookData.checkInStatus && cookData.dailyTaskReport && cookData.hourLogStatus){
-                    setWorkStatusConfirmationModalIsOpen(false);
+
+                if(cookData.checkInStatus){
+                    if(_.includes([5, 9, 10], auth.getRoleId())){
+
+                        if(cookData.dailyTaskReport && cookData.hourLogStatus){
+                            setWorkStatusConfirmationModalIsOpen(false);
+                        }else{
+                            setShowReminder(true);
+                            setWorkStatusConfirmationModalIsOpen(true);
+                        }
+                    }else{
+                        setWorkStatusConfirmationModalIsOpen(false);
+                    }
                 }else{
                     setWorkStatusConfirmationModalIsOpen(true);
                 }
@@ -71,6 +86,7 @@ export const DailyWorkReport = () => {
 
     return (
         <React.Fragment>
+            <Toaster />
             <WorkStatusConfirmationModal
                showAcknowledgementReminder={showAcknowledgementReminder}
                setShowAcknowledgementReminder={setShowAcknowledgementReminder}
@@ -78,6 +94,8 @@ export const DailyWorkReport = () => {
                setCheckIn={setCheckIn}
                data={data}
                setData={setData}
+               showReminder={showReminder}
+               setShowReminder={setShowReminder}
                workStatusConfirmationModalIsOpen={workStatusConfirmationModalIsOpen}
                setWorkStatusConfirmationModalIsOpen={setWorkStatusConfirmationModalIsOpen}
             />

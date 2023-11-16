@@ -359,14 +359,14 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
     Route::get('settings/change-language', [SettingsController::class, 'changeLanguage'])->name('settings.change_language');
     Route::resource('settings', SettingsController::class)->only(['edit', 'update', 'index', 'change_language']);
     Route::get('get-pending-active-live-action', [PendingActionController::class, 'get_pending_active_live_action']);
-   
+
     Route::get('get-pending-expired-live-action', [PendingActionController::class, 'get_pending_expired_live_action']);
     Route::get('get-pending-past-action', [PendingActionController::class, 'get_pending_past_action']);
-    
+
     /** DEVELOPER CHECK IN CHECK OUT START*/
     Route::get('check-in-status', [DashboardController::class, 'clockInStatus']);
     Route::post('/developer/daily-minimum-track-hours-log/acknowledgement',[DashboardController::class,'developerDailytrackHoursLog']);
-    Route::get('check-out-in-status', [DashboardController::class, 'clockOutStatus']);
+    Route::put('check-out-status', [DashboardController::class, 'clockOutStatus']);
     /** DEVELOPER CHECK IN CHECK OUT START*/
 
     /* Setting menu routes starts from here */
@@ -521,8 +521,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'account'], function () {
         Route::resource('employee-shifts', EmployeeShiftController::class);
         Route::get('pending-action/{any?}', [PendingActionController::class, 'index'])->where('any', '.*');
         Route::resource('pending-action', PendingActionController::class);
-      
-   
+
+
 
     });
 

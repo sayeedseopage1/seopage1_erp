@@ -3,12 +3,13 @@ import axios from 'axios';
 import _ from 'lodash';
 import React from 'react';
 import { LuChevronsUpDown } from 'react-icons/lu';
+import { toast } from 'react-toastify';
 import Button from '../../../../../../global/Button';
 import Modal from '../../../../../../global/Modal';
 import Switch from '../../../../../../global/Switch';
-import Toaster from '../../../../../../global/Toaster';
 import { Flex } from '../../../../../../global/styled-component/Flex';
 import { FormGroup, Label } from '../../../../../../global/styled-component/Form';
+import { useAuth } from '../../../../../../hooks/useAuth';
 import { convertTime } from '../../../../../../utils/converTime';
 import ShowClock from '../../components/ShowClock';
 import AcknowledgementReminderModal from './AcknowledgementReminderModal';
@@ -25,54 +26,40 @@ export const WorkStatusConfirmationModal = ({
     workStatusConfirmationModalIsOpen,
     setWorkStatusConfirmationModalIsOpen,
     checkIn,
+    showReminder,
+    setShowReminder,
     setCheckIn,
     data,
     setData,
 }) => {
   const [showDailySubmissionForm, setShowDailySubmissionForm] = React.useState(false);
-  const [isUILoading, setIsUILoading] = React.useState(true);
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  // handle checkout button
-  const onCheckOutButtonClick = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    try {
-        await axios.put('/account/check-out-status', {})
-            .then(response => {
-                // check clock in form already submitted
-                setCheckIn(true);
-                setData(response.data.data);
-
-                const cookData = {
-                    dailyTaskReport: response.data.data.daily_task_report.daily_submission_status,
-                    hourLogStatus: response.data.data.hours_log_report.hours_log_report_status,
-                }
-
-                // store on local store
-                localStorage.removeItem('clock_in');
-
-                // check all submitted
-                if(cookData.dailyTaskReport && cookData.hourLogStatus){
-                    setWorkStatusConfirmationModalIsOpen(false);
-                }else{
-                    setWorkStatusConfirmationModalIsOpen(true);
-                }
-            })
-            .catch(err => console.log(err));
-        setIsLoading(false);
-
-    } catch (error) {
-       console.log(error)
-    } finally{
-        setIsLoading(false);
-    }
-
-  }
+  const auth = useAuth();
 
   // handle continue button
   const handleContinue = () => {
+    window.location.reload();
     setWorkStatusConfirmationModalIsOpen(false);
+  }
+
+  // handle check in button
+  const handleCheckInButton = (e) => {
+    setCheckIn(true); // update state
+    // toaster
+    toast.success('You Clock In Successfully')
+
+    localStorage.setItem('clock_in', JSON.stringify({
+        checkInStatus: true,
+        dailyTaskReport: true,
+        hourLogStatus: true,
+    }))
+
+    // if not developer then avoid next step
+    if(!_.includes([5, 9, 10], auth.getRoleId())){
+        setWorkStatusConfirmationModalIsOpen(false);
+        window.location.reload();
+    }else{
+        setShowReminder(true);
+    }
   }
 
   return (
@@ -80,19 +67,19 @@ export const WorkStatusConfirmationModal = ({
        <React.Fragment>
             <div style={styles.modal_container}>
                     <div className={styles.work_status_confirmation_modal}>
-                        <Toaster />
+
                         <Switch>
-                            <Switch.Case condition={!checkIn}>
+                            <Switch.Case condition={!checkIn && !showReminder}>
                                 <React.Fragment>
                                     <div className='text-center'>
                                         <i className={`fa-solid fa-cloud-moon-rain ${styles.cloud}`}></i>
                                         <ShowClock className={styles.clock} />
                                     </div>
                                     {/* Check In Form */}
-                                    <CheckInForm onCheckIn={() => setCheckIn(true)}/>
+                                    <CheckInForm onCheckIn={handleCheckInButton}/>
                                 </React.Fragment>
                             </Switch.Case>
-                            <Switch.Case condition={checkIn && data}>
+                            <Switch.Case condition={showReminder && data}>
                                 <div className={styles.work_status_modal_title}>
                                     <h4>Working Status Confirmation</h4>
                                 </div>
@@ -171,7 +158,7 @@ export const WorkStatusConfirmationModal = ({
                 <DailyReportSubmissionEnforcer
                     close={() => setShowDailySubmissionForm(false)}
                     reminderType="daily_report"
-                    reminderDate={data?.daily_task_report.daily_submission_status}
+                    reminderDate={data?.daily_task_report?.data?.checking_date}
                     onSubmit={() => {
                         setData(prev => ({
                             ...prev,
@@ -220,13 +207,13 @@ const CheckInForm = ({onCheckIn}) => {
                     onCheckIn();
                 }
             })
-            .catch(err => {
-                console.log(err)
-            })
 
             setIsSubmitting(false);
         } catch (error) {
-            console.log(error);
+            if(error.response.status === 403){
+                toast.error(error.response.data.error);
+                setIsSubmitting(false);
+            }
         }
     }
 

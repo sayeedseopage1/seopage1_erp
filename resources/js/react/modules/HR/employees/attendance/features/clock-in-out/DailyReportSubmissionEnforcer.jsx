@@ -17,10 +17,12 @@ import DailyReportSubmissionForm from "./DailyReportSubmissionForm";
 
 const TASK_DATA_API = "/account/tasks/get-today-tasks";
 
-const DailyReportSubmissionEnforcer = ({ close, date_type="today", onSubmit }) => {
+const DailyReportSubmissionEnforcer = ({ close, reminderDate="today", onSubmit }) => {
     const [tasks, setTasks] = React.useState([]);
     const [reportedDate, setReportedDate] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true);
+
+
     const auth = useAuth();
 
     // fetch data
@@ -28,7 +30,7 @@ const DailyReportSubmissionEnforcer = ({ close, date_type="today", onSubmit }) =
         try {
             if(_.size(tasks) === 0){
                 await axios
-                    .get(`${TASK_DATA_API}/${auth.getId()}?date_type=${date_type}`)
+                    .get(`${TASK_DATA_API}/${auth.getId()}?date_type=${reminderDate}`)
                     .then((res) => {
                         setTasks(res.data.data);
                         setReportedDate(res.data.date);

@@ -6,11 +6,10 @@ import FileUploader from "../../../../../../file-upload/FileUploader";
 import Button from "../../../../../../global/Button";
 import { Flex } from "../../../../../../global/styled-component/Flex";
 import {
-    Checkbox,
     FormError,
     FormGroup,
     Input,
-    Label,
+    Label
 } from "../../../../../../global/styled-component/Form";
 import { checkIsURL } from "../../../../../../utils/check-is-url";
 
@@ -87,7 +86,7 @@ const DailyReportSubmissionForm = ({ close, task, reportDate, onSubmit }) => {
         fd.append("link_name", attachmentLink);
         fd.append("section_name", completedSection);
         fd.append("comment", description);
-        fd.append("mark_as_complete", markAsCompleted);
+        fd.append("mark_as_complete", false);
         fd.append("report_date", reportDate);
         fd.append(
             "_token",
@@ -239,7 +238,7 @@ const DailyReportSubmissionForm = ({ close, task, reportDate, onSubmit }) => {
                             </FormError>
                         </FormGroup>
 
-                        <Flex alignItem="center" className="mt-3">
+                        {/* <Flex alignItem="center" className="mt-3">
                             <label htmlFor="markAsComplete">
                                 <Checkbox
                                     type="checkbox"
@@ -253,7 +252,7 @@ const DailyReportSubmissionForm = ({ close, task, reportDate, onSubmit }) => {
                                 />{" "}
                                 Mark as Complete
                             </label>
-                        </Flex>
+                        </Flex> */}
 
                         {/* footer section */}
                         <div className="mt-3 w-100 d-flex align-items-center">
