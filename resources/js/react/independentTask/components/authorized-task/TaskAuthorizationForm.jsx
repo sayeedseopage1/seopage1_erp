@@ -134,7 +134,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                         icon: "success",
                         title: "Independent task creation request has been authorized and the task has been created successfully!",
                         showConfirmButton: false,
-                        timer: 2500,
+                        timer: 3000,
                     });
                 } else {
                     Swal.fire({
@@ -142,7 +142,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                         icon: "success",
                         title: "Independent task creation request denied successfully",
                         showConfirmButton: false,
-                        timer: 2500,
+                        timer: 3000,
                     });
                 }
                 close();
