@@ -8,6 +8,8 @@ use App\Models\PendingAction;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Auth;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -500,6 +502,54 @@ class HelperPendingActionController extends AccountBaseController
         
        
     }
+    public function WonDealAcceptAuthorization($project,$id)
+   {
+    
+    $client= User::where('id',$project->client_id)->first();
+   // dd($client);
+    $project_manager= User::where('id',$id)->first();
+    $deal= Deal::where('id',$project->deal_id)->first();
+    $pending_hours= Carbon::parse($deal->award_time)->addHours(20);
+    $current_time = Carbon::now();
+    $different_in_minutes = $current_time->diffInMinutes($pending_hours);
+    $timeframe = $different_in_minutes/60;
+    $sales= User::where('id',Auth::id())->first();
+    // /dd($sales);
+    
+      
+        $action = new PendingAction();
+        $action->code = 'PWDA';
+        $action->serial = 'PWDA'.'x0';
+        $action->item_name= 'Won deals';
+        $action->heading= 'Won deal awaiting your acceptance!';
+        $action->message = 'Won deal <a href="'.route('contracts.show', $deal->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> is awaiting for your acceptance! (Sales person: <a href="'.route('employees.show',$sales->id).'">'.$sales->name.'</a>)';
+        
+        $action->timeframe= $timeframe;
+       
+        $action->project_id = $project->id;
+        
+        $action->client_id = $client->id;
+       
+        $action->authorization_for= $id;
+    //   / dd($id);
+       
+        $button = [
+            [
+                'button_name' => 'Review',
+                'button_color' => 'primary',
+                'button_type' => 'redirect_url',
+                'button_url' => route('contracts.show', $deal->id),
+            ],
+          
+        ];
+        $action->button = json_encode($button);
+        $action->save();
+      //  dd($action);
+   //    dd(json_decode($action->button));
+
+       
+
+   }
     
    
     
