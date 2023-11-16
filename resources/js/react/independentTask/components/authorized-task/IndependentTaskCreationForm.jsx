@@ -206,8 +206,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             result[pair[0]] = pair[1];
         }
 
-        console.log(result);
-        return;
+        // console.log(result);
+        // return;
 
         if (isValid()) {
             postIndependentTask(fd)

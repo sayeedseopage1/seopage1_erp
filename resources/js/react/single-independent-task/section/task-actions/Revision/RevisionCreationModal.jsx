@@ -6,6 +6,7 @@ import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPa
 import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
 import { useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const RevisionCreationModal = ({ close, task, auth }) => {
     const [reason, setReason] = useState(null);
@@ -20,12 +21,12 @@ const RevisionCreationModal = ({ close, task, auth }) => {
     } = useRevision();
     const { pathname } = useLocation();
     const navigate = useNavigate();
-    console.log({pathname});
+    // console.log({pathname});
 
     const role = auth.getRoleId();
 
     const revisionOptions =
-        role === 4
+        (role === 4 || role === 1)
             ? getProjectManagerAcknowladgementOptions()
             : getLeadDeveloperAcknowladgementOptions();
 
@@ -95,7 +96,18 @@ const RevisionCreationModal = ({ close, task, auth }) => {
                 })
                 .catch((err) => console.log(err));
         } else {
-            console.log("Your forgot to fill up some required fields");
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+
+            Toast.fire({
+                icon: "error",
+                title: "Your forgot to fill up some required fields",
+            });
         }
     };
 

@@ -72,7 +72,7 @@ const SingleIndependentTask = () => {
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
 
-    console.log(task);
+    // console.log(task);
 
     useEffect(() => {
         (async () => {
@@ -118,11 +118,11 @@ const SingleIndependentTask = () => {
                         task_working_environment;
                 });
 
-            console.log({ CurrentTask });
+            // console.log({ CurrentTask });
 
             const _task = new SingleTask(CurrentTask);
 
-            console.log({ _task });
+            // console.log({ _task });
 
             let hasPermission = singleTaskPagePermission(_task, loggedUser);
 
@@ -156,7 +156,7 @@ const SingleIndependentTask = () => {
 
     if (!task) return null;
 
-    console.log("task revision", task?.revisions);
+    // console.log("task revision", task?.revisions);
 
     return (
         <RefetchTaskProvider.Provider value={{ setRefetchTask }}>

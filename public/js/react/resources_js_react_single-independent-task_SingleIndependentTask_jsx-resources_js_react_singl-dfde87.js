@@ -755,7 +755,8 @@ var SingleIndependentTask = function SingleIndependentTask() {
   var task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.SingleTask(Task); // task instance
   var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_8__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user); // logged users data
 
-  console.log(task);
+  // console.log(task);
+
   (0,react__WEBPACK_IMPORTED_MODULE_2__.useEffect)(function () {
     _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var CurrentTask, _task, hasPermission;
@@ -791,16 +792,11 @@ var SingleIndependentTask = function SingleIndependentTask() {
               CurrentTask.working_environment_data = task_working_environment;
             });
           case 5:
-            console.log({
-              CurrentTask: CurrentTask
-            });
-            _task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.SingleTask(CurrentTask);
-            console.log({
-              _task: _task
-            });
+            // console.log({ CurrentTask });
+            _task = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.SingleTask(CurrentTask); // console.log({ _task });
             hasPermission = (0,_permissions__WEBPACK_IMPORTED_MODULE_26__.singleTaskPagePermission)(_task, loggedUser);
             if (hasPermission) {
-              _context.next = 13;
+              _context.next = 11;
               break;
             }
             return _context.abrupt("return", throwError({
@@ -808,10 +804,10 @@ var SingleIndependentTask = function SingleIndependentTask() {
               message: "Access to this resource is forbidden. Please contact the administrator for assistance.",
               code: 403
             }));
-          case 13:
+          case 11:
             // const task = _task;
             dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_6__.storeTask)(CurrentTask));
-          case 14:
+          case 12:
           case "end":
             return _context.stop();
         }
@@ -826,7 +822,9 @@ var SingleIndependentTask = function SingleIndependentTask() {
   }
   var _taskStatus = new _utils_single_task__WEBPACK_IMPORTED_MODULE_7__.BoardColumn(taskStatus);
   if (!task) return null;
-  console.log("task revision", task === null || task === void 0 ? void 0 : task.revisions);
+
+  // console.log("task revision", task?.revisions);
+
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(RefetchTaskProvider.Provider, {
     value: {
       setRefetchTask: setRefetchTask
@@ -14897,14 +14895,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-independent-task/components/Button.jsx");
 /* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-independent-task/components/SubmitButton.jsx");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -14943,14 +14944,13 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
   var _useRevision = (0,_hooks_useRevision__WEBPACK_IMPORTED_MODULE_3__.useRevision)(),
     getLeadDeveloperAcknowladgementOptions = _useRevision.getLeadDeveloperAcknowladgementOptions,
     getProjectManagerAcknowladgementOptions = _useRevision.getProjectManagerAcknowladgementOptions;
-  var _useLocation = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useLocation)(),
+  var _useLocation = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useLocation)(),
     pathname = _useLocation.pathname;
-  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_8__.useNavigate)();
-  console.log({
-    pathname: pathname
-  });
+  var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_9__.useNavigate)();
+  // console.log({pathname});
+
   var role = auth.getRoleId();
-  var revisionOptions = role === 4 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
+  var revisionOptions = role === 4 || role === 1 ? getProjectManagerAcknowladgementOptions() : getLeadDeveloperAcknowladgementOptions();
   var _useCreateRevisionMut = (0,_services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_4__.useCreateRevisionMutation)(),
     _useCreateRevisionMut2 = _slicedToArray(_useCreateRevisionMut, 2),
     createRevision = _useCreateRevisionMut2[0],
@@ -14995,7 +14995,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
     };
     if (validate()) {
       createRevision(data).unwrap().then(function (res) {
-        var Toast = Swal.mixin({
+        var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default().mixin({
           toast: true,
           position: "top-end",
           showConfirmButton: false,
@@ -15012,44 +15012,54 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
         return console.log(err);
       });
     } else {
-      console.log("Your forgot to fill up some required fields");
+      var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_7___default().mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+      });
+      Toast.fire({
+        icon: "error",
+        title: "Your forgot to fill up some required fields"
+      });
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
       className: "sp1_single_task--modal-panel",
       style: {
         maxWidth: "550px"
       },
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "border-bottom pb-2 px-3 mb-3 d-flex align-items-center justify-content-between",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "font-weight-bold f-14",
           children: ["Revision - Task: ", task === null || task === void 0 ? void 0 : task.id, "#", (task === null || task === void 0 ? void 0 : task.title) || (task === null || task === void 0 ? void 0 : task.heading)]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
           onClick: close,
           className: "",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("i", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("i", {
             className: "fa-solid fa-xmark"
           })
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("form", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("form", {
         className: "px-3",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "form-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
             htmlFor: "",
             className: "font-weight-bold",
-            children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+            children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
               className: "f-16",
               children: "*"
             }), " :"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
             className: "px-3",
             children: revisionOptions.map(function (option) {
-              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+              return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
                 className: "form-check d-flex align-items-start mb-2",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("input", {
                   className: "form-check-input mr-2",
                   type: "radio",
                   name: "exampleRadios",
@@ -15064,7 +15074,7 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                     height: "16px",
                     marginTop: "3px"
                   }
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("label", {
                   className: "form-check-label",
                   htmlFor: option.id,
                   style: {
@@ -15074,39 +15084,39 @@ var RevisionCreationModal = function RevisionCreationModal(_ref) {
                 })]
               }, option.id);
             })
-          }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
+          }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("small", {
             id: "emailHelp",
             className: "form-text text-danger",
             children: reasonError
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
           className: "form-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("label", {
             htmlFor: "",
             className: "font-weight-bold",
-            children: ["Explain or Comment", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+            children: ["Explain or Comment", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("sup", {
               className: "f-16",
               children: "*"
             }), " :"]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
             className: "ck-editor-holder",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_2__["default"], {
               onChange: handleEditorTextChange
             })
-          }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
+          }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("small", {
             id: "emailHelp",
             className: "form-text text-danger",
             children: commentError
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
             className: "mt-3 d-flex align-items-center",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
               onClick: close,
               variant: "tertiary",
               className: "ml-auto mr-2",
               children: "Close"
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
               title: "Submit",
               onClick: handleSubmission,
               isLoading: isLoading
@@ -15399,19 +15409,23 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
   var _window;
   var task = _ref.task,
     close = _ref.close;
+  var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_7__.useSelector)(function (s) {
+      return s.subTask;
+    }),
+    Task = _useSelector.task;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("REVISION"),
     _useState2 = _slicedToArray(_useState, 2),
     show = _useState2[0],
     setShow = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState4 = _slicedToArray(_useState3, 2),
     accept = _useState4[0],
     setAccept = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState6 = _slicedToArray(_useState5, 2),
     comment = _useState6[0],
     setComment = _useState6[1];
-  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""),
     _useState8 = _slicedToArray(_useState7, 2),
     denyReason = _useState8[0],
     setDenyReason = _useState8[1];
@@ -15425,6 +15439,10 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
     _useRevisionAcceptOrD2 = _slicedToArray(_useRevisionAcceptOrD, 2),
     revisionAcceptOrDeny = _useRevisionAcceptOrD2[0],
     isLoadingRevisionReview = _useRevisionAcceptOrD2[1].isLoading;
+
+  // useEffect(()=>{
+  //   console.log({Task,name:Task?.create_by?.name});
+  // },[Task])
 
   // handle Accept and continue submition
   var hanldeAcceptAndContinueSubmition = function hanldeAcceptAndContinueSubmition(data, type) {
@@ -15441,7 +15459,7 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
   var handleOnSubmit = function handleOnSubmit(data, type) {
     var _comment$comment, _data$reason, _data$is_deniable;
     var fdata = {
-      comment: (_comment$comment = comment === null || comment === void 0 ? void 0 : comment.comment) !== null && _comment$comment !== void 0 ? _comment$comment : '',
+      comment: (_comment$comment = comment === null || comment === void 0 ? void 0 : comment.comment) !== null && _comment$comment !== void 0 ? _comment$comment : "",
       task_id: data === null || data === void 0 ? void 0 : data.task_id,
       project_id: task === null || task === void 0 ? void 0 : task.projectId,
       user_id: auth === null || auth === void 0 ? void 0 : auth.getId(),
@@ -15450,13 +15468,13 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
           is_deniable: data === null || data === void 0 ? void 0 : data.is_deniable
         });
       }),
-      revision_acknowledgement: (_data$reason = data === null || data === void 0 ? void 0 : data.reason) !== null && _data$reason !== void 0 ? _data$reason : '',
+      revision_acknowledgement: (_data$reason = data === null || data === void 0 ? void 0 : data.reason) !== null && _data$reason !== void 0 ? _data$reason : "",
       revision_id: revision === null || revision === void 0 ? void 0 : revision.id,
-      mode: data !== null && data !== void 0 && data["continue"] ? 'continue' : accept,
-      deny_reason: denyReason !== null && denyReason !== void 0 ? denyReason : '',
+      mode: data !== null && data !== void 0 && data["continue"] ? "continue" : accept,
+      deny_reason: denyReason !== null && denyReason !== void 0 ? denyReason : "",
       is_deniable: (_data$is_deniable = data === null || data === void 0 ? void 0 : data.is_deniable) !== null && _data$is_deniable !== void 0 ? _data$is_deniable : false
     };
-    var params = !(data !== null && data !== void 0 && data["continue"]) && accept === "deny" ? 'deny-continue' : 'accept-continue';
+    var params = !(data !== null && data !== void 0 && data["continue"]) && accept === "deny" ? "deny-continue" : "accept-continue";
     revisionAcceptOrDeny({
       fdata: fdata,
       params: params
@@ -15467,24 +15485,27 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
     });
   };
   var handleContinueButton = function handleContinueButton() {
-    setAccept('continue');
+    setAccept("continue");
     if (lodash__WEBPACK_IMPORTED_MODULE_9___default().size(revision === null || revision === void 0 ? void 0 : revision.taskSubTask) === 0) {
-      setShow('DENY_ASSIGNEE_TO_DEV');
+      setShow("DENY_ASSIGNEE_TO_DEV");
     } else {
       handleOnSubmit({
         "continue": true
-      }, '');
+      }, "");
     }
   };
-  var generateModalTitle = function generateModalTitle() {
+  var generateModalTitle = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
     if (auth.getRoleId() === 4) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By Project Manager/Top Management";
+      var _Task$create_by;
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Lead Developer" : "Revision By ".concat(Task === null || Task === void 0 || (_Task$create_by = Task.create_by) === null || _Task$create_by === void 0 ? void 0 : _Task$create_by.name);
     } else if (auth.getRoleId() === 6) {
-      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By Project Manager/Top Management";
+      var _Task$create_by2;
+      return show === "ASSIGNEE_TO_DEV" ? "Revision For Developer" : "Revision By ".concat(Task === null || Task === void 0 || (_Task$create_by2 = Task.create_by) === null || _Task$create_by2 === void 0 ? void 0 : _Task$create_by2.name);
     } else if (auth.getRoleId() === 9 || auth.getRoleId() === 10) {
-      return "Revision By Project Manager/Top Management";
+      var _Task$create_by3;
+      return "Revision By ".concat(Task === null || Task === void 0 || (_Task$create_by3 = Task.create_by) === null || _Task$create_by3 === void 0 ? void 0 : _Task$create_by3.name);
     } else return "Revision By Lead Developer";
-  };
+  }, [Task]);
 
   //   console.log({task})
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
@@ -15507,20 +15528,20 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsxs)("div", {
         className: "px-3",
-        children: [show === 'REVISION' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_RevisionView__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        children: [show === "REVISION" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_RevisionView__WEBPACK_IMPORTED_MODULE_2__["default"], {
           revision: revision,
           isLoading: isFetching,
           isContinue: isLoadingRevisionReview,
           onAccept: function onAccept() {
-            setAccept('accept');
-            setShow('ACCEPT_AND_CONTINUE');
+            setAccept("accept");
+            setShow("ACCEPT_AND_CONTINUE");
           },
           onDeny: function onDeny() {
-            setAccept('deny');
-            setShow('DENY_AND_CONTINUE');
+            setAccept("deny");
+            setShow("DENY_AND_CONTINUE");
           },
           onContinue: handleContinueButton
-        }), show === 'ACCEPT_AND_CONTINUE' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
+        }), show === "ACCEPT_AND_CONTINUE" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_11__.jsx)(_RevisionAcceptAndContinue__WEBPACK_IMPORTED_MODULE_3__.RevisionAcceptAndContinue, {
           task: task,
           isSubmitting: isLoadingRevisionReview,
           onSubmit: function onSubmit(data) {
@@ -15534,7 +15555,7 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
           revision: revision,
           type: true,
           onSubmit: function onSubmit(data) {
-            return handleOnSubmit(data, 'ASSIGNEE_TO_DEV');
+            return handleOnSubmit(data, "ASSIGNEE_TO_DEV");
           },
           isSubmitting: isLoadingRevisionReview,
           onBack: function onBack() {
@@ -15554,7 +15575,7 @@ var RevisionViewModal = function RevisionViewModal(_ref) {
           revision: revision,
           type: false,
           onSubmit: function onSubmit(data) {
-            return handleOnSubmit(data, 'DENY_ASSIGNEE_TO_DEV');
+            return handleOnSubmit(data, "DENY_ASSIGNEE_TO_DEV");
           },
           isSubmitting: isLoadingRevisionReview,
           onBack: function onBack() {
@@ -15831,9 +15852,9 @@ var TaskAction = function TaskAction(_ref) {
     checkMarkAsCompleteEnableStatus = _useDeveloperCanCompl.data,
     isLoadingCompleteCheck = _useDeveloperCanCompl.isLoading;
   var ENABLE_MARKASCOMPLETE_BUTTON = task && (task !== null && task !== void 0 && task.isSubtask ? (checkMarkAsCompleteEnableStatus === null || checkMarkAsCompleteEnableStatus === void 0 ? void 0 : checkMarkAsCompleteEnableStatus.message) === "Developer can complete this task" : true);
-  console.log({
-    task: task
-  });
+
+  // console.log({task});
+
   var onModalEditButtonClick = function onModalEditButtonClick(e) {
     e.preventDefault();
     checkSubTaskTimer(task === null || task === void 0 ? void 0 : task.id).unwrap().then(function (res) {
