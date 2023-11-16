@@ -35,7 +35,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [refPage, setRefPage] = useState("");
-    
+
     // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
     const [files, setFiles] = React.useState([]);
@@ -153,6 +153,9 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
 
     // handle sumition
     const handleSubmit = (e) => {
+        if (!isValid()) {
+            return;
+        }
         e.preventDefault();
         const _startDate = startDate
             ? dayjs.dayjs(startDate).format("DD-MM-YYYY")
@@ -162,7 +165,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             : "";
 
         const fd = new FormData();
-        fd.append("heading", title ?? "");
+        fd.append("heading", `${title} for ${loginUrl}` ?? "");
         fd.append("description", description ?? "");
         fd.append("start_date", _startDate ?? "");
         fd.append("due_date", _dueDate ?? "");
@@ -171,13 +174,12 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         fd.append("priority", _.lowerCase(priority));
         fd.append("board_column_id", 2);
 
-        // newly added field and data 
-        fd.append("login_url",loginUrl ?? "");
-        fd.append("user_name",username ?? "");
-        fd.append("frontend_password",password ?? "");
-        fd.append("reference_site",refPage ?? "");
+        // newly added field and data
+        fd.append("login_url", loginUrl ?? "");
+        fd.append("user_name", username ?? "");
+        fd.append("frontend_password", password ?? "");
+        fd.append("reference_site", refPage ?? "");
 
-        
         // fd.append("estimate_hours", estimateTimeHour ?? 0);
         // fd.append("estimate_minutes", estimateTimeMin ?? 0);
         // fd.append("deliverable_id", milestone?.deliverable_type ?? '');
@@ -205,6 +207,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         }
 
         console.log(result);
+        return;
 
         if (isValid()) {
             postIndependentTask(fd)
@@ -218,7 +221,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                         icon: "success",
                         title: "Independent task creation request submitted for authorization successfully!",
                         showConfirmButton: false,
-                        timer: 2500,
+                        timer: 3000,
                     });
                 })
                 .catch((err) => {
@@ -287,20 +290,135 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                     {/* body */}
                     <div className="sp1_modal-body sp1_task_create_modal_body">
                         <div className="sp1-subtask-form --form sp1_task_create_modal_body_form row">
-                            {/* Task Title */}
-                            <div className="col-12 col-md-6">
-                                <Input
-                                    id="title"
-                                    label="Title"
+                            {/* task credential */}
+                            <section
+                                className="d-flex col-12"
+                                style={{
+                                    // borderBottom: "dashed 1px #d1d1d1",
+                                    // borderTop: "dashed 1px #d1d1d1",
+                                    padding: "0",
+                                    // backgroundColor:'#F2F4F7',
+                                    flexWrap: "wrap",
+                                }}
+                            >
+                                {/* Login url */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="login-url"
+                                        label="Login URL"
+                                        type="text"
+                                        placeholder="Enter the login url"
+                                        name="login-url"
+                                        required={true}
+                                        value={loginUrl}
+                                        error={formError?.loginUrl}
+                                        onChange={(e) =>
+                                            handleChange(e, setLoginUrl)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Reference Page */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="ref-page"
+                                        label="Reference Page (Optional)"
+                                        type="text"
+                                        placeholder="Enter the reference page"
+                                        name="ref-page"
+                                        required={false}
+                                        value={refPage}
+                                        error={formError?.refPage}
+                                        onChange={(e) =>
+                                            handleChange(e, setRefPage)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Username */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="username"
+                                        label="Username"
+                                        type="text"
+                                        placeholder="Enter the username"
+                                        name="username"
+                                        required={true}
+                                        value={username}
+                                        error={formError?.username}
+                                        onChange={(e) =>
+                                            handleChange(e, setUsername)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Password */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="password"
+                                        label="Password Field"
+                                        type="password"
+                                        placeholder="Enter the password"
+                                        name="password"
+                                        required={true}
+                                        value={password}
+                                        error={formError?.password}
+                                        onChange={(e) =>
+                                            handleChange(e, setPassword)
+                                        }
+                                    />
+                                </div>
+                            </section>
+
+                            <section
+                                className="col-12 px-0 d-md-flex justify-content-center align-items-center"
+                                style={{ overflow: "hidden" }}
+                            >
+                                {/* Task Title */}
+                                <div className="col-12 col-md-6 pr-md-2">
+                                    <Input
+                                        id="title"
+                                        label="Title"
+                                        type="text"
+                                        placeholder="Enter a task title"
+                                        name="title"
+                                        required={true}
+                                        value={title}
+                                        error={formError?.title}
+                                        onChange={(e) =>
+                                            handleChange(e, setTitle)
+                                        }
+                                    />
+                                </div>
+
+                                {/* task title extension */}
+                                <div className="col-12 col-md-6 pl-md-0 d-md-flex align-items-center ">
+                                    {/* <Input
+                                    id="title-extension"
+                                    label=""
                                     type="text"
-                                    placeholder="Enter a task title"
-                                    name="title"
-                                    required={true}
-                                    value={title}
-                                    error={formError?.title}
-                                    onChange={(e) => handleChange(e, setTitle)}
-                                />
-                            </div>
+                                    placeholder=""
+                                    readOnly
+                                    name="title-extension"
+                                    // required={true}
+                                    value={loginUrl}
+                                    // error={formError?.title}
+                                    // onChange={(e) => handleChange(e, setTitle)}
+                                /> */}
+                                    <span className="font-weight-bold text-gray pt-md-4 pr-md-2">
+                                        for
+                                    </span>
+                                    <span
+                                        className="form-control height-35 w-100 f-14 mt-md-4 mx-0 d-flex align-items-center"
+                                        style={{
+                                            backgroundColor: "whitesmoke",
+                                            overflowX:'auto'
+                                        }}
+                                    >
+                                        <span>{loginUrl}</span>
+                                    </span>
+                                </div>
+                            </section>
 
                             {/* Task Categories List */}
                             <div className="col-12 col-md-6">
@@ -312,6 +430,20 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 {formError?.taskCategory && (
                                     <div style={{ color: "red" }}>
                                         {formError?.taskCategory}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* assignee to */}
+                            <div className="col-12 col-md-6">
+                                <AssginedToSelection
+                                    selected={assignedTo}
+                                    onSelect={setAssignedTo}
+                                />
+
+                                {formError?.assignedTo && (
+                                    <div style={{ color: "red" }}>
+                                        {formError?.assignedTo}
                                     </div>
                                 )}
                             </div>
@@ -369,6 +501,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 </div>
                             </div> */}
 
+                            {/* start date */}
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label htmlFor="">
@@ -393,6 +526,7 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                 </div>
                             </div>
 
+                            {/* due date */}
                             <div className="col-12 col-md-6">
                                 <div className="form-group my-3">
                                     <label htmlFor="">
@@ -435,20 +569,6 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     />
                                 </div>
                             </div> */}
-
-                            {/* assignee to */}
-                            <div className="col-12 col-md-6">
-                                <AssginedToSelection
-                                    selected={assignedTo}
-                                    onSelect={setAssignedTo}
-                                />
-
-                                {formError?.assignedTo && (
-                                    <div style={{ color: "red" }}>
-                                        {formError?.assignedTo}
-                                    </div>
-                                )}
-                            </div>
 
                             {/* Priority */}
                             <div className="col-12 col-md-6">
@@ -509,86 +629,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                     }
                                 </div>
                             </div> */}
-                            <section
-                                className="d-flex col-12"
-                                style={{
-                                    // borderBottom: "dashed 1px #d1d1d1",
-                                    // borderTop: "dashed 1px #d1d1d1",
-                                    padding: "0",
-                                    // backgroundColor:'#F2F4F7',
-                                    flexWrap:'wrap',
-                                }}
-                            >
-                                {/* Login url */}
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="login-url"
-                                        label="Login URL"
-                                        type="text"
-                                        placeholder="Enter the login url"
-                                        name="login-url"
-                                        required={true}
-                                        value={loginUrl}
-                                        error={formError?.loginUrl}
-                                        onChange={(e) =>
-                                            handleChange(e, setLoginUrl)
-                                        }
-                                    />
-                                </div>
 
-                                {/* Username */}
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="username"
-                                        label="Username"
-                                        type="text"
-                                        placeholder="Enter the username"
-                                        name="username"
-                                        required={true}
-                                        value={username}
-                                        error={formError?.username}
-                                        onChange={(e) =>
-                                            handleChange(e, setUsername)
-                                        }
-                                    />
-                                </div>
-
-                                {/* Password */}
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="password"
-                                        label="Password Field"
-                                        type="password"
-                                        placeholder="Enter the password"
-                                        name="password"
-                                        required={true}
-                                        value={password}
-                                        error={formError?.password}
-                                        onChange={(e) =>
-                                            handleChange(e, setPassword)
-                                        }
-                                    />
-                                </div>
-                                
-                                {/* Reference Page */}
-                                <div className="col-12 col-md-6">
-                                    <Input
-                                        id="ref-page"
-                                        label="Reference Page (Optional)"
-                                        type="text"
-                                        placeholder="Enter the reference page"
-                                        name="ref-page"
-                                        required={false}
-                                        value={refPage}
-                                        error={formError?.refPage}
-                                        onChange={(e) =>
-                                            handleChange(e, setRefPage)
-                                        }
-                                    />
-                                </div>
-
-                            </section>
-
+                            {/* description */}
                             <div className="col-12">
                                 <div className="form-group my-3">
                                     <label htmlFor="">

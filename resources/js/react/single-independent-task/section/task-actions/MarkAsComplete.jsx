@@ -15,6 +15,7 @@ import Modal from "../../components/Modal";
 import SubmitButton from "../../components/SubmitButton";
 
 import { checkIsURL } from "../../../utils/check-is-url";
+import Swal from "sweetalert2";
 // import Swal from "sweetalert2";
 
 const MarkAsComplete = ({ task, auth }) => {
@@ -67,42 +68,47 @@ const MarkAsComplete = ({ task, auth }) => {
                     .unwrap()
                     .then((res) => {
                         if (res.status === "true" || res.status === true) {
-                            const htmlContent = (
-                                <div className="__tostar_modal">
-                                    <strong>
-                                        You can't complete this task because you
-                                        have some pending subtask?
-                                    </strong>
-                                    <ul className="py-1">
-                                        {res.subtasks.map((el, idx) => (
-                                            <li
-                                                key={el.id}
-                                                style={{
-                                                    listStyle: "unset",
-                                                    fontSize: "13px",
-                                                }}
-                                            >
-                                                <a
-                                                    href={`/account/tasks/${el.id}`}
-                                                >
-                                                    {idx + 1}. {el.heading}
-                                                </a>{" "}
-                                                (
-                                                <a
-                                                    href={`/account/clients/${el.clientId}`}
-                                                >
-                                                    {el.client_name}
-                                                </a>
-                                                )
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            );
-                            toast.warn(htmlContent, {
-                                position: "top-center",
-                                icon: false,
-                            });
+                            // const htmlContent = (
+                            //     <div className="__tostar_modal">
+                            //         <strong>
+                            //             You can't complete this task because you
+                            //             have some pending subtask?
+                            //         </strong>
+                            //         <ul className="py-1">
+                            //             {res.subtasks.map((el, idx) => (
+                            //                 <li
+                            //                     key={el.id}
+                            //                     style={{
+                            //                         listStyle: "unset",
+                            //                         fontSize: "13px",
+                            //                     }}
+                            //                 >
+                            //                     <a
+                            //                         href={`/account/tasks/${el.id}`}
+                            //                     >
+                            //                         {idx + 1}. {el.heading}
+                            //                     </a>{" "}
+                            //                     (
+                            //                     <a
+                            //                         href={`/account/clients/${el.clientId}`}
+                            //                     >
+                            //                         {el.client_name}
+                            //                     </a>
+                            //                     )
+                            //                 </li>
+                            //             ))}
+                            //         </ul>
+                            //     </div>
+                            // );
+                            // toast.warn(htmlContent, {
+                            //     position: "top-center",
+                            //     icon: false,
+                            // });
+                            Swal.fire({
+                                icon:'warning',
+                                title:`You can't complete this task because you
+                                have some pending subtask?`
+                            })
                             close();
                         } else {
                             setMarkAsCompleteModalIsOpen(true);
