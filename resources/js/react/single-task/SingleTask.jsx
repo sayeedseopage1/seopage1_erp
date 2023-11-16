@@ -47,6 +47,8 @@ const SingleTaskPage = () => {
     const task = new SingleTask(Task); // task instance
     const loggedUser = new User(window?.Laravel?.user); // logged users data
 
+  
+
     useEffect(() => {
         (() => {
             if (data) {
@@ -79,6 +81,8 @@ const SingleTaskPage = () => {
     // console.log({ task });
 
     if (!task) return null;
+
+   
 
     return (
         <div className="position-relative">
@@ -394,52 +398,115 @@ const SingleTaskPage = () => {
                                                     </div>
                                                 </div>
 
-                                                {/* task type */}
-                                                <div className="sp1_st-list-item">
-                                                    <div className="sp1_st-list-item-head">
-                                                        Task Type:{" "}
-                                                    </div>
-                                                    <div className="sp1_st-list-item-value">
-                                                        {task?.taskType ?? "--"}
-                                                    </div>
-                                                </div>
 
-                                                <div className="sp1_st-list-item">
-                                                    <div className="sp1_st-list-item-head">
-                                                        Page Type:{" "}
-                                                    </div>
-                                                    <div className="sp1_st-list-item-value">
-                                                        {task?.pageType ?? "--"}
-                                                    </div>
-                                                </div>
+                                                
+                                                <Switch>
+                                                    <Switch.Case condition={ task?.taskTypeDetails.taskType === 'New Page Design'}>
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Page Type:{" "}
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.pageType ?? "--"}
+                                                            </div>
+                                                        </div>
 
-                                                <div className="sp1_st-list-item">
-                                                    <div className="sp1_st-list-item-head">
-                                                        Page Name:{" "}
-                                                    </div>
-                                                    <div className="sp1_st-list-item-value">
-                                                        {task?.pageName ?? "--"}
-                                                    </div>
-                                                </div>
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Page Name:{" "}
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.pageName ?? "--"}
+                                                            </div>
+                                                        </div>
 
-                                                <div className="sp1_st-list-item">
-                                                    <div className="sp1_st-list-item-head">
-                                                        Page Url:{" "}
-                                                    </div>
-                                                    <div className="sp1_st-list-item-value">
-                                                        {task?.pageUrl ? (
-                                                            <a
-                                                                href={
-                                                                    task?.pageUrl
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Page Url:{" "}
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.pageUrl ? (
+                                                                    <a href={task?.pageUrl}>
+                                                                        ( view )
+                                                                    </a>
+                                                                ) : (
+                                                                    <span>--</span>
+                                                                )}
+                                                            </div>
+                                                        </div> 
+                                                    </Switch.Case>
+
+
+                                                    <Switch.Case condition={ task?.taskTypeDetails.taskType === 'Cloning Existing Design'}>
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Page Type:{" "}
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.taskTypeDetails?.taskTypeName ?? "--"}
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Number of Pages:{" "}
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.taskTypeDetails?.numberOfPages ?? "--"}
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Existing Design Link:{" "}
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.taskTypeDetails?.existingDesignLink ?
+                                                                    <a href={task?.taskTypeDetails?.existingDesignLink}>
+                                                                        {task?.taskTypeDetails?.existingDesignLink}
+                                                                    </a>:
+                                                                    "--"
                                                                 }
-                                                            >
-                                                                ( view )
-                                                            </a>
-                                                        ) : (
-                                                            <span>--</span>
-                                                        )}
-                                                    </div>
-                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                    </Switch.Case>
+
+
+                                                    <Switch.Case condition={task?.taskTypeDetails?.taskType === 'Others'}>
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                               Other Task Type:  
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                --
+                                                            </div>
+                                                        </div>  
+
+                                                        
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Page Name: 
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.taskTypeDetails?.pageName ?? '--'}
+                                                            </div>
+                                                        </div>  
+                                                        <div className="sp1_st-list-item">
+                                                            <div className="sp1_st-list-item-head">
+                                                                Page URL: 
+                                                            </div>
+                                                            <div className="sp1_st-list-item-value">
+                                                                {task?.taskTypeDetails?.pageUrl ?
+                                                                    <a href={task?.taskTypeDetails?.pageUrl}>
+                                                                        {task?.taskTypeDetails?.pageUrl}
+                                                                    </a>:
+                                                                    "--"
+                                                                }
+                                                            </div>
+                                                        </div>  
+                                                    </Switch.Case>
+
+                                                </Switch>
                                             </>
                                         )}
                                     </div>

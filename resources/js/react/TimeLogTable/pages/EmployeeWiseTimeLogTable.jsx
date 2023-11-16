@@ -8,6 +8,8 @@ import Tabbar from "../components/Tabbar";
 import { EmployeeTableCtx } from "../context/EmployeeTableContext";
 import TimeLogTableFilterBar from "../components/TimeLogTableFilterBar";
 import { convertTime } from "../../utils/converTime";
+import { RefreshButton } from "../components/RefreshButton";
+import Loader from "../../global/Loader";
 
 
 
@@ -17,7 +19,7 @@ const EmployeeWiseTimeLogTable = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
-    const { setFilter } = useContext(EmployeeTableCtx);
+    const { filter, setFilter } = useContext(EmployeeTableCtx);
     const [nSession, setNSession] = useState(0);
     const [trackedTime, setTractedTime] = useState(0);
 
@@ -32,9 +34,9 @@ const EmployeeWiseTimeLogTable = () => {
     }
 
     // handle fetch data
-    const handleFetchData = (filter) => {
+    const handleFetchData = async (filter) => {
         setFilter(filter);
-        getEmployeeWiseData(filter)
+        await getEmployeeWiseData(filter)
         .unwrap()
         .then(res => {
             setCurrentPage(1);
@@ -67,12 +69,22 @@ const EmployeeWiseTimeLogTable = () => {
         handleData(data, currentPage, number);
     }
 
+    // handle refresh button
+    const handleRefresh = () => {
+        handleFetchData(filter);
+    }
+
     return (
         <div className="sp1_tlr_container">
         <TimeLogTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="mb-3">
-                    <Tabbar/>
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                    <Tabbar/> 
+                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                        {isLoading ?
+                            <Loader title="Refreshing..."  borderRightColor="white" />
+                        : 'Refresh'}
+                    </RefreshButton>
                 </div>
                 <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{gap: '10px'}}>
                     <span className="mx-auto">

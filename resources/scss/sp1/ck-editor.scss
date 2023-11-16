@@ -482,6 +482,7 @@
     h1{font-size: 2rem !important;}
     a{
         color: var(--header_color);
+        word-break: break-all;
         &:hover{
             color: var(--header_color);
             text-decoration: underline;
@@ -492,4 +493,8 @@
 
 .ck.ck-powered-by {
     display: none !important;
+}
+
+.word-break{
+    word-break: break-all !important;
 }

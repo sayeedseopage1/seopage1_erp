@@ -4999,7 +4999,7 @@ class TaskController extends AccountBaseController
                     $past_action->serial = $action->serial;
                     $past_action->action_id = $action->id;
                     $past_action->heading = $action->heading;
-                    $past_action->message = $action->message;
+                    $past_action->message = $action->message .'was resolved by '.$authorize_by->name;
                  //   $past_action->button = $action->button;
                     $past_action->timeframe = $action->timeframe;
                     $past_action->authorization_for = $action->authorization_for;

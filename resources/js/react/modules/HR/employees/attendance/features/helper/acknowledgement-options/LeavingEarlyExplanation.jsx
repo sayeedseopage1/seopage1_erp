@@ -1,0 +1,188 @@
+import React from "react";
+import CKEditorComponent from "../../../../../../../ckeditor";
+import Button from "../../../../../../../global/Button";
+import Switch from "../../../../../../../global/Switch";
+import { Label } from "../../../../../../../global/styled-component/Form";
+
+/**
+ * * This component responsible for rendering leave early explanation form
+ */
+
+const LeavingEarlyExplanation = ({
+    checked,
+    index,
+    onChange,
+    onSubmit,
+    isLoading,
+    parentReason,
+    lessTrackDate,
+    onBack,
+}) => {
+    // form data
+    const [comment, setComment] = React.useState("");
+    const [error, setError] = React.useState(null);
+    const [durationStart, setDurationStart] = React.useState("08:00 AM");
+    const [durationEnd, setDurationEnd] = React.useState("05:00 PM");
+
+    // setup time field
+    React.useEffect(() => {
+        // start time
+        window
+            .$("#timepicker1")
+            .timepicker("setTime", durationStart)
+            .on("changeTime.timepicker", function (e) {
+                setDurationStart(e.target.value);
+            });
+
+        // end time
+        window
+            .$("#timepicker2")
+            .timepicker("setTime", durationEnd)
+            .on("changeTime.timepicker", function (e) {
+                setDurationEnd(e.target.value);
+                // console.log(e.timeStamp)
+            });
+    }, [checked]);
+
+    // form validation checking
+    const isValid = () => {
+        let errCount = 0;
+        let err = new Object();
+
+        if (comment === "") {
+            errCount++;
+            err.comment = "Please explain the reason why you came late!";
+        }
+
+        setError(err);
+        return !errCount;
+    };
+
+    // editor data change
+    const handleEditorChange = (e, editor) => {
+        const data = editor.getData();
+        setComment(data);
+    };
+
+    // handle submission
+    const handleSubmission = (e) => {
+        e.preventDefault();
+        const data = {
+            reason_for_less_tracked_hours_a_day_task: parentReason,
+            child_reason: "I am leaving early",
+            durations: JSON.stringify([
+                { id: "de2sew", start: durationStart, end: durationEnd },
+            ]),
+            comment,
+        };
+
+        if (isValid()) {
+            onSubmit(data);
+        } else {
+            Swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Please complete all required fields.",
+                showConfirmButton: true,
+            });
+        }
+    };
+
+    return (
+        <React.Fragment>
+            <div className="--option-item">
+                {/* acknowledgement option */}
+                <div
+                    className="d-flex align-items-center"
+                    style={{ gap: "10px" }}
+                >
+                    <input
+                        type="checkbox"
+                        style={{ cursor: "pointer" }}
+                        checked={checked}
+                        value={index.toString()}
+                        onChange={onChange}
+                    />
+                    I am leaving early
+                </div>
+
+                <Switch>
+                    <Switch.Case condition={checked}>
+                        <div className="pl-3 my-3 bg-white">
+                            <Label className="font-weight-bold">
+                                Select the time here <sup>*</sup>
+                            </Label>
+
+                            {/* time selection */}
+                            <div className="row">
+                                <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                                    <label htmlFor="" className="d-block">
+                                        From:
+                                    </label>
+                                    <input
+                                        id="timepicker1"
+                                        className="form-control w-100 py-2"
+                                        data-minute-step="1"
+                                        data-modal-backdrop="false"
+                                        type="text"
+                                    />
+                                </div>
+
+                                <div className="col-6 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                                    <label htmlFor="" className="d-block">
+                                        To
+                                    </label>
+                                    <input
+                                        id="timepicker2"
+                                        className="form-control w-100 py-2"
+                                        data-minute-step="1"
+                                        data-modal-backdrop="false"
+                                        type="text"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* comment field */}
+                            <div className="mt-3">
+                                <Label className="font-weight-bold">Explain the reason why you are leaving early on ${lessTrackDate} <sup>*</sup> </Label>
+                                <div className="ck-editor-holder stop-timer-options">
+                                    <CKEditorComponent
+                                        data={comment}
+                                        onChange={handleEditorChange}
+                                    />
+                                </div>
+                                <Switch.Case condition={error?.comment}>
+                                    <div className="f-14 text-danger">
+                                        {error?.comment}
+                                    </div>
+                                </Switch.Case>
+                            </div>
+
+                            {/* footer section */}
+                            <div className="mt-3 w-100 d-flex align-items-center">
+                                {/* back button */}
+                                <Button
+                                    variant="tertiary"
+                                    onClick={() => onBack(null)}
+                                    className="ml-auto mr-2"
+                                >
+                                    Back
+                                </Button>
+
+                                <Button
+                                    onClick={handleSubmission}
+                                    isLoading={isLoading}
+                                    loaderTitle="Processing..."
+                                >
+                                    Submit
+                                </Button>
+                            </div>
+                        </div>
+                    </Switch.Case>
+                </Switch>
+            </div>
+        </React.Fragment>
+    );
+};
+
+export default LeavingEarlyExplanation;

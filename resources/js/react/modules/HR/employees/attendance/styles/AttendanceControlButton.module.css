@@ -1,0 +1,33 @@
+.attendance_button_group{
+    display: flex;
+    align-items: center;
+}
+
+/* clock show */
+.clock{
+    padding: 0 10px;
+    text-align: right;
+}
+
+.clock div:first-child{
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    color: #616e80;
+    line-height: 27px;
+}
+
+.clock div:nth-child(2){
+    color: #7c828b;
+    font-size: 15px;
+}
+
+/* button */
+.check_button{
+    font-weight: 400;
+    font-size: 16px !important;
+    color: rgb(227, 230, 233) !important;
+    padding: 0.854rem !important;
+    background-color: #1D82F5;
+}
+

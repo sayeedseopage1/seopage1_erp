@@ -21,6 +21,8 @@ const CommentSendBox = ({onCommentPost, task}) => {
     setComment(data);
   } 
 
+  console.log(files)
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const fd = new FormData();

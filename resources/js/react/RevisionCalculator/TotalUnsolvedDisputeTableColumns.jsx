@@ -1,11 +1,10 @@
-import _ from "lodash";
-import React from 'react';
-import styles from './styles.module.css';
-import Popover from "../global/Popover";
-import { useState } from "react";
-import Modal from "../global/Modal";
-import Button from "../global/Button";
 import dayjs from "dayjs";
+import _ from "lodash";
+import React, { useState } from 'react';
+import Button from "../global/Button";
+import Modal from "../global/Modal";
+import Popover from "../global/Popover";
+import styles from './styles.module.css';
 
 export const TotalUnsolvedDisputeTableColumns = [
     {

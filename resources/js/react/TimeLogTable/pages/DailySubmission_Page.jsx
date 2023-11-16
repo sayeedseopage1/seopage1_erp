@@ -14,6 +14,8 @@ import '../styles/time-log-history.css';
 import '../styles/time-log-table.css';
 import '../components/data-table.css';
 import { useLazyGetAllDailySubmissionQuery } from '../../services/api/dailySubmissionApiSlice';
+import { RefreshButton } from '../components/RefreshButton';
+import Loader from '../../global/Loader';
 
 const DailySubmission_Page = () => {
     const [data, setData] = useState([]);
@@ -22,7 +24,8 @@ const DailySubmission_Page = () => {
     const [renderData, setRenderData] = useState(null);
     const [sortConfig, setSortConfig] = useState([]);
     const [trackedTime, setTractedTime] = useState(0);
-    const [getAllDailySubmission,{isLoading}] = useLazyGetAllDailySubmissionQuery();
+    const [getAllDailySubmission,{isLoading, isFetching}] = useLazyGetAllDailySubmissionQuery();
+    const [filter, setFilter] = useState(null);
 
 
 
@@ -37,12 +40,13 @@ const DailySubmission_Page = () => {
     }
 
     // handle fetch data
-    const handleFetchData = (filter) => {
+    const handleFetchData = async (filter) => {
         const queryObject = _.pickBy(filter, Boolean);
+        setFilter(queryObject);
         const searchParams = new URLSearchParams(queryObject).toString();
-        console.log(searchParams);
+        // console.log(searchParams);
         setCurrentPage(1);
-        getAllDailySubmission(searchParams)
+        await getAllDailySubmission(searchParams)
             .unwrap()
             .then(({dailySubmission})=>{
                 const newData = dailySubmission.map((data,i)=>({...data,unique_id:i}));
@@ -78,12 +82,23 @@ const DailySubmission_Page = () => {
     }
 
     // console.log(get_submission_table_data());
+    // handle refresh button
+    const handleRefresh = () => {
+        handleFetchData(filter);
+    }
 
     return (
         <div className="sp1_tlr_container">
             <DailySubmissionTableFilter onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="mb-2"> <Tabbar /></div>
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                    <Tabbar/> 
+                    <RefreshButton onClick={handleRefresh} isLoading={isFetching} > 
+                        {isFetching ?
+                            <Loader title="Refreshing..."  borderRightColor="white" />
+                        : 'Refresh'}
+                    </RefreshButton>
+                </div>
                 {/* <div className=" w-100 d-flex flex-wrap justify-center align-items-center" style={{ gap: '10px' }}>
                     <span className="mx-auto">
                         Total Tracked Time: <strong>{convertTime(trackedTime)}</strong>
@@ -101,7 +116,7 @@ const DailySubmission_Page = () => {
                     handlePerPageData={handlePerPageData}
                     currentPage={currentPage}
                     totalEntry={data.length}
-                    isLoading={isLoading}
+                    isLoading={isFetching}
                 />
             </div>
         </div>
