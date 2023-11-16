@@ -16,7 +16,7 @@ use App\Notifications\ApproveIndependentTasksNotification;
 use App\Notifications\IndependentTasksNotification;
 use Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 use Notification;
 
 
@@ -84,18 +84,22 @@ class IndependentTaskController extends AccountBaseController
         $ppTask->save();
 
         if ($request->hasFile('file')) {
+            $files = $request->file('file');
+            $destinationPath = storage_path('app/public/');
+            $file_name = [];
 
-            foreach ($request->file as $fileData) {
-                $file = new TaskFile();
-                $file->task_id = $ppTask->id;
+            foreach ($files as $file) {
+                $ppTaskFile = new TaskFile();
+                $ppTaskFile->task_id = $ppTask->id;
+                $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                array_push($file_name, $filename);
+                $ppTaskFile->user_id = $ppTask->user_id;
+                $ppTaskFile->filename = $filename;
+                $ppTaskFile->hashname = $filename;
+                $ppTaskFile->size = $file->getSize();
+                $ppTaskFile->save();
 
-                $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $ppTask->id);
-
-                $file->user_id = $ppTask->user_id;
-                $file->filename = $fileData->getClientOriginalName();
-                $file->hashname = $filename;
-                $file->size = $fileData->getSize();
-                $file->save();
+                Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
 
                 $this->logTaskActivity($ppTask->id, $ppTask->user_id, 'fileActivity', $ppTask->board_column_id);
             }
@@ -179,21 +183,24 @@ class IndependentTaskController extends AccountBaseController
             $independent_task->added_by = $pendingParentTasks->added_by;
             $independent_task->save();
 
-
             if ($request->hasFile('file')) {
-
-                foreach ($request->file as $fileData) {
-                    $file = TaskFile::where('task_id',$pendingParentTasks->id);
-                    $file->task_id = $independent_task->id;
-
-                    $filename = Files::uploadLocalOrS3($fileData, TaskFile::FILE_PATH . '/' . $independent_task->id);
-
-                    $file->user_id = $independent_task->user_id;
-                    $file->filename = $fileData->getClientOriginalName();
-                    $file->hashname = $filename;
-                    $file->size = $fileData->getSize();
-                    $file->save();
-
+                $files = $request->file('file');
+                $destinationPath = storage_path('app/public/');
+                $file_name = [];
+    
+                foreach ($files as $file) {
+                    $ppTaskFile = TaskFile::where('task_id',$pendingParentTasks->id);
+                    $ppTaskFile->task_id = $independent_task->id;
+                    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+                    array_push($file_name, $filename);
+                    $ppTaskFile->user_id = $independent_task->user_id;;
+                    $ppTaskFile->filename = $filename;
+                    $ppTaskFile->hashname = $filename;
+                    $ppTaskFile->size = $file->getSize();
+                    $ppTaskFile->save();
+    
+                    Storage::disk('s3')->put('/' . $filename, file_get_contents($file));
+    
                     $this->logTaskActivity($independent_task->id, $independent_task->user_id, 'fileActivity', $independent_task->board_column_id);
                 }
             }

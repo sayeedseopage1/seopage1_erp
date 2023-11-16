@@ -20,6 +20,7 @@ import TaskAuthorization from "../components/authorized-task/TaskAuthorization";
 import SubmitButton from "../components/SubmitButton";
 import { useState } from "react";
 import IndependentTaskCreationForm from "../components/authorized-task/IndependentTaskCreationForm";
+import { useRefresh } from "../index";
 
 const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     // const {tasks} = useSelector(s => s.tasks)
@@ -27,13 +28,17 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     // const dispatch = useDispatch();
     // const [getTasks, { isFetching }] = useLazyGetTasksQuery();
     // const [filter, setFilter] = React.useState(null);
-    const [search, setSearch] = useState('');
-    const [showIndividualTaskCreationForm, setShowIndividualTaskCreationForm] = useState(false);
+    const [search, setSearch] = useState("");
+    const {setRefresh} = useRefresh();
+    const [showIndividualTaskCreationForm, setShowIndividualTaskCreationForm] =
+        useState(false);
     // const [showAuthorizationModal, setShowAuthorizationModal] = React.useState(false);
     // const [showAuthorizationTableModal, setShowAuthorizationTableModal] = React.useState(false);
     // const [activeModalTaskTypeData, setActiveModalTaskTypeData] = React.useState(null);
     // const [comment, setComment] = React.useState('');
-    const [columnVisibility, setColumnVisibility] = useState(defaultColumnVisibility)
+    const [columnVisibility, setColumnVisibility] = useState(
+        defaultColumnVisibility
+    );
 
     // api function
     // const [updateTasktypeAuthStatus, { isLoading }] = useUpdateTasktypeAuthStatusMutation();
@@ -64,9 +69,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     //     }
     // }
 
-
     // const [getTaskTypeData,{ isFetching: tasksTypeDataIsFetching }] = useLazyGetTaskTypeDataQuery();
-
 
     // fetch table data
     // const fetchTasksTypeData = async () => {
@@ -102,12 +105,12 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
     let tableColumns = TaskTableColumns;
 
     if (true) {
-        tableColumns = _.filter(TaskTableColumns, d => d.id !== "action");
+        tableColumns = _.filter(TaskTableColumns, (d) => d.id !== "action");
     }
 
     const handleTaskAddForm = () => {
         setShowIndividualTaskCreationForm(true);
-    }
+    };
 
     return (
         <React.Fragment>
@@ -116,6 +119,11 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
             </FilterContainer>
 
             <div className="sp1_tlr_container">
+                <section className="pt-3 pr-3 d-flex justify-content-end">
+                    <Button onClick={setRefresh} size="sm" variant="primary">
+                        Refresh
+                    </Button>
+                </section>
                 <div className="sp1_tlr_tbl_container">
                     <div className="mb-3 d-flex align-items-center flex-wrap justify-content-between">
                         {/* <Tabbar /> */}
@@ -138,8 +146,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                             className="d-flex align-items-center flex-wrap"
                             style={{ gap: "10px" }}
                         >
-
-                            {_.includes([1, 4], auth?.getRoleId()) && (
+                            {_.includes([1, 4, 8], auth?.getRoleId()) && (
                                 <SubmitButton
                                     onClick={handleTaskAddForm}
                                     isLoading={false}
@@ -151,9 +158,12 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                             <TaskAuthorization />
                         </div>
 
-                        <div className="mr-auto ml-2 mb-2 "/>                            
-                        
-                        <div className="mr-2 mb-2" style={{ maxWidth: '300px' }}>
+                        <div className="mr-auto ml-2 mb-2 " />
+
+                        <div
+                            className="mr-2 mb-2"
+                            style={{ maxWidth: "300px" }}
+                        >
                             <SearchBox
                                 value={search}
                                 onChange={setSearch}
@@ -161,7 +171,7 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                             />
                         </div>
 
-                        <div className="mb-2" style={{ marginTop: '2px' }}>
+                        <div className="mb-2" style={{ marginTop: "2px" }}>
                             <TableFilter
                                 tableName="tasksTable"
                                 columns={tableColumns}
@@ -169,18 +179,21 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                                 setColumnVisibility={setColumnVisibility}
                             />
                         </div>
-
                     </div>
 
                     <IndependentTaskCreationForm
                         isOpen={showIndividualTaskCreationForm}
                         close={() => setShowIndividualTaskCreationForm(false)}
-                        projectName={'independent-task-creation-form'}
+                        projectName={"independent-task-creation-form"}
                         onSuccess={() => onFilter({})}
                     />
 
                     <TasksTable
-                        tasks={_.orderBy(tableData,['creation_date'],['desc'])}
+                        tasks={_.orderBy(
+                            tableData,
+                            ["creation_date"],
+                            ["desc"]
+                        )}
                         isLoading={isLoading}
                         filter={filter}
                         tableName="independent-task-table"
@@ -193,14 +206,11 @@ const Tasks = ({ tableData, isLoading, onFilter, filter }) => {
                     />
                 </div>
             </div>
-
         </React.Fragment>
     );
 };
 
 export default Tasks;
-
-
 
 const ShowAuthorizationTableModalComponent = () => {
     return (
@@ -209,14 +219,16 @@ const ShowAuthorizationTableModalComponent = () => {
                 <div className="sp1_modal-panel sp1_task_auth_modal_table ">
                     {/* header */}
                     <div className="sp1_modal-head">
-                        <div className="sp1_modal-title pl-2"><strong>Primary Page Development</strong></div>
+                        <div className="sp1_modal-title pl-2">
+                            <strong>Primary Page Development</strong>
+                        </div>
                         <Button
                             onClick={closeTable}
                             aria-label="ModalClose"
-                            variant='tertiary'
-                            className='sp1_modal-close'
+                            variant="tertiary"
+                            className="sp1_modal-close"
                         >
-                            <i className='fa-solid fa-xmark' />
+                            <i className="fa-solid fa-xmark" />
                         </Button>
                     </div>
                     {/* end header */}
@@ -227,21 +239,42 @@ const ShowAuthorizationTableModalComponent = () => {
                             <table className="sp1_tasks_table">
                                 <thead className="sp1_tasks_thead">
                                     <tr className="sp1_tasks_tr">
-                                        <th className="sp1_tasks_th px-2">Page Name</th>
-                                        <th className="sp1_tasks_th px-2">Page URL</th>
-                                        <th className="sp1_tasks_th px-2">Task</th>
-                                        <th className="sp1_tasks_th px-2">SubTask</th>
-                                        <th className="sp1_tasks_th px-2">Assigned By</th>
-                                        <th className="sp1_tasks_th px-2">Assigned To</th>
-                                        <th className="sp1_tasks_th px-2">Project</th>
-                                        <th className="sp1_tasks_th px-2">Client</th>
-                                        <th className="sp1_tasks_th px-2">Action</th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Page Name
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Page URL
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Task
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            SubTask
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Assigned By
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Assigned To
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Project
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Client
+                                        </th>
+                                        <th className="sp1_tasks_th px-2">
+                                            Action
+                                        </th>
                                     </tr>
                                 </thead>
 
                                 <tbody className="sp1_tasks_tbody">
                                     {_.map(tasksType, (data, index) => (
-                                        <tr className="sp1_tasks_tr" key={index}>
+                                        <tr
+                                            className="sp1_tasks_tr"
+                                            key={index}
+                                        >
                                             <td className="sp1_tasks_td">
                                                 <span className="multiline-ellipsis">
                                                     {data?.page_name}
@@ -249,91 +282,147 @@ const ShowAuthorizationTableModalComponent = () => {
                                             </td>
 
                                             <td className="sp1_tasks_td ">
-                                                ( <a href={data?.page_url} style={{ color: '#4285F4 !important' }}>
-                                                    <abbr title={data?.page_url}>
+                                                ({" "}
+                                                <a
+                                                    href={data?.page_url}
+                                                    style={{
+                                                        color: "#4285F4 !important",
+                                                    }}
+                                                >
+                                                    <abbr
+                                                        title={data?.page_url}
+                                                    >
                                                         view
                                                     </abbr>
-                                                </a> )
+                                                </a>{" "}
+                                                )
                                             </td>
                                             <td className="sp1_tasks_td ">
                                                 <abbr title={data?.task}>
-                                                    <a href={`/account/tasks/${data?.task_id}`} className="multiline-ellipsis">
+                                                    <a
+                                                        href={`/account/tasks/${data?.task_id}`}
+                                                        className="multiline-ellipsis"
+                                                    >
                                                         {data?.task}
                                                     </a>
                                                 </abbr>
                                             </td>
                                             <td className="sp1_tasks_td ">
                                                 <abbr title={data?.sub_task}>
-                                                    <a href={`/account/tasks/${data?.sub_task_id}`} className="multiline-ellipsis">
+                                                    <a
+                                                        href={`/account/tasks/${data?.sub_task_id}`}
+                                                        className="multiline-ellipsis"
+                                                    >
                                                         {data?.sub_task}
                                                     </a>
                                                 </abbr>
                                             </td>
                                             <td className="sp1_tasks_td ">
-                                                <abbr title={data?.added_by_name}>
-                                                    <a href={`/account/employees/${data?.added_by_id}`} className="multiline-ellipsis">
+                                                <abbr
+                                                    title={data?.added_by_name}
+                                                >
+                                                    <a
+                                                        href={`/account/employees/${data?.added_by_id}`}
+                                                        className="multiline-ellipsis"
+                                                    >
                                                         {data?.added_by_name}
                                                     </a>
                                                 </abbr>
                                             </td>
                                             <td className="sp1_tasks_td">
-                                                <abbr title={data?.assigned_to_name}>
-                                                    <a href={`/account/employees/${data?.assigned_to_id}`} className="multiline-ellipsis">
+                                                <abbr
+                                                    title={
+                                                        data?.assigned_to_name
+                                                    }
+                                                >
+                                                    <a
+                                                        href={`/account/employees/${data?.assigned_to_id}`}
+                                                        className="multiline-ellipsis"
+                                                    >
                                                         {data?.assigned_to_name}
                                                     </a>
                                                 </abbr>
                                             </td>
                                             <td className="sp1_tasks_td ">
-                                                <abbr title={data?.project_name} >
-                                                    <a href={`/account/tasks/${data?.project_id}`} className="multiline-ellipsis">
+                                                <abbr
+                                                    title={data?.project_name}
+                                                >
+                                                    <a
+                                                        href={`/account/tasks/${data?.project_id}`}
+                                                        className="multiline-ellipsis"
+                                                    >
                                                         {data?.project_name}
                                                     </a>
                                                 </abbr>
                                             </td>
                                             <td className="sp1_tasks_td ">
                                                 <abbr title={data?.client_name}>
-                                                    <a href={`/account/employees/${data?.client_id}`} className="multiline-ellipsis">
+                                                    <a
+                                                        href={`/account/employees/${data?.client_id}`}
+                                                        className="multiline-ellipsis"
+                                                    >
                                                         {data?.client_name}
                                                     </a>
                                                 </abbr>
                                             </td>
                                             <td className="sp1_tasks_td ">
-                                                <div className="w-fit d-flex align-items-center ml-auto" style={{ gap: '10px' }}>
-                                                    {
-                                                        data?.authorization_status === 0 ?
-                                                            <React.Fragment>
-                                                                <Button
-                                                                    onClick={() => {
-                                                                        setShowAuthorizationModal(true);
-                                                                        setActiveModalTaskTypeData(data);
-                                                                    }}
-                                                                    variant="success"
-                                                                    className="font-weight-normal py-1"
-                                                                >
-                                                                    Authorize
-                                                                </Button>
-                                                                <Button
-                                                                    onClick={() => {
-                                                                        setShowAuthorizationModal(true);
-                                                                        setActiveModalTaskTypeData(data);
-                                                                    }}
-                                                                    variant="danger"
-                                                                    className="font-weight-normal py-1"
-                                                                >
-                                                                    Deny
-                                                                </Button>
-                                                            </React.Fragment>
-                                                            :
-                                                            <div>
-                                                                {data?.authorization_status === 1 && <span className="badge badge-success py-2 px-2">Approved</span>}
-                                                                {data?.authorization_status === 2 && <span className="badge badge-danger py-2 px-2"> Denied </span>}
-                                                            </div>
-                                                    }
+                                                <div
+                                                    className="w-fit d-flex align-items-center ml-auto"
+                                                    style={{ gap: "10px" }}
+                                                >
+                                                    {data?.authorization_status ===
+                                                    0 ? (
+                                                        <React.Fragment>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    setShowAuthorizationModal(
+                                                                        true
+                                                                    );
+                                                                    setActiveModalTaskTypeData(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                variant="success"
+                                                                className="font-weight-normal py-1"
+                                                            >
+                                                                Authorize
+                                                            </Button>
+                                                            <Button
+                                                                onClick={() => {
+                                                                    setShowAuthorizationModal(
+                                                                        true
+                                                                    );
+                                                                    setActiveModalTaskTypeData(
+                                                                        data
+                                                                    );
+                                                                }}
+                                                                variant="danger"
+                                                                className="font-weight-normal py-1"
+                                                            >
+                                                                Deny
+                                                            </Button>
+                                                        </React.Fragment>
+                                                    ) : (
+                                                        <div>
+                                                            {data?.authorization_status ===
+                                                                1 && (
+                                                                <span className="badge badge-success py-2 px-2">
+                                                                    Approved
+                                                                </span>
+                                                            )}
+                                                            {data?.authorization_status ===
+                                                                2 && (
+                                                                <span className="badge badge-danger py-2 px-2">
+                                                                    {" "}
+                                                                    Denied{" "}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>
                                     ))}
-
                                 </tbody>
                             </table>
                         </div>
@@ -342,20 +431,34 @@ const ShowAuthorizationTableModalComponent = () => {
                 </div>
             </div>
         </Modal>
-    )
-}
+    );
+};
 
-{/* Flyover */ }
+{
+    /* Flyover */
+}
 const ActiveModalTaskTypeData = () => {
     return (
-        <Modal isOpen={showAuthorizationModal && (activeModalTaskTypeData !== null ? true : false)}>
+        <Modal
+            isOpen={
+                showAuthorizationModal &&
+                (activeModalTaskTypeData !== null ? true : false)
+            }
+        >
             <div className="sp1_modal-content-wrapper">
                 <div className="sp1_modal-panel sp1_task_auth_modal ">
                     {/* header */}
                     <div className="sp1_modal-head">
-                        <div className="sp1_modal-title pl-2"><strong>Primary Page Development</strong></div>
-                        <Button onClick={close} aria-label="ModalClose" variant='tertiary' className='sp1_modal-close'>
-                            <i className='fa-solid fa-xmark' />
+                        <div className="sp1_modal-title pl-2">
+                            <strong>Primary Page Development</strong>
+                        </div>
+                        <Button
+                            onClick={close}
+                            aria-label="ModalClose"
+                            variant="tertiary"
+                            className="sp1_modal-close"
+                        >
+                            <i className="fa-solid fa-xmark" />
                         </Button>
                     </div>
                     {/* end header */}
@@ -363,20 +466,44 @@ const ActiveModalTaskTypeData = () => {
                     {/* body */}
                     <div className="sp1_modal-body p-3">
                         <ul className="sp1_modal_items px-3">
-                            <li><b>Page name: </b> {activeModalTaskTypeData?.page_name}</li>
-                            <li><b>Page URL: </b> {activeModalTaskTypeData?.page_url}</li>
-                            <li><b>Task: </b> {activeModalTaskTypeData?.task}</li>
-                            <li><b>Sub-Task: </b> {activeModalTaskTypeData?.sub_task}</li>
-                            <li><b> Assigned By: </b> {activeModalTaskTypeData?.added_by_name}</li>
-                            <li><b> Assigned To: </b> {activeModalTaskTypeData?.assigned_to_name}</li>
-                            <li><b> Project: </b> {activeModalTaskTypeData?.project_name}</li>
-                            <li><b> Client: </b> {activeModalTaskTypeData?.client_name}</li>
+                            <li>
+                                <b>Page name: </b>{" "}
+                                {activeModalTaskTypeData?.page_name}
+                            </li>
+                            <li>
+                                <b>Page URL: </b>{" "}
+                                {activeModalTaskTypeData?.page_url}
+                            </li>
+                            <li>
+                                <b>Task: </b> {activeModalTaskTypeData?.task}
+                            </li>
+                            <li>
+                                <b>Sub-Task: </b>{" "}
+                                {activeModalTaskTypeData?.sub_task}
+                            </li>
+                            <li>
+                                <b> Assigned By: </b>{" "}
+                                {activeModalTaskTypeData?.added_by_name}
+                            </li>
+                            <li>
+                                <b> Assigned To: </b>{" "}
+                                {activeModalTaskTypeData?.assigned_to_name}
+                            </li>
+                            <li>
+                                <b> Project: </b>{" "}
+                                {activeModalTaskTypeData?.project_name}
+                            </li>
+                            <li>
+                                <b> Client: </b>{" "}
+                                {activeModalTaskTypeData?.client_name}
+                            </li>
                         </ul>
 
-
-
                         <div className="form-group py-3">
-                            <label className="font-weight-bold"> Comment: <sup>*</sup>  </label>
+                            <label className="font-weight-bold">
+                                {" "}
+                                Comment: <sup>*</sup>{" "}
+                            </label>
                             <div className="ck-editor-holder stop-timer-options">
                                 <CKEditorComponent
                                     onChange={(e, editor) => {
@@ -387,33 +514,61 @@ const ActiveModalTaskTypeData = () => {
                             </div>
                         </div>
 
-
                         <div className="w-100 mt-3">
-                            <div className="w-fit d-flex align-items-center ml-auto" style={{ gap: '10px' }}>
-                                {
-                                    isLoading ?
-                                        <span className="badge badge-light py-2 px-2 f-14 ml-auto">
-                                            <Loader />
-                                        </span>
-                                        :
-                                        activeModalTaskTypeData?.authorization_status === 0 ?
-                                            <React.Fragment>
-                                                <Button
-                                                    onClick={(e) => handleUpdateTaskTypeAuthorizationStatus(e, 'approved', activeModalTaskTypeData?.id)}
-                                                    variant="success"
-                                                    className="ml-auto"
-                                                >Authorize</Button>
-                                                <Button
-                                                    onClick={(e) => handleUpdateTaskTypeAuthorizationStatus(e, 'denied', activeModalTaskTypeData?.id)}
-                                                    variant="danger"
-                                                >Deny</Button>
-                                            </React.Fragment> :
-                                            <div>
-                                                {activeModalTaskTypeData?.authorization_status === 1 && <span className="badge badge-success py-2 px-2 f-14">Approved</span>}
-                                                {activeModalTaskTypeData?.authorization_status === 2 && <span className="badge badge-danger py-2 px-2 f-14"> Denied </span>}
-                                            </div>
-                                }
-
+                            <div
+                                className="w-fit d-flex align-items-center ml-auto"
+                                style={{ gap: "10px" }}
+                            >
+                                {isLoading ? (
+                                    <span className="badge badge-light py-2 px-2 f-14 ml-auto">
+                                        <Loader />
+                                    </span>
+                                ) : activeModalTaskTypeData?.authorization_status ===
+                                  0 ? (
+                                    <React.Fragment>
+                                        <Button
+                                            onClick={(e) =>
+                                                handleUpdateTaskTypeAuthorizationStatus(
+                                                    e,
+                                                    "approved",
+                                                    activeModalTaskTypeData?.id
+                                                )
+                                            }
+                                            variant="success"
+                                            className="ml-auto"
+                                        >
+                                            Authorize
+                                        </Button>
+                                        <Button
+                                            onClick={(e) =>
+                                                handleUpdateTaskTypeAuthorizationStatus(
+                                                    e,
+                                                    "denied",
+                                                    activeModalTaskTypeData?.id
+                                                )
+                                            }
+                                            variant="danger"
+                                        >
+                                            Deny
+                                        </Button>
+                                    </React.Fragment>
+                                ) : (
+                                    <div>
+                                        {activeModalTaskTypeData?.authorization_status ===
+                                            1 && (
+                                            <span className="badge badge-success py-2 px-2 f-14">
+                                                Approved
+                                            </span>
+                                        )}
+                                        {activeModalTaskTypeData?.authorization_status ===
+                                            2 && (
+                                            <span className="badge badge-danger py-2 px-2 f-14">
+                                                {" "}
+                                                Denied{" "}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -421,5 +576,5 @@ const ActiveModalTaskTypeData = () => {
                 </div>
             </div>
         </Modal>
-    )
-}
+    );
+};

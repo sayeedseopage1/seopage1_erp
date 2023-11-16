@@ -13,7 +13,7 @@ const TodaysUpdateModalTable = () => {
 
     const loggedUser = new User(window.Laravel?.user);
 
-    const { data, isLoading } = useGetDailySubmissionQuery(
+    const { data, isLoading, refetch } = useGetDailySubmissionQuery(
         `${loggedUser?.id}?date_type=${date_type}`
     ); 
 
@@ -51,6 +51,7 @@ const TodaysUpdateModalTable = () => {
                             open={open}
                             setOpen={setOpen}
                             loading={isLoading}
+                            refetch={refetch}
                         />
                     ))}
                 </tbody>
