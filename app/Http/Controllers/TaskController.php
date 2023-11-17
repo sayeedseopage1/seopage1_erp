@@ -82,6 +82,7 @@ use App\Models\DailySubmission;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
+use App\Notifications\PPAuthDenyNotification;
 use App\Notifications\TaskCommentNotification;
 use App\Notifications\TaskCommentReplyNotification;
 
@@ -3635,6 +3636,8 @@ class TaskController extends AccountBaseController
                 'task_types.task_type',
                 'task_types.page_name',
                 'task_types.page_url',
+                'task_types.authorization_status as primary_page_authorization_status',
+                'task_types.comment as primary_page_authorization_comment',
                 'task_types.task_type_other',
                 'task_types.page_type_name',
                 'task_types.existing_design_link',
@@ -5392,6 +5395,13 @@ class TaskController extends AccountBaseController
             $taskType->authorization_status = 2;
             $taskType->comment = $request->comment;
             $taskType->save();
+
+            $findTask = Task::where('id',$taskType->task_id)->first();
+
+            $user = User::where('id',$findTask->created_by)->first();
+
+            Notification::send($user, new PPAuthDenyNotification($findTask, $taskType));
+
         }
         $actions = PendingAction::where('code','PPA')->where('past_status',0)->where('task_id',$taskType->task_id)->get();
 
