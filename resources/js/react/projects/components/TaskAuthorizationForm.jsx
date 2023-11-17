@@ -11,6 +11,7 @@ import QuestionAnswer from "./QuestionAnswer";
 import TaskAuthorizationQuestionAnswers from "./TaskAuthorizationQuestionAnswers";
 import { User } from "../../utils/user-details";
 import _ from "lodash";
+import Textarea from "../../global/form/Textarea";
 
 const TaskAuthorizationForm = ({ data, table }) => {
     const [visible, setVisible] = useState(false);
@@ -71,18 +72,19 @@ const TaskAuthorizationForm = ({ data, table }) => {
 
 
     const getDescription = () => {
-
+        //add word break class a tag in description
         // return 'console...'
         let description = data?.description;
+
+        description = description.replace(/<a/g, '<a class="word-break"');
+
         let descLength = description.length;
 
         if(descLength > 500 && !showFullDescription){
             // setShowFullDescription(false);
             description = description.slice(0, 500);
         }
-
-
-
+ 
         return description;
     }
 
@@ -227,13 +229,38 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                         </div>
                                     </div>
 
+                                    {/* task description */}
+                                    <div className={styles.inline_flex}>
+                                        <div className={styles.task_info__label} >
+                                            Task Description
+                                        </div>
+                                        <div className={styles.task_info__text}> 
+                                            <div>
+                                                <div 
+                                                    className={`sp1_ck_content ${styles.task_description}`} 
+                                                    dangerouslySetInnerHTML={{__html: getDescription() + `${(!showFullDescription && data?.description.length >= 500) ? '...' : ''}` }} 
+                                                />  
+                                                {data?.description.length > 500 &&
+                                                    <div className="d-flex align-items-center w-100 my-3">
+                                                        <button
+                                                            className={styles.show_more_btn}
+                                                            onClick={() => setShowFullDescription(!showFullDescription)}
+                                                        >
+                                                            {showFullDescription ? 'Show Less' : 'Show More'}
+                                                        </button>
+                                                    </div>
+                                                } 
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                    <div className="mb-3">
+
+                                    {/* <div className="mb-3">
                                         <label
                                             className="task_info__label"
                                             style={{fontWeight: '500', fontFamily: 'Inter', color: '#626262'}}
                                         >
-                                            Descriptions:
+                                           Task Description:
                                         </label>
                                         <div className={styles.task_info__text}>
                                             <div className={styles.task_description}>
@@ -250,7 +277,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                 }
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     { data.approval_status !== null &&
                                         <>
@@ -347,7 +374,7 @@ const TaskAuthorizationForm = ({ data, table }) => {
                                                         <label className="task_info__label">
                                                             Comment:
                                                         </label>
-                                                        <textarea
+                                                        <Textarea
                                                             rows={6}
                                                             value={comment}
                                                             onChange={(e) =>

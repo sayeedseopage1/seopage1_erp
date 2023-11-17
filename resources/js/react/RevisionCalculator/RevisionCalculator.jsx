@@ -1,11 +1,13 @@
-import React, {useState, useMemo, useEffect} from 'react'
-import {Outlet} from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Outlet } from 'react-router-dom';
+import Loader from '../global/Loader';
 import DataTable from '../global/data-table/table';
-import { revisionColumns } from './RevisionColumns';
-import { fakeData } from './faker';
-import styles from './styles.module.css';
-import JqueryDateRangePicker from './JqueryDateRangePicker';
+import { Flex } from '../global/styled-component/Flex';
 import { useLazyGetRevisionCalculatorDataQuery } from '../services/api/revisionCalculatorApiSlice';
+import JqueryDateRangePicker from './JqueryDateRangePicker';
+import { RefreshButton } from './RefreshButton';
+import { revisionColumns } from './RevisionColumns';
+import styles from './styles.module.css';
 
 // const data = fakeData(300);
 
@@ -27,28 +29,34 @@ const RevisionCalculator = () => {
   }
  ] = useLazyGetRevisionCalculatorDataQuery();
 
+  const fetchData = async (_startDate, _endDate) => {
+    let query = {
+      start_date: _startDate,
+      end_date: _endDate
+    }
+
+    const queryObject = _.pickBy(query, Boolean);
+      const queryString = new URLSearchParams(queryObject).toString();
+
+    try{
+      let res = await getRevisionCalculatorData(`?${queryString}`).unwrap();
+      setData(res);
+    }catch(err){
+      console.log(err)
+    }
+  }
+
   useEffect(() => { 
     if(_startDate && _endDate){
-      (async() => {
-      
-        let query = {
-          start_date: _startDate,
-          end_date: _endDate
-        }
-  
-        const queryObject = _.pickBy(query, Boolean);
-          const queryString = new URLSearchParams(queryObject).toString();
-   
-        try{
-          let res = await getRevisionCalculatorData(`?${queryString}`).unwrap();
-          setData(res);
-        }catch(err){
-          console.log(err)
-        }
-      })()
+      fetchData(_startDate, _endDate)
     }
 
   }, [_startDate, _endDate])
+
+  // handle refresh
+  const handleRefresh = () =>{
+    fetchData(_startDate, _endDate)
+  }
 
   return (
     <section className='p-3'>
@@ -72,14 +80,22 @@ const RevisionCalculator = () => {
             startDate,
             endDate
           }}
-          navbar={
-            <JqueryDateRangePicker
-              startDate = {startDate}
-              endDate ={endDate}
-              setStartDate = {setStartDate}
-              setEndDate = {setEndDate}
-              className={styles.table_date_picker}
-            />
+          navbar={ 
+            <Flex alignItem="center" justifyContent="space-between" className='w-100'>
+              <JqueryDateRangePicker
+                startDate = {startDate}
+                endDate ={endDate}
+                setStartDate = {setStartDate}
+                setEndDate = {setEndDate}
+                className={styles.table_date_picker}
+              />
+              <RefreshButton onClick={handleRefresh} className='ml-auto'>
+                {isFetching ? 
+                  <Loader title='Loading...' />:
+                  "Refresh"
+                }
+              </RefreshButton>
+            </Flex>
           }
         /> 
 

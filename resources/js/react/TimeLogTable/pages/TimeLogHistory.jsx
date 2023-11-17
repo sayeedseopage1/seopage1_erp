@@ -11,6 +11,8 @@ import TimeLogHistoryTable from "../components/TimeLogHistoryTable";
 import '../components/data-table.css';
 import '../styles/time-log-history.css';
 import { User } from "../../utils/user-details";
+import { RefreshButton } from "../components/RefreshButton";
+import Loader from "../../global/Loader";
 
 const TimeLogHistory = () => {
     // const [data, setData] = useState([]);
@@ -19,6 +21,7 @@ const TimeLogHistory = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [renderData, setRenderData] = useState([]);
     const [sortConfig, setSortConfig] = useState([]);
+    const [filter, setFilter] = useState(null);
     const dispatch = useDispatch();
     const auth = new User(window?.Laravel?.user);
 
@@ -32,9 +35,9 @@ const TimeLogHistory = () => {
     }, [data, currentPage, perPageData]);
 
     // handle fetch data
-    const handleFetchData = (filter) => {
-        
-        getTimeLogHistory(filter)
+    const handleFetchData = async (filter) => {
+        setFilter(filter);
+        await getTimeLogHistory(filter)
         .unwrap()
         .then(res => {
             let sortedData = _.orderBy(res?.data, ["employee_id"], ["desc"]);
@@ -68,12 +71,22 @@ const TimeLogHistory = () => {
         handleData(data, currentPage, number);
     }
 
+    // handle refresh button
+    const handleRefresh = () => {
+        handleFetchData(filter);
+    }
+
     return (
         <div className="sp1_tlr_container">
             <TimeLogHistoryTableFilterBar onFilter={handleFetchData} />
             <div className="sp1_tlr_tbl_container">
-                <div className="">
-                    <Tabbar />
+            <div className="d-flex align-items-center justify-content-between mb-2">
+                    <Tabbar/> 
+                    <RefreshButton onClick={handleRefresh} isLoading={isLoading} > 
+                        {isLoading ?
+                            <Loader title="Refreshing..."  borderRightColor="white" />
+                        : 'Refresh'}
+                    </RefreshButton>
                 </div>
                 <TimeLogHistoryTable
                     data={renderData}

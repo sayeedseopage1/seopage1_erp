@@ -1,18 +1,21 @@
 import "./bootstrap";
-import "./react/TimeLogTable";
+import "./react/Incentives/main";
 import "./react/Insights/main";
 import "./react/Points/main";
-import "./react/Incentives/main";
 import "./react/QualifiedSales/main";
+import "./react/TimeLogTable";
 // import "./react/PendingAction/main";
+import "./react/RevisionCalculator/main";
+import "./react/disputes/index";
 import "./react/independentTask/index";
+import "./react/portfolios/index";
+import "./react/projects/index";
 import "./react/single-independent-task/index";
 import "./react/single-task/index";
 import "./react/tasks/index";
-import "./react/projects/index";
-import "./react/disputes/index";
-import "./react/portfolios/index";
-import "./react/RevisionCalculator/main";
+// headless features
+import "./react/headless-features/main";
+import "./react/modules/main";
 // import './react/revison-page/main'
 
 // react latest components
