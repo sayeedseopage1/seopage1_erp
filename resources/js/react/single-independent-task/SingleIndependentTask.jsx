@@ -426,21 +426,25 @@ const SingleIndependentTask = () => {
                                             </div>
 
                                             {/* TASK CATEGORY */}
-                                            <div className="sp1_st-list-item">
-                                                <div className="sp1_st-list-item-head">
-                                                    Task Category :{" "}
-                                                </div>
-                                                <div className="sp1_st-list-item-value">
-                                                    {/* <span
+                                            {!task.subtaskId ? (
+                                                <div className="sp1_st-list-item">
+                                                    <div className="sp1_st-list-item-head">
+                                                        Task Category :{" "}
+                                                    </div>
+                                                    <div className="sp1_st-list-item-value">
+                                                        {/* <span
                                                         className="dot-color mr-2"
                                                         style={{
                                                             background:
                                                                 "rgba(252, 189, 1, 1)",
                                                         }}
                                                     /> */}
-                                                    {task.category.name}
+                                                        {task.category.name}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            ) : (
+                                                <></>
+                                            )}
 
                                             {/* PRIORITY */}
                                             <div className="sp1_st-list-item">
@@ -553,6 +557,7 @@ const SingleIndependentTask = () => {
                                                             </h6>
                                                             <hr />
                                                             <div className="row">
+                                                                {/* working/staging site's url */}
                                                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
@@ -577,6 +582,7 @@ const SingleIndependentTask = () => {
                                                                     </span>
                                                                 </div>
 
+                                                                {/* frontend password */}
                                                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
@@ -592,6 +598,7 @@ const SingleIndependentTask = () => {
                                                                     </span>
                                                                 </div>
 
+                                                                {/* working/staging site's login url */}
                                                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
@@ -617,6 +624,7 @@ const SingleIndependentTask = () => {
                                                                     </span>
                                                                 </div>
 
+                                                                {/* working/staging site's username/email */}
                                                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
@@ -625,13 +633,16 @@ const SingleIndependentTask = () => {
                                                                             Username/Email
                                                                         </strong>
                                                                         : <br />{" "}
-                                                                        {
+                                                                        {task
+                                                                            ?.workEnvData
+                                                                            ?.email ||
                                                                             task
                                                                                 ?.workEnvData
-                                                                                ?.email
-                                                                        }
+                                                                                ?.user_name}
                                                                     </span>
                                                                 </div>
+
+                                                                {/* password */}
                                                                 <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
                                                                     <span>
                                                                         <strong>
@@ -643,6 +654,30 @@ const SingleIndependentTask = () => {
                                                                                 ?.workEnvData
                                                                                 ?.password
                                                                         }
+                                                                    </span>
+                                                                </div>
+
+                                                                {/* Reference Page */}
+                                                                <div className="col-12 col-lg-6 col-xl-4 mb-2 word-break">
+                                                                    <span>
+                                                                        <strong>
+                                                                            Reference
+                                                                            Page
+                                                                        </strong>
+                                                                        : <br />{" "}
+                                                                        <a
+                                                                            target="__blank"
+                                                                            href={
+                                                                                task
+                                                                                    ?.workEnvData
+                                                                                    ?.reference_site
+                                                                            }
+                                                                        >
+                                                                            View
+                                                                            on
+                                                                            new
+                                                                            tab
+                                                                        </a>
                                                                     </span>
                                                                 </div>
                                                             </div>

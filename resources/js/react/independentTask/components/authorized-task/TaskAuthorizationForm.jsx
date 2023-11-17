@@ -90,15 +90,33 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
     const handleSubmission = async (e, status) => {
         if (status) {
             if (!client) {
-                toast.warning("Client is required");
+                // toast.warning("Client is required");
+                Swal.fire({
+                    icon:"warning",
+                    title:"Client is required",
+                    timer:'2000',
+                    timerProgressBar:true,
+                })
                 return;
             } else if (!comment) {
-                toast.warning("Comment is required");
+                // toast.warning("Comment is required");
+                Swal.fire({
+                    icon:"warning",
+                    title:"Comment is required",
+                    timer:'2000',
+                    timerProgressBar:true,
+                })
                 return;
             }
         } else {
             if (!comment) {
-                toast.warning("Comment is required");
+                // toast.warning("Comment is required");
+                Swal.fire({
+                    icon:"warning",
+                    title:"Comment is required",
+                    timer:'2000',
+                    timerProgressBar:true,
+                })
                 return;
             }
         }
@@ -463,6 +481,11 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             className={styles.task_info__label}
                                         >
                                             Client Name{" "}
+                                            {!hasQuestion && (
+                                                <span className="text-danger">
+                                                    *
+                                                </span>
+                                            )}
                                         </div>
 
                                         {!data?.approval_status && auth ? (
@@ -639,7 +662,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                             isConversationLoading || isFetching
                                         }
                                         refresh={() => {
-                                            setRefresh();
+                                            handleRefresh();
                                             refreshing();
                                             refetch();
                                         }}
@@ -715,7 +738,7 @@ const TaskAuthorizationForm = ({ data, table, refreshing }) => {
                                                 <QuestionAnswer
                                                     data={data}
                                                     refresh={() => {
-                                                        setRefresh();
+                                                        handleRefresh();
                                                         refreshing();
                                                         refetch();
                                                     }}

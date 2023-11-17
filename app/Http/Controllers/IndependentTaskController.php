@@ -84,8 +84,10 @@ class IndependentTaskController extends AccountBaseController
         $ppTask->u_id = $request->id;
         $ppTask->login_url = $request->login_url;
         $ppTask->frontend_password = $request->frontend_password;
+        $ppTask->password = $request->password;
         $ppTask->user_name = $request->user_name;
         $ppTask->reference_site = $request->reference_site;
+        $ppTask->site_url = $request->site_url;
         $ppTask->independent_task_status = $request->isIndependent;
         $ppTask->save();
 
@@ -221,8 +223,10 @@ class IndependentTaskController extends AccountBaseController
 
 
             $workingEnv = new WorkingEnvironment();
-            $workingEnv->site_url = $pendingParentTasks->reference_site;
+            $workingEnv->site_url = $pendingParentTasks->site_url;
+            $workingEnv->reference_site = $pendingParentTasks->reference_site;
             $workingEnv->frontend_password = $pendingParentTasks->frontend_password;
+            $workingEnv->password = $pendingParentTasks->password;
             $workingEnv->login_url = $pendingParentTasks->login_url;
             $workingEnv->user_name = $pendingParentTasks->user_name;
             $workingEnv->task_id = $independent_task->id;

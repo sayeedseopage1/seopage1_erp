@@ -719,7 +719,7 @@ var useRefetchTaskDetails = function useRefetchTaskDetails() {
   };
 };
 var SingleIndependentTask = function SingleIndependentTask() {
-  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
+  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _task$workEnvData6, _task$workEnvData7, _$last;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -978,7 +978,7 @@ var SingleIndependentTask = function SingleIndependentTask() {
                         })]
                       })]
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                  }), !task.subtaskId ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
                     className: "sp1_st-list-item",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
                       className: "sp1_st-list-item-head",
@@ -987,7 +987,7 @@ var SingleIndependentTask = function SingleIndependentTask() {
                       className: "sp1_st-list-item-value",
                       children: task.category.name
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
+                  }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.Fragment, {}), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
                     className: "sp1_st-list-item",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("div", {
                       className: "sp1_st-list-item-head",
@@ -1106,14 +1106,25 @@ var SingleIndependentTask = function SingleIndependentTask() {
                           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("span", {
                             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("strong", {
                               children: "Working/Staging Site's Username/Email"
-                            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData4 = task.workEnvData) === null || _task$workEnvData4 === void 0 ? void 0 : _task$workEnvData4.email]
+                            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", (task === null || task === void 0 || (_task$workEnvData4 = task.workEnvData) === null || _task$workEnvData4 === void 0 ? void 0 : _task$workEnvData4.email) || (task === null || task === void 0 || (_task$workEnvData5 = task.workEnvData) === null || _task$workEnvData5 === void 0 ? void 0 : _task$workEnvData5.user_name)]
                           })
                         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
                           className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
                           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("span", {
                             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("strong", {
                               children: "Password"
-                            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData5 = task.workEnvData) === null || _task$workEnvData5 === void 0 ? void 0 : _task$workEnvData5.password]
+                            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", task === null || task === void 0 || (_task$workEnvData6 = task.workEnvData) === null || _task$workEnvData6 === void 0 ? void 0 : _task$workEnvData6.password]
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("div", {
+                          className: "col-12 col-lg-6 col-xl-4 mb-2 word-break",
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsxs)("span", {
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("strong", {
+                              children: "Reference Page"
+                            }), ": ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("br", {}), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_31__.jsx)("a", {
+                              target: "__blank",
+                              href: task === null || task === void 0 || (_task$workEnvData7 = task.workEnvData) === null || _task$workEnvData7 === void 0 ? void 0 : _task$workEnvData7.reference_site,
+                              children: "View on new tab"
+                            })]
                           })
                         })]
                       })]
@@ -3292,7 +3303,11 @@ function subTaskCreationPermision(_ref9) {
   }
 
   // if task assign to
-  if ((assignedUser === null || assignedUser === void 0 ? void 0 : assignedUser.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) || (assignedBy === null || assignedBy === void 0 ? void 0 : assignedBy.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 6, 9, 10], auth === null || auth === void 0 ? void 0 : auth.getRoleId()) || (auth === null || auth === void 0 ? void 0 : auth.getRoleId()) === 1) {
+  if ((assignedUser === null || assignedUser === void 0 ? void 0 : assignedUser.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) || (assignedBy === null || assignedBy === void 0 ? void 0 : assignedBy.getId()) === (auth === null || auth === void 0 ? void 0 : auth.getId()) && lodash__WEBPACK_IMPORTED_MODULE_0___default().includes([5, 6, 9, 10], auth === null || auth === void 0 ? void 0 : auth.getRoleId())
+
+  // ||
+  // auth?.getRoleId() === 1
+  ) {
     assigneePermission = true;
   }
   return statusPermission && assigneePermission;

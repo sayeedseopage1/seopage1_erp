@@ -1,6 +1,6 @@
 import { Listbox } from "@headlessui/react";
 import _ from "lodash";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CKEditorComponent from "../../../ckeditor";
@@ -17,6 +17,7 @@ import { usePostIndependentTaskMutation } from "../../../services/api/independen
 import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import Input from "../form/Input";
 import validator from "validator";
+import Swal from "sweetalert2";
 
 const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const dayjs = new CompareDate();
@@ -35,6 +36,8 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [refPage, setRefPage] = useState("");
+    const [siteUrl, setSiteUrl] = useState("");
+    const [frontendPass, setFrontendPass] = useState("");
 
     // const [estimateTimeHour, setEstimateTimeHour] = useState(0);
     // const [estimateTimeMin, setEstimateTimeMin] = useState(0);
@@ -56,9 +59,15 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         setUsername("");
         setPassword("");
         setRefPage("");
+        setSiteUrl("");
+        setFrontendPass("");
         setFiles([]);
         setFormError(null);
     };
+
+    useEffect(()=>{
+      handleResetForm();
+    },[])
 
     const params = useParams();
     const [postIndependentTask, { isLoading, error }] =
@@ -151,6 +160,11 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
             errCount++;
         }
 
+        if (siteUrl && !validator.isURL(siteUrl)) {
+            err.refPage = "Enter a valid Site URL";
+            errCount++;
+        }
+
         setFormError(err);
         return !errCount;
     };
@@ -158,6 +172,12 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
     // handle sumition
     const handleSubmit = (e) => {
         if (!isValid()) {
+            Swal.fire({
+                icon:"error",
+                title:"Missing required field or inavlid input",
+                timer:'2000',
+                timerProgressBar:true,
+            })
             return;
         }
         e.preventDefault();
@@ -181,8 +201,10 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
         // newly added field and data
         fd.append("login_url", loginUrl ?? "");
         fd.append("user_name", username ?? "");
-        fd.append("frontend_password", password ?? "");
+        fd.append("password", password ?? "");
         fd.append("reference_site", refPage ?? "");
+        fd.append("site_url", siteUrl ?? "");
+        fd.append("frontend_password", frontendPass ?? "");
 
         // fd.append("estimate_hours", estimateTimeHour ?? 0);
         // fd.append("estimate_minutes", estimateTimeMin ?? 0);
@@ -369,6 +391,40 @@ const IndependentTaskCreationForm = ({ isOpen, close, onSuccess }) => {
                                         error={formError?.password}
                                         onChange={(e) =>
                                             handleChange(e, setPassword)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Site URL */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="site-url"
+                                        label="Site's URL (Optional)"
+                                        type="text"
+                                        placeholder="Enter the working/staging site's url"
+                                        name="site-url"
+                                        required={false}
+                                        value={siteUrl}
+                                        error={formError?.siteUrl}
+                                        onChange={(e) =>
+                                            handleChange(e, setSiteUrl)
+                                        }
+                                    />
+                                </div>
+
+                                {/* Frontend Password */}
+                                <div className="col-12 col-md-6">
+                                    <Input
+                                        id="frontend-password"
+                                        label="Frontend Password (Optional)"
+                                        type="password"
+                                        placeholder="Enter the frontend password"
+                                        name="frontend-password"
+                                        required={false}
+                                        value={frontendPass}
+                                        error={formError?.frontendPass}
+                                        onChange={(e) =>
+                                            handleChange(e, setFrontendPass)
                                         }
                                     />
                                 </div>

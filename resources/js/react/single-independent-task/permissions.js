@@ -227,8 +227,9 @@ export function subTaskCreationPermision({task, status, auth}){
             assignedUser?.getId() === auth?.getId() ||
             assignedBy?.getId() === auth?.getId()
             &&  _.includes([5,6,9,10], auth?.getRoleId())
-        ) ||
-        auth?.getRoleId() === 1
+        ) 
+        // ||
+        // auth?.getRoleId() === 1
     ){
         assigneePermission = true;
     }
