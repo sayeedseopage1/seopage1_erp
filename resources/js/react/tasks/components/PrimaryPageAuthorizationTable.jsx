@@ -330,11 +330,16 @@ export const Columns = [
 const ActionButton = ({ ...props }) => {
     const { row, table } = props;
     const [isOpen, setIsOpen] = React.useState(false);
+    const [isDeny, setIsDeny] = React.useState(false);
     const [comment, setComment] = React.useState("");
     const [error, setError] = React.useState(null);
 
     const open = () => setIsOpen(true);
-    const close = () => setIsOpen(false);
+    const close = () => {
+        setIsOpen(false);
+        setComment("");
+        setIsDeny(false);
+    }
 
     const authorization_status = row?.authorization_status;
 
@@ -342,18 +347,20 @@ const ActionButton = ({ ...props }) => {
     // update data
     const [updateTasktypeAuthStatus, {isLoading}] = useUpdateTasktypeAuthStatusMutation();
 
-    const handleSubmission = (type) => {
-        if(comment){
-            updateTasktypeAuthStatus({status: type, task_type_id: row.id, comment })
-            .then(res => (
-                toast.success('Action taken successfully')
-            )).catch(err => console.log(err))
-            .finally(() => {
-                close();
-            })
-        }else{
+    const handleSubmission = async (type) => {
+        if(type === denied && !comment){
             setError({comment: 'You have to write a comment'})
+            return;
         }
+
+        // submit form
+        await updateTasktypeAuthStatus({status: type, task_type_id: row.id, comment })
+        .then(() => (
+            toast.success('Action taken successfully')
+        )).catch(err => console.log(err))
+        .finally(() => {
+            close();
+        })
 
     }
 
@@ -460,13 +467,58 @@ const ActionButton = ({ ...props }) => {
                                 </div>
                             </div>
                         </div>
+                    </Card.Body>
 
+                    <Card.Footer>
+                        {isLoading ?
+                            <div className="badge badge-dark f-14 py-2 px-3 font-weight-normal">
+                                <Spinner title="Processing..." borderRightColor="white"/>
+                            </div>
+                        :
+                            <>
+                                 <Button variant="danger" onClick={() => setIsDeny(true)}>Deny</Button>
+                                 <Button variant="success" onClick={approve}>Approve</Button>
+                            </>
+                        }
+                    </Card.Footer>
+
+                    {/* deny reason form */}
+                    <DenyReasonExplanationForm
+                        comment={comment}
+                        setComment={setComment}
+                        isOpen={isDeny}
+                        close={() => setIsDeny(false)}
+                        error={error}
+                        isLoading={isLoading}
+                        onSubmit={denied}
+                    />
+                </Card>
+            </Modal>
+        </React.Fragment>
+    );
+};
+
+
+const DenyReasonExplanationForm = ({
+    comment,
+    setComment,
+    isOpen,
+    close,
+    error,
+    isLoading,
+    onSubmit
+}) => {
+    return(
+        <Modal isOpen={isOpen}>
+                <Card className={`${styles.card} ${styles.card_auth_form}`}>
+                    <Card.Body className={`${styles.card_body} pt-3 px-4`}>
                         <div className="form-group pt-4">
-                            <label className="font-weight-bold">
-                                Comment: <sup>*</sup>
+                            <label className="font-weight-bold f-16 mb-2">
+                                Please explain why you decided to deny this: <sup>*</sup>
                             </label>
-                            <div className="ck-editor-holder stop-timer-options">
+                            <div className="ck-editor-holder stop-timer-options primary_page_auth_deny_reason_rich_editor">
                                 <CKEditorComponent
+                                    data={comment}
                                     onChange={(e, editor) => {
                                         const d = editor.getData();
                                         setComment(d);
@@ -484,13 +536,15 @@ const ActionButton = ({ ...props }) => {
                             </div>
                         :
                             <>
-                                 <Button variant="danger" onClick={denied}>Deny</Button>
-                                <Button variant="success" onClick={approve}>Approve</Button>
+                                <Button variant="tertiary" onClick={close}>Close</Button>
+                                <Button variant="primary" onClick={onSubmit}>Submit</Button>
                             </>
                         }
                     </Card.Footer>
+
+                    {/* deny reason form */}
+
                 </Card>
             </Modal>
-        </React.Fragment>
-    );
-};
+    )
+}

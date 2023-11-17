@@ -1434,7 +1434,7 @@ const ResolveModal = ({ state }) => {
 
                                 {row?.status && row?.need_authrization ? (
                                     <React.Fragment>
-                                        {/* devider */}
+                                        {/* divider */}
                                         <div className="mt-3 pb-2 py-2 position-relative">
                                             <hr />
                                             <span className="badge badge-secondary divider-text">
