@@ -887,7 +887,7 @@ class ProjectController extends AccountBaseController
      */
     public function update(UpdateProject $request, $id)
     {
-               dd($request->all());
+            //   / dd($request->all());
 
         //kpi distribution start from here
       //  DB::beginTransaction();
