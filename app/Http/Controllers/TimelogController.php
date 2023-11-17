@@ -367,7 +367,7 @@ class TimelogController extends AccountBaseController
      */
     public function startTimer(Request $request)
     {
-       
+
     //DB::beginTransaction();
      $userID = Auth::id(); // Replace with the actual user ID
 
@@ -376,22 +376,22 @@ class TimelogController extends AccountBaseController
     //  ->select('created_at')
     //  ->first();
     //  $today_timelog_count = ProjectTimeLog::where('user_id', $userID)
-    
+
     //  ->whereDate('created_at',Carbon::today())
     //  ->count();
      //dd($today_timelog_count);
 
-    
-  
- 
+
+
+
  // Check if the query returned any result
     //     if(Auth::user()->role_id == 5 || Auth::user()->role_id == 9 || Auth::user()->role_id == 10)
     //     {
-           
+
     //         if ($yesterdayDate && $today_timelog_count < 1  ) {
     //             // $yesterdayDate is an object, so you need to access the "created_at" property
     //             $carbonDate = Carbon::createFromFormat('Y-m-d H:i:s', $yesterdayDate->created_at);
-            
+
     //             // Get the day of the month
     //             $day = $carbonDate->format('l');
     //             $totalMinutes = DB::table('project_time_logs')
@@ -409,16 +409,16 @@ class TimelogController extends AccountBaseController
     //            $daily_submission = DailySubmission::where('user_id', Auth::user()->id)
     // ->where(function ($query) use ($yesterdayDate) {
     //     $query->whereDate('created_at', Carbon::today())
-        
+
     //     ->orWhereDate('created_at', $yesterdayDate->created_at);
-              
+
     // })
     // ->first();
     // //dd($daily_submission);
     //           if($acknowledgement == null)
     //           {
     //             $acknowledgement_submitted = false;
-    //           }else 
+    //           }else
     //           {
     //             $acknowledgement_submitted = true;
 
@@ -426,72 +426,72 @@ class TimelogController extends AccountBaseController
     //           if($daily_submission  == null)
     //           {
     //             $daily_submission_submitted = false;
-    //           }else 
+    //           }else
     //           {
     //             $daily_submission_submitted = true;
 
     //           }
-              
+
     //        // dd()
     //        //dd($acknowledgement);
     //        //dd($day != 'Saturday' && $totalMinutes < 435 && $acknowledgement == null);
     //       // $date= $acknowledgement->created_at;
     //         // TODO: NEED to check $totalMinutes
 
-    //         if($day != 'Saturday' && $totalMinutes < 420 && $acknowledgement == null ) 
+    //         if($day != 'Saturday' && $totalMinutes < 420 && $acknowledgement == null )
     //         {
     //           // dd("regular day");
-              
+
     //             return response()->json([
     //                 'date'=> $yesterdayDate->created_at,
     //                 'acknowledgement_submitted' => $acknowledgement_submitted ,
-                  
+
     //                 'error' => 'Developer did not submit the acknowledgement form'
     //             ], 400);
-           
+
     //         }elseif($day == 'Saturday' && $totalMinutes < 270 && $acknowledgement == null )
     //         {
     //           // dd("regular day");
-              
+
     //           // dd("Saturday");
     //            return response()->json([
     //                 'date'=> $yesterdayDate->created_at,
     //                 'acknowledgement_submitted' => $acknowledgement_submitted ,
-                  
+
     //                'error' => 'Developer did not submit the acknowledgement form'
     //            ], 400);
-           
-           
+
+
     //         }elseif($day != 'Saturday' && $totalMinutes < 420 && $daily_submission == null )
     //         {
     //           // dd("regular day");
-              
+
     //           // dd("Saturday");
     //            return response()->json([
     //                 'date'=> $yesterdayDate->created_at,
-                   
+
     //                 'daily_submission_submitted' =>$daily_submission_submitted,
     //                'error' => 'Developer did not submit the daily submission data'
     //            ], 400);
-           
-           
+
+
     //         }elseif($day == 'Saturday' && $totalMinutes < 270 && $daily_submission == null )
     //         {
     //           // dd("regular day");
-              
+
     //           // dd("Saturday");
     //            return response()->json([
     //                 'date'=> $yesterdayDate->created_at,
-                  
+
     //                 'daily_submission_submitted' =>$daily_submission_submitted,
     //                'error' => 'Developer did not submit the daily submission data'
     //            ], 400);
-           
-           
+
+
     //         }
-            
-            
-    //         else 
+
+
+    //         else
     //         {
     //            $task_status= Task::find($request->task_id);
     //            $task_status->task_status="in progress";
@@ -500,15 +500,15 @@ class TimelogController extends AccountBaseController
     //            $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
     //            //  dd($task_status);
     //              $timeLog = new ProjectTimeLog();
-               
-           
+
+
     //                $activeTimer = ProjectTimeLog::with('user')
     //                    ->whereNull('end_time')
     //                    ->join('users', 'users.id', '=', 'project_time_logs.user_id')
     //                    ->where('user_id', $this->user->id)->first();
     //                if (is_null($activeTimer)) {
     //                    $taskId = $request->task_id;
-           
+
     //                    if ($request->has('create_task')) {
     //                        $task = new Task();
     //                        $task->heading = $request->memo;
@@ -516,21 +516,21 @@ class TimelogController extends AccountBaseController
     //                        $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
     //                        $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
     //                        $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-           
+
     //                        if ($request->project_id != '') {
     //                            $task->project_id = $request->project_id;
     //                        }
-           
+
     //                        $task->save();
     //                        $taskId = $task->id;
     //                    }
-           
+
     //                    if ($request->project_id != '') {
     //                        $timeLog->project_id = $request->project_id;
     //                    }
-           
+
     //                    $timeLog->task_id = $taskId;
-           
+
     //                    $timeLog->user_id = $this->user->id;
     //                    $timeLog->start_time = now();
     //                    $timeLog->hourly_rate = 0;
@@ -539,14 +539,14 @@ class TimelogController extends AccountBaseController
     //                 //  /  dd($task_revision);
     //                     if($task_revision != null)
     //                     {
-                           
+
     //                         $timeLog->revision_id = $task_revision->id;
     //                         $timeLog->revision_status = 1;
-                          
+
 
     //                     }
     //                    $timeLog->save();
-           
+
     //                    if ($request->project_id != '') {
     //                        //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
     //                        $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
@@ -554,9 +554,9 @@ class TimelogController extends AccountBaseController
     //                    else {
     //                        $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
     //                    }
-           
+
     //                    $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
-           
+
     //                    return response()->json([
     //                        'status' => 'success',
     //                        'message' => 'task timer started',
@@ -564,16 +564,16 @@ class TimelogController extends AccountBaseController
     //                        'task_status'=> $task_board_column,
     //                    ]);
     //                }
-           
+
     //                return response()->json([
     //                    'status' => 'error',
     //                    'message' => 'timer already running',
-                      
+
     //                ]);
-           
+
     //         }
-            
-               
+
+
     //         } else {
     //            $task_status= Task::find($request->task_id);
     //            $task_status->task_status="in progress";
@@ -582,14 +582,12 @@ class TimelogController extends AccountBaseController
     //            $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
     //            //  dd($task_status);
     //              $timeLog = new ProjectTimeLog();
-           
     //                $activeTimer = ProjectTimeLog::with('user')
     //                    ->whereNull('end_time')
     //                    ->join('users', 'users.id', '=', 'project_time_logs.user_id')
     //                    ->where('user_id', $this->user->id)->first();
     //                if (is_null($activeTimer)) {
     //                    $taskId = $request->task_id;
-           
     //                    if ($request->has('create_task')) {
     //                        $task = new Task();
     //                        $task->heading = $request->memo;
@@ -597,21 +595,21 @@ class TimelogController extends AccountBaseController
     //                        $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
     //                        $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
     //                        $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-           
+
     //                        if ($request->project_id != '') {
     //                            $task->project_id = $request->project_id;
     //                        }
-           
+
     //                        $task->save();
     //                        $taskId = $task->id;
     //                    }
-           
+
     //                    if ($request->project_id != '') {
     //                        $timeLog->project_id = $request->project_id;
     //                    }
-           
+
     //                    $timeLog->task_id = $taskId;
-           
+
     //                    $timeLog->user_id = $this->user->id;
     //                    $timeLog->start_time = now();
     //                    $timeLog->hourly_rate = 0;
@@ -620,14 +618,14 @@ class TimelogController extends AccountBaseController
     //                    //  /  dd($task_revision);
     //                        if($task_revision != null)
     //                        {
-                              
+
     //                            $timeLog->revision_id = $task_revision->id;
     //                            $timeLog->revision_status = 1;
-                             
-   
+
+
     //                        }
     //                    $timeLog->save();
-           
+
     //                    if ($request->project_id != '') {
     //                        //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
     //                        $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
@@ -635,9 +633,9 @@ class TimelogController extends AccountBaseController
     //                    else {
     //                        $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
     //                    }
-           
+
     //                    $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
-           
+
     //                    return response()->json([
     //                        'status' => 'success',
     //                        'message' => 'task timer started',
@@ -645,16 +643,16 @@ class TimelogController extends AccountBaseController
     //                        'task_status'=> $task_board_column,
     //                    ]);
     //                }
-           
+
     //                return response()->json([
     //                    'status' => 'error',
     //                    'message' => 'timer already running',
-                      
+
     //                ]);
-               
+
     //         }
 
-    //     } else 
+    //     } else
     //     {
     //        //
     //     }
@@ -665,14 +663,14 @@ class TimelogController extends AccountBaseController
         $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
         //  dd($task_status);
           $timeLog = new ProjectTimeLog();
-    
+
             $activeTimer = ProjectTimeLog::with('user')
                 ->whereNull('end_time')
                 ->join('users', 'users.id', '=', 'project_time_logs.user_id')
                 ->where('user_id', $this->user->id)->first();
             if (is_null($activeTimer)) {
                 $taskId = $request->task_id;
-    
+
                 if ($request->has('create_task')) {
                     $task = new Task();
                     $task->heading = $request->memo;
@@ -680,21 +678,21 @@ class TimelogController extends AccountBaseController
                     $task->is_private = $request->has('is_private') && $request->is_private == 'true' ? 1 : 0;
                     $task->start_date = Carbon::now($this->global->timezone)->format('Y-m-d');
                     $task->due_date = Carbon::now($this->global->timezone)->format('Y-m-d');
-    
+
                     if ($request->project_id != '') {
                         $task->project_id = $request->project_id;
                     }
-    
+
                     $task->save();
                     $taskId = $task->id;
                 }
-    
+
                 if ($request->project_id != '') {
                     $timeLog->project_id = $request->project_id;
                 }
-    
+
                 $timeLog->task_id = $taskId;
-    
+
                 $timeLog->user_id = $this->user->id;
                 $timeLog->start_time = now();
                 $timeLog->hourly_rate = 0;
@@ -703,14 +701,14 @@ class TimelogController extends AccountBaseController
                 //  /  dd($task_revision);
                     if($task_revision != null)
                     {
-                       
+
                         $timeLog->revision_id = $task_revision->id;
                         $timeLog->revision_status = 1;
-                      
+
 
                     }
                 $timeLog->save();
-    
+
                 if ($request->project_id != '') {
                     //$this->logProjectActivity($request->project_id, 'modules.tasks.timerStartedBy');
                     $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedProject');
@@ -718,9 +716,9 @@ class TimelogController extends AccountBaseController
                 else {
                     $this->logUserActivity($this->user->id, 'modules.tasks.timerStartedTask');
                 }
-    
+
                 $this->logTaskActivity($timeLog->task_id, user()->id, 'timerStartedBy');
-    
+
                 return response()->json([
                     'status' => 'success',
                     'message' => 'task timer started',
@@ -728,19 +726,20 @@ class TimelogController extends AccountBaseController
                     'task_status'=> $task_board_column,
                 ]);
             }
-    
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'timer already running',
-               
+
             ]);
-        
+
 
   // dd($timeLog);
-     
 
-     
+
+
     }
+
 
     public function stopTimer(Request $request)
     {
@@ -761,9 +760,9 @@ class TimelogController extends AccountBaseController
         $timeLog->save();
         $html = $this->showActiveTimer()->render();
         return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
-       
 
-     }else 
+
+     }else
      {
         $timeId = $request->id;
         //dd( $timeId);
@@ -810,7 +809,7 @@ class TimelogController extends AccountBaseController
         $this->logUserActivity($this->user->id, 'modules.tasks.timerStoppedBy');
 
         /** @phpstan-ignore-next-line */
-       
+
         $html = $this->showActiveTimer()->render();
 
         $this->activeTimerCount = ProjectTimeLog::whereNull('end_time')
@@ -829,10 +828,10 @@ class TimelogController extends AccountBaseController
             'status' => 200,
             'message'=> 'Timer Stopped Successfully',
         ]);
-       
+
      }
     //  /  DB::beginTransaction();
-      
+
 
        // return Reply::successWithData(__('messages.timerStoppedSuccessfully'), ['html' => $html, 'activeTimerCount' => $this->activeTimerCount]);
     }
