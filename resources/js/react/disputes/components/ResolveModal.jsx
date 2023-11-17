@@ -9,7 +9,7 @@ import Dropdown from "../../global/Dropdown";
 import Loader from "../../global/Loader";
 import Modal from "../../global/Modal";
 import SubmitButton from "../../global/SubmitButton";
-import Switch from '../../global/Switch';
+import Switch from "../../global/Switch";
 import {
     default as DebounceInput,
     default as DebounceTextarea,
@@ -572,91 +572,186 @@ const ResolveModal = ({ state }) => {
                                     </ul>
                                 </div>
 
-
                                 <Switch>
-                                    <Switch.Case condition={row &&!isLoading && row?.raised_against && row?.task}>
+                                    <Switch.Case
+                                        condition={
+                                            row &&
+                                            !isLoading &&
+                                            row?.raised_against &&
+                                            row?.task
+                                        }
+                                    >
                                         {/* Client */}
-                                        <Switch.Case condition={row && _.includes(["CPR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["CPR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Client"
-                                                user = {{
+                                                user={{
                                                     ...row?.client,
-                                                    avatar: row?.client?.image ? `/user-uploads/avatar/${row?.client?.image}` : null
+                                                    avatar: row?.client?.image
+                                                        ? `/user-uploads/avatar/${row?.client?.image}`
+                                                        : null,
                                                 }}
-                                                comment = ""
-                                                questions = {[...filterQuestion(conversations, row?.client?.id)]}
+                                                comment=""
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.client?.id
+                                                    ),
+                                                ]}
                                                 reason=""
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Sale */}
-                                        <Switch.Case condition={row && _.includes(["SPR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["SPR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Sale"
-                                                user = {{
+                                                user={{
                                                     ...row?.sales_person,
-                                                    avatar: row?.sales_person?.image ? `/user-uploads/avatar/${row?.sales_person?.image}` : null
+                                                    avatar: row?.sales_person
+                                                        ?.image
+                                                        ? `/user-uploads/avatar/${row?.sales_person?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.pm_comment}
-                                                questions = {[...filterQuestion(conversations, row?.sales_person?.id)]}
-                                                reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
+                                                comment={row?.pm_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.sales_person?.id
+                                                    ),
+                                                ]}
+                                                reason={
+                                                    row?.dispute_between ===
+                                                    "LDR"
+                                                        ? row?.revision_acknowledgement
+                                                        : row?.deny_reason
+                                                }
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Project Manager */}
-                                        <Switch.Case condition={row && _.includes(["SPR", "CPR", "PLR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["SPR", "CPR", "PLR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Project Manager"
-                                                user = {{
+                                                user={{
                                                     ...row?.project_manager,
-                                                    avatar: row?.project_manager?.image ? `/user-uploads/avatar/${row?.project_manager?.image}` : null
+                                                    avatar: row?.project_manager
+                                                        ?.image
+                                                        ? `/user-uploads/avatar/${row?.project_manager?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.pm_comment}
-                                                questions = {[...filterQuestion(conversations, row?.project_manager?.id)]}
-                                                reason={row?.revision_acknowledgement}
+                                                comment={row?.pm_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.project_manager?.id
+                                                    ),
+                                                ]}
+                                                reason={
+                                                    row?.revision_acknowledgement
+                                                }
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Lead Developer */}
-                                        <Switch.Case condition={row && _.includes(["PLR", "LDR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["PLR", "LDR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Lead Developer"
-                                                user = {{
-                                                    ...row?.task?.lead_developer,
-                                                    avatar: row?.task?.lead_developer?.image ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}` : null
+                                                user={{
+                                                    ...row?.task
+                                                        ?.lead_developer,
+                                                    avatar: row?.task
+                                                        ?.lead_developer?.image
+                                                        ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.lead_comment}
-                                                questions = {[...filterQuestion(conversations, row?.task?.lead_developer?.id)]}
-                                                reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
+                                                comment={row?.lead_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.task
+                                                            ?.lead_developer?.id
+                                                    ),
+                                                ]}
+                                                reason={
+                                                    row?.dispute_between ===
+                                                    "LDR"
+                                                        ? row?.revision_acknowledgement
+                                                        : row?.deny_reason
+                                                }
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Developer */}
-                                        <Switch.Case condition={_.includes(["LDR"], row?.dispute_between)} >
+                                        <Switch.Case
+                                            condition={_.includes(
+                                                ["LDR"],
+                                                row?.dispute_between
+                                            )}
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Developer"
-                                                user = {{
+                                                user={{
                                                     ...row?.task?.developer,
-                                                    avatar: row?.task?.developer?.image ? `/user-uploads/avatar/${row?.task?.developer?.image}` : null
+                                                    avatar: row?.task?.developer
+                                                        ?.image
+                                                        ? `/user-uploads/avatar/${row?.task?.developer?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.dev_comment}
-                                                questions = {[...filterQuestion(conversations, row?.task?.developer?.id)]}
+                                                comment={row?.dev_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.task?.developer?.id
+                                                    ),
+                                                ]}
                                                 reason={row?.deny_reason}
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
                                     </Switch.Case>
                                 </Switch>
-
 
                                 {/* QUESTION AND ANSWER */}
                                 {mode === "QUESTION_AND_ANSWER" ? (

@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import Modal from "../../components/Modal";
+import React, { useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import CKEditorComponent from "../../../ckeditor";
+import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
+import Button from '../../../global/Button';
 import Card from "../../../global/Card";
-import styles from "./task-edit-form.module.css";
 import { CompareDate } from "../../../utils/dateController";
+import Modal from "../../components/Modal";
 import Input from "../../components/form/Input";
 import DatePicker from "../comments/DatePicker";
-import CKEditorComponent from "../../../ckeditor";
-import Button from  '../../../global/Button'
-import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
 import AssignedToSelection from "./AssignedToSelection";
 import PrioritySelection from "./PrioritySelection";
-import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
+import TaskCategorySelectionBox from "./TaskCategorySelectionBox";
+import styles from "./task-edit-form.module.css";
 
+import { Listbox } from "@headlessui/react";
+import { toast } from "react-toastify";
 import {
     useDeleteUplaodedFileMutation,
-    useGetTaskDetailsQuery,
-    useEditSubtaskMutation,
+    useGetTaskDetailsQuery
 } from "../../../services/api/SingleTaskPageApi";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { storeSubTasks } from "../../../services/features/subTaskSlice";
-import { toast } from "react-toastify";
+import { useGetMilestoneDetailsQuery } from "../../../services/api/projectApiSlice";
 import { useUpdateTaskMutation } from "../../../services/api/tasksApiSlice";
-import { useGetMilestoneDetailsQuery, useLazyGetMilestoneDetailsQuery } from "../../../services/api/projectApiSlice";
-import { Listbox } from "@headlessui/react";
-import Loader from "../../../global/Loader";
 import { convertTime } from "../../../utils/converTime";
 
 const dayjs = new CompareDate();
@@ -160,7 +155,7 @@ const TaskEditForm = ({ task, onSubmit, isLoading, onClose}) => {
         overloadedUser: (name, gender) =>
           `You cannot assign this task to ${name} because ${
             gender === 'male' ? 'he ' : 'she '
-          } has more than 10 submittable tasks.`,
+          } has more than 4 submittable tasks.`,
         description: 'This field is required.',
       };
 

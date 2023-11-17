@@ -108,7 +108,7 @@ const FilePreview = ({
     ...props
 }) => {
     return (
-        <a href={downloadUrl} onClick={e => !downloadAble && e.preventDefault()} download={downloadAble}>
+        <a href={downloadUrl} target="_blank" onClick={e => !downloadAble && e.preventDefault()} download={downloadAble}>
             <div className={`sp1_file_upload--input-preview ${classname}`} {...props}>
                 {/* delete button */}
                 {deleteAble  && (
