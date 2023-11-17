@@ -253,6 +253,7 @@
                             @enderror
                         </div>
 
+                        @if ($deliverable->to)
                         <div class="col-md-4">
                             <div class="form-group my-3">
                                 <label class="f-14 text-dark-grey mb-12" data-label="true" for="from146">To
@@ -267,6 +268,7 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        @endif
                         @endif
                         @php
                             $data = \App\models\DelivarableColumnEdit::where([
