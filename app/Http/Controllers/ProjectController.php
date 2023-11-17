@@ -823,21 +823,7 @@ class ProjectController extends AccountBaseController
 
         return view('projects.create', $this->data);
     }
-    public function storeDisputeAuthorization(Request $request){
-        $validator =  $request->validate([
-            'dispute_admin_comment' => 'required',
-
-        ], [
-            'dispute_admin_comment.required' => 'This field is required!',
-        ]);
-
-        $project = Project::find($request->project_id);
-        $project->dispute_admin_comment = $request->dispute_admin_comment;
-        $project->status = 'canceled';
-        $project->save();
-
-        return response()->json(['status'=>400]);
-    }
+   
 
     public function storeDisputeAuthorization(Request $request){
         $validator =  $request->validate([
