@@ -1,12 +1,12 @@
 import _ from "lodash";
 import React from "react";
+import { toast } from "react-toastify";
 import CKEditorComponent from "../../ckeditor";
-import { useStoreProjectGuidelineMutation, useUpdateProjectGuidelineMutation } from "../../services/api/projectApiSlice";
+import { useUpdateProjectGuidelineMutation } from "../../services/api/projectApiSlice";
 import Button from "../../tasks/components/Button";
 import Modal from "../../tasks/components/Modal";
 import SubmitButton from "../../tasks/components/SubmitButton";
 import Input from "../../tasks/components/form/Input";
-import { toast } from "react-toastify";
 
 const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projectId }) => {
     const [themeDetails, setThemeDetails] = React.useState("");
@@ -25,15 +25,15 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     const [pluginDescription, setPluginDescription] = React.useState('');
     const [colorSchema, setColorSchema] = React.useState('no');
     const [primaryColor, setPrimaryColor] = React.useState("#1D82F5");
-    const [primaryColorDescription, setPrimaryColorDescription] = React.useState(''); 
+    const [primaryColorDescription, setPrimaryColorDescription] = React.useState('');
     const [secondaryColors, setSecondaryColors] = React.useState([{
             id:'egqsz',
             color: '#1D82F5',
             description: '',
         }]);
- 
 
-   const [error, setError] = React.useState(null); 
+
+   const [error, setError] = React.useState(null);
 
    const [updateProjectGuideline, { isLoading }] = useUpdateProjectGuidelineMutation();
 
@@ -48,7 +48,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     const onChange = (e, setState) => {
         setState(e.target.value);
     };
- 
+
 
     // add secondary color
     const addSecondaryColor = (e) => {
@@ -60,7 +60,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         }])
     }
 
-    // handle secondary color change 
+    // handle secondary color change
     const handleSecondaryColorChange = (e, id) => {
         let newColors = _.map(secondaryColors, item => item.id === id ? {id, color: e.target.value, description: ''} : item);
         setSecondaryColors([...newColors])
@@ -88,7 +88,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 id: (Math.random() + 1).toString(36).substring(7),
                 url: ''
             }])
-    } 
+    }
 
     // handle on chagne ref url
     const handleRefUrlChange = (e, id) =>{
@@ -101,12 +101,12 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
     // remove design ref
     const removeDesignRef = (e, id) => {
-        e.stopPropagation(); 
+        e.stopPropagation();
         let newRef = _.filter(designRefURL, item => item.id !== id);
         setDesignRefURL([...newRef])
     }
 
-    
+
     const themeDetailsAuthorized = () => {
         const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details');
 
@@ -131,10 +131,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     }
 
     //
-     
-    const themeDetailsAuthorizedStatus = () => { 
-        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details'); 
-        
+
+    const themeDetailsAuthorizedStatus = () => {
+        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details');
+
         if(data?.theme_details === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
@@ -143,16 +143,16 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span> 
+                return <span className="badge badge-warning"> Panding </span>
             }else if(Number(status) === 1) {
-                return <span className="badge badge-success"> Approved </span> 
+                return <span className="badge badge-success"> Approved </span>
             }
         }
-    }  
+    }
 
-    const designDetailsAuthorizedStatus = () => { 
+    const designDetailsAuthorizedStatus = () => {
         const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'design_details')
-        
+
         if(data?.design_details === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
@@ -161,17 +161,17 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span> 
+                return <span className="badge badge-warning"> Panding </span>
             }else if(Number(status) === 1) {
-                return <span className="badge badge-success"> Approved </span> 
+                return <span className="badge badge-success"> Approved </span>
             }
         }
-    }  
- 
-    
-    const colorSchemaAuthorizedStatus = () => { 
+    }
+
+
+    const colorSchemaAuthorizedStatus = () => {
         const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'color_schema')
-        
+
         if(data?.color_schema === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
@@ -180,16 +180,16 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span> 
+                return <span className="badge badge-warning"> Panding </span>
             }else if(Number(status) === 1) {
-                return <span className="badge badge-success"> Approved </span> 
+                return <span className="badge badge-success"> Approved </span>
             }
         }
-    }  
- 
-    const pluginResearchAuthorizedStatus = () => { 
+    }
+
+    const pluginResearchAuthorizedStatus = () => {
         const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research')
-        
+
         if(data?.plugin_research === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
@@ -198,15 +198,15 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
-                return <span className="badge badge-warning"> Panding </span> 
+                return <span className="badge badge-warning"> Panding </span>
             }else if(Number(status) === 1) {
-                return <span className="badge badge-success"> Approved </span> 
+                return <span className="badge badge-success"> Approved </span>
             }
         }
-    }  
- 
+    }
 
-    
+
+
 
     // validation
     const isValide = () => {
@@ -237,10 +237,10 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                     err.themeUrl = "Provided Value Must Be an URL!"
                     count++;
                 }
-            } 
+            }
           }
- 
-        
+
+
 
         // design details
        if(!designDetailsAuthorized && edit.design_details){
@@ -258,7 +258,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                     if(xDOrFigmaFile === ''){
                         err.xdFigma = "You Have to Provide Reference Link!"
                         count++;
-                    }else if(!isURL(xDOrFigmaFile)){ 
+                    }else if(!isURL(xDOrFigmaFile)){
                         err.xdFigma = "Provided Value Must Be an URL!"
                         count++;
                     }
@@ -273,25 +273,25 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 }else if(designFileType === 'The Reference Site That Has to Be Clone'){
                     _.map(designRefURL, item => {
                         if(item.url === ''){
-                            err.designRef = "You Have to Provide Reference Link!" 
+                            err.designRef = "You Have to Provide Reference Link!"
                             count++;
-                        }else if(!isURL(item.url)){ 
+                        }else if(!isURL(item.url)){
                             err.designRef = "Provided Value Must Be an URL!"
                             count++;
                         }
                     })
 
                     if(designRefDescription === ''){
-                        err.designRefDescripton = "You have to Provide Instruction!" 
+                        err.designRefDescripton = "You have to Provide Instruction!"
                         count++;
                     }
                 }
-            } 
+            }
         }
        }
 
         // color schema
-        
+
         if(!colorSchemaAuthorized() && edit.color_schema){
             if(colorSchema === ''){
                 err.colorSchema = 'You Need to Select An Option';
@@ -302,7 +302,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                     err.pColorDesc = "You Have to Provide This Field!"
                     count++;
                 }
-    
+
                 _.map(secondaryColors, item => {
                     if(item.description === ''){
                         err.sDescription = "You Have to Provide This Field!"
@@ -311,22 +311,22 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                 })
             }
         }
- 
 
-        
-        // plugin 
+
+
+        // plugin
         if(!pluginResearchAuthorized() && edit.plugin_research){
             if(plugin === ''){
                 err.plugin = 'You Need to Select An Option';
                 count++;
             }
-    
+
             if(plugin==='yes'){
                 if(pluginName === '') {
                     err.pluginName = "You Have to Provide Plugin Name";
                     count++;
                 }
-    
+
                 if(pluginURL === ''){
                     err.pluginURL = "You Have to Provide Plugin URL";
                     count++;
@@ -334,7 +334,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                     err.pluginURL = "Provided Value Must Be an URL!"
                     count++;
                 }
-    
+
                 if(pluginGoogleDrive === '') {
                     err.pluginGoogleDrive = "You Have to Provide Plugin Google Drive URL"
                     count++;
@@ -342,15 +342,15 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                     err.pluginGoogleDrive = "Provided Value Must Be an URL!"
                     count++;
                 }
-    
+
                 if(pluginDescription === '') {
                     err.pluginDescription = "You Have to Provide Instruction of This Plugin!"
                     count++;
                 }
-            } 
+            }
         }
         setError({...err});
-        return !count; 
+        return !count;
     }
 
 
@@ -377,30 +377,30 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
             formData = {
                 ...formData,
                 design_details: designDetials === 'yes' ? 1 : 0,
-                design: designFileType === '--' ? null : designFileType, 
-                xd_url: xDOrFigmaFile, 
+                design: designFileType === '--' ? null : designFileType,
+                xd_url: xDOrFigmaFile,
                 drive_url: photoshopReferenceURL,
                 reference_link: _.compact(_.map(designRefURL, item => item.url)),
                 instruction: designRefDescription,
             }
-        } 
-        
+        }
+
         if(!pluginResearchAuthorized() && edit.plugin_research){
-            formData = { 
+            formData = {
                 ...formData,
                 plugin_research: plugin === "yes" ? 1 : 0,
                 plugin_name: pluginName,
                 plugin_url: pluginURL,
-                google_drive_link: pluginGoogleDrive, 
+                google_drive_link: pluginGoogleDrive,
                 instruction_plugin: pluginDescription,
-                
+
             }
         }
 
         if(!colorSchemaAuthorized() && edit.color_schema){
             formData = {
-                ...formData, 
-                color_schema: colorSchema === "yes" ? 1 : 0, 
+                ...formData,
+                color_schema: colorSchema === "yes" ? 1 : 0,
                 primary_color: primaryColor,
                 primary_color_description: primaryColorDescription,
                 color: _.compact(_.map(secondaryColors, item => item.color)),
@@ -412,7 +412,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         if(isValide()){
             await updateProjectGuideline(formData)
             .unwrap()
-            .then(res => { 
+            .then(res => {
                 console.log(res)
                 toast.success('Task Guideline Update Successfully');
                 close();
@@ -421,7 +421,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
         }
     }
 
- 
+
 
     return (
         <React.Fragment>
@@ -460,27 +460,27 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             className="font-weight-bold"
                                             style={{ color: "#808080" }}
                                         >
-                                            <span className="mr-1">1. Theme Details</span> 
-                                            {themeDetailsAuthorized() ? 
+                                            <span className="mr-1">1. Theme Details</span>
+                                            {themeDetailsAuthorized() ?
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
                                                     {themeDetailsAuthorizedStatus()}
                                                     <button
                                                         onClick={() => setEdit(prev => ({...prev, theme_details: true}))}
-                                                        className="badge badge-secondary ml-1" 
+                                                        className="badge badge-secondary ml-1"
                                                     >
                                                         Edit
                                                     </button>
                                                 </>
-                                            } 
-                                        </label> 
+                                            }
+                                        </label>
                                         {
                                             edit?.theme_details &&
                                             <>
                                                 <div className="d-block pl-3">
                                                     <div className="form-check form-check-inline">
                                                         <input
-                                                            type="radio" 
+                                                            type="radio"
                                                             name="theme_details"
                                                             className="form-check-input"
                                                             id="themeDetailsYes"
@@ -547,8 +547,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )} 
-                                            </>  
+                                                )}
+                                            </>
                                         }
                                     </div>
                                 </React.Fragment>
@@ -556,33 +556,33 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
                                 {/* design Provide */}
                                 <React.Fragment>
-                                    <div className="form-group">  
+                                    <div className="form-group">
                                         <label
                                             htmlFor=""
                                             className="font-weight-bold"
                                             style={{ color: "#808080" }}
                                         >
                                             <span className="mr-1">2. Design Details </span>
-                                            {designDetailsAuthorized() ? 
+                                            {designDetailsAuthorized() ?
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
-                                                   {designDetailsAuthorizedStatus()} 
-                                                    <button 
+                                                   {designDetailsAuthorizedStatus()}
+                                                    <button
                                                         onClick={() => setEdit(prev => ({...prev, design_details: true}))}
-                                                        className="badge badge-secondary ml-1"  
+                                                        className="badge badge-secondary ml-1"
                                                     >
                                                         Edit
                                                     </button>
                                                 </>
-                                            } 
-                                        </label> 
+                                            }
+                                        </label>
 
                                         {edit?.design_details &&
                                             <React.Fragment>
                                                 <div className="d-block pl-3">
                                                     <div className="form-check form-check-inline">
                                                         <input
-                                                            type="radio" 
+                                                            type="radio"
                                                             name="design_details"
                                                             className="form-check-input"
                                                             id="designDetailsYes"
@@ -604,7 +604,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
                                                     <div className="form-check form-check-inline">
                                                         <input
-                                                            type="radio" 
+                                                            type="radio"
                                                             name="design_details"
                                                             className="form-check-input"
                                                             id="designDetailsNo"
@@ -623,7 +623,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                         >
                                                             No
                                                         </label>
-                                                    </div> 
+                                                    </div>
                                                     {error?.designDetials && <div className='' style={{color: 'red'}}> {error?.designDetials} </div>}
                                                 </div>
 
@@ -632,17 +632,17 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                     <div className="px-3">
                                                         <div className="form-group mt-2">
                                                             <label htmlFor="exampleFormControlSelect1">Select Design Reference Type<sup>*</sup></label>
-                                                            <select 
-                                                                className="form-control py-2" 
-                                                                value={designFileType} 
+                                                            <select
+                                                                className="form-control py-2"
+                                                                value={designFileType}
                                                                 onChange={e => {
                                                                     setXDorFigmaFile('');
                                                                     setPhotoshopReferenceURL('');
                                                                     setDesignRefURL([{id: 'lgqsz', url: ''}])
                                                                     onChange(e, setDesignFileType)
-                                                                }} 
+                                                                }}
                                                                 id="exampleFormControlSelect1"
-                                                            > 
+                                                            >
                                                                 <option value="--" disabled>--</option>
                                                                 <option value="XD/Figma">XD/Figma</option>
                                                                 <option value="Photoshop">Photoshop</option>
@@ -711,58 +711,58 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                                         }
                                                                     </div>
                                                                 ))
-                                                            } 
-                                                            
+                                                            }
+
                                                             <button type="button" onClick={addDesignRefURL} className="bg-transparent text-primary hover-underline">+ Another Reference URL</button>
                                                         </div>
 
-                                                        <div className="form-group"> 
+                                                        <div className="form-group">
                                                             <label htmlFor="ckeditor">Add Instraction<sup>*</sup></label>
                                                             <div className="ck-editor-holder">
-                                                                <CKEditorComponent 
+                                                                <CKEditorComponent
                                                                     onChange={(e, editor) => (
                                                                         setDesignRefDescription(editor.getData())
-                                                                    )} 
+                                                                    )}
                                                                 />
                                                             </div>
-                                                        {error?.designRefDescripton && <div className='' style={{color: 'red'}}> {error?.designRefDescripton} </div>}   
+                                                        {error?.designRefDescripton && <div className='' style={{color: 'red'}}> {error?.designRefDescripton} </div>}
                                                         </div>
                                                     </div>
-                                                } 
+                                                }
                                             </React.Fragment>
                                         }
                                         </div>
-                                </React.Fragment> 
+                                </React.Fragment>
                                 {/* end design provide */}
-                                        
+
 
                                 {/* color schema */}
-                                <div className="form-group">  
+                                <div className="form-group">
                                         <label
                                             htmlFor=""
                                             className="font-weight-bold"
                                             style={{ color: "#808080" }}
                                         >
-                                            <span className="mr-1">3. Color Schema</span>
-                                            {colorSchemaAuthorized() ? 
+                                            <span className="mr-1">3. Color Scheme</span>
+                                            {colorSchemaAuthorized() ?
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
                                                     {colorSchemaAuthorizedStatus()}
                                                     <button
                                                         onClick={() => setEdit(prev => ({...prev, color_schema: true}))}
-                                                        className="badge badge-secondary ml-1" 
+                                                        className="badge badge-secondary ml-1"
                                                     >
                                                         Edit
                                                     </button>
                                                 </>
-                                            } 
-                                        </label> 
+                                            }
+                                        </label>
                                         {edit?.color_schema &&
                                             <React.Fragment>
                                                 <div className="d-block pl-3">
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="color_schema"
                                                     className="form-check-input"
                                                     id="colorSchemaYes"
@@ -781,7 +781,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
                                             <div className="form-check form-check-inline">
                                                 <input
-                                                    type="radio" 
+                                                    type="radio"
                                                     name="color_schema"
                                                     className="form-check-input"
                                                     id="colorSchemaNo"
@@ -797,29 +797,29 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                 >
                                                     No
                                                 </label>
-                                            </div> 
+                                            </div>
                                             {error?.colorSchema && <div className='' style={{color: 'red'}}> {error?.colorSchema} </div>}
                                         </div>
 
-                                        
+
                                         {
                                             colorSchema === 'yes' &&
                                             <React.Fragment>
                                                 {/* priamry color */}
-                                                 <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}> 
+                                                 <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
                                                     <div className="form-group">
                                                         <label htmlFor="" className="mb-2" style={{fontWeight: 600, color: "#777"}}>1. Primary Color <sup>*</sup> </label>
 
                                                         <div className="form-group px-2">
                                                             <label htmlFor="">Choose Color:</label>
                                                             <div className="input-group mb-3 col-12 col-md-6">
-                                                                <input 
+                                                                <input
                                                                     type="text"
-                                                                    className="form-control" 
-                                                                    placeholder="Recipient's username" 
-                                                                    aria-label="Recipient's username" 
+                                                                    className="form-control"
+                                                                    placeholder="Recipient's username"
+                                                                    aria-label="Recipient's username"
                                                                     aria-describedby="basic-addon2"
-                                                                    value={primaryColor} 
+                                                                    value={primaryColor}
                                                                     onChange={e => onChange(e, setPrimaryColor)}
                                                                 />
                                                                 <div className="input-group-append">
@@ -833,22 +833,22 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                         <div className="form-group pl-2">
                                                             <label htmlFor="">Where Should Developer Use this Color <sup>*</sup></label>
                                                             <div className="ck-editor-holder">
-                                                                <CKEditorComponent 
+                                                                <CKEditorComponent
                                                                     onChange={(e, editor) => (
                                                                         setPrimaryColorDescription(editor.getData())
                                                                     )}
-                                                                /> 
+                                                                />
                                                             </div>
-                                                            
+
                                                             {error?.pColorDesc && <div className='' style={{color: 'red'}}> {error?.pColorDesc} </div>}
                                                         </div>
-                                                    </div> 
+                                                    </div>
                                                 </div>
 
 
 
                                                 {/* secondary color */}
-                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}> 
+                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
                                                     <div className="form-group">
                                                         <label htmlFor="" className="mb-2" style={{fontWeight: 600, color: "#777"}}>2. Secondary Color <sup>*</sup> </label>
 
@@ -858,28 +858,28 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                                     <div className="form-group">
                                                                         <label htmlFor=""><b>{index + 1}.</b> Choose Color:</label>
                                                                         <div className="d-flex align-items-center">
-                                                                            <div className="input-group mb-3 pl-3 col-10 col-md-6"> 
-                                                                                <input 
+                                                                            <div className="input-group mb-3 pl-3 col-10 col-md-6">
+                                                                                <input
                                                                                     type="text"
-                                                                                    className="form-control" 
-                                                                                    placeholder="Recipient's username" 
-                                                                                    aria-label="Recipient's username" 
+                                                                                    className="form-control"
+                                                                                    placeholder="Recipient's username"
+                                                                                    aria-label="Recipient's username"
                                                                                     aria-describedby="basic-addon2"
                                                                                     value={item.color}
                                                                                     onChange={e => handleSecondaryColorChange(e, item.id)}
-                                                                                />  
-                                                                                
+                                                                                />
+
                                                                                 <div className="input-group-append">
                                                                                     <span className="input-group-text px-1 border-0" id="basic-addon2">
-                                                                                        <input 
-                                                                                            type="color" 
-                                                                                            value={item.color} 
-                                                                                            onChange={e => handleSecondaryColorChange(e, item.id)} 
+                                                                                        <input
+                                                                                            type="color"
+                                                                                            value={item.color}
+                                                                                            onChange={e => handleSecondaryColorChange(e, item.id)}
                                                                                             style={{width: '32px', border: 'none'}}
                                                                                         />
                                                                                     </span>
                                                                                 </div>
-                                                                            </div> 
+                                                                            </div>
 
                                                                             {
                                                                                 _.size(secondaryColors) > 1 &&
@@ -893,58 +893,58 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                                     <div className="form-group pl-3">
                                                                         <label htmlFor="">Where Should Developer Use this Color <sup>*</sup></label>
                                                                         <div className="ck-editor-holder">
-                                                                            <CKEditorComponent onChange={(e, editor) => handleSecondaryColorDescriptionChange(e, editor, item.id)} /> 
+                                                                            <CKEditorComponent onChange={(e, editor) => handleSecondaryColorDescriptionChange(e, editor, item.id)} />
                                                                         </div>
-                                                            
+
                                                                         {error?.sDescription && <div className='' style={{color: 'red'}}> {error?.sDescription} </div>}
                                                                     </div>
                                                                 </div>
                                                             ))
-                                                        }  
-                                                        
+                                                        }
+
                                                         <div className="d-flex align-items-center px-3">
-                                                            <button 
-                                                                type="button" 
-                                                                onClick={addSecondaryColor} 
+                                                            <button
+                                                                type="button"
+                                                                onClick={addSecondaryColor}
                                                                 className="bg-transparent text-primary hover-underline ml-auto"
                                                             >+ Another Color</button>
                                                         </div>
-                                                    </div> 
+                                                    </div>
                                                 </div>
                                             </React.Fragment>
-                                        } 
+                                        }
                                             </React.Fragment>
                                         }
                                     </div>
                                 {/* end color schema */}
 
-                                {/* Plugin Research */} 
-                                    <div className="form-group">  
+                                {/* Plugin Research */}
+                                    <div className="form-group">
                                         <label
                                             htmlFor=""
                                             className="font-weight-bold"
                                             style={{ color: "#808080" }}
                                         >
                                             <span className="mr-1">4. Plugin Research</span>
-                                            {pluginResearchAuthorized() ? 
+                                            {pluginResearchAuthorized() ?
                                                 <span className="badge badge-success mr-1"> Approved </span> :
                                                 <>
                                                     {pluginResearchAuthorizedStatus()}
-                                                    <button 
+                                                    <button
                                                         onClick={() => setEdit(prev => ({...prev, plugin_research: true}))}
-                                                        className="badge badge-secondary ml-1" 
+                                                        className="badge badge-secondary ml-1"
                                                     >
                                                         Edit
                                                     </button>
                                                 </>
-                                            } 
-                                        </label> 
-                                        
+                                            }
+                                        </label>
+
                                         {edit.plugin_research && <React.Fragment>
                                             <div className="d-block pl-3">
                                                 <div className="form-check form-check-inline">
                                                     <input
-                                                        type="radio" 
+                                                        type="radio"
                                                         name="plugin"
                                                         className="form-check-input"
                                                         id="pluginYes"
@@ -963,7 +963,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
                                                 <div className="form-check form-check-inline">
                                                     <input
-                                                        type="radio" 
+                                                        type="radio"
                                                         name="plugin"
                                                         className="form-check-input"
                                                         id="pluginNo"
@@ -984,8 +984,8 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                             </div>
 
                                             {
-                                                plugin === 'yes' && 
-                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}> 
+                                                plugin === 'yes' &&
+                                                <div className="mt-3 mx-3 p-3" style={{background: '#F9F9F9', borderRadius: '10px'}}>
                                                     <div className="row">
                                                         <div className="col-12 col-md-4">
                                                             <Input
@@ -1003,7 +1003,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                                 label="Plugin URL"
                                                                 required={true}
                                                                 placeholder="Enter Plugin URL"
-                                                                error={error?.pluginURL} 
+                                                                error={error?.pluginURL}
                                                                 value={pluginURL}
                                                                 onChange={e => onChange(e, setPluginURL)}
                                                             />
@@ -1012,7 +1012,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                             <Input
                                                                 label="Share Google Drive Link"
                                                                 required={true}
-                                                                error={error?.pluginGoogleDrive} 
+                                                                error={error?.pluginGoogleDrive}
                                                                 placeholder="Share Google Drive Link"
                                                                 value={pluginGoogleDrive}
                                                                 onChange={e => onChange(e, setPluginGoogleDrive)}
@@ -1024,7 +1024,7 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                                                 <div className="ck-editor-holder">
                                                                     <CKEditorComponent onChange={(e, editor) => setPluginDescription(editor.getData())} />
                                                                 </div>
-                                                                
+
                                                                 {error?.pluginDescription && <div className='' style={{color: 'red'}}> {error?.pluginDescription} </div>}
                                                             </div>
                                                         </div>
@@ -1035,13 +1035,13 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
                                         }
                                     </div>
                                 {/* End Plugin Research */}
-                                
+
 
                                 <div className="d-flex align-items-center justify-content-end">
                                     <Button onClick={close} variant="tertiary" className="mr-2">
                                         Close
                                     </Button>
-                                   {!_.isEmpty(_.pickBy(edit, Boolean)) &&  
+                                   {!_.isEmpty(_.pickBy(edit, Boolean)) &&
                                     <SubmitButton
                                         title="Update"
                                         onClick={handleSubmit}

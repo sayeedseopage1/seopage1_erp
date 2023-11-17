@@ -1,11 +1,10 @@
+import _ from "lodash";
 import React from "react";
+import { toast } from "react-toastify";
 import CKEditorComponent from "../../../ckeditor";
+import FileUploader from "../../../file-upload/FileUploader";
 import Button from "../../../global/Button";
 import Switch from "../../../global/Switch";
-import UploadFilesInLine from "../../../file-upload/UploadFilesInLine";
-import _, { random } from "lodash";
-import { toast } from "react-toastify";
-import FileUploader from "../../../file-upload/FileUploader";
 import { useRemoveCommentPreviousUploadedFileMutation, useUpdateCommentMutation } from "../../../services/api/TaskCommentApiSlice";
 
 const EditComment = ({ comment, updateComments, close }) => {
@@ -61,7 +60,6 @@ const EditComment = ({ comment, updateComments, close }) => {
         updateComment({ data: formData, commentId: comment.id })
             .unwrap()
             .then((res) => {
-                console.log("log")
                 toast.success("Successfully Updated!");
                 updateComments(res.data);
 
