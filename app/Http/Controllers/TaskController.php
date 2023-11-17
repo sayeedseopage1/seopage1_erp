@@ -874,7 +874,7 @@ class TaskController extends AccountBaseController
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
 
         }
-        
+
 
         //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return response()->json([
@@ -1017,7 +1017,6 @@ class TaskController extends AccountBaseController
 
     public function TaskRevision(Request $request)
     {
-
         // DB::beginTransaction();
 
         $task_status = Task::find($request->task_id);
@@ -1079,7 +1078,14 @@ class TaskController extends AccountBaseController
         if($dispute_between == 'PLR' && $request->is_deniable==false){
             $task_revision->final_responsible_person = "PM";
         }
+
+        if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
+            $task_revision->raised_by_percent = 50;
+            $task_revision->raised_against_percent = 50;
+            $task_revision->final_responsible_person = null;
+        }
         $task_revision->save();
+
 
         //dd($type);
         //authorizatoin action start here
@@ -3300,7 +3306,7 @@ class TaskController extends AccountBaseController
         if($actions != null)
         {
         foreach ($actions as $key => $action) {
-           
+
                 $action->authorized_by= Auth::id();
                 $action->authorized_at= Carbon::now();
                 $action->past_status = 1;
@@ -3330,11 +3336,11 @@ class TaskController extends AccountBaseController
                 $past_action->client_id = $action->client_id;
                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-               
-           
-           
+
+
+
         }
-       
+
     }
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);

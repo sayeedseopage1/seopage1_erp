@@ -141,7 +141,7 @@ export const LeadIssuesTableColumns = [
                     </Switch.Case>
 
                     <Switch.Case
-                        condition={!rPerson && disputed && row.raised_against_p }
+                        condition={!rPerson && row.raised_against_p }
                     >
                         <a
                             href={`/account/employees/${row.lead_developer_id}`}
@@ -149,14 +149,14 @@ export const LeadIssuesTableColumns = [
                             className="multiline-ellipsis"
                         >
                             {row.lead_developer_name}
-                        </a> 
+                        </a>
 
                         <Switch.Case condition={disputeBetween === "PLR"}>
-                        <span>({row.raised_against_p}%)</span>
+                            <span>({row.raised_against_p}%)</span>
                         </Switch.Case>
 
                         <Switch.Case condition={disputeBetween === "LDR"}>
-                        <span>({row.raised_by_p}%)</span>
+                            <span>({row.raised_by_p}%)</span>
                         </Switch.Case>
                     </Switch.Case>
                 </Switch>
@@ -223,12 +223,12 @@ const Verdict = ({ row }) => {
     if (row?.status) {
         if (row?.winner) {
             return (
-                <span> 
-                    Verdict given in favor of
+                <span>
+                    Verdict given in favor of {" "}
                     <a
                         href={`/account/employees/${row?.winner}`}
                         className="hover-underline"
-                    > 
+                    >
                         {row?.winner_name}
                     </a>
                 </span>
@@ -236,7 +236,7 @@ const Verdict = ({ row }) => {
         } else {
             return (
                 <div>
-                    Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
+                    Both parties were hold partially responsible. Party {" "}<a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             );
         }
