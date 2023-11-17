@@ -114,6 +114,7 @@ class RevisionCalculatorController extends AccountBaseController
                 $total_disputes= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
                 ->where('task_revisions.dispute_created',1)
+                ->where('task_revisions.dispute_status',0)
               
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
