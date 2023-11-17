@@ -3,10 +3,10 @@ import axios from "axios";
 import _ from "lodash";
 import React, { useDeferredValue } from "react";
 import { HiOutlineSelector } from "react-icons/hi";
-import Avatar from "../../../../../../../global/Avatar";
-import Switch from "../../../../../../../global/Switch";
-import { Flex } from "../../../../../../../global/styled-component/Flex";
-import Search from "../../../components/Search";
+import Avatar from "../../../../../../../../global/Avatar";
+import Switch from "../../../../../../../../global/Switch";
+import { Flex } from "../../../../../../../../global/styled-component/Flex";
+import Search from "../../../../components/Search";
 
 /**
  * * This component responsible for rendering User list

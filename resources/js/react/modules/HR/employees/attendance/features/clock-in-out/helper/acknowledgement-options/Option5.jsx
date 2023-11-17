@@ -1,23 +1,20 @@
 import React from "react";
-import CKEditorComponent from "../../../../../../../ckeditor";
-import Button from "../../../../../../../global/Button";
-import Switch from "../../../../../../../global/Switch";
-import { FormGroup, Label } from "../../../../../../../global/styled-component/Form";
+import Button from "../../../../../../../../global/Button";
+import Switch from "../../../../../../../../global/Switch";
+import {
+    FormGroup,
+    Label,
+} from "../../../../../../../../global/styled-component/Form";
 import DurationTime from "./DurationTimer";
+import TaskList from "./TaskList";
 
-const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
-    const [comment, setComment] = React.useState("");
+const Option5 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
+    const [task, setTask] = React.useState(null);
     const [durations, setDurations] = React.useState([
         { start: "00:00 AM", end: "00:00 AM", id: "de2sew" },
     ]);
     const [error, setError] = React.useState(null);
     const uniqueId = Math.random().toString(6).slice(2);
-
-    // editor data change
-    const handleEditorChange = (e, editor) => {
-        const data = editor.getData();
-        setComment(data);
-    };
 
     // remove duration
     const onRemove = (e, id) => {
@@ -42,27 +39,28 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
         let errCount = 0;
         let err = new Object();
 
-        if (comment === "") {
-            err.comment = "Please explaine the reason here!";
+        if(!task){
+            err.task = "Select the task you forgot to track hours!";
             errCount++;
         }
+
         setError(err);
         return !errCount;
-    };
+    }
 
     // handle form submit
     const handleSubmission = (e) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task:
-                "In the morning, I had to wait for work before I could start.",
+                "I forgot to track hours.",
+            forgot_to_track_task_id: task?.id,
             durations: JSON.stringify(durations),
-            comment,
         };
 
-        if (isValid()) {
+        if (isValid()){
             onSubmit(data);
-        } else {
+        }else{
             Swal.fire({
                 position: "center",
                 icon: "error",
@@ -70,7 +68,9 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                 showConfirmButton: true,
             });
         }
+
     };
+
     return (
         <React.Fragment>
             <div className="--option-item">
@@ -86,30 +86,42 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                         value={index.toString()}
                         onChange={onChange}
                     />
-                    In the morning, I had to wait for work before I could start.
+                    I forgot to track hours.
                 </div>
 
                 {/* if checked */}
                 <Switch>
                     <Switch.Case condition={checked}>
                         <div className="pl-3 my-3 bg-white">
+                            <FormGroup>
+                                <Label className="font-weight-bold">
+                                    Select the task you forgot to track hours
+                                </Label>
+                                <TaskList task={task} onSelect={setTask} />
+                                <Switch.Case condition={error?.task}>
+                                    <div style={{color: 'red'}}>
+                                        {error?.task}
+                                    </div>
+                                </Switch.Case>
+                            </FormGroup>
+
                             {/* time duration */}
                             <FormGroup>
                                 <Label className="font-weight-bold">
-                                    Select an approximate time here. <sup>*</sup>
+                                    Select an approximate time here.
                                 </Label>
                                 {/* duration selection row */}
                                 <div className="row">
                                     <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                                        <Label className="font-weight-bold text-dark">
+                                        <label htmlFor="" className="d-block">
                                             From:
-                                        </Label>
+                                        </label>
                                     </div>
 
                                     <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                                        <Label className="font-weight-bold text-dark">
+                                        <label htmlFor="" className="d-block">
                                             To
-                                        </Label>
+                                        </label>
                                     </div>
                                 </div>
 
@@ -136,22 +148,6 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
                                     Add New Time
                                 </button>
                             </FormGroup>
-
-                            {/* comment field */}
-                            <div className="mt-3">
-                                <Label className="font-weight-bold">Write your comments here: </Label>
-                                <div className="ck-editor-holder stop-timer-options">
-                                    <CKEditorComponent
-                                        data={comment}
-                                        onChange={handleEditorChange}
-                                    />
-                                </div>
-                                <Switch.Case condition={error?.comment}>
-                                    <div className="f-14 text-danger">
-                                        {error?.comment}
-                                    </div>
-                                </Switch.Case>
-                            </div>
 
                             {/* footer section */}
                             <div className="mt-3 d-flex align-items-center">
@@ -180,4 +176,4 @@ const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     );
 };
 
-export default Option6;
+export default Option5;

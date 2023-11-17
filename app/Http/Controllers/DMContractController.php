@@ -32,6 +32,7 @@ use Auth;
 use App\Helper\Reply;
 use App\Models\AwardTimeIncress;
 use App\Models\AuthorizationAction;
+use App\Http\Controllers\HelperPendingActionController;
 
 class DMContractController extends AccountBaseController
 {
@@ -527,6 +528,11 @@ class DMContractController extends AccountBaseController
              $qualified_sale->amount = $deal->amount;
              //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
              $qualified_sale->save();
+             $helper = new HelperPendingActionController();
+
+
+             $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
+ 
 
             //  dd('oooo');
 

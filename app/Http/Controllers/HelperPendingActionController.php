@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Auth;
+use App\Models\ProjectDeliverable;
 
 class HelperPendingActionController extends AccountBaseController
 {
@@ -550,6 +551,162 @@ class HelperPendingActionController extends AccountBaseController
        
 
    }
+   public function ProjectDeliverableCreation($id)
+   {
+    $project = Project::where('id',$id)->first();
+    $client= User::where('id',$project->client_id)->first();
+    // dd($client);
+     $project_manager= User::where('id',$project->pm_id)->first();
+    
+   
+     // /dd($sales);
+     
+       
+         $action = new PendingAction();
+         $action->code = 'DCA';
+         $action->serial = 'DCA'.'x0';
+         $action->item_name= 'Creating deliverables for clients';
+         $action->heading= 'Create deliverables!';
+         $action->message = 'You need to create deliverable for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+         
+         $action->timeframe= 48;
+        
+         $action->project_id = $project->id;
+         
+         $action->client_id = $client->id;
+        
+         $action->authorization_for= $project_manager->id;
+     //   / dd($id);
+        
+         $button = [
+             [
+                 'button_name' => 'Create',
+                 'button_color' => 'primary',
+                 'button_type' => 'redirect_url',
+                 'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
+             ],
+           
+         ];
+         $action->button = json_encode($button);
+         $action->save();
+   }
+   public function DeliverableModification($project,$id)
+   {
+    $project = Project::where('id',$project->id)->first();
+    $client= User::where('id',$project->client_id)->first();
+    // dd($client);
+     $project_manager= User::where('id',$project->pm_id)->first();
+     $deliverables= ProjectDeliverable::where('id',$id)->first();
+
+       
+         $action = new PendingAction();
+         $action->code = 'DMA';
+         $action->serial = 'DMA'.'x0';
+         $action->item_name= 'Deliverables revision request';
+         $action->heading= 'Revision requested in deliverables (From management)!';
+         $action->message = 'Revision requested by management for the deliverables '.$deliverables->title.' for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+         
+         $action->timeframe= 24;
+        
+         $action->project_id = $project->id;
+         
+         $action->client_id = $client->id;
+         $action->deliverable_id = $id;
+        
+         $action->authorization_for= $project_manager->id;
+     //   / dd($id);
+        
+         $button = [
+             [
+                 'button_name' => 'Revise',
+                 'button_color' => 'primary',
+                 'button_type' => 'redirect_url',
+                 'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
+             ],
+           
+         ];
+         $action->button = json_encode($button);
+         $action->save();
+   }
+   public function SendDeliverabletoClient($id)
+   {
+    $project = Project::where('id',$id)->first();
+    $client= User::where('id',$project->client_id)->first();
+    // dd($client);
+     $project_manager= User::where('id',$project->pm_id)->first();
+    // $deliverables= ProjectDeliverable::where('id',$id)->first();
+
+       
+         $action = new PendingAction();
+         $action->code = 'SDCA';
+         $action->serial = 'SDCA'.'x0';
+         $action->item_name= 'Sending deliverables to the client';
+         $action->heading= 'Share deliverables with the client!';
+         $action->message = 'Share deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a>';
+         
+         $action->timeframe= 24;
+        
+         $action->project_id = $project->id;
+         
+         $action->client_id = $client->id;
+        // $action->deliverable_id = $id;
+        
+         $action->authorization_for= $project_manager->id;
+     //   / dd($id);
+        
+         $button = [
+             [
+                 'button_name' => 'Share',
+                 'button_color' => 'primary',
+                 'button_type' => 'redirect_url',
+                 'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
+             ],
+           
+         ];
+         $action->button = json_encode($button);
+         $action->save();
+   }
+   public function ClientDisagreeAgreement($project)
+   {
+    $project = Project::where('id',$project->id)->first();
+    $client= User::where('id',$project->client_id)->first();
+    // dd($client);
+     $project_manager= User::where('id',$project->pm_id)->first();
+    // $deliverables= ProjectDeliverable::where('id',$id)->first();
+
+       
+         $action = new PendingAction();
+         $action->code = 'CDDA';
+         $action->serial = 'CDDA'.'x0';
+         $action->item_name= 'Deliverables revision request';
+         $action->heading= 'Revision requested in deliverables (From Client)!';
+         $action->message = 'Revision requested by client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> for the deliverables for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a>';
+         
+         $action->timeframe= 24;
+        
+         $action->project_id = $project->id;
+         
+         $action->client_id = $client->id;
+        // $action->deliverable_id = $id;
+        
+         $action->authorization_for= $project_manager->id;
+     //   / dd($id);
+        
+         $button = [
+             [
+                 'button_name' => 'Revise',
+                 'button_color' => 'primary',
+                 'button_type' => 'redirect_url',
+                 'button_url' => route('projects.show', $project->id.'?tab=deliverables'),
+             ],
+           
+         ];
+         $action->button = json_encode($button);
+         $action->save();
+
+   }
+  
+  
     
    
     

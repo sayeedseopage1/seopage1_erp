@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import styles from '../styles.module.css';
-import Modal from '../../global/Modal';
 import Button from '../../global/Button';
+import Modal from '../../global/Modal';
 import DataTable from '../../global/data-table/table';
 import { useLazyGetPendingRevisionDataQuery } from '../../services/api/revisionCalculatorApiSlice';
-import {PendingRevisionColumns} from './columns'
+import styles from '../styles.module.css';
+import { PendingRevisionColumns } from './columns';
 
 
 // const data = projectElaborationData(50);
@@ -20,8 +20,8 @@ const PendingRevisionTable = () => {
     const pm_id = searchParams.get('pm');
     const start_date = searchParams.get('start_date');
     const end_date = searchParams.get('end_date');
-    const filter = {pm_id, start_date, end_date} 
-    
+    const filter = {pm_id, start_date, end_date}
+
     const goBack = ()=> navigation(`/`);
 
     const [
@@ -29,9 +29,9 @@ const PendingRevisionTable = () => {
         {isFetching}
     ] = useLazyGetPendingRevisionDataQuery();
 
-    
-  // fetch data 
-  useEffect(() => { 
+
+  // fetch data
+  useEffect(() => {
     ( async () => {
         const queryObject = _.pickBy(filter, Boolean);
         const queryString = new URLSearchParams(queryObject).toString();
@@ -45,7 +45,7 @@ const PendingRevisionTable = () => {
                     uid: Math.random().toString(36).substr(2, 5)
                 })
             })
-            setData(arr); 
+            setData(arr);
 
         } catch(err){
             console.log(err)
@@ -53,53 +53,53 @@ const PendingRevisionTable = () => {
     })()
   }, [])
 
- 
-  
+
+
     return (
-      <Modal isOpen={true}> 
+      <Modal isOpen={true}>
           <div className="sp1_modal-content-wrapper">
               <div className={`sp1_modal-panel ${styles.modal_panel}`}>
                   {/* header */}
                   <div className={`sp1_modal-head ${styles.modal_title_bar}`}>
-                      <div className="sp1_modal-title pl-2">Developer Issues</div>
-                      <Button 
-                        onClick={goBack} 
-                        aria-label="ModalClose" 
-                        variant='tertiary' 
+                      <div className="sp1_modal-title pl-2">Rev. Accept/Deny Pending</div>
+                      <Button
+                        onClick={goBack}
+                        aria-label="ModalClose"
+                        variant='tertiary'
                         className='sp1_modal-close'
                     >
                         <i className='fa-solid fa-xmark'/>
                       </Button>
                   </div>
                   {/* end header */}
-  
+
                   {/* body */}
                   <div className={`sp1_modal-body ${styles.modal_body}`}>
-  
+
                       <DataTable
-                          data={data} 
+                          data={data}
                           margeRow={true}
                           tableName='devIssuesTableTable'
                           columns={PendingRevisionColumns}
                           pageIndex={pageIndex}
                           perPageRow={nRows}
                           onPageChange={(value) => setPageIndex(value)}
-                          onPageRowChange={(n) => setNRows(n)} 
+                          onPageRowChange={(n) => setNRows(n)}
                           total={data.length}
                           isLoading={isFetching}
                           uniq_id='uid'
                           tableClass={styles.table}
                           groupBy={(data) => _.groupBy(data, d=>d.projectId)}
                           tableContainerClass={styles.tableContainer}
-                      />  
-  
+                      />
+
                   </div>
                   {/* end body */}
-              </div>  
+              </div>
           </div>
        </Modal>
     )
 }
-  
 
-export default PendingRevisionTable 
+
+export default PendingRevisionTable

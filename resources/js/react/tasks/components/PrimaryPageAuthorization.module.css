@@ -8,7 +8,9 @@
 }
 
 .card_auth_form{
-    width: 600px; 
+    width: 600px;
+
+    box-shadow: 0 0 10px rgb(0 0 0 / 15%)
 }
 
 @media only screen and (max-width: 1200px){
@@ -30,7 +32,7 @@
 .card_body{
     max-height: 80vh;
     overflow-y: auto;
-    padding-right: 16px;
+    padding-right: 16px;;
 }
 
 
@@ -121,7 +123,7 @@
     display: -moz-grid;
     display: grid;
     grid-template-columns: 130px 1fr;
-    gap: 1rem; 
+    gap: 1rem;
 }
 
 .item div[data-type = 'label']{

@@ -9,7 +9,7 @@ import Dropdown from "../../global/Dropdown";
 import Loader from "../../global/Loader";
 import Modal from "../../global/Modal";
 import SubmitButton from "../../global/SubmitButton";
-import Switch from '../../global/Switch';
+import Switch from "../../global/Switch";
 import {
     default as DebounceInput,
     default as DebounceTextarea,
@@ -572,91 +572,186 @@ const ResolveModal = ({ state }) => {
                                     </ul>
                                 </div>
 
-
                                 <Switch>
-                                    <Switch.Case condition={row &&!isLoading && row?.raised_against && row?.task}>
+                                    <Switch.Case
+                                        condition={
+                                            row &&
+                                            !isLoading &&
+                                            row?.raised_against &&
+                                            row?.task
+                                        }
+                                    >
                                         {/* Client */}
-                                        <Switch.Case condition={row && _.includes(["CPR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["CPR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Client"
-                                                user = {{
+                                                user={{
                                                     ...row?.client,
-                                                    avatar: row?.client?.image ? `/user-uploads/avatar/${row?.client?.image}` : null
+                                                    avatar: row?.client?.image
+                                                        ? `/user-uploads/avatar/${row?.client?.image}`
+                                                        : null,
                                                 }}
-                                                comment = ""
-                                                questions = {[...filterQuestion(conversations, row?.client?.id)]}
+                                                comment=""
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.client?.id
+                                                    ),
+                                                ]}
                                                 reason=""
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Sale */}
-                                        <Switch.Case condition={row && _.includes(["SPR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["SPR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Sale"
-                                                user = {{
+                                                user={{
                                                     ...row?.sales_person,
-                                                    avatar: row?.sales_person?.image ? `/user-uploads/avatar/${row?.sales_person?.image}` : null
+                                                    avatar: row?.sales_person
+                                                        ?.image
+                                                        ? `/user-uploads/avatar/${row?.sales_person?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.pm_comment}
-                                                questions = {[...filterQuestion(conversations, row?.sales_person?.id)]}
-                                                reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
+                                                comment={row?.pm_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.sales_person?.id
+                                                    ),
+                                                ]}
+                                                reason={
+                                                    row?.dispute_between ===
+                                                    "LDR"
+                                                        ? row?.revision_acknowledgement
+                                                        : row?.deny_reason
+                                                }
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Project Manager */}
-                                        <Switch.Case condition={row && _.includes(["SPR", "CPR", "PLR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["SPR", "CPR", "PLR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Project Manager"
-                                                user = {{
+                                                user={{
                                                     ...row?.project_manager,
-                                                    avatar: row?.project_manager?.image ? `/user-uploads/avatar/${row?.project_manager?.image}` : null
+                                                    avatar: row?.project_manager
+                                                        ?.image
+                                                        ? `/user-uploads/avatar/${row?.project_manager?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.pm_comment}
-                                                questions = {[...filterQuestion(conversations, row?.project_manager?.id)]}
-                                                reason={row?.revision_acknowledgement}
+                                                comment={row?.pm_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.project_manager?.id
+                                                    ),
+                                                ]}
+                                                reason={
+                                                    row?.revision_acknowledgement
+                                                }
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Lead Developer */}
-                                        <Switch.Case condition={row && _.includes(["PLR", "LDR"], row?.dispute_between)}>
+                                        <Switch.Case
+                                            condition={
+                                                row &&
+                                                _.includes(
+                                                    ["PLR", "LDR"],
+                                                    row?.dispute_between
+                                                )
+                                            }
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Lead Developer"
-                                                user = {{
-                                                    ...row?.task?.lead_developer,
-                                                    avatar: row?.task?.lead_developer?.image ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}` : null
+                                                user={{
+                                                    ...row?.task
+                                                        ?.lead_developer,
+                                                    avatar: row?.task
+                                                        ?.lead_developer?.image
+                                                        ? `/user-uploads/avatar/${row?.task?.lead_developer?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.lead_comment}
-                                                questions = {[...filterQuestion(conversations, row?.task?.lead_developer?.id)]}
-                                                reason={row?.dispute_between === "LDR"? row?.revision_acknowledgement: row?.deny_reason}
+                                                comment={row?.lead_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.task
+                                                            ?.lead_developer?.id
+                                                    ),
+                                                ]}
+                                                reason={
+                                                    row?.dispute_between ===
+                                                    "LDR"
+                                                        ? row?.revision_acknowledgement
+                                                        : row?.deny_reason
+                                                }
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
 
                                         {/* Developer */}
-                                        <Switch.Case condition={_.includes(["LDR"], row?.dispute_between)} >
+                                        <Switch.Case
+                                            condition={_.includes(
+                                                ["LDR"],
+                                                row?.dispute_between
+                                            )}
+                                        >
                                             <UserSection
                                                 row={row}
                                                 sectionTitle="Developer"
-                                                user = {{
+                                                user={{
                                                     ...row?.task?.developer,
-                                                    avatar: row?.task?.developer?.image ? `/user-uploads/avatar/${row?.task?.developer?.image}` : null
+                                                    avatar: row?.task?.developer
+                                                        ?.image
+                                                        ? `/user-uploads/avatar/${row?.task?.developer?.image}`
+                                                        : null,
                                                 }}
-                                                comment = {row?.dev_comment}
-                                                questions = {[...filterQuestion(conversations, row?.task?.developer?.id)]}
+                                                comment={row?.dev_comment}
+                                                questions={[
+                                                    ...filterQuestion(
+                                                        conversations,
+                                                        row?.task?.developer?.id
+                                                    ),
+                                                ]}
                                                 reason={row?.deny_reason}
                                                 getUserById={getUserById}
                                             />
                                         </Switch.Case>
                                     </Switch.Case>
                                 </Switch>
-
 
                                 {/* QUESTION AND ANSWER */}
                                 {mode === "QUESTION_AND_ANSWER" ? (
@@ -825,120 +920,25 @@ const ResolveModal = ({ state }) => {
                                 row?.status ? (
                                     <table className="dispute-preview-table">
                                         <tbody>
-                                            <tr>
-                                                <td className="py-2">
-                                                    Reviewed by
-                                                </td>
-                                                <td className="px-3 py-2 vertical-center w-100">
-                                                    <div className="d-flex align-items-center">
-                                                        <Avatar
-                                                            src={
-                                                                row?.resolved_by
-                                                                    ?.image
-                                                                    ? `/user-uploads/avatar/${row?.resolved_by?.image}`
-                                                                    : null
-                                                            }
-                                                            alt={
-                                                                row?.resolved_by
-                                                                    ?.name
-                                                            }
-                                                            name={
-                                                                row?.resolved_by
-                                                                    ?.name
-                                                            }
-                                                            type="circle"
-                                                            width={32}
-                                                            height={32}
-                                                            fontSize="1.2rem"
-                                                        />
-
-                                                        <div className="px-2">
-                                                            <a
-                                                                href={`/account/employees/${row?.resolved_by?.id}`}
-                                                                className="d-block"
-                                                            >
-                                                                {
-                                                                    row
-                                                                        ?.resolved_by
-                                                                        ?.name
-                                                                }
-                                                            </a>
-                                                            <span
-                                                                className="d-block f-10"
-                                                                style={{
-                                                                    color: "#777",
-                                                                    marginTop:
-                                                                        "-0.30rem",
-                                                                }}
-                                                            >
-                                                                {
-                                                                    row
-                                                                        ?.resolved_by
-                                                                        ?.designation
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
                                             {row?.winner ? (
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Winner
-                                                    </td>
-                                                    <td className="px-3 py-2 vertical-center w-100">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row?.winner
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.winner?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row?.winner
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row?.winner
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
+                                                <>
+                                                    <tr>
+                                                        <td className="py-2">
+                                                            Winner
+                                                        </td>
+                                                        <td className="px-3 py-2 vertical-center w-100">
+                                                            <Person user={row?.winner} />
+                                                        </td>
+                                                    </tr>
 
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.winner?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+
+                                                    <tr>
+                                                        <td className="py-2"> Loser </td>
+                                                        <td className="px-3 py-2 vertical-center w-100">
+                                                            <Person user={row?.winner.id === row?.raised_by.id ? row?.raised_against : row?.raised_by} />
+                                                        </td>
+                                                    </tr>
+                                                </>
                                             ) : (
                                                 <tr>
                                                     <td className="py-2">
@@ -946,31 +946,23 @@ const ResolveModal = ({ state }) => {
                                                     </td>
                                                     <td className="px-3 py-2 vertical-center w-100">
                                                         <div className="d-flex align-items-center">
-                                                            {
-                                                                row?.raised_by
-                                                                    ?.name
-                                                            }{" "}
-                                                            -{" "}
-                                                            {
-                                                                row?.raised_by_percent
-                                                            }
-                                                            %
+                                                            {`${row?.raised_by?.name } - ${row?.raised_by_percent}%`}
                                                         </div>
                                                         <div className="d-flex align-items-center">
-                                                            {
-                                                                row
-                                                                    ?.raised_against
-                                                                    ?.name
-                                                            }{" "}
-                                                            -{" "}
-                                                            {
-                                                                row?.raised_against_percent
-                                                            }
-                                                            %
+                                                            {`${row?.raised_against?.name } - ${row?.raised_against_percent}%`}
                                                         </div>
                                                     </td>
                                                 </tr>
                                             )}
+
+                                            <tr>
+                                                <td className="py-2">
+                                                    Reviewed by
+                                                </td>
+                                                <td className="px-3 py-2 vertical-center w-100">
+                                                    <Person user={row?.resolved_by} />
+                                                </td>
+                                            </tr>
 
                                             <tr>
                                                 <td className="py-2">
@@ -1442,7 +1434,7 @@ const ResolveModal = ({ state }) => {
 
                                 {row?.status && row?.need_authrization ? (
                                     <React.Fragment>
-                                        {/* devider */}
+                                        {/* divider */}
                                         <div className="mt-3 pb-2 py-2 position-relative">
                                             <hr />
                                             <span className="badge badge-secondary divider-text">
@@ -1452,126 +1444,26 @@ const ResolveModal = ({ state }) => {
 
                                         <table className="dispute-preview-table">
                                             <tbody>
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Review by
-                                                    </td>
-                                                    <td className="px-3 py-2 vertical-center w-100">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row
-                                                                        ?.authorized_by
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.authorized_by?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row
-                                                                        ?.authorized_by
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row
-                                                                        ?.authorized_by
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
-
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.authorized_by?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.authorized_by
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.authorized_by
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
 
                                                 {row?.winner ? (
-                                                    <tr>
-                                                        <td className="py-2">
-                                                            Winner
-                                                        </td>
-                                                        <td className="px-3 py-2 vertical-center w-100">
-                                                            <div className="d-flex align-items-center">
-                                                                <Avatar
-                                                                    src={
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.image
-                                                                            ? `/user-uploads/avatar/${row?.winner?.image}`
-                                                                            : null
-                                                                    }
-                                                                    alt={
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.name
-                                                                    }
-                                                                    name={
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.name
-                                                                    }
-                                                                    type="circle"
-                                                                    width={32}
-                                                                    height={32}
-                                                                    fontSize="1.2rem"
-                                                                />
+                                                    <>
+                                                        <tr>
+                                                            <td className="py-2">
+                                                                Winner
+                                                            </td>
+                                                            <td className="px-3 py-2 vertical-center w-100">
+                                                                <Person user={row?.winner} />
+                                                            </td>
+                                                        </tr>
 
-                                                                <div className="px-2">
-                                                                    <a
-                                                                        href={`/account/employees/${row?.winner?.id}`}
-                                                                        className="d-block"
-                                                                    >
-                                                                        {
-                                                                            row
-                                                                                ?.winner
-                                                                                ?.name
-                                                                        }
-                                                                    </a>
-                                                                    <span
-                                                                        className="d-block f-10"
-                                                                        style={{
-                                                                            color: "#777",
-                                                                            marginTop:
-                                                                                "-0.30rem",
-                                                                        }}
-                                                                    >
-                                                                        {
-                                                                            row
-                                                                                ?.winner
-                                                                                ?.designation
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+
+                                                        <tr>
+                                                            <td className="py-2"> Loser </td>
+                                                            <td className="px-3 py-2 vertical-center w-100">
+                                                                <Person user={row?.winner.id === row?.raised_by.id ? row?.raised_against : row?.raised_by} />
+                                                            </td>
+                                                        </tr>
+                                                    </>
                                                 ) : (
                                                     <tr>
                                                         <td className="py-2">
@@ -1580,32 +1472,23 @@ const ResolveModal = ({ state }) => {
                                                         </td>
                                                         <td className="px-3 py-2 vertical-center w-100">
                                                             <div className="d-flex align-items-center">
-                                                                {
-                                                                    row
-                                                                        ?.raised_by
-                                                                        ?.name
-                                                                }{" "}
-                                                                -{" "}
-                                                                {
-                                                                    row?.raised_by_percent
-                                                                }
-                                                                %
+                                                                {`${row.raised_by?.name} - ${row?.raised_by_percent}%`}
                                                             </div>
                                                             <div className="d-flex align-items-center">
-                                                                {
-                                                                    row
-                                                                        ?.raised_against
-                                                                        ?.name
-                                                                }{" "}
-                                                                -{" "}
-                                                                {
-                                                                    row?.raised_against_percent
-                                                                }
-                                                                %
+                                                                {`${row.raised_against?.name} - ${row?.raised_against_percent}%`}
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 )}
+
+                                                <tr>
+                                                    <td className="py-2">
+                                                        Review by
+                                                    </td>
+                                                    <td className="px-3 py-2 vertical-center w-100">
+                                                        <Person user={row?.authorized_by} />
+                                                    </td>
+                                                </tr>
 
                                                 <tr>
                                                     <td className="py-2">
@@ -2289,6 +2172,39 @@ const RanderButton = ({
                         Close
                     </Button>
                 ) : null}
+            </div>
+        </div>
+    );
+};
+
+// Person
+const Person = ({ user }) => {
+    if (!user) return null;
+
+    const imageSrc = `/user-uploads/avatar/${user?.image}`;
+
+    return (
+        <div className="d-flex align-items-center">
+            <Avatar
+                src={user.image ? imageSrc : null}
+                alt=""
+                name={user.name}
+                type="circle"
+                width={32}
+                height={32}
+                fontSize="1.2rem"
+            />
+            <div className="px-2">
+                <a href={`/account/employees/${user.id}`} className="d-block">
+                    {user.name}
+                </a>
+
+                <span
+                    className="d-block f-10"
+                    style={{ color: "#777", marginTop: "-0.3rem" }}
+                >
+                    {user?.designation ?? ""}
+                </span>
             </div>
         </div>
     );

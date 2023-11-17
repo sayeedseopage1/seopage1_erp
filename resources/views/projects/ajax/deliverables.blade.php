@@ -223,12 +223,20 @@
       </div>
   </div>
   @endif
+  @php
+      $qualifiedSale = App\Models\QualifiedSale::where('project_id',$project->id)->first();
+    //   dd($qualifiedSale);
+  @endphp
     <!-- CARD BODY START -->
     <div class="card-body">
 
 
         <div class="d-flex flex-column">
-            <h5>@lang('Project Deliverables')</h5>
+            <div class="d-flex justify-content-between">
+                <h4>@lang('Project Deliverables')</h4>
+
+                {{-- <a href="" class="btn btn-primary">See Admin Comment</a>    --}}
+            </div>
 
             <td width="80%">
                 <table class="inv-num-date text-dark f-13 mt-3">

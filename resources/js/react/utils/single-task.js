@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
-import { User } from "./user-details";
 import _ from "lodash";
+import { User } from "./user-details";
 
 // board column
 export class BoardColumn {
@@ -205,10 +205,10 @@ export class TaskRevision {
 export class SingleTask {
     constructor(task) {
         this.id = task?.id;
-        this.title = _.startCase(task?.heading);
+        this.title = task?.heading;
         this.parentTaskId = task?.parent_task_id;
-        this.parentTaskTitle = _.startCase(task?.parent_task_title);
-        this.projectName = _.startCase(task?.project_name);
+        this.parentTaskTitle = task?.parent_task_title;
+        this.projectName = task?.project_name;
         this.projectId = task?.project_id;
         this.boardColumn = new BoardColumn(task?.board_column);
         this.assigneeTo = new User(task?.users?.[0]);
@@ -258,8 +258,10 @@ export class SingleTask {
             taskTypeName: task?.page_type_name,
             existingDesignLink: task?.existing_design_link,
             numberOfPages: task?.number_of_pages,
+            status: task?.primary_page_authorization_status,
+            comment: task?.primary_page_authorization_comment
         });
-        
+
         this.subtaskId = task?.subtask_id;
         this.projectManagerId = task?.project_manager_id;
         this.projectManagerAvatar = task?.project_manager_avatar;

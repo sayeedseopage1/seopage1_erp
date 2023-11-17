@@ -1,14 +1,14 @@
 import axios from "axios";
 import _ from "lodash";
 import React from "react";
-import Button from "../../../../../global/Button";
-import EmptyTable from "../../../../../global/EmptyTable";
-import Modal from "../../../../../global/Modal";
-import { Placeholder } from "../../../../../global/Placeholder";
-import Switch from "../../../../../global/Switch";
-import { Flex } from "../../../../../global/styled-component/Flex";
-import { useAuth } from "../../../../../hooks/useAuth";
-import { convertTime } from '../../../../../utils/converTime';
+import Button from "../../../../../../global/Button";
+import EmptyTable from "../../../../../../global/EmptyTable";
+import Modal from "../../../../../../global/Modal";
+import { Placeholder } from "../../../../../../global/Placeholder";
+import Switch from "../../../../../../global/Switch";
+import { Flex } from "../../../../../../global/styled-component/Flex";
+import { useAuth } from "../../../../../../hooks/useAuth";
+import { convertTime } from '../../../../../../utils/converTime';
 import DailyReportSubmissionForm from "./DailyReportSubmissionForm";
 
 /**
@@ -17,10 +17,12 @@ import DailyReportSubmissionForm from "./DailyReportSubmissionForm";
 
 const TASK_DATA_API = "/account/tasks/get-today-tasks";
 
-const DailyReportSubmissionEnforcer = ({ close, date_type="today" }) => {
+const DailyReportSubmissionEnforcer = ({ close, reminderDate="today", onSubmit }) => {
     const [tasks, setTasks] = React.useState([]);
     const [reportedDate, setReportedDate] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(true);
+
+
     const auth = useAuth();
 
     // fetch data
@@ -28,7 +30,7 @@ const DailyReportSubmissionEnforcer = ({ close, date_type="today" }) => {
         try {
             if(_.size(tasks) === 0){
                 await axios
-                    .get(`${TASK_DATA_API}/${auth.getId()}?date_type=${date_type}`)
+                    .get(`${TASK_DATA_API}/${auth.getId()}?date_type=${reminderDate}`)
                     .then((res) => {
                         setTasks(res.data.data);
                         setReportedDate(res.data.date);
@@ -48,6 +50,20 @@ const DailyReportSubmissionEnforcer = ({ close, date_type="today" }) => {
     React.useEffect(() => {
         fetchData();
     }, []);
+
+
+    // update existing task status
+    const updateTask = (task, status) => {
+        const _tasks = tasks;
+        const newTasks = _tasks.map(t => t.id === task.id ? {...task, daily_submission_status: status } : t);
+        setTasks(newTasks);
+
+        const falsyTask = newTasks.filter(t => !t.daily_submission_status)
+        if(falsyTask.length === 0){
+            onSubmit()
+            close();
+        }
+    }
 
     return (
         <div className="sp1_single_task--modal">
@@ -129,6 +145,7 @@ const DailyReportSubmissionEnforcer = ({ close, date_type="today" }) => {
                                                             <DailyReportSubmissionButton
                                                                 task={task}
                                                                 reportDate={reportedDate}
+                                                                onSubmit = {(status) => updateTask(task, status)}
                                                             />
                                                         </Switch.Case>
 
@@ -153,7 +170,7 @@ const DailyReportSubmissionEnforcer = ({ close, date_type="today" }) => {
 };
 
 
-const DailyReportSubmissionButton = ({task, reportDate}) => {
+const DailyReportSubmissionButton = ({task, reportDate, onSubmit}) => {
     const [show, setShow] = React.useState(false);
     return(
         <>
@@ -165,6 +182,7 @@ const DailyReportSubmissionButton = ({task, reportDate}) => {
                     task={task}
                     reportDate={reportDate}
                     close={() => setShow(false)}
+                    onSubmit={onSubmit}
                 />
             </Modal>
         </>

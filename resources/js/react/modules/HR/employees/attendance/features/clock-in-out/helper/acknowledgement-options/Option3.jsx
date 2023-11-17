@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../../../../../../../global/Button';
-import Switch from '../../../../../../../global/Switch';
+import Button from '../../../../../../../../global/Button';
+import Switch from '../../../../../../../../global/Switch';
 import DidNotWorkForFewHours from './DidNotWorkForFewHours';
 import LateExplanationOption from './LateExplanationOption';
 import LeaveExplanationOption from './LeaveExplanationOption';
@@ -12,9 +12,13 @@ const Option3 = ({
     onChange,
     onSubmit,
     isLoading,
+    checkInTime,
     onBack
 }) => {
   const [step, setStep] = React.useState(0);
+
+
+
   return (
     <React.Fragment>
         <div className="--option-item">
@@ -27,7 +31,7 @@ const Option3 = ({
                     value={index.toString()}
                     onChange={onChange}
                 />
-                I was present less hours at work Nov 09, 2023
+                I was present less hours at work <strong>{checkInTime}</strong>
             </div>
 
 
@@ -40,10 +44,10 @@ const Option3 = ({
                                 checked={step===1}
                                 index={1}
                                 onChange={e => setStep(Number(e.target.value))}
-                                onSubmit={d => console.log(d)}
+                                onSubmit={onSubmit}
                                 onBack={() => setStep(0)}
-                                lessTrackDate="today"
-                                parentReason="I was present less hours at work Nov 09, 2023"
+                                lessTrackDate={checkInTime}
+                                parentReason={`I was present less hours at work ${checkInTime}`}
                                 isLoading={false}
                             />
                         </Switch.Case>
@@ -54,10 +58,10 @@ const Option3 = ({
                                 checked={step===2}
                                 index={2}
                                 onChange={e => setStep(Number(e.target.value))}
-                                onSubmit={d => console.log(d)}
+                                onSubmit={onSubmit}
                                 onBack={() => setStep(0)}
-                                lessTrackDate="today"
-                                parentReason="I was present less hours at work Nov 09, 2023"
+                                lessTrackDate={checkInTime}
+                                parentReason={`I was present less hours at work ${checkInTime}`}
                                 isLoading={false}
                             />
                         </Switch.Case>
@@ -68,10 +72,10 @@ const Option3 = ({
                                 checked={step===3}
                                 index={3}
                                 onChange={e => setStep(Number(e.target.value))}
-                                onSubmit={d => console.log(d)}
+                                onSubmit={onSubmit}
                                 onBack={() => setStep(0)}
-                                lessTrackDate="today"
-                                parentReason="I was present less hours at work Nov 09, 2023"
+                                lessTrackDate={checkInTime}
+                                parentReason={`I was present less hours at work ${checkInTime}`}
                                 isLoading={false}
                             />
                         </Switch.Case>
@@ -82,10 +86,10 @@ const Option3 = ({
                                 checked={step===4}
                                 index={4}
                                 onChange={e => setStep(Number(e.target.value))}
-                                onSubmit={d => console.log(d)}
+                                onSubmit={onSubmit}
                                 onBack={() => setStep(0)}
-                                lessTrackDate="today"
-                                parentReason="I was present less hours at work Nov 09, 2023"
+                                lessTrackDate={checkInTime}
+                                parentReason={`I was present less hours at work ${checkInTime}`}
                                 isLoading={false}
                             />
                         </Switch.Case>

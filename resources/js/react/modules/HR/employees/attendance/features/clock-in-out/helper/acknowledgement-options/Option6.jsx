@@ -1,31 +1,23 @@
 import React from "react";
-import CKEditorComponent from "../../../../../../../ckeditor";
-import Button from "../../../../../../../global/Button";
-import Switch from "../../../../../../../global/Switch";
-import { Flex } from "../../../../../../../global/styled-component/Flex";
+import CKEditorComponent from "../../../../../../../../ckeditor";
+import Button from "../../../../../../../../global/Button";
+import Switch from "../../../../../../../../global/Switch";
+import { FormGroup, Label } from "../../../../../../../../global/styled-component/Form";
 import DurationTime from "./DurationTimer";
 
-/**
- * * This component responsible for rendering working report details explanation form
- */
-const DidNotWorkForFewHours = ({
-    checked,
-    index,
-    onChange,
-    onSubmit,
-    isLoading,
-    parentReason,
-    lessTrackDate,
-    onBack,
-}) => {
+const Option6 = ({ checked, index, onChange, onSubmit, isLoading, onBack }) => {
     const [comment, setComment] = React.useState("");
     const [durations, setDurations] = React.useState([
-        { start: "00:00AM", end: "00:00AM", id: "dwedj" },
+        { start: "00:00 AM", end: "00:00 AM", id: "de2sew" },
     ]);
     const [error, setError] = React.useState(null);
-
-    // generate random id
     const uniqueId = Math.random().toString(6).slice(2);
+
+    // editor data change
+    const handleEditorChange = (e, editor) => {
+        const data = editor.getData();
+        setComment(data);
+    };
 
     // remove duration
     const onRemove = (e, id) => {
@@ -46,22 +38,14 @@ const DidNotWorkForFewHours = ({
         ]);
     };
 
-    // editor data change
-    const handleEditorChange = (e, editor) => {
-        const data = editor.getData();
-        setComment(data);
-    };
-
-    // form validation check
     const isValid = () => {
         let errCount = 0;
         let err = new Object();
 
         if (comment === "") {
+            err.comment = "Please explaine the reason here!";
             errCount++;
-            err.comment = "Please explain the reason why you came late!";
         }
-
         setError(err);
         return !errCount;
     };
@@ -70,9 +54,9 @@ const DidNotWorkForFewHours = ({
     const handleSubmission = (e) => {
         e.preventDefault();
         const data = {
-            reason_for_less_tracked_hours_a_day_task: parentReason,
+            reason_for_less_tracked_hours_a_day_task:
+                "In the morning, I had to wait for work before I could start.",
             durations: JSON.stringify(durations),
-            child_reason: "I didn't work for a few hours in between",
             comment,
         };
 
@@ -82,17 +66,19 @@ const DidNotWorkForFewHours = ({
             Swal.fire({
                 position: "center",
                 icon: "error",
-                title: "Please complete all required fields.",
+                title: "Please fill up the all required fields!",
                 showConfirmButton: true,
             });
         }
     };
-
     return (
         <React.Fragment>
             <div className="--option-item">
                 {/* acknowledgement option */}
-                <Flex alignItem="center" gap="10px">
+                <div
+                    className="d-flex align-items-center"
+                    style={{ gap: "10px" }}
+                >
                     <input
                         type="checkbox"
                         style={{ cursor: "pointer" }}
@@ -100,54 +86,60 @@ const DidNotWorkForFewHours = ({
                         value={index.toString()}
                         onChange={onChange}
                     />
-                    I didn't work for a few hours in between.
-                </Flex>
+                    In the morning, I had to wait for work before I could start.
+                </div>
 
                 {/* if checked */}
                 <Switch>
                     <Switch.Case condition={checked}>
                         <div className="pl-3 my-3 bg-white">
-                            {/* duration selection row */}
-                            <div className="row">
-                                <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                                    <label htmlFor="" className="d-block">
-                                        From:
-                                    </label>
+                            {/* time duration */}
+                            <FormGroup>
+                                <Label className="font-weight-bold">
+                                    Select an approximate time here. <sup>*</sup>
+                                </Label>
+                                {/* duration selection row */}
+                                <div className="row">
+                                    <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                                        <Label className="font-weight-bold text-dark">
+                                            From:
+                                        </Label>
+                                    </div>
+
+                                    <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
+                                        <Label className="font-weight-bold text-dark">
+                                            To
+                                        </Label>
+                                    </div>
                                 </div>
 
-                                <div className="col-5 input-group bootstrap-timepicker timepicker d-flex flex-column">
-                                    <label htmlFor="" className="d-block">
-                                        To
-                                    </label>
-                                </div>
-                            </div>
+                                {/* duration */}
+                                {_.map(durations, (duration) => (
+                                    <DurationTime
+                                        key={duration.id}
+                                        id={duration.id}
+                                        onRemove={onRemove}
+                                        startTime={duration.start}
+                                        endTime={duration.end}
+                                        durations={durations}
+                                        setDurations={setDurations}
+                                    />
+                                ))}
 
-                            {/* duration */}
-                            {_.map(durations, (duration) => (
-                                <DurationTime
-                                    key={duration.id}
-                                    id={duration.id}
-                                    onRemove={onRemove}
-                                    startTime={duration.start}
-                                    endTime={duration.end}
-                                    durations={durations}
-                                    setDurations={setDurations}
-                                />
-                            ))}
-
-                            {/* add timer field */}
-                            <button
-                                className="mt-2 d-flex align-items-center bg-transparent"
-                                style={{ gap: "10px" }}
-                                onClick={addDurationForm}
-                            >
-                                <i className="fa-solid fa-circle-plus" />
-                                Add New Time
-                            </button>
+                                {/* add timer field */}
+                                <button
+                                    className="mt-2 d-flex align-items-center bg-transparent"
+                                    style={{ gap: "10px" }}
+                                    onClick={addDurationForm}
+                                >
+                                    <i className="fa-solid fa-circle-plus" />
+                                    Add New Time
+                                </button>
+                            </FormGroup>
 
                             {/* comment field */}
                             <div className="mt-3">
-                                <h6>Write your comments here: </h6>
+                                <Label className="font-weight-bold">Write your comments here: </Label>
                                 <div className="ck-editor-holder stop-timer-options">
                                     <CKEditorComponent
                                         data={comment}
@@ -188,4 +180,4 @@ const DidNotWorkForFewHours = ({
     );
 };
 
-export default DidNotWorkForFewHours;
+export default Option6;

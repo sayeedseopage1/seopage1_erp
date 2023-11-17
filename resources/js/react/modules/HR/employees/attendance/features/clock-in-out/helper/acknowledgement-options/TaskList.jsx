@@ -3,17 +3,20 @@ import axios from "axios";
 import _ from "lodash";
 import React from "react";
 import { HiOutlineSelector } from "react-icons/hi";
-import Switch from "../../../../../../../global/Switch";
-import { Flex } from "../../../../../../../global/styled-component/Flex";
-import Search from "../../../components/Search";
+import Switch from "../../../../../../../../global/Switch";
+import { Flex } from "../../../../../../../../global/styled-component/Flex";
+import { useAuth } from "../../../../../../../../hooks/useAuth";
+import Search from "../../../../components/Search";
 
-const ProjectList = ({ project, onSelect }) => {
+const TaskList = ({ task, onSelect }) => {
     return (
         <div className="position-relative w-100 mb-3">
-            <Listbox value={project} onChange={onSelect}>
+            <Listbox value={task} onChange={onSelect}>
                 <Listbox.Button className="position-relative w-100 py-2 bg-transparent border rounded-sm pl-2 pr-1">
                     <Flex justifyContent="space-between" alignItem="center">
-                        <span className="singleline-ellipsis mr-3">{project?.project_name ?? "--"}</span>
+                        <span className="singleline-ellipsis mr-3">
+                            {task?.heading ?? "--"}
+                        </span>
                         <HiOutlineSelector />
                     </Flex>
                 </Listbox.Button>
@@ -26,16 +29,19 @@ const ProjectList = ({ project, onSelect }) => {
 };
 
 const List = () => {
-    const [projects, setProjects] = React.useState([]);
+    const [tasks, setTasks] = React.useState([]);
     const [searchText, setSearchText] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(true);
+    const auth = useAuth();
 
     // fetch project data
     const fetchProjectData = async () => {
         try {
-            await axios.get("/account/get-projects").then((res) => {
-                setProjects(res.data);
-            });
+            await axios
+                .get(`/account/tasks/get-developer-tasks/${auth.getId()}`)
+                .then((res) => {
+                    setTasks(res.data);
+                });
             setIsLoading(false);
         } catch (error) {
             console.error(error);
@@ -48,15 +54,15 @@ const List = () => {
     }, []);
 
     // handle filter search query
-    const filterProjectBySearchQuery = (projects, query) => {
-        if (_.size(projects) === 0) return [];
-        return _.filter(projects, (project) =>
-            project.project_name.toLowerCase().includes(query.toLowerCase())
+    const filterProjectBySearchQuery = (tasks, query) => {
+        if (_.size(tasks) === 0) return [];
+        return _.filter(tasks, (task) =>
+            task.heading.toLowerCase().includes(query.toLowerCase())
         );
     };
 
     const query = React.useDeferredValue(searchText);
-    const filteredData = filterProjectBySearchQuery(projects, query);
+    const filteredData = filterProjectBySearchQuery(tasks, query);
 
     return (
         <Listbox.Options
@@ -68,14 +74,12 @@ const List = () => {
                     <div className="task-selection-list-option">Loading...</div>
                 </Switch.Case>
 
-                <Switch.Case condition={!isLoading && _.size(projects) === 0}>
+                <Switch.Case condition={!isLoading && _.size(tasks) === 0}>
                     <div className="task-selection-list-option">
                         Data not found
                     </div>
                 </Switch.Case>
-                <Switch.Case
-                    condition={!isLoading && _.size(projects) !== 0}
-                >
+                <Switch.Case condition={!isLoading && _.size(tasks) !== 0}>
                     <Search
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
@@ -88,18 +92,27 @@ const List = () => {
                         }
                     >
                         <div className="task-selection-list-option">
-                            <div className="task-selection-list-option" style={{color: 'gray'}}>
-                                <span>Project not found by this name: <strong>{query}</strong></span>
+                            <div
+                                className="task-selection-list-option"
+                                style={{ color: "gray" }}
+                            >
+                                <span>
+                                    Task not found by this name:{" "}
+                                    <strong>{query}</strong>
+                                </span>
                             </div>
                         </div>
                     </Switch.Case>
 
                     <Switch.Case condition={_.size(filteredData) !== 0}>
-                        <div className="mt-3" style={{ maxHeight: "350px", overflowY: "auto" }}>
-                            {_.map(filteredData, (project) => (
+                        <div
+                            className="mt-3"
+                            style={{ maxHeight: "350px", overflowY: "auto" }}
+                        >
+                            {_.map(filteredData, (task) => (
                                 <Listbox.Option
-                                    key={project.id}
-                                    value={project}
+                                    key={task.id}
+                                    value={task}
                                     className={({ selected, active }) =>
                                         selected
                                             ? "task-selection-list-option selected"
@@ -111,9 +124,9 @@ const List = () => {
                                     {({ selected }) => (
                                         <Flex alignItem="center" gap="10px">
                                             <span>
-                                                {project.project_name}{" "}
+                                                {task.heading}{" "}
                                                 <span className="badge badge-success ml-2">
-                                                    {project.client_name}
+                                                    {task.client_name}
                                                 </span>
                                             </span>
 
@@ -134,4 +147,4 @@ const List = () => {
     );
 };
 
-export default ProjectList;
+export default TaskList;

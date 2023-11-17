@@ -133,7 +133,6 @@ $project->members->pluck('user_id')->toArray(); @endphp
                                             </div>
                                         </div>
 
-                            
 
 
                              @endif

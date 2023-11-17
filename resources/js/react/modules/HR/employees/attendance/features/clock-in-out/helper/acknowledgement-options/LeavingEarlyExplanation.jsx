@@ -1,14 +1,14 @@
 import React from "react";
-import CKEditorComponent from "../../../../../../../ckeditor";
-import Button from "../../../../../../../global/Button";
-import Switch from "../../../../../../../global/Switch";
-import { Label } from "../../../../../../../global/styled-component/Form";
+import CKEditorComponent from "../../../../../../../../ckeditor/index";
+import Button from "../../../../../../../../global/Button";
+import Switch from "../../../../../../../../global/Switch";
+import { Label } from "../../../../../../../../global/styled-component/Form";
 
 /**
- * this component responsible for rendering late explanation form for user
+ * * This component responsible for rendering leave early explanation form
  */
 
-const LateExplanationOption = ({
+const LeavingEarlyExplanation = ({
     checked,
     index,
     onChange,
@@ -44,7 +44,7 @@ const LateExplanationOption = ({
             });
     }, [checked]);
 
-    // validation checking
+    // form validation checking
     const isValid = () => {
         let errCount = 0;
         let err = new Object();
@@ -69,7 +69,7 @@ const LateExplanationOption = ({
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
-            child_reason: "I came late",
+            child_reason: "I am leaving early",
             durations: JSON.stringify([
                 { id: "de2sew", start: durationStart, end: durationEnd },
             ]),
@@ -98,19 +98,20 @@ const LateExplanationOption = ({
                 >
                     <input
                         type="checkbox"
-                        style={{ cursor: "pointer"}}
+                        style={{ cursor: "pointer" }}
                         checked={checked}
                         value={index.toString()}
                         onChange={onChange}
                     />
-                    I came late
+                    I am leaving early
                 </div>
 
                 <Switch>
                     <Switch.Case condition={checked}>
                         <div className="pl-3 my-3 bg-white">
-
-                            <Label className="font-weight-bold"> Select the delay time here <sup>*</sup></Label>
+                            <Label className="font-weight-bold">
+                                Select the time here <sup>*</sup>
+                            </Label>
 
                             {/* time selection */}
                             <div className="row">
@@ -141,30 +142,38 @@ const LateExplanationOption = ({
                                 </div>
                             </div>
 
-
                             {/* comment field */}
                             <div className="mt-3">
-                                <h6>Write your comments here: </h6>
+                                <Label className="font-weight-bold">Explain the reason why you are leaving early on ${lessTrackDate} <sup>*</sup> </Label>
                                 <div className="ck-editor-holder stop-timer-options">
-                                    <CKEditorComponent data={comment} onChange={handleEditorChange} />
+                                    <CKEditorComponent
+                                        data={comment}
+                                        onChange={handleEditorChange}
+                                    />
                                 </div>
                                 <Switch.Case condition={error?.comment}>
-                                    <div className='f-14 text-danger'>{error?.comment}</div>
+                                    <div className="f-14 text-danger">
+                                        {error?.comment}
+                                    </div>
                                 </Switch.Case>
                             </div>
 
                             {/* footer section */}
-                            <div className='mt-3 w-100 d-flex align-items-center'>
+                            <div className="mt-3 w-100 d-flex align-items-center">
                                 {/* back button */}
                                 <Button
-                                    variant='tertiary'
+                                    variant="tertiary"
                                     onClick={() => onBack(null)}
-                                    className='ml-auto mr-2'
+                                    className="ml-auto mr-2"
                                 >
                                     Back
                                 </Button>
 
-                                <Button onClick={handleSubmission} isLoading={isLoading} loaderTitle='Processing...'>
+                                <Button
+                                    onClick={handleSubmission}
+                                    isLoading={isLoading}
+                                    loaderTitle="Processing..."
+                                >
                                     Submit
                                 </Button>
                             </div>
@@ -176,4 +185,4 @@ const LateExplanationOption = ({
     );
 };
 
-export default LateExplanationOption;
+export default LeavingEarlyExplanation;
