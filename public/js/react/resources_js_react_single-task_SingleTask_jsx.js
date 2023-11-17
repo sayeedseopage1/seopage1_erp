@@ -47,247 +47,6 @@ var Checkbox = function Checkbox(_ref) {
 
 /***/ }),
 
-/***/ "./resources/js/react/file-upload/FileUploader.jsx":
-/*!*********************************************************!*\
-  !*** ./resources/js/react/file-upload/FileUploader.jsx ***!
-  \*********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _file_upload_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./file-upload.css */ "./resources/js/react/file-upload/file-upload.css");
-/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Button */ "./resources/js/react/file-upload/Button.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-var _excluded = ["id", "deleteAble", "onRemove", "downloadAble", "downloadUrl", "fileType", "fileName", "previewUrl", "ext", "classname", "size"];
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
-function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-
-
-
-
-
-var FileUploaderContext = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createContext();
-
-// render icon
-var RenderIcon = function RenderIcon(_ref) {
-  var filename = _ref.filename,
-    size = _ref.size;
-  // get ext
-  if (!filename) return null;
-  var arr = filename.split(".");
-  var ext = arr[arr.length - 1];
-  var _filename = (filename === null || filename === void 0 ? void 0 : filename.slice(0, 2)) + ".." + (filename === null || filename === void 0 ? void 0 : filename.slice(filename.length - (ext.length + 2), filename === null || filename === void 0 ? void 0 : filename.length));
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-    className: "uploaded-file-preview",
-    "data-toggle": "tooltip",
-    "data-placement": "top",
-    title: filename,
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-      className: "__icon",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("svg", {
-        xmlns: "http://www.w3.org/2000/svg",
-        fill: "currentColor",
-        viewBox: "0 0 16 16",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("path", {
-          d: "M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"
-        })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-        className: "uploaded-file-ext uploaded-file-ext-".concat(size),
-        children: ext === null || ext === void 0 ? void 0 : ext.slice(0, 3)
-      })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-      className: "d-block uploaded-file-name uploaded-file-name-".concat(size),
-      children: _filename
-    })]
-  });
-};
-
-// file input
-var FileInput = function FileInput(_ref2) {
-  var _ref2$className = _ref2.className,
-    className = _ref2$className === void 0 ? "" : _ref2$className;
-  var _React$useContext = react__WEBPACK_IMPORTED_MODULE_0__.useContext(FileUploaderContext),
-    setFiles = _React$useContext.setFiles,
-    previews = _React$useContext.previews,
-    setPreviews = _React$useContext.setPreviews;
-  var handleFileUpload = function handleFileUpload(e) {
-    var uploadedFiles = e.target.files;
-    setFiles(function (prev) {
-      return [].concat(_toConsumableArray(prev), _toConsumableArray(uploadedFiles));
-    });
-    var filePreviews = [];
-    var _loop = function _loop() {
-      var reader = new FileReader();
-      var file = uploadedFiles[i];
-      reader.onload = function (event) {
-        var arr = file.name.split(".");
-        var ext = arr[arr.length - 1];
-        filePreviews.push({
-          name: file.name,
-          type: file.type,
-          preview: event.target.result,
-          ext: ext
-        });
-        if (filePreviews.length === uploadedFiles.length) {
-          setPreviews([].concat(_toConsumableArray(previews), filePreviews));
-        }
-      };
-      reader.readAsDataURL(file);
-    };
-    for (var i = 0; i < uploadedFiles.length; i++) {
-      _loop();
-    }
-  };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
-    className: "sp1_file_upload--input-wrapper ".concat(className),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-      type: "file",
-      multiple: true,
-      onChange: handleFileUpload,
-      className: "sp1_file_upload--input"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
-      className: "fa-solid fa-cloud-arrow-up"
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("span", {
-      className: "mt-2",
-      children: "Upload Files"
-    })]
-  });
-};
-
-// previews
-var FilePreview = function FilePreview(_ref3) {
-  var id = _ref3.id,
-    _ref3$deleteAble = _ref3.deleteAble,
-    deleteAble = _ref3$deleteAble === void 0 ? true : _ref3$deleteAble,
-    onRemove = _ref3.onRemove,
-    _ref3$downloadAble = _ref3.downloadAble,
-    downloadAble = _ref3$downloadAble === void 0 ? true : _ref3$downloadAble,
-    _ref3$downloadUrl = _ref3.downloadUrl,
-    downloadUrl = _ref3$downloadUrl === void 0 ? "#" : _ref3$downloadUrl,
-    _ref3$fileType = _ref3.fileType,
-    fileType = _ref3$fileType === void 0 ? "" : _ref3$fileType,
-    _ref3$fileName = _ref3.fileName,
-    fileName = _ref3$fileName === void 0 ? "" : _ref3$fileName,
-    _ref3$previewUrl = _ref3.previewUrl,
-    previewUrl = _ref3$previewUrl === void 0 ? "" : _ref3$previewUrl,
-    _ref3$ext = _ref3.ext,
-    ext = _ref3$ext === void 0 ? "" : _ref3$ext,
-    _ref3$classname = _ref3.classname,
-    classname = _ref3$classname === void 0 ? "" : _ref3$classname,
-    _ref3$size = _ref3.size,
-    size = _ref3$size === void 0 ? "sm" : _ref3$size,
-    props = _objectWithoutProperties(_ref3, _excluded);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("a", {
-    href: downloadUrl,
-    download: downloadAble,
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", _objectSpread(_objectSpread({
-      className: "sp1_file_upload--input-preview ".concat(classname)
-    }, props), {}, {
-      children: [deleteAble && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        type: "button",
-        onClick: function onClick(e) {
-          e.stopPropagation();
-          onRemove(e, id);
-        },
-        className: "__remove--btn",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("i", {
-          className: "fa-regular fa-trash-can"
-        })
-      }), fileType === "images" || fileType.startsWith('image/') ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("img", {
-        src: previewUrl,
-        alt: "",
-        style: {
-          width: "100%",
-          height: "100%",
-          maxWidth: "80px",
-          maxHeight: "80px",
-          objectFit: "fill"
-        }
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(RenderIcon, {
-        filename: fileName,
-        size: size
-      })]
-    }))
-  });
-};
-
-// uploaded file previews
-var SelectedFilePreveiw = function SelectedFilePreveiw(_ref4) {
-  var children = _ref4.children;
-  var _React$useContext2 = react__WEBPACK_IMPORTED_MODULE_0__.useContext(FileUploaderContext),
-    previews = _React$useContext2.previews,
-    files = _React$useContext2.files,
-    setFiles = _React$useContext2.setFiles,
-    setPreviews = _React$useContext2.setPreviews;
-  var onDelete = function onDelete(e, index) {
-    // e.stopPropagation();
-    var updatePreview = _toConsumableArray(previews);
-    var updatedFiles = _toConsumableArray(files);
-    updatedFiles.splice(index, 1);
-    updatePreview.splice(index, 1);
-    setFiles(updatedFiles);
-    setPreviews(updatePreview);
-  };
-  return children({
-    previews: previews,
-    onDelete: onDelete
-  });
-};
-
-// file uploader
-var FileUploader = function FileUploader(_ref5) {
-  var files = _ref5.files,
-    setFiles = _ref5.setFiles,
-    children = _ref5.children,
-    _ref5$className = _ref5.className,
-    className = _ref5$className === void 0 ? "" : _ref5$className;
-  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(""),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
-    previews = _React$useState2[0],
-    setPreviews = _React$useState2[1];
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(FileUploaderContext.Provider, {
-    value: {
-      files: files,
-      setFiles: setFiles,
-      previews: previews,
-      setPreviews: setPreviews
-    },
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      className: "d-flex flex-wrap align-items-center ".concat(className),
-      style: {
-        gap: "10px"
-      },
-      children: children
-    })
-  });
-};
-FileUploader.Input = FileInput;
-FileUploader.Preview = FilePreview;
-FileUploader.SelectedFiles = SelectedFilePreveiw;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (FileUploader);
-
-/***/ }),
-
 /***/ "./resources/js/react/global/AvatarGroup.jsx":
 /*!***************************************************!*\
   !*** ./resources/js/react/global/AvatarGroup.jsx ***!
@@ -902,7 +661,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 
 
 var SingleTaskPage = function SingleTaskPage() {
-  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$taskType, _task$pageType, _task$pageName, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
+  var _window, _task$assigneeTo, _task$assigneeTo2, _task$assigneeTo3, _task$assigneeTo4, _task$assigneeTo5, _task$assigneeTo6, _task$assigneeBy, _task$assigneeBy2, _task$assigneeBy3, _task$assigneeBy4, _task$assigneeBy5, _task$assigneeBy6, _task$category$name, _task$category, _task$pageType, _task$pageName, _task$taskTypeDetails, _task$taskTypeDetails2, _task$taskTypeDetails3, _task$taskTypeDetails4, _task$taskTypeDetails5, _task$taskTypeDetails6, _task$taskTypeDetails7, _task$taskTypeDetails8, _task$taskTypeDetails9, _task$taskTypeDetails10, _task$taskTypeDetails11, _task$taskTypeDetails12, _task$taskTypeDetails13, _task$workEnvData, _task$workEnvData2, _task$workEnvData3, _task$workEnvData4, _task$workEnvData5, _$last;
   var _useSelector = (0,react_redux__WEBPACK_IMPORTED_MODULE_3__.useSelector)(function (s) {
       return s.subTask;
     }),
@@ -1198,46 +957,108 @@ var SingleTaskPage = function SingleTaskPage() {
                       className: "sp1_st-list-item-value",
                       children: (_task$category$name = task === null || task === void 0 || (_task$category = task.category) === null || _task$category === void 0 ? void 0 : _task$category.name) !== null && _task$category$name !== void 0 ? _task$category$name : "--"
                     })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                    className: "sp1_st-list-item",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                      className: "sp1_st-list-item-head",
-                      children: ["Task Type:", " "]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                      className: "sp1_st-list-item-value",
-                      children: (_task$taskType = task === null || task === void 0 ? void 0 : task.taskType) !== null && _task$taskType !== void 0 ? _task$taskType : "--"
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                    className: "sp1_st-list-item",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                      className: "sp1_st-list-item-head",
-                      children: ["Page Type:", " "]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                      className: "sp1_st-list-item-value",
-                      children: (_task$pageType = task === null || task === void 0 ? void 0 : task.pageType) !== null && _task$pageType !== void 0 ? _task$pageType : "--"
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                    className: "sp1_st-list-item",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                      className: "sp1_st-list-item-head",
-                      children: ["Page Name:", " "]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                      className: "sp1_st-list-item-value",
-                      children: (_task$pageName = task === null || task === void 0 ? void 0 : task.pageName) !== null && _task$pageName !== void 0 ? _task$pageName : "--"
-                    })]
-                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                    className: "sp1_st-list-item",
-                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
-                      className: "sp1_st-list-item-head",
-                      children: ["Page Url:", " "]
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
-                      className: "sp1_st-list-item-value",
-                      children: task !== null && task !== void 0 && task.pageUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("a", {
-                        href: task === null || task === void 0 ? void 0 : task.pageUrl,
-                        children: "( view )"
-                      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
-                        children: "--"
-                      })
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_28__["default"], {
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_28__["default"].Case, {
+                      condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.taskType) === 'New Page Design',
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: ["Page Type:", " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: (_task$pageType = task === null || task === void 0 ? void 0 : task.pageType) !== null && _task$pageType !== void 0 ? _task$pageType : "--"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: ["Page Name:", " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: (_task$pageName = task === null || task === void 0 ? void 0 : task.pageName) !== null && _task$pageName !== void 0 ? _task$pageName : "--"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: ["Page Url:", " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: task !== null && task !== void 0 && task.pageUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("a", {
+                            href: task === null || task === void 0 ? void 0 : task.pageUrl,
+                            children: "( view )"
+                          }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("span", {
+                            children: "--"
+                          })
+                        })]
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_28__["default"].Case, {
+                      condition: (task === null || task === void 0 ? void 0 : task.taskTypeDetails.taskType) === 'Cloning Existing Design',
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: ["Page Type:", " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: (_task$taskTypeDetails = task === null || task === void 0 || (_task$taskTypeDetails2 = task.taskTypeDetails) === null || _task$taskTypeDetails2 === void 0 ? void 0 : _task$taskTypeDetails2.taskTypeName) !== null && _task$taskTypeDetails !== void 0 ? _task$taskTypeDetails : "--"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: ["Number of Pages:", " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: (_task$taskTypeDetails3 = task === null || task === void 0 || (_task$taskTypeDetails4 = task.taskTypeDetails) === null || _task$taskTypeDetails4 === void 0 ? void 0 : _task$taskTypeDetails4.numberOfPages) !== null && _task$taskTypeDetails3 !== void 0 ? _task$taskTypeDetails3 : "--"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: ["Existing Design Link:", " "]
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: task !== null && task !== void 0 && (_task$taskTypeDetails5 = task.taskTypeDetails) !== null && _task$taskTypeDetails5 !== void 0 && _task$taskTypeDetails5.existingDesignLink ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("a", {
+                            href: task === null || task === void 0 || (_task$taskTypeDetails6 = task.taskTypeDetails) === null || _task$taskTypeDetails6 === void 0 ? void 0 : _task$taskTypeDetails6.existingDesignLink,
+                            children: task === null || task === void 0 || (_task$taskTypeDetails7 = task.taskTypeDetails) === null || _task$taskTypeDetails7 === void 0 ? void 0 : _task$taskTypeDetails7.existingDesignLink
+                          }) : "--"
+                        })]
+                      })]
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)(_global_Switch__WEBPACK_IMPORTED_MODULE_28__["default"].Case, {
+                      condition: (task === null || task === void 0 || (_task$taskTypeDetails8 = task.taskTypeDetails) === null || _task$taskTypeDetails8 === void 0 ? void 0 : _task$taskTypeDetails8.taskType) === 'Others',
+                      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: "Other Task Type:"
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: "--"
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: "Page Name:"
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: (_task$taskTypeDetails9 = task === null || task === void 0 || (_task$taskTypeDetails10 = task.taskTypeDetails) === null || _task$taskTypeDetails10 === void 0 ? void 0 : _task$taskTypeDetails10.pageName) !== null && _task$taskTypeDetails9 !== void 0 ? _task$taskTypeDetails9 : '--'
+                        })]
+                      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsxs)("div", {
+                        className: "sp1_st-list-item",
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-head",
+                          children: "Page URL:"
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("div", {
+                          className: "sp1_st-list-item-value",
+                          children: task !== null && task !== void 0 && (_task$taskTypeDetails11 = task.taskTypeDetails) !== null && _task$taskTypeDetails11 !== void 0 && _task$taskTypeDetails11.pageUrl ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_29__.jsx)("a", {
+                            href: task === null || task === void 0 || (_task$taskTypeDetails12 = task.taskTypeDetails) === null || _task$taskTypeDetails12 === void 0 ? void 0 : _task$taskTypeDetails12.pageUrl,
+                            children: task === null || task === void 0 || (_task$taskTypeDetails13 = task.taskTypeDetails) === null || _task$taskTypeDetails13 === void 0 ? void 0 : _task$taskTypeDetails13.pageUrl
+                          }) : "--"
+                        })]
+                      })]
                     })]
                   })]
                 })]
@@ -3943,6 +3764,7 @@ var CommentSendBox = function CommentSendBox(_ref) {
     var data = editor.getData();
     setComment(data);
   };
+  console.log(files);
   var handleSubmit = function handleSubmit(e) {
     e.preventDefault();
     var fd = new FormData();
@@ -8418,10 +8240,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
-/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
+/* harmony import */ var _components_Modal__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../components/Modal */ "./resources/js/react/single-task/components/Modal.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -8448,7 +8270,7 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     countDown = _React$useState4[0],
     setCountDown = _React$useState4[1];
-  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_3__.User(window.Laravel.user);
+  var auth = new _utils_user_details__WEBPACK_IMPORTED_MODULE_1__.User(window.Laravel.user);
   react__WEBPACK_IMPORTED_MODULE_0___default().useEffect(function () {
     var timeOutId;
     var timeIntervelId;
@@ -8472,7 +8294,7 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
       clearInterval(timeIntervelId);
     };
   }, []);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
     isOpen: isOpen,
     className: "subtask-timer-confirmation--modal",
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
@@ -8484,6 +8306,9 @@ var LeadConfirmationModal = function LeadConfirmationModal(_ref) {
           children: [" ", "Do you understand the following things?", " "]
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("ol", {
           type: "A",
+          style: {
+            marginLeft: '32px'
+          },
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
             children: [" ", "Your team's job is not to decide what the look and feel of a website will be based on a few reference websites.", " "]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("li", {
@@ -10814,7 +10639,7 @@ var SubTaskForm = function SubTaskForm(_ref) {
             className: "form-control height-35 f-14",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_20__.jsx)(_comments_DatePicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
               placeholderText: "Ex: ".concat(dayjs.dayjs().format("DD-MM-YYYY")),
-              minDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).toDate(),
+              minDate: dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).isBefore(dayjs.dayjs()) ? dayjs.dayjs().toDate() : dayjs.dayjs(task === null || task === void 0 ? void 0 : task.startDate).toDate(),
               maxDate: dueDate || dayjs.dayjs(task === null || task === void 0 ? void 0 : task.dueDate).toDate(),
               date: startDate,
               setDate: setStateDate
@@ -14852,11 +14677,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _ckeditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../ckeditor */ "./resources/js/react/ckeditor/index.jsx");
 /* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
-/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var _components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../components/SubmitButton */ "./resources/js/react/single-task/components/SubmitButton.jsx");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -14869,25 +14691,22 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-
-
 var projectManagerAcknowladgement = [{
   id: "CPRx01",
   title: 'Client added some additional requirements which was not part of the actual job scope',
   isDeniable: false,
   createDispute: true
 }, {
-  id: 'PLRx12',
+  id: 'CPRx12',
   title: 'I submitted the work without proper checking and overlooked the issues',
   isDeniable: false,
   createDispute: false
 }, {
-  id: 'PLRx03',
+  id: 'CPRx03',
   title: "I couldn't understand clients expectation properly earlier",
   isDeniable: false
 }, {
-  id: 'PLRx04',
+  id: 'CPRx04',
   title: 'I didn’t understand the job properly as it’s very technical in nature and relied fully on technical team for success',
   isDeniable: false
 }, {
@@ -15040,24 +14859,24 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
       console.log('Your forgot to fill up some required fields');
     }
   };
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("form", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
       className: "px-3",
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+          children: ["Select Reason for Revision", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "f-16",
             children: "*"
           }), " :"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "px-3",
           children: _.map(projectManagerAcknowladgement, function (option) {
-            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+            return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
               className: "form-check d-flex align-items-start mb-2",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
                 className: "form-check-input mr-2",
                 type: "radio",
                 name: "exampleRadios",
@@ -15072,7 +14891,7 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
                   height: "16px",
                   marginTop: "3px"
                 }
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
                 className: "form-check-label",
                 htmlFor: option.id,
                 style: {
@@ -15082,24 +14901,24 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
               })]
             }, option.id);
           })
-        }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
+        }), reasonError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: reasonError
         })]
-      }), (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), (reason === null || reason === void 0 ? void 0 : reason.id) === 'CPRx01' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "d-block font-weight-bold",
-          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             children: "*"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "d-block",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check form-check-inline",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               className: "form-check-input",
               name: "milestone",
               type: "radio",
@@ -15114,14 +14933,14 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               htmlFor: "createMilestoneYes",
               className: "form-check-label",
               children: "Yes"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check form-check-inline",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               className: "form-check-input",
               name: "milestone",
               type: "radio",
@@ -15136,30 +14955,30 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               htmlFor: "createMilestoneNo",
               className: "form-check-label",
               children: "No"
             })]
           })]
         })]
-      }), additionalPaid === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), additionalPaid === 'yes' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "d-block font-weight-bold",
-          children: ["Amount? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+          children: ["Amount? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             children: "*"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "input-group",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
             className: "input-group-prepend",
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
               className: "input-group-text",
               children: "$"
             })
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
             type: "number",
             onChange: function onChange(e) {
               return setAdditionalAmount(e.target.value);
@@ -15170,19 +14989,19 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
             onBlur: handleBlurEvent
           })]
         })]
-      }), additionalPaid === 'no' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), additionalPaid === 'no' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "d-block font-weight-bold",
-          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+          children: ["Is the client paying additionally for these changes? ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             children: "*"
           })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "d-block",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check mb-3",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               name: "additionalInformation",
               className: "form-check-input",
               type: "radio",
@@ -15199,14 +15018,14 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               htmlFor: "additionalInformation1",
               className: "form-check-label",
               children: "Client changed his/her mind and he/she don't want to pay additional payment. We have to continue the task for client satisfaction"
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
             className: "form-check",
-            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
               className: "form-check-input",
               name: "additionalInformation",
               type: "radio",
@@ -15223,48 +15042,48 @@ var AssigneeToLeadFromClientRevision = function AssigneeToLeadFromClientRevision
                 height: "16px",
                 marginTop: "3px"
               }
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("label", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("label", {
               htmlFor: "additionalInformation2",
               className: "form-check-label",
               children: "The client is interpreting his original instruction in a very unusual way!"
             })]
           })]
         })]
-      }), additionalError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+      }), additionalError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
         className: "mb-3",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: additionalError
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
         className: "form-group",
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("label", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("label", {
           htmlFor: "",
           className: "font-weight-bold",
-          children: ["Explain or Comment", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("sup", {
+          children: ["Explain or Comment", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("sup", {
             className: "f-16",
             children: "*"
           }), " :"]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
           className: "ck-editor-holder",
-          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ckeditor__WEBPACK_IMPORTED_MODULE_1__["default"], {
             onChange: handleEditorTextChange
           })
-        }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("small", {
+        }), commentError && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("small", {
           id: "emailHelp",
           className: "form-text text-danger",
           children: commentError
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("div", {
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
           className: "mt-3 d-flex align-items-center",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
             onClick: onBack,
             variant: "tertiary",
             className: "ml-auto mr-2",
             children: "Back"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_SubmitButton__WEBPACK_IMPORTED_MODULE_3__["default"], {
             title: "Submit",
             onClick: handleSubmission,
             isLoading: isSubmitting
@@ -17410,20 +17229,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
-/* harmony import */ var _StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StartTimerConfirmationModal */ "./resources/js/react/single-task/section/task-actions/StartTimerConfirmationModal.jsx");
-/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
-/* harmony import */ var _utils_dateController__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../utils/dateController */ "./resources/js/react/utils/dateController.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
-/* harmony import */ var _stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./stop-timer/LessTrackTimerModal */ "./resources/js/react/single-task/section/task-actions/stop-timer/LessTrackTimerModal.jsx");
-/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/dist/index.js");
+/* harmony import */ var _services_api_SingleTaskPageApi__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/api/SingleTaskPageApi */ "./resources/js/react/services/api/SingleTaskPageApi.js");
+/* harmony import */ var _services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/features/subTaskSlice */ "./resources/js/react/services/features/subTaskSlice.js");
+/* harmony import */ var _utils_dateController__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../utils/dateController */ "./resources/js/react/utils/dateController.js");
+/* harmony import */ var _utils_user_details__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../utils/user-details */ "./resources/js/react/utils/user-details.js");
+/* harmony import */ var _components_Button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/Button */ "./resources/js/react/single-task/components/Button.jsx");
+/* harmony import */ var _StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./StartTimerConfirmationModal */ "./resources/js/react/single-task/section/task-actions/StartTimerConfirmationModal.jsx");
+/* harmony import */ var _stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./stop-timer/LessTrackTimerModal */ "./resources/js/react/single-task/section/task-actions/stop-timer/LessTrackTimerModal.jsx");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw new Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw new Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -17451,29 +17274,29 @@ var TimerControl = function TimerControl(_ref) {
     timerStart = _ref.timerStart,
     setTimerStart = _ref.setTimerStart,
     auth = _ref.auth;
-  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     timerId = _useState2[0],
     setTimerId = _useState2[1];
-  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(0),
     _useState4 = _slicedToArray(_useState3, 2),
     seconds = _useState4[0],
     setSeconds = _useState4[1];
-  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false),
     _useState6 = _slicedToArray(_useState5, 2),
     isOpenConfirmationModal = _useState6[0],
     setIsOpenConfirmationModal = _useState6[1];
-  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_6__.useDispatch)();
-  var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_4__.CompareDate();
-  var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_9__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
+  var dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_2__.useDispatch)();
+  var dayjs = new _utils_dateController__WEBPACK_IMPORTED_MODULE_5__.CompareDate();
+  var loggedUser = new _utils_user_details__WEBPACK_IMPORTED_MODULE_6__.User((_window = window) === null || _window === void 0 || (_window = _window.Laravel) === null || _window === void 0 ? void 0 : _window.user);
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_11__.useNavigate)();
   var timerStatus = task === null || task === void 0 || (_task$ranningTimer = task.ranningTimer) === null || _task$ranningTimer === void 0 ? void 0 : _task$ranningTimer.status;
-  var taskRunning = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
+  var taskRunning = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(function () {
     return timerStatus;
   }, [timerStatus]);
 
   // check timer is already running
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (taskRunning === "running") {
       var _task$ranningTimer2, _task$ranningTimer3;
       var serverTime = task === null || task === void 0 || (_task$ranningTimer2 = task.ranningTimer) === null || _task$ranningTimer2 === void 0 ? void 0 : _task$ranningTimer2.time;
@@ -17486,7 +17309,7 @@ var TimerControl = function TimerControl(_ref) {
   }, [taskRunning]);
 
   //   timer control
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     var interval = null;
     if (timerStart) {
       //   interval for timer
@@ -17544,68 +17367,47 @@ var TimerControl = function TimerControl(_ref) {
     timerStopStatusIsLoading = _useStopTimerApiMutat2[1].isLoading;
 
   // timer start control
-  var startTimerControl = function startTimerControl() {
-    var _window2;
-    setIsOpenConfirmationModal(false);
-    startTimerApi({
-      task_id: task === null || task === void 0 ? void 0 : task.id,
-      project_id: task === null || task === void 0 ? void 0 : task.projectId,
-      memo: task === null || task === void 0 ? void 0 : task.title,
-      user_id: (_window2 = window) === null || _window2 === void 0 || (_window2 = _window2.Laravel) === null || _window2 === void 0 || (_window2 = _window2.user) === null || _window2 === void 0 ? void 0 : _window2.id
-    }).unwrap().then(function (res) {
-      if ((res === null || res === void 0 ? void 0 : res.status) === "success" || (res === null || res === void 0 ? void 0 : res.status) === 200) {
-        setTimerStart(true);
-        setTimerId(res === null || res === void 0 ? void 0 : res.id);
-        dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
-        Toast.fire({
-          icon: 'success',
-          title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
-        });
-      } else {
-        Toast.fire({
-          icon: 'warning',
-          title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
-        });
-      }
-    })["catch"](function (err) {
-      // TODO: Need to check again backend condition...
-
-      if (err.status === 400) {
-        if (err.data.acknowledgement_submitted === false) {
-          Swal.fire({
-            title: "You have not meet last day's minimum hour count. Please share the reasons!",
-            showDenyButton: true,
-            confirmButtonText: 'Yes',
-            denyButtonText: "Close",
-            icon: 'warning'
-          }).then(function (result) {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-              var _err$data;
-              dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__.setLessTrackModal)({
-                show: true,
-                type: 'START_TIMER',
-                date: dayjs.dayjs(err === null || err === void 0 || (_err$data = err.data) === null || _err$data === void 0 ? void 0 : _err$data.date).format("MMM DD, YYYY")
-              }));
-            }
-          });
-        } else if (err.data.daily_submission_submitted === false) {
-          Swal.fire({
-            title: "You didn't submit last day daily submission",
-            showDenyButton: true,
-            confirmButtonText: 'Yes',
-            denyButtonText: "Close",
-            icon: 'warning'
-          }).then(function (result) {
-            /* Read more about isConfirmed, isDenied below */
-            if (result.isConfirmed) {
-              navigate("?modal=daily-submission&date_type=last-date");
-            }
-          });
+  var startTimerControl = /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      var _window2;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            setIsOpenConfirmationModal(false);
+            _context.next = 3;
+            return startTimerApi({
+              task_id: task === null || task === void 0 ? void 0 : task.id,
+              project_id: task === null || task === void 0 ? void 0 : task.projectId,
+              memo: task === null || task === void 0 ? void 0 : task.title,
+              user_id: (_window2 = window) === null || _window2 === void 0 || (_window2 = _window2.Laravel) === null || _window2 === void 0 || (_window2 = _window2.user) === null || _window2 === void 0 ? void 0 : _window2.id
+            }).unwrap().then(function (res) {
+              if ((res === null || res === void 0 ? void 0 : res.status) === "success" || (res === null || res === void 0 ? void 0 : res.status) === 200) {
+                setTimerStart(true);
+                setTimerId(res === null || res === void 0 ? void 0 : res.id);
+                dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_4__.setTaskStatus)(res === null || res === void 0 ? void 0 : res.task_status));
+                Toast.fire({
+                  icon: 'success',
+                  title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
+                });
+              } else {
+                Toast.fire({
+                  icon: 'warning',
+                  title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
+                });
+              }
+            })["catch"](function (err) {
+              console.log(err);
+            });
+          case 3:
+          case "end":
+            return _context.stop();
         }
-      }
-    });
-  };
+      }, _callee);
+    }));
+    return function startTimerControl() {
+      return _ref2.apply(this, arguments);
+    };
+  }();
 
   // start timer function
   var startTimer = function startTimer(e) {
@@ -17628,7 +17430,7 @@ var TimerControl = function TimerControl(_ref) {
       if ((res === null || res === void 0 ? void 0 : res.status) === "success" || (res === null || res === void 0 ? void 0 : res.status) === 200) {
         Toast.fire({
           icon: "success",
-          title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
+          title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
         setTimerStart(false);
         setSeconds(0);
@@ -17636,7 +17438,7 @@ var TimerControl = function TimerControl(_ref) {
       } else {
         Toast.fire({
           icon: 'warning',
-          title: lodash__WEBPACK_IMPORTED_MODULE_5___default().startCase(res === null || res === void 0 ? void 0 : res.message)
+          title: lodash__WEBPACK_IMPORTED_MODULE_0___default().startCase(res === null || res === void 0 ? void 0 : res.message)
         });
       }
     });
@@ -17648,43 +17450,45 @@ var TimerControl = function TimerControl(_ref) {
 
   // handle stop timer
   var handleStopTimer = function handleStopTimer() {
-    // fetch data
-    getUserTrackTime(loggedUser === null || loggedUser === void 0 ? void 0 : loggedUser.getId()).unwrap().then(function (res) {
-      if (res) {
-        var currentTime = dayjs.dayjs(res.current_time);
-        var target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
-        var isSaturday = currentTime.day() === 6;
-        if (isSaturday) {
-          target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
-        }
-        var check = dayjs.dayjs(currentTime).isBefore(target);
-        var isDev = lodash__WEBPACK_IMPORTED_MODULE_5___default().includes([5, 9, 10], Number(auth === null || auth === void 0 ? void 0 : auth.getRoleId()));
-        if (!check && isDev) {
-          res.tracked_times < res.target_time ? dispatch((0,_services_features_subTaskSlice__WEBPACK_IMPORTED_MODULE_7__.setLessTrackModal)({
-            show: true,
-            type: 'STOP_TIMER',
-            date: 'Today'
-          })) : stopTimer();
-        } else {
-          stopTimer();
-        }
-      }
-    })["catch"](function (err) {
-      return console.log(err);
-    });
+    stopTimer();
+
+    // // fetch data
+    // getUserTrackTime(loggedUser?.getId())
+    // .unwrap()
+    // .then(res => {
+    //     if(res){
+    //         let currentTime = dayjs.dayjs(res.current_time);
+    //         let target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
+    //         const isSaturday = currentTime.day() === 6;
+
+    //         if(isSaturday){
+    //             target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
+    //         }
+
+    //         let check = dayjs.dayjs(currentTime).isBefore(target);
+    //         let isDev = _.includes([5, 9 , 10], Number(auth?.getRoleId()));
+    //         if(!check && isDev){
+    //             res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER', date: 'Today'})) : stopTimer()
+    //         }else{
+    //             stopTimer();
+    //         }
+    //     }
+
+    // })
+    // .catch(err => console.log(err))
   };
 
   // control loading states...
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     if (startTimerFirstCheckIsFetching || timerStartStatusIsLoading) {
       document.getElementsByTagName("body")[0].style.cursor = "progress";
     } else {
       document.getElementsByTagName("body")[0].style.cursor = "default";
     }
   }, [startTimerFirstCheckIsFetching, timerStartStatusIsLoading]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-    children: [!timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+    children: [!timerStart ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+      children: [!timerStartStatusIsLoading && !startTimerFirstCheckIsFetching ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
         variant: "tertiary",
         onClick: startTimer,
         className: "d-flex align-items-center btn-outline-dark text-dark",
@@ -17693,7 +17497,7 @@ var TimerControl = function TimerControl(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("span", {
           children: "Start Timer"
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
         className: "cursor-processing mr-2",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "spinner-border text-white",
@@ -17703,12 +17507,12 @@ var TimerControl = function TimerControl(_ref) {
             height: "18px"
           }
         }), "Starting..."]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_StartTimerConfirmationModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
         isOpen: isOpenConfirmationModal,
         onConfirm: startTimerControl
       })]
-    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), {
-      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)((react__WEBPACK_IMPORTED_MODULE_1___default().Fragment), {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
         variant: "tertiary",
         className: "d-flex align-items-center btn-outline-dark text-dark",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("i", {
@@ -17717,7 +17521,7 @@ var TimerControl = function TimerControl(_ref) {
           className: "d-inline ml-1",
           children: timer()
         })]
-      }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }), trackTimerFetcing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
         className: "cursor-processing",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "spinner-border text-white",
@@ -17727,7 +17531,7 @@ var TimerControl = function TimerControl(_ref) {
             height: "18px"
           }
         }), "Processing..."]
-      }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }) : !timerStopStatusIsLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
         variant: "tertiary",
         onClick: handleStopTimer,
         className: "d-flex align-items-center btn-outline-dark text-dark",
@@ -17737,7 +17541,7 @@ var TimerControl = function TimerControl(_ref) {
           className: "d-inline ml-1",
           children: "Stop Timer"
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
         className: "cursor-processing",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)("div", {
           className: "spinner-border text-white",
@@ -17748,7 +17552,7 @@ var TimerControl = function TimerControl(_ref) {
           }
         }), "Stopping..."]
       })]
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_10__.jsx)(_stop_timer_LessTrackTimerModal__WEBPACK_IMPORTED_MODULE_9__["default"], {
       stopTimer: stopTimer,
       startTimer: startTimerControl
     })]
@@ -19211,23 +19015,6 @@ var TimeLogTable = function TimeLogTable(_ref4) {
 
 /***/ }),
 
-/***/ "./resources/js/react/utils/check-is-url.js":
-/*!**************************************************!*\
-  !*** ./resources/js/react/utils/check-is-url.js ***!
-  \**************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   checkIsURL: () => (/* binding */ checkIsURL)
-/* harmony export */ });
-var checkIsURL = function checkIsURL(url) {
-  var urlRegex = /^(?:ftp|http|https):\/\/(?:www\.)?[^\s]+$/;
-  return typeof url === 'string' && urlRegex.test(url);
-};
-
-/***/ }),
-
 /***/ "./resources/js/react/utils/timeCalculate.js":
 /*!***************************************************!*\
   !*** ./resources/js/react/utils/timeCalculate.js ***!
@@ -19290,32 +19077,6 @@ ___CSS_LOADER_EXPORT___.push([module.id, ".sp1_checkbox--label.disable {\r\n    
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/file-upload/file-upload.css":
-/*!******************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/file-upload/file-upload.css ***!
-  \******************************************************************************************************************************************************************************************************************/
-/***/ ((module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/cssWithMappingToString.js */ "./node_modules/css-loader/dist/runtime/cssWithMappingToString.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
-/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
-// Imports
-
-
-var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
-// Module
-___CSS_LOADER_EXPORT___.push([module.id, "\r\n.upload-file-modal{ \r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.upload-file-modal .__panel{\r\n    width: 100%;\r\n    max-width: 60vw;\r\n    height: 100%;\r\n    max-height: 80vh;\r\n    min-height: 60vh;\r\n    background-color: #fff;\r\n    border-radius: 16px;\r\n    display: -moz-grid;\r\n    display: grid;\r\n    grid-template-rows: 48px 1fr;\r\n}\r\n\r\n\r\n.upload-file-modal .__panel .__navbar{\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    padding: 10px 16px 10px 24px;\r\n    border-bottom: 1px solid #f0f0f0;\r\n}\r\n\r\n.upload-file-modal .__panel .__navbar h5{\r\n    margin: 0;\r\n    font-weight: 600;\r\n    color: #777;\r\n}\r\n\r\n.file_upload_panel__body{\r\n    padding: 10px 24px;\r\n    overflow: hidden;\r\n    display: -moz-grid;\r\n    display: grid;\r\n    height: 100%;\r\n    grid-template-rows: 250px 1fr;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.file_upload_panel__body .__upload_new{\r\n    width: 100%;\r\n    height: 250px;\r\n    background: #f6f6f6;\r\n    border-radius: 10px;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    flex-direction: column;\r\n    position: relative;\r\n}\r\n\r\n.file_upload_panel__body .__upload_new .fa-cloud-arrow-up{\r\n   font-size: 120px;\r\n   color: #c4c4c4;\r\n   display: block;\r\n}\r\n\r\n.file-upload-input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1-uploaded-files_list{\r\n    display: flex;\r\n    flex-direction: column;\r\n    gap: 20px;\r\n    overflow-y: auto; \r\n    height: 100%;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.sp1-uploaded-files .__title{\r\n    font-weight: 600;\r\n    color: #777;\r\n    font-size: 16px;\r\n}\r\n\r\n\r\n.sp1_uploaded_file{\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n}\r\n.sp1-uploaded-files .__files_list{\r\n    display: flex;\r\n    align-items: center;\r\n    flex-wrap: wrap;\r\n    gap: 10px;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview{\r\n    border: 1px solid rgba(0 0 0 / 10%);\r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    width: 100px;\r\n    height: 100px;\r\n    position: relative;\r\n    transition: background .4s ease-in-out;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview:hover{\r\n    background: rgb(0 0 0 / 5%)\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext{\r\n    font-size: 14px;\r\n}\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext-sm{\r\n    padding: 0px 4px; \r\n    bottom: 15px !important;\r\n}\r\n\r\n\r\n\r\n.sp1_file_upload--input-preview  .uploaded-file-name{\r\n    font-size: 14px; \r\n    margin-top: 0;\r\n}\r\n\r\n\r\n\r\n/* file uploader  */\r\n\r\n.sp1_file_upload--input-wrapper{\r\n    position: relative;\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n    display: flex;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: rgba(77, 86, 105, 0.8);\r\n    cursor: pointer;\r\n}\r\n\r\n.sp1_file_upload--input-wrapper:hover{\r\n    color: rgba(14, 21, 36, 0.966) \r\n}\r\n\r\n.sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{\r\n    font-size: 2.2rem;\r\n}\r\n\r\n.sp1_file_upload--input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn{\r\n    position: absolute;\r\n    top: 3px;\r\n    right: 3px;\r\n    padding: 4px;\r\n    background-color: #ff401f;\r\n    color: #fff;\r\n    cursor: pointer;\r\n    border-color: #ff401f;\r\n    z-index: 2;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn i{ \r\n    -moz-user-select: none;\r\n    -webkit-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n/* end file uploader  */", "",{"version":3,"sources":["webpack://./resources/js/react/file-upload/file-upload.css"],"names":[],"mappings":";AACA;IACI,aAAa;IACb,mBAAmB;IACnB,uBAAuB;AAC3B;;AAEA;IACI,WAAW;IACX,eAAe;IACf,YAAY;IACZ,gBAAgB;IAChB,gBAAgB;IAChB,sBAAsB;IACtB,mBAAmB;IAEnB,kBAAkB;IAClB,aAAa;IACb,4BAA4B;AAChC;;;AAGA;IACI,aAAa;IACb,mBAAmB;IACnB,8BAA8B;IAC9B,4BAA4B;IAC5B,gCAAgC;AACpC;;AAEA;IACI,SAAS;IACT,gBAAgB;IAChB,WAAW;AACf;;AAEA;IACI,kBAAkB;IAClB,gBAAgB;IAChB,kBAAkB;IAElB,aAAa;IACb,YAAY;IACZ,6BAA6B;IAC7B,oBAAoB;AACxB;;;AAGA;IACI,WAAW;IACX,aAAa;IACb,mBAAmB;IACnB,mBAAmB;IACnB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IAEvB,sBAAsB;IACtB,kBAAkB;AACtB;;AAEA;GACG,gBAAgB;GAChB,cAAc;GACd,cAAc;AACjB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,UAAU;IACV,UAAU;AACd;;AAEA;IACI,aAAa;IAEb,sBAAsB;IACtB,SAAS;IACT,gBAAgB;IAChB,YAAY;IACZ,oBAAoB;AACxB;;;AAGA;IACI,gBAAgB;IAChB,WAAW;IACX,eAAe;AACnB;;;AAGA;IACI,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,mBAAmB;AACvB;AACA;IACI,aAAa;IACb,mBAAmB;IAEnB,eAAe;IACf,SAAS;AACb;;;AAGA;IACI,mCAAmC;IACnC,iBAAiB;IACjB,kBAAkB;IAClB,WAAW;IACX,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,sCAAsC;AAC1C;;;AAGA;IACI;AACJ;;;AAGA;;IAEI,eAAe;AACnB;;AAEA;;IAEI,gBAAgB;IAChB,uBAAuB;AAC3B;;;;AAIA;IACI,eAAe;IACf,aAAa;AACjB;;;;AAIA,mBAAmB;;AAEnB;IACI,kBAAkB;IAClB,YAAY;IACZ,aAAa;IACb,kBAAkB;IAClB,mBAAmB;IACnB,aAAa;IAEb,sBAAsB;IACtB,mBAAmB;IACnB,uBAAuB;IACvB,6BAA6B;IAC7B,eAAe;AACnB;;AAEA;IACI;AACJ;;AAEA;IACI,iBAAiB;AACrB;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,MAAM;IACN,OAAO;IACP,UAAU;IACV,UAAU;AACd;;AAEA;IACI,kBAAkB;IAClB,QAAQ;IACR,UAAU;IACV,YAAY;IACZ,yBAAyB;IACzB,WAAW;IACX,eAAe;IACf,qBAAqB;IACrB,UAAU;AACd;;AAEA;IACI,sBAAsB;IACtB,yBAAyB;IACzB,iBAAiB;AACrB;;AAEA,uBAAuB","sourcesContent":["\r\n.upload-file-modal{ \r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n}\r\n\r\n.upload-file-modal .__panel{\r\n    width: 100%;\r\n    max-width: 60vw;\r\n    height: 100%;\r\n    max-height: 80vh;\r\n    min-height: 60vh;\r\n    background-color: #fff;\r\n    border-radius: 16px;\r\n    display: -ms-grid;\r\n    display: -moz-grid;\r\n    display: grid;\r\n    grid-template-rows: 48px 1fr;\r\n}\r\n\r\n\r\n.upload-file-modal .__panel .__navbar{\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: space-between;\r\n    padding: 10px 16px 10px 24px;\r\n    border-bottom: 1px solid #f0f0f0;\r\n}\r\n\r\n.upload-file-modal .__panel .__navbar h5{\r\n    margin: 0;\r\n    font-weight: 600;\r\n    color: #777;\r\n}\r\n\r\n.file_upload_panel__body{\r\n    padding: 10px 24px;\r\n    overflow: hidden;\r\n    display: -moz-grid;\r\n    display: -ms-grid;\r\n    display: grid;\r\n    height: 100%;\r\n    grid-template-rows: 250px 1fr;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.file_upload_panel__body .__upload_new{\r\n    width: 100%;\r\n    height: 250px;\r\n    background: #f6f6f6;\r\n    border-radius: 10px;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    position: relative;\r\n}\r\n\r\n.file_upload_panel__body .__upload_new .fa-cloud-arrow-up{\r\n   font-size: 120px;\r\n   color: #c4c4c4;\r\n   display: block;\r\n}\r\n\r\n.file-upload-input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1-uploaded-files_list{\r\n    display: flex;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    gap: 20px;\r\n    overflow-y: auto; \r\n    height: 100%;\r\n    padding-bottom: 24px;\r\n}\r\n\r\n\r\n.sp1-uploaded-files .__title{\r\n    font-weight: 600;\r\n    color: #777;\r\n    font-size: 16px;\r\n}\r\n\r\n\r\n.sp1_uploaded_file{\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n}\r\n.sp1-uploaded-files .__files_list{\r\n    display: flex;\r\n    align-items: center;\r\n    -ms-flex-wrap: wrap;\r\n    flex-wrap: wrap;\r\n    gap: 10px;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview{\r\n    border: 1px solid rgba(0 0 0 / 10%);\r\n    padding: 6px 10px;\r\n    border-radius: 4px;\r\n    color: #777;\r\n    width: 100px;\r\n    height: 100px;\r\n    position: relative;\r\n    transition: background .4s ease-in-out;\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview:hover{\r\n    background: rgb(0 0 0 / 5%)\r\n}\r\n\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext{\r\n    font-size: 14px;\r\n}\r\n\r\n.sp1_file_upload--input-preview\r\n.uploaded-file-ext-sm{\r\n    padding: 0px 4px; \r\n    bottom: 15px !important;\r\n}\r\n\r\n\r\n\r\n.sp1_file_upload--input-preview  .uploaded-file-name{\r\n    font-size: 14px; \r\n    margin-top: 0;\r\n}\r\n\r\n\r\n\r\n/* file uploader  */\r\n\r\n.sp1_file_upload--input-wrapper{\r\n    position: relative;\r\n    width: 100px;\r\n    height: 100px;\r\n    border-radius: 8px;\r\n    background: #f3f3f3;\r\n    display: flex;\r\n    -ms-flex-direction: column;\r\n    flex-direction: column;\r\n    align-items: center;\r\n    justify-content: center;\r\n    color: rgba(77, 86, 105, 0.8);\r\n    cursor: pointer;\r\n}\r\n\r\n.sp1_file_upload--input-wrapper:hover{\r\n    color: rgba(14, 21, 36, 0.966) \r\n}\r\n\r\n.sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{\r\n    font-size: 2.2rem;\r\n}\r\n\r\n.sp1_file_upload--input{\r\n    width: 100%;\r\n    height: 100%;\r\n    position: absolute;\r\n    top: 0;\r\n    left: 0;\r\n    z-index: 1;\r\n    opacity: 0;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn{\r\n    position: absolute;\r\n    top: 3px;\r\n    right: 3px;\r\n    padding: 4px;\r\n    background-color: #ff401f;\r\n    color: #fff;\r\n    cursor: pointer;\r\n    border-color: #ff401f;\r\n    z-index: 2;\r\n}\r\n\r\n.sp1_file_upload--input-preview .__remove--btn i{ \r\n    -moz-user-select: none;\r\n    -webkit-user-select: none;\r\n    user-select: none;\r\n}\r\n\r\n/* end file uploader  */"],"sourceRoot":""}]);
-// Exports
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
-
-
-/***/ }),
-
 /***/ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/global/AvatarGroup.module.css":
 /*!********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/global/AvatarGroup.module.css ***!
@@ -19335,7 +19096,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".fpsqco3G\\+Hf7gF1vYUOU9Q\\=\\={\n    width: -moz-fit-content;\n    width: fit-content;\n    display: flex;\n    margin: auto;\n    padding: 0;\n    flex-direction: row-reverse;\n}\n\n.rpJ2L0Uklhu0QGtrM7rb3Q\\=\\={\n    width: 24px;\n    height: 24px;\n    border-radius: 100%;\n    border: 2px solid rgb(244, 244, 244) ;\n    padding: 0;\n    background-color: #ededed;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    margin-left: -10px;\n    box-shadow: 0 0 2px rgb(0 0 0 / 10%);\n}\n\n\n.N71c75OLkFHuPvS5HeIkpQ\\=\\={\n    width: 100%;\n    height: 100%;\n    border-radius: 100%;\n    object-fit: fill;\n    -o-object-fit: fill;\n}\n\n\n.\\+F5c8j7QS2thczRvvUXBlw\\=\\={\n    background-color: rgb(39, 111, 236);\n    color: #fff;\n    text-decoration:none !important;\n}\n\n.\\+F5c8j7QS2thczRvvUXBlw\\=\\= span{\n    font-size: 12px;\n    text-decoration:none !important;\n}\n", "",{"version":3,"sources":["webpack://./resources/js/react/global/AvatarGroup.module.css"],"names":[],"mappings":"AAAA;IACI,uBAAkB;IAAlB,kBAAkB;IAClB,aAAa;IACb,YAAY;IACZ,UAAU;IACV,2BAA2B;AAC/B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,mBAAmB;IACnB,qCAAqC;IACrC,UAAU;IACV,yBAAyB;IACzB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,kBAAkB;IAClB,oCAAoC;AACxC;;;AAGA;IACI,WAAW;IACX,YAAY;IACZ,mBAAmB;IACnB,gBAAgB;IAChB,mBAAmB;AACvB;;;AAGA;IACI,mCAAmC;IACnC,WAAW;IACX,+BAA+B;AACnC;;AAEA;IACI,eAAe;IACf,+BAA+B;AACnC","sourcesContent":[".avatar_group{\n    width: fit-content;\n    display: flex;\n    margin: auto;\n    padding: 0;\n    flex-direction: row-reverse;\n}\n\n.avatar{\n    width: 24px;\n    height: 24px;\n    border-radius: 100%;\n    border: 2px solid rgb(244, 244, 244) ;\n    padding: 0;\n    background-color: #ededed;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    margin-left: -10px;\n    box-shadow: 0 0 2px rgb(0 0 0 / 10%);\n}\n\n\n.avatar_image{\n    width: 100%;\n    height: 100%;\n    border-radius: 100%;\n    object-fit: fill;\n    -o-object-fit: fill;\n}\n\n\n.empty_avatar{\n    background-color: rgb(39, 111, 236);\n    color: #fff;\n    text-decoration:none !important;\n}\n\n.empty_avatar span{\n    font-size: 12px;\n    text-decoration:none !important;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".fpsqco3G\\+Hf7gF1vYUOU9Q\\=\\={\r\n    width: -moz-fit-content;\r\n    width: fit-content;\r\n    display: flex;\r\n    margin: auto;\r\n    padding: 0;\r\n    flex-direction: row-reverse;\r\n}\r\n\r\n.rpJ2L0Uklhu0QGtrM7rb3Q\\=\\={\r\n    width: 24px;\r\n    height: 24px;\r\n    border-radius: 100%;\r\n    border: 2px solid rgb(244, 244, 244) ;\r\n    padding: 0;\r\n    background-color: #ededed;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    margin-left: -10px;\r\n    box-shadow: 0 0 2px rgb(0 0 0 / 10%);\r\n}\r\n\r\n\r\n.N71c75OLkFHuPvS5HeIkpQ\\=\\={\r\n    width: 100%;\r\n    height: 100%;\r\n    border-radius: 100%;\r\n    object-fit: fill;\r\n    -o-object-fit: fill;\r\n}\r\n\r\n\r\n.\\+F5c8j7QS2thczRvvUXBlw\\=\\={\r\n    background-color: rgb(39, 111, 236);\r\n    color: #fff;\r\n    text-decoration:none !important;\r\n}\r\n\r\n.\\+F5c8j7QS2thczRvvUXBlw\\=\\= span{\r\n    font-size: 12px;\r\n    text-decoration:none !important;\r\n}\r\n", "",{"version":3,"sources":["webpack://./resources/js/react/global/AvatarGroup.module.css"],"names":[],"mappings":"AAAA;IACI,uBAAkB;IAAlB,kBAAkB;IAClB,aAAa;IACb,YAAY;IACZ,UAAU;IACV,2BAA2B;AAC/B;;AAEA;IACI,WAAW;IACX,YAAY;IACZ,mBAAmB;IACnB,qCAAqC;IACrC,UAAU;IACV,yBAAyB;IACzB,aAAa;IACb,mBAAmB;IACnB,uBAAuB;IACvB,kBAAkB;IAClB,oCAAoC;AACxC;;;AAGA;IACI,WAAW;IACX,YAAY;IACZ,mBAAmB;IACnB,gBAAgB;IAChB,mBAAmB;AACvB;;;AAGA;IACI,mCAAmC;IACnC,WAAW;IACX,+BAA+B;AACnC;;AAEA;IACI,eAAe;IACf,+BAA+B;AACnC","sourcesContent":[".avatar_group{\r\n    width: fit-content;\r\n    display: flex;\r\n    margin: auto;\r\n    padding: 0;\r\n    flex-direction: row-reverse;\r\n}\r\n\r\n.avatar{\r\n    width: 24px;\r\n    height: 24px;\r\n    border-radius: 100%;\r\n    border: 2px solid rgb(244, 244, 244) ;\r\n    padding: 0;\r\n    background-color: #ededed;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    margin-left: -10px;\r\n    box-shadow: 0 0 2px rgb(0 0 0 / 10%);\r\n}\r\n\r\n\r\n.avatar_image{\r\n    width: 100%;\r\n    height: 100%;\r\n    border-radius: 100%;\r\n    object-fit: fill;\r\n    -o-object-fit: fill;\r\n}\r\n\r\n\r\n.empty_avatar{\r\n    background-color: rgb(39, 111, 236);\r\n    color: #fff;\r\n    text-decoration:none !important;\r\n}\r\n\r\n.empty_avatar span{\r\n    font-size: 12px;\r\n    text-decoration:none !important;\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"avatar_group": "fpsqco3G+Hf7gF1vYUOU9Q==",
@@ -19469,35 +19230,6 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_checkbox_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
-
-/***/ }),
-
-/***/ "./resources/js/react/file-upload/file-upload.css":
-/*!********************************************************!*\
-  !*** ./resources/js/react/file-upload/file-upload.css ***!
-  \********************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
-/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_file_upload_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!../../../../node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./file-upload.css */ "./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[8].oneOf[1].use[2]!./resources/js/react/file-upload/file-upload.css");
-
-            
-
-var options = {};
-
-options.insert = "head";
-options.singleton = false;
-
-var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_file_upload_css__WEBPACK_IMPORTED_MODULE_1__["default"], options);
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_1_node_modules_postcss_loader_dist_cjs_js_ruleSet_1_rules_8_oneOf_1_use_2_file_upload_css__WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 

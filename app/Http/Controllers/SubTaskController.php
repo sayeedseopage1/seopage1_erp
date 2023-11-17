@@ -104,7 +104,7 @@ class SubTaskController extends AccountBaseController
             ];
 
         }
-
+     // DB::beginTransaction();
         $validator = Validator::make($request->all(), $rules);
         if ($request->start_date == "Invalid Date" ) {
             return response($validator->errors(), 422);
@@ -185,6 +185,16 @@ class SubTaskController extends AccountBaseController
         $subTask->assigned_to = $request->user_id ? $request->user_id : null;
 
         $subTask->save();
+        $parent_task_count= Subtask::where('task_id',$subTask->task_id)->count();
+    //    / dd($parent_task_count);
+        if($parent_task_count > 0)
+        {
+            $update_parent_task= Task::where('id',$subTask->task_id)->first();
+            $update_parent_task->board_column_id = 3;
+            $update_parent_task->save();
+
+        }
+        
        // dd($subTask);
 
         $task_id = Task::where('id', $request->task_id)->first();
@@ -245,6 +255,10 @@ class SubTaskController extends AccountBaseController
         if($request->page_type == 'Primary Page Development')
         {
             $task_type->authorization_status= 0;
+            $helper = new HelperPendingActionController();
+
+
+            $helper->PrimaryPageAuthorization($task_s);
 
         }
         $task_type->page_name= $request->page_name;
@@ -257,9 +271,9 @@ class SubTaskController extends AccountBaseController
 
         $topManagement = User::where('role_id', 1)->get();
 
-        foreach ($topManagement as $user) {
-            Notification::send($user, new PrimaryPageNotification($task_type));
-        }
+        // foreach ($topManagement as $user) {
+        //     Notification::send($user, new PrimaryPageNotification($task_type));
+        // }
 
         if($task->independent_task_status != 1)
         {

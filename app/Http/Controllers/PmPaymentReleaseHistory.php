@@ -40,7 +40,7 @@ class PmPaymentReleaseHistory extends AccountBaseController
        
        
         $startDate = Carbon::now()->startofMonth();
-        $assignEndDate = Carbon::now()->endofMonth();
+        $assignEndDate = Carbon::now()->endofMonth()->addDay();
         $pmId = 209;
       
        
@@ -160,19 +160,21 @@ class PmPaymentReleaseHistory extends AccountBaseController
     {
     //   /  dd($request->startDate, $request->endDate,$request->pmID);
         $startDate = Carbon::parse($request->startDate);
-        $assignEndDate = Carbon::parse($request->endDate);
+        // $assignEndDate = Carbon::parse($request->endDate);
+        $endDate = Carbon::parse($request->endDate);
+        $assignEndDate = $endDate->addDay();
        
         $pmId = $request->pmID;
         if($request->startDate == null)
         {
             $startDate = Carbon::now()->startofMonth();
-            $assignEndDate = Carbon::now()->endofMonth();
+            $assignEndDate = Carbon::now()->endofMonth()->addDay();
             $pmId = 209;
         }
         if($request->endDate == null)
         {
             
-            $assignEndDate = Carbon::now()->endofMonth();
+            $assignEndDate = Carbon::now()->endofMonth()->addDay();
            
         }
         if($request->pmID == null)

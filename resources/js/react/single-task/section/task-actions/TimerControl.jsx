@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useMemo } from "react";
-import Button from "../../components/Button";
-import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
+import _ from "lodash";
+import React, { useEffect, useMemo, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
     useLazyGetTaskDetailsQuery,
     useLazyGetUserTrackTimeQuery,
     useStartTimerApiMutation,
     useStopTimerApiMutation
 } from "../../../services/api/SingleTaskPageApi";
+import { setTaskStatus } from "../../../services/features/subTaskSlice";
 import { CompareDate } from "../../../utils/dateController";
-import _ from "lodash";
-import { useDispatch } from "react-redux";
-import { setLessTrackModal, setTaskStatus } from "../../../services/features/subTaskSlice";
-import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 import { User } from "../../../utils/user-details";
-import { useNavigate } from "react-router-dom";
+import Button from "../../components/Button";
+import StartTimerConfirmationModal from "./StartTimerConfirmationModal";
+import LessTrackTimerModal from "./stop-timer/LessTrackTimerModal";
 
 
 
@@ -101,9 +101,9 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
 
     // timer start control
-    const startTimerControl = () => {
+    const startTimerControl = async () => {
         setIsOpenConfirmationModal(false);
-        startTimerApi({
+        await startTimerApi({
             task_id: task?.id,
             project_id: task?.projectId,
             memo: task?.title,
@@ -127,44 +127,7 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
                 }
             })
             .catch((err) => {
-                // TODO: Need to check again backend condition...
-
-                if(err.status === 400){
-                    if(err.data.acknowledgement_submitted === false){
-                        Swal.fire({
-                            title:  "You have not meet last day's minimum hour count. Please share the reasons!",
-                            showDenyButton: true,
-                            confirmButtonText: 'Yes',
-                            denyButtonText: `Close`,
-                            icon: 'warning'
-                          }).then((result) => {
-                            /* Read more about isConfirmed, isDenied below */
-                            if (result.isConfirmed) {
-                                dispatch(setLessTrackModal({
-                                    show: true,
-                                    type: 'START_TIMER',
-                                    date: dayjs.dayjs(err?.data?.date).format("MMM DD, YYYY"),
-                                }))
-                            }
-                          })
-                     }
-
-                     else if(err.data.daily_submission_submitted === false){
-                        Swal.fire({
-                            title:  "You didn't submit last day daily submission",
-                            showDenyButton: true,
-                            confirmButtonText: 'Yes',
-                            denyButtonText: `Close`,
-                            icon: 'warning'
-                          }).then((result) => {
-                            /* Read more about isConfirmed, isDenied below */
-                            if (result.isConfirmed) {
-                                navigate(`?modal=daily-submission&date_type=last-date`)
-                            }
-                          })
-                     }
-
-                }
+                console.log(err);
             });
     };
 
@@ -215,30 +178,32 @@ const TimerControl = ({ task, timerStart, setTimerStart, auth }) => {
 
     // handle stop timer
     const handleStopTimer = () => {
-        // fetch data
-        getUserTrackTime(loggedUser?.getId())
-        .unwrap()
-        .then(res => {
-            if(res){
-                let currentTime = dayjs.dayjs(res.current_time);
-                let target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
-                const isSaturday = currentTime.day() === 6;
+        stopTimer();
 
-                if(isSaturday){
-                    target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
-                }
+        // // fetch data
+        // getUserTrackTime(loggedUser?.getId())
+        // .unwrap()
+        // .then(res => {
+        //     if(res){
+        //         let currentTime = dayjs.dayjs(res.current_time);
+        //         let target = currentTime.set('hour', 16).set('minute', 45).set('second', 0);
+        //         const isSaturday = currentTime.day() === 6;
 
-                let check = dayjs.dayjs(currentTime).isBefore(target);
-                let isDev = _.includes([5, 9 , 10], Number(auth?.getRoleId()));
-                if(!check && isDev){
-                    res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER', date: 'Today'})) : stopTimer()
-                }else{
-                    stopTimer();
-                }
-            }
+        //         if(isSaturday){
+        //             target = currentTime.set('hour', 13).set('minute', 0).set('second', 0);
+        //         }
 
-        })
-        .catch(err => console.log(err))
+        //         let check = dayjs.dayjs(currentTime).isBefore(target);
+        //         let isDev = _.includes([5, 9 , 10], Number(auth?.getRoleId()));
+        //         if(!check && isDev){
+        //             res.tracked_times < res.target_time ?  dispatch(setLessTrackModal({show: true, type: 'STOP_TIMER', date: 'Today'})) : stopTimer()
+        //         }else{
+        //             stopTimer();
+        //         }
+        //     }
+
+        // })
+        // .catch(err => console.log(err))
     }
 
     // control loading states...

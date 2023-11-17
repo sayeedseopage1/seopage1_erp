@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CKEditorComponent from "../../../../../ckeditor";
 import Button from "../../../../components/Button";
 
-const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmit, isSubmitting, lessTrackDate }) => {
+const LeaveExplanationOption = ({ id, onChecked, checked, parentReason, onSubmit, isSubmitting, lessTrackDate }) => {
     const [leavePeriod, setLeavePeriod] = useState("");
     const [comment, setComment] = useState("");
     const [duratonStart, setDurationStart] = useState("08:00 AM");
@@ -60,7 +60,7 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmi
     }
 
     // handle submission
-    const handleSubmittion = (e) => {
+    const handleSubmission = (e) => {
         e.preventDefault();
         const data = {
             reason_for_less_tracked_hours_a_day_task: parentReason,
@@ -68,8 +68,8 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmi
             durations: JSON.stringify([{id: 'de2sew', start: duratonStart, end: durationEnd}]),
             comment,
             leave_period: leavePeriod,
-        };  
-        
+        };
+
         if(isValid()){
             onSubmit(data);
         }else{
@@ -101,7 +101,7 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmi
                         htmlFor="IHadHalfDayOfLeaveToday"
                         className="m-0 p-0"
                     >
-                        I had half day of leave <strong>{lessTrackDate}</strong> 
+                        I had half day of leave <strong>{lessTrackDate}</strong>
                     </label>
                 </div>
                 {checked && (
@@ -189,8 +189,8 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmi
                                 Back
                             </Button>
                             {
-                                !isSubmitting ? 
-                                <Button onClick={handleSubmittion} className="">
+                                !isSubmitting ?
+                                <Button onClick={handleSubmission} className="">
                                     Submit
                                 </Button>
                                 : <Button className="cursor-processing">
@@ -213,4 +213,4 @@ const LeaveExplainationOption = ({ id, onChecked, checked, parentReason, onSubmi
     );
 };
 
-export default LeaveExplainationOption;
+export default LeaveExplanationOption;

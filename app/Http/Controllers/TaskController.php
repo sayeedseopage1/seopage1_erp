@@ -9,6 +9,8 @@ use App\Http\Requests\Tasks\StoreTask;
 use App\Http\Requests\Tasks\UpdateTask;
 use App\Models\BaseModel;
 use App\Models\EmployeeDetails;
+use App\Models\PendingAction;
+use App\Models\PendingActionPast;
 use App\Models\Pinned;
 use App\Models\PMProject;
 use App\Models\PmTaskGuideline;
@@ -856,7 +858,9 @@ class TaskController extends AccountBaseController
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-        $this->logProjectActivity($task->project->id, $link);
+        if($task->independent_task_status == 0)
+        {
+            $this->logProjectActivity($task->project->id, $link);
 
         $this->triggerPusher('notification-channel', 'notification', [
             'user_id' => $task->project->pm_id,
@@ -868,6 +872,9 @@ class TaskController extends AccountBaseController
         //dd("hdbjasdbjasd");
 
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
+
+        }
+        
 
         //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return response()->json([
@@ -2934,8 +2941,11 @@ class TaskController extends AccountBaseController
         //     $task_revision->sale_accept = true;
         //     $task_revision->final_responsible_person = 'S';
         // }
+        $project= Project::where('id',$task_status->project_id)->first();
 
-        $task_revision->added_by = Auth::id();
+            $task_revision->added_by = Auth::id();
+
+
         $taskRevisionFind = TaskRevision::where('task_id', $task_status->id)->orderBy('id', 'desc')->get();
         foreach ($taskRevisionFind as $taskRevision) {
             $taskRevision->revision_no = $taskRevision->revision_no + 1;
@@ -2953,6 +2963,7 @@ class TaskController extends AccountBaseController
         // }
         // dd($task_revision);
         $task_revision->save();
+
 
 
         // CREATE DISPUTE
@@ -3284,6 +3295,47 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->google_drive_link = $data['google_drive_link'];
         $pm_task_guideline->instruction_plugin = $data['instruction_plugin'];
         $pm_task_guideline->save();
+        $project= Project::where('id',$pm_task_guideline->project_id)->first();
+        $actions = PendingAction::where('code','SDCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+              //  $project_id =Project::where('id',$project->project_id)->first();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message. ' authorized by '.Auth::user()->name;
+              //  $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+               
+           
+           
+        }
+       
+    }
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
 
@@ -3369,6 +3421,15 @@ class TaskController extends AccountBaseController
 
         $task_guideline_count = PmTaskGuideline::where('project_id', $data['project_id'])->where('status', 0)->count();
         if ($pm_task_guideline_authorization != null && $task_guideline_count > 0) {
+
+            //need pending action
+            $project= Project::where('id',$pm_task_guideline->project_id)->first();
+            $helper = new HelperPendingActionController();
+
+
+            $helper->TaskGuidelineAuthorization($project);
+
+            //need pending action
             foreach ($users as $user) {
                 Notification::send($user, new PmTaskGuidelineNotification($pm_task_guideline_authorization));
             }
@@ -3379,7 +3440,7 @@ class TaskController extends AccountBaseController
 
     public function updateTaskGuideline(Request $request, $id)
     {
-
+       // DB::beginTransaction();
         $reference_links = json_encode($request->reference_link);
         $colors = json_encode($request->color);
         $color_descriptions = json_encode($request->color_description);
@@ -3431,7 +3492,10 @@ class TaskController extends AccountBaseController
             $pm_task_guideline_update->status = 0;
         }
 
+
+
         $pm_task_guideline_update->save();
+
         return response()->json(['status' => 200]);
     }
 
@@ -3450,6 +3514,44 @@ class TaskController extends AccountBaseController
             $pm_task_guideline->status = 1;
             $pm_task_guideline->save();
         }
+        $actions = PendingAction::where('code','TGA')->where('past_status',0)->where('project_id',$pm_task_guideline_authorization->project_id)->get();
+        //  dd($actions);
+          if($actions != null)
+          {
+          foreach ($actions as $key => $action) {
+              $project= Project::where('id',$pm_task_guideline_authorization->project_id)->first();
+
+                  $action->authorized_by= Auth::id();
+                  $action->authorized_at= Carbon::now();
+                  $action->past_status = 1;
+                  $action->save();
+                  $project_manager= User::where('id',$project->pm_id)->first();
+                  $client= User::where('id',$project->client_id)->first();
+                  $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                  $past_action= new PendingActionPast();
+                  $past_action->item_name = $action->item_name;
+                  $past_action->code = $action->code;
+                  $past_action->serial = $action->serial;
+                  $past_action->action_id = $action->id;
+                  $past_action->heading = $action->heading;
+                  $past_action->message = 'Task guideline authorization from PM <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was completed by '.$authorize_by->name;
+               //   $past_action->button = $action->button;
+                  $past_action->timeframe = $action->timeframe;
+                  $past_action->authorization_for = $action->authorization_for;
+                  $past_action->authorized_by = $action->authorized_by;
+                  $past_action->authorized_at = $action->authorized_at;
+                  $past_action->expired_status = $action->expired_status;
+                  $past_action->past_status = $action->past_status;
+                  $past_action->project_id = $action->project_id;
+                  $past_action->task_id = $action->task_id;
+                  $past_action->client_id = $action->client_id;
+                  $past_action->milestone_id = $action->milestone_id;
+                  $past_action->save();
+
+
+          }
+      }
 
 
         return response()->json([
@@ -3566,6 +3668,31 @@ class TaskController extends AccountBaseController
                 ->leftJoin('pending_parent_tasks', 'tasks.pp_task_id', 'pending_parent_tasks.id')
                 ->where('tasks.id', $id)
                 ->first();
+
+                // ONLY FOR PENDIN PERENT TASK FILE START
+
+            $ppTaskImages = DB::table('tasks')
+            ->leftJoin('task_files', 'tasks.pp_task_id', 'task_files.task_id')
+            ->select('task_files.filename as pp_task_file_url', 'task_files.filename as pp_task_file_name','task_files.id as pp_task_files_id')
+            ->where('tasks.id', $id)
+            ->get();
+
+            $pp_prefix = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/';
+
+            $ppTaskFileData = [];
+
+            foreach($ppTaskImages as $item){
+                if($item->pp_task_file_url != null){
+                    $fileUrl = $pp_prefix . $item->pp_task_file_url;
+                    $fileExtension = pathinfo($item->pp_task_file_url, PATHINFO_EXTENSION);
+                    $item->pp_task_file_url = $fileUrl;
+                    $item->pp_task_file_icon = $fileExtension;
+                    $item->pp_task_file_id = $item->pp_task_files_id;
+                    array_push($ppTaskFileData, $item);
+                }
+            }
+
+            // ONLY FOR PENDIN PERENT TASK FILE END
 
 
             $taskImages = DB::table('tasks')
@@ -3708,6 +3835,7 @@ class TaskController extends AccountBaseController
             }
             return response()->json([
                 'task' => $task,
+                'ppTaskFiles' => $ppTaskFileData,
                 'taskFiles' => $taskFileData,
                 'parent_task_heading' => $parent_task_heading,
                 'parent_task_action' => $parent_task_action,
@@ -4516,6 +4644,13 @@ class TaskController extends AccountBaseController
         }
 
         $dispute->save();
+        $task= Task::where('id',$dispute->task_id)->first();
+        $disputes= TaskRevisionDispute::where('id',$dispute->id)->first();
+        $helper = new HelperPendingActionController();
+
+
+        $helper->TaskDisputeAuthorization($task,$disputes);
+
         // dd($revision, $dispute);
     }
 
@@ -4577,14 +4712,14 @@ class TaskController extends AccountBaseController
                     'tasks.id as id',
                     'tasks.heading as title',
                     'tasks.subtask_id',
-                  
+
                     'task_users.user_id as task_user_id'
                 )
                 ->first();
                 $lead_dev= User::where('role_id',6)->orderBy('id','desc')->first();
+                $task->lead_developer = null;
 
-
-                if ($task->lead_developer) {
+                if ($lead_dev) {
                     $task->lead_developer = get_user($lead_dev->id, false);
                 }
             if ($task->subtask_id) {
@@ -4884,6 +5019,44 @@ class TaskController extends AccountBaseController
             $query->resolved_on = Carbon::now();
             $query->has_update = true;
             $query->save();
+
+            $actions = PendingAction::where('code','TDA')->where('past_status',0)->where('task_id',$query->task_id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+                    $task= Task::where('id',$query->task_id)->first();
+                    $project= Project::where('id',$task->project_id)->first();
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$project->pm_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = $action->message .'was resolved by '.$authorize_by->name;
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                    $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+                    $past_action->milestone_id = $action->milestone_id;
+                    $past_action->save();
+
+
+            }
+        }
 
             $filter = [
                 "dispute_id" => $request->dispute_id ?? NULL,
@@ -5200,7 +5373,8 @@ class TaskController extends AccountBaseController
 
     public function taskTypeAuthorization(Request $request, $id)
     {
-        // dd($$request->all());
+        //dd($request->all());
+    //    / DB::beginTransaction();
         if ($request->status == 'approved') {
             $taskType = TaskType::find($id);
             $taskType->authorization_status = 1;
@@ -5213,6 +5387,46 @@ class TaskController extends AccountBaseController
             $taskType->comment = $request->comment;
             $taskType->save();
         }
+        $actions = PendingAction::where('code','PPA')->where('past_status',0)->where('task_id',$taskType->task_id)->get();
+
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+                $task= Task::where('id',$taskType->task_id)->first();
+                $project= Project::where('id',$task->project_id)->first();
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $lead_developer= User::where('role_id',6)->orderBy('id','desc')->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = 'Primary page authorization needed from lead developer <a href="'.route('employees.show',$lead_developer->id).'">'.$lead_developer->name.'</a> for Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> was completed by '.$authorize_by->name;
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+                $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+              //  dd($past_action);
+
+
+        }
+    }
 
         return response()->json([
             'authorization_status' => $taskType->authorization_status,
@@ -5221,11 +5435,14 @@ class TaskController extends AccountBaseController
     }
     public function get_today_tasks(Request $request, $id)
     {
-        //    / dd("smkdmaskdm");
+        $id = Auth::user()->id;
+            // dd($request->all());
         $startDate = Carbon::today()->format('Y-m-d');
         $endDate = Carbon::today()->format('Y-m-d');
-        //    / dd($startDate, $endDate);
-        $todayData = ProjectTimeLog::select(
+
+        $date = Carbon::parse($request->date_type);
+
+        $tasks = ProjectTimeLog::select(
             'tasks.id',
             'tasks.heading as task_title',
             'task_types.page_url',
@@ -5238,7 +5455,7 @@ class TaskController extends AccountBaseController
             'daily_submissions.status as daily_submission_status',
             'project_time_logs.created_at as project_time_logs_created_at',
 
-            DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . Carbon::today() . '" AND DATE(project_time_logs.end_time) <= "' . Carbon::today() . '"), 0) as total_time_spent'),
+            DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . $date . '" AND DATE(project_time_logs.end_time) <= "' . $date . '"), 0) as total_time_spent'),
         )
             ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
             ->join('projects', 'projects.id', 'tasks.project_id')
@@ -5248,84 +5465,114 @@ class TaskController extends AccountBaseController
             ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
             ->where('project_time_logs.user_id', $id)
 
-            ->whereDate('project_time_logs.created_at', Carbon::today())
+            ->whereDate('project_time_logs.created_at', $date)
             ->groupBy('tasks.id')
             ->get();
 
-        // dd($todayData);
-        if ($todayData->isEmpty()) {
-            $yesterdayData = ProjectTimeLog::select(
-                'tasks.id',
-                'tasks.heading as task_title',
-                'task_types.page_url',
-                'projects.id as projectId',
-                'projects.project_name',
-                'projects.project_budget',
-                'clients.name as client_name',
-                'clients.id as clientId',
-                'developers.id as developer_id',
-                'project_time_logs.created_at as project_time_logs_created_at',
 
-                DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . Carbon::yesterday() . '" AND DATE(project_time_logs.end_time) <= "' . Carbon::yesterday() . '"), 0) as total_time_spent'),
-            )
-                ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
-                ->join('projects', 'projects.id', 'tasks.project_id')
-                ->join('users as clients', 'clients.id', 'projects.client_id')
-                ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
-                ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-                ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
-                ->where('project_time_logs.user_id', $id)
 
-                ->whereDate('project_time_logs.created_at', Carbon::yesterday())
+        // //    / dd($startDate, $endDate);
+        // $todayData = ProjectTimeLog::select(
+        //     'tasks.id',
+        //     'tasks.heading as task_title',
+        //     'task_types.page_url',
+        //     'projects.id as projectId',
+        //     'projects.project_name',
+        //     'projects.project_budget',
+        //     'clients.name as client_name',
+        //     'clients.id as clientId',
+        //     'developers.id as developer_id',
+        //     'daily_submissions.status as daily_submission_status',
+        //     'project_time_logs.created_at as project_time_logs_created_at',
 
-                ->groupBy('tasks.id')
-                ->get();
-            //   dd($yesterdayData);
-            if ($yesterdayData->isEmpty()) {
-                //  dd("nsnaslkdn");
-                $user_data = User::where('id', $id)->first();
-                $project_time_log_date = ProjectTimeLog::where('user_id', $id)->orderBy('id', 'desc')->first();
-                $last_login = $project_time_log_date->created_at;
+        //     DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . Carbon::today() . '" AND DATE(project_time_logs.end_time) <= "' . Carbon::today() . '"), 0) as total_time_spent'),
+        // )
+        //     ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
+        //     ->join('projects', 'projects.id', 'tasks.project_id')
+        //     ->join('users as clients', 'clients.id', 'projects.client_id')
+        //     ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
+        //     ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
+        //     ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
+        //     ->where('project_time_logs.user_id', $id)
 
-                // Check if the last login date is today's date
+        //     ->whereDate('project_time_logs.created_at', Carbon::today())
+        //     ->groupBy('tasks.id')
+        //     ->get();
 
-                $yesterdayData = ProjectTimeLog::select(
-                    'tasks.id',
-                    'tasks.heading as task_title',
-                    'task_types.page_url',
-                    'projects.id as projectId',
-                    'projects.project_name',
-                    'projects.project_budget',
-                    'clients.name as client_name',
-                    'clients.id as clientId',
-                    'developers.id as developer_id',
-                    'project_time_logs.created_at as project_time_logs_created_at',
+        // // dd($todayData);
+        // if ($todayData->isEmpty()) {
+        //     $yesterdayData = ProjectTimeLog::select(
+        //         'tasks.id',
+        //         'tasks.heading as task_title',
+        //         'task_types.page_url',
+        //         'projects.id as projectId',
+        //         'projects.project_name',
+        //         'projects.project_budget',
+        //         'clients.name as client_name',
+        //         'clients.id as clientId',
+        //         'developers.id as developer_id',
+        //         'project_time_logs.created_at as project_time_logs_created_at',
 
-                    DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . $last_login . '" AND DATE(project_time_logs.end_time) <= "' . $last_login . '"), 0) as total_time_spent'),
-                )
-                    ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
-                    ->join('projects', 'projects.id', 'tasks.project_id')
-                    ->join('users as clients', 'clients.id', 'projects.client_id')
-                    ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
-                    ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
-                    ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
-                    ->where('project_time_logs.user_id', $id)
+        //         DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . Carbon::yesterday() . '" AND DATE(project_time_logs.end_time) <= "' . Carbon::yesterday() . '"), 0) as total_time_spent'),
+        //     )
+        //         ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
+        //         ->join('projects', 'projects.id', 'tasks.project_id')
+        //         ->join('users as clients', 'clients.id', 'projects.client_id')
+        //         ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
+        //         ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
+        //         ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
+        //         ->where('project_time_logs.user_id', $id)
 
-                    ->whereDate('project_time_logs.created_at', $last_login)
-                    ->groupBy('tasks.id')
-                    ->get();
-            }
-        }
+        //         ->whereDate('project_time_logs.created_at', Carbon::yesterday())
 
-        if ($request->date_type == 'today') {
-            // dd("today");
-            $tasks = $todayData;
-            $date = Carbon::now();
-        } else {
-            //   dd("last_day");
-            $tasks = $yesterdayData;
-            $date = Carbon::yesterday();
-        }
+        //         ->groupBy('tasks.id')
+        //         ->get();
+        //     //   dd($yesterdayData);
+        //     if ($yesterdayData->isEmpty()) {
+        //         //  dd("nsnaslkdn");
+        //         $user_data = User::where('id', $id)->first();
+        //         $project_time_log_date = ProjectTimeLog::where('user_id', $id)->orderBy('id', 'desc')->first();
+        //         $last_login = $project_time_log_date->created_at;
+
+        //         // Check if the last login date is today's date
+
+        //         $yesterdayData = ProjectTimeLog::select(
+        //             'tasks.id',
+        //             'tasks.heading as task_title',
+        //             'task_types.page_url',
+        //             'projects.id as projectId',
+        //             'projects.project_name',
+        //             'projects.project_budget',
+        //             'clients.name as client_name',
+        //             'clients.id as clientId',
+        //             'developers.id as developer_id',
+        //             'project_time_logs.created_at as project_time_logs_created_at',
+
+        //             DB::raw('COALESCE((SELECT SUM(project_time_logs.total_minutes) FROM project_time_logs WHERE project_time_logs.user_id = "' . $id . '" AND tasks.id= project_time_logs.task_id AND DATE(project_time_logs.start_time) >= "' . $last_login . '" AND DATE(project_time_logs.end_time) <= "' . $last_login . '"), 0) as total_time_spent'),
+        //         )
+        //             ->join('tasks', 'tasks.id', 'project_time_logs.task_id')
+        //             ->join('projects', 'projects.id', 'tasks.project_id')
+        //             ->join('users as clients', 'clients.id', 'projects.client_id')
+        //             ->join('users as developers', 'developers.id', 'project_time_logs.user_id')
+        //             ->leftJoin('task_types', 'task_types.task_id', 'tasks.id')
+        //             ->leftJoin('daily_submissions', 'daily_submissions.task_id', 'tasks.id')
+        //             ->where('project_time_logs.user_id', $id)
+
+        //             ->whereDate('project_time_logs.created_at', $last_login)
+        //             ->groupBy('tasks.id')
+        //             ->get();
+        //     }
+        // }
+
+        // if ($request->date_type == 'today') {
+        //     // dd("today");
+        //     $tasks = $todayData;
+        //     $date = Carbon::now();
+        // } else {
+        //     //   dd("last_day");
+        //     $tasks = $yesterdayData;
+        //     $date = Carbon::yesterday();
+        // }
 
         $tasks->each(function ($task) {
             $daily_submission = DailySubmission::select("status")
@@ -5588,7 +5835,7 @@ class TaskController extends AccountBaseController
 
             ->whereIn('tasks.board_column_id', [2, 3])
             ->count();
-        if ($tasks > 4) {
+        if ($tasks > 3) {
             return response()->json([
                 'tasks' => $tasks,
                 'message' => 'error',

@@ -10,7 +10,7 @@ import { useSubmitDailySubmissionMutation } from "../../../services/api/dailySub
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }) => {
+const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading, refetch }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [attachmentLink, setAttachmentLink] = useState('');
@@ -89,6 +89,7 @@ const TodaysUpdateModalTableRow = ({ data, date, index, open, setOpen, loading }
                     title: 'Submitted successfully'
                 })
                 setOpen(null);
+                refetch();
             })
             .catch(err => console.log(err))
     }

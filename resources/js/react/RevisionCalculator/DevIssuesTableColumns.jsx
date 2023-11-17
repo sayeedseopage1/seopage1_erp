@@ -81,6 +81,9 @@ export const DevIssuesTableColumns = [
         moveable: false,
         sort: (row) => {
             const shortCode = row?.final_responsible_person;
+            const disputed = row?.dispute_created;
+            const disputeBetween = row?.dispute_between;
+            
             const obj = {
                 C: row.client_name,
                 PM: row.project_manager_name,
@@ -89,54 +92,24 @@ export const DevIssuesTableColumns = [
                 D: row.developer_name,
                 UD: row.developer_name,
                 GD: row.developer_name 
-            } 
+            }
+            
+            if(!shortCode && disputed && disputeBetween==='LDR'){
+                return obj.D;
+            }
             return obj[`${shortCode}`]
         },
         rowSpan: 2,
         marge: false,
         row: ({ row }) => {
-            if (!row) return null;
-  
+            if (!row) return null; 
+            const rPerson = row?.final_responsible_person;
+            const disputed = row?.dispute_created;
+ 
             return (
                 <Switch>
                     <Switch.Case
-                        condition={row.final_responsible_person === "PM"}
-                    >
-                        <a
-                            href={`/account/employees/${row.project_manager_id}`}
-                            title={row.project_manager_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.project_manager_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "S"}
-                    >
-                        <a
-                            href={`/account/employees/${row.sales_id}`}
-                            title={row.sales_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.sales_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "C"}
-                    >
-                        <a
-                            href={`/account/clients/${row.clientId}`}
-                            title={row.client_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.client_name}
-                        </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "LD"}
+                        condition={rPerson === "LD"}
                     >
                         <a
                             href={`/account/employees/${row.lead_developer_id}`}
@@ -147,10 +120,8 @@ export const DevIssuesTableColumns = [
                         </a>
                     </Switch.Case>
 
-                    
-
                     <Switch.Case
-                        condition={row.final_responsible_person === "D"}
+                        condition={_.includes (["D", "UD", "GD"], rPerson)}
                     >
                         <a
                             href={`/account/employees/${row.developer_id}`}
@@ -162,7 +133,7 @@ export const DevIssuesTableColumns = [
                     </Switch.Case>
 
                     <Switch.Case
-                        condition={row.final_responsible_person === "UD"}
+                        condition={!rPerson && disputed && row.raised_against_p }
                     >
                         <a
                             href={`/account/employees/${row.developer_id}`}
@@ -171,18 +142,7 @@ export const DevIssuesTableColumns = [
                         >
                             {row.developer_name}
                         </a>
-                    </Switch.Case>
-
-                    <Switch.Case
-                        condition={row.final_responsible_person === "GD"}
-                    >
-                        <a
-                            href={`/account/employees/${row.developer_id}`}
-                            title={row.developer_name}
-                            className="multiline-ellipsis"
-                        >
-                            {row.developer_name}
-                        </a>
+                        ({row.raised_against_p}%)
                     </Switch.Case>
                 </Switch>
             ); 
@@ -238,7 +198,7 @@ const Verdict = ({row}) => {
         }else{
             return (
                 <div>
-                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_rasied_against_name}</a> ({row?.raised_against_percent}%)
+                     Both parties were hold partially responsible. Party <a  className="hover-underline" href={`/account/employees/${row?.dispute_raised_by_id}`}>{row?.dispute_raised_by_name}</a> ({row?.raised_by_percent}%) & Party <a className="hover-underline" href={`/account/employees/${row?.dispute_raised_against_id}`}>{row?.dispute_raised_against_name}</a> ({row?.raised_against_percent}%)
                 </div>
             )
         }

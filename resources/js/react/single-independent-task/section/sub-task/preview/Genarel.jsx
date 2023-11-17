@@ -262,13 +262,13 @@ const Genarel = ({task, isFetching}) => {
             </div>
 
             <div className="col-12 border-top py-4 mt-4">
-                <Accordion expendable={false} title="General Guidelines">
+                {/* <Accordion expendable={false} title="General Guidelines">
                     {
                         isFetching ? 
                         <ArticleLoader /> :
                         <Guideline text={task?.guidelines} editorContainerClass="modal-guideline-editor-text" />
                     }
-                </Accordion>
+                </Accordion> */}
 
                 {_.size(task?.revisions) > 0 &&
                     <Accordion

@@ -40,6 +40,12 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Traits\PmDashboardAdminView;
 use App\Models\PmCoreMetric;
+use App\Models\DeveloperStopTimer;
+use Auth;
+use App\Models\Attendance;
+use App\Models\DailySubmission;
+
+use function PHPUnit\Framework\isNull;
 
 class DashboardController extends AccountBaseController
 {
@@ -489,4 +495,280 @@ class DashboardController extends AccountBaseController
 
         return response()->json(['status'=>200]);
       }
+      public function DeveloperCheckOut(Request $request)
+    {
+
+        $currentDateTime = Carbon::now();
+        $desiredTime = Carbon::createFromTime(16, 45, 0); // 4:29 PM
+        $current_day = Carbon::now();
+        // dd($current_day->dayOfWeek);
+        $dayOfWeek = $current_day->dayOfWeek;
+        if ($dayOfWeek === Carbon::SATURDAY) {
+            // It's Monday
+            $desiredTime = Carbon::createFromTime(13, 00, 0);
+        }
+        // dd($desiredTime);
+
+
+        // Current time is greater than 4:29 PM
+        // Add your logic here
+        $stop_time = new DeveloperStopTimer();
+        $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+        $stop_time->durations = $request->durations;
+        $stop_time->comment = $request->comment;
+        $stop_time->leave_period = $request->leave_period;
+        $stop_time->child_reason = $request->child_reason;
+        $stop_time->responsible_person = $request->responsible_person;
+        $stop_time->related_to_any_project = $request->related_to_any_project;
+        $stop_time->responsible_person_id = $request->responsible_person_id;
+        $stop_time->project_id = $request->project_id;
+        $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+        $stop_time->task_id = $request->task_id;
+        $stop_time->user_id = $request->user_id;
+        $stop_time->transition_hours = $request->transition_hours;
+        $stop_time->transition_minutes = $request->transition_minutes;
+        $stop_time->date = $request->date;
+        $stop_time->client = $request->client;
+
+        $stop_time->save();
+
+        // $task = Task::where('id', $request->task_id)->first();
+        // if ($task->subtask_id == null) {
+        //     $subtasks = Subtask::where('task_id', $task->id)->get();
+        //     $subtasks_count = Subtask::where('task_id', $task->id)->count();
+        //     $completed_subtask_count = 0;
+
+        //     foreach ($subtasks as $subtask) {
+        //         // Increment the count if the subtask is completed (assuming board_column_id 8 indicates completion)
+        //         $completed_subtask_count += Task::where('subtask_id', $subtask->id)->where('board_column_id', 8)->count();
+        //     }
+        //     if ($subtasks_count == $completed_subtask_count || $subtasks_count == 0) {
+        //         $parent_task_action = "Lead Developer Can Complete Parent Task";
+        //     } else {
+        //         $parent_task_action = "Lead Developer Can not Complete Parent Task";
+        //     }
+        // } else {
+        //     $parent_task_action = "No Subtask on this parent tasks";
+        // }
+
+
+
+        return response()->json([
+            'stop_time' => $stop_time,
+
+
+        ]);
+    }
+    public function clockInStatus()
+    {
+        $user_id = Auth::user()->id;
+        $today = Carbon::now();
+
+        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+
+        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->where('clock_out_time')->first();
+
+
+        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at','!=',$today)->orderBy('created_at','desc')->first();
+        $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+                            ->whereDate('created_at', $userClockIn->created_at)
+                            ->orderBy('created_at', 'desc')
+                            ->groupBy('task_id')
+                            ->get('task_id');
+        $userTaskCount = $userGetTasks->count();
+
+        $userDailyTaskSubmission = true;
+        if ($userTaskCount > 0) {
+            $arr = [];
+            foreach($userGetTasks as $userGetTask){
+                array_push($arr, $userGetTask->task_id);
+            }
+            $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                                    -> whereIn('task_id', array_values($arr))
+                                    -> whereDate('report_date', $userClockIn->created_at)
+                                    -> get();
+
+
+            if($report->count() === $userTaskCount){
+                $userDailyTaskSubmission = true;
+            }else {
+                $userDailyTaskSubmission = false;
+            }
+
+        }else{
+            $userDailyTaskSubmission = true;
+        }
+
+        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
+        $createdAt = Carbon::parse($userClockIn->created_at);
+        $logStatus = true;
+
+        $minimum_log_hours = 0;
+
+        if($userDeveloperHoursTrack){
+            $logStatus = true;
+        }else{
+
+            if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+                $minimum_log_hours = 240;
+                if($userTotalMin < 240){
+                    $logStatus = false;
+                }else{
+                    $logStatus = true;
+                }
+            } else {
+                $minimum_log_hours = 420;
+                if($userTotalMin < 420){
+                    $logStatus = false;
+                }else $logStatus = true;
+            }
+        }
+
+
+    }else{
+        $logStatus = true;
+        $userDailyTaskSubmission = true;
+    }
+
+        $incomplete_hours = $minimum_log_hours - $userTotalMin;
+
+        return response()->json([
+            'data' => [
+                'check_in_check_out' => [
+                    'check_in_status' => $user ? true : false,
+                    'data' => $user,
+                ],
+                'daily_task_report' => [
+                    'daily_submission_status' => $userDailyTaskSubmission,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                    ],
+                ],
+                'hours_log_report' => [
+                    'hours_log_report_status' => $logStatus,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                        'complete_hours'=> $userTotalMin,
+                        'target_minimum_log_hours'=> $minimum_log_hours,
+                        'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                    ]
+                ]
+            ],
+        ]);
+    }
+
+    public function clockOutStatus()
+    {
+        $user_id = Auth::user()->id;
+        $today = Carbon::now();
+
+        if(Auth::user()->role_id = 5 || Auth::user()->role_id = 9 || Auth::user()->role_id = 10){
+
+        $user = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->first();
+        $user->clock_out_time = Carbon::now();
+        $user->save();
+
+        $userClockIn = Attendance::where('user_id',$user_id)->whereDate('created_at',$today)->orderBy('created_at','desc')->first();
+        $userGetTasks = ProjectTimeLog::where('user_id', $userClockIn->user_id)
+                            ->whereDate('created_at', $userClockIn->created_at)
+                            ->orderBy('created_at', 'desc')
+                            ->groupBy('task_id')
+                            ->get();
+        $userTaskCount = $userGetTasks->count();
+
+        $userDailyTaskSubmission = true;
+        if ($userTaskCount > 0) {
+            $arr = [];
+            foreach($userGetTasks as $userGetTask){
+                array_push($arr, $userGetTask->task_id);
+            }
+            $report = DailySubmission::where('user_id', $userClockIn->user_id)
+                                    -> whereIn('task_id', array_values($arr))
+                                    -> whereDate('report_date', $userClockIn->created_at)
+                                    -> get();
+
+
+            if($report->count() === $userTaskCount){
+                $userDailyTaskSubmission = true;
+            }else {
+                $userDailyTaskSubmission = false;
+            }
+        }else{
+            $userDailyTaskSubmission = true;
+        }
+
+        $userDeveloperHoursTrack = DeveloperStopTimer::where('user_id',$userClockIn->user_id)->whereDate('date','=',$userClockIn->created_at)->orderBy('created_at','desc')->first();
+        $userTotalMin = ProjectTimeLog::where('user_id',$user_id)->whereDate('created_at','=',$userClockIn->created_at)->orderBy('created_at','desc')->sum('total_minutes');
+        $createdAt = Carbon::parse($userClockIn->created_at);
+        $logStatus = true;
+
+        $minimum_log_hours = 0;
+
+        if ($createdAt->dayOfWeek === Carbon::SATURDAY) {
+            $minimum_log_hours = 240;
+            if($userTotalMin < 240){
+                $logStatus = false;
+            }
+        } else {
+            $minimum_log_hours = 420;
+            if($userTotalMin < 420){
+                $logStatus = false;
+            }
+        }
+
+        $logStatus = $userDeveloperHoursTrack ? true : false ;
+    }
+
+        $incomplete_hours = $minimum_log_hours - $userTotalMin;
+
+        return response()->json([
+            'data' => [
+                'check_in_check_out' => [
+                    'check_in_status' => false,
+                    'data' => $user,
+                ],
+                'daily_task_report' => [
+                    'daily_submission_status' => $userDailyTaskSubmission ? true : false,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                    ],
+                ],
+                'hours_log_report' => [
+                    'hours_log_report_status' => $logStatus,
+                    'data' => [
+                        'checking_date'=> $userClockIn->created_at,
+                        'complete_hours'=> $userTotalMin,
+                        'target_minimum_log_hours'=> $minimum_log_hours,
+                        'incomplete_hours'=> $incomplete_hours < 0 ? 0 : $incomplete_hours,
+                    ]
+                ]
+            ],
+        ]);
+    }
+
+
+
+    public function developerDailytrackHoursLog(Request $request)
+    {
+        // dd($request->all());
+        $stop_time = new DeveloperStopTimer();
+        $stop_time->reason_for_less_tracked_hours_a_day_task = $request->reason_for_less_tracked_hours_a_day_task;
+        $stop_time->durations = $request->durations;
+        $stop_time->comment = $request->comment;
+        $stop_time->leave_period = $request->leave_period;
+        $stop_time->child_reason = $request->child_reason;
+        $stop_time->responsible_person = $request->responsible_person;
+        $stop_time->related_to_any_project = $request->related_to_any_project;
+        $stop_time->responsible_person_id = $request->responsible_person_id;
+        $stop_time->forgot_to_track_task_id = $request->forgot_to_track_task_id;
+        $stop_time->user_id = Auth::user()->id;
+        $stop_time->transition_hours = $request->transition_hours;
+        $stop_time->transition_minutes = $request->transition_minutes;
+        $stop_time->date = $request->date;
+
+        $stop_time->save();
+
+        return response()->json(['status'=>200]);
+    }
   }

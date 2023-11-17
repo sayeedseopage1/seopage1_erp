@@ -914,7 +914,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var LeaveExplainationOption = function LeaveExplainationOption(_ref) {
+var LeaveExplanationOption = function LeaveExplanationOption(_ref) {
   var id = _ref.id,
     onChecked = _ref.onChecked,
     checked = _ref.checked,
@@ -981,7 +981,7 @@ var LeaveExplainationOption = function LeaveExplainationOption(_ref) {
   };
 
   // handle submission
-  var handleSubmittion = function handleSubmittion(e) {
+  var handleSubmission = function handleSubmission(e) {
     e.preventDefault();
     var data = {
       reason_for_less_tracked_hours_a_day_task: parentReason,
@@ -1131,7 +1131,7 @@ var LeaveExplainationOption = function LeaveExplainationOption(_ref) {
             className: "ml-auto mr-2",
             children: "Back"
           }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
-            onClick: handleSubmittion,
+            onClick: handleSubmission,
             className: "",
             children: "Submit"
           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -1150,7 +1150,7 @@ var LeaveExplainationOption = function LeaveExplainationOption(_ref) {
     })
   });
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LeaveExplainationOption);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (LeaveExplanationOption);
 
 /***/ }),
 
@@ -1737,7 +1737,7 @@ var OptionFour = function OptionFour(_ref) {
   };
 
   // validation
-  var isVaild = function isVaild() {
+  var isValid = function isValid() {
     var errCount = 0;
     var err = new Object();
     if (comment === '') {
@@ -1766,7 +1766,7 @@ var OptionFour = function OptionFour(_ref) {
   };
 
   // handle submission
-  var handleSubmittion = function handleSubmittion(e) {
+  var handleSubmission = function handleSubmission(e) {
     var _person$id;
     e.preventDefault();
     var data = {
@@ -1784,13 +1784,13 @@ var OptionFour = function OptionFour(_ref) {
       responsible: responsible,
       client: client
     };
-    if (isVaild()) {
+    if (isValid()) {
       onSubmit(data);
     } else {
       Swal.fire({
         position: "center",
         icon: "error",
-        title: "Please fillup the all required fields!",
+        title: "Please fill up the all required fields!",
         showConfirmButton: true
       });
     }
@@ -2045,7 +2045,7 @@ var OptionFour = function OptionFour(_ref) {
             className: "ml-auto mr-2",
             children: "Back"
           }), !isSubmitting ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
-            onClick: handleSubmittion,
+            onClick: handleSubmission,
             className: "",
             children: "Submit"
           }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(_components_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {

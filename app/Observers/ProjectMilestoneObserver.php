@@ -17,7 +17,7 @@ class ProjectMilestoneObserver
     public function creating(ProjectMilestone $projectMilestone)
     {
         if (!isRunningInConsoleOrSeeding()) {
-            $projectMilestone->added_by = user()->id;
+        //    / $projectMilestone->added_by = user()->id;
         }
     }
 

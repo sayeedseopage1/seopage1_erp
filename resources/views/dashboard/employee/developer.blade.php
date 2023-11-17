@@ -119,6 +119,8 @@
         </div>
         @endif
         <!-- CLOCK IN CLOCK OUT END -->
+        <!-- User check in checkout button -->
+            <div id="employee-check-in-out-button" class="ml-auto d-flex clock-in-out mb-3 mb-lg-0 mb-md-0 m mt-4 mt-lg-0 mt-md-0 justify-content-between"></div>
     </div>
     <div class="emp-dash-detail">
         @if(count(array_intersect(['profile', 'shift_schedule', 'birthday', 'notices'], $activeWidgets)) > 0)

@@ -468,7 +468,11 @@ const SubTaskForm = ({ close }) => {
                                 placeholderText={`Ex: ${dayjs
                                     .dayjs()
                                     .format("DD-MM-YYYY")}`}
-                                minDate={dayjs.dayjs(task?.startDate).toDate()}
+                                minDate={
+                                    dayjs.dayjs(task?.startDate).isBefore(dayjs.dayjs()) ?
+                                    dayjs.dayjs().toDate() :
+                                    dayjs.dayjs(task?.startDate).toDate()
+                                }
                                 maxDate={
                                     dueDate ||
                                     dayjs.dayjs(task?.dueDate).toDate()

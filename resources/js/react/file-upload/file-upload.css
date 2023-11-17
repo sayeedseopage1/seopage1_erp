@@ -1,5 +1,5 @@
 
-.upload-file-modal{ 
+.upload-file-modal{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,7 +80,7 @@
     -ms-flex-direction: column;
     flex-direction: column;
     gap: 20px;
-    overflow-y: auto; 
+    overflow-y: auto;
     height: 100%;
     padding-bottom: 24px;
 }
@@ -132,14 +132,14 @@
 
 .sp1_file_upload--input-preview
 .uploaded-file-ext-sm{
-    padding: 0px 4px; 
+    padding: 0px 4px;
     bottom: 15px !important;
 }
 
 
 
 .sp1_file_upload--input-preview  .uploaded-file-name{
-    font-size: 14px; 
+    font-size: 14px;
     margin-top: 0;
 }
 
@@ -163,7 +163,7 @@
 }
 
 .sp1_file_upload--input-wrapper:hover{
-    color: rgba(14, 21, 36, 0.966) 
+    color: rgba(14, 21, 36, 0.966)
 }
 
 .sp1_file_upload--input-wrapper i.fa-cloud-arrow-up{
@@ -189,10 +189,10 @@
     color: #fff;
     cursor: pointer;
     border-color: #ff401f;
-    z-index: 2;
+    z-index: 3;
 }
 
-.sp1_file_upload--input-preview .__remove--btn i{ 
+.sp1_file_upload--input-preview .__remove--btn i{
     -moz-user-select: none;
     -webkit-user-select: none;
     user-select: none;
