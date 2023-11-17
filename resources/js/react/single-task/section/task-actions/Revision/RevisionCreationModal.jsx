@@ -5,6 +5,7 @@ import { useRevision } from '../../../../hooks/useRevision';
 import { useCreateRevisionMutation } from "../../../../services/api/SingleTaskPageApi";
 import Button from "../../../components/Button";
 import SubmitButton from "../../../components/SubmitButton";
+import Swal from "sweetalert2";
 
 
 
@@ -89,7 +90,19 @@ const RevisionCreationModal = ({ close, task, auth }) => {
             })
             .catch(err => console.log(err));
         }else{
-            console.log('Your forgot to fill up some required fields')
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: 'You forgot to fill up some required fields'
+            })
+            // console.log('Your forgot to fill up some required fields')
         }
     }
 

@@ -11,11 +11,17 @@
   font-size: 35px;
 }
 
+.container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0 0;
+}
+
 /* ------------------ action container (start) ------------------ */
 .action_container{
   /* border: solid; */
-  padding: 15px 0 0;
-  display: flex;
+  display: inline-flex;
   gap: 10px;
   font-family: 'Poppins', sans-serif !important;
 }

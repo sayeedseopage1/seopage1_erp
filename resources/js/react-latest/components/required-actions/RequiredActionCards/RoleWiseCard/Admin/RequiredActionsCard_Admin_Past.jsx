@@ -1,6 +1,5 @@
 import React from "react";
 import style from "../../../../../styles/required-action-card.module.css";
-import { MdPendingActions } from "react-icons/md";
 import ActionsButton from "./admin-components/ActionsButton";
 import dayjs from "dayjs";
 
