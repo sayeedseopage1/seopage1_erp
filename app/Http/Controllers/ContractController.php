@@ -1896,6 +1896,10 @@ class ContractController extends AccountBaseController
                 $qualified_sale->amount = $deal->amount;
 
                 $qualified_sale->save();
+                $helper = new HelperPendingActionController();
+
+
+                $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
                 // /dd($qualified_sale);
 
 
@@ -1937,14 +1941,7 @@ class ContractController extends AccountBaseController
                 // dd("true");
 
                 //need pending action
-                if($project->project_status == 'pending')
-                {
-                    $helper = new HelperPendingActionController();
-
-
-                    $helper->WonDealAcceptAuthorization($project);
-
-                }
+             
                
                 //need pending action
                 //dd($authorization_action);
@@ -2558,6 +2555,10 @@ class ContractController extends AccountBaseController
                 $project->project_status = 'pending';
                 $project->status = 'not started';
                 $project->save();
+                $helper = new HelperPendingActionController();
+
+
+            $helper->WonDealAcceptAuthorization($project,$project->pm_id);
 
             } elseif ($request->mode == 'reject') {
                 $mode = '2';

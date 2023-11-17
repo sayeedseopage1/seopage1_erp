@@ -2084,6 +2084,49 @@ class ProjectController extends AccountBaseController
         $project->comments = $request->comments;
         $project->save();
        // dd($project);
+       $actions = PendingAction::where('code','PWDA')->where('past_status',0)->where('project_id',$project->id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+                $dealId=Deal::where('id',$project->deal_id)->first(); 
+                $sales = User::where('id',$deal->added_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = 'Won deal <a href="'.route('contracts.show', $dealId->id).'">'.$project->project_name.'</a> from Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> is awaiting for your acceptance! (Sales person: <a href="'.route('employees.show',$sales->id).'">'.$sales->name.'</a>) accepted by (Project manager: <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>)';
+             //   $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+              //  $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+           //     $past_action->milestone_id = $action->milestone_id;
+                $past_action->save();
+
+                $helper = new HelperPendingActionController();
+
+
+                $helper->ProjectDeliverableCreation($past_action->project_id);
+                
+           
+        }
+    }
         
         if ($request->project_challenge != 'No Challenge') {
             $project_update = Project::find($request->project_id);
@@ -3101,6 +3144,43 @@ class ProjectController extends AccountBaseController
             $deliverable->milestone_id = $request->milestone_id;
             $deliverable->description = $request->description;
             $deliverable->save();
+            $project= Project::where('id',$deliverable->project_id)->first();
+            $actions = PendingAction::where('code','DCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+               
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$project->pm_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+               
+                  
+    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = 'Deliverable creation for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> has been authorized by <a href="'.route('employees.show',Auth::user()->id).'">'.Auth::user()->name.'</a>';
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                  //  $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+               //     $past_action->milestone_id = $action->milestone_id;
+                    $past_action->save();
+            }
+        }
             $project_id = Project::where('id', $deliverable->project_id)->first();
             $project = Project::find($deliverable->project_id);
             $project->hours_allocated = $project_id->hours_allocated + $deliverable->estimation_time;
@@ -3258,6 +3338,43 @@ class ProjectController extends AccountBaseController
                     $data->save();
                 }
             }
+            $project= Project::where('id',$deliverable->project_id)->first();
+            $actions = PendingAction::where('code','DMA')->where('past_status',0)->where('deliverable_id',$request->id)->get();
+            if($actions != null)
+            {
+            foreach ($actions as $key => $action) {
+               
+                    $action->authorized_by= Auth::id();
+                    $action->authorized_at= Carbon::now();
+                    $action->past_status = 1;
+                    $action->save();
+                    $project_manager= User::where('id',$project->pm_id)->first();
+                    $client= User::where('id',$project->client_id)->first();
+                    $authorize_by= User::where('id',$action->authorized_by)->first();
+               
+                  
+    
+                    $past_action= new PendingActionPast();
+                    $past_action->item_name = $action->item_name;
+                    $past_action->code = $action->code;
+                    $past_action->serial = $action->serial;
+                    $past_action->action_id = $action->id;
+                    $past_action->heading = $action->heading;
+                    $past_action->message = 'Revision requested by management for the deliverables '.$deliverable->title.' for project <a href="'.route('projects.show', $project->id.'?tab=deliverables').'">'.$project->project_name.'</a> from the Client <a href="'.route('clients.show',$client->id).'">'.$client->name.'</a> authorized by <a href="'.route('employees.show',$project_manager->id).'">'.$project_manager->name.'</a>';
+                 //   $past_action->button = $action->button;
+                    $past_action->timeframe = $action->timeframe;
+                    $past_action->authorization_for = $action->authorization_for;
+                    $past_action->authorized_by = $action->authorized_by;
+                    $past_action->authorized_at = $action->authorized_at;
+                    $past_action->expired_status = $action->expired_status;
+                    $past_action->past_status = $action->past_status;
+                    $past_action->project_id = $action->project_id;
+                  //  $past_action->task_id = $action->task_id;
+                    $past_action->client_id = $action->client_id;
+               //     $past_action->milestone_id = $action->milestone_id;
+                    $past_action->save();
+            }
+        }
         }
 
         $deliverable->title = $request->title ?? $deliverable->title;
@@ -5651,9 +5768,14 @@ public function updatePmBasicSEO(Request $request){
                 $past_action->client_id = $action->client_id;
                // $past_action->deliverable_id = $action->deliverable_id;
                 $past_action->save();
-                
+               
+           
            
         }
+        $helper = new HelperPendingActionController();
+
+
+        $helper->SendDeliverabletoClient($past_action->project_id);
     }
 
 
@@ -5769,18 +5891,13 @@ public function updatePmBasicSEO(Request $request){
                 $data->save();
             }
 
-            //authorizatoin action start here
-            $authorization_action = new AuthorizationAction();
-            $authorization_action->model_name = $deliverable->getMorphClass();
-            $authorization_action->model_id = $deliverable->id;
-            $authorization_action->type = 'deliverable_modification_by_top_managment';
-            $authorization_action->deal_id = $project->deal_id;
-            $authorization_action->project_id = $project->id;
-            $authorization_action->link = route('projects.show', $project->id) . '?tab=deliverables';
-            $authorization_action->title = $this->user->name . ' Send deliverable modification request';
-            $authorization_action->authorization_for = $project->pm_id;
-            $authorization_action->save();
-            //end authorization action here
+            //need pending action
+               
+            $helper = new HelperPendingActionController();
+
+
+            $helper->DeliverableModification($project,$deliverable->id);
+            //need pending action
 
             $data = ProjectDeliverable::find($request->delivarable_id);
             $url = route('projects.show', $data->project_id) . '?tab=deliverables';
