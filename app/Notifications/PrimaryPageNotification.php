@@ -81,11 +81,11 @@ class PrimaryPageNotification extends Notification
    </p>'
      .
     '<p>
-       <b style="color: black">' . __('Assingee To') . ': '.'</b>' . '<a href="'.route('employees.show',$assingee_to->id).'">'.$assingee_to->name .'</a>'. '
+       <b style="color: black">' . __('Assigned To') . ': '.'</b>' . '<a href="'.route('employees.show',$assingee_to->id).'">'.$assingee_to->name .'</a>'. '
    </p>'
      .
     '<p>
-       <b style="color: black">' . __('Assingee By') . ': '.'</b>' . '<a href="'.route('employees.show',$ld->id).'">'.$ld->name .'</a>'. '
+       <b style="color: black">' . __('Assigned By') . ': '.'</b>' . '<a href="'.route('employees.show',$ld->id).'">'.$ld->name .'</a>'. '
    </p>'
      .
     '<p>

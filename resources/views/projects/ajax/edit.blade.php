@@ -215,22 +215,26 @@ $createPublicProjectPermission = user()->permission('create_public_project');
 
                         </div>
                         <!-- BUDGET VS SPENT END -->
-
-                    <div class="col-md-12 col-lg-12">
-                        <div class="form-group mt-3">
-                            <label class="text-dark-grey" data-label="true" for="description">Project General Guidelines
-                                <sup class="mr-1">*</sup>
-                            </label>
-                            <textarea name="project_summary" id="description" class="form-control @error('project_summary') is-invalid @enderror">{!! $project->project_summary !!}</textarea>
-                           <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
-                            <script>
-                                CKEDITOR.replace('project_summary');
-                            </script>
-                            @error('project_summary')
-                            <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        @php
+                            $task = App\Models\Task::where('project_id',$project->id)->first();
+                        @endphp
+                        @if ($task == null || Auth::user()->role_id !=4)
+                        <div class="col-md-12 col-lg-12">
+                            <div class="form-group mt-3">
+                                <label class="text-dark-grey" data-label="true" for="description">Project General Guidelines
+                                    <sup class="mr-1">*</sup>
+                                </label>
+                                <textarea name="project_summary" id="description" class="form-control @error('project_summary') is-invalid @enderror">{!! $project->project_summary !!}</textarea>
+                            <script src="{{ asset('/ckeditor/ckeditor.js') }}"></script>
+                                <script>
+                                    CKEDITOR.replace('project_summary');
+                                </script>
+                                @error('project_summary')
+                                <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
-                    </div>
+                        @endif
 
 
                     @if ($project->public == 0 && $editProjectMembersPermission == 'all' || $editPermission == 'all')
