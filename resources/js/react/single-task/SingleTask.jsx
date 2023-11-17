@@ -408,19 +408,21 @@ const SingleTaskPage = () => {
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 <span className="d-block">{task?.pageType ?? "--"}</span>
-                                                                <Popover>
-                                                                    <Popover.Button>
-                                                                        <span className="badge badge-warning"> Primary page request denied </span>
-                                                                    </Popover.Button>
-                                                                    <Popover.Panel >
-                                                                        <div className="single_task_revision_popover_panel">
-                                                                            <div
-                                                                                className="sp1_ck_content"
-                                                                                dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
-                                                                            />
-                                                                        </div>
-                                                                    </Popover.Panel>
-                                                                </Popover>
+                                                                <Switch.Case condition={!task?.taskTypeDetails.comment}>
+                                                                    <Popover>
+                                                                        <Popover.Button>
+                                                                            <span className="badge badge-warning"> Primary page request denied </span>
+                                                                        </Popover.Button>
+                                                                        <Popover.Panel >
+                                                                            <div className="single_task_revision_popover_panel">
+                                                                                <div
+                                                                                    className="sp1_ck_content"
+                                                                                    dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
+                                                                                />
+                                                                            </div>
+                                                                        </Popover.Panel>
+                                                                    </Popover>
+                                                                </Switch.Case>
                                                             </div>
                                                         </div>
 
@@ -457,19 +459,21 @@ const SingleTaskPage = () => {
                                                             </div>
                                                             <div className="sp1_st-list-item-value">
                                                                 <span>{task?.taskTypeDetails?.taskTypeName ?? "--"}</span>
-                                                                <Popover>
-                                                                    <Popover.Button>
-                                                                        <span className="badge badge-warning"> Primary page request denied </span>
-                                                                    </Popover.Button>
-                                                                    <Popover.Panel >
-                                                                        <div className="single_task_revision_popover_panel">
-                                                                            <div
-                                                                                className="sp1_ck_content"
-                                                                                dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
-                                                                            />
-                                                                        </div>
-                                                                    </Popover.Panel>
-                                                                </Popover>
+                                                                <Switch.Case condition={!task?.taskTypeDetails.comment}>
+                                                                    <Popover>
+                                                                        <Popover.Button>
+                                                                            <span className="badge badge-warning"> Primary page request denied </span>
+                                                                        </Popover.Button>
+                                                                        <Popover.Panel >
+                                                                            <div className="single_task_revision_popover_panel">
+                                                                                <div
+                                                                                    className="sp1_ck_content"
+                                                                                    dangerouslySetInnerHTML={{__html: task?.taskTypeDetails.comment}}
+                                                                                />
+                                                                            </div>
+                                                                        </Popover.Panel>
+                                                                    </Popover>
+                                                                </Switch.Case>
                                                             </div>
                                                         </div>
 
