@@ -3635,6 +3635,8 @@ class TaskController extends AccountBaseController
                 'task_types.task_type',
                 'task_types.page_name',
                 'task_types.page_url',
+                'task_types.authorization_status as primary_page_authorization_status',
+                'task_types.comment as primary_page_authorization_comment',
                 'task_types.task_type_other',
                 'task_types.page_type_name',
                 'task_types.existing_design_link',
