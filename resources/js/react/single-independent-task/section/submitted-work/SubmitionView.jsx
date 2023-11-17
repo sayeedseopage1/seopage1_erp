@@ -110,8 +110,8 @@ const SubmitionView = ({ isOpen, close, toggle, data, isLoading }) => {
                                             fileName={file}
                                             downloadAble={true}
                                             deleteAble={false}
-                                            downloadUrl={`/storage/TaskSubmission/${file}`}
-                                            previewUrl={`/storage/TaskSubmission/${file}`}
+                                            downloadUrl={`${file}`}
+                                            previewUrl={`${file}`}
                                             fileType={_.includes(["png","jpg", "jpeg", "gif", "svg"], _.last(_.split(file, '.'))) ? 'images' : 'others'}
                                             ext=""
                                         />

@@ -257,7 +257,7 @@ class ContractController extends AccountBaseController
             ], 422);
         }
 
-        DB::beginTransaction();
+       
         $existing_client = User::where('user_name', $request->user_name)->first();
         $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $suffle = substr(str_shuffle($chars), 0, 6);
@@ -1402,6 +1402,11 @@ class ContractController extends AccountBaseController
             $qualified_sale->amount = $deal->amount;
             //$qualified_sale->actual_amount= $deal->actual_amount . $currency->currency_code;
             $qualified_sale->save();
+        //  /   dd($qualified_sale);
+            $helper = new HelperPendingActionController();
+
+
+            $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
 
 
 
@@ -1477,16 +1482,16 @@ class ContractController extends AccountBaseController
 
             foreach ($users as $key => $user) {
                 //start authorization action
-                $authorization_action = new AuthorizationAction();
-                $authorization_action->model_name = $deal->getMorphClass();
-                $authorization_action->model_id = $deal->id;
-                $authorization_action->type = 'saleslead_price_authorization';
-                $authorization_action->deal_id = $project_id->deal_id;
-                $authorization_action->project_id = $project_id->id;
-                $authorization_action->link = route('authorization_request', $project_id->deal_id);
-                $authorization_action->title = 'Sales Lead Price Authorization';
-                $authorization_action->authorization_for = $user->id;
-                $authorization_action->save();
+                // $authorization_action = new AuthorizationAction();
+                // $authorization_action->model_name = $deal->getMorphClass();
+                // $authorization_action->model_id = $deal->id;
+                // $authorization_action->type = 'saleslead_price_authorization';
+                // $authorization_action->deal_id = $project_id->deal_id;
+                // $authorization_action->project_id = $project_id->id;
+                // $authorization_action->link = route('authorization_request', $project_id->deal_id);
+                // $authorization_action->title = 'Sales Lead Price Authorization';
+                // $authorization_action->authorization_for = $user->id;
+                // $authorization_action->save();
                 //end authorization action
 
 
@@ -1500,20 +1505,13 @@ class ContractController extends AccountBaseController
                     'redirectUrl' => route('deals.show', $project_id->deal_id)
                 ]);
             }
-            // dd("true");
-
-            //start authorization action
-            $authorization_action = new AuthorizationAction();
-            $authorization_action->model_name = $deal->getMorphClass();
-            $authorization_action->model_id = $deal->id;
-            $authorization_action->type = 'project_manager_accept_project';
-            $authorization_action->deal_id = $project_id->deal_id;
-            $authorization_action->project_id = $project_id->id;
-            $authorization_action->link = route('projects.edit', $project_id->id);
-            $authorization_action->title = 'Required action to accept project';
-            $authorization_action->authorization_for = $project_id->pm_id;
-            $authorization_action->save();
-            //end authorization action
+           
+          //  dd($project);
+            //need pending action
+          
+          
+          //  dd($project);
+            //need pending action
             if(Auth::user()->role_id==4){
                 $project_member = new ProjectMember();
                 $project_member->user_id = Auth::id();
@@ -1521,7 +1519,7 @@ class ContractController extends AccountBaseController
                 $project_member->project_id = $project->id;
                 $project_member->save();
             }
-          //  dd("asd asl d");
+        //    / dd("asd asl d");
 
 
             DB::commit();
@@ -1898,6 +1896,10 @@ class ContractController extends AccountBaseController
                 $qualified_sale->amount = $deal->amount;
 
                 $qualified_sale->save();
+                $helper = new HelperPendingActionController();
+
+
+                $helper->WonDealAcceptAuthorization($project,$qualified_sale->pm_id);
                 // /dd($qualified_sale);
 
 
@@ -1938,17 +1940,10 @@ class ContractController extends AccountBaseController
                 }
                 // dd("true");
 
-                //start authorization action
-                $authorization_action = new AuthorizationAction();
-                $authorization_action->model_name = $deal->getMorphClass();
-                $authorization_action->model_id = $deal->id;
-                $authorization_action->type = 'project_manager_accept_project';
-                $authorization_action->deal_id = $project_id->deal_id;
-                $authorization_action->project_id = $project_id->id;
-                $authorization_action->link = route('projects.edit', $project_id->id);
-                $authorization_action->title = 'Project manager accept Project';
-                $authorization_action->authorization_for = $project_id->pm_id;
-                $authorization_action->save();
+                //need pending action
+             
+               
+                //need pending action
                 //dd($authorization_action);
                 // $check_new_pm= User::where('id',$deal->pm_id)->first();
                 // $new_pm = EmployeeDetails::where('user_id',$check_new_pm->id)->first();
@@ -2560,6 +2555,10 @@ class ContractController extends AccountBaseController
                 $project->project_status = 'pending';
                 $project->status = 'not started';
                 $project->save();
+                $helper = new HelperPendingActionController();
+
+
+            $helper->WonDealAcceptAuthorization($project,$project->pm_id);
 
             } elseif ($request->mode == 'reject') {
                 $mode = '2';

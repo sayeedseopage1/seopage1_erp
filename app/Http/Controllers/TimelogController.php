@@ -582,14 +582,12 @@ class TimelogController extends AccountBaseController
     //            $task_board_column= TaskboardColumn::where('id',$task_status->board_column_id)->first();
     //            //  dd($task_status);
     //              $timeLog = new ProjectTimeLog();
-
     //                $activeTimer = ProjectTimeLog::with('user')
     //                    ->whereNull('end_time')
     //                    ->join('users', 'users.id', '=', 'project_time_logs.user_id')
     //                    ->where('user_id', $this->user->id)->first();
     //                if (is_null($activeTimer)) {
     //                    $taskId = $request->task_id;
-
     //                    if ($request->has('create_task')) {
     //                        $task = new Task();
     //                        $task->heading = $request->memo;

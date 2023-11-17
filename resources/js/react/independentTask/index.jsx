@@ -89,7 +89,10 @@ const SubtasksContainer = () => {
 
 
 
-export const RefreshContext = createContext({});
+export const RefreshContext = createContext({refresh:true,setRefresh:()=>true});
+export function useRefresh(){
+    return useContext(RefreshContext);
+}
 
 const IndependentTask = () => {
     const [refresh, setRefresh] = useState(false);

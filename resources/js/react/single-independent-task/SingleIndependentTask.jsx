@@ -37,6 +37,7 @@ import { singleTaskPagePermission } from "./permissions";
 import ERROR from "../global/ERROR";
 import { useErrorHandler } from "../context/ErrorHandleServiceContextProvider";
 import { toast } from "react-toastify";
+import FileUploader from "../file-upload/FileUploader";
 
 const RefetchTaskProvider = React.createContext({});
 export const useRefetchTaskDetails = () => {
@@ -88,6 +89,7 @@ const SingleIndependentTask = () => {
                         task_guideline,
                         revisions,
                         Sub_Tasks,
+                        ppTaskFiles,
                     }) => {
                         for (const key in task) {
                             CurrentTask[key] = task[key];
@@ -99,6 +101,7 @@ const SingleIndependentTask = () => {
                         CurrentTask.pm_task_guideline = task_guideline;
                         CurrentTask.task_revisions = revisions;
                         CurrentTask.taskSubTask = Sub_Tasks;
+                        CurrentTask.taskFiles = [...ppTaskFiles];
                     }
                 );
 
@@ -153,7 +156,7 @@ const SingleIndependentTask = () => {
 
     if (!task) return null;
 
-    console.log("task revision",task?.revisions);
+    console.log("task revision", task?.revisions);
 
     return (
         <RefetchTaskProvider.Provider value={{ setRefetchTask }}>
@@ -422,6 +425,23 @@ const SingleIndependentTask = () => {
                                                 </div>
                                             </div>
 
+                                            {/* TASK CATEGORY */}
+                                            <div className="sp1_st-list-item">
+                                                <div className="sp1_st-list-item-head">
+                                                    Task Category :{" "}
+                                                </div>
+                                                <div className="sp1_st-list-item-value">
+                                                    {/* <span
+                                                        className="dot-color mr-2"
+                                                        style={{
+                                                            background:
+                                                                "rgba(252, 189, 1, 1)",
+                                                        }}
+                                                    /> */}
+                                                    {task.category.name}
+                                                </div>
+                                            </div>
+
                                             {/* PRIORITY */}
                                             <div className="sp1_st-list-item">
                                                 <div className="sp1_st-list-item-head">
@@ -685,6 +705,61 @@ const SingleIndependentTask = () => {
                                             <Guideline
                                                 text={task?.description}
                                             />
+
+                                            {_.size(task?.attachments) > 0 ? (
+                                                <div className="mt-3">
+                                                    <h4 className="mb-2">
+                                                        Task Attachments:{" "}
+                                                    </h4>
+                                                    <FileUploader>
+                                                        {_.map(
+                                                            task?.attachments,
+                                                            (attachment) =>
+                                                                attachment?.pp_task_file_name ? (
+                                                                    <FileUploader.Preview
+                                                                        key={
+                                                                            attachment?.pp_task_file_id
+                                                                        }
+                                                                        fileName={
+                                                                            attachment?.pp_task_file_name
+                                                                        }
+                                                                        downloadAble={
+                                                                            true
+                                                                        }
+                                                                        deleteAble={
+                                                                            false
+                                                                        }
+                                                                        downloadUrl={
+                                                                            attachment?.pp_task_file_url
+                                                                        }
+                                                                        previewUrl={
+                                                                            attachment?.pp_task_file_url
+                                                                        }
+                                                                        fileType={
+                                                                            _.includes(
+                                                                                [
+                                                                                    "png",
+                                                                                    "jpeg",
+                                                                                    "jpg",
+                                                                                    "svg",
+                                                                                    "webp",
+                                                                                    "gif",
+                                                                                ],
+                                                                                attachment?.pp_task_file_icon
+                                                                            )
+                                                                                ? "images"
+                                                                                : "others"
+                                                                        }
+                                                                        classname="comment_file"
+                                                                        ext={
+                                                                            attachment?.pp_task_file_icon
+                                                                        }
+                                                                    />
+                                                                ) : null
+                                                        )}
+                                                    </FileUploader>
+                                                </div>
+                                            ) : null}
                                         </Accordion>
                                     </div>
                                 </div>

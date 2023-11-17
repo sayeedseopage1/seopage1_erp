@@ -858,7 +858,9 @@ class TaskController extends AccountBaseController
 
         $text = Auth::user()->name . ' mark task complete';
         $link = '<a href="' . route('tasks.show', $task->id) . '">' . $text . '</a>';
-        $this->logProjectActivity($task->project->id, $link);
+        if($task->independent_task_status == 0)
+        {
+            $this->logProjectActivity($task->project->id, $link);
 
         $this->triggerPusher('notification-channel', 'notification', [
             'user_id' => $task->project->pm_id,
@@ -870,6 +872,9 @@ class TaskController extends AccountBaseController
         //dd("hdbjasdbjasd");
 
         Notification::send($user, new TaskSubmitNotification($task_id, $sender));
+
+        }
+        
 
         //Toastr::success('Submitted Successfully', 'Success', ["positionClass" => "toast-top-right"]);
         return response()->json([
@@ -3290,6 +3295,47 @@ class TaskController extends AccountBaseController
         $pm_task_guideline->google_drive_link = $data['google_drive_link'];
         $pm_task_guideline->instruction_plugin = $data['instruction_plugin'];
         $pm_task_guideline->save();
+        $project= Project::where('id',$pm_task_guideline->project_id)->first();
+        $actions = PendingAction::where('code','SDCA')->where('past_status',0)->where('project_id',$request->project_id)->get();
+        if($actions != null)
+        {
+        foreach ($actions as $key => $action) {
+           
+                $action->authorized_by= Auth::id();
+                $action->authorized_at= Carbon::now();
+                $action->past_status = 1;
+                $action->save();
+
+              //  $project_id =Project::where('id',$project->project_id)->first();
+                $project_manager= User::where('id',$project->pm_id)->first();
+                $client= User::where('id',$project->client_id)->first();
+                $authorize_by= User::where('id',$action->authorized_by)->first();
+
+                $past_action= new PendingActionPast();
+                $past_action->item_name = $action->item_name;
+                $past_action->code = $action->code;
+                $past_action->serial = $action->serial;
+                $past_action->action_id = $action->id;
+                $past_action->heading = $action->heading;
+                $past_action->message = $action->message. ' authorized by '.Auth::user()->name;
+              //  $past_action->button = $action->button;
+                $past_action->timeframe = $action->timeframe;
+                $past_action->authorization_for = $action->authorization_for;
+                $past_action->authorized_by = $action->authorized_by;
+                $past_action->authorized_at = $action->authorized_at;
+                $past_action->expired_status = $action->expired_status;
+                $past_action->past_status = $action->past_status;
+                $past_action->project_id = $action->project_id;
+                $past_action->task_id = $action->task_id;
+                $past_action->client_id = $action->client_id;
+               // $past_action->deliverable_id = $action->deliverable_id;
+                $past_action->save();
+               
+           
+           
+        }
+       
+    }
 
         $pm_task_update = PmTaskGuideline::find($pm_task_guideline->id);
 
@@ -3623,6 +3669,31 @@ class TaskController extends AccountBaseController
                 ->where('tasks.id', $id)
                 ->first();
 
+                // ONLY FOR PENDIN PERENT TASK FILE START
+
+            $ppTaskImages = DB::table('tasks')
+            ->leftJoin('task_files', 'tasks.pp_task_id', 'task_files.task_id')
+            ->select('task_files.filename as pp_task_file_url', 'task_files.filename as pp_task_file_name','task_files.id as pp_task_files_id')
+            ->where('tasks.id', $id)
+            ->get();
+
+            $pp_prefix = 'https://seopage1storage.s3.ap-southeast-1.amazonaws.com/';
+
+            $ppTaskFileData = [];
+
+            foreach($ppTaskImages as $item){
+                if($item->pp_task_file_url != null){
+                    $fileUrl = $pp_prefix . $item->pp_task_file_url;
+                    $fileExtension = pathinfo($item->pp_task_file_url, PATHINFO_EXTENSION);
+                    $item->pp_task_file_url = $fileUrl;
+                    $item->pp_task_file_icon = $fileExtension;
+                    $item->pp_task_file_id = $item->pp_task_files_id;
+                    array_push($ppTaskFileData, $item);
+                }
+            }
+
+            // ONLY FOR PENDIN PERENT TASK FILE END
+
 
             $taskImages = DB::table('tasks')
                 ->leftJoin('task_files', 'tasks.id', 'task_files.task_id')
@@ -3764,6 +3835,7 @@ class TaskController extends AccountBaseController
             }
             return response()->json([
                 'task' => $task,
+                'ppTaskFiles' => $ppTaskFileData,
                 'taskFiles' => $taskFileData,
                 'parent_task_heading' => $parent_task_heading,
                 'parent_task_action' => $parent_task_action,

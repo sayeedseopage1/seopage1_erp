@@ -328,6 +328,7 @@ class RevisionCalculatorController extends AccountBaseController
             ->leftJoin('projects','projects.id','task_revisions.project_id')          
             ->where('projects.pm_id',$id)
             ->where('task_revisions.dispute_created',1)
+            ->where('task_revisions.dispute_status',0)
             ->where('task_revisions.dispute_between','!=','')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
@@ -690,6 +691,7 @@ public function TotalDispute(Request $request, $id)
         ->leftJoin('users as dispute_raised_against','dispute_raised_against.id','task_revision_disputes.raised_against')      
         ->where('projects.pm_id',$id)
         ->where('task_revisions.dispute_created',1)
+        ->where('task_revisions.dispute_status',0)
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
