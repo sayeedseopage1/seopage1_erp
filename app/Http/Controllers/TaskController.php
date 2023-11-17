@@ -6367,7 +6367,7 @@ class TaskController extends AccountBaseController
                 "id" => $comment->id,
                 "user_id" => $comment->user->id,
                 "user_name" => $comment->user->name,
-                "type_is_reply" => $comment->reply_status,
+                "type_is_reply" => (int)($comment->reply_status),
                 "created_at" => $comment->updated_at,
                 "parent_comment_id" => $comment->root,
                 "is_deleted" => $comment->is_deleted,

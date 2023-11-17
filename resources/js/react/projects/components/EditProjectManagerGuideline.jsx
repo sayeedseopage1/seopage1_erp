@@ -62,20 +62,20 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
     // handle secondary color change
     const handleSecondaryColorChange = (e, id) => {
-        let newColors = _.map(secondaryColors, item => item.id === id ? {id, color: e.target.value, description: ''} : item);
+        let newColors = _.map(secondaryColors, item => item?.id === id ? {id, color: e.target.value, description: ''} : item);
         setSecondaryColors([...newColors])
     }
 
     // handle secondary color description change
     const handleSecondaryColorDescriptionChange = (e, editor, id) => {
         let text = editor.getData();
-        let newColors = _.map(secondaryColors, item => item.id === id ? {...item, description: text} : item);
+        let newColors = _.map(secondaryColors, item => item?.id === id ? {...item, description: text} : item);
         setSecondaryColors([...newColors])
     }
 
     // remove secondary color
     const removeSecondaryColor = (e, id) => {
-        let newColors = _.filter(secondaryColors, item => item.id !== id);
+        let newColors = _.filter(secondaryColors, item => item?.id !== id);
         setSecondaryColors([...newColors])
     }
 
@@ -102,44 +102,44 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     // remove design ref
     const removeDesignRef = (e, id) => {
         e.stopPropagation();
-        let newRef = _.filter(designRefURL, item => item.id !== id);
+        let newRef = _.filter(designRefURL, item => item?.id !== id);
         setDesignRefURL([...newRef])
     }
 
 
     const themeDetailsAuthorized = () => {
-        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details');
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'theme_details');
 
-        return data?.theme_details === 1 || d.status === 1;
+        return data?.theme_details === 1 || d?.status === 1;
     }
 
     const designDetailsAuthorized = () => {
-        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'design_details');
-        return data?.design_details === 1 || d.status === 1;
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'design_details');
+        return data?.design_details === 1 || d?.status === 1;
     }
 
 
     const colorSchemaAuthorized = () => {
-        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'color_schema');
-        return data?.color_schema === 1 || d.status === 1;
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'color_schema');
+        return data?.color_schema === 1 || d?.status === 1;
     }
 
 
     const pluginResearchAuthorized = () => {
-        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research');
-        return data?.plugin_research === 1 || d.status === 1;
+        const d =  _.find(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'plugin_research');
+        return data?.plugin_research === 1 || d?.status === 1;
     }
 
     //
 
     const themeDetailsAuthorizedStatus = () => {
-        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'theme_details');
+        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'theme_details');
 
         if(data?.theme_details === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
             const d = data?.pm_task_guideline_authorization[index];
-            let status = d.status;
+            let status = d?.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
@@ -151,13 +151,13 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     }
 
     const designDetailsAuthorizedStatus = () => {
-        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'design_details')
+        const index = _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'design_details')
 
         if(data?.design_details === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
             const d = data?.pm_task_guideline_authorization[index];
-            let status = d.status;
+            let status = d?.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
@@ -170,13 +170,13 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
 
 
     const colorSchemaAuthorizedStatus = () => {
-        const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'color_schema')
+        const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'color_schema')
 
         if(data?.color_schema === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
             const d = data?.pm_task_guideline_authorization[index];
-            let status = d.status;
+            let status = d?.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
@@ -188,13 +188,13 @@ const EditProjectManagerGuideline = ({ isOpen, close, data, openTaskForm, projec
     }
 
     const pluginResearchAuthorizedStatus = () => {
-        const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d.name), /\s+/g, '_') === 'plugin_research')
+        const index =  _.findIndex(data?.pm_task_guideline_authorization, d => _.replace(_.lowerCase(d?.name), /\s+/g, '_') === 'plugin_research')
 
         if(data?.plugin_research === 1) {
             return <span className="badge badge-success"> Approved </span>
         }else if(index !== -1){
             const d = data?.pm_task_guideline_authorization[index];
-            let status = d.status;
+            let status = d?.status;
             if(Number(status) === 2){
                 return <span className="badge badge-warning"> Rejected </span>
             }else if(Number(status) === 0){
