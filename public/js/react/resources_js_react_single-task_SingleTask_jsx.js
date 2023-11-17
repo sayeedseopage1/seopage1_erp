@@ -160,9 +160,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   useRevision: () => (/* binding */ useRevision)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-
 var useRevision = function useRevision() {
   // project menager acknowladgement options
   var getProjectManagerAcknowladgementOptions = function getProjectManagerAcknowladgementOptions() {
@@ -185,14 +182,14 @@ var useRevision = function useRevision() {
     }, {
       id: 'PLRx04',
       revision: "The instruction was followed, but the lead developer missed out some default/basic things or best practices which are not essential to write in instruction",
-      isDeniable: true
+      isDeniable: false
     }];
   };
 
   // lead developer acknowladgement Options
   var getLeadDeveloperAcknowladgementOptions = function getLeadDeveloperAcknowladgementOptions() {
     var isAlreadyAccepted = false;
-    // if alreayd accepted
+    // if already accepted
     if (isAlreadyAccepted) {
       return [];
     } else {
@@ -211,7 +208,7 @@ var useRevision = function useRevision() {
       }, {
         id: 'LDRx4',
         revision: "The instruction was followed but the developer missed out on some default/basic things or best practices which are not essential to mention in instruction.",
-        isDeniable: true
+        isDeniable: false
       }];
     }
   };
