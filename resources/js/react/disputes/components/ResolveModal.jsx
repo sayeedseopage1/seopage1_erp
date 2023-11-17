@@ -920,120 +920,25 @@ const ResolveModal = ({ state }) => {
                                 row?.status ? (
                                     <table className="dispute-preview-table">
                                         <tbody>
-                                            <tr>
-                                                <td className="py-2">
-                                                    Reviewed by
-                                                </td>
-                                                <td className="px-3 py-2 vertical-center w-100">
-                                                    <div className="d-flex align-items-center">
-                                                        <Avatar
-                                                            src={
-                                                                row?.resolved_by
-                                                                    ?.image
-                                                                    ? `/user-uploads/avatar/${row?.resolved_by?.image}`
-                                                                    : null
-                                                            }
-                                                            alt={
-                                                                row?.resolved_by
-                                                                    ?.name
-                                                            }
-                                                            name={
-                                                                row?.resolved_by
-                                                                    ?.name
-                                                            }
-                                                            type="circle"
-                                                            width={32}
-                                                            height={32}
-                                                            fontSize="1.2rem"
-                                                        />
-
-                                                        <div className="px-2">
-                                                            <a
-                                                                href={`/account/employees/${row?.resolved_by?.id}`}
-                                                                className="d-block"
-                                                            >
-                                                                {
-                                                                    row
-                                                                        ?.resolved_by
-                                                                        ?.name
-                                                                }
-                                                            </a>
-                                                            <span
-                                                                className="d-block f-10"
-                                                                style={{
-                                                                    color: "#777",
-                                                                    marginTop:
-                                                                        "-0.30rem",
-                                                                }}
-                                                            >
-                                                                {
-                                                                    row
-                                                                        ?.resolved_by
-                                                                        ?.designation
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
                                             {row?.winner ? (
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Winner
-                                                    </td>
-                                                    <td className="px-3 py-2 vertical-center w-100">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row?.winner
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.winner?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row?.winner
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row?.winner
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
+                                                <>
+                                                    <tr>
+                                                        <td className="py-2">
+                                                            Winner
+                                                        </td>
+                                                        <td className="px-3 py-2 vertical-center w-100">
+                                                            <Person user={row?.winner} />
+                                                        </td>
+                                                    </tr>
 
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.winner?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+
+                                                    <tr>
+                                                        <td className="py-2"> Loser </td>
+                                                        <td className="px-3 py-2 vertical-center w-100">
+                                                            <Person user={row?.winner.id === row?.raised_by.id ? row?.raised_against : row?.raised_by} />
+                                                        </td>
+                                                    </tr>
+                                                </>
                                             ) : (
                                                 <tr>
                                                     <td className="py-2">
@@ -1041,31 +946,23 @@ const ResolveModal = ({ state }) => {
                                                     </td>
                                                     <td className="px-3 py-2 vertical-center w-100">
                                                         <div className="d-flex align-items-center">
-                                                            {
-                                                                row?.raised_by
-                                                                    ?.name
-                                                            }{" "}
-                                                            -{" "}
-                                                            {
-                                                                row?.raised_by_percent
-                                                            }
-                                                            %
+                                                            {`${row?.raised_by?.name } - ${row?.raised_by_percent}%`}
                                                         </div>
                                                         <div className="d-flex align-items-center">
-                                                            {
-                                                                row
-                                                                    ?.raised_against
-                                                                    ?.name
-                                                            }{" "}
-                                                            -{" "}
-                                                            {
-                                                                row?.raised_against_percent
-                                                            }
-                                                            %
+                                                            {`${row?.raised_against?.name } - ${row?.raised_against_percent}%`}
                                                         </div>
                                                     </td>
                                                 </tr>
                                             )}
+
+                                            <tr>
+                                                <td className="py-2">
+                                                    Reviewed by
+                                                </td>
+                                                <td className="px-3 py-2 vertical-center w-100">
+                                                    <Person user={row?.resolved_by} />
+                                                </td>
+                                            </tr>
 
                                             <tr>
                                                 <td className="py-2">
@@ -1547,126 +1444,26 @@ const ResolveModal = ({ state }) => {
 
                                         <table className="dispute-preview-table">
                                             <tbody>
-                                                <tr>
-                                                    <td className="py-2">
-                                                        Review by
-                                                    </td>
-                                                    <td className="px-3 py-2 vertical-center w-100">
-                                                        <div className="d-flex align-items-center">
-                                                            <Avatar
-                                                                src={
-                                                                    row
-                                                                        ?.authorized_by
-                                                                        ?.image
-                                                                        ? `/user-uploads/avatar/${row?.authorized_by?.image}`
-                                                                        : null
-                                                                }
-                                                                alt={
-                                                                    row
-                                                                        ?.authorized_by
-                                                                        ?.name
-                                                                }
-                                                                name={
-                                                                    row
-                                                                        ?.authorized_by
-                                                                        ?.name
-                                                                }
-                                                                type="circle"
-                                                                width={32}
-                                                                height={32}
-                                                                fontSize="1.2rem"
-                                                            />
-
-                                                            <div className="px-2">
-                                                                <a
-                                                                    href={`/account/employees/${row?.authorized_by?.id}`}
-                                                                    className="d-block"
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.authorized_by
-                                                                            ?.name
-                                                                    }
-                                                                </a>
-                                                                <span
-                                                                    className="d-block f-10"
-                                                                    style={{
-                                                                        color: "#777",
-                                                                        marginTop:
-                                                                            "-0.30rem",
-                                                                    }}
-                                                                >
-                                                                    {
-                                                                        row
-                                                                            ?.authorized_by
-                                                                            ?.designation
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
 
                                                 {row?.winner ? (
-                                                    <tr>
-                                                        <td className="py-2">
-                                                            Winner
-                                                        </td>
-                                                        <td className="px-3 py-2 vertical-center w-100">
-                                                            <div className="d-flex align-items-center">
-                                                                <Avatar
-                                                                    src={
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.image
-                                                                            ? `/user-uploads/avatar/${row?.winner?.image}`
-                                                                            : null
-                                                                    }
-                                                                    alt={
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.name
-                                                                    }
-                                                                    name={
-                                                                        row
-                                                                            ?.winner
-                                                                            ?.name
-                                                                    }
-                                                                    type="circle"
-                                                                    width={32}
-                                                                    height={32}
-                                                                    fontSize="1.2rem"
-                                                                />
+                                                    <>
+                                                        <tr>
+                                                            <td className="py-2">
+                                                                Winner
+                                                            </td>
+                                                            <td className="px-3 py-2 vertical-center w-100">
+                                                                <Person user={row?.winner} />
+                                                            </td>
+                                                        </tr>
 
-                                                                <div className="px-2">
-                                                                    <a
-                                                                        href={`/account/employees/${row?.winner?.id}`}
-                                                                        className="d-block"
-                                                                    >
-                                                                        {
-                                                                            row
-                                                                                ?.winner
-                                                                                ?.name
-                                                                        }
-                                                                    </a>
-                                                                    <span
-                                                                        className="d-block f-10"
-                                                                        style={{
-                                                                            color: "#777",
-                                                                            marginTop:
-                                                                                "-0.30rem",
-                                                                        }}
-                                                                    >
-                                                                        {
-                                                                            row
-                                                                                ?.winner
-                                                                                ?.designation
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+
+                                                        <tr>
+                                                            <td className="py-2"> Loser </td>
+                                                            <td className="px-3 py-2 vertical-center w-100">
+                                                                <Person user={row?.winner.id === row?.raised_by.id ? row?.raised_against : row?.raised_by} />
+                                                            </td>
+                                                        </tr>
+                                                    </>
                                                 ) : (
                                                     <tr>
                                                         <td className="py-2">
@@ -1675,32 +1472,23 @@ const ResolveModal = ({ state }) => {
                                                         </td>
                                                         <td className="px-3 py-2 vertical-center w-100">
                                                             <div className="d-flex align-items-center">
-                                                                {
-                                                                    row
-                                                                        ?.raised_by
-                                                                        ?.name
-                                                                }{" "}
-                                                                -{" "}
-                                                                {
-                                                                    row?.raised_by_percent
-                                                                }
-                                                                %
+                                                                {`${row.raised_by?.name} - ${row?.raised_by_percent}%`}
                                                             </div>
                                                             <div className="d-flex align-items-center">
-                                                                {
-                                                                    row
-                                                                        ?.raised_against
-                                                                        ?.name
-                                                                }{" "}
-                                                                -{" "}
-                                                                {
-                                                                    row?.raised_against_percent
-                                                                }
-                                                                %
+                                                                {`${row.raised_against?.name} - ${row?.raised_against_percent}%`}
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 )}
+
+                                                <tr>
+                                                    <td className="py-2">
+                                                        Review by
+                                                    </td>
+                                                    <td className="px-3 py-2 vertical-center w-100">
+                                                        <Person user={row?.authorized_by} />
+                                                    </td>
+                                                </tr>
 
                                                 <tr>
                                                     <td className="py-2">
@@ -2384,6 +2172,39 @@ const RanderButton = ({
                         Close
                     </Button>
                 ) : null}
+            </div>
+        </div>
+    );
+};
+
+// Person
+const Person = ({ user }) => {
+    if (!user) return null;
+
+    const imageSrc = `/user-uploads/avatar/${user?.image}`;
+
+    return (
+        <div className="d-flex align-items-center">
+            <Avatar
+                src={user.image ? imageSrc : null}
+                alt=""
+                name={user.name}
+                type="circle"
+                width={32}
+                height={32}
+                fontSize="1.2rem"
+            />
+            <div className="px-2">
+                <a href={`/account/employees/${user.id}`} className="d-block">
+                    {user.name}
+                </a>
+
+                <span
+                    className="d-block f-10"
+                    style={{ color: "#777", marginTop: "-0.3rem" }}
+                >
+                    {user?.designation ?? ""}
+                </span>
             </div>
         </div>
     );
