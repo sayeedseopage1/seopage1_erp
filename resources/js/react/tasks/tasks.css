@@ -120,3 +120,8 @@
 .tasks_search_bar{
     border-color: rgba(151, 151, 151, 0.219) !important;
 }
+
+
+.primary_page_auth_deny_reason_rich_editor > .ck-editor__editable{
+    min-height: 200px !important;
+}
