@@ -77,18 +77,43 @@ class RevisionCalculatorController extends AccountBaseController
                 ->where('projects.pm_id',$pm->project_manager_id)
               
                 ->where('task_revisions.final_responsible_person','S')
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'SPR')
+                        ->where('task_revisions.raised_against_percent', '!=', null);
+                })
+                ->groupBy('task_revisions.id')
+                
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $pm_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
               
                 ->where('task_revisions.final_responsible_person','PM')
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'SPR')
+                        ->where('task_revisions.raised_by_percent', '!=', null);
+                })
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'PLR')
+                        ->where('task_revisions.raised_by_percent', '!=', null);
+                })
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'CPR')
+                        ->where('task_revisions.raised_by_percent', '!=', null);
+                })
+                ->groupBy('task_revisions.id')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $client_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
               
                 ->where('task_revisions.final_responsible_person','C')
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'CPR')
+                        ->where('task_revisions.raised_against_percent', '!=', null);
+                })
+             
+                ->groupBy('task_revisions.id')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $lead_developer_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
@@ -96,12 +121,31 @@ class RevisionCalculatorController extends AccountBaseController
               
                 ->where('task_revisions.final_responsible_person','LD')
                 ->where('task_revisions.dispute_between','!=','')
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'PLR')
+                        ->where('task_revisions.raised_against_percent', '!=', null);
+                })
+                ->orWhere(function ($query) {
+                    $query->where('task_revisions.dispute_between', 'LDR')
+                        ->where('task_revisions.raised_by_percent', '!=', null);
+                })
+                // ->orWhere('task_revisions.dispute_between','PLR')
+                // ->orWhere('task_revisions.dispute_between','LDR')
+                ->where('task_revisions.dispute_between','LDR')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $developer_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
                 ->where('projects.pm_id',$pm->project_manager_id)
               
                 ->where('task_revisions.final_responsible_person','D')
+                 
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'LDR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+       
+       
+        ->groupBy('task_revisions.id')
                 ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
                 ->count();
                 $pending_issues= TaskRevision::leftJoin('projects','projects.id','task_revisions.project_id')
@@ -290,6 +334,13 @@ class RevisionCalculatorController extends AccountBaseController
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','S')
             ->where('task_revisions.dispute_between','!=','')
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'SPR')
+                    ->where('task_revisions.raised_against_percent', '!=', null);
+            })
+           
+            // ->orWhere('task_revisions.dispute_between','SPR')
+            ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['pm_issues'] = TaskRevision::select('task_revisions.id')
@@ -298,6 +349,19 @@ class RevisionCalculatorController extends AccountBaseController
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','PM')
             ->where('task_revisions.dispute_between','!=','')
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'SPR')
+                    ->where('task_revisions.raised_by_percent', '!=', null);
+            })
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'PLR')
+                    ->where('task_revisions.raised_by_percent', '!=', null);
+            })
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'CPR')
+                    ->where('task_revisions.raised_by_percent', '!=', null);
+            })
+            ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['client_issues'] = TaskRevision::select('task_revisions.id')
@@ -306,6 +370,12 @@ class RevisionCalculatorController extends AccountBaseController
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','C')
             ->where('task_revisions.dispute_between','!=','')
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'CPR')
+                    ->where('task_revisions.raised_against_percent', '!=', null);
+            })
+          
+            ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['lead_developer_issues'] = TaskRevision::select('task_revisions.id')
@@ -314,6 +384,18 @@ class RevisionCalculatorController extends AccountBaseController
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','LD')
             ->where('task_revisions.dispute_between','!=','')
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'PLR')
+                    ->where('task_revisions.raised_against_percent', '!=', null);
+            })
+            ->orWhere(function ($query) {
+                $query->where('task_revisions.dispute_between', 'LDR')
+                    ->where('task_revisions.raised_by_percent', '!=', null);
+            })
+           
+            ->where('task_revisions.dispute_between','LDR')
+            // ->orWhereNotNull('task_revisions.raised_by_percent')
+            ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['developer_issues'] = TaskRevision::select('task_revisions.id')
@@ -322,6 +404,14 @@ class RevisionCalculatorController extends AccountBaseController
             ->where('projects.pm_id',$id)
             ->where('task_revisions.final_responsible_person','D')
             ->where('task_revisions.dispute_between','!=','')
+             
+        ->orWhere(function ($query) {
+            $query->where('task_revisions.dispute_between', 'LDR')
+                ->where('task_revisions.raised_against_percent', '!=', null);
+        })
+       
+        
+        ->groupBy('task_revisions.id')
             ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
             ->count();
             $data['total_disputes'] = TaskRevision::select('task_revisions.id')
@@ -520,9 +610,7 @@ public function ClientIssue(Request $request, $id)
             $query->where('task_revisions.dispute_between', 'CPR')
                 ->where('task_revisions.raised_against_percent', '!=', null);
         })
-        // ->where('task_revisions.dispute_between','CPR')
-        // ->orWhereNotNull('task_revisions.raised_against_percent')
-        // ->orWhere('task_revisions.dispute_between','CPR')
+      
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
@@ -583,8 +671,7 @@ public function LeadDevIssue(Request $request, $id)
             $query->where('task_revisions.dispute_between', 'LDR')
                 ->where('task_revisions.raised_by_percent', '!=', null);
         })
-        // ->orWhere('task_revisions.dispute_between','PLR')
-        // ->orWhere('task_revisions.dispute_between','LDR')
+       
         ->where('task_revisions.dispute_between','LDR')
         // ->orWhereNotNull('task_revisions.raised_by_percent')
         ->groupBy('task_revisions.id')
@@ -643,9 +730,7 @@ public function DevIssue(Request $request, $id)
                 ->where('task_revisions.raised_against_percent', '!=', null);
         })
        
-        // ->orWhereNull('task_revisions.raised_against_percent')
-        //  ->where('task_revisions.dispute_between','LDR')
-        //  ->orWhereNotNull('task_revisions.raised_against_percent')
+      
         ->groupBy('task_revisions.id')
         ->whereBetween('task_revisions.created_at', [$startDate, $endDate])
         ->get();
