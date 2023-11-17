@@ -132,14 +132,33 @@ const TaskAuthorization = ({ title }) => {
                                     setVisibilityOption={setVisibilityOption}
                                     visibilityOption={visibilityOption}
                                 />
-                                <Button
+                                {/* <Button
                                     // isLoading={isFetching || isLoading}
                                     variant="primary"
                                     onClick={() => refetch()}
                                     size="sm"
                                 >
                                     Refresh
-                                </Button>
+                                </Button> */}
+                                <button
+                                    onClick={refetch}
+                                    className="btn btn-primary"
+                                    type="button"
+                                    disabled={isFetching || isLoading}
+                                    style={{
+                                        paddingTop: "5px",
+                                        paddingBottom: "5px",
+                                    }}
+                                >
+                                    {(isFetching || isLoading) && (
+                                        <span
+                                            className="spinner-border spinner-border-sm mr-1"
+                                            role="status"
+                                            aria-hidden="true"
+                                        ></span>
+                                    )}
+                                    Refresh
+                                </button>
                             </section>
 
                             <DataTable
@@ -150,12 +169,9 @@ const TaskAuthorization = ({ title }) => {
                                         ["desc", "desc"]
                                     ) || []
                                 }
-                                tableColumns={authorizationColumns(
-                                    (isFetching || isLoading),
-                                    refetch
-                                )}
+                                tableColumns={authorizationColumns(refetch)}
                                 tableName="authorize-task-table"
-                                // isLoading={isFetching || isLoading}
+                                isLoading={isFetching || isLoading}
                                 // loader={<Loader />}
                                 // tableMaxHeight
                             />
