@@ -708,9 +708,10 @@ class HelperPendingActionController extends AccountBaseController
    public function CreateTask($id)
    {
     $project= Project::where('id',$id)->first();
+   // dd($project);
     $client= User::where('id',$project->client_id)->first();
         $project_manager= User::where('id',$project->pm_id)->first();
-        $authorizer= User::where('id',$project_manager->id)->get();
+        $authorizer= User::where('id',$project_manager->id)->first();
         
             $action = new PendingAction();
             $action->code = 'CT';
@@ -726,6 +727,7 @@ class HelperPendingActionController extends AccountBaseController
             $button= '';
            
             $action->save();
+         //   dd($action);
             $button = [
                 [
                     'button_name' => 'Create',
@@ -737,7 +739,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_name' => 'Request time more',
                     'button_color' => 'success',
                     'button_type' => 'modal',
-                    'button_url' => route('projects.show'),
+                    'button_url' => '',
                     'modal_form'=> true,
                     'form'=> [
                         [
@@ -828,7 +830,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_name' => 'All the tasks were already created',
                     'button_color' => 'success',
                     'button_type' => 'modal',
-                    'button_url' => route('projects.show'),
+                    'button_url' => '',
                     'modal_form'=> true,
                     'form'=> [
                         

@@ -5727,7 +5727,7 @@ public function updatePmBasicSEO(Request $request){
     }
     public function DeliverableFinalAuthorizationAccept(Request $request)
     {
-
+      //  DB::beginTransaction();
         if ($request->denyAuthorization) {
             $project = Project::find($request->project_id);
             $project->authorization_status = 'canceled';
@@ -5780,10 +5780,7 @@ public function updatePmBasicSEO(Request $request){
 
 
         $helper->SendDeliverabletoClient($past_action->project_id);
-        $helper = new HelperPendingActionController();
-
-
-        $helper->CreateTask($past_action->project_id);
+       
     }
 
 
@@ -5832,22 +5829,10 @@ public function updatePmBasicSEO(Request $request){
             }
         }
 
-        if (is_null($request->authorization_form)) {
-            $authorization_action = AuthorizationAction::where([
-                'project_id' => $project_id->id,
-                'type' => 'deliverable',
-                'authorization_for' => $this->user->id,
-                'status' => '0'
-            ])->first();
-            if ($authorization_action) {
-                $authorization_action->description = $this->user->name . ' Accept this request';
-                $authorization_action->authorization_by = $this->user->id;
-                $authorization_action->approved_at = Carbon::now();
-                $authorization_action->status = '1';
-                $authorization_action->save();
-            }
-        }
+        $helper = new HelperPendingActionController();
 
+
+        $helper->CreateTask($request->project_id);
         $log_user = Auth::user();
 
         // 2ND TIME TOM MANAGEMENT AUTHORIZATION START
