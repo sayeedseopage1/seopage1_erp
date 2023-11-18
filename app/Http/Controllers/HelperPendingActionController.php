@@ -736,7 +736,7 @@ class HelperPendingActionController extends AccountBaseController
                     'button_url' => route('projects.show', $project->id.'?tab=tasks'),
                 ],
                 [
-                    'button_name' => 'Request time more',
+                    'button_name' => 'Request more time',
                     'button_color' => 'success',
                     'button_type' => 'modal',
                     'button_url' => '',
