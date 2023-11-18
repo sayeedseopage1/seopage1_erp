@@ -82,6 +82,7 @@ use App\Models\DailySubmission;
 use App\Models\PendingParentTaskConversation;
 use App\Models\PendingParentTasks;
 use App\Notifications\PendingParentTasksNotification;
+use App\Notifications\PPAuthDenyNotification;
 use App\Notifications\TaskCommentNotification;
 use App\Notifications\TaskCommentReplyNotification;
 
@@ -1082,7 +1083,7 @@ class TaskController extends AccountBaseController
         if($request->acknowledgement_id == 'LDRx4' || $request->acknowledgement_id == 'PLRx04'){
             $task_revision->raised_by_percent = 50;
             $task_revision->raised_against_percent = 50;
-            $task_revision->final_responsible_person = null;
+            $task_revision->final_responsible_person = '';
         }
         $task_revision->save();
 
@@ -3034,7 +3035,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->lead_comment = $request->comment;
             $tasks_accept->approval_status = 'accepted';
             $tasks_accept->is_accept = true;
-            if($tasks_accept->dispute_between  == 'PLR' || $tasks_accept->dispute_between  == 'LDR'){
+            if(($tasks_accept->dispute_between  == 'PLR' && $tasks_accept->acknowledgement_id != 'PLRx04') || ($tasks_accept->dispute_between  == 'LDR' && $tasks_accept->acknowledgement_id != 'LDRx4')){
                 $tasks_accept->final_responsible_person = $request->mode !== 'continue' ? $this->role[Auth::user()->role_id] : $this->role[User::find($tasks_accept->added_by)->role_id];
             }
 
@@ -3222,7 +3223,7 @@ class TaskController extends AccountBaseController
             $tasks_accept->final_responsible_person = $this->role[Auth::user()->role_id];
         } elseif ($request->mode == 'continue') {
             $tasks_accept->is_accept = true;
-            if($tasks_accept->acknowledgement_id !== null){
+            if($tasks_accept->acknowledgement_id !== null && $tasks_accept->acknowledgement_id != 'LDRx4'){
                 $tasks_accept->final_responsible_person = $this->role[$added_by_role_id];
             }
         }
@@ -5394,6 +5395,13 @@ class TaskController extends AccountBaseController
             $taskType->authorization_status = 2;
             $taskType->comment = $request->comment;
             $taskType->save();
+
+            $findTask = Task::where('id',$taskType->task_id)->first();
+
+            $user = User::where('id',$findTask->created_by)->first();
+
+            Notification::send($user, new PPAuthDenyNotification($findTask, $taskType));
+
         }
         $actions = PendingAction::where('code','PPA')->where('past_status',0)->where('task_id',$taskType->task_id)->get();
 
